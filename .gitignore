@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+
+# pnpm
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+
+# React Native
+*.log
+.metro-health-check*
+
+# iOS
+ios/Pods/
+ios/*.xcworkspace
+ios/build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+*.apk
+*.aab
+*.keystore
+!debug.keystore
+local.properties
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Temporary
+*.tmp
+*.temp

@@ -1,0 +1,9 @@
+{
+  "name": "rn-monorepo",
+  "private": true,
+  "scripts": {
+    "start": "echo \"Use: pnpm --filter mobile start\"",
+    "android": "echo \"Use: pnpm --filter mobile android\"",
+    "ios": "echo \"Use: pnpm --filter mobile ios\""
+  }
+}
