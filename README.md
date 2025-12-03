@@ -54,7 +54,7 @@ echo 'eval "$(rbenv init - zsh)"' >> ~/.zshrc && source ~/.zshrc
 ruby -v  # Doit afficher ruby 3.1.4
 ```
 
-### 3. Configurer Xcode
+### 3. Configurer Xcode (iOS)
 
 ```bash
 # Sélectionner Xcode comme outil de build actif
@@ -63,14 +63,41 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
 Ouvrir Xcode au moins une fois pour accepter la licence et installer les composants additionnels (simulateurs iOS).
 
-### 4. Installer les dépendances du projet
+### 4. Configurer Android Studio (Android)
+
+1. Installer [Android Studio](https://developer.android.com/studio)
+2. Ouvrir Android Studio → **More Actions** → **Virtual Device Manager**
+3. Créer un émulateur (ex: Pixel 7, API 34)
+
+Configurer les variables d'environnement :
+
+```bash
+# Java 17 (requis par Gradle 9)
+brew install openjdk@17
+sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk
+echo 'export JAVA_HOME="/opt/homebrew/opt/openjdk@17"' >> ~/.zshrc
+
+# Android SDK
+echo 'export ANDROID_HOME=$HOME/Library/Android/sdk' >> ~/.zshrc
+echo 'export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Vérifier :
+
+```bash
+java -version   # Doit afficher openjdk 17.x.x
+adb --version   # Doit afficher Android Debug Bridge
+```
+
+### 5. Installer les dépendances du projet
 
 ```bash
 # À la racine du monorepo
 pnpm install
 ```
 
-### 5. Installer les Pods iOS
+### 6. Installer les Pods iOS
 
 ```bash
 # Dans packages/mobile
@@ -79,37 +106,24 @@ bundle install
 bundle exec pod install --project-directory=ios
 ```
 
-### 6. Lancer l'app
+### 7. Lancer l'app
 
 ```bash
-# Depuis la racine du monorepo
-pnpm --filter mobile ios      # iOS
-pnpm --filter mobile android  # Android
+# Démarrer Metro (dans un terminal dédié)
+pnpm --filter mobile start
+
+# Dans un autre terminal :
+pnpm --filter mobile ios      # iOS (simulateur)
+pnpm --filter mobile android  # Android (émulateur doit être lancé)
 ```
 
-### Dépannage
+---
 
-#### `xcodebuild` requires Xcode
+## Dépannage
 
-```bash
-sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-```
+### 🔧 Général (iOS & Android)
 
-#### `pod: command not found` ou erreurs CocoaPods
-
-Utiliser Bundler (installé localement dans le projet) :
-
-```bash
-cd packages/mobile
-bundle install
-bundle exec pod install --project-directory=ios
-```
-
-#### Erreurs Ruby / `kconv` / `securerandom`
-
-Installer Ruby 3.1.x via rbenv (voir section 2 ci-dessus).
-
-#### Erreur "Unable to resolve module" dans le simulateur
+#### Erreur "Unable to resolve module" dans le simulateur/émulateur
 
 Dans un monorepo pnpm, les dépendances sont hoistées à la racine. Metro doit être configuré pour les trouver.
 
@@ -136,6 +150,30 @@ module.exports = mergeConfig(getDefaultConfig(__dirname), config);
 
 Après modification, redémarrer Metro (`Ctrl + C` puis `pnpm --filter mobile start`).
 
+---
+
+### 🍎 iOS
+
+#### `xcodebuild` requires Xcode
+
+```bash
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+```
+
+#### `pod: command not found` ou erreurs CocoaPods
+
+Utiliser Bundler (installé localement dans le projet) :
+
+```bash
+cd packages/mobile
+bundle install
+bundle exec pod install --project-directory=ios
+```
+
+#### Erreurs Ruby / `kconv` / `securerandom`
+
+Installer Ruby 3.1.x via rbenv (voir section 2 ci-dessus).
+
 #### Erreur "No script URL provided" au lancement de l'app
 
 Metro n'est pas démarré. Lancer dans un terminal séparé :
@@ -145,6 +183,57 @@ pnpm --filter mobile start
 ```
 
 Puis recharger l'app dans le simulateur (`Cmd + R`).
+
+---
+
+### 🤖 Android
+
+#### Erreur "Gradle requires JVM 17 or later"
+
+Gradle 9 nécessite Java 17 minimum. Installer et configurer Java 17 :
+
+```bash
+brew install openjdk@17
+sudo ln -sfn /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-17.jdk
+echo 'export JAVA_HOME="/opt/homebrew/opt/openjdk@17"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Vérifier : `java -version` doit afficher `openjdk 17.x.x`.
+
+#### Erreur "adb: command not found"
+
+Le SDK Android n'est pas dans le PATH :
+
+```bash
+echo 'export ANDROID_HOME=$HOME/Library/Android/sdk' >> ~/.zshrc
+echo 'export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools' >> ~/.zshrc
+source ~/.zshrc
+```
+
+#### Erreur "Included build node_modules/@react-native/gradle-plugin does not exist"
+
+Dans un monorepo pnpm, certaines dépendances React Native ne sont pas installées par défaut. Ajouter les dépendances manquantes :
+
+```bash
+pnpm --filter mobile add -D @react-native/gradle-plugin@0.82.1 @react-native/codegen@0.82.1
+```
+
+#### Erreur "Unable to load script" ou écran blanc
+
+Metro n'est pas démarré ou l'app n'est pas connectée.
+
+1. Lancer Metro dans un terminal séparé :
+   ```bash
+   pnpm --filter mobile start
+   ```
+
+2. Relancer l'app :
+   ```bash
+   pnpm --filter mobile android
+   ```
+
+3. Ou recharger dans l'émulateur : appuyer sur `R` deux fois.
 
 ## Commandes principales
 
