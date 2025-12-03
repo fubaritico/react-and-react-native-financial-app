@@ -4,6 +4,7 @@
   "scripts": {
     "start": "echo \"Use: pnpm --filter mobile start\"",
     "android": "echo \"Use: pnpm --filter mobile android\"",
-    "ios": "echo \"Use: pnpm --filter mobile ios\""
+    "ios": "echo \"Use: pnpm --filter mobile ios\"",
+    "clean": "rm -rf node_modules packages/*/node_modules"
   }
 }
