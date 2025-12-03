@@ -1,46 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { View, Text } from 'react-native';
+import { twMerge } from 'tailwind-merge';
 
 interface CardProps {
   title: string;
   text?: string;
   children?: React.ReactNode;
-  style?: ViewStyle;
+  className?: string;
 }
 
-export const Card: React.FC<CardProps> = ({ title, text, children, style }) => {
+export const Card: React.FC<CardProps> = ({ title, text, children, className }) => {
   return (
-    <View style={[styles.container, style]}>
-      <Text style={styles.title}>{title}</Text>
-      {text && <Text style={styles.text}>{text}</Text>}
-      {children && <View style={styles.content}>{children}</View>}
+    <View
+      className={twMerge(
+        'bg-white rounded-xl p-4 shadow-md',
+        className
+      )}
+    >
+      <Text className="text-lg font-semibold text-gray-900 mb-2">{title}</Text>
+      {text && <Text className="text-sm text-gray-600 leading-5">{text}</Text>}
+      {children && <View className="mt-3">{children}</View>}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    marginBottom: 8,
-  },
-  text: {
-    fontSize: 14,
-    color: '#666666',
-    lineHeight: 20,
-  },
-  content: {
-    marginTop: 12,
-  },
-});

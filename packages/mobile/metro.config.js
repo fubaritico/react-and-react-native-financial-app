@@ -1,8 +1,9 @@
 const path = require('path');
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+const { withNativeWind } = require('nativewind/metro');
 
-// Racine du monorepo
-const monorepoRoot = path.resolve(__dirname, '../..');
+const projectRoot = __dirname;
+const monorepoRoot = path.resolve(projectRoot, '../..');
 
 /**
  * Metro configuration
@@ -14,10 +15,12 @@ const config = {
   watchFolders: [monorepoRoot],
   resolver: {
     nodeModulesPaths: [
-      path.resolve(__dirname, 'node_modules'),
+      path.resolve(projectRoot, 'node_modules'),
       path.resolve(monorepoRoot, 'node_modules'),
     ],
   },
 };
 
-module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+module.exports = withNativeWind(mergeConfig(getDefaultConfig(projectRoot), config), {
+  input: './global.css',
+});

@@ -1,71 +1,49 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ViewStyle } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
+import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps {
   title: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'outline';
   disabled?: boolean;
-  style?: ViewStyle;
+  className?: string;
 }
+
+const variantStyles = {
+  primary: 'bg-primary',
+  secondary: 'bg-secondary',
+  outline: 'bg-transparent border-2 border-primary',
+};
+
+const textStyles = {
+  primary: 'text-white',
+  secondary: 'text-black',
+  outline: 'text-primary',
+};
 
 export const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
   variant = 'primary',
   disabled = false,
-  style,
+  className,
 }) => {
   return (
     <TouchableOpacity
-      style={[
-        styles.base,
-        styles[variant],
-        disabled && styles.disabled,
-        style,
-      ]}
+      className={twMerge(
+        'py-3 px-6 rounded-lg items-center justify-center',
+        variantStyles[variant],
+        disabled && 'opacity-50',
+        className
+      )}
       onPress={onPress}
       disabled={disabled}
       activeOpacity={0.7}
     >
-      <Text style={[styles.text, styles[`${variant}Text`]]}>{title}</Text>
+      <Text className={twMerge('text-base font-semibold', textStyles[variant])}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  base: {
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  primary: {
-    backgroundColor: '#6200EE',
-  },
-  secondary: {
-    backgroundColor: '#03DAC6',
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: '#6200EE',
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  primaryText: {
-    color: '#FFFFFF',
-  },
-  secondaryText: {
-    color: '#000000',
-  },
-  outlineText: {
-    color: '#6200EE',
-  },
-});
