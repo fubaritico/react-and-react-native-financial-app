@@ -19,9 +19,132 @@ react-native/
 
 - **Node.js** (v18+ recommandé)
 - **pnpm** : `npm install -g pnpm`
-- **React Native CLI** : pour le package sans Expo
+- **Ruby** (v3.1.x recommandé) : pour CocoaPods (iOS)
 - **Xcode** (macOS) : pour iOS
 - **Android Studio** : pour Android
+
+## Installation de l'environnement (macOS)
+
+Cette section détaille les étapes pour configurer l'environnement de développement React Native sur macOS.
+
+### 1. Installer pnpm
+
+```bash
+npm install -g pnpm
+```
+
+### 2. Installer Ruby 3.1 via rbenv
+
+La version système de Ruby (2.6) est trop ancienne pour CocoaPods. Ruby 3.4+ peut aussi poser des problèmes de compatibilité. **Ruby 3.1.x est recommandé.**
+
+```bash
+# Installer rbenv
+brew install rbenv
+
+# Installer Ruby 3.1.4
+rbenv install 3.1.4
+
+# Définir comme version globale
+rbenv global 3.1.4
+
+# Ajouter rbenv au shell (une seule fois)
+echo 'eval "$(rbenv init - zsh)"' >> ~/.zshrc && source ~/.zshrc
+
+# Vérifier la version
+ruby -v  # Doit afficher ruby 3.1.4
+```
+
+### 3. Configurer Xcode
+
+```bash
+# Sélectionner Xcode comme outil de build actif
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+```
+
+Ouvrir Xcode au moins une fois pour accepter la licence et installer les composants additionnels (simulateurs iOS).
+
+### 4. Installer les dépendances du projet
+
+```bash
+# À la racine du monorepo
+pnpm install
+```
+
+### 5. Installer les Pods iOS
+
+```bash
+# Dans packages/mobile
+cd packages/mobile
+bundle install
+bundle exec pod install --project-directory=ios
+```
+
+### 6. Lancer l'app
+
+```bash
+# Depuis la racine du monorepo
+pnpm --filter mobile ios      # iOS
+pnpm --filter mobile android  # Android
+```
+
+### Dépannage
+
+#### `xcodebuild` requires Xcode
+
+```bash
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+```
+
+#### `pod: command not found` ou erreurs CocoaPods
+
+Utiliser Bundler (installé localement dans le projet) :
+
+```bash
+cd packages/mobile
+bundle install
+bundle exec pod install --project-directory=ios
+```
+
+#### Erreurs Ruby / `kconv` / `securerandom`
+
+Installer Ruby 3.1.x via rbenv (voir section 2 ci-dessus).
+
+#### Erreur "Unable to resolve module" dans le simulateur
+
+Dans un monorepo pnpm, les dépendances sont hoistées à la racine. Metro doit être configuré pour les trouver.
+
+Le fichier `packages/mobile/metro.config.js` doit inclure :
+
+```js
+const path = require('path');
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
+
+const monorepoRoot = path.resolve(__dirname, '../..');
+
+const config = {
+  watchFolders: [monorepoRoot],
+  resolver: {
+    nodeModulesPaths: [
+      path.resolve(__dirname, 'node_modules'),
+      path.resolve(monorepoRoot, 'node_modules'),
+    ],
+  },
+};
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+```
+
+Après modification, redémarrer Metro (`Ctrl + C` puis `pnpm --filter mobile start`).
+
+#### Erreur "No script URL provided" au lancement de l'app
+
+Metro n'est pas démarré. Lancer dans un terminal séparé :
+
+```bash
+pnpm --filter mobile start
+```
+
+Puis recharger l'app dans le simulateur (`Cmd + R`).
 
 ## Commandes principales
 
@@ -93,6 +216,7 @@ pnpm add -w -D <package-name>
 
 ## Prochaines étapes
 
-1. Créer le dossier `packages/`
-2. Initialiser le projet React Native CLI dans `packages/mobile`
-3. (Plus tard) Ajouter un projet Expo dans `packages/mobile-expo`
+1. ~~Créer le dossier `packages/`~~ ✅
+2. ~~Initialiser le projet React Native CLI dans `packages/mobile`~~ ✅
+3. Ajouter un projet Expo dans `packages/mobile-expo`
+4. Créer un package `shared` pour le code partagé
