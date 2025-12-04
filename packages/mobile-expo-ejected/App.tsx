@@ -1,11 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import { Header, Button, Card } from '@monorepo/design-system';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
+      <Header title="Mobile Expo Ejected" subtitle="Design System partagé" />
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
+        <Card title="Bienvenue" text="Ceci est une carte du design-system partagé." style={styles.card} />
+        <Card title="Actions" style={styles.card}>
+          <Button title="Primary" onPress={() => alert('Primary!')} style={styles.button} />
+          <Button title="Secondary" variant="secondary" onPress={() => alert('Secondary!')} style={styles.button} />
+          <Button title="Outline" variant="outline" onPress={() => alert('Outline!')} />
+        </Card>
+      </ScrollView>
     </View>
   );
 }
@@ -13,8 +22,18 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#F3F4F6',
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: 16,
+  },
+  card: {
+    marginBottom: 16,
+  },
+  button: {
+    marginBottom: 8,
   },
 });
