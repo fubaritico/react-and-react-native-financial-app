@@ -1,25 +1,20 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { twMerge } from 'tailwind-merge';
+import { View, Text, ViewStyle } from 'react-native';
+import tw from '../lib/tw';
 
 interface CardProps {
   title: string;
   text?: string;
   children?: React.ReactNode;
-  className?: string;
+  style?: ViewStyle;
 }
 
-export const Card: React.FC<CardProps> = ({ title, text, children, className }) => {
+export const Card: React.FC<CardProps> = ({ title, text, children, style }) => {
   return (
-    <View
-      className={twMerge(
-        'bg-white rounded-xl p-4 shadow-md',
-        className
-      )}
-    >
-      <Text className="text-lg font-semibold text-gray-900 mb-2">{title}</Text>
-      {text && <Text className="text-sm text-gray-600 leading-5">{text}</Text>}
-      {children && <View className="mt-3">{children}</View>}
+    <View style={[tw`bg-white rounded-xl p-4 shadow-md`, style]}>
+      <Text style={tw`text-lg font-semibold text-gray-900 mb-2`}>{title}</Text>
+      {text && <Text style={tw`text-sm text-gray-600 leading-5`}>{text}</Text>}
+      {children && <View style={tw`mt-3`}>{children}</View>}
     </View>
   );
 };

@@ -1,44 +1,42 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { StatusBar, StyleSheet, View, ScrollView, Alert } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { Header, Button, Card } from '@monorepo/design-system';
 
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <StatusBar barStyle="light-content" />
+        <Header title="Mobile CLI" subtitle="Design System partagé" />
+        <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
+          <Card title="Bienvenue" text="Ceci est une carte du design-system partagé." style={styles.card} />
+          <Card title="Actions" style={styles.card}>
+            <Button title="Primary" onPress={() => Alert.alert('Primary!')} style={styles.button} />
+            <Button title="Secondary" variant="secondary" onPress={() => Alert.alert('Secondary!')} style={styles.button} />
+            <Button title="Outline" variant="outline" onPress={() => Alert.alert('Outline!')} />
+          </Card>
+        </ScrollView>
+      </SafeAreaView>
     </SafeAreaProvider>
-  );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F3F4F6',
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: 16,
+  },
+  card: {
+    marginBottom: 16,
+  },
+  button: {
+    marginBottom: 8,
   },
 });
 

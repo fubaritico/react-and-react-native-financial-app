@@ -6,5 +6,19 @@
     "android": "echo \"Use: pnpm --filter mobile android\"",
     "ios": "echo \"Use: pnpm --filter mobile ios\"",
     "clean": "rm -rf node_modules packages/*/node_modules"
+  },
+  "devDependencies": {
+    "tailwindcss": "3"
+  },
+  "pnpm": {
+    "overrides": {
+      "react-native": "0.81.5",
+      "@react-native/babel-plugin-codegen": "0.81.5",
+      "@react-native/babel-preset": "0.81.5",
+      "@react-native/codegen": "0.81.5",
+      "@react-native/js-polyfills": "0.81.5",
+      "@react-native/metro-babel-transformer": "0.81.5",
+      "@react-native/metro-config": "0.81.5"
+    }
   }
 }

@@ -119,6 +119,146 @@ pnpm --filter mobile android  # Android (émulateur doit être lancé)
 
 ---
 
+## Alignement des versions React Native (0.81.5)
+
+### Pourquoi React Native 0.81.5 ?
+
+Dans ce monorepo, nous avons plusieurs apps :
+- **`mobile`** : React Native CLI (sans Expo)
+- **`mobile-expo`** : Expo managed (SDK 54)
+- **`mobile-expo-ejected`** : Expo bare/ejected
+- **`design-system`** : Composants partagés avec `twrnc` (Tailwind pour RN)
+
+**Expo SDK 54 impose React Native 0.81.x**. Pour éviter les conflits de versions multiples dans le monorepo (qui causent des erreurs "Invalid hook call" et des crashes), toutes les apps doivent utiliser la **même version de React Native**.
+
+### Le problème rencontré
+
+Initialement, `mobile` utilisait RN 0.82.1 (dernière version) tandis qu'Expo SDK 54 utilisait RN 0.81.5. Cela créait :
+- **3 versions de react-native** dans `node_modules/.pnpm`
+- Des erreurs "Invalid hook call" dues aux multiples instances de React
+- Des crashes Android avec `library "libreact_featureflagsjni.so" not found`
+
+### La solution
+
+#### 1. Forcer une version unique avec pnpm overrides
+
+Dans le `package.json` racine :
+
+```json
+{
+  "pnpm": {
+    "overrides": {
+      "react-native": "0.81.5",
+      "@react-native/babel-plugin-codegen": "0.81.5",
+      "@react-native/babel-preset": "0.81.5",
+      "@react-native/codegen": "0.81.5",
+      "@react-native/js-polyfills": "0.81.5",
+      "@react-native/metro-babel-transformer": "0.81.5",
+      "@react-native/metro-config": "0.81.5"
+    }
+  }
+}
+```
+
+#### 2. Aligner les versions dans chaque package.json
+
+Dans `packages/mobile/package.json`, `packages/mobile-expo/package.json`, etc. :
+
+```json
+{
+  "dependencies": {
+    "react-native": "0.81.5"
+  },
+  "devDependencies": {
+    "@react-native-community/cli": "20.0.0",
+    "@react-native/babel-preset": "0.81.5",
+    "@react-native/metro-config": "0.81.5",
+    "@react-native/typescript-config": "0.81.5"
+  }
+}
+```
+
+#### 3. Régénérer le dossier Android (si créé avec une autre version)
+
+Si le dossier `android/` a été créé avec RN 0.82, il contient des fichiers incompatibles. Solution :
+
+```bash
+cd packages/mobile
+mv android android_backup
+npx @react-native-community/cli init mobile --version 0.81.5 --skip-install --directory temp_mobile
+mv temp_mobile/android .
+rm -rf temp_mobile
+```
+
+### Commandes de nettoyage utiles
+
+#### Vérifier les versions installées
+
+```bash
+# Voir combien de versions de react-native sont installées
+ls node_modules/.pnpm | grep "^react-native@0"
+
+# Vérifier la version dans un package
+cat packages/mobile/node_modules/react-native/package.json | grep version
+```
+
+#### Nettoyage complet et réinstallation
+
+```bash
+# Supprimer le lockfile et réinstaller
+rm pnpm-lock.yaml
+pnpm clean && pnpm install
+```
+
+#### Nettoyage iOS
+
+```bash
+cd packages/mobile/ios
+rm -rf build Pods Podfile.lock
+pod install
+```
+
+#### Nettoyage Android
+
+```bash
+# Supprimer les builds et caches Gradle
+rm -rf packages/mobile/android/build
+rm -rf packages/mobile/android/app/build
+rm -rf packages/mobile/android/.gradle
+rm -rf ~/.gradle/caches
+
+# Désinstaller l'app de l'émulateur
+adb uninstall com.mobile
+
+# Rebuilder
+pnpm --filter mobile android
+```
+
+#### Reset Metro
+
+```bash
+npx react-native start --reset-cache
+```
+
+### Debugging Android
+
+Pour voir les logs de crash Android :
+
+```bash
+# Effacer les anciens logs
+adb logcat -c
+
+# Enregistrer les logs dans un fichier
+adb logcat > /tmp/crash.log
+
+# (Lancer l'app qui crash, puis Ctrl+C)
+
+# Voir les erreurs
+grep -A 10 "FATAL EXCEPTION" /tmp/crash.log
+```
+
+---
+
 ## Dépannage
 
 ### 🔧 Général (iOS & Android)

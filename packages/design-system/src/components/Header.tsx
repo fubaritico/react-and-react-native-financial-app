@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
+import tw from '../lib/tw';
 
 interface HeaderProps {
   title: string;
@@ -8,9 +9,9 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
   return (
-    <View className="py-4 px-5 bg-primary">
-      <Text className="text-2xl font-bold text-white">{title}</Text>
-      {subtitle && <Text className="text-sm text-white opacity-80 mt-1">{subtitle}</Text>}
+    <View style={tw`py-4 px-5 bg-primary`}>
+      <Text style={tw`text-2xl font-bold text-white`}>{title}</Text>
+      {subtitle && <Text style={tw`text-sm text-white opacity-80 mt-1`}>{subtitle}</Text>}
     </View>
   );
 };
