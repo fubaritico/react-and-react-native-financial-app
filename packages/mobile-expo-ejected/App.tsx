@@ -6,7 +6,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      <Header title="Mobile Expo Ejected" subtitle="Design System partagé" />
+      <Header title="Expo Ejected" subtitle="Design System partagé" />
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
         <Card title="Bienvenue" text="Ceci est une carte du design-system partagé." style={styles.card} />
         <Card title="Actions" style={styles.card}>
