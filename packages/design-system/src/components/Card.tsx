@@ -14,7 +14,15 @@ export const Card: React.FC<CardProps> = ({ title, text, children, style }) => {
     <View style={[tw`bg-white rounded-xl p-4 shadow-md`, style]}>
       <Text style={tw`text-lg font-semibold text-gray-900 mb-2`}>{title}</Text>
       {text && <Text style={tw`text-sm text-gray-600 leading-5`}>{text}</Text>}
-      {children && <View style={tw`mt-3`}>{children}</View>}
+      {children && (
+        <View style={tw`mt-3`}>
+          {typeof children === 'string' ? (
+            <Text style={tw`text-sm text-gray-600 leading-5`}>{children}</Text>
+          ) : (
+            children
+          )}
+        </View>
+      )}
     </View>
   );
 };

@@ -49,3 +49,7 @@ local.properties
 # Temporary
 *.tmp
 *.temp
+
+# Proto
+proto/
+
