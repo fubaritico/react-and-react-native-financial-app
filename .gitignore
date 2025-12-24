@@ -53,3 +53,7 @@ local.properties
 # Proto
 proto/
 
+# Critical
+critical
+
+
