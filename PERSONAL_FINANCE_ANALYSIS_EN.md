@@ -1,105 +1,105 @@
-# Personal Finance App - Analyse et Spécifications
+# Personal Finance App - Analysis & Specifications
 
-> Document de travail pour le développement de l'application Personal Finance basée sur le challenge Frontend Mentor.
-
----
-
-## Table des matières
-
-1. [Analyse des écrans](#1-analyse-des-écrans)
-2. [Composants UI récurrents](#2-composants-ui-récurrents)
-3. [Structure de navigation](#3-structure-de-navigation)
-4. [Modèle de données](#4-modèle-de-données)
-5. [Solutions techniques](#5-solutions-techniques)
-6. [Authentification](#6-authentification)
-7. [Plan de développement](#7-plan-de-développement)
+> Working document for the development of the Personal Finance application based on the Frontend Mentor challenge.
 
 ---
 
-## 1. Analyse des écrans
+## Table of Contents
 
-### 1.1 Liste des écrans principaux
+1. [Screen Analysis](#1-screen-analysis)
+2. [Recurring UI Components](#2-recurring-ui-components)
+3. [Navigation Structure](#3-navigation-structure)
+4. [Data Model](#4-data-model)
+5. [Technical Solutions](#5-technical-solutions)
+6. [Authentication](#6-authentication)
+7. [Development Plan](#7-development-plan)
 
-| # | Écran | Description |
-|---|-------|-------------|
-| 1 | **Overview** | Dashboard principal avec vue d'ensemble : solde courant, revenus, dépenses, résumé des pots, dernières transactions, budgets (donut chart), recurring bills |
-| 2 | **Transactions** | Liste paginée (10/page) avec recherche, tri, filtre par catégorie |
-| 3 | **Budgets** | Donut chart global + liste des budgets par catégorie avec progression et 3 dernières transactions |
-| 4 | **Pots** | Liste des objectifs d'épargne avec progression, actions Add/Withdraw |
-| 5 | **Recurring Bills** | Factures récurrentes avec statut (payé, à venir, due soon), recherche, tri |
+---
 
-### 1.2 Écrans secondaires / Modals
+## 1. Screen Analysis
 
-| Écran | Type | Description |
-|-------|------|-------------|
-| Add Budget | Modal | Formulaire création budget |
-| Edit Budget | Modal | Formulaire modification budget |
-| Delete Budget | Modal | Confirmation suppression |
-| Add Pot | Modal | Formulaire création pot |
-| Edit Pot | Modal | Formulaire modification pot |
-| Delete Pot | Modal | Confirmation suppression |
-| Add Money to Pot | Modal | Formulaire ajout d'argent |
-| Withdraw from Pot | Modal | Formulaire retrait d'argent |
-| Login | Screen | Connexion utilisateur |
-| Register | Screen | Inscription utilisateur |
+### 1.1 Main Screens List
 
-### 1.3 Détail par écran
+| # | Screen | Description |
+|---|--------|-------------|
+| 1 | **Overview** | Main dashboard with overview: current balance, income, expenses, pots summary, latest transactions, budgets (donut chart), recurring bills |
+| 2 | **Transactions** | Paginated list (10/page) with search, sort, filter by category |
+| 3 | **Budgets** | Global donut chart + budget list by category with progress and 3 latest transactions |
+| 4 | **Pots** | Savings goals list with progress, Add/Withdraw actions |
+| 5 | **Recurring Bills** | Recurring bills with status (paid, upcoming, due soon), search, sort |
+
+### 1.2 Secondary Screens / Modals
+
+| Screen | Type | Description |
+|--------|------|-------------|
+| Add Budget | Modal | Budget creation form |
+| Edit Budget | Modal | Budget modification form |
+| Delete Budget | Modal | Deletion confirmation |
+| Add Pot | Modal | Pot creation form |
+| Edit Pot | Modal | Pot modification form |
+| Delete Pot | Modal | Deletion confirmation |
+| Add Money to Pot | Modal | Add money form |
+| Withdraw from Pot | Modal | Withdraw money form |
+| Login | Screen | User login |
+| Register | Screen | User registration |
+
+### 1.3 Screen Details
 
 #### Overview
-- **Header** : Titre "Overview"
-- **Balance Card** (dark) : Current Balance avec montant
-- **Income/Expenses Cards** : Deux cartes blanches avec montants
-- **Pots Summary** : Total saved + liste des pots avec montants
-- **Transactions** : 5 dernières transactions avec "View All"
-- **Budgets** : Donut chart + liste catégories avec montants
-- **Recurring Bills** : Résumé (Paid Bills, Total Upcoming, Due Soon)
+- **Header**: Title "Overview"
+- **Balance Card** (dark): Current Balance with amount
+- **Income/Expenses Cards**: Two white cards with amounts
+- **Pots Summary**: Total saved + pots list with amounts
+- **Transactions**: 5 latest transactions with "View All"
+- **Budgets**: Donut chart + category list with amounts
+- **Recurring Bills**: Summary (Paid Bills, Total Upcoming, Due Soon)
 
 #### Transactions
-- **Header** : Titre "Transactions"
-- **Search Bar** : Recherche par nom
-- **Sort/Filter** : Icônes tri et filtre
-- **Transaction List** : Liste paginée (10 items)
-  - Avatar, Nom, Catégorie, Montant (+/-), Date
-- **Pagination** : Navigation entre pages
+- **Header**: Title "Transactions"
+- **Search Bar**: Search by name
+- **Sort/Filter**: Sort and filter icons
+- **Transaction List**: Paginated list (10 items)
+  - Avatar, Name, Category, Amount (+/-), Date
+- **Pagination**: Page navigation
 
 #### Budgets
-- **Header** : Titre "Budgets" + bouton "+ Add New Budget"
-- **Donut Chart** : Total dépensé avec breakdown par catégorie
-- **Spending Summary** : Liste catégories avec barres de progression
-- **Budget Cards** : Pour chaque budget
-  - Catégorie avec couleur
-  - Maximum mensuel
-  - Barre de progression (Spent/Free)
-  - Latest Spending (3 dernières transactions)
-  - Bouton "See All" → filtre Transactions
+- **Header**: Title "Budgets" + "+ Add New Budget" button
+- **Donut Chart**: Total spent with category breakdown
+- **Spending Summary**: Category list with progress bars
+- **Budget Cards**: For each budget
+  - Category with color
+  - Monthly maximum
+  - Progress bar (Spent/Free)
+  - Latest Spending (3 latest transactions)
+  - "See All" button → filters Transactions
 
 #### Pots
-- **Header** : Titre "Pots" + bouton "+ Add New Budget" (devrait être "Add New Pot")
-- **Pot Cards** : Pour chaque pot
-  - Nom avec indicateur couleur
-  - Total Saved (montant)
-  - Barre de progression (% du target)
+- **Header**: Title "Pots" + "+ Add New Pot" button
+- **Pot Cards**: For each pot
+  - Name with color indicator
+  - Total Saved (amount)
+  - Progress bar (% of target)
   - Target amount
-  - Boutons "Add Money" / "Withdraw"
+  - "Add Money" / "Withdraw" buttons
 
 #### Recurring Bills
-- **Header** : Titre "Recurring Bills"
-- **Total Card** (dark) : Total bills avec montant
-- **Summary** : Paid Bills, Total Upcoming, Due Soon
-- **Search Bar** : Recherche par nom
-- **Sort** : Icône tri
-- **Bills List** : Liste des factures
-  - Avatar, Nom, Fréquence + jour, Statut (paid/due), Montant
+- **Header**: Title "Recurring Bills"
+- **Total Card** (dark): Total bills with amount
+- **Summary**: Paid Bills, Total Upcoming, Due Soon
+- **Search Bar**: Search by name
+- **Sort**: Sort icon
+- **Bills List**: Bills list
+  - Avatar, Name, Frequency + day, Status (paid/due), Amount
 
 ---
 
-## 2. Composants UI récurrents
+## 2. Recurring UI Components
 
-### 2.1 Liste des composants
+### 2.1 Components List
 
-| Composant | Props principales | Utilisé dans |
-|-----------|-------------------|--------------|
-| `BottomTabBar` | activeTab, onTabPress | Tous les écrans |
+| Component | Main Props | Used In |
+|-----------|------------|---------|
+| `BottomTabBar` | activeTab, onTabPress | All screens |
 | `Card` | title, children, style | Overview, Budgets, Pots, Bills |
 | `SummaryCard` | title, amount, variant (dark/light) | Overview, Bills |
 | `TransactionItem` | avatar, name, category, amount, date | Overview, Transactions, Budgets |
@@ -115,7 +115,7 @@
 | `Input` | label, value, onChange, error | Forms |
 | `Avatar` | source, size | Transactions, Bills |
 
-### 2.2 Design Tokens (à extraire du Figma)
+### 2.2 Design Tokens (to extract from Figma)
 
 ```
 Colors:
@@ -139,15 +139,15 @@ Typography:
 
 ---
 
-## 3. Structure de navigation
+## 3. Navigation Structure
 
 ```
 RootNavigator
-├── AuthStack (non authentifié)
+├── AuthStack (not authenticated)
 │   ├── Login
 │   └── Register
 │
-└── MainStack (authentifié)
+└── MainStack (authenticated)
     └── BottomTabNavigator
         ├── Overview (index)
         ├── Transactions
@@ -155,7 +155,7 @@ RootNavigator
         ├── Pots
         └── RecurringBills
 
-+ Modals (accessibles depuis MainStack)
++ Modals (accessible from MainStack)
   ├── AddBudgetModal
   ├── EditBudgetModal
   ├── DeleteBudgetModal
@@ -168,21 +168,21 @@ RootNavigator
 
 ---
 
-## 4. Modèle de données
+## 4. Data Model
 
-### 4.1 Entités identifiées (depuis data.json)
+### 4.1 Identified Entities (from data.json)
 
-| Entité | Description | Source JSON |
+| Entity | Description | JSON Source |
 |--------|-------------|-------------|
-| `User` | Utilisateur de l'app | À créer (Auth) |
-| `Balance` | Solde courant, revenus, dépenses | `balance` |
-| `Transaction` | Transaction (dépense ou revenu) | `transactions[]` |
-| `Budget` | Budget par catégorie | `budgets[]` |
-| `Pot` | Objectif d'épargne | `pots[]` |
+| `User` | App user | To create (Auth) |
+| `Balance` | Current balance, income, expenses | `balance` |
+| `Transaction` | Transaction (expense or income) | `transactions[]` |
+| `Budget` | Budget by category | `budgets[]` |
+| `Pot` | Savings goal | `pots[]` |
 
-> Note : Les `RecurringBills` sont dérivées des `transactions` où `recurring: true`
+> Note: `RecurringBills` are derived from `transactions` where `recurring: true`
 
-### 4.2 Schéma des entités
+### 4.2 Entity Schema
 
 ```typescript
 // === BALANCE ===
@@ -203,7 +203,7 @@ interface Transaction {
   name: string;         // "Emma Richardson"
   category: Category;   // "General"
   date: string;         // "2024-08-19T14:23:11Z" (ISO 8601)
-  amount: number;       // 75.50 (positif = revenu, négatif = dépense)
+  amount: number;       // 75.50 (positive = income, negative = expense)
   recurring: boolean;   // false
 }
 
@@ -226,7 +226,7 @@ interface Budget {
   userId: string;
   category: Category;   // "Entertainment"
   maximum: number;      // 50.00
-  theme: string;        // "#277C78" (couleur hex)
+  theme: string;        // "#277C78" (hex color)
   createdAt: Date;
   updatedAt: Date;
 }
@@ -237,8 +237,8 @@ interface Pot {
   userId: string;
   name: string;         // "Savings"
   target: number;       // 2000.00
-  total: number;        // 159.00 (montant actuel épargné)
-  theme: string;        // "#277C78" (couleur hex)
+  total: number;        // 159.00 (current saved amount)
+  theme: string;        // "#277C78" (hex color)
   createdAt: Date;
   updatedAt: Date;
 }
@@ -253,20 +253,20 @@ interface User {
 }
 ```
 
-### 4.3 Données d'exemple extraites
+### 4.3 Extracted Sample Data
 
-**Categories utilisées :**
+**Used Categories:**
 - Entertainment, Bills, Groceries, Dining Out, Transportation
 - Personal Care, Education, Lifestyle, Shopping, General
 
-**Themes (couleurs) :**
-- `#277C78` - Vert (Entertainment, Savings)
-- `#82C9D7` - Bleu clair (Bills, Gift)
+**Themes (colors):**
+- `#277C78` - Green (Entertainment, Savings)
+- `#82C9D7` - Light Blue (Bills, Gift)
 - `#F2CDAC` - Beige (Dining Out, New Laptop)
-- `#626070` - Gris (Personal Care, Concert Ticket)
-- `#826CB0` - Violet (Holiday)
+- `#626070` - Gray (Personal Care, Concert Ticket)
+- `#826CB0` - Purple (Holiday)
 
-**Budgets initiaux :**
+**Initial Budgets:**
 | Category | Maximum | Theme |
 |----------|---------|-------|
 | Entertainment | $50.00 | #277C78 |
@@ -274,7 +274,7 @@ interface User {
 | Dining Out | $75.00 | #F2CDAC |
 | Personal Care | $100.00 | #626070 |
 
-**Pots initiaux :**
+**Initial Pots:**
 | Name | Target | Total | Progress |
 |------|--------|-------|----------|
 | Savings | $2,000 | $159 | 7.95% |
@@ -283,7 +283,7 @@ interface User {
 | New Laptop | $1,000 | $10 | 1% |
 | Holiday | $1,440 | $531 | 36.8% |
 
-### 4.4 Relations
+### 4.4 Relationships
 
 ```
 User (1) ──────────── (1) Balance
@@ -297,38 +297,38 @@ User (1) ──────────── (1) Balance
      └── (1) ──────── (N) Pot
 ```
 
-**Logique métier :**
+**Business Logic:**
 - `RecurringBills` = `transactions.filter(t => t.recurring === true)`
-- `Budget.spent` = somme des `transactions` du mois courant pour cette `category`
+- `Budget.spent` = sum of current month `transactions` for this `category`
 - `Pot.progress` = `(total / target) * 100`
-- Ajouter argent à un Pot → déduire de `Balance.current`
-- Retirer argent d'un Pot → ajouter à `Balance.current`
-- Supprimer un Pot → retourner `total` à `Balance.current`
+- Add money to Pot → deduct from `Balance.current`
+- Withdraw money from Pot → add to `Balance.current`
+- Delete a Pot → return `total` to `Balance.current`
 
-### 4.5 Opérations CRUD
+### 4.5 CRUD Operations
 
-| Entité | Create | Read | Update | Delete | Notes |
+| Entity | Create | Read | Update | Delete | Notes |
 |--------|--------|------|--------|--------|-------|
 | User | ✓ | ✓ | ✓ | ✓ | Via Auth |
-| Balance | ✗ | ✓ | ✓ | ✗ | Auto-créé avec User, mis à jour via Pots |
-| Transaction | ✗ | ✓ | ✗ | ✗ | Read-only (données importées) |
+| Balance | ✗ | ✓ | ✓ | ✗ | Auto-created with User, updated via Pots |
+| Transaction | ✗ | ✓ | ✗ | ✗ | Read-only (imported data) |
 | Budget | ✓ | ✓ | ✓ | ✓ | Full CRUD |
 | Pot | ✓ | ✓ | ✓ | ✓ | Full CRUD + Add/Withdraw |
 
-### 4.6 Calculs dérivés (côté client)
+### 4.6 Derived Calculations (client-side)
 
 ```typescript
-// Recurring Bills (filtrées depuis transactions)
+// Recurring Bills (filtered from transactions)
 const recurringBills = transactions.filter(t => t.recurring);
 
-// Spent par budget (mois courant = Août 2024)
+// Spent per budget (current month = August 2024)
 const getSpentForBudget = (category: Category, month: string) => {
   return transactions
     .filter(t => t.category === category && t.date.startsWith(month) && t.amount < 0)
     .reduce((sum, t) => sum + Math.abs(t.amount), 0);
 };
 
-// Latest spending (3 dernières transactions d'une catégorie)
+// Latest spending (3 latest transactions for a category)
 const getLatestSpending = (category: Category, limit = 3) => {
   return transactions
     .filter(t => t.category === category && t.amount < 0)
@@ -340,43 +340,43 @@ const getLatestSpending = (category: Category, limit = 3) => {
 const getBillStatus = (bill: Transaction, currentDate: Date) => {
   const billDate = new Date(bill.date);
   const dayOfMonth = billDate.getDate();
-  // Paid = déjà passé ce mois, Due Soon = dans 5 jours, Upcoming = reste
+  // Paid = already passed this month, Due Soon = within 5 days, Upcoming = rest
 };
 ```
 
 ---
 
-## 5. Solutions techniques
+## 5. Technical Solutions
 
-### 5.1 Base de données
+### 5.1 Database
 
-**Choix : Supabase** ✅
+**Choice: Supabase** ✅
 
-| Aspect | Détail |
+| Aspect | Detail |
 |--------|--------|
-| Type | PostgreSQL (relationnel) |
-| Auth | Intégré (email/password, OAuth) |
-| API | Auto-générée REST + Realtime |
-| RLS | Row Level Security pour isolation par user |
-| SDK | `@supabase/supabase-js` (compatible React Native) |
+| Type | PostgreSQL (relational) |
+| Auth | Built-in (email/password, OAuth) |
+| API | Auto-generated REST + Realtime |
+| RLS | Row Level Security for user isolation |
+| SDK | `@supabase/supabase-js` (React Native compatible) |
 | Free tier | 500MB DB, 50K users, 2GB storage |
 
 ### 5.2 State Management
 
-**Choix : Jotai + TanStack Query** ✅
+**Choice: Jotai + TanStack Query** ✅
 
-| Lib | Rôle |
+| Lib | Role |
 |-----|------|
-| **Jotai** | État local atomique (UI state, modals, filters) |
-| **TanStack Query** | Cache serveur, mutations, sync avec Supabase |
+| **Jotai** | Atomic local state (UI state, modals, filters) |
+| **TanStack Query** | Server cache, mutations, sync with Supabase |
 
 ```typescript
-// Exemple d'architecture
-// atoms/ui.ts - Jotai pour UI state
+// Architecture example
+// atoms/ui.ts - Jotai for UI state
 const selectedCategoryAtom = atom<Category | null>(null);
 const isModalOpenAtom = atom(false);
 
-// hooks/useTransactions.ts - TanStack Query pour data
+// hooks/useTransactions.ts - TanStack Query for data
 const useTransactions = () => useQuery({
   queryKey: ['transactions'],
   queryFn: () => supabase.from('transactions').select('*')
@@ -385,7 +385,7 @@ const useTransactions = () => useQuery({
 
 ### 5.3 Navigation
 
-**Choix : Expo Router (Expo) + React Navigation (mobile)** ✅
+**Choice: Expo Router (Expo) + React Navigation (mobile)** ✅
 
 | App | Navigation |
 |-----|------------|
@@ -393,45 +393,45 @@ const useTransactions = () => useQuery({
 | `mobile-expo-ejected` | Expo Router (file-based) |
 | `mobile` | React Navigation (config-based) |
 
-> Note : La logique de navigation sera similaire, seule l'implémentation diffère.
+> Note: Navigation logic will be similar, only implementation differs.
 
-### 5.4 Autres librairies
+### 5.4 Other Libraries
 
-| Besoin | Choix | Raison |
-|--------|-------|--------|
-| Charts (Donut) | `react-native-svg` + custom | Contrôle total sur le rendu |
-| Forms | `react-hook-form` | Léger, performant |
-| Validation | `zod` | TypeScript-first, inférence de types |
+| Need | Choice | Reason |
+|------|--------|--------|
+| Charts (Donut) | `react-native-svg` + custom | Full control over rendering |
+| Forms | `react-hook-form` | Lightweight, performant |
+| Validation | `zod` | TypeScript-first, type inference |
 | Date | `date-fns` | Tree-shakeable, immutable |
-| Icons | `lucide-react-native` | Moderne, cohérent |
-| Styling | `twrnc` | Déjà en place dans design-system |
+| Icons | `lucide-react-native` | Modern, consistent |
+| Styling | `twrnc` | Already in place in design-system |
 
-### 5.5 Structure des packages
+### 5.5 Package Structure
 
 ```
 packages/
-├── design-tokens/          # 🆕 Tokens partagés (Style Dictionary)
-│   ├── tokens.json        # Source DTCG format
+├── design-tokens/          # 🆕 Shared tokens (Style Dictionary)
+│   ├── tokens.json        # DTCG format source
 │   ├── style-dictionary.config.js
 │   └── build/
-│       ├── tailwind.theme.js  # Pour twrnc
-│       └── tokens.ts          # Pour usage TS direct
+│       ├── tailwind.theme.js  # For twrnc
+│       └── tokens.ts          # For direct TS usage
 │
-├── design-system/          # Composants UI Mobile (React Native + twrnc)
+├── design-system/          # Mobile UI Components (React Native + twrnc)
 │   └── src/
 │       ├── components/    # Button, Card, Input...
 │       └── index.ts
 │
-├── design-system-web/      # 🔮 Futur : Composants UI Web (React DOM)
+├── design-system-web/      # 🔮 Future: Web UI Components (React DOM)
 │
-├── shared/                 # Logique métier partagée (mobile + web)
-│   ├── api/               # Client Supabase, services CRUD
-│   ├── atoms/             # Jotai atoms (state global)
+├── shared/                 # Shared business logic (mobile + web)
+│   ├── api/               # Supabase client, CRUD services
+│   ├── atoms/             # Jotai atoms (global state)
 │   ├── hooks/             # TanStack Query hooks
-│   ├── types/             # Types TypeScript
+│   ├── types/             # TypeScript types
 │   └── utils/             # Helpers (date, format, currency...)
 │
-├── screens/                # 🆕 Écrans/Pages partagés (UI sans navigation)
+├── screens/                # 🆕 Shared Screens/Pages (UI without navigation)
 │   ├── auth/              # LoginScreen, SignUpScreen
 │   ├── overview/          # OverviewScreen
 │   ├── transactions/      # TransactionsScreen
@@ -439,15 +439,15 @@ packages/
 │   ├── pots/              # PotsScreen, AddPotModal...
 │   └── bills/             # RecurringBillsScreen
 │
-├── mobile/                 # App React Navigation (wiring only)
-├── mobile-expo/            # App Expo Router (wiring only)
-├── mobile-expo-ejected/    # App Expo Router (wiring only)
-└── web/                    # 🔮 Futur : Next.js / Vite (responsive)
+├── mobile/                 # React Navigation App (wiring only)
+├── mobile-expo/            # Expo Router App (wiring only)
+├── mobile-expo-ejected/    # Expo Router App (wiring only)
+└── web/                    # 🔮 Future: Next.js / Vite (responsive)
 ```
 
-### 5.6 Navigation agnostique
+### 5.6 Navigation Agnostic
 
-Les écrans dans `screens/` ne doivent **pas** importer de lib de navigation. On utilise l'injection de callbacks :
+Screens in `screens/` must **not** import navigation libs. We use callback injection:
 
 ```typescript
 // screens/overview/OverviewScreen.tsx
@@ -503,9 +503,9 @@ export default function Overview() {
 }
 ```
 
-### 5.7 Design Tokens avec Style Dictionary
+### 5.7 Design Tokens with Style Dictionary
 
-Source unique des tokens (couleurs, spacing, typography) au format DTCG :
+Single source of tokens (colors, spacing, typography) in DTCG format:
 
 ```json
 // design-tokens/tokens.json
@@ -529,31 +529,31 @@ Source unique des tokens (couleurs, spacing, typography) au format DTCG :
 }
 ```
 
-Style Dictionary génère les outputs pour chaque plateforme :
-- `tailwind.theme.js` → pour `twrnc` (mobile) et Tailwind CSS (web)
-- `tokens.ts` → pour usage TypeScript direct
-- `variables.css` → pour CSS custom properties (web)
+Style Dictionary generates outputs for each platform:
+- `tailwind.theme.js` → for `twrnc` (mobile) and Tailwind CSS (web)
+- `tokens.ts` → for direct TypeScript usage
+- `variables.css` → for CSS custom properties (web)
 
-### 5.8 Responsabilités des packages
+### 5.8 Package Responsibilities
 
-| Package | Responsabilité | Dépendances |
-|---------|---------------|-------------|
-| `design-tokens` | Tokens (couleurs, spacing, typo) | Aucune (JS/TS pur) |
-| `design-system` | Composants UI Mobile | `design-tokens`, `react-native`, `twrnc` |
-| `design-system-web` | Composants UI Web (futur) | `design-tokens`, `react`, `tailwindcss` |
-| `shared` | Logique métier, API, state | `design-tokens` (optionnel) |
-| `screens` | Écrans complets (sans nav) | `design-system`, `shared` |
-| `mobile*` | Wiring navigation mobile | `screens`, `shared` |
-| `web` | Wiring navigation web (futur) | `screens` ou `screens-web`, `shared` |
+| Package | Responsibility | Dependencies |
+|---------|---------------|--------------|
+| `design-tokens` | Tokens (colors, spacing, typo) | None (pure JS/TS) |
+| `design-system` | Mobile UI Components | `design-tokens`, `react-native`, `twrnc` |
+| `design-system-web` | Web UI Components (future) | `design-tokens`, `react`, `tailwindcss` |
+| `shared` | Business logic, API, state | `design-tokens` (optional) |
+| `screens` | Complete screens (no nav) | `design-system`, `shared` |
+| `mobile*` | Mobile navigation wiring | `screens`, `shared` |
+| `web` | Web navigation wiring (future) | `screens` or `screens-web`, `shared` |
 
-### 5.9 Structure détaillée du package `shared/`
+### 5.9 Detailed `shared/` Package Structure
 
-Le package `shared/` contient **toute la logique métier** partagée entre mobile et web :
+The `shared/` package contains **all business logic** shared between mobile and web:
 
 ```
 packages/shared/
-├── api/                    # Client Supabase + services CRUD
-│   ├── supabase.ts        # Client initialisé
+├── api/                    # Supabase client + CRUD services
+│   ├── supabase.ts        # Initialized client
 │   ├── auth.ts            # signIn, signUp, signOut
 │   ├── transactions.ts    # getTransactions, getRecurringBills
 │   ├── budgets.ts         # getBudgets, createBudget, updateBudget, deleteBudget
@@ -567,17 +567,17 @@ packages/shared/
 │   ├── usePots.ts         # usePots, usePotMutations
 │   └── useBalance.ts      # useBalance
 │
-├── atoms/                  # Jotai atoms (state UI global)
+├── atoms/                  # Jotai atoms (global UI state)
 │   ├── filters.ts         # selectedCategory, searchQuery, sortOrder
 │   ├── modals.ts          # isAddBudgetOpen, isAddPotOpen...
 │   └── ui.ts              # activeTab, theme...
 │
-├── types/                  # Types TypeScript
+├── types/                  # TypeScript types
 │   ├── models.ts          # Transaction, Budget, Pot, Balance, User
 │   ├── api.ts             # API responses, errors
 │   └── navigation.ts      # Screen params types
 │
-└── utils/                  # Helpers purs (aucune dépendance plateforme)
+└── utils/                  # Pure helpers (no platform dependency)
     ├── currency.ts        # formatCurrency, parseCurrency
     ├── date.ts            # formatDate, isToday, getDaysUntil
     ├── budget.ts          # calculateSpent, calculateRemaining
@@ -585,19 +585,19 @@ packages/shared/
     └── bills.ts           # getBillStatus (paid, upcoming, due soon)
 ```
 
-### 5.10 Architecture hexagonale
+### 5.10 Hexagonal Architecture
 
-L'architecture suit le principe de l'**architecture hexagonale** (ports & adapters) :
+The architecture follows the **hexagonal architecture** principle (ports & adapters):
 
 ```
                     ┌─────────────────────────────────────┐
-                    │           DOMAINE / MÉTIER          │
+                    │           DOMAIN / BUSINESS         │
                     │            (shared/)                │
                     │                                     │
-                    │  • API Supabase (services CRUD)     │
+                    │  • Supabase API (CRUD services)     │
                     │  • TanStack Query hooks             │
                     │  • Jotai atoms                      │
-                    │  • Types TypeScript                 │
+                    │  • TypeScript types                 │
                     │  • Utils (date, currency, etc.)     │
                     │                                     │
                     └──────────────┬──────────────────────┘
@@ -605,8 +605,8 @@ L'architecture suit le principe de l'**architecture hexagonale** (ports & adapte
                     ┌──────────────┴──────────────┐
                     │                             │
           ┌─────────▼─────────┐       ┌──────────▼──────────┐
-          │   ADAPTATEUR      │       │    ADAPTATEUR       │
-          │     MOBILE        │       │       WEB           │
+          │     ADAPTER       │       │      ADAPTER        │
+          │     MOBILE        │       │        WEB          │
           │                   │       │                     │
           │ • design-system   │       │ • design-system-web │
           │ • screens/        │       │ • screens-web/      │
@@ -614,32 +614,32 @@ L'architecture suit le principe de l'**architecture hexagonale** (ports & adapte
           └───────────────────┘       └─────────────────────┘
 ```
 
-**Pourquoi séparer mobile et web ?**
-- Événements différents : `onPress` vs `onClick`, `onLongPress` vs `onContextMenu`
-- Interactions : pas de hover sur mobile, gestures tactiles vs souris
-- Layouts : responsive web vs dimensions fixes mobile
-- Composants natifs : `ScrollView` vs `<div>` avec overflow
-- Performance : bundle optimisé par plateforme
+**Why separate mobile and web?**
+- Different events: `onPress` vs `onClick`, `onLongPress` vs `onContextMenu`
+- Interactions: no hover on mobile, touch gestures vs mouse
+- Layouts: responsive web vs fixed mobile dimensions
+- Native components: `ScrollView` vs `<div>` with overflow
+- Performance: optimized bundle per platform
 
-### 5.11 Partage de la logique métier
+### 5.11 Business Logic Sharing
 
-| Élément | Partagé (`shared/`) | Mobile | Web |
+| Element | Shared (`shared/`) | Mobile | Web |
 |---------|---------------------|--------|-----|
-| API Supabase | ✅ | - | - |
+| Supabase API | ✅ | - | - |
 | TanStack Query hooks | ✅ | - | - |
 | Jotai atoms | ✅ | - | - |
-| Types TypeScript | ✅ | - | - |
+| TypeScript types | ✅ | - | - |
 | Utils (date, currency) | ✅ | - | - |
 | Design tokens | ✅ | - | - |
-| Composants UI | - | `design-system` | `design-system-web` |
-| Écrans/Pages | - | `screens/` | `screens-web/` |
+| UI Components | - | `design-system` | `design-system-web` |
+| Screens/Pages | - | `screens/` | `screens-web/` |
 | Navigation | - | Expo Router / React Nav | Next.js Router |
 
-### 5.12 Exemple concret : Overview
+### 5.12 Concrete Example: Overview
 
 ```typescript
 // ══════════════════════════════════════════════════════════
-// DOMAINE (shared/) - Logique métier partagée
+// DOMAIN (shared/) - Shared business logic
 // ══════════════════════════════════════════════════════════
 
 // shared/hooks/useOverviewData.ts
@@ -661,7 +661,7 @@ export const useOverviewData = () => {
 
 ```typescript
 // ══════════════════════════════════════════════════════════
-// ADAPTATEUR MOBILE (screens/)
+// MOBILE ADAPTER (screens/)
 // ══════════════════════════════════════════════════════════
 
 // screens/overview/OverviewScreen.tsx
@@ -691,7 +691,7 @@ export const OverviewScreen: React.FC<OverviewScreenProps> = (props) => {
 
 ```typescript
 // ══════════════════════════════════════════════════════════
-// ADAPTATEUR WEB (screens-web/)
+// WEB ADAPTER (screens-web/)
 // ══════════════════════════════════════════════════════════
 
 // screens-web/overview/OverviewPage.tsx
@@ -719,52 +719,52 @@ export const OverviewPage: React.FC<OverviewPageProps> = (props) => {
 };
 ```
 
-**Résultat** : 
-- La logique métier (`useOverviewData`) est écrite **une seule fois**
-- L'UI est adaptée à chaque plateforme (événements, layout, composants natifs)
+**Result**: 
+- Business logic (`useOverviewData`) is written **once**
+- UI is adapted to each platform (events, layout, native components)
 
 ---
 
-## 6. Authentification
+## 6. Authentication
 
-### 6.1 Écrans Auth analysés
+### 6.1 Analyzed Auth Screens
 
 #### Login Screen
-| Élément | Détail |
+| Element | Detail |
 |---------|--------|
-| Header | Logo "finance" sur fond noir |
-| Card | Fond blanc avec coins arrondis |
-| Titre | "Login" (h1, bold) |
-| Champ Email | Label "Email", input text |
-| Champ Password | Label "Password", input password + icône œil (toggle visibility) |
-| Bouton | "Login" (primary, dark, full-width) |
-| Lien | "Need to create an account? **Sign Up**" |
+| Header | "finance" logo on black background |
+| Card | White background with rounded corners |
+| Title | "Login" (h1, bold) |
+| Email Field | Label "Email", text input |
+| Password Field | Label "Password", password input + eye icon (toggle visibility) |
+| Button | "Login" (primary, dark, full-width) |
+| Link | "Need to create an account? **Sign Up**" |
 
 #### Sign Up Screen
-| Élément | Détail |
+| Element | Detail |
 |---------|--------|
-| Header | Logo "finance" sur fond noir |
-| Card | Fond blanc avec coins arrondis |
-| Titre | "Sign Up" (h1, bold) |
-| Champ Name | Label "Name", input text |
-| Champ Email | Label "Email", input text |
-| Champ Password | Label "Create Password", input password + icône œil |
+| Header | "finance" logo on black background |
+| Card | White background with rounded corners |
+| Title | "Sign Up" (h1, bold) |
+| Name Field | Label "Name", text input |
+| Email Field | Label "Email", text input |
+| Password Field | Label "Create Password", password input + eye icon |
 | Helper text | "Passwords must be at least 8 characters" |
-| Bouton | "Create Account" (primary, dark, full-width) |
-| Lien | "Already have an account? **Login**" |
+| Button | "Create Account" (primary, dark, full-width) |
+| Link | "Already have an account? **Login**" |
 
-### 6.2 Composants Auth à créer
+### 6.2 Auth Components to Create
 
-| Composant | Props |
+| Component | Props |
 |-----------|-------|
-| `AuthHeader` | - (logo fixe) |
+| `AuthHeader` | - (fixed logo) |
 | `AuthCard` | title, children |
 | `TextInput` | label, value, onChange, type, error, helperText |
-| `PasswordInput` | label, value, onChange, error, helperText (avec toggle visibility) |
+| `PasswordInput` | label, value, onChange, error, helperText (with toggle visibility) |
 | `AuthButton` | title, onPress, loading |
 | `AuthLink` | text, linkText, onPress |
 
-### 6.3 Flow d'authentification
+### 6.3 Authentication Flow
 
 ```
 App Launch
@@ -793,16 +793,16 @@ Check Auth State (Supabase session)
     └── Authenticated ──► Main App
 ```
 
-### 6.4 Validation des formulaires
+### 6.4 Form Validation
 
-| Champ | Règles | Message d'erreur |
-|-------|--------|------------------|
+| Field | Rules | Error Message |
+|-------|-------|---------------|
 | Name | Required, min 2 chars | "Name is required" |
 | Email | Required, valid email format | "Please enter a valid email" |
 | Password | Required, min 8 chars | "Passwords must be at least 8 characters" |
 
 ```typescript
-// Schéma Zod
+// Zod Schema
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(8, "Passwords must be at least 8 characters"),
@@ -815,24 +815,24 @@ const signUpSchema = z.object({
 });
 ```
 
-### 6.5 Fonctionnalités Auth
+### 6.5 Auth Features
 
-| Fonctionnalité | Priorité | Provider |
-|----------------|----------|----------|
-| Inscription (email/password) | ✅ Must have | Supabase Auth |
-| Connexion (email/password) | ✅ Must have | Supabase Auth |
-| Déconnexion | ✅ Must have | Supabase Auth |
-| Persistance de session | ✅ Must have | Supabase + AsyncStorage |
-| Récupération mot de passe | ⚡ Nice to have | Supabase Auth |
+| Feature | Priority | Provider |
+|---------|----------|----------|
+| Sign up (email/password) | ✅ Must have | Supabase Auth |
+| Sign in (email/password) | ✅ Must have | Supabase Auth |
+| Sign out | ✅ Must have | Supabase Auth |
+| Session persistence | ✅ Must have | Supabase + AsyncStorage |
+| Password recovery | ⚡ Nice to have | Supabase Auth |
 | OAuth (Google, Apple) | ⚡ Nice to have | Supabase Auth |
 
-### 6.6 Seed des données initiales
+### 6.6 Initial Data Seeding
 
-À la première connexion d'un nouvel utilisateur, on seed les données depuis `data.json` :
+On first login for a new user, seed data from `data.json`:
 
 ```typescript
 const seedInitialData = async (userId: string) => {
-  // 1. Créer le Balance initial
+  // 1. Create initial Balance
   await supabase.from('balances').insert({
     user_id: userId,
     current: 4836.00,
@@ -840,21 +840,21 @@ const seedInitialData = async (userId: string) => {
     expenses: 1700.50
   });
 
-  // 2. Importer les transactions
+  // 2. Import transactions
   const transactions = dataJson.transactions.map(t => ({
     ...t,
     user_id: userId
   }));
   await supabase.from('transactions').insert(transactions);
 
-  // 3. Créer les budgets
+  // 3. Create budgets
   const budgets = dataJson.budgets.map(b => ({
     ...b,
     user_id: userId
   }));
   await supabase.from('budgets').insert(budgets);
 
-  // 4. Créer les pots
+  // 4. Create pots
   const pots = dataJson.pots.map(p => ({
     ...p,
     user_id: userId
@@ -865,40 +865,40 @@ const seedInitialData = async (userId: string) => {
 
 ---
 
-## 7. Plan de développement
+## 7. Development Plan
 
-### Phase 1 : Setup & Infrastructure
-- [ ] Choisir et configurer la base de données
-- [ ] Configurer l'authentification
+### Phase 1: Setup & Infrastructure
+- [ ] Choose and configure database
+- [ ] Configure authentication
 - [ ] Setup navigation (React Navigation / Expo Router)
-- [ ] Créer les composants de base dans design-system
+- [ ] Create base components in design-system
 
-### Phase 2 : Authentification
-- [ ] Écran Login
-- [ ] Écran Register
-- [ ] Protection des routes
-- [ ] Persistance de session
+### Phase 2: Authentication
+- [ ] Login screen
+- [ ] Register screen
+- [ ] Route protection
+- [ ] Session persistence
 
-### Phase 3 : Écrans principaux (Read)
+### Phase 3: Main Screens (Read)
 - [ ] Overview
-- [ ] Transactions (avec pagination, search, sort, filter)
+- [ ] Transactions (with pagination, search, sort, filter)
 - [ ] Budgets
 - [ ] Pots
 - [ ] Recurring Bills
 
-### Phase 4 : CRUD Budgets
+### Phase 4: Budgets CRUD
 - [ ] Add Budget
 - [ ] Edit Budget
 - [ ] Delete Budget
 
-### Phase 5 : CRUD Pots
+### Phase 5: Pots CRUD
 - [ ] Add Pot
 - [ ] Edit Pot
 - [ ] Delete Pot
 - [ ] Add Money
 - [ ] Withdraw Money
 
-### Phase 6 : Polish
+### Phase 6: Polish
 - [ ] Animations
 - [ ] Error handling
 - [ ] Loading states
@@ -906,26 +906,26 @@ const seedInitialData = async (userId: string) => {
 
 ---
 
-## 8. Configuration Supabase
+## 8. Supabase Configuration
 
-### 8.1 Projet créé
+### 8.1 Project Created
 
-| Paramètre | Valeur |
-|-----------|--------|
-| Organisation | fubaritico |
-| Nom du projet | Finance Mobile Application |
-| Région | Europe |
+| Parameter | Value |
+|-----------|-------|
+| Organization | fubaritico |
+| Project name | Finance Mobile Application |
+| Region | Europe |
 | URL | `https://lccpruqcqalxtbddggow.supabase.co` |
 
-### 8.2 Variables d'environnement
+### 8.2 Environment Variables
 
-Fichier `.env` à la racine (gitignored) :
+`.env` file at root (gitignored):
 ```bash
 SUPABASE_URL=https://lccpruqcqalxtbddggow.supabase.co
 SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
-### 8.3 Schéma SQL à créer
+### 8.3 SQL Schema to Create
 
 ```sql
 -- Enable UUID extension
@@ -1006,35 +1006,35 @@ CREATE POLICY "Users can delete own pots" ON pots FOR DELETE USING (auth.uid() =
 
 ---
 
-## Notes et décisions
+## Notes and Decisions
 
-> Section pour documenter les décisions prises au fil du développement
+> Section to document decisions made during development
 
-| Date | Décision | Raison |
+| Date | Decision | Reason |
 |------|----------|--------|
-| 24/12/2024 | Supabase cloud (Europe) | Latence optimale, free tier suffisant |
-| 24/12/2024 | Jotai + TanStack Query | State atomique + cache serveur |
-| 24/12/2024 | Expo Router + React Navigation | File-based pour Expo, config pour RN CLI |
-| 24/12/2024 | Email/password auth only (MVP) | OAuth en nice-to-have |
-| 25/12/2024 | Package `screens/` séparé | Écrans réutilisables entre Expo Router et React Navigation |
-| 25/12/2024 | Navigation agnostique (callbacks) | Les screens ne dépendent pas de la lib de navigation |
-| 25/12/2024 | Package `design-tokens/` avec Style Dictionary | Source unique des tokens, multi-output (Tailwind, TS, CSS) |
-| 25/12/2024 | `design-system` mobile only pour l'instant | `design-system-web` sera créé quand le web arrivera |
-| 25/12/2024 | Préparation future web responsive | Architecture pensée pour `react-native-web` ou composants web natifs |
-| 25/12/2024 | Architecture hexagonale | Domaine (`shared/`) séparé des adaptateurs (UI mobile/web) |
-| 25/12/2024 | `screens-web/` séparé de `screens/` | Événements différents (hover, click vs touch), UX optimisée par plateforme |
+| 24/12/2024 | Supabase cloud (Europe) | Optimal latency, sufficient free tier |
+| 24/12/2024 | Jotai + TanStack Query | Atomic state + server cache |
+| 24/12/2024 | Expo Router + React Navigation | File-based for Expo, config for RN CLI |
+| 24/12/2024 | Email/password auth only (MVP) | OAuth as nice-to-have |
+| 25/12/2024 | Separate `screens/` package | Reusable screens between Expo Router and React Navigation |
+| 25/12/2024 | Navigation agnostic (callbacks) | Screens don't depend on navigation lib |
+| 25/12/2024 | `design-tokens/` package with Style Dictionary | Single source of tokens, multi-output (Tailwind, TS, CSS) |
+| 25/12/2024 | `design-system` mobile only for now | `design-system-web` will be created when web arrives |
+| 25/12/2024 | Future responsive web preparation | Architecture designed for `react-native-web` or native web components |
+| 25/12/2024 | Hexagonal architecture | Domain (`shared/`) separated from adapters (mobile/web UI) |
+| 25/12/2024 | `screens-web/` separate from `screens/` | Different events (hover, click vs touch), UX optimized per platform |
 
 ---
 
-## Prochaines étapes
+## Next Steps
 
-1. [ ] Créer les tables Supabase (SQL Editor)
-2. [ ] Créer le package `design-tokens/` avec Style Dictionary
-3. [ ] Créer le package `shared/` (api, atoms, hooks, types, utils)
-4. [ ] Créer le package `screens/`
-5. [ ] Implémenter Auth (Login, Sign Up)
-6. [ ] Développer les écrans principaux
+1. [ ] Create Supabase tables (SQL Editor)
+2. [ ] Create `design-tokens/` package with Style Dictionary
+3. [ ] Create `shared/` package (api, atoms, hooks, types, utils)
+4. [ ] Create `screens/` package
+5. [ ] Implement Auth (Login, Sign Up)
+6. [ ] Develop main screens
 
 ---
 
-*Document mis à jour le : 25/12/2024*
+*Document updated: 25/12/2024*
