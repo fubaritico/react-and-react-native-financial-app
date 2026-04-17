@@ -11,7 +11,9 @@
     "android:build": "expo run:android",
     "android:build:device": "expo run:android --device",
     "web": "expo start --web",
-    "lint": "eslint ./src"
+    "changelog": "conventional-changelog -p angular -r 0 --path . > CHANGELOG.md",
+    "lint": "eslint ./src",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@monorepo/design-system": "workspace:^",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@types/react": "catalog:",
+    "conventional-changelog": "catalog:",
     "typescript": "catalog:"
   },
   "private": true
