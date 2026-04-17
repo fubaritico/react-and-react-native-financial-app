@@ -6,9 +6,9 @@
 
 PACKAGES=(
   "packages/design-system"
-  "packages/mobile-expo"
-  "packages/mobile"
-  "packages/mobile-expo-ejected"
+  "apps/mobile-expo"
+  "apps/mobile"
+  "apps/mobile-expo-ejected"
 )
 
 for pkg in "${PACKAGES[@]}"; do

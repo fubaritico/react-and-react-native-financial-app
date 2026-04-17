@@ -8,9 +8,9 @@ set -e
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT_DIR"
 
-MOBILE_DIR="$ROOT_DIR/packages/mobile"
-EXPO_DIR="$ROOT_DIR/packages/mobile-expo"
-EJECTED_DIR="$ROOT_DIR/packages/mobile-expo-ejected"
+MOBILE_DIR="$ROOT_DIR/apps/mobile"
+EXPO_DIR="$ROOT_DIR/apps/mobile-expo"
+EJECTED_DIR="$ROOT_DIR/apps/mobile-expo-ejected"
 
 # ---------- CLEAN ----------
 
@@ -65,19 +65,19 @@ pnpm install --frozen-lockfile
 echo ""
 echo "=== NATIVE REBUILD ==="
 
-# --- packages/mobile (bare RN CLI) ---
+# --- apps/mobile (bare RN CLI) ---
 if [ -f "$MOBILE_DIR/ios/Podfile" ]; then
-  echo "  -> Installing pods for packages/mobile..."
+  echo "  -> Installing pods for apps/mobile..."
   (cd "$MOBILE_DIR/ios" && pod install)
 fi
 
-# --- packages/mobile-expo-ejected ---
+# --- apps/mobile-expo-ejected ---
 if [ -f "$EJECTED_DIR/ios/Podfile" ]; then
-  echo "  -> Installing pods for packages/mobile-expo-ejected..."
+  echo "  -> Installing pods for apps/mobile-expo-ejected..."
   (cd "$EJECTED_DIR/ios" && pod install)
 fi
 
-# --- packages/mobile-expo (Expo managed) ---
+# --- apps/mobile-expo (Expo managed) ---
 # No native dirs — Expo Go handles native builds. Nothing to do.
 
 # ---------- DONE ----------

@@ -1,6 +1,6 @@
 # Modus Operandi — Wireless iPhone Deployment (bare RN CLI)
 
-This guide covers deploying `packages/mobile` (bare React Native CLI) to a physical iPhone over Wi-Fi. This avoids USB disconnect issues during heavy xcodebuild I/O (known problem with iPhone 12 mini).
+This guide covers deploying `apps/mobile` (bare React Native CLI) to a physical iPhone over Wi-Fi. This avoids USB disconnect issues during heavy xcodebuild I/O (known problem with iPhone 12 mini).
 
 ## Prerequisites
 
@@ -20,7 +20,7 @@ This guide covers deploying `packages/mobile` (bare React Native CLI) to a physi
 
 #### 3. Xcode — Code Signing
 
-1. Open `packages/mobile/ios/mobile.xcworkspace` in Xcode
+1. Open `apps/mobile/ios/mobile.xcworkspace` in Xcode
 2. Click the blue **mobile** project icon (top of left sidebar)
 3. Under **TARGETS**, click **mobile**
 4. Go to **Signing & Capabilities** tab
@@ -67,7 +67,7 @@ This only needs to be done once per developer certificate.
 This is already set in the repo. If it reverts (e.g. after a React Native upgrade), fix it:
 
 ```
-# In packages/mobile/ios/mobile.xcodeproj/project.pbxproj
+# In apps/mobile/ios/mobile.xcodeproj/project.pbxproj
 # Change (in both Debug and Release build settings):
 ENABLE_USER_SCRIPT_SANDBOXING = YES;
 # To:

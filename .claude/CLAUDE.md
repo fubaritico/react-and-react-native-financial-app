@@ -36,11 +36,12 @@ targeting React Native (Expo) and React web (React Router).
 
 ### Exists now
 ```
-packages/
-  design-system/       @monorepo/design-system — RN-only, needs cross-platform refactor
+apps/
   mobile/              bare RN CLI — learning reference, may be aligned from time to time
   mobile-expo/         Expo SDK 54 — CANONICAL mobile app, primary focus
   mobile-expo-ejected/ ejected Expo — learning reference, may be aligned from time to time
+packages/
+  design-system/       @monorepo/design-system — RN-only, needs cross-platform refactor
 ```
 
 > **Production-grade**: all 3 mobile apps are kept intentionally to compare bare RN CLI
@@ -163,11 +164,31 @@ packages/
   - Enabled wireless debugging (Connect via Network) to avoid USB disconnect
   - Set ENABLE_USER_SCRIPT_SANDBOXING=NO to fix ip.txt sandbox violation
   - Created `docs/modus-operandi/iphone-wireless-deploy.md` — full wireless deploy guide
+- Added Fb app icon (1024×1024 PNG) to all three mobile apps
+  - Source icon in `packages/design-system/src/assets/app-icon.png`
+  - Bare RN CLI switched to modern single-image AppIcon format
+- Added `expo-dev-client@~6.0.20` to pnpm catalog, mobile-expo and mobile-expo-ejected
+- Added native build scripts (`ios:build`, `ios:build:device`, `android:build`, `android:build:device`)
+- Added `bundleIdentifier` to mobile-expo app.json (`com.anonymous.mobileexpo`)
+- Documented dev vs build scripts in mobile-expo and mobile-expo-ejected READMEs
+- Added Hot Reload (Fast Refresh) section to mobile-expo README
+- Updated reset script to clean mobile-expo generated `ios/`/`android/` dirs
+- Added "always use pnpm" rule to CLAUDE.md
+- Added disk space / build artifacts section to troubleshooting rules
+- Added `conventional-changelog@7.2.0` to pnpm catalog and all 4 packages as devDependency
+- Added `changelog` script to design-system, mobile-expo, mobile, mobile-expo-ejected
+- Added `type-check` script (`tsc --noEmit`) to all 4 packages
+- Created `publish.sh` for design-system (version bump + changelog + npm publish + tag + push)
+- Added `release:patch/minor/major` scripts to design-system
+- Created `scripts/update-changelogs.sh` — auto-generates changelog only for packages with staged changes
+- Added changelog generation as last step in pre-commit hook (after type-check + lint + test)
 
 ### Next
-- Phase 0 (move mobile-expo → apps/mobile, update workspace)
+- Pre-phase cleanup: clean up project (NativeWind remnants, etc.) before starting Phase 0
 
 ### Known Issues
 - Design system tailwind.config.js still references nativewind/preset (to be replaced)
 - NativeWind remnants in mobile-expo (global.css, nativewind-env.d.ts)
+- `expo-dev-client` not yet tested on mobile-expo-ejected
+- mobile-expo-ejected `ios/` is gitignored — icon update is local only
 
