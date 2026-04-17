@@ -9,16 +9,24 @@ Full modus operandi: `docs/modus-operandi/reset.md`
 | Error | Cause | Fix |
 |-------|-------|-----|
 | xcodebuild error 70 | Code signing not configured for physical device | Use `ios:sim` or set up signing in Xcode |
-| xcodebuild error 65 | Stale DerivedData / sandbox conflict | `rm -rf ~/Library/Developer/Xcode/DerivedData/mobile-*` |
-| "Waiting to reconnect" | USB connection dropping during build | Replug, reset Location & Privacy, or use simulator |
+| xcodebuild error 65 | Stale DerivedData or ENABLE_USER_SCRIPT_SANDBOXING=YES | See `iphone-wireless-deploy.md` |
+| "Waiting to reconnect" | USB connection dropping during build | Use wireless debugging (see `iphone-wireless-deploy.md`) |
 | Port 8081 in use | Leftover Metro process | `lsof -ti:8081 \| xargs kill -9` |
 | Pod install fails | Stale CocoaPods cache | `pod repo update && pod cache clean --all` |
 
 ### Bare RN CLI (packages/mobile) — Physical Device
 
-Physical device deployment requires Xcode code signing setup (free Apple ID is sufficient).
-Known issue: iPhone 12 mini USB connection drops during heavy xcodebuild I/O.
-Workaround: use simulator (`ios:sim`) or test via Expo Go with mobile-expo.
+Full guide: `docs/modus-operandi/iphone-wireless-deploy.md`
+
+Physical device deployment uses **wireless debugging** (Connect via Network) to avoid
+USB disconnect issues during heavy xcodebuild I/O (iPhone 12 mini).
+
+Key requirements:
+- Developer Mode enabled on iPhone
+- "Connect via network" checked in Xcode → Devices and Simulators
+- `ENABLE_USER_SCRIPT_SANDBOXING = NO` in project.pbxproj (both Debug + Release)
+- Mac and iPhone on same Wi-Fi
+- Device Conditions set to None (no network simulation active)
 
 ### Simulator Management
 
