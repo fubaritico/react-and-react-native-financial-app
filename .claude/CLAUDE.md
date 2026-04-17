@@ -42,9 +42,10 @@ packages/
   mobile-expo-ejected/ ejected Expo — learning reference, may be aligned from time to time
 ```
 
-> **Learning project**: all 3 mobile apps are kept intentionally to compare bare RN CLI
-> vs Expo managed vs Expo ejected. Primary development happens on mobile-expo,
-> but the other two may be updated to stay aligned. Never delete them.
+> **Production-grade**: all 3 mobile apps are kept intentionally to compare bare RN CLI
+> vs Expo managed vs Expo ejected. All are held to production-grade quality.
+> Only mobile-expo will be published. The other two may be updated to stay aligned.
+> Never delete them.
 
 ### Target after all phases
 ```
@@ -138,9 +139,20 @@ packages/
 - Full project structure scan and mapping to memory
 - Verified all phase plans exist (phase-0 through phase-6), all unstarted
 - Read all design-system components, mobile-expo config, root config
+- Updated mobile-expo README with prerequisites (iOS sim, Android emulator), Expo Go steps, troubleshooting
+- Clarified all 3 mobile apps are learning references (not archived)
+- Set up Husky v9 with pre-commit (type-check + lint + test) and commit-msg (commitlint)
+- Set up commitlint with conventional commits config (ESM format)
+- Set up ESLint 9 flat config: root base + per-package extending configs with react-native plugin
+- Set up Prettier (no semi, single quotes, trailing commas)
+- Introduced pnpm catalog pattern in pnpm-workspace.yaml
+- Added `"type": "module"` and `packageManager` field to root package.json
+- Fixed Jest config in packages/mobile (transformIgnorePatterns for pnpm)
+- Auto-fixed all existing code (semicolons, import order, formatting)
+- Added root scripts: lint, lint:fix, type-check, test
 
 ### Next
-- User-defined prep work before Phase 0 (user will specify)
+- Phase 0 prep work (user will specify)
 
 ### Known Issues
 - troubleshooting.md is empty
