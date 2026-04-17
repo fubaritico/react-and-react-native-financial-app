@@ -98,6 +98,15 @@ Expo Go lets you run the app on a real device without building a native binary.
    - **Android**: open the **Expo Go** app and tap "Scan QR code"
 5. The app loads on your device via the Metro bundler — changes reload automatically
 
+## Hot Reload (Fast Refresh)
+
+Expo uses **Fast Refresh** powered by Metro. Any change to a `.tsx` or `.ts` file is reflected on the device/simulator within seconds — no full rebuild needed.
+
+- Works on **Expo Go**, **dev builds**, and **simulators/emulators**
+- Preserves component state when possible
+- If Fast Refresh fails (e.g. syntax error), fix the error and save again — it recovers automatically
+- To force a full reload, press `r` in the Metro terminal
+
 ## Advantages of managed workflow
 
 - No native configuration required (no Xcode/Android Studio needed for day-to-day dev)
