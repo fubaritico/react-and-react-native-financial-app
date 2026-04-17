@@ -64,7 +64,11 @@ pnpm install
 
 ## Commands
 
-All commands are run from the **monorepo root**:
+All commands are run from the **monorepo root**.
+
+### Dev (Expo Go — no native build)
+
+Use these for day-to-day development. Runs JS via Expo Go on your device or simulator — fast startup, but no custom native code, no custom app icon or splash screen.
 
 ```bash
 # Start Metro bundler (interactive — pick device from menu)
@@ -73,15 +77,35 @@ pnpm --filter mobile-expo start
 # Clear Metro cache and start
 pnpm --filter mobile-expo start --clear
 
-# Launch on iOS simulator
+# Launch on iOS simulator via Expo Go
 pnpm --filter mobile-expo ios
 
-# Launch on Android emulator
+# Launch on Android emulator via Expo Go
 pnpm --filter mobile-expo android
 
 # Launch on Web
 pnpm --filter mobile-expo web
 ```
+
+### Build (native binary — full app experience)
+
+Use these when you need the real app: custom icon, splash screen, native modules, or testing on a physical device. Compiles a native binary via Xcode/Gradle — slower first build, but produces a standalone app.
+
+```bash
+# Build and run on iOS simulator
+pnpm --filter mobile-expo ios:build
+
+# Build and run on physical iPhone (prompts for device selection)
+pnpm --filter mobile-expo ios:build:device
+
+# Build and run on Android emulator
+pnpm --filter mobile-expo android:build
+
+# Build and run on physical Android device
+pnpm --filter mobile-expo android:build:device
+```
+
+> **First build** generates the `ios/` and `android/` folders (via `expo prebuild`) and runs pod install. Subsequent builds are incremental and much faster.
 
 ## Expo Go (physical device)
 

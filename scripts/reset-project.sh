@@ -23,6 +23,9 @@ find . -name "node_modules" -type d -prune -exec rm -rf {} + 2>/dev/null || true
 echo "  -> Removing Expo caches..."
 rm -rf "$EXPO_DIR/.expo" "$EJECTED_DIR/.expo" 2>/dev/null || true
 
+echo "  -> Removing mobile-expo generated native dirs (expo prebuild)..."
+rm -rf "$EXPO_DIR/ios" "$EXPO_DIR/android" 2>/dev/null || true
+
 echo "  -> Removing iOS build artifacts..."
 rm -rf "$MOBILE_DIR/ios/Pods" "$MOBILE_DIR/ios/build" 2>/dev/null || true
 rm -rf "$EJECTED_DIR/ios/Pods" "$EJECTED_DIR/ios/build" 2>/dev/null || true
@@ -43,6 +46,7 @@ watchman watch-del-all 2>/dev/null || true
 
 echo "  -> Clearing Xcode DerivedData for mobile projects..."
 find ~/Library/Developer/Xcode/DerivedData -maxdepth 1 -name "mobile-*" -type d -exec rm -rf {} + 2>/dev/null || true
+find ~/Library/Developer/Xcode/DerivedData -maxdepth 1 -name "mobileexpo-*" -type d -exec rm -rf {} + 2>/dev/null || true
 find ~/Library/Developer/Xcode/DerivedData -maxdepth 1 -name "mobileexpoejected-*" -type d -exec rm -rf {} + 2>/dev/null || true
 
 echo "  -> Pruning pnpm store..."
