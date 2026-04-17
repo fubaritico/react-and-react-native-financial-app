@@ -97,11 +97,12 @@ config.resolver.sourceExts = [
 
 The `react-native` field ensures Metro uses the correct entry point.
 
-## Archived Packages
+## Learning Reference Packages
 
-`packages/mobile` and `packages/mobile-expo-ejected` are ARCHIVED.
-Do not modify, do not run, do not reference them in new code.
-They exist for reference only until confirmed safe to delete.
+`packages/mobile` (bare RN CLI) and `packages/mobile-expo-ejected` (ejected Expo) are kept
+as learning references to compare approaches with the canonical `packages/mobile-expo` (Expo managed).
+Primary development happens on mobile-expo, but the other two may be aligned from time to time.
+Never delete them. All three must be covered by ESLint and project tooling.
 
 ## Adding a New Package
 

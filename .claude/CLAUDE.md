@@ -37,10 +37,14 @@ targeting React Native (Expo) and React web (React Router).
 ```
 packages/
   design-system/       @monorepo/design-system — RN-only, needs cross-platform refactor
-  mobile/              bare RN CLI — ARCHIVED, do not touch
-  mobile-expo/         Expo SDK 54 — CANONICAL mobile app
-  mobile-expo-ejected/ ejected Expo — ARCHIVED, do not touch
+  mobile/              bare RN CLI — learning reference, may be aligned from time to time
+  mobile-expo/         Expo SDK 54 — CANONICAL mobile app, primary focus
+  mobile-expo-ejected/ ejected Expo — learning reference, may be aligned from time to time
 ```
+
+> **Learning project**: all 3 mobile apps are kept intentionally to compare bare RN CLI
+> vs Expo managed vs Expo ejected. Primary development happens on mobile-expo,
+> but the other two may be updated to stay aligned. Never delete them.
 
 ### Target after all phases
 ```
@@ -127,4 +131,19 @@ packages/
 | `troubleshooting.md` | Debug, architectural decisions                                  |
 
 **Before coding**: ask which reference files are needed — do NOT start coding without the relevant files loaded.
+
+## Session State
+
+### Completed
+- Full project structure scan and mapping to memory
+- Verified all phase plans exist (phase-0 through phase-6), all unstarted
+- Read all design-system components, mobile-expo config, root config
+
+### Next
+- User-defined prep work before Phase 0 (user will specify)
+
+### Known Issues
+- troubleshooting.md is empty
+- Design system tailwind.config.js still references nativewind/preset (to be replaced)
+- NativeWind remnants in mobile-expo (global.css, nativewind-env.d.ts)
 
