@@ -38,3 +38,6 @@ catalog:
   husky: "^9.1.7"
   "@commitlint/cli": "^20.5.0"
   "@commitlint/config-conventional": "^20.5.0"
+
+  # Release tools
+  conventional-changelog: "7.2.0"
