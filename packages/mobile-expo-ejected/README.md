@@ -9,17 +9,41 @@ Application React Native avec **Expo (bare workflow)** — projet "ejecté" via 
 - **TypeScript**
 - **Code natif exposé** (ios/ et android/)
 
-## Commandes
+## Commands
+
+All commands are run from the **monorepo root**.
+
+### Dev (Expo Go — JS only)
+
+Use these for quick iteration on JS code. Runs via Expo Go — no native build required, but no custom icon, splash screen, or native modules.
 
 ```bash
-# Démarrer Metro
+# Start Metro bundler
 pnpm --filter mobile-expo-ejected start
 
-# Lancer sur iOS (simulateur)
+# Launch on iOS via Expo Go
 pnpm --filter mobile-expo-ejected ios
 
-# Lancer sur Android (émulateur)
+# Launch on Android via Expo Go
 pnpm --filter mobile-expo-ejected android
+```
+
+### Build (native binary — full app experience)
+
+Use these when you need the real app: custom icon, splash screen, native modules, or testing on a physical device. Compiles a native binary via Xcode/Gradle using the existing `ios/` and `android/` folders.
+
+```bash
+# Build and run on iOS simulator
+pnpm --filter mobile-expo-ejected ios:build
+
+# Build and run on physical iPhone (prompts for device selection)
+pnpm --filter mobile-expo-ejected ios:build:device
+
+# Build and run on Android emulator
+pnpm --filter mobile-expo-ejected android:build
+
+# Build and run on physical Android device
+pnpm --filter mobile-expo-ejected android:build:device
 ```
 
 ## Différence avec mobile-expo (managed)

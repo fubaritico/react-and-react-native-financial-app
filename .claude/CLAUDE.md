@@ -23,6 +23,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Never hallucinate** — if uncertain, read code first
 - **Always use context7** for any question about an API, library, or package
 - **Secrets** — live in `.env*` files — never in rules, memory, or code
+- **Always use pnpm** — never npm or yarn, including for registry lookups (`pnpm view` not `npm view`)
 - **Never `console.log`** — use `console.warn` / `console.error`
 - **Never explicit `any`** — strict TypeScript
 - **Always run** lint + typecheck + test once a set of modifications is done

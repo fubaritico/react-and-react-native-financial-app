@@ -4,14 +4,19 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
+    "ios": "expo start --ios",
+    "android": "expo start --android",
+    "ios:build": "expo run:ios",
+    "ios:build:device": "expo run:ios --device",
+    "android:build": "expo run:android",
+    "android:build:device": "expo run:android --device",
     "web": "expo start --web",
     "lint": "eslint ./src"
   },
   "dependencies": {
     "@monorepo/design-system": "workspace:^",
     "expo": "catalog:",
+    "expo-dev-client": "catalog:",
     "expo-status-bar": "catalog:",
     "react": "catalog:",
     "react-native": "catalog:"

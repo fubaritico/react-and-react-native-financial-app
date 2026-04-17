@@ -28,6 +28,35 @@ Key requirements:
 - Mac and iPhone on same Wi-Fi
 - Device Conditions set to None (no network simulation active)
 
+### Disk Space — Build Artifacts
+
+Xcode DerivedData, CocoaPods cache, and Expo prebuild output (`ios/`, `android/`) accumulate
+quickly and can consume several GB. This is especially problematic on smaller drives.
+
+Cleanup commands:
+```bash
+# DerivedData — can be 5-20+ GB (Xcode rebuilds what it needs)
+rm -rf ~/Library/Developer/Xcode/DerivedData
+
+# CocoaPods cache
+pod cache clean --all
+
+# Expo managed (mobile-expo) generated native dirs
+rm -rf packages/mobile-expo/ios packages/mobile-expo/android
+
+# pnpm store — remove unreferenced packages
+pnpm store prune
+
+# iOS simulator caches (resets all simulators)
+xcrun simctl erase all
+```
+
+The reset script (`pnpm reset`) handles most of these automatically.
+
+> **Warning**: third-party cleanup utilities may delete Xcode simulator runtimes and device
+> trust caches. If your simulator or physical device stops being recognized after a cleanup,
+> re-download the runtime in Xcode > Settings > Components and re-pair your device.
+
 ### Simulator Management
 
 - Close simulator between app switches (Metro port conflict)
