@@ -9,7 +9,7 @@ Prepare and propose a conventional commit for the current changes.
    - `packages/tokens` → scope `tokens`
    - `packages/tailwind-config` → scope `tailwind-config`
    - `packages/shared` → scope `shared`
-   - `packages/mobile-expo` or `apps/mobile` → scope `mobile`
+   - `apps/mobile-expo` or `apps/mobile` → scope `mobile`
    - `apps/web` → scope `web`
    - `.claude/` or `docs/` → scope `config`
    - Root config files → scope `monorepo`

@@ -103,7 +103,7 @@ The generic `ios` command is for physical device deployment (requires signing se
 **Cause**: The Xcode project isn't configured for device signing.
 
 **Fix**:
-1. Open `packages/mobile/ios/mobile.xcworkspace` in Xcode
+1. Open `apps/mobile/ios/mobile.xcworkspace` in Xcode
 2. Click the blue **mobile** project icon (top of left sidebar)
 3. Under **TARGETS**, click **mobile**
 4. Go to **Signing & Capabilities** tab
@@ -162,7 +162,7 @@ pod repo update
 pod cache clean --all
 
 # Then retry
-cd packages/mobile/ios && pod install
+cd apps/mobile/ios && pod install
 ```
 
 ### Metro port 8081 already in use

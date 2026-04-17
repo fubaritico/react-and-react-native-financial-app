@@ -99,8 +99,8 @@ The `react-native` field ensures Metro uses the correct entry point.
 
 ## Learning Reference Packages
 
-`packages/mobile` (bare RN CLI) and `packages/mobile-expo-ejected` (ejected Expo) are kept
-as learning references to compare approaches with the canonical `packages/mobile-expo` (Expo managed).
+`apps/mobile` (bare RN CLI) and `apps/mobile-expo-ejected` (ejected Expo) are kept
+as learning references to compare approaches with the canonical `apps/mobile-expo` (Expo managed).
 Primary development happens on mobile-expo, but the other two may be aligned from time to time.
 Never delete them. All three must be covered by ESLint and project tooling.
 
@@ -108,5 +108,5 @@ Never delete them. All three must be covered by ESLint and project tooling.
 
 1. Create `packages/[name]/` directory
 2. Add `package.json` with `@monorepo/[name]` name
-3. Add to no extra workspace config — pnpm-workspace.yaml uses `packages/*` glob
+3. Add to no extra workspace config — pnpm-workspace.yaml uses `packages/*` and `apps/*` globs
 4. Add as dependency where needed: `pnpm --filter [consumer] add @monorepo/[name]@workspace:^`

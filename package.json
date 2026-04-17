@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "pnpm -r --if-present run test",
-    "clean": "rm -rf node_modules packages/*/node_modules",
+    "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules",
     "reset": "./scripts/reset-project.sh",
     "postinstall": "chmod +x scripts/*.sh",
     "prepare": "husky"

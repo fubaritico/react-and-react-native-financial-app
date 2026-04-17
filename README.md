@@ -10,9 +10,12 @@ react-native/
 ├── pnpm-workspace.yaml     # Déclaration des workspaces pnpm
 ├── .gitignore              # Fichiers ignorés par Git
 ├── README.md               # Ce fichier
-└── packages/               # Contient tous les packages
-    ├── mobile/             # (à venir) App React Native sans Expo
-    └── mobile-expo/        # (à venir) App React Native avec Expo
+├── apps/                   # Applications
+│   ├── mobile/             # App React Native CLI (sans Expo)
+│   ├── mobile-expo/        # App React Native avec Expo (canonical)
+│   └── mobile-expo-ejected/ # App Expo ejected
+└── packages/               # Packages partagés
+    └── design-system/      # @monorepo/design-system
 ```
 
 ## Prérequis
@@ -100,8 +103,8 @@ pnpm install
 ### 6. Installer les Pods iOS
 
 ```bash
-# Dans packages/mobile
-cd packages/mobile
+# Dans apps/mobile
+cd apps/mobile
 bundle install
 bundle exec pod install --project-directory=ios
 ```
@@ -162,7 +165,7 @@ Dans le `package.json` racine :
 
 #### 2. Aligner les versions dans chaque package.json
 
-Dans `packages/mobile/package.json`, `packages/mobile-expo/package.json`, etc. :
+Dans `apps/mobile/package.json`, `apps/mobile-expo/package.json`, etc. :
 
 ```json
 {
@@ -183,7 +186,7 @@ Dans `packages/mobile/package.json`, `packages/mobile-expo/package.json`, etc. :
 Si le dossier `android/` a été créé avec RN 0.82, il contient des fichiers incompatibles. Solution :
 
 ```bash
-cd packages/mobile
+cd apps/mobile
 mv android android_backup
 npx @react-native-community/cli init mobile --version 0.81.5 --skip-install --directory temp_mobile
 mv temp_mobile/android .
@@ -199,7 +202,7 @@ rm -rf temp_mobile
 ls node_modules/.pnpm | grep "^react-native@0"
 
 # Vérifier la version dans un package
-cat packages/mobile/node_modules/react-native/package.json | grep version
+cat apps/mobile/node_modules/react-native/package.json | grep version
 ```
 
 #### Nettoyage complet et réinstallation
@@ -213,7 +216,7 @@ pnpm clean && pnpm install
 #### Nettoyage iOS
 
 ```bash
-cd packages/mobile/ios
+cd apps/mobile/ios
 rm -rf build Pods Podfile.lock
 pod install
 ```
@@ -222,9 +225,9 @@ pod install
 
 ```bash
 # Supprimer les builds et caches Gradle
-rm -rf packages/mobile/android/build
-rm -rf packages/mobile/android/app/build
-rm -rf packages/mobile/android/.gradle
+rm -rf apps/mobile/android/build
+rm -rf apps/mobile/android/app/build
+rm -rf apps/mobile/android/.gradle
 rm -rf ~/.gradle/caches
 
 # Désinstaller l'app de l'émulateur
@@ -267,7 +270,7 @@ grep -A 10 "FATAL EXCEPTION" /tmp/crash.log
 
 Dans un monorepo pnpm, les dépendances sont hoistées à la racine. Metro doit être configuré pour les trouver.
 
-Le fichier `packages/mobile/metro.config.js` doit inclure :
+Le fichier `apps/mobile/metro.config.js` doit inclure :
 
 ```js
 const path = require('path');
@@ -305,7 +308,7 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 Utiliser Bundler (installé localement dans le projet) :
 
 ```bash
-cd packages/mobile
+cd apps/mobile
 bundle install
 bundle exec pod install --project-directory=ios
 ```
@@ -406,11 +409,12 @@ pnpm --filter mobile ios
 
 ### pnpm workspaces
 
-Le fichier `pnpm-workspace.yaml` déclare que tous les sous-dossiers de `packages/` sont des packages du monorepo :
+Le fichier `pnpm-workspace.yaml` déclare les packages du monorepo :
 
 ```yaml
 packages:
   - "packages/*"
+  - "apps/*"
 ```
 
 **Avantages :**
@@ -446,6 +450,6 @@ pnpm add -w -D <package-name>
 ## Prochaines étapes
 
 1. ~~Créer le dossier `packages/`~~ ✅
-2. ~~Initialiser le projet React Native CLI dans `packages/mobile`~~ ✅
-3. Ajouter un projet Expo dans `packages/mobile-expo`
+2. ~~Initialiser le projet React Native CLI dans `apps/mobile`~~ ✅
+3. Ajouter un projet Expo dans `apps/mobile-expo`
 4. Créer un package `shared` pour le code partagé

@@ -11,12 +11,12 @@ This phase has no new features — only moves and decisions.
 
 ## Step 0.1 — Decide Canonical Mobile App
 
-**Decision already made**: `packages/mobile-expo` is canonical.
+**Decision already made**: `apps/mobile-expo` is canonical.
 - Expo SDK 54, React 19, RN 0.81.5
 - Expo Router (file-based navigation)
 - Cleanest setup, no ejection complexity
 
-`packages/mobile` and `packages/mobile-expo-ejected` are ARCHIVED.
+`apps/mobile` and `apps/mobile-expo-ejected` are ARCHIVED.
 Do not modify them. Mark for deletion once Phase 3 is validated.
 
 ---
@@ -28,7 +28,7 @@ Do not modify them. Mark for deletion once Phase 3 is validated.
 mkdir apps
 
 # Move canonical mobile app
-mv packages/mobile-expo apps/mobile
+mv packages/mobile-expo apps/mobile  # DONE — all 3 apps moved to apps/
 
 # Update package.json name inside apps/mobile
 # Change: "name": "mobile-expo"
@@ -80,8 +80,8 @@ pnpm --filter mobile start
 ## Completion Criteria
 
 - [ ] `apps/mobile/` exists and boots
-- [ ] `packages/mobile` untouched (archived)
-- [ ] `packages/mobile-expo-ejected` untouched (archived)
+- [ ] `apps/mobile` (moved from packages/mobile)
+- [ ] `apps/mobile-expo-ejected` (moved from packages/mobile-expo-ejected)
 - [ ] `pnpm-workspace.yaml` includes `apps/*`
 - [ ] `pnpm install` runs without errors
 - [ ] `.gitignore` includes `packages/tokens/build/`

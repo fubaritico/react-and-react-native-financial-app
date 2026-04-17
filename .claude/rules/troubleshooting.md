@@ -14,7 +14,7 @@ Full modus operandi: `docs/modus-operandi/reset.md`
 | Port 8081 in use | Leftover Metro process | `lsof -ti:8081 \| xargs kill -9` |
 | Pod install fails | Stale CocoaPods cache | `pod repo update && pod cache clean --all` |
 
-### Bare RN CLI (packages/mobile) — Physical Device
+### Bare RN CLI (apps/mobile) — Physical Device
 
 Full guide: `docs/modus-operandi/iphone-wireless-deploy.md`
 
@@ -42,7 +42,7 @@ rm -rf ~/Library/Developer/Xcode/DerivedData
 pod cache clean --all
 
 # Expo managed (mobile-expo) generated native dirs
-rm -rf packages/mobile-expo/ios packages/mobile-expo/android
+rm -rf apps/mobile-expo/ios apps/mobile-expo/android
 
 # pnpm store — remove unreferenced packages
 pnpm store prune
