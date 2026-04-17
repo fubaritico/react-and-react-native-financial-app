@@ -1,2 +1,39 @@
 packages:
   - "packages/*"
+
+catalog:
+  # React ecosystem
+  react: "19.1.0"
+  react-native: "0.81.5"
+
+  # Expo
+  expo: "~54.0.25"
+  expo-status-bar: "~3.0.8"
+
+  # TypeScript
+  typescript: "~5.9.2"
+  "@types/react": "~19.1.0"
+
+  # Styling
+  tailwindcss: "3"
+  twrnc: "^4.6.1"
+
+  # ESLint
+  eslint: "^9.27.0"
+  "@eslint/js": "^9.27.0"
+  typescript-eslint: "^8.32.1"
+  eslint-plugin-react: "^7.37.5"
+  eslint-plugin-react-hooks: "^5.2.0"
+  eslint-plugin-react-native: "^5.0.0"
+  eslint-plugin-import: "^2.31.0"
+  eslint-plugin-prettier: "^5.4.0"
+  eslint-config-prettier: "^10.1.5"
+  globals: "^15.15.0"
+
+  # Prettier
+  prettier: "^3.5.3"
+
+  # Git hooks & commit
+  husky: "^9.1.7"
+  "@commitlint/cli": "^20.5.0"
+  "@commitlint/config-conventional": "^20.5.0"

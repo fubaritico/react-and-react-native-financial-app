@@ -1,4 +1,4 @@
-import { create } from 'twrnc';
+import { create } from 'twrnc'
 
 const tw = create({
   theme: {
@@ -9,6 +9,6 @@ const tw = create({
       },
     },
   },
-});
+})
 
-export default tw;
+export default tw
