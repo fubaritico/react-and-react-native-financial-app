@@ -8,47 +8,131 @@ Application React Native avec **Expo (managed workflow)**.
 - **React Native 0.81.5**
 - **TypeScript**
 
-## Commandes
+## Prerequisites
+
+### iOS Simulator
+
+1. Install **Xcode** from the Mac App Store
+2. Open Xcode, go to **Settings > Components**
+3. Download an **iOS runtime** (e.g. iOS 18.4 — ~9 GB)
+4. Verify simulators are available:
+   ```bash
+   xcrun simctl list devices available
+   ```
+   You should see devices like "iPhone 16", "iPhone 15 Pro", etc.
+
+### Android Emulator
+
+Since there is no Android physical device available, the emulator is the only way to test on Android.
+
+1. Install **Android Studio** from https://developer.android.com/studio
+2. On first launch, complete the setup wizard — it installs the Android SDK, build tools, and platform tools
+3. Open Android Studio, go to **More Actions > Virtual Device Manager** (or **Tools > Device Manager** if a project is open)
+4. Click **Create Device**:
+   - Pick a device profile (e.g. "Pixel 8")
+   - Select a system image — download one with **API 34+** (click the download icon next to it)
+   - Finish the wizard
+5. Start the emulator by clicking the play button next to your device in the Device Manager
+6. Set the environment variables — add these to your `~/.zshrc`:
+   ```bash
+   export ANDROID_HOME=$HOME/Library/Android/sdk
+   export PATH=$PATH:$ANDROID_HOME/emulator
+   export PATH=$PATH:$ANDROID_HOME/platform-tools
+   ```
+   Then reload your shell:
+   ```bash
+   source ~/.zshrc
+   ```
+7. Verify the setup:
+   ```bash
+   adb devices
+   ```
+   You should see your emulator listed (e.g. `emulator-5554  device`)
+8. Launch the app:
+   ```bash
+   pnpm --filter mobile-expo android
+   ```
+
+**Note:** The Android emulator requires hardware acceleration (Intel HAXM or Apple Hypervisor). On Apple Silicon Macs this works out of the box. On Intel Macs, ensure HAXM is installed (Android Studio setup wizard handles this).
+
+### Dependencies
 
 ```bash
-# Démarrer le serveur de développement
+# From monorepo root
+pnpm install
+```
+
+## Commands
+
+All commands are run from the **monorepo root**:
+
+```bash
+# Start Metro bundler (interactive — pick device from menu)
 pnpm --filter mobile-expo start
 
-# Lancer sur iOS (simulateur)
+# Clear Metro cache and start
+pnpm --filter mobile-expo start --clear
+
+# Launch on iOS simulator
 pnpm --filter mobile-expo ios
 
-# Lancer sur Android (émulateur)
+# Launch on Android emulator
 pnpm --filter mobile-expo android
 
-# Lancer sur Web
+# Launch on Web
 pnpm --filter mobile-expo web
 ```
 
-## Expo Go (test sur device physique)
+## Expo Go (physical device)
 
-1. Installer l'app **Expo Go** sur ton téléphone
-2. Lancer `pnpm --filter mobile-expo start`
-3. Scanner le QR code affiché dans le terminal
+Expo Go lets you run the app on a real device without building a native binary.
 
-## Avantages du managed workflow
+1. Install **Expo Go** from the App Store (iOS) or Google Play Store (Android)
+2. Make sure your phone and your computer are on the **same Wi-Fi network**
+3. From the monorepo root, run:
+   ```bash
+   pnpm --filter mobile-expo start
+   ```
+4. A QR code appears in the terminal
+   - **iOS**: open the **Camera** app and point it at the QR code — tap the Expo banner that appears
+   - **Android**: open the **Expo Go** app and tap "Scan QR code"
+5. The app loads on your device via the Metro bundler — changes reload automatically
 
-- ✅ Pas de configuration native (pas de Xcode/Android Studio requis pour dev)
-- ✅ OTA updates possibles
-- ✅ SDK Expo riche (camera, notifications, auth...)
-- ✅ Build cloud avec EAS
+## Advantages of managed workflow
+
+- No native configuration required (no Xcode/Android Studio needed for day-to-day dev)
+- OTA updates possible
+- Rich Expo SDK (camera, notifications, auth...)
+- Cloud builds with EAS
 
 ## Limitations
 
-- ❌ Pas d'accès direct au code natif iOS/Android
-- ❌ Modules natifs custom limités
-- ❌ Dépendance à l'écosystème Expo
+- No direct access to native iOS/Android code
+- Custom native modules are limited
+- Dependency on the Expo ecosystem
+
+## Troubleshooting
+
+### "Unable to boot device / cannot determine the runtime bundle"
+The iOS simulator runtime is missing. Install it via Xcode > Settings > Components (see Prerequisites above).
+
+### Simulator boot timeout
+On first launch after installing a runtime, the simulator may timeout during boot. The app usually recovers automatically — check if the simulator opened and the app loaded despite the error.
+
+### expo version mismatch warning
+If Metro warns about expo version mismatch, update with:
+```bash
+pnpm --filter mobile-expo add expo@~54.0.33
+```
 
 ## Structure
 
 ```
 mobile-expo/
-├── App.tsx          # Point d'entrée
-├── app.json         # Configuration Expo
+├── App.tsx          # Entry point
+├── app.json         # Expo configuration
+├── index.ts         # App registry
+├── metro.config.js  # Metro config (monorepo watchFolders)
 ├── assets/          # Images, fonts...
 ├── package.json
 └── tsconfig.json
