@@ -1,22 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { Header, Button, Card } from '@monorepo/design-system';
+import { Button, Card, Header } from '@monorepo/design-system'
+import { StatusBar } from 'expo-status-bar'
+import { ScrollView, StyleSheet, View } from 'react-native'
 
 export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       <Header title="Mobile Expo" subtitle="Design System partagé" />
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
-        <Card title="Bienvenue" text="Ceci est une carte du design-system partagé." style={styles.card} />
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <Card
+          title="Bienvenue"
+          text="Ceci est une carte du design-system partagé."
+          style={styles.card}
+        />
         <Card title="Actions" style={styles.card}>
-          <Button title="Primary" onPress={() => alert('Primary!')} style={styles.button} />
-          <Button title="Secondary" variant="secondary" onPress={() => alert('Secondary!')} style={styles.button} />
-          <Button title="Outline" variant="outline" onPress={() => alert('Outline!')} />
+          <Button
+            title="Primary"
+            onPress={() => {
+              alert('Primary!')
+            }}
+            style={styles.button}
+          />
+          <Button
+            title="Secondary"
+            variant="secondary"
+            onPress={() => {
+              alert('Secondary!')
+            }}
+            style={styles.button}
+          />
+          <Button
+            title="Outline"
+            variant="outline"
+            onPress={() => {
+              alert('Outline!')
+            }}
+          />
         </Card>
       </ScrollView>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -36,4 +62,4 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 8,
   },
-});
+})

@@ -1,26 +1,27 @@
-import React from 'react';
-import { TouchableOpacity, Text, ViewStyle } from 'react-native';
-import tw from '../lib/tw';
+import React from 'react'
+import { Text, TouchableOpacity, ViewStyle } from 'react-native'
+
+import tw from '../lib/tw'
 
 interface ButtonProps {
-  title: string;
-  onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline';
-  disabled?: boolean;
-  style?: ViewStyle;
+  title: string
+  onPress: () => void
+  variant?: 'primary' | 'secondary' | 'outline'
+  disabled?: boolean
+  style?: ViewStyle
 }
 
 const variantStyles = {
   primary: tw`bg-primary`,
   secondary: tw`bg-secondary`,
   outline: tw`bg-transparent border-2 border-primary`,
-};
+}
 
 const textStyles = {
   primary: tw`text-white`,
   secondary: tw`text-black`,
   outline: tw`text-primary`,
-};
+}
 
 export const Button: React.FC<ButtonProps> = ({
   title,
@@ -45,5 +46,5 @@ export const Button: React.FC<ButtonProps> = ({
         {title}
       </Text>
     </TouchableOpacity>
-  );
-};
+  )
+}

@@ -1,12 +1,13 @@
-import React from 'react';
-import { View, Text, ViewStyle } from 'react-native';
-import tw from '../lib/tw';
+import React from 'react'
+import { Text, View, ViewStyle } from 'react-native'
+
+import tw from '../lib/tw'
 
 interface CardProps {
-  title: string;
-  text?: string;
-  children?: React.ReactNode;
-  style?: ViewStyle;
+  title: string
+  text?: string
+  children?: React.ReactNode
+  style?: ViewStyle
 }
 
 export const Card: React.FC<CardProps> = ({ title, text, children, style }) => {
@@ -24,5 +25,5 @@ export const Card: React.FC<CardProps> = ({ title, text, children, style }) => {
         </View>
       )}
     </View>
-  );
-};
+  )
+}

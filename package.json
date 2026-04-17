@@ -1,14 +1,35 @@
 {
   "name": "rn-monorepo",
   "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.7.1",
   "scripts": {
     "start": "echo \"Use: pnpm --filter mobile start\"",
     "android": "echo \"Use: pnpm --filter mobile android\"",
     "ios": "echo \"Use: pnpm --filter mobile ios\"",
-    "clean": "rm -rf node_modules packages/*/node_modules"
+    "type-check": "pnpm -r --if-present run type-check",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "pnpm -r --if-present run test",
+    "clean": "rm -rf node_modules packages/*/node_modules",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "tailwindcss": "3"
+    "@commitlint/cli": "catalog:",
+    "@commitlint/config-conventional": "catalog:",
+    "@eslint/js": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-react": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "eslint-plugin-react-native": "catalog:",
+    "globals": "catalog:",
+    "husky": "catalog:",
+    "prettier": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript-eslint": "catalog:"
   },
   "pnpm": {
     "overrides": {

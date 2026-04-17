@@ -51,7 +51,7 @@ local.properties
 *.temp
 
 # Proto
-proto/
+files/proto/
 
 # Critical (credentials for supabase)
 files/critical

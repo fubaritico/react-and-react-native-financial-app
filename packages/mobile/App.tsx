@@ -1,6 +1,6 @@
-import { StatusBar, StyleSheet, View, ScrollView, Alert } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { Header, Button, Card } from '@monorepo/design-system';
+import { Button, Card, Header } from '@monorepo/design-system'
+import { Alert, ScrollView, StatusBar, StyleSheet } from 'react-native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 
 function App() {
   return (
@@ -8,17 +8,43 @@ function App() {
       <SafeAreaView style={styles.container} edges={['top']}>
         <StatusBar barStyle="light-content" />
         <Header title="Mobile CLI" subtitle="Design System partagé" />
-        <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
-          <Card title="Bienvenue" text="Ceci est une carte du design-system partagé." style={styles.card} />
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContent}
+        >
+          <Card
+            title="Bienvenue"
+            text="Ceci est une carte du design-system partagé."
+            style={styles.card}
+          />
           <Card title="Actions" style={styles.card}>
-            <Button title="Primary" onPress={() => Alert.alert('Primary!')} style={styles.button} />
-            <Button title="Secondary" variant="secondary" onPress={() => Alert.alert('Secondary!')} style={styles.button} />
-            <Button title="Outline" variant="outline" onPress={() => Alert.alert('Outline!')} />
+            <Button
+              title="Primary"
+              onPress={() => {
+                Alert.alert('Primary!')
+              }}
+              style={styles.button}
+            />
+            <Button
+              title="Secondary"
+              variant="secondary"
+              onPress={() => {
+                Alert.alert('Secondary!')
+              }}
+              style={styles.button}
+            />
+            <Button
+              title="Outline"
+              variant="outline"
+              onPress={() => {
+                Alert.alert('Outline!')
+              }}
+            />
           </Card>
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -38,6 +64,6 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 8,
   },
-});
+})
 
-export default App;
+export default App
