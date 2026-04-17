@@ -150,12 +150,23 @@ packages/
 - Fixed Jest config in packages/mobile (transformIgnorePatterns for pnpm)
 - Auto-fixed all existing code (semicolons, import order, formatting)
 - Added root scripts: lint, lint:fix, type-check, test
+- Created `scripts/reset-project.sh` (full clean + reinstall + pod install + DerivedData cleanup)
+- Added root scripts: `reset`, `postinstall`
+- Added `ios:sim` and `android:emu` scripts to packages/mobile
+- Created `docs/modus-operandi/reset.md` (post-reset verification checklist + known issues)
+- Populated `.claude/rules/troubleshooting.md` with quick reference table
+- Configured Xcode signing for physical device (Personal Team, free Apple ID)
+- Updated Podfile.lock (CocoaPods 1.15.2 -> 1.16.2)
+- Clarified all apps are production-grade (not just learning references)
+- Fixed bare RN CLI (packages/mobile) physical iPhone deployment:
+  - Enabled wireless debugging (Connect via Network) to avoid USB disconnect
+  - Set ENABLE_USER_SCRIPT_SANDBOXING=NO to fix ip.txt sandbox violation
+  - Created `docs/modus-operandi/iphone-wireless-deploy.md` — full wireless deploy guide
 
 ### Next
-- Phase 0 prep work (user will specify)
+- Phase 0 (move mobile-expo → apps/mobile, update workspace)
 
 ### Known Issues
-- troubleshooting.md is empty
 - Design system tailwind.config.js still references nativewind/preset (to be replaced)
 - NativeWind remnants in mobile-expo (global.css, nativewind-env.d.ts)
 
