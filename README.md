@@ -1,4 +1,4 @@
-# React Native Monorepo
+# React & React Native Financial App
 
 Monorepo pour applications React Native, géré avec **pnpm workspaces**.
 
@@ -15,7 +15,7 @@ react-native/
 │   ├── mobile-expo/        # App React Native avec Expo (canonical)
 │   └── mobile-expo-ejected/ # App Expo ejected
 └── packages/               # Packages partagés
-    └── design-system/      # @monorepo/design-system
+    └── ui/      # @financial-app/ui
 ```
 
 ## Prérequis
@@ -113,11 +113,11 @@ bundle exec pod install --project-directory=ios
 
 ```bash
 # Démarrer Metro (dans un terminal dédié)
-pnpm --filter mobile start
+pnpm --filter mobile-financial-app start
 
 # Dans un autre terminal :
-pnpm --filter mobile ios      # iOS (simulateur)
-pnpm --filter mobile android  # Android (émulateur doit être lancé)
+pnpm --filter mobile-financial-app ios      # iOS (simulateur)
+pnpm --filter mobile-financial-app android  # Android (émulateur doit être lancé)
 ```
 
 ---
@@ -130,7 +130,7 @@ Dans ce monorepo, nous avons plusieurs apps :
 - **`mobile`** : React Native CLI (sans Expo)
 - **`mobile-expo`** : Expo managed (SDK 54)
 - **`mobile-expo-ejected`** : Expo bare/ejected
-- **`design-system`** : Composants partagés avec `twrnc` (Tailwind pour RN)
+- **`ui`** : Composants partagés avec `twrnc` (Tailwind pour RN)
 
 **Expo SDK 54 impose React Native 0.81.x**. Pour éviter les conflits de versions multiples dans le monorepo (qui causent des erreurs "Invalid hook call" et des crashes), toutes les apps doivent utiliser la **même version de React Native**.
 
@@ -234,7 +234,7 @@ rm -rf ~/.gradle/caches
 adb uninstall com.mobile
 
 # Rebuilder
-pnpm --filter mobile android
+pnpm --filter mobile-financial-app android
 ```
 
 #### Reset Metro
@@ -291,7 +291,7 @@ const config = {
 module.exports = mergeConfig(getDefaultConfig(__dirname), config);
 ```
 
-Après modification, redémarrer Metro (`Ctrl + C` puis `pnpm --filter mobile start`).
+Après modification, redémarrer Metro (`Ctrl + C` puis `pnpm --filter mobile-financial-app start`).
 
 ---
 
@@ -322,7 +322,7 @@ Installer Ruby 3.1.x via rbenv (voir section 2 ci-dessus).
 Metro n'est pas démarré. Lancer dans un terminal séparé :
 
 ```bash
-pnpm --filter mobile start
+pnpm --filter mobile-financial-app start
 ```
 
 Puis recharger l'app dans le simulateur (`Cmd + R`).
@@ -359,7 +359,7 @@ source ~/.zshrc
 Dans un monorepo pnpm, certaines dépendances React Native ne sont pas installées par défaut. Ajouter les dépendances manquantes :
 
 ```bash
-pnpm --filter mobile add -D @react-native/gradle-plugin@0.82.1 @react-native/codegen@0.82.1
+pnpm --filter mobile-financial-app add -D @react-native/gradle-plugin@0.82.1 @react-native/codegen@0.82.1
 ```
 
 #### Erreur "Unable to load script" ou écran blanc
@@ -368,12 +368,12 @@ Metro n'est pas démarré ou l'app n'est pas connectée.
 
 1. Lancer Metro dans un terminal séparé :
    ```bash
-   pnpm --filter mobile start
+   pnpm --filter mobile-financial-app start
    ```
 
 2. Relancer l'app :
    ```bash
-   pnpm --filter mobile android
+   pnpm --filter mobile-financial-app android
    ```
 
 3. Ou recharger dans l'émulateur : appuyer sur `R` deux fois.
@@ -396,13 +396,13 @@ Exemples :
 
 ```bash
 # Démarrer le bundler Metro pour l'app mobile
-pnpm --filter mobile start
+pnpm --filter mobile-financial-app start
 
 # Lancer l'app sur Android
-pnpm --filter mobile android
+pnpm --filter mobile-financial-app android
 
 # Lancer l'app sur iOS
-pnpm --filter mobile ios
+pnpm --filter mobile-financial-app ios
 ```
 
 ## Fonctionnement du monorepo
@@ -427,10 +427,10 @@ packages:
 
 ```bash
 # Ajouter une dépendance au package "mobile"
-pnpm --filter mobile add <package-name>
+pnpm --filter mobile-financial-app add <package-name>
 
 # Ajouter une dépendance de dev
-pnpm --filter mobile add -D <package-name>
+pnpm --filter mobile-financial-app add -D <package-name>
 ```
 
 ### Ajouter une dépendance à la racine (outils partagés)

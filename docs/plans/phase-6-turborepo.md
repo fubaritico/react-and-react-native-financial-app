@@ -53,8 +53,8 @@ build all packages it depends on first.
 
 Guaranteed order:
 ```
-@monorepo/tokens → @monorepo/tailwind-config → @monorepo/design-system → apps
-                                              → @monorepo/shared       → apps
+@financial-app/tokens → @financial-app/tailwind-config → @financial-app/ui → apps
+                                              → @financial-app/shared       → apps
 ```
 
 ---
@@ -68,7 +68,7 @@ Guaranteed order:
     "dev":        "turbo dev",
     "lint":       "turbo lint",
     "type-check": "turbo type-check",
-    "tokens":     "pnpm --filter @monorepo/tokens build",
+    "tokens":     "pnpm --filter @financial-app/tokens build",
     "clean":      "rm -rf node_modules packages/*/node_modules apps/*/node_modules",
     "clean:build": "rm -rf packages/*/build packages/*/dist apps/*/dist"
   }
@@ -81,24 +81,24 @@ Guaranteed order:
 
 Each package needs a `build` script for Turbo to call.
 
-### @monorepo/tokens
+### @financial-app/tokens
 ```json
 { "build": "style-dictionary build --config sd.config.js",
   "watch": "style-dictionary build --config sd.config.js --watch" }
 ```
 
-### @monorepo/tailwind-config
+### @financial-app/tailwind-config
 ```json
 { "build": "echo 'tailwind-config has no build step'" }
 ```
 
-### @monorepo/design-system
+### @financial-app/ui
 ```json
 { "build": "tsc --noEmit",
   "type-check": "tsc --noEmit" }
 ```
 
-### @monorepo/shared
+### @financial-app/shared
 ```json
 { "build": "tsc",
   "dev": "tsc --watch" }
@@ -148,7 +148,7 @@ For GitHub Actions or similar:
   run: pnpm install
 
 - name: Build tokens first (not cached in CI)
-  run: pnpm --filter @monorepo/tokens build
+  run: pnpm --filter @financial-app/tokens build
 
 - name: Build all
   run: pnpm build

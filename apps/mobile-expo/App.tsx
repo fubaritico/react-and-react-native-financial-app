@@ -1,4 +1,4 @@
-import { Button, Card, Header } from '@monorepo/design-system'
+import { Button, Card, Header } from '@financial-app/ui'
 import { StatusBar } from 'expo-status-bar'
 import { ScrollView, StyleSheet, View } from 'react-native'
 

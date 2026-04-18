@@ -1,4 +1,4 @@
-# @monorepo/design-system
+# @financial-app/ui
 
 Composants UI partagés pour les applications React Native du monorepo.
 
@@ -7,7 +7,7 @@ Composants UI partagés pour les applications React Native du monorepo.
 ### Header
 
 ```tsx
-import { Header } from '@monorepo/design-system';
+import { Header } from '@financial-app/ui';
 
 <Header title="Mon App" subtitle="Bienvenue" />
 ```
@@ -19,7 +19,7 @@ import { Header } from '@monorepo/design-system';
 ### Button
 
 ```tsx
-import { Button } from '@monorepo/design-system';
+import { Button } from '@financial-app/ui';
 
 <Button 
   title="Cliquer" 
@@ -38,7 +38,7 @@ import { Button } from '@monorepo/design-system';
 ### Card
 
 ```tsx
-import { Card } from '@monorepo/design-system';
+import { Card } from '@financial-app/ui';
 
 <Card 
   title="Ma carte" 
@@ -64,7 +64,7 @@ Ajouter dans le `package.json` de l'app :
 ```json
 {
   "dependencies": {
-    "@monorepo/design-system": "workspace:*"
+    "@financial-app/ui": "workspace:*"
   }
 }
 ```

@@ -74,18 +74,18 @@ packages/tokens/
 
 ```bash
 # Build all token outputs
-pnpm --filter @monorepo/tokens build
+pnpm --filter @financial-app/tokens build
 
 # Watch mode during development
-pnpm --filter @monorepo/tokens watch
+pnpm --filter @financial-app/tokens watch
 
-# Must run before building tailwind-config or design-system
+# Must run before building tailwind-config or ui
 ```
 
 ## sd.config.js Outputs
 
 Four required platforms:
-1. **js** → `build/js/tokens.js` + `tokens.d.ts` — consumed by design-system
+1. **js** → `build/js/tokens.js` + `tokens.d.ts` — consumed by ui
 2. **tailwind** → `build/tailwind/tailwind.tokens.js` — consumed by tailwind-config
 3. **css** → `build/css/variables.css` — consumed by web app
 4. **native** → `build/native/tokens.native.js` — unitless numbers for RN
@@ -109,7 +109,7 @@ packages/tokens/build/
 
 ## Rules
 
-- build/ is always gitignored — CI must run `pnpm --filter @monorepo/tokens build` first
+- build/ is always gitignored — CI must run `pnpm --filter @financial-app/tokens build` first
 - Rebrand = edit base/color.json only, then rebuild
 - Semantic tokens MUST use aliases `{category.name.scale}` — never raw hex values
 - Package exports must expose `./build/*` path for consumers

@@ -5,7 +5,7 @@ Prepare and propose a conventional commit for the current changes.
 1. Run `git status` to see changed files
 2. Run `git diff --staged` and `git diff` to analyze all changes
 3. Identify the scope based on changed files:
-   - `packages/design-system` → scope `design-system`
+   - `packages/ui` → scope `ui`
    - `packages/tokens` → scope `tokens`
    - `packages/tailwind-config` → scope `tailwind-config`
    - `packages/shared` → scope `shared`

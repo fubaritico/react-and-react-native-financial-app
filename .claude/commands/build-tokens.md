@@ -12,27 +12,27 @@ Rebuild all Style Dictionary outputs from source JSON.
 
 - After editing any file in packages/tokens/src/
 - After a fresh clone (build/ is gitignored)
-- Before building design-system or tailwind-config
+- Before building ui or tailwind-config
 - Before starting dev servers for the first time
 
 ## Command
 
 ```bash
-pnpm --filter @monorepo/tokens build
+pnpm --filter @financial-app/tokens build
 ```
 
 ## Watch Mode (during token development)
 
 ```bash
-pnpm --filter @monorepo/tokens watch
+pnpm --filter @financial-app/tokens watch
 ```
 
 ## What Gets Generated
 
 | Output | Path | Consumed by |
 |--------|------|-------------|
-| JS/TS tokens | packages/tokens/build/js/ | @monorepo/design-system |
-| Tailwind map | packages/tokens/build/tailwind/ | @monorepo/tailwind-config |
+| JS/TS tokens | packages/tokens/build/js/ | @financial-app/ui |
+| Tailwind map | packages/tokens/build/tailwind/ | @financial-app/tailwind-config |
 | CSS variables | packages/tokens/build/css/ | apps/web |
 | Native values | packages/tokens/build/native/ | apps/mobile (via tailwind-config) |
 
@@ -57,6 +57,6 @@ ls packages/tokens/build/native/tokens.native.js
 
 If build fails with "cannot find module style-dictionary":
 ```bash
-pnpm --filter @monorepo/tokens install
-pnpm --filter @monorepo/tokens build
+pnpm --filter @financial-app/tokens install
+pnpm --filter @financial-app/tokens build
 ```

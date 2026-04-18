@@ -12,7 +12,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Package manager**: pnpm workspaces
 - **Monorepo orchestration**: Turborepo (turbo.json — to be added in Phase 6)
 - **Language**: TypeScript strict throughout
-- **Org scope**: @monorepo/*
+- **Org scope**: @financial-app/*
 
 ## Critical Workflow Rules
 - **Be concise** — no recap, no enumerations, no unsolicited explanations. Act, then report briefly if needed.
@@ -41,7 +41,7 @@ apps/
   mobile-expo/         Expo SDK 54 — CANONICAL mobile app, primary focus
   mobile-expo-ejected/ ejected Expo — learning reference, may be aligned from time to time
 packages/
-  design-system/       @monorepo/design-system — RN-only, needs cross-platform refactor
+  ui/       @financial-app/ui — RN-only, needs cross-platform refactor
 ```
 
 > **Production-grade**: all 3 mobile apps are kept intentionally to compare bare RN CLI
@@ -57,7 +57,7 @@ apps/
 packages/
   tokens/              new — Style Dictionary, single token source of truth
   tailwind-config/     new — shared Tailwind config consumed by both apps
-  design-system/       refactored — cross-platform via file extension split
+  ui/       refactored — cross-platform via file extension split
   shared/              new — Supabase, Jotai atoms, TanStack Query, types, utils
 ```
 
@@ -75,11 +75,11 @@ packages/
 
 4. **Token pipeline**: Style Dictionary JSON → JS/TS + CSS vars + Tailwind map + RN values
 
-5. **Layer order**: tokens → tailwind-config → design-system → apps
+5. **Layer order**: tokens → tailwind-config → ui → apps
 
 ## Non-Negotiable Rules
 
-- NEVER hardcode colors/spacing in app configs — always from @monorepo/tokens
+- NEVER hardcode colors/spacing in app configs — always from @financial-app/tokens
 - NEVER import react-native in .web.tsx files
 - NEVER import HTML elements or cn() in .native.tsx files
 - NEVER commit packages/tokens/build/ — it is always generated
@@ -104,10 +104,10 @@ packages/
 
 | Package                  | Path                      | Status        |
 |--------------------------|---------------------------|---------------|
-| @monorepo/tokens         | packages/tokens/          | to create     |
-| @monorepo/tailwind-config| packages/tailwind-config/ | to create     |
-| @monorepo/design-system  | packages/design-system/   | to refactor   |
-| @monorepo/shared         | packages/shared/          | to create     |
+| @financial-app/tokens         | packages/tokens/          | to create     |
+| @financial-app/tailwind-config| packages/tailwind-config/ | to create     |
+| @financial-app/ui  | packages/ui/   | to refactor   |
+| @financial-app/shared         | packages/shared/          | to create     |
 | mobile (app)             | apps/mobile/              | to rename     |
 | web (app)                | apps/web/                 | to create     |
 
@@ -118,7 +118,7 @@ packages/
 
 ## Navigation
 
-- `.claude/rules/` — domain rules (design-system, tokens, styling, monorepo)
+- `.claude/rules/` — domain rules (ui, tokens, styling, monorepo)
 - `.claude/commands/` — slash commands for recurring tasks
 - `docs/plans/` — step-by-step phase plans with exact file changes
 - `files/docs and context/PERSONAL_FINANCE_ANALYSIS_EN.md` — full product specification
@@ -127,7 +127,7 @@ packages/
 | File                 | When to load                                                    |
 |----------------------|-----------------------------------------------------------------|
 | `new-component.md`   | UI component, design system and other pattern to apply strictly |
-| `design-system.md`   | All the rules to follow about design system files, folders      |
+| `design-system.md`   | All the rules to follow about UI package files, folders         |
 | `styling.md`         | All the rules to follow about styling                           |
 | `tokens.md`          | All infrmation about token use and setup                        |
 | `monorepo.md`        | Description of the expected project architecture                |
@@ -140,7 +140,7 @@ packages/
 ### Completed
 - Full project structure scan and mapping to memory
 - Verified all phase plans exist (phase-0 through phase-6), all unstarted
-- Read all design-system components, mobile-expo config, root config
+- Read all ui package components, mobile-expo config, root config
 - Updated mobile-expo README with prerequisites (iOS sim, Android emulator), Expo Go steps, troubleshooting
 - Clarified all 3 mobile apps are learning references (not archived)
 - Set up Husky v9 with pre-commit (type-check + lint + test) and commit-msg (commitlint)
@@ -165,7 +165,7 @@ packages/
   - Set ENABLE_USER_SCRIPT_SANDBOXING=NO to fix ip.txt sandbox violation
   - Created `docs/modus-operandi/iphone-wireless-deploy.md` — full wireless deploy guide
 - Added Fb app icon (1024×1024 PNG) to all three mobile apps
-  - Source icon in `packages/design-system/src/assets/app-icon.png`
+  - Source icon in `packages/ui/src/assets/app-icon.png`
   - Bare RN CLI switched to modern single-image AppIcon format
 - Added `expo-dev-client@~6.0.20` to pnpm catalog, mobile-expo and mobile-expo-ejected
 - Added native build scripts (`ios:build`, `ios:build:device`, `android:build`, `android:build:device`)
@@ -176,12 +176,16 @@ packages/
 - Added "always use pnpm" rule to CLAUDE.md
 - Added disk space / build artifacts section to troubleshooting rules
 - Added `conventional-changelog@7.2.0` to pnpm catalog and all 4 packages as devDependency
-- Added `changelog` script to design-system, mobile-expo, mobile, mobile-expo-ejected
+- Added `changelog` script to ui package, mobile-expo, mobile, mobile-expo-ejected
 - Added `type-check` script (`tsc --noEmit`) to all 4 packages
-- Created `publish.sh` for design-system (version bump + changelog + npm publish + tag + push)
-- Added `release:patch/minor/major` scripts to design-system
+- Removed `publish.sh` and `release:*` scripts from ui package (not published, monorepo-only)
 - Created `scripts/update-changelogs.sh` — auto-generates changelog only for packages with staged changes
 - Added changelog generation as last step in pre-commit hook (after type-check + lint + test)
+- Moved all 3 mobile apps from packages/ to apps/ directory (mobile, mobile-expo, mobile-expo-ejected)
+  - Updated pnpm-workspace.yaml to include apps/*
+  - Updated all path references in scripts, docs, rules, commands, and config
+  - Regenerated pnpm-lock.yaml — verified type-check + lint + test pass
+  - Tested mobile app on iOS simulator — works correctly
 
 ### Next
 - Pre-phase cleanup: clean up project (NativeWind remnants, etc.) before starting Phase 0

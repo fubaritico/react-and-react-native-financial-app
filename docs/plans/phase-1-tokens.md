@@ -9,8 +9,8 @@ should contain raw hex values or numeric spacing values in its config.
 ## Current Problem
 
 Colors are hardcoded in 4 places:
-- `packages/design-system/src/lib/tw.ts`
-- `packages/design-system/tailwind.config.js`
+- `packages/ui/src/lib/tw.ts`
+- `packages/ui/tailwind.config.js`
 - `apps/mobile/tailwind.config.js`
 - `apps/web/tailwind.config.js` (future)
 
@@ -25,7 +25,7 @@ Use command: `/add-package tokens lib`
 Additional setup beyond standard package scaffold:
 
 ```bash
-pnpm --filter @monorepo/tokens add -D style-dictionary
+pnpm --filter @financial-app/tokens add -D style-dictionary
 ```
 
 ---
@@ -193,7 +193,7 @@ ls packages/tokens/build/native/
 - [ ] `packages/tokens/` exists with correct structure
 - [ ] All 4 token categories in src/base/
 - [ ] Semantic aliases in src/semantic/
-- [ ] `pnpm --filter @monorepo/tokens build` succeeds
+- [ ] `pnpm --filter @financial-app/tokens build` succeeds
 - [ ] All 4 build outputs generated
 - [ ] `packages/tokens/build/` in .gitignore
 

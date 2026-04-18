@@ -11,7 +11,7 @@
 | 0 | phase-0-cleanup.md | Canonical app decision, restructure to apps/ | nothing |
 | 1 | phase-1-tokens.md | Style Dictionary token pipeline | Phase 0 |
 | 2 | phase-2-tailwind-config.md | Shared Tailwind config package | Phase 1 |
-| 3 | phase-3-design-system.md | Cross-platform file extension split + CVA | Phase 2 |
+| 3 | phase-3-ui.md | Cross-platform file extension split + CVA | Phase 2 |
 | 4 | phase-4-web-app.md | React Router + Vite web app scaffold | Phase 3 |
 | 5 | phase-5-shared.md | Supabase, Jotai, TanStack Query shared package | Phase 4 |
 | 6 | phase-6-turborepo.md | Turborepo pipeline + build orchestration | Phase 5 |
@@ -45,13 +45,13 @@ tokens/src/*.json          (edit here for design values)
 tokens/build/              (never edit — generated)
        ↓
 tailwind-config/index.js   (thin wrapper)
-design-system/lib/tw.ts    (RN singleton)
+ui/lib/tw.ts    (RN singleton)
        ↓
-design-system/variants/    (CVA objects — shared contract)
+ui/variants/    (CVA objects — shared contract)
        ↓
-design-system/components/
+ui/components/
   *.native.tsx             (twrnc — consumed by apps/mobile)
   *.web.tsx                (Tailwind CSS + cn() — consumed by apps/web)
        ↓
-apps/mobile + apps/web     (never touch design-system internals)
+apps/mobile + apps/web     (never touch ui internals)
 ```

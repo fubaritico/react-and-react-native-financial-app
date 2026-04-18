@@ -1,4 +1,4 @@
-# 1.0.0 (2026-04-17)
+# 1.0.0 (2026-04-18)
 
 
 ### Bug Fixes
@@ -21,4 +21,5 @@
 * **mobile:** set bundler for monorepo and app first launch ef90526
 * **mobile:** set ejected expo project aa156fc
 * **mobile:** set project with expo dae87e9
+* **monorepo:** add changelog generation and type-check scripts 0d4e8e4
 * styles based on nativewind and used by apps and ds d95e9f2

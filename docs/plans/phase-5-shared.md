@@ -2,7 +2,7 @@
 
 ## Goal
 
-Create `@monorepo/shared` — pure TypeScript, no renderer imports.
+Create `@financial-app/shared` — pure TypeScript, no renderer imports.
 Contains: Supabase client + API layer, Jotai atoms, TanStack Query hooks,
 domain types, and utility functions. Both apps consume this.
 
@@ -15,10 +15,10 @@ domain types, and utility functions. Both apps consume this.
 Use command: `/add-package shared lib`
 
 ```bash
-pnpm --filter @monorepo/shared add @supabase/supabase-js
-pnpm --filter @monorepo/shared add jotai
-pnpm --filter @monorepo/shared add @tanstack/react-query
-pnpm --filter @monorepo/shared add zod
+pnpm --filter @financial-app/shared add @supabase/supabase-js
+pnpm --filter @financial-app/shared add jotai
+pnpm --filter @financial-app/shared add @tanstack/react-query
+pnpm --filter @financial-app/shared add zod
 ```
 
 ---
@@ -113,8 +113,8 @@ export interface Pot {
 ## Step 5.5 — Add to Both Apps
 
 ```bash
-pnpm --filter mobile add @monorepo/shared@workspace:^
-pnpm --filter web add @monorepo/shared@workspace:^
+pnpm --filter mobile-financial-app add @financial-app/shared@workspace:^
+pnpm --filter web-financial-app add @financial-app/shared@workspace:^
 ```
 
 ---
@@ -144,7 +144,7 @@ Actual keys are in root `.env` (gitignored). Copy as needed.
 - [ ] Domain types exported from src/types/index.ts
 - [ ] At least one TanStack Query hook working in each app
 - [ ] No renderer imports anywhere in packages/shared/
-- [ ] Both apps resolve @monorepo/shared correctly
+- [ ] Both apps resolve @financial-app/shared correctly
 
 ## Next
 

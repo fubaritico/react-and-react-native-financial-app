@@ -1,5 +1,5 @@
 {
-  "name": "mobile",
+  "name": "mobile-financial-app",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -14,7 +14,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@monorepo/design-system": "workspace:^",
+    "@financial-app/ui": "workspace:^",
     "react": "catalog:",
     "react-native": "catalog:",
     "react-native-safe-area-context": "^5.5.2"

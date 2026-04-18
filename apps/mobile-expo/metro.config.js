@@ -10,7 +10,7 @@ config.watchFolders = [monorepoRoot];
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, 'node_modules'),
   path.resolve(monorepoRoot, 'node_modules'),
-  path.resolve(monorepoRoot, 'packages/design-system/node_modules'),
+  path.resolve(monorepoRoot, 'packages/ui/node_modules'),
 ];
 
 module.exports = config;

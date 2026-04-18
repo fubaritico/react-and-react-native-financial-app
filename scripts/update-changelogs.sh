@@ -5,7 +5,7 @@
 # then stages the updated CHANGELOG.md files.
 
 PACKAGES=(
-  "packages/design-system"
+  "packages/ui"
   "apps/mobile-expo"
   "apps/mobile"
   "apps/mobile-expo-ejected"

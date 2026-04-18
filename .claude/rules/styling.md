@@ -5,7 +5,7 @@
 ```
 Layer 1: tokens           packages/tokens/src/*.json          — designers edit this
 Layer 2: tailwind-config  packages/tailwind-config/index.js   — consumes token build
-Layer 3: variants         packages/design-system/src/variants/ — CVA objects
+Layer 3: variants         packages/ui/src/variants/ — CVA objects
 Layer 4: components       *.native.tsx / *.web.tsx             — consume variants
 ```
 
@@ -13,7 +13,7 @@ Never skip layers. Never reference colors or spacing values that aren't from tok
 
 ## CVA Variant Rules
 
-Variant files live in packages/design-system/src/variants/[name].variants.ts
+Variant files live in packages/ui/src/variants/[name].variants.ts
 
 ### Safe classes for shared variants (both engines understand these)
 ```
@@ -56,8 +56,8 @@ export type [Name]Variants = VariantProps<typeof [name]Variants>;
 
 ## twrnc Rules (native)
 
-- tw instance is a singleton — import from packages/design-system/src/lib/tw.ts
-- tw is initialized with resolveConfig(@monorepo/tailwind-config) — never inline theme
+- tw instance is a singleton — import from packages/ui/src/lib/tw.ts
+- tw is initialized with resolveConfig(@financial-app/tailwind-config) — never inline theme
 - Use template literals: tw`bg-primary rounded-md px-4`
 - Use CVA output: tw`${buttonVariants({ variant, size })}`
 - Never combine StyleSheet.create() with tw — pick one per component
@@ -65,7 +65,7 @@ export type [Name]Variants = VariantProps<typeof [name]Variants>;
 ## Tailwind CSS Rules (web)
 
 - cn() is the ONLY way to compose classNames — never string concatenation
-- cn() lives in packages/design-system/src/lib/cn.ts (clsx + tailwind-merge)
+- cn() lives in packages/ui/src/lib/cn.ts (clsx + tailwind-merge)
 - Always start with CVA output, then add web-only classes:
   ```ts
   cn(buttonVariants({ variant, size }), 'hover:opacity-80 transition-opacity')
@@ -76,7 +76,7 @@ export type [Name]Variants = VariantProps<typeof [name]Variants>;
 ```ts
 import { create } from 'twrnc';
 import resolveConfig from 'tailwindcss/resolveConfig';
-import baseConfig from '@monorepo/tailwind-config';
+import baseConfig from '@financial-app/tailwind-config';
 
 export const tw = create(resolveConfig(baseConfig));
 ```
