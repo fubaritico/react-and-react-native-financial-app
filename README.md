@@ -1,22 +1,86 @@
 # React & React Native Financial App
 
-Monorepo for React Native applications, managed with **pnpm workspaces**.
+A cross-platform **Personal Finance** application (Frontend Mentor challenge) built on a shared design system targeting React Native (Expo) and React web (React Router), managed with **pnpm workspaces**.
+
+### Technologies
+
+React Native · Expo SDK 54 · React · TypeScript · pnpm · Turborepo · twrnc · Tailwind CSS · Style Dictionary · CVA · Supabase · Jotai · TanStack Query · Expo Router · react-hook-form · zod
+
+---
+
+## Table of Contents
+
+- [Project Structure](#project-structure)
+- [Packages](#packages)
+- [Prerequisites](#prerequisites)
+- [Environment Setup (macOS)](#environment-setup-macos)
+- [Main Commands](#main-commands)
+- [How the Monorepo Works](#how-the-monorepo-works)
+- [React Native Version Alignment (0.81.5)](#react-native-version-alignment-0815)
+- [Troubleshooting](#troubleshooting)
+
+---
 
 ## Project Structure
 
 ```
-react-native/
+react-and-react-native-financial-app/
 ├── package.json            # Monorepo root config
 ├── pnpm-workspace.yaml     # pnpm workspaces declaration
 ├── .gitignore              # Git ignored files
 ├── README.md               # This file
 ├── apps/                   # Applications
+│   ├── api/                # Express REST API for Supabase DB
 │   ├── mobile/             # React Native CLI app (without Expo)
 │   ├── mobile-expo/        # React Native app with Expo (canonical)
 │   └── mobile-expo-ejected/ # Ejected Expo app
-└── packages/               # Shared packages
-    └── ui/      # @financial-app/ui
+├── packages/               # Shared packages
+│   ├── http-client/        # @financial-app/http-client — API client
+│   └── ui/                 # @financial-app/ui — shared design system
+└── scripts/                # Utility scripts (reset, changelogs)
 ```
+
+[Back to top](#table-of-contents)
+
+---
+
+## Packages
+
+### Apps
+
+| App | Path | Status | Description |
+|-----|------|--------|-------------|
+| `mobile-expo` | `apps/mobile-expo/` | Exists | Expo managed (SDK 54) — canonical mobile app, primary focus |
+| `mobile` | `apps/mobile/` | Exists | Bare React Native CLI — learning reference |
+| `mobile-expo-ejected` | `apps/mobile-expo-ejected/` | Exists | Expo bare/ejected — learning reference |
+| `web` | `apps/web/` | Planned | React Router + Vite |
+| `api` | `apps/api/` | Planned | Express REST API for Supabase DB |
+
+### Shared Packages
+
+| Package | Path | Status | Description |
+|---------|------|--------|-------------|
+| `@financial-app/ui` | `packages/ui/` | Exists | Cross-platform design system (React Native + web) |
+| `@financial-app/tokens` | `packages/tokens/` | Planned | Style Dictionary — single token source of truth |
+| `@financial-app/tailwind-config` | `packages/tailwind-config/` | Planned | Shared Tailwind config consumed by both apps |
+| `@financial-app/shared` | `packages/shared/` | Planned | Supabase, Jotai atoms, TanStack Query, types, utils |
+| `@financial-app/http-client` | `packages/http-client/` | Planned | API client consuming the Express REST API |
+
+### Dependency Graph
+
+```
+@financial-app/tokens           -> depends on nothing
+@financial-app/tailwind-config  -> @financial-app/tokens
+@financial-app/ui               -> @financial-app/tokens, @financial-app/tailwind-config
+@financial-app/shared           -> depends on nothing (pure TS, no renderer)
+@financial-app/http-client      -> depends on nothing (API client for apps/api)
+apps/api                        -> Supabase SDK (serves REST API)
+apps/*  (mobile, web)           -> @financial-app/ui, @financial-app/shared, @financial-app/http-client
+```
+
+[Back to top](#table-of-contents)
+
+---
 
 ## Prerequisites
 
@@ -25,6 +89,10 @@ react-native/
 - **Ruby** (v3.1.x recommended): for CocoaPods (iOS)
 - **Xcode** (macOS): for iOS
 - **Android Studio**: for Android
+
+[Back to top](#table-of-contents)
+
+---
 
 ## Environment Setup (macOS)
 
@@ -119,6 +187,91 @@ pnpm --filter mobile-financial-app start
 pnpm --filter mobile-financial-app ios      # iOS (simulator)
 pnpm --filter mobile-financial-app android  # Android (emulator must be running)
 ```
+
+[Back to top](#table-of-contents)
+
+---
+
+## Main Commands
+
+### Install dependencies (all packages)
+
+```bash
+pnpm install
+```
+
+### Run a script in a specific package
+
+```bash
+pnpm --filter <package-name> <script>
+```
+
+Examples:
+
+```bash
+# Start the Metro bundler for the mobile app
+pnpm --filter mobile-financial-app start
+
+# Launch the app on Android
+pnpm --filter mobile-financial-app android
+
+# Launch the app on iOS
+pnpm --filter mobile-financial-app ios
+```
+
+### Quality checks
+
+```bash
+pnpm type-check    # TypeScript --noEmit across all packages
+pnpm lint          # ESLint across all packages
+pnpm test          # Jest tests across all packages
+```
+
+### Reset
+
+```bash
+pnpm reset         # Full clean + reinstall + pod install
+```
+
+[Back to top](#table-of-contents)
+
+---
+
+## How the Monorepo Works
+
+### pnpm workspaces
+
+The `pnpm-workspace.yaml` file declares the monorepo packages:
+
+```yaml
+packages:
+  - "packages/*"
+  - "apps/*"
+```
+
+**Advantages:**
+
+- **Centralized dependencies**: pnpm installs everything in a single root `node_modules` (with symlinks).
+- **Code sharing**: packages can import from each other.
+- **Unified commands**: everything is managed from the root with `pnpm --filter`.
+
+### Add a dependency to a package
+
+```bash
+# Add a dependency to the "mobile" package
+pnpm --filter mobile-financial-app add <package-name>
+
+# Add a dev dependency
+pnpm --filter mobile-financial-app add -D <package-name>
+```
+
+### Add a dependency to the root (shared tools)
+
+```bash
+pnpm add -w -D <package-name>
+```
+
+[Back to top](#table-of-contents)
 
 ---
 
@@ -260,6 +413,8 @@ adb logcat > /tmp/crash.log
 grep -A 10 "FATAL EXCEPTION" /tmp/crash.log
 ```
 
+[Back to top](#table-of-contents)
+
 ---
 
 ## Troubleshooting
@@ -378,78 +533,4 @@ Metro is not started or the app is not connected.
 
 3. Or reload in the emulator: press `R` twice.
 
-## Main Commands
-
-### Install dependencies (all packages)
-
-```bash
-pnpm install
-```
-
-### Run a script in a specific package
-
-```bash
-pnpm --filter <package-name> <script>
-```
-
-Examples:
-
-```bash
-# Start the Metro bundler for the mobile app
-pnpm --filter mobile-financial-app start
-
-# Launch the app on Android
-pnpm --filter mobile-financial-app android
-
-# Launch the app on iOS
-pnpm --filter mobile-financial-app ios
-```
-
-## How the Monorepo Works
-
-### pnpm workspaces
-
-The `pnpm-workspace.yaml` file declares the monorepo packages:
-
-```yaml
-packages:
-  - "packages/*"
-  - "apps/*"
-```
-
-**Advantages:**
-
-- **Centralized dependencies**: pnpm installs everything in a single root `node_modules` (with symlinks).
-- **Code sharing**: packages can import from each other.
-- **Unified commands**: everything is managed from the root with `pnpm --filter`.
-
-### Add a dependency to a package
-
-```bash
-# Add a dependency to the "mobile" package
-pnpm --filter mobile-financial-app add <package-name>
-
-# Add a dev dependency
-pnpm --filter mobile-financial-app add -D <package-name>
-```
-
-### Add a dependency to the root (shared tools)
-
-```bash
-pnpm add -w -D <package-name>
-```
-
-## Planned Packages
-
-| Package | Description |
-|---------|-------------|
-| `mobile` | React Native CLI app (without Expo) |
-| `mobile-expo` | React Native app with Expo |
-| `shared` | (optional) Shared code between apps |
-
-## Next Steps
-
-1. ~~Create the `packages/` folder~~ Done
-2. ~~Initialize the React Native CLI project in `apps/mobile`~~ Done
-3. Add an Expo project in `apps/mobile-expo`
-4. Create a `shared` package for shared code
+[Back to top](#table-of-contents)
