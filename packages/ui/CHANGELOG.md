@@ -3,23 +3,23 @@
 
 ### Bug Fixes
 
-* **mobile:** enable wireless iPhone deployment and fix sandbox violation 824ba71
-* **monorepo:** align React versions and fix cache issues d67c956
+* **mobile:** enable wireless iPhone deployment and fix sandbox violation ([824ba71](https://github.com/fubaritico/react-and-react-native-financial-app/commit/824ba7136ba466297da10c77ad9e1752f93d7026))
+* **monorepo:** align React versions and fix cache issues ([d67c956](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d67c956998a0ce4d5b368f3b814393e8d1c02b58))
 
 
 ### Features
 
-* added .nvmrc and .gitattributes files 836d77d
-* added env for BDD credentials c08b401
-* added shared design system 69b2530
-* alignement de mobile-expo-ejected aveclesmême dépendances c3df036
-* **expo:** add expo-dev-client and native build scripts 1b26c7f
-* **icons:** add Fb app icon to all mobile apps e18ea02
-* **mobile:** react native package basic setup ab09677
-* **mobile:** reinstall deps with pnpm 0edc846
-* **mobile:** set android for app preview 4ac7220
-* **mobile:** set bundler for monorepo and app first launch ef90526
-* **mobile:** set ejected expo project aa156fc
-* **mobile:** set project with expo dae87e9
-* **monorepo:** add changelog generation and type-check scripts 0d4e8e4
-* styles based on nativewind and used by apps and ds d95e9f2
+* added .nvmrc and .gitattributes files ([836d77d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/836d77dd5681ea7ecd79ef0dd7bb74c7f5fabc7a))
+* added env for BDD credentials ([c08b401](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c08b4019e8528439de6b969fc9cec13b2595601a))
+* added shared design system ([69b2530](https://github.com/fubaritico/react-and-react-native-financial-app/commit/69b25309bb897f486afe8585eb3c7d3776ad9b5a))
+* alignement de mobile-expo-ejected aveclesmême dépendances ([c3df036](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c3df03680c52be2e98b931e9860a5c1c0ddcc842))
+* **expo:** add expo-dev-client and native build scripts ([1b26c7f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1b26c7f61490496cf77043e28ff08033829bc8e9))
+* **icons:** add Fb app icon to all mobile apps ([e18ea02](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e18ea02267c836173524182be2629b4d8cd3142b))
+* **mobile:** react native package basic setup ([ab09677](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ab09677a32fae9ba09ffdfa89bdcf3a46a13186f))
+* **mobile:** reinstall deps with pnpm ([0edc846](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0edc8468983485f24b175ccd43f1cc33a1f575dc))
+* **mobile:** set android for app preview ([4ac7220](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4ac722067d12b31dc8f1ffa18b7dc07141e3e2d6))
+* **mobile:** set bundler for monorepo and app first launch ([ef90526](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ef905268a13f1178a356f502758e134105189563))
+* **mobile:** set ejected expo project ([aa156fc](https://github.com/fubaritico/react-and-react-native-financial-app/commit/aa156fc87b8658222436e709bb2b18fb6b6a107e))
+* **mobile:** set project with expo ([dae87e9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dae87e9708fe26bfac0f9fc223c00951bbd6088e))
+* **monorepo:** add changelog generation and type-check scripts ([0d4e8e4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d4e8e4152898ac353d95b283d2390d1f9b84f18))
+* styles based on nativewind and used by apps and ds ([d95e9f2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d95e9f2966e13816f1cb7ef78b9fc786e1c4ec47))

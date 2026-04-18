@@ -1,13 +1,13 @@
 # mobile-expo-ejected
 
-Application React Native avec **Expo (bare workflow)** — projet "ejecté" via `expo prebuild`.
+React Native application with **Expo (bare workflow)** — project "ejected" via `expo prebuild`.
 
 ## Stack
 
 - **Expo SDK 54**
 - **React Native 0.81.5**
 - **TypeScript**
-- **Code natif exposé** (ios/ et android/)
+- **Native code exposed** (ios/ and android/)
 
 ## Commands
 
@@ -46,50 +46,50 @@ pnpm --filter mobile-expo-ejected android:build
 pnpm --filter mobile-expo-ejected android:build:device
 ```
 
-## Différence avec mobile-expo (managed)
+## Difference with mobile-expo (managed)
 
 | Aspect | mobile-expo (managed) | mobile-expo-ejected (bare) |
 |--------|----------------------|---------------------------|
-| Dossiers ios/android | ❌ Cachés | ✅ Exposés |
-| Modules natifs custom | ❌ Limité | ✅ Possible |
-| Expo Go | ✅ Oui | ❌ Non (build natif requis) |
-| Complexité | Simple | Plus complexe |
-| Expo SDK | ✅ Disponible | ✅ Disponible |
+| ios/android folders | Hidden | Exposed |
+| Custom native modules | Limited | Possible |
+| Expo Go | Yes | No (native build required) |
+| Complexity | Simple | More complex |
+| Expo SDK | Available | Available |
 
-## Différence avec mobile (React Native CLI pur)
+## Difference with mobile (pure React Native CLI)
 
 | Aspect | mobile (RN CLI) | mobile-expo-ejected |
 |--------|-----------------|---------------------|
-| Expo SDK | ❌ Non | ✅ Oui |
-| Config via app.json | ❌ Non | ✅ Oui |
-| Régénérable | ❌ Non | ✅ `npx expo prebuild` |
-| Setup initial | Manuel | Automatisé |
+| Expo SDK | No | Yes |
+| Config via app.json | No | Yes |
+| Regenerable | No | Yes (`npx expo prebuild`) |
+| Initial setup | Manual | Automated |
 
-## Régénérer le code natif
+## Regenerate native code
 
-Si tu modifies `app.json` (nom, icône, permissions...), tu peux régénérer :
+If you modify `app.json` (name, icon, permissions...), you can regenerate:
 
 ```bash
 npx expo prebuild --clean
 ```
 
-⚠️ Cela écrase les modifications manuelles dans `ios/` et `android/`.
+Warning: this overwrites manual modifications in `ios/` and `android/`.
 
 ## Structure
 
 ```
 mobile-expo-ejected/
-├── App.tsx          # Point d'entrée
-├── app.json         # Configuration Expo
-├── ios/             # Projet Xcode natif
-├── android/         # Projet Gradle natif
+├── App.tsx          # Entry point
+├── app.json         # Expo configuration
+├── ios/             # Native Xcode project
+├── android/         # Native Gradle project
 ├── assets/
 ├── package.json
 └── tsconfig.json
 ```
 
-## Quand utiliser ce workflow ?
+## When to use this workflow?
 
-- Tu as besoin de **modules natifs custom**
-- Tu veux **modifier le code natif** iOS/Android
-- Tu veux garder les **avantages d'Expo** (SDK, config centralisée)
+- You need **custom native modules**
+- You want to **modify native iOS/Android code**
+- You want to keep **Expo advantages** (SDK, centralized config)
