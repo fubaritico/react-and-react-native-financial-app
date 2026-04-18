@@ -27,7 +27,7 @@ This app runs via Expo Go. No native build required.
 
 ```bash
 # Terminal 1: start Metro
-pnpm --filter mobile-expo start
+pnpm --filter mobile-expo-financial-app start
 
 # Then press:
 #   i → opens iOS simulator
@@ -44,10 +44,10 @@ This app builds native binaries directly.
 
 ```bash
 # Terminal 1: start Metro
-pnpm --filter mobile start
+pnpm --filter mobile-financial-app start
 
 # Terminal 2: build + launch on simulator
-pnpm --filter mobile ios:sim
+pnpm --filter mobile-financial-app ios:sim
 ```
 
 - [ ] iOS simulator (iPhone 16): app builds, installs, launches, connects to Metro
@@ -55,7 +55,7 @@ pnpm --filter mobile ios:sim
 
 ```bash
 # Terminal 2: build + launch on Android emulator
-pnpm --filter mobile android
+pnpm --filter mobile-financial-app android
 ```
 
 - [ ] Android emulator: app builds, installs, launches, connects to Metro
@@ -64,12 +64,12 @@ pnpm --filter mobile android
 
 ```bash
 # Terminal 1: start Metro
-pnpm --filter mobile-expo-ejected start
+pnpm --filter mobile-expo-ejected-financial-app start
 
 # Terminal 2: build + launch
-pnpm --filter mobile-expo-ejected ios
+pnpm --filter mobile-expo-ejected-financial-app ios
 # or
-pnpm --filter mobile-expo-ejected android
+pnpm --filter mobile-expo-ejected-financial-app android
 ```
 
 - [ ] iOS simulator: app builds, installs, launches
@@ -84,14 +84,14 @@ pnpm --filter mobile-expo-ejected android
 
 ## Known Issues & Fixes
 
-### `pnpm --filter mobile ios` targets physical iPhone instead of simulator
+### `pnpm --filter mobile-financial-app ios` targets physical iPhone instead of simulator
 
 **Symptom**: `react-native run-ios` auto-detects a booted/connected physical iPhone and
 targets it instead of a simulator. Build fails with error code 70 (signing) or 65 (sandbox).
 
 **Fix**: Use `ios:sim` to explicitly target iPhone 16 simulator:
 ```bash
-pnpm --filter mobile ios:sim
+pnpm --filter mobile-financial-app ios:sim
 ```
 
 The generic `ios` command is for physical device deployment (requires signing setup).
@@ -125,7 +125,7 @@ or signing config).
 rm -rf ~/Library/Developer/Xcode/DerivedData/mobile-*
 
 # Then rebuild
-pnpm --filter mobile ios:sim
+pnpm --filter mobile-financial-app ios:sim
 ```
 
 The reset script already cleans DerivedData, but this can happen if you switch between

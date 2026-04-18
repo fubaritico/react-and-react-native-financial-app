@@ -1,5 +1,5 @@
 {
-  "name": "mobile-expo",
+  "name": "mobile-expo-financial-app",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
@@ -16,7 +16,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@monorepo/design-system": "workspace:^",
+    "@financial-app/ui": "workspace:^",
     "expo": "catalog:",
     "expo-dev-client": "catalog:",
     "expo-status-bar": "catalog:",

@@ -1,6 +1,6 @@
 # Command — new-component
 
-Create a new cross-platform component in @monorepo/design-system.
+Create a new cross-platform component in @financial-app/ui.
 
 ## Usage
 
@@ -11,7 +11,7 @@ Create a new cross-platform component in @monorepo/design-system.
 ## Steps Claude Code Must Follow
 
 ### 1. Create variant file
-`packages/design-system/src/variants/[name].variants.ts`
+`packages/ui/src/variants/[name].variants.ts`
 
 ```ts
 import { cva } from 'class-variance-authority';
@@ -41,7 +41,7 @@ export type [Name]Variants = VariantProps<typeof [name]Variants>;
 ```
 
 ### 2. Create types file
-`packages/design-system/src/components/[Name]/[Name].tsx`
+`packages/ui/src/components/[Name]/[Name].tsx`
 
 ```ts
 import type { [Name]Variants } from '../../variants/[name].variants';
@@ -55,21 +55,21 @@ export { [name]Variants } from '../../variants/[name].variants';
 ```
 
 ### 3. Create native implementation
-`packages/design-system/src/components/[Name]/[Name].native.tsx`
+`packages/ui/src/components/[Name]/[Name].native.tsx`
 
 - Use Pressable, Text, View from react-native
 - Use tw`${[name]Variants({ ...variantProps })}` for styles
 - No HTML elements, no cn(), no StyleSheet
 
 ### 4. Create web implementation
-`packages/design-system/src/components/[Name]/[Name].web.tsx`
+`packages/ui/src/components/[Name]/[Name].web.tsx`
 
 - Use HTML semantic elements (button, div, span, etc.)
 - Use cn([name]Variants({ ...variantProps }), 'web-only-classes')
 - No RN imports, no StyleSheet, no tw``
 
 ### 5. Create index
-`packages/design-system/src/components/[Name]/index.ts`
+`packages/ui/src/components/[Name]/index.ts`
 
 ```ts
 export { [Name] } from './[Name].native';
@@ -77,7 +77,7 @@ export type { [Name]Props } from './[Name]';
 ```
 
 ### 6. Register in public API
-Add to `packages/design-system/src/index.ts`:
+Add to `packages/ui/src/index.ts`:
 ```ts
 export { [Name] } from './components/[Name]';
 export type { [Name]Props } from './components/[Name]';

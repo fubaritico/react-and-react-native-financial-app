@@ -1,4 +1,4 @@
-import { Button, Card, Header } from '@monorepo/design-system'
+import { Button, Card, Header } from '@financial-app/ui'
 import { Alert, ScrollView, StatusBar, StyleSheet } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 

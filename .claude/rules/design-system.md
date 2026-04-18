@@ -1,8 +1,8 @@
-# Rules — Design System Components
+# Rules — UI Package Components
 
 ## File Structure (mandatory for every component)
 
-Every component in packages/design-system/src/components/ MUST follow this exact pattern:
+Every component in packages/ui/src/components/ MUST follow this exact pattern:
 
 ```
 ComponentName/

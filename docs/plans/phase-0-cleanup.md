@@ -69,10 +69,10 @@ packages/tokens/build/
 
 ```bash
 # Mobile app must still boot
-pnpm --filter mobile start
+pnpm --filter mobile-financial-app start
 
 # Design system must still resolve
-# Check apps/mobile/App.tsx imports from @monorepo/design-system still work
+# Check apps/mobile/App.tsx imports from @financial-app/ui still work
 ```
 
 ---

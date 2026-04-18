@@ -2,7 +2,7 @@
 
 ## Goal
 
-Create `apps/web/` — a React Router + Vite app that consumes `@monorepo/design-system`
+Create `apps/web/` — a React Router + Vite app that consumes `@financial-app/ui`
 and gets `.web.tsx` component implementations automatically via Vite's bundler resolution.
 
 ## Status: TODO (requires Phase 3 complete)
@@ -24,8 +24,8 @@ cd web
 ```bash
 # From apps/web
 pnpm add react-router-dom
-pnpm add @monorepo/design-system@workspace:^
-pnpm add @monorepo/tailwind-config@workspace:^
+pnpm add @financial-app/ui@workspace:^
+pnpm add @financial-app/tailwind-config@workspace:^
 
 # Dev dependencies
 pnpm add -D tailwindcss postcss autoprefixer
@@ -38,7 +38,7 @@ npx tailwindcss init -p
 
 ### apps/web/tailwind.config.js
 ```js
-const baseConfig = require('@monorepo/tailwind-config');
+const baseConfig = require('@financial-app/tailwind-config');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -46,7 +46,7 @@ module.exports = {
   content: [
     './index.html',
     './src/**/*.{ts,tsx}',
-    '../../packages/design-system/src/**/*.{ts,tsx}',
+    '../../packages/ui/src/**/*.{ts,tsx}',
   ],
 };
 ```
@@ -73,7 +73,7 @@ export default defineConfig({
   resolve: {
     extensions: ['.web.tsx', '.web.ts', '.web.jsx', '.web.js', '.tsx', '.ts', '.jsx', '.js'],
     alias: {
-      '@monorepo/design-system': path.resolve(__dirname, '../../packages/design-system/src'),
+      '@financial-app/ui': path.resolve(__dirname, '../../packages/ui/src'),
     },
   },
 });
@@ -104,7 +104,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 ### apps/web/src/App.tsx
 ```tsx
 import { Routes, Route } from 'react-router-dom';
-import { Header, Button, Card } from '@monorepo/design-system';
+import { Header, Button, Card } from '@financial-app/ui';
 
 export default function App() {
   return (
@@ -129,7 +129,7 @@ export default function App() {
 
 ```bash
 # Start web app
-pnpm --filter web dev
+pnpm --filter web-financial-app dev
 
 # Verify in browser DevTools:
 # Components should render as <button> and <div>, NOT as RN primitives
@@ -152,7 +152,7 @@ In `apps/web/src/index.css`, import the generated CSS vars from tokens:
 
 ## Completion Criteria
 
-- [ ] `apps/web/` exists and boots with `pnpm --filter web dev`
+- [ ] `apps/web/` exists and boots with `pnpm --filter web-financial-app dev`
 - [ ] Vite resolves `.web.tsx` before `.tsx`
 - [ ] All 3 design system components render as HTML elements
 - [ ] Tailwind classes apply correctly (colors match mobile app)

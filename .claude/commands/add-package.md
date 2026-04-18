@@ -21,7 +21,7 @@ mkdir apps/[name]            # for app
 For a library package:
 ```json
 {
-  "name": "@monorepo/[name]",
+  "name": "@financial-app/[name]",
   "version": "1.0.0",
   "private": true,
   "main": "src/index.ts",
@@ -59,7 +59,7 @@ For a library package:
 
 ### 4. Create src/index.ts
 ```ts
-// @monorepo/[name] public API
+// @financial-app/[name] public API
 ```
 
 ### 5. Install dependencies
@@ -70,10 +70,10 @@ pnpm install
 
 ### 6. Add as dependency to consumer
 ```bash
-pnpm --filter [consumer-package] add @monorepo/[name]@workspace:^
+pnpm --filter [consumer-package] add @financial-app/[name]@workspace:^
 ```
 
 ## Dependency Constraint Reminder
 
 Check .claude/rules/monorepo.md for allowed dependency directions.
-Packages must NEVER import from apps. Shared packages NEVER import from design-system.
+Packages must NEVER import from apps. Shared packages NEVER import from ui.

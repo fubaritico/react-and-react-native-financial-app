@@ -90,7 +90,7 @@ Close Xcode to avoid DerivedData lock conflicts with the CLI build.
 ### Step 3 — Build and deploy
 
 ```bash
-pnpm --filter mobile ios
+pnpm --filter mobile-financial-app ios
 ```
 
 This runs `react-native run-ios`, which:
@@ -108,15 +108,15 @@ The app will briefly show "Connecting to Metro..." then load the JS bundle from 
 
 Once the app is running on iPhone and Metro is running on your Mac, **hot reload is automatic**:
 
-1. Edit any `.ts` / `.tsx` file (app code, design-system components, shared utils)
+1. Edit any `.ts` / `.tsx` file (app code, ui components, shared utils)
 2. Metro detects the change via its file watcher
 3. The app hot-reloads on the iPhone over Wi-Fi — no rebuild needed
 
-Changes appear in ~1 second. You do NOT need to re-run `pnpm --filter mobile ios`.
+Changes appear in ~1 second. You do NOT need to re-run `pnpm --filter mobile-financial-app ios`.
 
 ### When a full rebuild IS required
 
-A rebuild (`pnpm --filter mobile ios`) is needed only when the **native binary** must change:
+A rebuild (`pnpm --filter mobile-financial-app ios`) is needed only when the **native binary** must change:
 
 | Change | Why rebuild is needed |
 |--------|----------------------|
@@ -153,7 +153,7 @@ Fix: set `ENABLE_USER_SCRIPT_SANDBOXING = NO` in `project.pbxproj` (see step 7 a
 
 ### App launches but shows white screen / doesn't connect to Metro
 
-- Ensure Metro is running: `pnpm --filter mobile start`
+- Ensure Metro is running: `pnpm --filter mobile-financial-app start`
 - Mac and iPhone on same Wi-Fi
 - Check Mac firewall isn't blocking port 8081
 - Shake iPhone → Dev Menu → "Change Bundle Location" → enter Mac's IP + `:8081`

@@ -2,9 +2,9 @@
 
 ## Goal
 
-Refactor `@monorepo/design-system` from a React Native-only package into a
+Refactor `@financial-app/ui` from a React Native-only package into a
 cross-platform package using the file extension split pattern. After this phase,
-the web app (Phase 4) can import components from @monorepo/design-system and get
+the web app (Phase 4) can import components from @financial-app/ui and get
 proper DOM implementations automatically.
 
 ## Status: TODO (requires Phase 2 complete)
@@ -14,8 +14,8 @@ proper DOM implementations automatically.
 ## Step 3.1 — Install CVA
 
 ```bash
-pnpm --filter @monorepo/design-system add class-variance-authority
-pnpm --filter @monorepo/design-system add clsx tailwind-merge
+pnpm --filter @financial-app/ui add class-variance-authority
+pnpm --filter @financial-app/ui add clsx tailwind-merge
 ```
 
 ---
@@ -219,7 +219,7 @@ export type { HeaderVariants } from './variants/header.variants';
 ## Step 3.8 — Verify Mobile App Still Works
 
 ```bash
-pnpm --filter mobile start
+pnpm --filter mobile-financial-app start
 # All 3 components must render identically to before
 ```
 
@@ -227,7 +227,7 @@ pnpm --filter mobile start
 
 ## Completion Criteria
 
-- [ ] CVA installed in @monorepo/design-system
+- [ ] CVA installed in @financial-app/ui
 - [ ] src/variants/ with 3 variant files + index.ts
 - [ ] src/lib/cn.ts exists (web only)
 - [ ] All 3 components split into ComponentName/ directories

@@ -8,25 +8,25 @@
     mobile/                 # Expo SDK 54 app (canonical mobile)
     web/                    # React Router + Vite app
   packages/
-    tokens/                 # @monorepo/tokens
-    tailwind-config/        # @monorepo/tailwind-config
-    design-system/          # @monorepo/design-system
-    shared/                 # @monorepo/shared
+    tokens/                 # @financial-app/tokens
+    tailwind-config/        # @financial-app/tailwind-config
+    ui/          # @financial-app/ui
+    shared/                 # @financial-app/shared
 ```
 
 ## Package Naming
 
-All packages use `@monorepo/` scope in package.json name field.
-Apps are private, unscoped: `"name": "mobile"`, `"name": "web"`.
+All packages use `@financial-app/` scope in package.json name field.
+Apps are private, with `-financial-app` suffix: `"name": "mobile-financial-app"`, `"name": "web-financial-app"`.
 
 ## Dependency Rules
 
 ```
-@monorepo/tokens           → depends on nothing
-@monorepo/tailwind-config  → depends on @monorepo/tokens
-@monorepo/design-system    → depends on @monorepo/tokens, @monorepo/tailwind-config
-@monorepo/shared           → depends on nothing (pure TS, no renderer)
-apps/*                     → depends on @monorepo/design-system, @monorepo/shared
+@financial-app/tokens           → depends on nothing
+@financial-app/tailwind-config  → depends on @financial-app/tokens
+@financial-app/ui    → depends on @financial-app/tokens, @financial-app/tailwind-config
+@financial-app/shared           → depends on nothing (pure TS, no renderer)
+apps/*                     → depends on @financial-app/ui, @financial-app/shared
 ```
 
 Never create circular dependencies. Shared packages NEVER import from apps.
@@ -38,14 +38,14 @@ Never create circular dependencies. Shared packages NEVER import from apps.
 pnpm install
 
 # Run command in specific package
-pnpm --filter @monorepo/design-system build
-pnpm --filter mobile start
+pnpm --filter @financial-app/ui build
+pnpm --filter mobile-financial-app start
 
 # Run command in all packages
 pnpm -r build
 
 # Add dependency to specific package
-pnpm --filter @monorepo/design-system add class-variance-authority
+pnpm --filter @financial-app/ui add class-variance-authority
 
 # Add dev dependency to root
 pnpm add -D turbo -w
@@ -68,7 +68,7 @@ pnpm add -D turbo -w
 }
 ```
 
-Build order guaranteed: tokens → tailwind-config → design-system → apps
+Build order guaranteed: tokens → tailwind-config → ui → apps
 
 ## Metro Config Rules (apps/mobile)
 
@@ -107,6 +107,6 @@ Never delete them. All three must be covered by ESLint and project tooling.
 ## Adding a New Package
 
 1. Create `packages/[name]/` directory
-2. Add `package.json` with `@monorepo/[name]` name
+2. Add `package.json` with `@financial-app/[name]` name
 3. Add to no extra workspace config — pnpm-workspace.yaml uses `packages/*` and `apps/*` globs
-4. Add as dependency where needed: `pnpm --filter [consumer] add @monorepo/[name]@workspace:^`
+4. Add as dependency where needed: `pnpm --filter [consumer] add @financial-app/[name]@workspace:^`

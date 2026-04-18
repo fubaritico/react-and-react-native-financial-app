@@ -2,7 +2,7 @@
 
 ## Goal
 
-Create a single `@monorepo/tailwind-config` package that consumes the token
+Create a single `@financial-app/tailwind-config` package that consumes the token
 build outputs and provides the Tailwind theme to all apps. After this phase,
 no app or package should define its own colors or spacing — they all extend
 this shared config.
@@ -20,19 +20,19 @@ mkdir packages/tailwind-config
 ### packages/tailwind-config/package.json
 ```json
 {
-  "name": "@monorepo/tailwind-config",
+  "name": "@financial-app/tailwind-config",
   "version": "1.0.0",
   "private": true,
   "main": "index.js",
   "dependencies": {
-    "@monorepo/tokens": "workspace:^"
+    "@financial-app/tokens": "workspace:^"
   }
 }
 ```
 
 ### packages/tailwind-config/index.js
 ```js
-const tokens = require('@monorepo/tokens/build/tailwind/tailwind.tokens');
+const tokens = require('@financial-app/tokens/build/tailwind/tailwind.tokens');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -69,7 +69,7 @@ module.exports = {
 
 Replace current hardcoded config:
 ```js
-const baseConfig = require('@monorepo/tailwind-config');
+const baseConfig = require('@financial-app/tailwind-config');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -77,7 +77,7 @@ module.exports = {
   content: [
     './app/**/*.{js,jsx,ts,tsx}',
     './src/**/*.{js,jsx,ts,tsx}',
-    '../../packages/design-system/src/**/*.{js,jsx,ts,tsx}',
+    '../../packages/ui/src/**/*.{js,jsx,ts,tsx}',
   ],
   presets: [require('nativewind/preset')],
 };
@@ -85,10 +85,10 @@ module.exports = {
 
 ---
 
-## Step 2.3 — Update packages/design-system/tailwind.config.js
+## Step 2.3 — Update packages/ui/tailwind.config.js
 
 ```js
-const baseConfig = require('@monorepo/tailwind-config');
+const baseConfig = require('@financial-app/tailwind-config');
 
 module.exports = {
   ...baseConfig,
@@ -99,12 +99,12 @@ module.exports = {
 
 ---
 
-## Step 2.4 — Update packages/design-system/src/lib/tw.ts
+## Step 2.4 — Update packages/ui/src/lib/tw.ts
 
 ```ts
 import { create } from 'twrnc';
 import resolveConfig from 'tailwindcss/resolveConfig';
-import baseConfig from '@monorepo/tailwind-config';
+import baseConfig from '@financial-app/tailwind-config';
 
 export const tw = create(resolveConfig(baseConfig));
 ```
@@ -120,7 +120,7 @@ pnpm install
 
 # Verify tw instance resolves correct colors
 # Boot apps/mobile and confirm primary color still renders correctly
-pnpm --filter mobile start
+pnpm --filter mobile-financial-app start
 ```
 
 ---
@@ -128,13 +128,13 @@ pnpm --filter mobile start
 ## Completion Criteria
 
 - [ ] `packages/tailwind-config/` exists
-- [ ] `index.js` consumes `@monorepo/tokens/build/tailwind/`
-- [ ] `apps/mobile/tailwind.config.js` extends `@monorepo/tailwind-config`
-- [ ] `packages/design-system/tailwind.config.js` extends `@monorepo/tailwind-config`
-- [ ] `packages/design-system/src/lib/tw.ts` uses shared config
+- [ ] `index.js` consumes `@financial-app/tokens/build/tailwind/`
+- [ ] `apps/mobile/tailwind.config.js` extends `@financial-app/tailwind-config`
+- [ ] `packages/ui/tailwind.config.js` extends `@financial-app/tailwind-config`
+- [ ] `packages/ui/src/lib/tw.ts` uses shared config
 - [ ] No hardcoded hex values remain in any tailwind.config.js or tw.ts
 - [ ] Mobile app boots and colors render correctly
 
 ## Next
 
-→ docs/plans/phase-3-design-system.md
+→ docs/plans/phase-3-ui.md

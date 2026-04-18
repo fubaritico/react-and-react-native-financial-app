@@ -1,5 +1,5 @@
 {
-  "name": "@monorepo/design-system",
+  "name": "@financial-app/ui",
   "version": "1.0.0",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -7,10 +7,7 @@
   "scripts": {
     "changelog": "conventional-changelog -p angular -r 0 --path . > CHANGELOG.md",
     "lint": "eslint ./src",
-    "type-check": "tsc --noEmit",
-    "release:patch": "./publish.sh patch",
-    "release:minor": "./publish.sh minor",
-    "release:major": "./publish.sh major"
+    "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": "catalog:",
