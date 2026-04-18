@@ -186,12 +186,19 @@ packages/
   - Updated all path references in scripts, docs, rules, commands, and config
   - Regenerated pnpm-lock.yaml — verified type-check + lint + test pass
   - Tested mobile app on iOS simulator — works correctly
+- Renamed project and all packages:
+  - Root: rn-monorepo → react-and-react-native-financial-app
+  - Scope: @monorepo/* → @financial-app/*
+  - Apps: mobile → mobile-financial-app, mobile-expo → mobile-expo-financial-app, mobile-expo-ejected → mobile-expo-ejected-financial-app
+  - packages/design-system → packages/ui (@financial-app/ui)
+  - Removed publish.sh and release:* scripts (monorepo-only, no npm publish needed)
+  - Updated all imports, configs, metro.config, tailwind.config content paths, docs, plans, scripts, filter refs
 
 ### Next
 - Pre-phase cleanup: clean up project (NativeWind remnants, etc.) before starting Phase 0
 
 ### Known Issues
-- Design system tailwind.config.js still references nativewind/preset (to be replaced)
+- packages/ui tailwind.config.js still references nativewind/preset (to be replaced)
 - NativeWind remnants in mobile-expo (global.css, nativewind-env.d.ts)
 - `expo-dev-client` not yet tested on mobile-expo-ejected
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only

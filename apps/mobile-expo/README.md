@@ -1,6 +1,6 @@
 # mobile-expo
 
-Application React Native avec **Expo (managed workflow)**.
+React Native application with **Expo (managed workflow)**.
 
 ## Stack
 
