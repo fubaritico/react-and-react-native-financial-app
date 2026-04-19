@@ -208,6 +208,9 @@ packages/
 - Vendored 5 Expo skills (building-native-ui, deployment, dev-client, native-data-fetching, upgrading-expo) with 26 reference files
 - Vendored 2 Callstack skills (rn-best-practices, upgrading-rn) with 36 reference files
 - Created persistent memory file (MEMORY.md) with skills inventory
+- Created `restart-session` skill for end → clear → start flow
+- Removed `.claude/commands/` (7 files) — fully replaced by `.claude/skills/`
+- Updated CLAUDE.md references from commands to skills
 
 ### Next
 - Pre-phase cleanup: clean up project (NativeWind remnants, etc.) before starting Phase 0
