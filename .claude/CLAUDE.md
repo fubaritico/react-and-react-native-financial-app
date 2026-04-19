@@ -211,6 +211,16 @@ packages/
 - Created `restart-session` skill for end → clear → start flow
 - Removed `.claude/commands/` (7 files) — fully replaced by `.claude/skills/`
 - Updated CLAUDE.md references from commands to skills
+- Created `setup-tokens-package` skill with references (sd-config-template, token-sources)
+  Based on vite-mf-monorepo reference, adapted for cross-platform (5 outputs: css, tailwind JS map, js, ts, native)
+- Created `migrate-to-nativewind-v5` skill (draft) — future migration from twrnc + TW v3 to NativeWind v5 + TW v4
+- Styling decision: stay on twrnc + Tailwind v3 (stable); NativeWind v5 + TW v4 is pre-release, revisit later
+- Confirmed Expo SDK 54 ships RN 0.81 + Reanimated v4 (NativeWind v5 prerequisites met)
+- Created `setup-ui-package` skill (dual-mode: scaffold/migrate) with `references/architecture.md`
+  Based on vite-mf-monorepo/packages/ui, enriched with phase-3 guardrails (cn.ts, variants, Metro config, safe/forbidden classes, mobile verification)
+- Evaluated Supabase vs Firebase vs Neon vs PlanetScale — decision: keep Supabase, plan Pro tier for production
+- Created docs/research/supabase-evaluation.md with full comparison and limitations
+- Installed supabase and supabase-postgres-best-practices agent skills (official, from supabase/agent-skills)
 
 ### Next
 - Pre-phase cleanup: clean up project (NativeWind remnants, etc.) before starting Phase 0
