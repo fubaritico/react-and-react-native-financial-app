@@ -1,7 +1,7 @@
 # Claude Code — rn-monorepo
 
 > Read this first every session. Then read .claude/rules/ relevant to your task.
-> For implementation plans, see docs/plans/. For slash commands, see .claude/commands/.
+> For implementation plans, see docs/plans/. For skills, see .claude/skills/.
 > For more information about the project intent and history, see files/docs and context MD files.
 
 ## Project
@@ -119,7 +119,7 @@ packages/
 ## Navigation
 
 - `.claude/rules/` — domain rules (ui, tokens, styling, monorepo)
-- `.claude/commands/` — slash commands for recurring tasks
+- `.claude/skills/` — agent skills for recurring tasks
 - `docs/plans/` — step-by-step phase plans with exact file changes
 - `files/docs and context/PERSONAL_FINANCE_ANALYSIS_EN.md` — full product specification
 
@@ -218,5 +218,4 @@ packages/
 - NativeWind remnants in mobile-expo (global.css, nativewind-env.d.ts)
 - `expo-dev-client` not yet tested on mobile-expo-ejected
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
-- Old .claude/commands/ still exist alongside new .claude/skills/ — can be removed once skills are validated
 
