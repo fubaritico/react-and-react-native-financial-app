@@ -9,7 +9,8 @@
       "WebSearch",
       "WebFetch",
       "Bash",
-      "Skill(commit)"
+      "Skill(commit)",
+      "Skill(end-session)"
     ]
   },
   "deny": [
