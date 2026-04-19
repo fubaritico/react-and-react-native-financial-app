@@ -1,0 +1,51 @@
+---
+name: commit
+description: Prepare and propose a conventional commit for the current changes. Use when committing code, creating a git commit, or finalizing a set of changes.
+allowed-tools: Bash(git:*)
+metadata:
+  author: financial-app
+  version: "1.0"
+---
+
+# Commit
+
+Prepare and propose a conventional commit for current changes.
+
+## Steps
+
+1. Run `git status` to see changed files
+2. Run `git diff --staged` and `git diff` to analyze all changes
+3. Identify the scope based on changed files:
+   - `packages/ui` -> scope `ui`
+   - `packages/tokens` -> scope `tokens`
+   - `packages/tailwind-config` -> scope `tailwind-config`
+   - `packages/shared` -> scope `shared`
+   - `apps/mobile-expo` or `apps/mobile` -> scope `mobile`
+   - `apps/web` -> scope `web`
+   - `apps/api` -> scope `api`
+   - `.claude/` or `docs/` -> scope `config`
+   - Root config files -> scope `monorepo`
+   - Multiple packages -> use the most impacted scope
+4. Generate a conventional commit message
+5. Propose the exact commands to run (user executes them)
+
+## Commit format
+
+```
+type(scope): subject
+
+- bullet point detail if needed
+```
+
+## Allowed types
+
+`feat` `fix` `refactor` `style` `test` `docs` `chore` `build` `ci` `perf` `revert`
+
+## Rules
+
+- Subject: lowercase, no trailing period, max 100 chars total
+- Body: bullet points for non-obvious changes
+- Never skip pre-commit hook (runs typecheck + lint + test automatically)
+- One feature per commit — do not accumulate unrelated changes
+- Stage specific files by name, never `git add .` or `git add -A`
+- Co-author line: `Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>`
