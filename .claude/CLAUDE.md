@@ -193,13 +193,30 @@ packages/
   - packages/design-system → packages/ui (@financial-app/ui)
   - Removed publish.sh and release:* scripts (monorepo-only, no npm publish needed)
   - Updated all imports, configs, metro.config, tailwind.config content paths, docs, plans, scripts, filter refs
+- Created GitHub repo under fubaritico org, switched remote origin from stefcot to fubaritico (SSH)
+- Translated all French docs/READMEs to English:
+  - Root README.md, packages/ui/README.md, apps/mobile-expo/README.md, apps/mobile-expo-ejected/README.md
+  - files/docs and context/PERSONAL_FINANCE_ANALYSIS.md (local only, gitignored)
+- Revamped root README: added TOC, back-to-top links, tech stack intro, Packages section with status/dependency graph
+- Added apps/api (Express REST API) and @financial-app/http-client (HeyAPI) to README and project structure
+- Removed "Next Steps" section from README (internal, not for repo consumers)
+- Committed CocoaPods pbxproj cleanup (empty arrays removed by newer CocoaPods)
+- Created docs/plans/phase-7-api-and-http-client.md — OpenAPI-driven Express API + HeyAPI client generation
+- Updated plans index: Phase 7 added, Phase 6 (Turborepo) now depends on Phase 7
+- Migrated 7 commands to agent skills format (.claude/skills/) with YAML frontmatter
+- Created 6 new custom skills: create-skill (meta), token-pipeline, cross-platform-component, expo-build, monorepo-check, api-openapi
+- Vendored 5 Expo skills (building-native-ui, deployment, dev-client, native-data-fetching, upgrading-expo) with 26 reference files
+- Vendored 2 Callstack skills (rn-best-practices, upgrading-rn) with 36 reference files
+- Created persistent memory file (MEMORY.md) with skills inventory
 
 ### Next
 - Pre-phase cleanup: clean up project (NativeWind remnants, etc.) before starting Phase 0
+- Refine custom skills as phases progress (skills are initial versions)
 
 ### Known Issues
 - packages/ui tailwind.config.js still references nativewind/preset (to be replaced)
 - NativeWind remnants in mobile-expo (global.css, nativewind-env.d.ts)
 - `expo-dev-client` not yet tested on mobile-expo-ejected
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
+- Old .claude/commands/ still exist alongside new .claude/skills/ — can be removed once skills are validated
 
