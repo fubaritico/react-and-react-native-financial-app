@@ -1,4 +1,4 @@
-# 1.0.0 (2026-04-18)
+# 1.0.0 (2026-04-20)
 
 
 ### Bug Fixes
@@ -13,6 +13,11 @@
 * added env for BDD credentials ([c08b401](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c08b4019e8528439de6b969fc9cec13b2595601a))
 * added shared design system ([69b2530](https://github.com/fubaritico/react-and-react-native-financial-app/commit/69b25309bb897f486afe8585eb3c7d3776ad9b5a))
 * alignement de mobile-expo-ejected aveclesmême dépendances ([c3df036](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c3df03680c52be2e98b931e9860a5c1c0ddcc842))
+* **config:** add agent skills — migrate commands + vendor Expo/Callstack skills ([3847dc7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/3847dc73a293dab050ad88f3f8ae7e712f867feb))
+* **config:** add multi-agent review skill with 5 domain experts ([bda46f8](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bda46f858062652f7617d8143337565926ff156b))
+* **config:** add restart-session skill for end → clear → start flow ([4f2f6b6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4f2f6b6a669273d5abc45fea1109a63c7cea70ed))
+* **config:** add setup-tokens-package and migrate-to-nativewind-v5 skills ([1d9caa6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1d9caa60ec308b74bed7ee14282645261bffa92a))
+* **config:** add setup-ui-package skill with architecture reference ([44982df](https://github.com/fubaritico/react-and-react-native-financial-app/commit/44982df4e2fb4aa4d4a03ba965b4cfac2cf0d72a))
 * **expo:** add expo-dev-client and native build scripts ([1b26c7f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1b26c7f61490496cf77043e28ff08033829bc8e9))
 * **icons:** add Fb app icon to all mobile apps ([e18ea02](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e18ea02267c836173524182be2629b4d8cd3142b))
 * **mobile:** react native package basic setup ([ab09677](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ab09677a32fae9ba09ffdfa89bdcf3a46a13186f))
