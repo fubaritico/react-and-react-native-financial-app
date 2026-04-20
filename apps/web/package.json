@@ -11,8 +11,9 @@
     "lint": "eslint ./app"
   },
   "dependencies": {
-    "@financial-app/tokens": "workspace:^",
+    "@financial-app/shared": "workspace:^",
     "@financial-app/tailwind-config": "workspace:^",
+    "@financial-app/tokens": "workspace:^",
     "@financial-app/ui": "workspace:^",
     "@react-router/node": "^7.14.1",
     "@react-router/serve": "^7.14.1",

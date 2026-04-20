@@ -1,0 +1,68 @@
+{
+  "name": "@financial-app/shared",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    },
+    "./auth/client": {
+      "import": "./src/auth/client.ts"
+    },
+    "./auth/client.server": {
+      "import": "./src/auth/client.server.ts"
+    },
+    "./auth/client.native": {
+      "import": "./src/auth/client.native.ts"
+    },
+    "./auth/oauth": {
+      "react-native": "./src/auth/oauth.native.ts",
+      "default": "./src/auth/oauth.ts"
+    },
+    "./auth/guard": {
+      "import": "./src/auth/guard.ts"
+    },
+    "./auth/hooks": {
+      "import": "./src/auth/hooks.ts"
+    },
+    "./auth/types": {
+      "import": "./src/auth/types.ts"
+    },
+    "./atoms": {
+      "import": "./src/atoms/index.ts"
+    },
+    "./types": {
+      "import": "./src/types/index.ts"
+    },
+    "./utils": {
+      "import": "./src/utils/index.ts"
+    }
+  },
+  "scripts": {
+    "changelog": "conventional-changelog -p angular -r 0 --path . > CHANGELOG.md",
+    "lint": "eslint ./src",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.49.4",
+    "jotai": "^2.12.3",
+    "zod": "^3.24.4"
+  },
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-router": "^7.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-router": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/react": "catalog:",
+    "conventional-changelog": "catalog:",
+    "typescript": "catalog:"
+  }
+}

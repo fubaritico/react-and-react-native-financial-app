@@ -32,3 +32,5 @@
 * styles based on nativewind and used by apps and ds ([d95e9f2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d95e9f2966e13816f1cb7ef78b9fc786e1c4ec47))
 * **tailwind-config:** create @financial-app/tailwind-config (Phase 2) ([257f51d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/257f51de7d099f73d2c9754855d1b797c04a2f21))
 * **tokens:** create @financial-app/tokens package (Phase 0) ([76b2857](https://github.com/fubaritico/react-and-react-native-financial-app/commit/76b2857cda2768fa3ac35888dd90244aff5736f0))
+* **ui:** cross-platform refactor with file extension split (Phase 3) ([75e52eb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/75e52eb986da00dfa20fb92f397f3e93d19026b2))
+* **web:** create apps/web with React Router v7 SSR (Phase 4) ([4ffb08a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4ffb08a4a90266ab12a58dca219742713c843511))
