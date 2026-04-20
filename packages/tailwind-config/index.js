@@ -3,7 +3,11 @@ const tokens = require('@financial-app/tokens/tailwind')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   theme: {
-    colors: tokens.color,
+    colors: {
+      ...tokens.color,
+      transparent: 'transparent',
+      current: 'currentColor',
+    },
     borderRadius: tokens.radius,
     spacing: tokens.spacing,
     fontFamily: {

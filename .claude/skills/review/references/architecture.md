@@ -28,6 +28,14 @@
 - **Files**: `apps/**`
 - **Check**: No imports from `../../apps/other-app` or `@financial-app` scoped app names
 
+### ARCH-003b: SOLID principle violations
+- **Files**: All `*.ts`, `*.tsx`
+- **S — Single Responsibility**: A module, class, or component does one thing. A component that fetches data AND renders UI violates SRP — split into a hook + a presentational component.
+- **O — Open/Closed**: Extend behavior through composition (variants, props, children), not by modifying existing code. A component that requires internal edits to support new variants is not open for extension.
+- **L — Liskov Substitution**: A component accepting the same props interface must be interchangeable across platforms. `.native.tsx` and `.web.tsx` must honor the same Props contract.
+- **I — Interface Segregation**: Props interfaces should not force consumers to provide values they don't use. Split large interfaces or use optional properties.
+- **D — Dependency Inversion**: Depend on abstractions (token aliases, variant objects, interfaces), not on concrete implementations (raw hex values, platform-specific APIs in shared code).
+
 ## High Violations
 
 ### ARCH-004: Missing component files (4-file pattern)

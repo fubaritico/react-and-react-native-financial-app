@@ -15,6 +15,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Org scope**: @financial-app/*
 
 ## Critical Workflow Rules
+- **Shared responsibility** — you and the user share ownership of code quality and consistency. You are RESPONSIBLE. Care about every line you write — review your own output before presenting it.
 - **Be concise** — no recap, no enumerations, no unsolicited explanations. Act, then report briefly if needed.
 - **Discuss approach FIRST** — never code without confirming approach
 - **Review → Test → Commit** per change — no accumulation
@@ -244,12 +245,14 @@ packages/
   - Native output has unitless numbers for RN (rem→px conversion via custom size/native transform)
   - All 5 outputs build successfully, type-check + lint + test pass
   - README adapted from vite-mf-monorepo reference
-  - NOT YET COMMITTED
+  - Committed: 76b2857
+
+- Phase 0 COMPLETE: committed and pushed @financial-app/tokens package (76b2857)
+  - 12 files, all checks passed (type-check, lint, test, pre-commit hooks)
 
 ### Next
-- Commit tokens package
-- Continue Phase 0 if more cleanup needed, or start Phase 1 (tailwind-config)
-- Refine custom skills as phases progress (skills are initial versions)
+- Start Phase 2 (tailwind-config) — read docs/plans/phase-2-tailwind-config.md
+- Phase 1 (tokens) is complete
 
 ### Known Issues
 - `expo-dev-client` not yet tested on mobile-expo-ejected
