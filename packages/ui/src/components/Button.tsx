@@ -19,7 +19,7 @@ const variantStyles = {
 
 const textStyles = {
   primary: tw`text-white`,
-  secondary: tw`text-black`,
+  secondary: tw`text-foreground`,
   outline: tw`text-primary`,
 }
 
