@@ -32,13 +32,13 @@ CJS format — Tailwind CSS v3 `resolveConfig` and twrnc both expect CJS configs
 The file uses `.js` extension inside a package without `"type": "module"`, so
 Node treats it as CJS regardless of root package.json.
 
-Consumes the **alias layer** from `tailwind.tokens.js` — these are the flat,
-consumer-facing names (`primary`, `background`, `theme-green`, etc.).
+Consumes the **alias layer** via the `./tailwind` subpath export — these are
+the flat, consumer-facing names (`primary`, `background`, `green`, etc.).
 Base (`base-*`) and semantic (`semantic-*`) keys are intentionally excluded
 to keep the public API clean.
 
 ```js
-const tokens = require('@financial-app/tokens/build/tailwind/tailwind.tokens')
+const tokens = require('@financial-app/tokens/tailwind')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

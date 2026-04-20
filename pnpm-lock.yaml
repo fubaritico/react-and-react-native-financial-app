@@ -267,6 +267,16 @@ importers:
         specifier: 'catalog:'
         version: 5.9.3
 
+  packages/tailwind-config:
+    dependencies:
+      '@financial-app/tokens':
+        specifier: workspace:^
+        version: link:../tokens
+    devDependencies:
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 3.4.19(yaml@2.8.2)
+
   packages/tokens:
     devDependencies:
       style-dictionary:
@@ -275,6 +285,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@financial-app/tailwind-config':
+        specifier: workspace:^
+        version: link:../tailwind-config
       react:
         specifier: 'catalog:'
         version: 19.1.0
