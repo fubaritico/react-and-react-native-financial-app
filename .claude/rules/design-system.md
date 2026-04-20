@@ -9,7 +9,8 @@ ComponentName/
   ComponentName.tsx         # types + props interface ONLY — no JSX, no imports from renderers
   ComponentName.native.tsx  # React Native implementation
   ComponentName.web.tsx     # DOM/HTML implementation
-  index.ts                  # re-export (bundler overrides per platform)
+  index.ts                  # native barrel — exports from .native (Metro uses this)
+  index.web.ts              # web barrel — exports from .web (Vite uses this)
 ```
 
 ## ComponentName.tsx — Types File Rules
@@ -77,17 +78,33 @@ export function Button({ label, onPress, variant, size, disabled }: ButtonProps)
 }
 ```
 
-## index.ts — Re-export Rules
+## index.ts / index.web.ts — Re-export Rules
+
+Two barrel files per component — one per platform:
 
 ```ts
-// Target does not matter — Metro picks .native.tsx, Vite/webpack picks .web.tsx
+// index.ts — Metro picks this (default entry)
 export { Button } from './Button.native';
 export type { ButtonProps } from './Button';
 ```
 
-## Public API (src/index.ts)
+```ts
+// index.web.ts — Vite picks this (via resolve.extensions .web.ts priority)
+export { Button } from './Button.web';
+export type { ButtonProps } from './Button';
+```
 
-Every new component must be added to src/index.ts with:
+## Public API (src/index.ts + src/index.web.ts)
+
+Two top-level barrels mirror the component pattern:
+- `src/index.ts` — imports from component `index.ts` (native)
+- `src/index.web.ts` — imports from component `index.web.ts` (web)
+
+The `@financial-app/ui` package.json `exports` map routes each platform:
+- `"react-native"` → `./src/index.ts`
+- `"default"` → `./src/index.web.ts`
+
+Every new component must be added to BOTH barrels with:
 - Named component export
 - Named type export
 - Named variant export (so consumers can compose)
@@ -98,7 +115,9 @@ Every new component must be added to src/index.ts with:
 - [ ] ComponentName.tsx — types only, no JSX
 - [ ] ComponentName.native.tsx — uses tw``, no HTML
 - [ ] ComponentName.web.tsx — uses cn(), no RN imports
-- [ ] index.ts — re-exports component + types
+- [ ] index.ts — re-exports from .native + types
+- [ ] index.web.ts — re-exports from .web + types
 - [ ] variants/[name].variants.ts — CVA object created
 - [ ] JSDocs for properties, functions, state variables
-- [ ] src/index.ts — component exported publicly
+- [ ] src/index.ts — component exported (native barrel)
+- [ ] src/index.web.ts — component exported (web barrel)
