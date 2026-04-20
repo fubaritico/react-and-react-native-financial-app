@@ -6,7 +6,7 @@ Add Turborepo to orchestrate builds across all packages with correct dependency
 order and caching. After this phase, a single `pnpm dev` or `pnpm build` at the
 root runs everything in the right sequence.
 
-## Status: TODO (requires Phase 5 complete)
+## Status: ABSORBED into Phase 7 (phase-7-home-page.md Step 7.1)
 
 ---
 
@@ -171,5 +171,5 @@ For GitHub Actions or similar:
 
 ## Done
 
-All 6 phases complete. The monorepo is fully set up.
-Refer to PERSONAL_FINANCE_ANALYSIS_EN.md for feature development roadmap.
+This phase has been absorbed into Phase 7 (Step 7.1).
+See `phase-7-home-page.md` for the consolidated plan.
