@@ -1,0 +1,10 @@
+@import '@financial-app/tokens/css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+}
