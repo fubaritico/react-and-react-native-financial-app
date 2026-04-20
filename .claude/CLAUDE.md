@@ -250,9 +250,56 @@ packages/
 - Phase 0 COMPLETE: committed and pushed @financial-app/tokens package (76b2857)
   - 12 files, all checks passed (type-check, lint, test, pre-commit hooks)
 
+- Aligned token alias names with Figma variable collection (d9345ae)
+  - Dropped `theme-` prefix from 15 secondary/other color aliases
+  - Renamed `other-purple` → `pink`, `beige`/`beige-light` → `beige-500`/`beige-100`
+  - Updated phase-2 plan: removed NativeWind refs, full token mapping
+
+- Phase 2 COMPLETE: created `packages/tailwind-config/` — @financial-app/tailwind-config (257f51d)
+  - Shared config consuming tokens via `./tailwind` subpath export
+  - Maps all categories: colors, spacing, radius, font family/size/weight/lineHeight
+  - Uses `theme` (full replace) — no default Tailwind values leak in
+  - Standalone type declaration (`index.d.ts`) — no twrnc/tailwindcss coupling
+  - tw.ts simplified: direct config pass to twrnc `create()`, no `resolveConfig`
+  - Added `transparent`/`currentColor` as CSS fundamentals in config
+
+- Fixed runtime warnings in ui components (5d3939b)
+  - Button: `black` → `foreground`
+  - Card: `gray-900` → `foreground`, `gray-600` → `foreground-muted`
+  - Tested on Expo iOS simulator and bare RN — no warnings, correct rendering
+
+- Added shared responsibility rule to CLAUDE.md
+- Added QUAL-002b review rule: separate type and value imports
+- Added ARCH-003b review rule: SOLID principles mapped to codebase patterns
+
+- Phase 3 COMPLETE: cross-platform refactor of @financial-app/ui (75e52eb)
+  - Installed CVA, clsx, tailwind-merge
+  - Created src/lib/cn.ts (web className composition)
+  - Created src/variants/ with button, card, header variant files + barrel index
+  - Split Button, Card, Header into folder-based components (types, native, web, index)
+  - Button: switched from TouchableOpacity to Pressable with press feedback (opacity-70)
+  - Card: shadow-md kept out of shared variant, applied per-platform
+  - Header: semantic <header> + <h1> on web
+  - Updated all 3 Metro configs with .native.* extension priority
+  - Updated src/index.ts — exports components, types, and variants via barrel
+  - Fixed primary button invisible text (CVA defaultVariants doesn't set prop value)
+  - Tested on iOS simulator + physical device — all components render correctly
+
+- Phase 4 COMPLETE: created `apps/web/` — React Router v7 framework + SSR (4ffb08a)
+  - React Router v7.14.1 with Vite 8, SSR enabled, Node adapter
+  - Vite resolve.extensions prioritizes .web.tsx before .tsx
+  - Home route with server-side loader mirroring mobile app layout
+  - Tailwind CSS via shared @financial-app/tailwind-config + token CSS vars
+  - Added `index.web.ts` barrel files to each ui component for web entry resolution
+  - Added `exports` map to @financial-app/ui: `react-native` → index.ts, `default` → index.web.ts
+  - Added react-dom to pnpm catalog, esbuild to pnpm.onlyBuiltDependencies
+  - Excluded `.react-router/` generated types from ESLint
+  - PostCSS/Tailwind configs use `.cjs` extension (ESM package with CJS configs)
+  - Tested on mobile (bare RN + Expo) — no regressions from index.web.ts changes
+  - Tested on web — SSR renders HTML, components are semantic, Tailwind colors match
+
 ### Next
-- Start Phase 2 (tailwind-config) — read docs/plans/phase-2-tailwind-config.md
-- Phase 1 (tokens) is complete
+- Start Phase 5 (shared package) — read docs/plans/phase-5-shared.md
 
 ### Known Issues
 - `expo-dev-client` not yet tested on mobile-expo-ejected
