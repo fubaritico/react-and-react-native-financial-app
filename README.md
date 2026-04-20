@@ -26,17 +26,18 @@ React Native · Expo SDK 54 · React · TypeScript · pnpm · Turborepo · twrnc
 ```
 react-and-react-native-financial-app/
 ├── package.json            # Monorepo root config
-├── pnpm-workspace.yaml     # pnpm workspaces declaration
-├── .gitignore              # Git ignored files
-├── README.md               # This file
-├── apps/                   # Applications
-│   ├── api/                # Express REST API for Supabase DB
-│   ├── mobile/             # React Native CLI app (without Expo)
-│   ├── mobile-expo/        # React Native app with Expo (canonical)
-│   └── mobile-expo-ejected/ # Ejected Expo app
-├── packages/               # Shared packages
-│   ├── http-client/        # @financial-app/http-client — API client
-│   └── ui/                 # @financial-app/ui — shared design system
+├── pnpm-workspace.yaml     # pnpm workspaces + catalog
+├── turbo.json              # Turborepo task pipeline
+├── apps/
+│   ├── mobile-expo/        # Expo SDK 54 (canonical mobile app)
+│   ├── web/                # React Router v7 + Vite (SSR)
+│   ├── mobile/             # Bare React Native CLI (learning reference)
+│   └── mobile-expo-ejected/ # Ejected Expo (learning reference)
+├── packages/
+│   ├── tokens/             # @financial-app/tokens — Style Dictionary (DTCG)
+│   ├── tailwind-config/    # @financial-app/tailwind-config — shared Tailwind config
+│   ├── ui/                 # @financial-app/ui — cross-platform design system
+│   └── shared/             # @financial-app/shared — auth, types, utils, atoms
 └── scripts/                # Utility scripts (reset, changelogs)
 ```
 
@@ -50,21 +51,21 @@ react-and-react-native-financial-app/
 
 | App | Path | Status | Description |
 |-----|------|--------|-------------|
-| `mobile-expo` | `apps/mobile-expo/` | Exists | Expo managed (SDK 54) — canonical mobile app, primary focus |
-| `mobile` | `apps/mobile/` | Exists | Bare React Native CLI — learning reference |
-| `mobile-expo-ejected` | `apps/mobile-expo-ejected/` | Exists | Expo bare/ejected — learning reference |
-| `web` | `apps/web/` | Planned | React Router + Vite |
-| `api` | `apps/api/` | Planned | Express REST API for Supabase DB |
+| `mobile-expo` | `apps/mobile-expo/` | Active | Expo managed (SDK 54) — canonical mobile app, primary focus |
+| `web` | `apps/web/` | Active | React Router v7 + Vite with SSR |
+| `mobile` | `apps/mobile/` | Active | Bare React Native CLI — learning reference |
+| `mobile-expo-ejected` | `apps/mobile-expo-ejected/` | Active | Expo bare/ejected — learning reference |
+| `api` | `apps/api/` | Planned | Express REST API (OpenAPI + zod-to-openapi) |
 
 ### Shared Packages
 
 | Package | Path | Status | Description |
 |---------|------|--------|-------------|
-| `@financial-app/ui` | `packages/ui/` | Exists | Cross-platform design system (React Native + web) |
-| `@financial-app/tokens` | `packages/tokens/` | Planned | Style Dictionary — single token source of truth |
-| `@financial-app/tailwind-config` | `packages/tailwind-config/` | Planned | Shared Tailwind config consumed by both apps |
-| `@financial-app/shared` | `packages/shared/` | Planned | Supabase, Jotai atoms, TanStack Query, types, utils |
-| `@financial-app/http-client` | `packages/http-client/` | Planned | API client consuming the Express REST API |
+| `@financial-app/tokens` | `packages/tokens/` | Active | Style Dictionary (DTCG) — colors, spacing, typography, radii |
+| `@financial-app/tailwind-config` | `packages/tailwind-config/` | Active | Shared Tailwind config consuming token outputs |
+| `@financial-app/ui` | `packages/ui/` | Active | Cross-platform design system (file extension split: `.native.tsx` / `.web.tsx`) |
+| `@financial-app/shared` | `packages/shared/` | Active | Auth (Supabase), Jotai atoms, domain types, utils |
+| `@financial-app/http-client` | `packages/http-client/` | Planned | HeyAPI client consuming the Express REST API |
 
 ### Dependency Graph
 
@@ -73,9 +74,7 @@ react-and-react-native-financial-app/
 @financial-app/tailwind-config  -> @financial-app/tokens
 @financial-app/ui               -> @financial-app/tokens, @financial-app/tailwind-config
 @financial-app/shared           -> depends on nothing (pure TS, no renderer)
-@financial-app/http-client      -> depends on nothing (API client for apps/api)
-apps/api                        -> Supabase SDK (serves REST API)
-apps/*  (mobile, web)           -> @financial-app/ui, @financial-app/shared, @financial-app/http-client
+apps/*  (mobile, web)           -> @financial-app/ui, @financial-app/shared
 ```
 
 [Back to top](#table-of-contents)
@@ -194,29 +193,25 @@ pnpm --filter mobile-financial-app android  # Android (emulator must be running)
 
 ## Main Commands
 
-### Install dependencies (all packages)
+All orchestrated commands use **Turborepo** for caching and correct dependency ordering.
+
+### Install & build
 
 ```bash
-pnpm install
+pnpm install       # Install all dependencies
+pnpm build         # Build all packages (tokens → tailwind-config → ui → apps)
+pnpm tokens        # Rebuild token outputs only
 ```
 
-### Run a script in a specific package
+### Development
 
 ```bash
-pnpm --filter <package-name> <script>
-```
+pnpm dev           # Start all dev servers in parallel
 
-Examples:
-
-```bash
-# Start the Metro bundler for the mobile app
-pnpm --filter mobile-financial-app start
-
-# Launch the app on Android
-pnpm --filter mobile-financial-app android
-
-# Launch the app on iOS
-pnpm --filter mobile-financial-app ios
+# Or run individual apps:
+pnpm --filter mobile-expo-financial-app start   # Expo (press i/a for iOS/Android)
+pnpm --filter web-financial-app dev             # Web (React Router dev server)
+pnpm --filter mobile-financial-app start        # Bare RN CLI (Metro bundler)
 ```
 
 ### Quality checks
@@ -227,10 +222,12 @@ pnpm lint          # ESLint across all packages
 pnpm test          # Jest tests across all packages
 ```
 
-### Reset
+### Cleanup
 
 ```bash
-pnpm reset         # Full clean + reinstall + pod install
+pnpm reset         # Full clean + reinstall + pod install + token rebuild
+pnpm clean         # Remove all node_modules
+pnpm clean:build   # Remove all build/dist outputs
 ```
 
 [Back to top](#table-of-contents)
@@ -239,30 +236,33 @@ pnpm reset         # Full clean + reinstall + pod install
 
 ## How the Monorepo Works
 
-### pnpm workspaces
+### pnpm workspaces + Turborepo
 
-The `pnpm-workspace.yaml` file declares the monorepo packages:
+The monorepo uses **pnpm workspaces** for dependency management and **Turborepo** for task orchestration.
 
 ```yaml
+# pnpm-workspace.yaml
 packages:
   - "packages/*"
   - "apps/*"
 ```
 
-**Advantages:**
+Turborepo ensures tasks run in the correct dependency order with caching:
 
-- **Centralized dependencies**: pnpm installs everything in a single root `node_modules` (with symlinks).
-- **Code sharing**: packages can import from each other.
-- **Unified commands**: everything is managed from the root with `pnpm --filter`.
+```
+pnpm build → tokens → tailwind-config → ui → shared → web (parallel where possible)
+```
+
+Cached tasks replay instantly — a full `pnpm type-check` with warm cache runs in ~30ms.
 
 ### Add a dependency to a package
 
 ```bash
-# Add a dependency to the "mobile" package
-pnpm --filter mobile-financial-app add <package-name>
+# Add a dependency to a specific package
+pnpm --filter mobile-expo-financial-app add <package-name>
 
 # Add a dev dependency
-pnpm --filter mobile-financial-app add -D <package-name>
+pnpm --filter mobile-expo-financial-app add -D <package-name>
 ```
 
 ### Add a dependency to the root (shared tools)
@@ -270,6 +270,21 @@ pnpm --filter mobile-financial-app add -D <package-name>
 ```bash
 pnpm add -w -D <package-name>
 ```
+
+### Cross-platform component architecture
+
+UI components use a **file extension split** pattern — shared types + CVA variants with platform-specific implementations:
+
+```
+packages/ui/src/components/Button/
+  Button.tsx           # Types + props interface only (no JSX)
+  Button.native.tsx    # React Native implementation (twrnc)
+  Button.web.tsx       # DOM/HTML implementation (Tailwind CSS + cn())
+  index.ts             # Native barrel (Metro picks this)
+  index.web.ts         # Web barrel (Vite picks this)
+```
+
+Styling: **twrnc** on native, **Tailwind CSS** on web. Shared variant logic via **CVA** (class-variance-authority).
 
 [Back to top](#table-of-contents)
 
