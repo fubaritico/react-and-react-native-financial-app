@@ -1,0 +1,13 @@
+{
+  "name": "@financial-app/tailwind-config",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "dependencies": {
+    "@financial-app/tokens": "workspace:^"
+  },
+  "devDependencies": {
+    "tailwindcss": "catalog:"
+  }
+}

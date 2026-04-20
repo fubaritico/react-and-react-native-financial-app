@@ -13,6 +13,17 @@
 - **Forbidden**: `: any`, `as any`, `<any>`
 - **Exception**: None — strict TypeScript is non-negotiable
 
+### QUAL-002b: Mixed type and value imports
+- **Files**: All `*.ts`, `*.tsx`
+- **Check**: Types and values from the same module MUST use separate import statements
+- **Forbidden**: `import { create, type TwConfig } from 'twrnc'`
+- **Required**:
+  ```ts
+  import type { TwConfig } from 'twrnc'
+  import { create } from 'twrnc'
+  ```
+- **Rationale**: Keeps type-only imports explicit, enables better tree-shaking, and matches `isolatedModules` best practices
+
 ## High Violations
 
 ### QUAL-003: Missing JSDoc on Props interface

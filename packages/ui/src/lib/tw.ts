@@ -1,14 +1,6 @@
+import baseConfig from '@financial-app/tailwind-config'
 import { create } from 'twrnc'
 
-const tw = create({
-  theme: {
-    extend: {
-      colors: {
-        primary: '#6200EE',
-        secondary: '#03DAC6',
-      },
-    },
-  },
-})
+const tw = create(baseConfig)
 
 export default tw
