@@ -26,12 +26,13 @@
 
 ## High Violations
 
-### QUAL-003: Missing JSDoc on Props interface
-- **Files**: `packages/ui/src/components/*/ComponentName.tsx`
-- **Check**: Every property in a Props interface must have a JSDoc comment
+### QUAL-003: Missing JSDoc on interface properties
+- **Files**: All `*.ts`, `*.tsx` in `packages/**`
+- **Check**: Every property in every interface must have a JSDoc comment
+- **Applies to**: Props interfaces, domain types, abstractions, internal interfaces
 - **Format**:
   ```ts
-  export interface ButtonProps {
+  export interface IButtonProps {
     /** Text displayed inside the button */
     label: string
     /** Callback fired when button is pressed */
@@ -41,10 +42,11 @@
   }
   ```
 
-### QUAL-004: Missing JSDoc on exported functions
-- **Files**: All exported functions in `packages/**`
-- **Check**: Every exported function must have JSDoc with description
+### QUAL-004: Missing JSDoc on functions
+- **Files**: All functions in `packages/**` (exported AND private)
+- **Check**: Every function must have JSDoc with description
 - **Check**: `@param` for each parameter, `@returns` for non-void functions
+- **Note**: Private helpers included — they are internal documentation for maintainers
 - **Format**:
   ```ts
   /**

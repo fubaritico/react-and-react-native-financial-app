@@ -1,28 +1,30 @@
-import { redirect } from 'react-router'
+import type { IAuthClient, IAuthError, IUser } from './types'
 
-import { createServerClient } from './client.server'
+/** Successful auth verification result */
+export interface IAuthResult {
+  /** Authenticated user */
+  user: IUser
+  /** JWT access token for forwarding to the Express API as Bearer token */
+  accessToken: string
+}
 
 /**
- * Server loader guard that enforces authentication.
- * Redirects to /login if no valid session exists or if auth calls fail.
- * @param request - Incoming HTTP request
- * @returns Object with `authClient`, `user`, `headers`, and `accessToken` for API calls.
+ * Verifies the current session is authenticated.
+ * Returns user + accessToken if valid, IAuthError otherwise.
+ * The caller decides what to do on failure (redirect, navigate, show error, etc.)
+ * @param authClient - Vendor-agnostic auth client
+ * @returns IAuthResult if authenticated, IAuthError if not
  */
-export async function requireAuth(request: Request) {
-  const { authClient, headers } = createServerClient(request)
+export async function requireAuth(
+  authClient: IAuthClient
+): Promise<IAuthResult | IAuthError> {
   const { user, error: userError } = await authClient.getUser()
-
-  if (userError || !user) {
-    // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router convention: throw Response for redirects
-    throw redirect('/login', { headers })
-  }
+  if (userError) return userError
+  if (!user) return { message: 'No authenticated user', status: 401 }
 
   const { session, error: sessionError } = await authClient.getSession()
+  if (sessionError) return sessionError
+  if (!session) return { message: 'No active session', status: 401 }
 
-  if (sessionError || !session) {
-    // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router convention: throw Response for redirects
-    throw redirect('/login', { headers })
-  }
-
-  return { authClient, user, headers, accessToken: session.access_token }
+  return { user, accessToken: session.access_token }
 }

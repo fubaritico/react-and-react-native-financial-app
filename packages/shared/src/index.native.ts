@@ -1,8 +1,6 @@
-// Auth
-export { createBrowserClient } from './auth/client'
-export { createServerClient } from './auth/client.server'
+// Auth (native-safe only)
 export { createNativeClient } from './auth/client.native'
-export { signInWithGoogle } from './auth/oauth'
+export { signInWithGoogle } from './auth/oauth.native'
 export { requireAuth } from './auth/guard'
 export { useAuthListener } from './auth/hooks'
 export type {
