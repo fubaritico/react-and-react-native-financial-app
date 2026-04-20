@@ -26,11 +26,12 @@ targeting React Native (Expo) and React web (React Router).
 - **Always use pnpm** — never npm or yarn, including for registry lookups (`pnpm view` not `npm view`)
 - **Never `console.log`** — use `console.warn` / `console.error`
 - **Never explicit `any`** — strict TypeScript
-- **Always run** lint + typecheck + test once a set of modifications is done
+- **Always run** lint + typecheck + test + review once a set of modifications is done
 - **Always ask** user to run pnpm dev, pnpm prod:server and pnpm storybook after having modified a component
 - **Always create a Storybook story** after every component (`/story`)
 - **Model**: Haiku for questions/research, Sonnet for code/commits — suggest Haiku when appropriate
 - **For React**: instead of using `React.` for react types, import the type from react
+- **Screenshot**: given screenshot names are always files located in desktop, otherwise the full file path is given
 
 ## Current State vs Target
 
@@ -221,6 +222,11 @@ packages/
 - Evaluated Supabase vs Firebase vs Neon vs PlanetScale — decision: keep Supabase, plan Pro tier for production
 - Created docs/research/supabase-evaluation.md with full comparison and limitations
 - Installed supabase and supabase-postgres-best-practices agent skills (official, from supabase/agent-skills)
+- Created `review` skill — multi-agent code reviewer with 5 parallel subagents (platform-safety, security, architecture, quality, accessibility)
+  - 61 rules total across 5 domains, WCAG 2.1 AA mapping table, contrast validation via `contrast-pairs.json`
+  - JSON schema with scoring, verdicts, `needs_verification` field for context7 escalation
+  - 8-step flow: scope detect → dispatch → aggregate → report → verify (context7) → fix loop (max 3) → store/ignore
+  - Added `review-results/` to .gitignore, JSDoc checklist item to design-system.md
 
 ### Next
 - Pre-phase cleanup: clean up project (NativeWind remnants, etc.) before starting Phase 0
