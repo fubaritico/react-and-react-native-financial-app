@@ -51,7 +51,7 @@ function toAuthError(
  * @returns Sanitized IAuthError with status 0 indicating network failure
  */
 function toNetworkError(thrown: unknown): IAuthError {
-  if (thrown instanceof Error) {
+  if (__DEV__ && thrown instanceof Error) {
     console.error('[auth] Network failure:', thrown.message)
   }
   return { message: '[auth] Network request failed', status: 0 }

@@ -55,7 +55,7 @@
     "react": "catalog:"
   },
   "devDependencies": {
-    "@types/node": "^25.6.0",
+    "@types/node": "catalog:",
     "@types/react": "catalog:",
     "conventional-changelog": "catalog:",
     "typescript": "catalog:"

@@ -6,3 +6,6 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+/** React Native global — true in dev builds, false in production */
+declare const __DEV__: boolean

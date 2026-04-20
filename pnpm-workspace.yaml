@@ -16,6 +16,7 @@ catalog:
   # TypeScript
   typescript: "~5.9.2"
   "@types/react": "~19.1.0"
+  "@types/node": "^25.6.0"
 
   # Styling
   tailwindcss: "3"
@@ -40,6 +41,9 @@ catalog:
   husky: "^9.1.7"
   "@commitlint/cli": "^20.5.0"
   "@commitlint/config-conventional": "^20.5.0"
+
+  # Env
+  react-native-dotenv: "^3.4.11"
 
   # Release tools
   conventional-changelog: "7.2.0"

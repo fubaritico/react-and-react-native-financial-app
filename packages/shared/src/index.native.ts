@@ -14,6 +14,7 @@ export type {
   IUser,
   OAuthProvider,
 } from './auth/types'
+export type { INativeClientConfig } from './auth/client.native'
 export type { IAuthResult } from './auth/guard'
 
 // Atoms
