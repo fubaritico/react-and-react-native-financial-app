@@ -3,7 +3,7 @@ import { Pressable, Text } from 'react-native'
 import tw from '../../lib/tw'
 import { buttonVariants } from '../../variants'
 
-import type { ButtonProps } from './Button'
+import type { IButtonProps } from './Button'
 
 /** Native implementation of the Button component. */
 export const Button = ({
@@ -12,7 +12,7 @@ export const Button = ({
   variant = 'primary',
   disabled,
   style,
-}: ButtonProps) => {
+}: IButtonProps) => {
   const variantClasses = buttonVariants({ variant, disabled })
 
   return (

@@ -1,2 +1,2 @@
 export { Button } from './Button.web'
-export type { ButtonProps } from './Button'
+export type { IButtonProps } from './Button'

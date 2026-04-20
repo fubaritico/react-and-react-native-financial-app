@@ -1,10 +1,10 @@
 import { cn } from '../../lib/cn'
 import { headerVariants } from '../../variants'
 
-import type { HeaderProps } from './Header'
+import type { IHeaderProps } from './Header'
 
 /** Web implementation of the Header component. */
-export const Header = ({ title, subtitle }: HeaderProps) => (
+export const Header = ({ title, subtitle }: IHeaderProps) => (
   <header className={cn(headerVariants())}>
     <h1 className="text-2xl font-bold text-white">{title}</h1>
     {subtitle && (

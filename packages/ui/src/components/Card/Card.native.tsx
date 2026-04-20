@@ -3,10 +3,10 @@ import { Text, View } from 'react-native'
 import tw from '../../lib/tw'
 import { cardVariants } from '../../variants'
 
-import type { CardProps } from './Card'
+import type { ICardProps } from './Card'
 
 /** Native implementation of the Card component. */
-export const Card = ({ title, text, children, style }: CardProps) => {
+export const Card = ({ title, text, children, style }: ICardProps) => {
   const baseClasses = cardVariants()
 
   return (
