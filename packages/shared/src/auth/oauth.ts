@@ -1,18 +1,15 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { IAuthClient } from './types'
 
 /**
- * Initiates Google OAuth sign-in via Supabase redirect flow (web only).
- * Supabase validates redirectTo against configured Site URLs in the dashboard.
- * @param supabase - Browser Supabase client
+ * Initiates Google OAuth sign-in via redirect flow (web only).
+ * The auth provider validates redirectTo against configured Site URLs.
+ * @param authClient - Browser auth client
  * @param redirectTo - URL to redirect to after successful authentication
- * @returns OAuth response with redirect URL
+ * @returns Promise resolving to `{ url: string | null; error: IAuthError | null }`
  */
 export async function signInWithGoogle(
-  supabase: SupabaseClient,
+  authClient: IAuthClient,
   redirectTo: string
 ) {
-  return supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: { redirectTo },
-  })
+  return authClient.signInWithOAuth('google', { redirectTo })
 }

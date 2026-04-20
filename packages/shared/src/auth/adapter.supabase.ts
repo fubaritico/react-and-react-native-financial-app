@@ -1,0 +1,171 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
+
+import type {
+  IAuthClient,
+  IAuthError,
+  IAuthSubscription,
+  ISession,
+  ISignInPayload,
+  ISignUpPayload,
+  IUser,
+  OAuthProvider,
+} from './types'
+
+interface ISupabaseUser {
+  id: string
+  email?: string
+  user_metadata?: Record<string, unknown>
+}
+
+interface ISupabaseSession {
+  access_token: string
+  refresh_token: string
+  user: ISupabaseUser
+}
+
+/**
+ * Normalizes a Supabase AuthError into IAuthError.
+ * Returns null when no error is present.
+ */
+function toAuthError(
+  error: { message: string; status?: number } | null
+): IAuthError | null {
+  if (!error) return null
+  return { message: error.message, status: error.status }
+}
+
+/**
+ * Wraps unexpected thrown exceptions (network timeout, DNS failure, etc.)
+ * into a normalized IAuthError. Raw messages are logged for debugging
+ * but never forwarded to callers (avoids leaking hostnames/infra details).
+ */
+function toNetworkError(thrown: unknown): IAuthError {
+  if (thrown instanceof Error) {
+    console.error('[auth] Network failure:', thrown.message)
+  }
+  return { message: '[auth] Network request failed', status: 0 }
+}
+
+/** Maps a Supabase User to IUser */
+function toUser(user: ISupabaseUser | null): IUser | null {
+  if (!user) return null
+  return {
+    id: user.id,
+    email: user.email,
+    user_metadata: user.user_metadata,
+  }
+}
+
+/** Maps a Supabase Session to ISession */
+function toSession(session: ISupabaseSession | null): ISession | null {
+  if (!session) return null
+  const user = toUser(session.user)
+  if (!user) return null
+  return {
+    access_token: session.access_token,
+    refresh_token: session.refresh_token,
+    user,
+  }
+}
+
+/**
+ * Wraps a SupabaseClient into the vendor-agnostic IAuthClient interface.
+ * This is the only place in the codebase that depends on Supabase auth API shape.
+ * All methods catch network-level exceptions and normalize them to IAuthError.
+ * @param client - Supabase client instance from any factory
+ * @returns Vendor-agnostic IAuthClient implementation
+ */
+export function createSupabaseAuthAdapter(client: SupabaseClient): IAuthClient {
+  return {
+    async getUser() {
+      try {
+        const { data, error } = await client.auth.getUser()
+        return { user: toUser(data.user), error: toAuthError(error) }
+      } catch (e) {
+        return { user: null, error: toNetworkError(e) }
+      }
+    },
+
+    async getSession() {
+      try {
+        const { data, error } = await client.auth.getSession()
+        return { session: toSession(data.session), error: toAuthError(error) }
+      } catch (e) {
+        return { session: null, error: toNetworkError(e) }
+      }
+    },
+
+    async signInWithPassword(payload: ISignInPayload) {
+      try {
+        const { data, error } = await client.auth.signInWithPassword(payload)
+        return { user: toUser(data.user), error: toAuthError(error) }
+      } catch (e) {
+        return { user: null, error: toNetworkError(e) }
+      }
+    },
+
+    async signUp(payload: ISignUpPayload) {
+      try {
+        const { data, error } = await client.auth.signUp({
+          email: payload.email,
+          password: payload.password,
+          options: { data: { name: payload.name } },
+        })
+        return { user: toUser(data.user), error: toAuthError(error) }
+      } catch (e) {
+        return { user: null, error: toNetworkError(e) }
+      }
+    },
+
+    async signInWithOAuth(
+      provider: OAuthProvider,
+      options: { redirectTo: string }
+    ) {
+      try {
+        const { data, error } = await client.auth.signInWithOAuth({
+          provider,
+          options: { redirectTo: options.redirectTo },
+        })
+        return { url: data.url, error: toAuthError(error) }
+      } catch (e) {
+        return { url: null, error: toNetworkError(e) }
+      }
+    },
+
+    async signInWithIdToken(provider: OAuthProvider, token: string) {
+      try {
+        const { data, error } = await client.auth.signInWithIdToken({
+          provider,
+          token,
+        })
+        return { user: toUser(data.user), error: toAuthError(error) }
+      } catch (e) {
+        return { user: null, error: toNetworkError(e) }
+      }
+    },
+
+    async signOut() {
+      try {
+        const { error } = await client.auth.signOut()
+        return { error: toAuthError(error) }
+      } catch (e) {
+        return { error: toNetworkError(e) }
+      }
+    },
+
+    onAuthStateChange(
+      callback: (event: string, session: ISession | null) => void
+    ): IAuthSubscription {
+      const {
+        data: { subscription },
+      } = client.auth.onAuthStateChange((event, session) => {
+        callback(event, toSession(session))
+      })
+      return {
+        unsubscribe() {
+          subscription.unsubscribe()
+        },
+      }
+    },
+  }
+}
