@@ -16,9 +16,12 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@financial-app/shared": "workspace:^",
     "@financial-app/ui": "workspace:^",
+    "@react-native-google-signin/google-signin": "^16.1.2",
     "expo": "catalog:",
     "expo-dev-client": "catalog:",
+    "expo-secure-store": "^55.0.13",
     "expo-status-bar": "catalog:",
     "react": "catalog:",
     "react-native": "catalog:"
