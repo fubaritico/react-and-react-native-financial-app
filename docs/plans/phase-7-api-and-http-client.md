@@ -4,424 +4,59 @@
 
 Create two new packages:
 
-1. **`apps/api/`** — Express REST API backed by Supabase, designed from an OpenAPI specification
-2. **`@financial-app/http-client`** (`packages/http-client/`) — generated TypeScript client using HeyAPI from the OpenAPI spec
+1. **`apps/api/`** — Express REST API backed by Supabase, code-first OpenAPI via Zod
+2. **`@financial-app/http-client`** (`packages/http-client/`) — generated TypeScript client using HeyAPI from the generated OpenAPI spec
 
-The OpenAPI spec is the single source of truth: it defines the API contract, drives the Express route validation, and generates the type-safe HTTP client consumed by mobile and web apps.
+Zod schemas are the single source of truth: they validate requests at runtime,
+generate the OpenAPI spec, and drive the type-safe HTTP client.
 
 ## Status: TODO (requires Phase 5 complete — shared types needed)
 
 ---
 
-## Step 7.1 — Write the OpenAPI Specification
+## Architecture Decisions
 
-Create the OpenAPI 3.1 spec as the contract for the entire API surface.
+### Code-First OpenAPI (Zod → Spec → Client)
 
-### apps/api/openapi.yaml
-
-Define all resources: auth, balances, transactions, budgets, pots.
-
-```yaml
-openapi: 3.1.0
-info:
-  title: Financial App API
-  version: 1.0.0
-  description: REST API for the Personal Finance application
-
-servers:
-  - url: http://localhost:3001
-    description: Local development
-
-paths:
-  /auth/login:
-    post:
-      operationId: login
-      tags: [Auth]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
-      responses:
-        '200':
-          description: Authenticated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthResponse'
-
-  /auth/register:
-    post:
-      operationId: register
-      tags: [Auth]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterRequest'
-      responses:
-        '201':
-          description: User created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthResponse'
-
-  /balance:
-    get:
-      operationId: getBalance
-      tags: [Balance]
-      security: [{ BearerAuth: [] }]
-      responses:
-        '200':
-          description: User balance
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Balance'
-
-  /transactions:
-    get:
-      operationId: getTransactions
-      tags: [Transactions]
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: page
-          in: query
-          schema: { type: integer, default: 1 }
-        - name: limit
-          in: query
-          schema: { type: integer, default: 10 }
-        - name: category
-          in: query
-          schema: { type: string }
-        - name: search
-          in: query
-          schema: { type: string }
-        - name: sort
-          in: query
-          schema: { type: string, enum: [latest, oldest, a-z, z-a, highest, lowest] }
-      responses:
-        '200':
-          description: Paginated transactions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TransactionList'
-
-  /budgets:
-    get:
-      operationId: getBudgets
-      tags: [Budgets]
-      security: [{ BearerAuth: [] }]
-      responses:
-        '200':
-          description: All budgets
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Budget'
-    post:
-      operationId: createBudget
-      tags: [Budgets]
-      security: [{ BearerAuth: [] }]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateBudgetRequest'
-      responses:
-        '201':
-          description: Budget created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Budget'
-
-  /budgets/{id}:
-    put:
-      operationId: updateBudget
-      tags: [Budgets]
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: string, format: uuid }
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateBudgetRequest'
-      responses:
-        '200':
-          description: Budget updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Budget'
-    delete:
-      operationId: deleteBudget
-      tags: [Budgets]
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: string, format: uuid }
-      responses:
-        '204':
-          description: Budget deleted
-
-  /pots:
-    get:
-      operationId: getPots
-      tags: [Pots]
-      security: [{ BearerAuth: [] }]
-      responses:
-        '200':
-          description: All pots
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Pot'
-    post:
-      operationId: createPot
-      tags: [Pots]
-      security: [{ BearerAuth: [] }]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreatePotRequest'
-      responses:
-        '201':
-          description: Pot created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pot'
-
-  /pots/{id}:
-    put:
-      operationId: updatePot
-      tags: [Pots]
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: string, format: uuid }
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdatePotRequest'
-      responses:
-        '200':
-          description: Pot updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pot'
-    delete:
-      operationId: deletePot
-      tags: [Pots]
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: string, format: uuid }
-      responses:
-        '204':
-          description: Pot deleted
-
-  /pots/{id}/add:
-    post:
-      operationId: addMoneyToPot
-      tags: [Pots]
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: string, format: uuid }
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PotAmountRequest'
-      responses:
-        '200':
-          description: Money added
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pot'
-
-  /pots/{id}/withdraw:
-    post:
-      operationId: withdrawFromPot
-      tags: [Pots]
-      security: [{ BearerAuth: [] }]
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema: { type: string, format: uuid }
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PotAmountRequest'
-      responses:
-        '200':
-          description: Money withdrawn
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Pot'
-
-components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
-  schemas:
-    LoginRequest:
-      type: object
-      required: [email, password]
-      properties:
-        email: { type: string, format: email }
-        password: { type: string, minLength: 8 }
-
-    RegisterRequest:
-      type: object
-      required: [name, email, password]
-      properties:
-        name: { type: string, minLength: 2 }
-        email: { type: string, format: email }
-        password: { type: string, minLength: 8 }
-
-    AuthResponse:
-      type: object
-      properties:
-        accessToken: { type: string }
-        user:
-          $ref: '#/components/schemas/User'
-
-    User:
-      type: object
-      properties:
-        id: { type: string, format: uuid }
-        email: { type: string }
-        displayName: { type: string }
-
-    Balance:
-      type: object
-      properties:
-        current: { type: number }
-        income: { type: number }
-        expenses: { type: number }
-
-    Transaction:
-      type: object
-      properties:
-        id: { type: string, format: uuid }
-        avatar: { type: string }
-        name: { type: string }
-        category: { type: string }
-        date: { type: string, format: date-time }
-        amount: { type: number }
-        recurring: { type: boolean }
-
-    TransactionList:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transaction'
-        page: { type: integer }
-        totalPages: { type: integer }
-        total: { type: integer }
-
-    Budget:
-      type: object
-      properties:
-        id: { type: string, format: uuid }
-        category: { type: string }
-        maximum: { type: number }
-        theme: { type: string }
-        spent: { type: number }
-
-    CreateBudgetRequest:
-      type: object
-      required: [category, maximum, theme]
-      properties:
-        category: { type: string }
-        maximum: { type: number }
-        theme: { type: string }
-
-    UpdateBudgetRequest:
-      type: object
-      properties:
-        category: { type: string }
-        maximum: { type: number }
-        theme: { type: string }
-
-    Pot:
-      type: object
-      properties:
-        id: { type: string, format: uuid }
-        name: { type: string }
-        target: { type: number }
-        total: { type: number }
-        theme: { type: string }
-
-    CreatePotRequest:
-      type: object
-      required: [name, target, theme]
-      properties:
-        name: { type: string }
-        target: { type: number }
-        theme: { type: string }
-
-    UpdatePotRequest:
-      type: object
-      properties:
-        name: { type: string }
-        target: { type: number }
-        theme: { type: string }
-
-    PotAmountRequest:
-      type: object
-      required: [amount]
-      properties:
-        amount: { type: number, minimum: 0.01 }
 ```
+Zod schemas (single source of truth)
+  │
+  ├──► Runtime validation in Express routes
+  │
+  └──► Generated openapi.yaml (via @asteasolutions/zod-to-openapi)
+         │
+         ├──► Swagger UI at /docs
+         │
+         └──► HeyAPI generates TypeScript client
+                │
+                └──► Apps consume type-safe SDK
+```
+
+**Why code-first over spec-first:**
+- No manual YAML maintenance — spec is always in sync with code
+- Zod schemas serve double duty (validation + documentation)
+- Change a schema → regenerate spec → regenerate client → TS catches breaking changes
+- No drift between what the API accepts and what the spec documents
+
+### No ORM
+
+Express routes use `@supabase/supabase-js` with the service role key.
+No Prisma — simple CRUD doesn't justify the overhead. Complex queries use `supabase.rpc()`.
+(Decision documented in Phase 5.)
+
+### Auth Flow
+
+The API receives a Supabase JWT as a Bearer token in the Authorization header.
+The auth middleware validates it via `supabase.auth.getUser(token)`.
+The API uses the service role key for data queries (bypasses RLS).
+Access control is enforced at the middleware level by `user_id`.
 
 ---
 
-## Step 7.2 — Scaffold apps/api/
+## Step 7.1 — Scaffold apps/api/
 
 ```bash
-mkdir -p apps/api/src/routes apps/api/src/middleware
+mkdir -p apps/api/src/{routes,schemas,middleware,lib}
 ```
 
 ### apps/api/package.json
@@ -436,18 +71,23 @@ mkdir -p apps/api/src/routes apps/api/src/middleware
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "generate:spec": "tsx src/lib/generate-spec.ts"
   },
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^7.3.0",
     "@supabase/supabase-js": "catalog:",
-    "express": "^5.1.0",
     "cors": "^2.8.5",
+    "express": "^5.1.0",
     "helmet": "^8.1.0",
+    "swagger-ui-express": "^5.0.0",
+    "yaml": "^2.7.0",
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@types/express": "^5.0.0",
     "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/swagger-ui-express": "^4.1.0",
     "tsx": "^4.19.0",
     "typescript": "catalog:"
   }
@@ -476,37 +116,218 @@ mkdir -p apps/api/src/routes apps/api/src/middleware
 
 ---
 
-## Step 7.3 — Express Server + Routes
+## Step 7.2 — Zod Schemas (Single Source of Truth)
 
-### src/index.ts
+All schemas live in `src/schemas/`. Each file defines the shape, validation rules,
+and OpenAPI metadata for one domain entity.
+
+### src/schemas/auth.ts
 
 ```ts
-import express from 'express'
-import cors from 'cors'
-import helmet from 'helmet'
-import { authRouter } from './routes/auth.js'
-import { balanceRouter } from './routes/balance.js'
-import { transactionsRouter } from './routes/transactions.js'
-import { budgetsRouter } from './routes/budgets.js'
-import { potsRouter } from './routes/pots.js'
+import { z } from 'zod'
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
 
-const app = express()
-const PORT = process.env.PORT ?? 3001
+extendZodWithOpenApi(z)
 
-app.use(helmet())
-app.use(cors())
-app.use(express.json())
+export const UserSchema = z.object({
+  id: z.string().uuid().openapi({ example: '550e8400-e29b-41d4-a716-446655440000' }),
+  email: z.string().email(),
+  displayName: z.string(),
+}).openapi('User')
 
-app.use('/auth', authRouter)
-app.use('/balance', balanceRouter)
-app.use('/transactions', transactionsRouter)
-app.use('/budgets', budgetsRouter)
-app.use('/pots', potsRouter)
+export const LoginRequestSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+}).openapi('LoginRequest')
 
-app.listen(PORT, () => {
-  console.error(`API server running on port ${PORT}`)
+export const RegisterRequestSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  password: z.string().min(8),
+}).openapi('RegisterRequest')
+
+export const AuthResponseSchema = z.object({
+  accessToken: z.string(),
+  user: UserSchema,
+}).openapi('AuthResponse')
+```
+
+### src/schemas/balance.ts
+
+```ts
+import { z } from 'zod'
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
+
+extendZodWithOpenApi(z)
+
+export const BalanceSchema = z.object({
+  current: z.number(),
+  income: z.number(),
+  expenses: z.number(),
+}).openapi('Balance')
+```
+
+### src/schemas/transaction.ts
+
+```ts
+import { z } from 'zod'
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
+
+extendZodWithOpenApi(z)
+
+export const TransactionSchema = z.object({
+  id: z.string().uuid(),
+  avatar: z.string(),
+  name: z.string(),
+  category: z.string(),
+  date: z.string().datetime(),
+  amount: z.number(),
+  recurring: z.boolean(),
+}).openapi('Transaction')
+
+export const TransactionListSchema = z.object({
+  data: z.array(TransactionSchema),
+  page: z.number().int(),
+  totalPages: z.number().int(),
+  total: z.number().int(),
+}).openapi('TransactionList')
+
+export const TransactionQuerySchema = z.object({
+  page: z.coerce.number().int().default(1),
+  limit: z.coerce.number().int().default(10),
+  category: z.string().optional(),
+  search: z.string().optional(),
+  sort: z.enum(['latest', 'oldest', 'a-z', 'z-a', 'highest', 'lowest']).optional(),
 })
 ```
+
+### src/schemas/budget.ts
+
+```ts
+import { z } from 'zod'
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
+
+extendZodWithOpenApi(z)
+
+export const BudgetSchema = z.object({
+  id: z.string().uuid(),
+  category: z.string(),
+  maximum: z.number(),
+  theme: z.string(),
+  spent: z.number(),
+}).openapi('Budget')
+
+export const CreateBudgetSchema = z.object({
+  category: z.string(),
+  maximum: z.number(),
+  theme: z.string(),
+}).openapi('CreateBudgetRequest')
+
+export const UpdateBudgetSchema = z.object({
+  category: z.string().optional(),
+  maximum: z.number().optional(),
+  theme: z.string().optional(),
+}).openapi('UpdateBudgetRequest')
+```
+
+### src/schemas/pot.ts
+
+```ts
+import { z } from 'zod'
+import { extendZodWithOpenApi } from '@asteasolutions/zod-to-openapi'
+
+extendZodWithOpenApi(z)
+
+export const PotSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  target: z.number(),
+  total: z.number(),
+  theme: z.string(),
+}).openapi('Pot')
+
+export const CreatePotSchema = z.object({
+  name: z.string(),
+  target: z.number(),
+  theme: z.string(),
+}).openapi('CreatePotRequest')
+
+export const UpdatePotSchema = z.object({
+  name: z.string().optional(),
+  target: z.number().optional(),
+  theme: z.string().optional(),
+}).openapi('UpdatePotRequest')
+
+export const PotAmountSchema = z.object({
+  amount: z.number().min(0.01),
+}).openapi('PotAmountRequest')
+```
+
+---
+
+## Step 7.3 — OpenAPI Registry & Generator
+
+### src/lib/openapi.ts
+
+```ts
+import {
+  OpenAPIRegistry,
+  OpenApiGeneratorV31,
+} from '@asteasolutions/zod-to-openapi'
+
+export const registry = new OpenAPIRegistry()
+
+// Register security scheme
+registry.registerComponent('securitySchemes', 'BearerAuth', {
+  type: 'http',
+  scheme: 'bearer',
+  bearerFormat: 'JWT',
+})
+
+export function generateDocument() {
+  const generator = new OpenApiGeneratorV31(registry.definitions)
+
+  return generator.generateDocument({
+    openapi: '3.1.0',
+    info: {
+      title: 'Financial App API',
+      version: '1.0.0',
+      description: 'REST API for the Personal Finance application',
+    },
+    servers: [
+      { url: 'http://localhost:3001', description: 'Local development' },
+    ],
+  })
+}
+```
+
+### src/lib/generate-spec.ts — Script to output openapi.yaml
+
+```ts
+import fs from 'node:fs'
+import path from 'node:path'
+import yaml from 'yaml'
+
+// Import all route files to trigger registry.registerPath() calls
+import '../routes/auth.js'
+import '../routes/balance.js'
+import '../routes/transactions.js'
+import '../routes/budgets.js'
+import '../routes/pots.js'
+
+import { generateDocument } from './openapi.js'
+
+const spec = generateDocument()
+const outPath = path.resolve(import.meta.dirname, '../../openapi.yaml')
+fs.writeFileSync(outPath, yaml.stringify(spec))
+console.error(`OpenAPI spec written to ${outPath}`)
+```
+
+Run with: `pnpm --filter api-financial-app generate:spec`
+
+---
+
+## Step 7.4 — Middleware
 
 ### src/middleware/auth.ts
 
@@ -532,6 +353,37 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
 }
 ```
 
+### src/middleware/validate.ts
+
+```ts
+import type { Request, Response, NextFunction } from 'express'
+import type { ZodSchema } from 'zod'
+
+export function validateBody(schema: ZodSchema) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const parsed = schema.safeParse(req.body)
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.flatten() })
+      return
+    }
+    req.body = parsed.data
+    next()
+  }
+}
+
+export function validateQuery(schema: ZodSchema) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const parsed = schema.safeParse(req.query)
+    if (!parsed.success) {
+      res.status(400).json({ error: parsed.error.flatten() })
+      return
+    }
+    req.query = parsed.data
+    next()
+  }
+}
+```
+
 ### src/lib/supabase.ts
 
 ```ts
@@ -543,30 +395,110 @@ export const supabase = createClient(
 )
 ```
 
-> The API uses the **service role key** (not the anon key) to bypass RLS and enforce access control at the Express middleware level.
+> The API uses the **service role key** (not the anon key) to bypass RLS
+> and enforce access control at the Express middleware level.
 
 ---
 
-## Step 7.4 — Route Implementation Pattern
+## Step 7.5 — Route Implementation Pattern
 
-Each route file follows this pattern:
+Each route file both registers OpenAPI paths (for spec generation)
+and defines Express handlers (for runtime). Same Zod schema does both.
+
+### src/routes/budgets.ts
 
 ```ts
-// src/routes/budgets.ts
 import { Router } from 'express'
 import { z } from 'zod'
+import { registry } from '../lib/openapi.js'
 import { requireAuth } from '../middleware/auth.js'
+import { validateBody } from '../middleware/validate.js'
 import { supabase } from '../lib/supabase.js'
+import {
+  BudgetSchema,
+  CreateBudgetSchema,
+  UpdateBudgetSchema,
+} from '../schemas/budget.js'
 
 export const budgetsRouter = Router()
-
 budgetsRouter.use(requireAuth)
 
-const createBudgetSchema = z.object({
-  category: z.string(),
-  maximum: z.number(),
-  theme: z.string(),
+// --- OpenAPI registration ---
+
+registry.registerPath({
+  method: 'get',
+  path: '/budgets',
+  tags: ['Budgets'],
+  security: [{ BearerAuth: [] }],
+  responses: {
+    200: {
+      description: 'All budgets',
+      content: {
+        'application/json': { schema: z.array(BudgetSchema) },
+      },
+    },
+  },
 })
+
+registry.registerPath({
+  method: 'post',
+  path: '/budgets',
+  tags: ['Budgets'],
+  security: [{ BearerAuth: [] }],
+  request: {
+    body: {
+      content: {
+        'application/json': { schema: CreateBudgetSchema },
+      },
+    },
+  },
+  responses: {
+    201: {
+      description: 'Budget created',
+      content: {
+        'application/json': { schema: BudgetSchema },
+      },
+    },
+  },
+})
+
+registry.registerPath({
+  method: 'put',
+  path: '/budgets/{id}',
+  tags: ['Budgets'],
+  security: [{ BearerAuth: [] }],
+  request: {
+    params: z.object({ id: z.string().uuid() }),
+    body: {
+      content: {
+        'application/json': { schema: UpdateBudgetSchema },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Budget updated',
+      content: {
+        'application/json': { schema: BudgetSchema },
+      },
+    },
+  },
+})
+
+registry.registerPath({
+  method: 'delete',
+  path: '/budgets/{id}',
+  tags: ['Budgets'],
+  security: [{ BearerAuth: [] }],
+  request: {
+    params: z.object({ id: z.string().uuid() }),
+  },
+  responses: {
+    204: { description: 'Budget deleted' },
+  },
+})
+
+// --- Express handlers ---
 
 budgetsRouter.get('/', async (_req, res) => {
   const { data, error } = await supabase
@@ -581,16 +513,10 @@ budgetsRouter.get('/', async (_req, res) => {
   res.json(data)
 })
 
-budgetsRouter.post('/', async (req, res) => {
-  const parsed = createBudgetSchema.safeParse(req.body)
-  if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.flatten() })
-    return
-  }
-
+budgetsRouter.post('/', validateBody(CreateBudgetSchema), async (req, res) => {
   const { data, error } = await supabase
     .from('budgets')
-    .insert({ ...parsed.data, user_id: res.locals.userId })
+    .insert({ ...req.body, user_id: res.locals.userId })
     .select()
     .single()
 
@@ -601,42 +527,92 @@ budgetsRouter.post('/', async (req, res) => {
   res.status(201).json(data)
 })
 
-// PUT /:id, DELETE /:id follow the same pattern
-```
+budgetsRouter.put('/:id', validateBody(UpdateBudgetSchema), async (req, res) => {
+  const { data, error } = await supabase
+    .from('budgets')
+    .update(req.body)
+    .eq('id', req.params.id)
+    .eq('user_id', res.locals.userId)
+    .select()
+    .single()
 
----
+  if (error) {
+    res.status(500).json({ error: error.message })
+    return
+  }
+  res.json(data)
+})
 
-## Step 7.5 — Serve the OpenAPI Spec
+budgetsRouter.delete('/:id', async (req, res) => {
+  const { error } = await supabase
+    .from('budgets')
+    .delete()
+    .eq('id', req.params.id)
+    .eq('user_id', res.locals.userId)
 
-Expose the spec at runtime for documentation and client generation:
-
-```bash
-pnpm --filter api-financial-app add swagger-ui-express yaml
-pnpm --filter api-financial-app add -D @types/swagger-ui-express
-```
-
-### src/index.ts (add before routes)
-
-```ts
-import swaggerUi from 'swagger-ui-express'
-import fs from 'node:fs'
-import path from 'node:path'
-import yaml from 'yaml'
-
-const specPath = path.resolve(import.meta.dirname, '../openapi.yaml')
-const spec = yaml.parse(fs.readFileSync(specPath, 'utf8'))
-
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(spec))
-app.get('/openapi.yaml', (_req, res) => {
-  res.type('text/yaml').send(fs.readFileSync(specPath, 'utf8'))
+  if (error) {
+    res.status(500).json({ error: error.message })
+    return
+  }
+  res.status(204).send()
 })
 ```
 
-Swagger UI available at `http://localhost:3001/docs`.
+> All other route files (auth, balance, transactions, pots) follow this same pattern:
+> registry calls at the top, Express handlers below, same Zod schema for both.
 
 ---
 
-## Step 7.6 — Generate HTTP Client with HeyAPI
+## Step 7.6 — Express Server Entry
+
+### src/index.ts
+
+```ts
+import express from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
+import swaggerUi from 'swagger-ui-express'
+
+// Import routes (also triggers OpenAPI registry calls)
+import { authRouter } from './routes/auth.js'
+import { balanceRouter } from './routes/balance.js'
+import { transactionsRouter } from './routes/transactions.js'
+import { budgetsRouter } from './routes/budgets.js'
+import { potsRouter } from './routes/pots.js'
+
+import { generateDocument } from './lib/openapi.js'
+
+const app = express()
+const PORT = process.env.PORT ?? 3001
+
+app.use(helmet())
+app.use(cors())
+app.use(express.json())
+
+// Swagger UI — live spec from registry (always in sync)
+const spec = generateDocument()
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(spec))
+app.get('/openapi.json', (_req, res) => res.json(spec))
+
+// Routes
+app.use('/auth', authRouter)
+app.use('/balance', balanceRouter)
+app.use('/transactions', transactionsRouter)
+app.use('/budgets', budgetsRouter)
+app.use('/pots', potsRouter)
+
+app.listen(PORT, () => {
+  console.error(`API server running on port ${PORT}`)
+})
+```
+
+> Swagger UI at `http://localhost:3001/docs` uses the live-generated spec —
+> no separate file needed at runtime. The `generate:spec` script is only
+> for producing the YAML that HeyAPI consumes.
+
+---
+
+## Step 7.7 — Generate HTTP Client with HeyAPI
 
 ### packages/http-client/package.json
 
@@ -681,16 +657,6 @@ export default defineConfig({
 })
 ```
 
-### Generate command
-
-```bash
-pnpm --filter @financial-app/http-client generate
-```
-
-This reads `apps/api/openapi.yaml` and generates:
-- `src/generated/types.gen.ts` — all request/response TypeScript types
-- `src/generated/sdk.gen.ts` — type-safe fetch functions per operation
-
 ### packages/http-client/src/index.ts
 
 ```ts
@@ -701,10 +667,12 @@ export type * from './generated/types.gen.js'
 
 ---
 
-## Step 7.7 — Add to Apps
+## Step 7.8 — Add to Apps
 
 ```bash
 pnpm --filter mobile-financial-app add @financial-app/http-client@workspace:^
+pnpm --filter mobile-expo-financial-app add @financial-app/http-client@workspace:^
+pnpm --filter mobile-expo-ejected-financial-app add @financial-app/http-client@workspace:^
 pnpm --filter web-financial-app add @financial-app/http-client@workspace:^
 ```
 
@@ -713,22 +681,46 @@ pnpm --filter web-financial-app add @financial-app/http-client@workspace:^
 ```ts
 import { client, getTransactions, getBudgets } from '@financial-app/http-client'
 
-// Configure base URL once
+// Configure base URL once (app root)
 client.setConfig({
   baseUrl: 'http://localhost:3001',
   headers: {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${accessToken}`,
   },
 })
 
-// Type-safe API calls
+// Type-safe API calls — types come from Zod schemas via generated spec
 const { data } = await getTransactions({ query: { page: 1, limit: 10 } })
 const { data: budgets } = await getBudgets()
 ```
 
 ---
 
-## Step 7.8 — Root Scripts
+## Step 7.9 — TanStack Query Hooks (post-generation)
+
+Once the HTTP client exists, add TanStack Query hooks to `@financial-app/shared`
+(or keep them in a dedicated `hooks/` directory in `http-client`).
+
+```bash
+pnpm --filter @financial-app/shared add @tanstack/react-query
+```
+
+```ts
+// packages/shared/src/hooks/useTransactions.ts
+import { useQuery } from '@tanstack/react-query'
+import { getTransactions } from '@financial-app/http-client'
+
+export function useTransactions(params?: { page?: number; category?: string }) {
+  return useQuery({
+    queryKey: ['transactions', params],
+    queryFn: () => getTransactions({ query: params }),
+  })
+}
+```
+
+---
+
+## Step 7.10 — Root Scripts
 
 Add to root `package.json`:
 
@@ -736,21 +728,25 @@ Add to root `package.json`:
 {
   "scripts": {
     "api:dev": "pnpm --filter api-financial-app dev",
-    "api:generate-client": "pnpm --filter @financial-app/http-client generate"
+    "api:generate-spec": "pnpm --filter api-financial-app generate:spec",
+    "api:generate-client": "pnpm api:generate-spec && pnpm --filter @financial-app/http-client generate"
   }
 }
 ```
 
+> `api:generate-client` runs both steps in sequence:
+> Zod → openapi.yaml → HeyAPI client. One command, full pipeline.
+
 ---
 
-## Step 7.9 — Environment Variables
+## Step 7.11 — Environment Variables
 
 ### apps/api/.env
 
 ```
 PORT=3001
 SUPABASE_URL=https://lccpruqcqalxtbddggow.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+SUPABASE_SERVICE_ROLE_KEY=<from Supabase dashboard>
 ```
 
 Add to `.env.example` and `.gitignore`.
@@ -760,30 +756,39 @@ Add to `.env.example` and `.gitignore`.
 ## Workflow
 
 ```
-openapi.yaml  (single source of truth)
-     │
-     ├──► apps/api/          Express validates requests against spec schemas (zod)
-     │
-     └──► packages/http-client/
-              └── src/generated/   HeyAPI generates types + SDK from spec
-                       │
-                       └──► apps/mobile, apps/web consume type-safe client
+Zod schemas in src/schemas/
+  │
+  ├──► Express routes: runtime validation (validateBody/validateQuery)
+  │
+  ├──► OpenAPI registry: registerPath() calls in each route file
+  │        │
+  │        ├──► Swagger UI at /docs (live, always in sync)
+  │        │
+  │        └──► generate:spec → openapi.yaml
+  │                  │
+  │                  └──► HeyAPI → src/generated/ (types + SDK)
+  │                            │
+  │                            └──► Apps consume type-safe client
+  │
+  └──► Domain types shared between API internals
 ```
 
 When the API contract changes:
-1. Update `apps/api/openapi.yaml`
-2. Update the Express route + zod schema to match
-3. Run `pnpm api:generate-client` to regenerate the HTTP client
+1. Update the Zod schema in `src/schemas/`
+2. Update the Express handler if needed
+3. Run `pnpm api:generate-client` (spec + client in one command)
 4. TypeScript catches any breaking changes in consuming apps
 
 ---
 
 ## Completion Criteria
 
-- [ ] `apps/api/openapi.yaml` defines all endpoints
+- [ ] Zod schemas define all domain entities (auth, balance, transactions, budgets, pots)
+- [ ] All routes register OpenAPI paths via the registry
+- [ ] `pnpm api:generate-spec` produces a valid `openapi.yaml`
 - [ ] `apps/api/` runs with `pnpm api:dev` on port 3001
 - [ ] Swagger UI accessible at `http://localhost:3001/docs`
-- [ ] All routes use zod validation matching the OpenAPI spec
+- [ ] All routes use `validateBody`/`validateQuery` middleware with Zod schemas
 - [ ] Auth middleware validates Supabase JWT tokens
 - [ ] `packages/http-client/` generates from the OpenAPI spec
 - [ ] Generated SDK is type-safe and exports all operations
