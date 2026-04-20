@@ -1,0 +1,65 @@
+{
+  "color": {
+    "base": {
+      "$description": "Raw color palette from Figma design system — not for direct use in components",
+      "beige": {
+        "500": { "$value": "#98908B", "$type": "color" },
+        "100": { "$value": "#F8F4F0", "$type": "color" }
+      },
+      "grey": {
+        "900": { "$value": "#201F24", "$type": "color" },
+        "500": { "$value": "#696868", "$type": "color" },
+        "300": { "$value": "#B3B3B3", "$type": "color" },
+        "100": { "$value": "#F2F2F2", "$type": "color" }
+      },
+      "white": {
+        "DEFAULT": { "$value": "#FFFFFF", "$type": "color" }
+      },
+      "green": {
+        "DEFAULT": { "$value": "#277C78", "$type": "color" }
+      },
+      "yellow": {
+        "DEFAULT": { "$value": "#F2CDAC", "$type": "color" }
+      },
+      "cyan": {
+        "DEFAULT": { "$value": "#82C9D7", "$type": "color" }
+      },
+      "navy": {
+        "DEFAULT": { "$value": "#626070", "$type": "color" }
+      },
+      "red": {
+        "DEFAULT": { "$value": "#C94736", "$type": "color" }
+      },
+      "purple": {
+        "DEFAULT": { "$value": "#826CB0", "$type": "color" }
+      },
+      "other-purple": {
+        "DEFAULT": { "$value": "#AF81BA", "$type": "color" }
+      },
+      "turquoise": {
+        "DEFAULT": { "$value": "#597C7C", "$type": "color" }
+      },
+      "brown": {
+        "DEFAULT": { "$value": "#93674F", "$type": "color" }
+      },
+      "magenta": {
+        "DEFAULT": { "$value": "#934F6F", "$type": "color" }
+      },
+      "blue": {
+        "DEFAULT": { "$value": "#3F82B2", "$type": "color" }
+      },
+      "navy-grey": {
+        "DEFAULT": { "$value": "#97A0AC", "$type": "color" }
+      },
+      "army-green": {
+        "DEFAULT": { "$value": "#7F9161", "$type": "color" }
+      },
+      "gold": {
+        "DEFAULT": { "$value": "#CAB361", "$type": "color" }
+      },
+      "orange": {
+        "DEFAULT": { "$value": "#BE6C49", "$type": "color" }
+      }
+    }
+  }
+}

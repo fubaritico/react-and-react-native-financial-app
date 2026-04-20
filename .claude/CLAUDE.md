@@ -227,14 +227,31 @@ packages/
   - JSON schema with scoring, verdicts, `needs_verification` field for context7 escalation
   - 8-step flow: scope detect → dispatch → aggregate → report → verify (context7) → fix loop (max 3) → store/ignore
   - Added `review-results/` to .gitignore, JSDoc checklist item to design-system.md
+- Pre-phase cleanup: removed all NativeWind remnants (7 files)
+  - Deleted 4 tailwind.config.js (all referenced uninstalled nativewind/preset)
+  - Deleted 2 nativewind-env.d.ts, 1 global.css
+  - Tested on iOS and Android — no side effects
+
+- Phase 0: Created `packages/tokens/` — @financial-app/tokens
+  - Extracted full color palette from Figma Design System page (5 desktop screenshots + 6 zoomed color screenshots)
+  - Base colors: beige (2), grey (4), white, 6 secondary (green, yellow, cyan, navy, red, purple), 9 other (turquoise, brown, magenta, blue, navy-grey, army-green, gold, orange, other-purple)
+  - Semantic layer: background, foreground, primary, secondary, destructive, success, warning, border, input, nav, transaction, recurring
+  - Alias layer: flat Tailwind names + all 15 theme colors + grey/beige shortcuts
+  - Typography: Public Sans, 7 text presets from Figma (1-5 + 4Bold + 5Bold)
+  - Spacing: full Tailwind scale (half-steps use `_` to avoid SD dot-as-path-separator)
+  - Radius: none/sm/md/lg/xl/2xl/full
+  - Style Dictionary v5.4.0, DTCG format ($value/$type), 5 output platforms (css, tailwind JS map, js, ts, native)
+  - Native output has unitless numbers for RN (rem→px conversion via custom size/native transform)
+  - All 5 outputs build successfully, type-check + lint + test pass
+  - README adapted from vite-mf-monorepo reference
+  - NOT YET COMMITTED
 
 ### Next
-- Pre-phase cleanup: clean up project (NativeWind remnants, etc.) before starting Phase 0
+- Commit tokens package
+- Continue Phase 0 if more cleanup needed, or start Phase 1 (tailwind-config)
 - Refine custom skills as phases progress (skills are initial versions)
 
 ### Known Issues
-- packages/ui tailwind.config.js still references nativewind/preset (to be replaced)
-- NativeWind remnants in mobile-expo (global.css, nativewind-env.d.ts)
 - `expo-dev-client` not yet tested on mobile-expo-ejected
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
 

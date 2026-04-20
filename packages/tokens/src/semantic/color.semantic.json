@@ -1,0 +1,64 @@
+{
+  "color": {
+    "semantic": {
+      "$description": "Semantic tokens mapping base palette to UI roles",
+      "background": {
+        "page": { "$value": "{color.base.beige.100}", "$type": "color" },
+        "card": { "$value": "{color.base.white.DEFAULT}", "$type": "color" },
+        "card-dark": { "$value": "{color.base.grey.900}", "$type": "color" },
+        "muted": { "$value": "{color.base.grey.100}", "$type": "color" }
+      },
+      "foreground": {
+        "default": { "$value": "{color.base.grey.900}", "$type": "color" },
+        "muted": { "$value": "{color.base.grey.500}", "$type": "color" },
+        "subtle": { "$value": "{color.base.grey.300}", "$type": "color" },
+        "on-dark": { "$value": "{color.base.white.DEFAULT}", "$type": "color" },
+        "on-dark-muted": { "$value": "{color.base.beige.500}", "$type": "color" }
+      },
+      "primary": {
+        "default": { "$value": "{color.base.grey.900}", "$type": "color" },
+        "foreground": { "$value": "{color.base.white.DEFAULT}", "$type": "color" }
+      },
+      "secondary": {
+        "default": { "$value": "{color.base.beige.100}", "$type": "color" },
+        "foreground": { "$value": "{color.base.grey.900}", "$type": "color" }
+      },
+      "destructive": {
+        "default": { "$value": "{color.base.red.DEFAULT}", "$type": "color" },
+        "foreground": { "$value": "{color.base.white.DEFAULT}", "$type": "color" }
+      },
+      "success": {
+        "default": { "$value": "{color.base.green.DEFAULT}", "$type": "color" },
+        "foreground": { "$value": "{color.base.white.DEFAULT}", "$type": "color" }
+      },
+      "warning": {
+        "default": { "$value": "{color.base.gold.DEFAULT}", "$type": "color" },
+        "foreground": { "$value": "{color.base.grey.900}", "$type": "color" }
+      },
+      "border": {
+        "default": { "$value": "{color.base.grey.100}", "$type": "color" },
+        "muted": { "$value": "{color.base.beige.500}", "$type": "color" }
+      },
+      "input": {
+        "border": { "$value": "{color.base.beige.500}", "$type": "color" },
+        "placeholder": { "$value": "{color.base.beige.500}", "$type": "color" }
+      },
+      "nav": {
+        "background": { "$value": "{color.base.grey.900}", "$type": "color" },
+        "text": { "$value": "{color.base.grey.300}", "$type": "color" },
+        "active-bg": { "$value": "{color.base.beige.100}", "$type": "color" },
+        "active-text": { "$value": "{color.base.grey.900}", "$type": "color" },
+        "accent": { "$value": "{color.base.green.DEFAULT}", "$type": "color" }
+      },
+      "transaction": {
+        "positive": { "$value": "{color.base.green.DEFAULT}", "$type": "color" },
+        "negative": { "$value": "{color.base.grey.900}", "$type": "color" }
+      },
+      "recurring": {
+        "paid": { "$value": "{color.base.green.DEFAULT}", "$type": "color" },
+        "upcoming": { "$value": "{color.base.gold.DEFAULT}", "$type": "color" },
+        "due-soon": { "$value": "{color.base.red.DEFAULT}", "$type": "color" }
+      }
+    }
+  }
+}
