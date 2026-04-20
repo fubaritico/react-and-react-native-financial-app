@@ -10,7 +10,8 @@
       "WebFetch",
       "Bash",
       "Skill(commit)",
-      "Skill(end-session)"
+      "Skill(end-session)",
+      "Skill(start-session)"
     ]
   },
   "deny": [
