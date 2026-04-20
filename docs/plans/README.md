@@ -14,8 +14,9 @@
 | 3 | phase-3-ui.md | Cross-platform file extension split + CVA | Phase 2 |
 | 4 | phase-4-web-app.md | React Router + Vite web app scaffold | Phase 3 |
 | 5 | phase-5-shared.md | Supabase, Jotai, TanStack Query shared package | Phase 4 |
-| 6 | phase-6-turborepo.md | Turborepo pipeline + build orchestration | Phase 7 |
-| 7 | phase-7-api-and-http-client.md | Express API (OpenAPI) + HeyAPI HTTP client | Phase 5 |
+| 6 | phase-6-turborepo.md | Turborepo pipeline + build orchestration | Phase 7 (absorbed) |
+| 7 | phase-7-home-page.md | Turborepo + routing + mock data + Home page | Phase 5 |
+| 8 | phase-8-api-and-http-client.md | Express API (OpenAPI) + HeyAPI HTTP client | Phase 7 |
 
 ## Current Status
 
@@ -28,8 +29,9 @@
 - [ ] Phase 3 — not started
 - [ ] Phase 4 — not started
 - [ ] Phase 5 — not started
-- [ ] Phase 6 — not started
+- [ ] Phase 6 — absorbed into Phase 7
 - [ ] Phase 7 — not started
+- [ ] Phase 8 — not started
 
 ## Key Reminders Before Starting Any Phase
 

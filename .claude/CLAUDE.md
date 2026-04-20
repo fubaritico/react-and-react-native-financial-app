@@ -323,10 +323,54 @@ packages/
   - `validateBody`/`validateQuery` middleware reuses same Zod schemas
   - No ORM (Prisma rejected — Supabase JS client sufficient for CRUD)
 
+- Phase 5.1 + 5.7: created `packages/shared/` — @financial-app/shared (6cb1d2c)
+  - Auth: 3 client factories (browser/server/native), Google OAuth (web redirect + native ID token)
+  - `requireAuth()` guard, `useAuthListener` hook, Jotai atoms (userAtom, isAuthenticatedAtom, isLoadingAtom)
+  - Domain types: IBalance, ITransaction, IBudget, IPot
+  - Utils: formatCurrency, formatDate
+  - Pluggable storage via IAuthStorage interface; react-router as optional peer dep
+  - All 4 apps depend on @financial-app/shared; storage adapters + Google Sign-In at app level
+
+- Added QUAL-015 review rule: all interfaces must use `I` prefix (01c9ad3)
+- Renamed all interfaces to I-prefix across shared + ui packages (4f3e680)
+  - IButtonProps, ICardProps, IHeaderProps, IAuthStorage, ISignInPayload, ISignUpPayload, IBalance, ITransaction, IBudget, IPot
+
+- Phase 5 DI refactoring: IAuthClient interface abstracting Supabase (b61ab38 + 92aff19)
+  - Created `IAuthClient`, `IUser`, `ISession`, `IAuthError`, `IAuthSubscription`, `IAuthResult` interfaces
+  - Created `adapter.supabase.ts` — single point of Supabase auth API coupling
+  - Factories return `IAuthClient` directly (server returns `{ authClient, headers }`)
+  - All async adapter methods wrapped in try/catch → normalized `IAuthError`
+  - Env var validation at factory creation (throws immediately with actionable message)
+  - Network error messages sanitized (no hostname/infra leak to callers)
+  - `userAtom` uses `IUser` instead of Supabase `User` type
+  - Decoupled guard.ts from react-router: returns `IAuthResult | IAuthError`, caller handles redirect
+  - Removed react-router from peerDependencies entirely
+  - Added `index.native.ts` barrel with `react-native` condition in exports map (Metro safety)
+  - Complete JSDoc on all interfaces, properties, and private helpers
+  - Widened QUAL-003 (all interface properties) and QUAL-004 (all functions including private)
+
+- Phase 5.8 + 5.9: app-level wiring and env files (0e2bcbf)
+  - Storage adapters: SecureStore (Expo apps), AsyncStorage (bare RN) via IAuthStorage
+  - Google Sign-In: explicit configureGoogleSignIn() init function with env var validation
+  - react-native-dotenv for bare RN CLI (babel plugin, @env module, env.d.ts with string | undefined)
+  - createNativeClient: added optional INativeClientConfig param for non-Expo envs
+  - Removed createServerClient from universal barrel (ARCH-001 — use subpath import)
+  - Exported INativeClientConfig from shared (ARCH-002)
+  - Gated raw network error logging behind __DEV__ (SEC-006)
+  - Added @types/node and react-native-dotenv to pnpm catalog
+  - Created .env.example for all 4 apps, .env with real Supabase keys (gitignored)
+  - TODO comment in web home route for future requireAuth (Phase 5.10)
+
 ### Next
-- Start Phase 5 (shared package) — read docs/plans/phase-5-shared.md
+- Phase 5.10: public routes vs protected routes (login/signup UI + auth guards)
+- Phase 7: Express API + OpenAPI + HeyAPI client
 
 ### Known Issues
+- Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.
+- Review ARCH-003b: factories read env vars directly instead of accepting params — trades testability for DX. Revisit if unit testing becomes painful.
+- Review SEC-002: bare RN uses plain AsyncStorage for tokens (unencrypted) — acceptable for learning reference, not published
+- Google client IDs empty in .env files — need Google Cloud Console setup before testing OAuth
+
 - `expo-dev-client` not yet tested on mobile-expo-ejected
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
 
