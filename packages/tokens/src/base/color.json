@@ -33,7 +33,7 @@
       "purple": {
         "DEFAULT": { "$value": "#826CB0", "$type": "color" }
       },
-      "other-purple": {
+      "pink": {
         "DEFAULT": { "$value": "#AF81BA", "$type": "color" }
       },
       "turquoise": {
