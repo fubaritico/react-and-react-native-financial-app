@@ -1,18 +1,16 @@
-import React from 'react'
-import { Text, View, ViewStyle } from 'react-native'
+import { Text, View } from 'react-native'
 
-import tw from '../lib/tw'
+import tw from '../../lib/tw'
+import { cardVariants } from '../../variants'
 
-interface CardProps {
-  title: string
-  text?: string
-  children?: React.ReactNode
-  style?: ViewStyle
-}
+import type { CardProps } from './Card'
 
-export const Card: React.FC<CardProps> = ({ title, text, children, style }) => {
+/** Native implementation of the Card component. */
+export const Card = ({ title, text, children, style }: CardProps) => {
+  const baseClasses = cardVariants()
+
   return (
-    <View style={[tw`bg-white rounded-xl p-4 shadow-md`, style]}>
+    <View style={[tw`${baseClasses} shadow-md`, style]}>
       <Text style={tw`text-lg font-semibold text-foreground mb-2`}>
         {title}
       </Text>

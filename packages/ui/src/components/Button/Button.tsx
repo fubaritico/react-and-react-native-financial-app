@@ -1,0 +1,16 @@
+import type { VariantProps } from 'class-variance-authority'
+import type { ViewStyle } from 'react-native'
+
+import type { buttonVariants } from '../../variants'
+
+/** Props for the Button component. */
+export interface ButtonProps extends VariantProps<typeof buttonVariants> {
+  /** Text displayed inside the button. */
+  title: string
+  /** Callback fired when the button is pressed. */
+  onPress: () => void
+  /** Optional style override (native only). */
+  style?: ViewStyle | object
+}
+
+export { buttonVariants } from '../../variants'
