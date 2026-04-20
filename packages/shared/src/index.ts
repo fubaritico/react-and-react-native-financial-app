@@ -1,7 +1,8 @@
 // Auth
 export { createBrowserClient } from './auth/client'
-export { createServerClient } from './auth/client.server'
 export { createNativeClient } from './auth/client.native'
+// createServerClient is NOT re-exported here — import from '@financial-app/shared/auth/client.server'
+// to avoid pulling @supabase/ssr into non-SSR bundles
 export { signInWithGoogle } from './auth/oauth'
 export { requireAuth } from './auth/guard'
 export { useAuthListener } from './auth/hooks'
@@ -16,6 +17,7 @@ export type {
   IUser,
   OAuthProvider,
 } from './auth/types'
+export type { INativeClientConfig } from './auth/client.native'
 export type { IAuthResult } from './auth/guard'
 
 // Atoms
