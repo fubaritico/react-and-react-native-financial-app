@@ -4,17 +4,31 @@ import {
   serializeCookieHeader,
 } from '@supabase/ssr'
 
+import { createSupabaseAuthAdapter } from './adapter.supabase'
+import type { IAuthClient } from './types'
+
 /**
- * Creates a Supabase client for server-side rendering (SSR) loaders.
+ * Creates an auth client for server-side rendering (SSR) loaders.
  * Reads session from request cookies, writes refreshed tokens to response headers.
  * @param request - Incoming HTTP request with cookies
- * @returns Object with `supabase` client and `headers` containing Set-Cookie directives
+ * @throws Error if VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY env vars are missing
+ * @returns Object with vendor-agnostic `authClient` and `headers` containing Set-Cookie directives
  */
-export function createServerClient(request: Request) {
+export function createServerClient(request: Request): {
+  authClient: IAuthClient
+  headers: Headers
+} {
   const headers = new Headers()
 
-  const url = process.env.VITE_SUPABASE_URL ?? ''
-  const key = process.env.VITE_SUPABASE_ANON_KEY ?? ''
+  const url = process.env.VITE_SUPABASE_URL
+  const key = process.env.VITE_SUPABASE_ANON_KEY
+
+  if (!url || !key) {
+    throw new Error(
+      '[auth] Missing env vars: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be set server-side. ' +
+        'Check apps/web/.env against .env.example.'
+    )
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-deprecated -- uses getAll/setAll (non-deprecated overload), lint false positive
   const supabase = createSupaServerClient(url, key, {
@@ -39,5 +53,6 @@ export function createServerClient(request: Request) {
     },
   })
 
-  return { supabase, headers }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- @supabase/ssr factory returns wider generic than SupabaseClient default
+  return { authClient: createSupabaseAuthAdapter(supabase), headers }
 }

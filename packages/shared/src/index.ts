@@ -6,9 +6,14 @@ export { signInWithGoogle } from './auth/oauth'
 export { requireAuth } from './auth/guard'
 export { useAuthListener } from './auth/hooks'
 export type {
+  IAuthClient,
+  IAuthError,
   IAuthStorage,
+  IAuthSubscription,
+  ISession,
   ISignInPayload,
   ISignUpPayload,
+  IUser,
   OAuthProvider,
 } from './auth/types'
 
