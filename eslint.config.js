@@ -13,6 +13,7 @@ export default tseslint.config(
       '**/node_modules/**',
       '**/dist/**',
       '**/build/**',
+      '**/.react-router/**',
       'packages/tokens/build/**',
       '**/*.config.js',
       '**/*.config.ts',
