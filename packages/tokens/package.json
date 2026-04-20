@@ -1,0 +1,26 @@
+{
+  "name": "@financial-app/tokens",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./build/ts/tokens.d.ts",
+        "default": "./build/js/tokens.js"
+      }
+    },
+    "./css": "./build/css/variables.css",
+    "./tailwind": "./build/tailwind/tailwind.tokens.js",
+    "./native": "./build/native/tokens.native.js"
+  },
+  "react-native": "./build/native/tokens.native.js",
+  "scripts": {
+    "clean": "rm -rf build",
+    "build": "pnpm clean && style-dictionary build --config sd.config.js",
+    "watch": "style-dictionary build --config sd.config.js --watch"
+  },
+  "devDependencies": {
+    "style-dictionary": "^5.4.0"
+  }
+}
