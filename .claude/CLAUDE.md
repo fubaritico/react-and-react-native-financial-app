@@ -298,6 +298,31 @@ packages/
   - Tested on mobile (bare RN + Expo) — no regressions from index.web.ts changes
   - Tested on web — SSR renders HTML, components are semantic, Tailwind colors match
 
+- Redesigned Phase 5 plan: auth-only scope (fe6fd96)
+  - Supabase SDK for auth only, data fetching deferred to Phase 7
+  - Pluggable storage: `createNativeClient(storage)` with `AuthStorage` interface
+  - 3 client factories: browser (cookies via @supabase/ssr), server (SSR), native (pluggable)
+  - `requireAuth()` guard returns `accessToken` for forwarding to Express API
+  - Jotai as client-side reactive cache, never source of truth for auth
+  - Supports all 4 apps (3 mobile + web) with per-app storage adapters
+  - Removed TanStack Query and data hooks (come with Phase 7)
+
+- Updated Phase 5 plan with Google OAuth support (3 sign-in methods: email/password, sign-up, Google OAuth)
+  - Added `oauth.ts` (web redirect flow) and `oauth.native.ts` (ID token flow) to directory structure
+  - Added `@react-native-google-signin/google-signin` as app-level dependency for all 3 mobile apps
+  - Added auth scenarios 1b (Google web) and 1c (Google native)
+  - Added Google client ID env vars for mobile apps
+  - Added completion criteria for Google OAuth on both platforms
+
+- Redesigned Phase 7 plan: code-first OpenAPI (fe6fd96)
+  - Replaced hand-written openapi.yaml with `@asteasolutions/zod-to-openapi`
+  - Zod schemas = single source of truth (runtime validation + spec generation)
+  - `generate:spec` script outputs YAML from registry, HeyAPI consumes it
+  - `api:generate-client` root script chains both steps
+  - Swagger UI serves live spec at runtime (always in sync)
+  - `validateBody`/`validateQuery` middleware reuses same Zod schemas
+  - No ORM (Prisma rejected — Supabase JS client sufficient for CRUD)
+
 ### Next
 - Start Phase 5 (shared package) — read docs/plans/phase-5-shared.md
 
