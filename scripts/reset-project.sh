@@ -20,6 +20,9 @@ echo "=== CLEAN ==="
 echo "  -> Removing all node_modules..."
 find . -name "node_modules" -type d -prune -exec rm -rf {} + 2>/dev/null || true
 
+echo "  -> Removing Turborepo caches..."
+find . -name ".turbo" -type d -prune -exec rm -rf {} + 2>/dev/null || true
+
 echo "  -> Removing Expo caches..."
 rm -rf "$EXPO_DIR/.expo" "$EJECTED_DIR/.expo" 2>/dev/null || true
 
@@ -34,6 +37,12 @@ echo "  -> Removing Android build artifacts..."
 rm -rf "$MOBILE_DIR/android/build" "$MOBILE_DIR/android/.gradle" 2>/dev/null || true
 rm -rf "$MOBILE_DIR/android_backup" 2>/dev/null || true
 rm -rf "$EJECTED_DIR/android/build" "$EJECTED_DIR/android/.gradle" 2>/dev/null || true
+
+echo "  -> Removing token build outputs..."
+rm -rf "$ROOT_DIR/packages/tokens/build" 2>/dev/null || true
+
+echo "  -> Removing web build outputs..."
+rm -rf "$ROOT_DIR/apps/web/build" "$ROOT_DIR/apps/web/dist" 2>/dev/null || true
 
 echo "  -> Removing Metro / Haste caches..."
 rm -rf /tmp/metro-* /tmp/haste-map-* 2>/dev/null || true
@@ -59,6 +68,9 @@ echo "=== INSTALL ==="
 
 echo "  -> Installing dependencies..."
 pnpm install --frozen-lockfile
+
+echo "  -> Building tokens (required by downstream packages)..."
+pnpm tokens
 
 # ---------- NATIVE REBUILD ----------
 

@@ -7,11 +7,16 @@
     "start": "echo \"Use: pnpm --filter mobile-financial-app start\"",
     "android": "echo \"Use: pnpm --filter mobile-financial-app android\"",
     "ios": "echo \"Use: pnpm --filter mobile-financial-app ios\"",
-    "type-check": "pnpm -r --if-present run type-check",
-    "lint": "eslint .",
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "type-check": "turbo type-check",
+    "lint": "turbo lint",
+    "lint:root": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "pnpm -r --if-present run test",
+    "test": "turbo test",
+    "tokens": "pnpm --filter @financial-app/tokens build",
     "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules",
+    "clean:build": "rm -rf packages/*/build packages/*/dist apps/*/dist",
     "reset": "./scripts/reset-project.sh",
     "postinstall": "chmod +x scripts/*.sh",
     "prepare": "husky"
@@ -31,6 +36,7 @@
     "husky": "catalog:",
     "prettier": "catalog:",
     "tailwindcss": "catalog:",
+    "turbo": "catalog:",
     "typescript-eslint": "catalog:"
   },
   "pnpm": {

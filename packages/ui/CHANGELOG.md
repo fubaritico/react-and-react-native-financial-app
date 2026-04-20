@@ -15,6 +15,7 @@
 * added env for BDD credentials ([c08b401](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c08b4019e8528439de6b969fc9cec13b2595601a))
 * added shared design system ([69b2530](https://github.com/fubaritico/react-and-react-native-financial-app/commit/69b25309bb897f486afe8585eb3c7d3776ad9b5a))
 * alignement de mobile-expo-ejected aveclesmême dépendances ([c3df036](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c3df03680c52be2e98b931e9860a5c1c0ddcc842))
+* **apps:** wire auth clients, Google Sign-In, and env files (Phase 5.8) ([0e2bcbf](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0e2bcbf908951f2d108dc179e814415f0fdce6a5))
 * **config:** add agent skills — migrate commands + vendor Expo/Callstack skills ([3847dc7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/3847dc73a293dab050ad88f3f8ae7e712f867feb))
 * **config:** add multi-agent review skill with 5 domain experts ([bda46f8](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bda46f858062652f7617d8143337565926ff156b))
 * **config:** add restart-session skill for end → clear → start flow ([4f2f6b6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4f2f6b6a669273d5abc45fea1109a63c7cea70ed))
