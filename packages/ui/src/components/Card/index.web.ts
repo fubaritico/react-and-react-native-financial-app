@@ -1,2 +1,2 @@
 export { Card } from './Card.web'
-export type { CardProps } from './Card'
+export type { ICardProps } from './Card'

@@ -1,2 +1,2 @@
 export { Header } from './Header.web'
-export type { HeaderProps } from './Header'
+export type { IHeaderProps } from './Header'

@@ -4,7 +4,7 @@ import type { ViewStyle } from 'react-native'
 import type { buttonVariants } from '../../variants'
 
 /** Props for the Button component. */
-export interface ButtonProps extends VariantProps<typeof buttonVariants> {
+export interface IButtonProps extends VariantProps<typeof buttonVariants> {
   /** Text displayed inside the button. */
   title: string
   /** Callback fired when the button is pressed. */
