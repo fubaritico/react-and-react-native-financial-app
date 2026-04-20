@@ -45,5 +45,8 @@ catalog:
   # Env
   react-native-dotenv: "^3.4.11"
 
+  # Turborepo
+  turbo: "^2.9.6"
+
   # Release tools
   conventional-changelog: "7.2.0"

@@ -4,6 +4,9 @@
   "private": true,
   "main": "index.js",
   "types": "index.d.ts",
+  "scripts": {
+    "build": "echo 'no build step'"
+  },
   "dependencies": {
     "@financial-app/tokens": "workspace:^"
   },

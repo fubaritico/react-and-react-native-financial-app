@@ -361,9 +361,25 @@ packages/
   - Created .env.example for all 4 apps, .env with real Supabase keys (gitignored)
   - TODO comment in web home route for future requireAuth (Phase 5.10)
 
+- Renumbered plans: Phase 7 = Home Page, Phase 8 = API (d193067)
+  - Created `docs/plans/phase-7-home-page.md` (8 steps: Turborepo + Expo Router + mocks + test-utils + auth placeholders + Overview page)
+  - Renamed phase-7 → phase-8-api-and-http-client.md
+  - Phase 6 (Turborepo) absorbed into Phase 7 Step 7.1
+  - Phase 5.10 (auth routes) absorbed into Phase 7 Step 7.6
+- Re-added context7 MCP server (was missing from config): `claude mcp add context7 -- npx -y @upstash/context7-mcp`
+
+- Phase 7, Step 7.1 COMPLETE: Turborepo setup
+  - Installed turbo v2.9.6 (added to pnpm catalog + root devDeps)
+  - Created `turbo.json` with `tasks` key (v2 API, not `pipeline`)
+  - Tasks: build (^build deps), dev, watch, lint, type-check (^build deps), test
+  - Root scripts: build/dev/lint/type-check/test via turbo, tokens shortcut, clean:build
+  - Added `build` scripts to ui (tsc --noEmit), shared (tsc --noEmit), tailwind-config (no-op)
+  - Added `.turbo/` to .gitignore
+  - Updated reset script: cleans .turbo dirs, token build/, web build/, rebuilds tokens after install
+  - Build order verified: tokens → tailwind-config → ui → web (with caching)
+
 ### Next
-- Phase 5.10: public routes vs protected routes (login/signup UI + auth guards)
-- Phase 7: Express API + OpenAPI + HeyAPI client
+- Phase 7, Step 7.2: Expo Router setup in mobile-expo (read docs/plans/phase-7-home-page.md)
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.
@@ -371,6 +387,7 @@ packages/
 - Review SEC-002: bare RN uses plain AsyncStorage for tokens (unencrypted) — acceptable for learning reference, not published
 - Google client IDs empty in .env files — need Google Cloud Console setup before testing OAuth
 
+- Responsive phone/tablet layouts: need to research Expo Router adaptive layouts + useWindowDimensions patterns with context7 before building Overview components
 - `expo-dev-client` not yet tested on mobile-expo-ejected
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
 
