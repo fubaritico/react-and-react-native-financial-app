@@ -100,4 +100,5 @@ Every new component must be added to src/index.ts with:
 - [ ] ComponentName.web.tsx — uses cn(), no RN imports
 - [ ] index.ts — re-exports component + types
 - [ ] variants/[name].variants.ts — CVA object created
+- [ ] JSDocs for properties, functions, state variables
 - [ ] src/index.ts — component exported publicly
