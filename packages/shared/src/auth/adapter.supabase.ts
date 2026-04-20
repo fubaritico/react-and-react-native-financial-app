@@ -11,21 +11,30 @@ import type {
   OAuthProvider,
 } from './types'
 
+/** Minimal Supabase user shape used for mapping */
 interface ISupabaseUser {
+  /** Unique user identifier */
   id: string
+  /** User email address */
   email?: string
+  /** Arbitrary metadata attached to the user */
   user_metadata?: Record<string, unknown>
 }
 
+/** Minimal Supabase session shape used for mapping */
 interface ISupabaseSession {
+  /** JWT access token */
   access_token: string
+  /** Token used to refresh an expired access token */
   refresh_token: string
+  /** User associated with this session */
   user: ISupabaseUser
 }
 
 /**
  * Normalizes a Supabase AuthError into IAuthError.
- * Returns null when no error is present.
+ * @param error - Supabase error object or null
+ * @returns Normalized IAuthError, or null when no error is present
  */
 function toAuthError(
   error: { message: string; status?: number } | null
@@ -38,6 +47,8 @@ function toAuthError(
  * Wraps unexpected thrown exceptions (network timeout, DNS failure, etc.)
  * into a normalized IAuthError. Raw messages are logged for debugging
  * but never forwarded to callers (avoids leaking hostnames/infra details).
+ * @param thrown - The caught exception (unknown type)
+ * @returns Sanitized IAuthError with status 0 indicating network failure
  */
 function toNetworkError(thrown: unknown): IAuthError {
   if (thrown instanceof Error) {
@@ -46,7 +57,11 @@ function toNetworkError(thrown: unknown): IAuthError {
   return { message: '[auth] Network request failed', status: 0 }
 }
 
-/** Maps a Supabase User to IUser */
+/**
+ * Maps a Supabase User to the vendor-agnostic IUser interface.
+ * @param user - Supabase user object or null
+ * @returns Mapped IUser, or null if input is null
+ */
 function toUser(user: ISupabaseUser | null): IUser | null {
   if (!user) return null
   return {
@@ -56,7 +71,11 @@ function toUser(user: ISupabaseUser | null): IUser | null {
   }
 }
 
-/** Maps a Supabase Session to ISession */
+/**
+ * Maps a Supabase Session to the vendor-agnostic ISession interface.
+ * @param session - Supabase session object or null
+ * @returns Mapped ISession, or null if input is null or user mapping fails
+ */
 function toSession(session: ISupabaseSession | null): ISession | null {
   if (!session) return null
   const user = toUser(session.user)
