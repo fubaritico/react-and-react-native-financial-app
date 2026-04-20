@@ -3,8 +3,8 @@
 ## Goal
 
 Create `@financial-app/shared` — pure TypeScript, no renderer imports.
-Contains: Supabase auth layer, Jotai atoms (client-side state), domain types,
-and utility functions. All 4 apps consume this.
+Contains: Supabase auth layer (email/password + Google OAuth), Jotai atoms
+(client-side state), domain types, and utility functions. All 4 apps consume this.
 
 Data fetching (transactions, budgets, pots, balance) is NOT in this package.
 It comes from the HeyAPI-generated HTTP client after Phase 7.
@@ -19,11 +19,12 @@ TanStack Query hooks that wrap the HTTP client also come after Phase 7.
 ### Data Flow — Who Talks to Supabase?
 
 ```
-Auth:  Apps → Supabase SDK directly (login, signup, session, token refresh)
+Auth:  Apps → Supabase SDK directly (login, signup, Google OAuth, session, token refresh)
 Data:  Apps → Express API (Phase 7) → Supabase (service role key)
 ```
 
 - Supabase SDK handles auth only (JWT issuance, refresh, session persistence)
+- Three sign-in methods: email/password sign-in, email/password sign-up, Google OAuth
 - All data reads/writes go through the Express API
 - The API is defined by OpenAPI spec, consumed via HeyAPI-generated client
 - No direct Supabase data queries from apps — ever
@@ -41,6 +42,25 @@ No Prisma — it would add a third schema source (openapi.yaml + schema.prisma +
 for simple CRUD that doesn't justify the overhead. If complex queries are needed later,
 use `supabase.rpc()` for raw SQL.
 
+### Auth — Sign-In Methods
+
+| Method              | Web                                          | Native (Expo + bare RN)                       |
+|---------------------|----------------------------------------------|-----------------------------------------------|
+| Email/password      | `signInWithPassword()` via Supabase SDK      | `signInWithPassword()` via Supabase SDK       |
+| Sign up             | `signUp()` via Supabase SDK                  | `signUp()` via Supabase SDK                   |
+| Google OAuth        | `signInWithOAuth()` — redirect flow          | `@react-native-google-signin/google-signin` → `signInWithIdToken()` |
+
+**Google OAuth flow differences:**
+- **Web**: Supabase handles the full redirect (consent screen → callback URL → session)
+- **Native**: `@react-native-google-signin/google-signin` presents the native Google Sign-In UI,
+  returns an ID token, which is then passed to `supabase.auth.signInWithIdToken()`
+- The shared package stays pure TS — native Google Sign-In lib is an app-level dependency
+
+**Supabase dashboard prerequisite:**
+- Enable Google provider in Auth → Providers
+- Set Google Cloud OAuth client ID + secret (web)
+- Set separate OAuth client IDs for iOS and Android (native)
+
 ### Auth — JWT & Session Management
 
 Supabase SDK manages JWTs entirely (issuance, storage, refresh).
@@ -48,16 +68,16 @@ We never decode or inspect tokens manually.
 
 | Platform | Storage mechanism | Package |
 |----------|-------------------|---------|
-| Web (SSR) | HTTP-only cookies | `@supabase/ssr` |
-| Expo managed / ejected | Encrypted storage | `expo-secure-store` |
-| Bare RN CLI | Async storage | `@react-native-async-storage/async-storage` |
+| Web (SSR)              | HTTP-only cookies   | `@supabase/ssr`                              |
+| Expo managed / ejected | Encrypted storage   | `expo-secure-store`                          |
+| Bare RN CLI            | Async storage       | `@react-native-async-storage/async-storage`  |
 
 The shared package does NOT depend on any storage implementation.
 Each app passes its own adapter via `createNativeClient(storage)`.
 
 ### Auth — Three Scenarios
 
-**1. User not connected — visits any route**
+**1a. User not connected — signs in with email/password**
 ```
 Request hits server → loader calls requireAuth()
   → createServerClient reads cookies → no session
@@ -66,6 +86,25 @@ Request hits server → loader calls requireAuth()
   → Supabase returns tokens → @supabase/ssr writes HTTP-only cookies
   → onAuthStateChange fires → Jotai userAtom hydrates
   → Client redirect to /overview
+```
+
+**1b. User not connected — signs in with Google (web)**
+```
+User clicks "Sign in with Google" → signInWithGoogle(supabase, redirectTo)
+  → Supabase redirects to Google consent screen
+  → User grants access → Google redirects to Supabase callback
+  → Supabase creates/links user → redirects to app with session cookies
+  → onAuthStateChange fires → Jotai userAtom hydrates
+```
+
+**1c. User not connected — signs in with Google (native)**
+```
+User taps "Sign in with Google" → GoogleSignin.signIn()
+  → Native Google Sign-In UI appears
+  → User grants access → returns idToken
+  → signInWithGoogle(supabase, idToken) → signInWithIdToken()
+  → Supabase creates/links user → returns session
+  → onAuthStateChange fires → Jotai userAtom hydrates
 ```
 
 **2. User connected — leaves, comes back (token valid)**
@@ -132,7 +171,8 @@ pnpm --filter @financial-app/shared add zod
 ```
 
 > No `@tanstack/react-query` yet — it comes with the HTTP client in Phase 7.
-> Storage adapters (expo-secure-store, async-storage) are app-level dependencies.
+> Storage adapters (expo-secure-store, async-storage) and `@react-native-google-signin/google-signin`
+> are app-level dependencies — NOT in the shared package.
 
 ---
 
@@ -144,9 +184,11 @@ packages/shared/src/
     client.ts              # createBrowserClient() — web client-side
     client.server.ts       # createServerClient(request) — web SSR only
     client.native.ts       # createNativeClient(storage) — pluggable, no Expo dep
+    oauth.ts               # signInWithGoogle() — web (redirect flow via Supabase)
+    oauth.native.ts        # signInWithGoogle() — native (receives idToken, calls signInWithIdToken)
     guard.ts               # requireAuth(request) — reusable server loader helper
     hooks.ts               # useAuth() — subscribes onAuthStateChange, updates Jotai
-    types.ts               # AuthStorage interface, SignInPayload, SignUpPayload
+    types.ts               # AuthStorage interface, SignInPayload, SignUpPayload, OAuthProvider
   atoms/
     auth.atom.ts           # userAtom, isAuthenticatedAtom
     ui.atom.ts             # UI state (modals, loading)
@@ -180,6 +222,8 @@ export interface SignUpPayload {
   email: string
   password: string
 }
+
+export type OAuthProvider = 'google'
 ```
 
 ### src/auth/client.ts — Web browser client
@@ -248,6 +292,39 @@ export function createNativeClient(storage: AuthStorage) {
   })
 }
 ```
+
+### src/auth/oauth.ts — Web Google sign-in (redirect flow)
+```ts
+import type { SupabaseClient } from '@supabase/supabase-js'
+
+export async function signInWithGoogle(supabase: SupabaseClient, redirectTo: string) {
+  return supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo },
+  })
+}
+```
+
+### src/auth/oauth.native.ts — Native Google sign-in (ID token flow)
+```ts
+import type { SupabaseClient } from '@supabase/supabase-js'
+
+/**
+ * Signs in with Google on native platforms.
+ * The caller is responsible for obtaining the idToken via
+ * @react-native-google-signin/google-signin at the app level.
+ */
+export async function signInWithGoogle(supabase: SupabaseClient, idToken: string) {
+  return supabase.auth.signInWithIdToken({
+    provider: 'google',
+    token: idToken,
+  })
+}
+```
+
+> The native version receives an `idToken` string instead of a `redirectTo` URL.
+> Each app obtains the token using `@react-native-google-signin/google-signin`
+> and passes it to this function. This keeps the shared package free of native deps.
 
 ### src/auth/guard.ts — Server loader helper
 ```ts
@@ -398,7 +475,18 @@ pnpm --filter web-financial-app add @financial-app/shared@workspace:^
 pnpm --filter mobile-expo-financial-app add expo-secure-store
 pnpm --filter mobile-expo-ejected-financial-app add expo-secure-store
 pnpm --filter mobile-financial-app add @react-native-async-storage/async-storage
+
+# Google Sign-In — app-level, NOT in shared
+pnpm --filter mobile-expo-financial-app add @react-native-google-signin/google-signin
+pnpm --filter mobile-expo-ejected-financial-app add @react-native-google-signin/google-signin
+pnpm --filter mobile-financial-app add @react-native-google-signin/google-signin
 ```
+
+> For Expo apps, add the config plugin to `app.json`:
+> ```json
+> ["@react-native-google-signin/google-signin", { "iosUrlScheme": "com.googleusercontent.apps.YOUR_IOS_CLIENT_ID" }]
+> ```
+> For bare RN CLI, native setup is required (GoogleService-Info.plist for iOS, google-services.json for Android).
 
 ---
 
@@ -436,6 +524,50 @@ const asyncStorageAdapter: AuthStorage = {
 export const supabase = createNativeClient(asyncStorageAdapter)
 ```
 
+### Expo apps — Google Sign-In wiring
+```ts
+// apps/mobile-expo/src/lib/google-auth.ts
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { signInWithGoogle } from '@financial-app/shared/auth/oauth.native'
+import { supabase } from './supabase'
+
+GoogleSignin.configure({
+  iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+})
+
+export async function handleGoogleSignIn() {
+  await GoogleSignin.hasPlayServices()
+  const response = await GoogleSignin.signIn()
+  if (response.data?.idToken) {
+    return signInWithGoogle(supabase, response.data.idToken)
+  }
+  throw new Error('Google Sign-In failed: no ID token returned')
+}
+```
+
+### Bare RN CLI — Google Sign-In wiring
+```ts
+// apps/mobile/src/lib/google-auth.ts
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { signInWithGoogle } from '@financial-app/shared/auth/oauth.native'
+import { supabase } from './supabase'
+
+GoogleSignin.configure({
+  iosClientId: process.env.GOOGLE_IOS_CLIENT_ID,
+  webClientId: process.env.GOOGLE_WEB_CLIENT_ID,
+})
+
+export async function handleGoogleSignIn() {
+  await GoogleSignin.hasPlayServices()
+  const response = await GoogleSignin.signIn()
+  if (response.data?.idToken) {
+    return signInWithGoogle(supabase, response.data.idToken)
+  }
+  throw new Error('Google Sign-In failed: no ID token returned')
+}
+```
+
 ### Web — loader usage (auth check + API call pattern)
 ```ts
 // apps/web/app/routes/overview.tsx
@@ -462,12 +594,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
 ```
 EXPO_PUBLIC_SUPABASE_URL=https://lccpruqcqalxtbddggow.supabase.co
 EXPO_PUBLIC_SUPABASE_ANON_KEY=<from root .env>
+EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=<from Google Cloud Console>
+EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID=<from Google Cloud Console>
 ```
 
 ### apps/mobile/.env
 ```
 SUPABASE_URL=https://lccpruqcqalxtbddggow.supabase.co
 SUPABASE_ANON_KEY=<from root .env>
+GOOGLE_WEB_CLIENT_ID=<from Google Cloud Console>
+GOOGLE_IOS_CLIENT_ID=<from Google Cloud Console>
 ```
 
 ### apps/web/.env
@@ -475,6 +611,9 @@ SUPABASE_ANON_KEY=<from root .env>
 VITE_SUPABASE_URL=https://lccpruqcqalxtbddggow.supabase.co
 VITE_SUPABASE_ANON_KEY=<from root .env>
 ```
+
+> Web does not need Google client IDs — Supabase handles the OAuth redirect
+> using credentials configured in the Supabase dashboard.
 
 Actual keys live in root `.env` (gitignored). Each app copies with its prefix.
 
@@ -515,10 +654,13 @@ Navigation reacts to atom changes — no manual redirects.
 - [ ] `createBrowserClient()` works on web (client-side)
 - [ ] `createServerClient()` works in SSR loaders (cookies)
 - [ ] `createNativeClient(storage)` works with both SecureStore and AsyncStorage
+- [ ] `signInWithGoogle()` works on web (redirect flow via Supabase)
+- [ ] `signInWithGoogle()` works on native (ID token flow via `@react-native-google-signin/google-signin`)
+- [ ] Google OAuth configured in Supabase dashboard (provider enabled, client IDs set)
 - [ ] `requireAuth()` redirects unauthenticated users to /login
 - [ ] `requireAuth()` returns `accessToken` for forwarding to Express API
 - [ ] Token auto-refresh works transparently (scenario 3)
-- [ ] Jotai atoms hydrate on client via onAuthStateChange
+- [ ] Jotai atoms hydrate on client via onAuthStateChange (regardless of sign-in method)
 - [ ] Domain types exported from src/types/index.ts
 - [ ] All 4 apps resolve @financial-app/shared correctly
 - [ ] `pnpm type-check && pnpm lint && pnpm test` passes

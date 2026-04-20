@@ -24,7 +24,7 @@ ComponentName/
 import type { VariantProps } from 'class-variance-authority';
 import type { buttonVariants } from '../../variants/button.variants';
 
-export interface ButtonProps extends VariantProps<typeof buttonVariants> {
+export interface IButtonProps extends VariantProps<typeof buttonVariants> {
   label: string;
   onPress: () => void;
 }
@@ -44,9 +44,9 @@ export { buttonVariants } from '../../variants/button.variants';
 import { Pressable, Text } from 'react-native';
 import { tw } from '../../lib/tw';
 import { buttonVariants } from '../../variants/button.variants';
-import type { ButtonProps } from './Button';
+import type { IButtonProps } from './Button';
 
-export function Button({ label, onPress, variant, size, disabled }: ButtonProps) {
+export function Button({ label, onPress, variant, size, disabled }: IButtonProps) {
   return (
     <Pressable onPress={onPress} disabled={!!disabled}
       style={tw`${buttonVariants({ variant, size, disabled })}`}>
@@ -66,9 +66,9 @@ export function Button({ label, onPress, variant, size, disabled }: ButtonProps)
 ```tsx
 import { cn } from '../../lib/cn';
 import { buttonVariants } from '../../variants/button.variants';
-import type { ButtonProps } from './Button';
+import type { IButtonProps } from './Button';
 
-export function Button({ label, onPress, variant, size, disabled }: ButtonProps) {
+export function Button({ label, onPress, variant, size, disabled }: IButtonProps) {
   return (
     <button onClick={onPress} disabled={!!disabled}
       className={cn(buttonVariants({ variant, size, disabled }), 'hover:opacity-80 transition-opacity cursor-pointer')}>
@@ -85,13 +85,13 @@ Two barrel files per component — one per platform:
 ```ts
 // index.ts — Metro picks this (default entry)
 export { Button } from './Button.native';
-export type { ButtonProps } from './Button';
+export type { IButtonProps } from './Button';
 ```
 
 ```ts
 // index.web.ts — Vite picks this (via resolve.extensions .web.ts priority)
 export { Button } from './Button.web';
-export type { ButtonProps } from './Button';
+export type { IButtonProps } from './Button';
 ```
 
 ## Public API (src/index.ts + src/index.web.ts)

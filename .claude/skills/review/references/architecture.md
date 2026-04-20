@@ -81,12 +81,13 @@
 
 ## Low Violations
 
-### ARCH-011: Inconsistent file naming
+### ARCH-011: Inconsistent file/type naming
 - **Files**: All
 - **Check**: Component files use PascalCase
 - **Check**: Utility/hook files use camelCase
 - **Check**: Variant files use `[name].variants.ts` pattern
 - **Check**: Config files use kebab-case or standard names (tsconfig.json, etc.)
+- **Check**: All interfaces MUST use `I` prefix (e.g., `IAuthClient`, `IButtonProps`, `ITransaction`)
 
 ### ARCH-012: Unused exports
 - **Files**: `packages/*/src/index.ts`

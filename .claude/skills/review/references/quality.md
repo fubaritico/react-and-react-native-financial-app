@@ -116,3 +116,10 @@
 - **Check**: Mixing arrow functions and function declarations in same module
 - **Check**: Mixing default and named exports inconsistently
 - **Check**: Inconsistent error handling approaches within same scope
+
+### QUAL-015: Interface naming convention
+- **Files**: All `*.ts`, `*.tsx`
+- **Check**: All interface names MUST start with `I` prefix (e.g., `IAuthClient`, `IAuthStorage`, `IButtonProps`)
+- **Forbidden**: `export interface AuthStorage { ... }` — must be `export interface IAuthStorage { ... }`
+- **Exception**: None — this applies to all interfaces, including Props, domain types, and abstractions
+- **Rationale**: Distinguishes interfaces from types, classes, and concrete implementations at a glance
