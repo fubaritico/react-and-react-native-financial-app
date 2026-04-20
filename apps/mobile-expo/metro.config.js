@@ -13,4 +13,9 @@ config.resolver.nodeModulesPaths = [
   path.resolve(monorepoRoot, 'packages/ui/node_modules'),
 ];
 
+config.resolver.sourceExts = [
+  'native.tsx', 'native.ts', 'native.jsx', 'native.js',
+  ...config.resolver.sourceExts,
+];
+
 module.exports = config;

@@ -10,12 +10,18 @@ const monorepoRoot = path.resolve(projectRoot, '../..');
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
+const defaultConfig = getDefaultConfig(projectRoot);
+
 const config = {
   watchFolders: [monorepoRoot],
   resolver: {
     nodeModulesPaths: [
       path.resolve(projectRoot, 'node_modules'),
       path.resolve(monorepoRoot, 'node_modules'),
+    ],
+    sourceExts: [
+      'native.tsx', 'native.ts', 'native.jsx', 'native.js',
+      ...defaultConfig.resolver.sourceExts,
     ],
   },
 };
