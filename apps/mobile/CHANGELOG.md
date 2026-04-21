@@ -23,6 +23,8 @@
 * **config:** add setup-ui-package skill with architecture reference ([44982df](https://github.com/fubaritico/react-and-react-native-financial-app/commit/44982df4e2fb4aa4d4a03ba965b4cfac2cf0d72a))
 * **expo:** add expo-dev-client and native build scripts ([1b26c7f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1b26c7f61490496cf77043e28ff08033829bc8e9))
 * **icons:** add Fb app icon to all mobile apps ([e18ea02](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e18ea02267c836173524182be2629b4d8cd3142b))
+* **mobile-expo:** add Expo Router with tabs + auth routes ([929dd51](https://github.com/fubaritico/react-and-react-native-financial-app/commit/929dd517782edfa4b692e01a4f27e5b02c776cfd))
+* **mobile:** add React Navigation with 5 tabs + auth stack (on standby) ([3434972](https://github.com/fubaritico/react-and-react-native-financial-app/commit/343497262a35c75e6ef481c54f4ab4075df8479f))
 * **mobile:** react native package basic setup ([ab09677](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ab09677a32fae9ba09ffdfa89bdcf3a46a13186f))
 * **mobile:** reinstall deps with pnpm ([0edc846](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0edc8468983485f24b175ccd43f1cc33a1f575dc))
 * **mobile:** set android for app preview ([4ac7220](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4ac722067d12b31dc8f1ffa18b7dc07141e3e2d6))
