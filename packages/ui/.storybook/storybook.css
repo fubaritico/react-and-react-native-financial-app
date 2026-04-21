@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Public Sans', system-ui, sans-serif;
+  background-color: var(--color-beige-100, #f8f4f0);
+}

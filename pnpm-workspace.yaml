@@ -9,9 +9,10 @@ catalog:
   react-native: "0.81.5"
 
   # Expo
-  expo: "~54.0.25"
+  expo: "~54.0.33"
   expo-dev-client: "~6.0.20"
   expo-status-bar: "~3.0.8"
+  "@expo/metro-runtime": "^6.1.2"
 
   # TypeScript
   typescript: "~5.9.2"
@@ -45,8 +46,21 @@ catalog:
   # Env
   react-native-dotenv: "^3.4.11"
 
+  # Routing
+  expo-router: "~6.0.23"
+
   # Turborepo
   turbo: "^2.9.6"
+
+  # Storybook
+  storybook: "^10.3.5"
+  "@storybook/react-native-web-vite": "^10.3.5"
+  react-native-web: "^0.19.13"
+
+  # Build tools
+  vite: "^6.3.5"
+  postcss: "^8.5.6"
+  autoprefixer: "^10.4.21"
 
   # Release tools
   conventional-changelog: "7.2.0"

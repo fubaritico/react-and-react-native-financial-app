@@ -19,5 +19,12 @@ export default tseslint.config(
       'react-native/no-raw-text': 'error',
       'react-native/no-inline-styles': 'warn',
     },
+  },
+  {
+    files: ['**/*.web.{ts,tsx}', '**/*.stories.{ts,tsx}'],
+    rules: {
+      'react-native/no-raw-text': 'off',
+      'react-native/no-inline-styles': 'off',
+    },
   }
 )

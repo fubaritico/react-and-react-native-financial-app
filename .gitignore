@@ -1,6 +1,9 @@
 # Turborepo
 .turbo/
 
+# Storybook
+storybook-static/
+
 # Dependencies
 node_modules/
 
