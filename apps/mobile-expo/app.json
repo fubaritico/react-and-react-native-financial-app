@@ -3,6 +3,7 @@
     "name": "mobile-expo",
     "slug": "mobile-expo",
     "version": "1.0.0",
+    "scheme": "financial-app",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -27,6 +28,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ]
   }
 }
