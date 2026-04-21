@@ -3,14 +3,19 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "android:emu": "react-native run-android",
-    "ios": "react-native run-ios",
-    "ios:sim": "react-native run-ios --simulator='iPhone 16'",
-    "changelog": "conventional-changelog -p angular -r 0 --path . > CHANGELOG.md",
-    "lint": "eslint ./src",
-    "type-check": "tsc --noEmit",
     "start": "react-native start",
+    "start:clean": "react-native start --reset-cache",
+    "ios": "react-native run-ios --simulator='iPhone 16'",
+    "ios:device": "react-native run-ios --device",
+    "android": "react-native run-android",
+    "pods": "cd ios && pod install && cd ..",
+    "clean:ios": "rm -rf ios/build ~/Library/Developer/Xcode/DerivedData/mobile-* && cd ios && pod install && cd ..",
+    "clean:android": "cd android && ./gradlew clean && cd ..",
+    "rebuild:ios": "rm -rf ios/build ~/Library/Developer/Xcode/DerivedData/mobile-* && cd ios && pod install && cd .. && react-native run-ios --simulator='iPhone 16'",
+    "rebuild:android": "cd android && ./gradlew clean && cd .. && react-native run-android",
+    "changelog": "conventional-changelog -p angular -r 0 --path . > CHANGELOG.md",
+    "lint": "eslint ./App.tsx ./src",
+    "type-check": "tsc --noEmit",
     "test": "jest"
   },
   "dependencies": {
@@ -18,9 +23,13 @@
     "@financial-app/ui": "workspace:^",
     "@react-native-async-storage/async-storage": "^3.0.2",
     "@react-native-google-signin/google-signin": "^16.1.2",
+    "@react-navigation/bottom-tabs": "^7.15.9",
+    "@react-navigation/native": "^7.2.2",
+    "@react-navigation/native-stack": "^7.14.11",
     "react": "catalog:",
     "react-native": "catalog:",
-    "react-native-safe-area-context": "^5.5.2"
+    "react-native-safe-area-context": "^5.5.2",
+    "react-native-screens": "~4.16.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
