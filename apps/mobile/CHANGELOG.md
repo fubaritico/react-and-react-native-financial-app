@@ -11,6 +11,7 @@
 
 ### Features
 
+* add DevBadge component to all 3 mobile apps ([bff5832](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bff58324984c0594a1b2e6c7766f528565e1a852))
 * added .nvmrc and .gitattributes files ([836d77d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/836d77dd5681ea7ecd79ef0dd7bb74c7f5fabc7a))
 * added env for BDD credentials ([c08b401](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c08b4019e8528439de6b969fc9cec13b2595601a))
 * added shared design system ([69b2530](https://github.com/fubaritico/react-and-react-native-financial-app/commit/69b25309bb897f486afe8585eb3c7d3776ad9b5a))
