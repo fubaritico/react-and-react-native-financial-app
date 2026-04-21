@@ -15,7 +15,9 @@
     "changelog": "conventional-changelog -p angular -r 0 --path . > CHANGELOG.md",
     "build": "tsc --noEmit",
     "lint": "eslint ./src",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build -o storybook-static"
   },
   "peerDependencies": {
     "react": "catalog:",
@@ -23,14 +25,23 @@
   },
   "dependencies": {
     "@financial-app/tailwind-config": "workspace:^",
+    "@financial-app/tokens": "workspace:^",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.5.0",
     "twrnc": "catalog:"
   },
   "devDependencies": {
+    "@storybook/react-native-web-vite": "catalog:",
     "@types/react": "catalog:",
+    "autoprefixer": "catalog:",
     "conventional-changelog": "catalog:",
-    "typescript": "catalog:"
+    "postcss": "catalog:",
+    "react-dom": "catalog:",
+    "react-native-web": "catalog:",
+    "storybook": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
   }
 }
