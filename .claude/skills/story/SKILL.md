@@ -22,7 +22,7 @@ Create a Storybook story for a component. Mandatory after every component creati
 
 ```tsx
 import { $Name } from '@financial-app/ui'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta: Meta<typeof $Name> = {
   title: 'Design System/$Name',
