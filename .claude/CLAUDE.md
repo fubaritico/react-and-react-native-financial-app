@@ -395,8 +395,51 @@ packages/
   - Updated reset script: cleans .turbo dirs, token build/, web build/, rebuilds tokens after install
   - Build order verified: tokens → tailwind-config → ui → web (with caching)
 
+- Phase 7, Step 7.2 IN PROGRESS: Expo Router setup in mobile-expo
+  - Fixed expo-router version mismatch: catalog had v4.0.22, SDK 54 requires v6.0.23
+  - Fixed @expo/metro-runtime: was 4.0.1, now ^6.1.2 (added to catalog)
+  - Updated expo in catalog: ~54.0.25 → ~54.0.33
+  - Ran `npx expo install --fix` to align all Expo deps
+  - Removed Metro config shim hack (getDevServer workaround) — version fix was the real solution
+  - Updated mobile-expo package.json: expo, expo-router, @expo/metro-runtime now use `catalog:`
+  - Added `prebuild`, `expo:fix`, `expo:check` scripts to mobile-expo
+  - Tested on iOS simulator: OK. Tested on Android emulator: OK (after prebuild --clean)
+  - app/_layout.tsx exists with Slot + StatusBar
+  - Expo Router file-based routing is working — actual route pages still need to be created
+
+- Added centralized root scripts for all apps (DX improvement)
+  - Root package.json reorganized with section separators (EXPO / MOBILE / EJECTED / WEB / TOOLING / MAINTENANCE)
+  - `expo:*` scripts (start, start:clean, ios, android, ios:device, android:device, prebuild, rebuild:ios, rebuild:android, fix, check)
+  - `mobile:*` scripts (start, start:clean, ios, android, ios:device, pods, rebuild:ios, rebuild:android)
+  - `ejected:*` scripts (start, ios, android)
+  - `web:dev` script
+  - Bare RN CLI (apps/mobile) package.json scripts reorganized: added start:clean, ios:device, pods, clean:ios, clean:android, rebuild:ios, rebuild:android
+
+- Added DevBadge component to all 3 mobile apps (dev-only, __DEV__ gated)
+  - EXPO = green (#1B5E20), MOBILE = blue (#0D47A1), EJECTED = orange (#E65100)
+  - Positioned upper-right (top: 50, right: 10), absolute, zIndex 9999
+  - Each app has its own `src/components/DevBadge.tsx` (not in ui package — dev-only)
+  - Wired into: mobile-expo app/_layout.tsx, mobile App.tsx, mobile-expo-ejected App.tsx
+
+- Updated troubleshooting rules with new entries + Expo dependency alignment section
+
+- Verified mobile-expo iOS simulator: OK (DevBadge visible, Expo Router functional)
+- Verified bare RN CLI (mobile) iOS simulator: OK (DevBadge visible, no crash)
+- Re-added context7 MCP server with `@latest` — needs session restart to take effect
+
+- Added React Navigation to bare RN CLI app (apps/mobile)
+  - Installed @react-navigation/native, @react-navigation/bottom-tabs, @react-navigation/native-stack, react-native-screens
+  - Created src/navigation/ (types, TabNavigator, AuthStack, RootNavigator) + src/screens/ (7 placeholder screens)
+  - Updated App.tsx: NavigationContainer + RootNavigator (auth bypassed, tabs only)
+  - Android native setup: RNScreensFragmentFactory in MainActivity.kt, enableOnBackInvokedCallback in AndroidManifest
+  - Fixed Jest transformIgnorePatterns for @react-navigation + react-native-screens
+  - Updated lint script to include App.tsx
+  - ParamList types use `type` (not `interface`) — React Navigation's ParamListBase requires implicit index signature
+  - **On standby** — mobile-expo is the primary focus. This app will be aligned after overview + auth are done on Expo.
+
 ### Next
-- Phase 7, Step 7.2: Expo Router setup in mobile-expo (read docs/plans/phase-7-home-page.md)
+- Phase 7, Step 7.2 CONTINUE: create route pages in mobile-expo app/ directory
+- Focus on mobile-expo: overview page + auth, then come back to align apps/mobile
 
 ### Next (Track B — UI components, separate session)
 - Wave 2 — Overview Primitives: 10 components (ColorDot, Avatar, Divider, SectionLink, BalanceCard, StatCard, TransactionRow, BillSummaryRow, SpendingSummaryRow, DonutChart)
