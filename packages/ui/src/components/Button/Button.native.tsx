@@ -10,26 +10,31 @@ export const Button = ({
   title,
   onPress,
   variant = 'primary',
+  fullWidth,
   disabled,
+  icon,
   style,
 }: IButtonProps) => {
-  const variantClasses = buttonVariants({ variant, disabled })
+  const variantClasses = buttonVariants({ variant, fullWidth, disabled })
+  const textColor =
+    variant === 'secondary'
+      ? 'text-grey-900'
+      : variant === 'tertiary'
+        ? 'text-grey-500'
+        : 'text-white'
 
   return (
     <Pressable
       onPress={onPress}
       disabled={!!disabled}
       style={({ pressed }) => [
-        tw`${variantClasses}`,
+        tw`${variantClasses} flex-row`,
         pressed && tw`opacity-70`,
         style,
       ]}
     >
-      <Text
-        style={tw`text-base font-semibold ${variant === 'primary' ? 'text-white' : variant === 'outline' ? 'text-primary' : 'text-foreground'}`}
-      >
-        {title}
-      </Text>
+      <Text style={tw`text-sm font-bold ${textColor}`}>{title}</Text>
+      {icon}
     </Pressable>
   )
 }

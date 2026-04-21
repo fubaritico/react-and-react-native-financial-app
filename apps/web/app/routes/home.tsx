@@ -43,10 +43,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               }}
             />
             <Button
-              title="Outline"
-              variant="outline"
+              title="Tertiary"
+              variant="tertiary"
               onPress={() => {
-                alert('Outline!')
+                alert('Tertiary!')
               }}
             />
           </div>

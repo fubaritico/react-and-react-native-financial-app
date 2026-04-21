@@ -2,10 +2,13 @@ import { Button, Card, Header } from '@financial-app/ui'
 import { StatusBar } from 'expo-status-bar'
 import { ScrollView, StyleSheet, View } from 'react-native'
 
+import { DevBadge } from './src/components/DevBadge'
+
 export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
+      <DevBadge />
       <Header title="Expo Ejected" subtitle="Design System partagé" />
       <ScrollView
         style={styles.scroll}
@@ -33,10 +36,10 @@ export default function App() {
             style={styles.button}
           />
           <Button
-            title="Outline"
-            variant="outline"
+            title="Tertiary"
+            variant="tertiary"
             onPress={() => {
-              alert('Outline!')
+              alert('Tertiary!')
             }}
           />
         </Card>

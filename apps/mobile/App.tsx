@@ -2,11 +2,14 @@ import { Button, Card, Header } from '@financial-app/ui'
 import { Alert, ScrollView, StatusBar, StyleSheet } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 
+import { DevBadge } from './src/components/DevBadge'
+
 function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container} edges={['top']}>
         <StatusBar barStyle="light-content" />
+        <DevBadge />
         <Header title="Mobile CLI" subtitle="Design System partagé" />
         <ScrollView
           style={styles.scroll}
@@ -34,10 +37,10 @@ function App() {
               style={styles.button}
             />
             <Button
-              title="Outline"
-              variant="outline"
+              title="Tertiary"
+              variant="tertiary"
               onPress={() => {
-                Alert.alert('Outline!')
+                Alert.alert('Tertiary!')
               }}
             />
           </Card>
