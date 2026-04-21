@@ -1,4 +1,4 @@
-# 1.0.0 (2026-04-20)
+# 1.0.0 (2026-04-21)
 
 
 ### Bug Fixes
@@ -34,5 +34,7 @@
 * styles based on nativewind and used by apps and ds ([d95e9f2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d95e9f2966e13816f1cb7ef78b9fc786e1c4ec47))
 * **tailwind-config:** create @financial-app/tailwind-config (Phase 2) ([257f51d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/257f51de7d099f73d2c9754855d1b797c04a2f21))
 * **tokens:** create @financial-app/tokens package (Phase 0) ([76b2857](https://github.com/fubaritico/react-and-react-native-financial-app/commit/76b2857cda2768fa3ac35888dd90244aff5736f0))
+* **ui:** add Wave 1 auth components (TextInput, PasswordInput, LinkText, AuthCard, AuthLayout) ([93d6ee2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/93d6ee268fc52406f412041b13976a24c83ed04d))
 * **ui:** cross-platform refactor with file extension split (Phase 3) ([75e52eb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/75e52eb986da00dfa20fb92f397f3e93d19026b2))
+* **ui:** refactor Button to 4 Figma variants (primary/secondary/tertiary/destroy) ([ac55aa6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ac55aa642ce2dad6d46bfef5ebfd18aee79f912c))
 * **web:** create apps/web with React Router v7 SSR (Phase 4) ([4ffb08a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4ffb08a4a90266ab12a58dca219742713c843511))
