@@ -57,7 +57,7 @@
       "recurring": {
         "paid": { "$value": "{color.base.green.DEFAULT}", "$type": "color" },
         "upcoming": { "$value": "{color.base.gold.DEFAULT}", "$type": "color" },
-        "due-soon": { "$value": "{color.base.red.DEFAULT}", "$type": "color" }
+        "due-soon": { "$value": "{color.base.cyan.DEFAULT}", "$type": "color" }
       }
     }
   }

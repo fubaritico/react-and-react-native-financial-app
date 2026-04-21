@@ -13,6 +13,26 @@ Full modus operandi: `docs/modus-operandi/reset.md`
 | "Waiting to reconnect" | USB connection dropping during build | Use wireless debugging (see `iphone-wireless-deploy.md`) |
 | Port 8081 in use | Leftover Metro process | `lsof -ti:8081 \| xargs kill -9` |
 | Pod install fails | Stale CocoaPods cache | `pod repo update && pod cache clean --all` |
+| `getDevServer is not a function (it is Object)` | `@expo/metro-runtime` or `expo-router` version mismatch with SDK | Run `npx expo install --fix` then `npx expo prebuild --clean && npx expo run:ios` |
+| `Cannot find native module 'ExpoLinking'` | JS bundle updated but native binary is stale (missing new native modules) | `npx expo prebuild --clean && npx expo run:ios` |
+
+### Expo Managed (apps/mobile-expo) — Dependency Alignment
+
+After upgrading Expo packages or adding native dependencies, the JS bundle and native binary
+can get out of sync. Symptoms: `Cannot find native module '...'`, `getDevServer is not a function`.
+
+Fix sequence:
+```bash
+cd apps/mobile-expo
+npx expo install --fix          # align all Expo deps to current SDK version
+npx expo prebuild --clean       # regenerate ios/ and android/ with new native modules
+npx expo run:ios                # build and install fresh binary on simulator
+```
+
+Key lesson (Phase 7.2): the pnpm catalog had `expo-router: "~4.0.22"` but SDK 54 requires
+`expo-router@~6.0.23` and `@expo/metro-runtime@^6.1.2`. The old v4 had ESM/CJS interop issues
+with RN 0.81. Always run `npx expo install --check` after adding Expo dependencies to verify
+version alignment. Do NOT attempt Metro resolver shims — fix the version mismatch instead.
 
 ### Bare RN CLI (apps/mobile) — Physical Device
 

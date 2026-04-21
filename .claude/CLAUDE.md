@@ -385,6 +385,25 @@ packages/
     - All have CVA variants, native/web implementations, Storybook stories
     - textInput.variants.ts added to shared variants
 
+- Track B Wave 2 COMPLETE: 9 overview primitives created, reviewed, committed (4e32a4d)
+  - Batch A (parallel): ColorDot, Avatar, Divider, SectionLink
+  - Batch B (parallel): BalanceCard, StatCard, BillSummaryRow
+  - Sequential: TransactionRow (uses Avatar), SpendingSummaryRow (uses ColorDot)
+  - All follow file extension split pattern with Storybook stories
+  - 2 new variant files: balanceCard.variants.ts, coloredBorderItem.variants.ts
+  - Registered all 9 components in both barrels + variants barrel
+
+- Track B Wave 3 PARTIAL: 3 of 4 overview sections created (4e32a4d)
+  - PotsOverview, TransactionsOverview, RecurringBillsOverview — all with stories
+  - BudgetsOverview deferred (depends on DonutChart)
+  - Registered all 3 in both barrels
+
+- Multi-agent review on Wave 2+3 (5 domains, 72 files)
+  - Fixed 4 critical: SectionLink/ColorDot/Avatar accessibility labels
+  - Fixed 9 high: accessibilityRole on headers + Pressable, hitSlop on SectionLink, variant re-exports in BalanceCard/StatCard/BillSummaryRow barrels
+  - Remaining medium/low deferred (PLAT-008 missing cn(), QUAL-013 magic numbers, A11Y-006/007)
+  - Score: Platform Safety 85, Security 100, Architecture 67, Quality 92, Accessibility 22 → Overall 72 (needs-attention)
+
 - Phase 7, Step 7.1 COMPLETE: Turborepo setup
   - Installed turbo v2.9.6 (added to pnpm catalog + root devDeps)
   - Created `turbo.json` with `tasks` key (v2 API, not `pipeline`)
@@ -442,11 +461,26 @@ packages/
 - Focus on mobile-expo: overview page + auth, then come back to align apps/mobile
 
 ### Next (Track B — UI components, separate session)
-- Wave 2 — Overview Primitives: 10 components (ColorDot, Avatar, Divider, SectionLink, BalanceCard, StatCard, TransactionRow, BillSummaryRow, SpendingSummaryRow, DonutChart)
-- Then Wave 3 — Overview Sections: 4 section components (PotsOverview, TransactionsOverview, BudgetsOverview, RecurringBillsOverview)
-- Read `.claude/skills/ui-track-b/SKILL.md` for full plan
-- Storybook is set up (`pnpm --filter @financial-app/ui storybook`)
+- Wave 2 COMPLETE: 9 overview primitives (ColorDot, Avatar, Divider, SectionLink, BalanceCard, StatCard, TransactionRow, BillSummaryRow, SpendingSummaryRow)
+- Wave 3 PARTIAL: 3 of 4 overview sections done (PotsOverview, TransactionsOverview, RecurringBillsOverview)
+- Remaining: DonutChart + BudgetsOverview (deferred together)
+- Review done on Wave 2+3: all critical + high findings fixed (4e32a4d)
+- **Next step: create `@financial-app/icons` package** (see below), then DonutChart + BudgetsOverview, then review mockups to identify missing icons
 - Wave 1 COMPLETE: Button refactored + TextInput, PasswordInput, LinkText, AuthCard, AuthLayout created
+- Storybook is set up (`pnpm --filter @financial-app/ui storybook`)
+
+#### Icons Package — `@financial-app/icons`
+
+Create a dedicated `packages/icons/` package that converts raw SVG files into React components via a build script.
+
+**Reference**: `vite-mf-monorepo/packages/shared/src/assets/` + `script/export-svgs.js` — proven SVG-to-JSX pipeline using `svg-to-jsx`. Adapted for cross-platform: web output uses standard `<svg>`, native output uses `react-native-svg` components.
+
+**Workflow**:
+1. Drop SVG source files into `packages/icons/src/assets/`
+2. Run `pnpm --filter @financial-app/icons build` — the build script converts each SVG to a React component (TSX), generates a barrel `index.ts`, and compiles with `tsc`
+3. Consumers import icons as named exports: `import { HomeIcon, PotIcon } from '@financial-app/icons'`
+
+**After the package is scaffolded and building**, review the Figma mockups to identify which icons are needed and where they should be used across the app (nav tabs, section headers, action buttons, etc.).
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.
