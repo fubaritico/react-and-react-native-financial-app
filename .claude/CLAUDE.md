@@ -368,6 +368,23 @@ packages/
   - Phase 5.10 (auth routes) absorbed into Phase 7 Step 7.6
 - Re-added context7 MCP server (was missing from config): `claude mcp add context7 -- npx -y @upstash/context7-mcp`
 
+- Track B — UI components (parallel session):
+  - Storybook v10 setup with @storybook/react-native-web-vite framework (dec4e07)
+    - Added storybook, @storybook/react-native-web-vite, react-native-web, vite, postcss, autoprefixer to pnpm catalog
+    - .storybook/main.ts with .web.tsx priority extensions, preview.ts imports token CSS vars
+    - ESLint overrides for .web.tsx and .stories.tsx (no-raw-text, no-inline-styles)
+  - Button refactored to 4 Figma variants: primary/secondary/tertiary/destroy (ac55aa6)
+    - Added icon prop, fullWidth variant, Storybook stories
+    - Apps updated: outline → tertiary
+  - Wave 1 auth components — 5 cross-platform components (93d6ee2)
+    - TextInput: label, placeholder, helperText, icon, prefix, secureTextEntry, error variant
+    - PasswordInput: composes TextInput via secureTextEntry, eye toggle
+    - LinkText: text + pressable link label
+    - AuthCard: title + children + footer, rounded-lg, shadow on web
+    - AuthLayout: desktop 2-col (aside + main), mobile banner + centered form
+    - All have CVA variants, native/web implementations, Storybook stories
+    - textInput.variants.ts added to shared variants
+
 - Phase 7, Step 7.1 COMPLETE: Turborepo setup
   - Installed turbo v2.9.6 (added to pnpm catalog + root devDeps)
   - Created `turbo.json` with `tasks` key (v2 API, not `pipeline`)
@@ -380,6 +397,13 @@ packages/
 
 ### Next
 - Phase 7, Step 7.2: Expo Router setup in mobile-expo (read docs/plans/phase-7-home-page.md)
+
+### Next (Track B — UI components, separate session)
+- Wave 2 — Overview Primitives: 10 components (ColorDot, Avatar, Divider, SectionLink, BalanceCard, StatCard, TransactionRow, BillSummaryRow, SpendingSummaryRow, DonutChart)
+- Then Wave 3 — Overview Sections: 4 section components (PotsOverview, TransactionsOverview, BudgetsOverview, RecurringBillsOverview)
+- Read `.claude/skills/ui-track-b/SKILL.md` for full plan
+- Storybook is set up (`pnpm --filter @financial-app/ui storybook`)
+- Wave 1 COMPLETE: Button refactored + TextInput, PasswordInput, LinkText, AuthCard, AuthLayout created
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.
