@@ -1,6 +1,7 @@
 import { Divider } from '@financial-app/ui/native'
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { Text, View } from 'react-native'
+
+import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
   title: 'Native/Design System/Divider',

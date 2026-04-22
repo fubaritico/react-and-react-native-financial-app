@@ -1,6 +1,5 @@
-import type { VariantProps } from 'class-variance-authority'
-
 import type { coloredBorderItemVariants } from '../../variants'
+import type { VariantProps } from 'class-variance-authority'
 
 /** Props for the BillSummaryRow component. */
 export interface IBillSummaryRowProps extends VariantProps<

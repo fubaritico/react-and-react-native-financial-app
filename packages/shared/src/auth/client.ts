@@ -1,6 +1,7 @@
 import { createBrowserClient as createSupaBrowserClient } from '@supabase/ssr'
 
 import { createSupabaseAuthAdapter } from './adapter.supabase'
+
 import type { IAuthClient } from './types'
 
 /**

@@ -40,10 +40,7 @@ export default tseslint.config(
       ecmaVersion: 2020,
       globals: globals.browser,
       parserOptions: {
-        project: [
-          './packages/*/tsconfig.json',
-          './apps/*/tsconfig.json',
-        ],
+        project: ['./packages/*/tsconfig.json', './apps/*/tsconfig.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -102,17 +99,30 @@ export default tseslint.config(
             'parent',
             'sibling',
             'index',
+            'object',
+            'type',
           ],
           'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
+          pathGroups: [
+            {
+              pattern: '@financial-app/**',
+              group: 'internal',
+              position: 'before',
+            },
+          ],
+          alphabetize: {
+            order: 'asc',
+            orderImportKind: 'asc',
+            caseInsensitive: true,
+          },
         },
       ],
       'sort-imports': [
         'error',
         {
-          ignoreCase: true,
           ignoreDeclarationSort: true,
           ignoreMemberSort: false,
+          memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
         },
       ],
     },

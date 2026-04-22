@@ -1,4 +1,5 @@
 import { Card } from '@financial-app/ui/native'
+
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {

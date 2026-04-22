@@ -1,6 +1,7 @@
 import { PotsOverview } from '@financial-app/ui/native'
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { View } from 'react-native'
+
+import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const noop = () => undefined
 

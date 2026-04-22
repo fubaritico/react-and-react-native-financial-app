@@ -149,12 +149,13 @@ Read `@completed.md`
 - BudgetsOverview placeholder on Overview page — awaiting DonutChart from Track B
 
 ### Next (Track B — UI components, separate session)
-- Storybook migration COMPLETE (7e5b129): apps/storybook/ standalone, 19 web + 1 native story, verified in browser
+- Storybook migration COMPLETE (7e5b129): apps/storybook/ standalone, 19 web + 21 native stories, verified in browser
+- All native stories added (df170e6): all 21 components have native Storybook stories
 - Barrel import fix: explicit .tsx extensions prevent .native.tsx resolution in react-native-web-vite
 - React downgraded to 19.1.0 (Expo SDK 54 renderer compatibility)
 - All stories under Web/Design System/ and Native/Design System/
 - **Next: DonutChart + BudgetsOverview** (last Wave 3 items)
-- Then: remaining native stories (only Button exists)
+- Then: correct/polish existing components as needed
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.

@@ -1,6 +1,7 @@
 import { SpendingSummaryRow } from '@financial-app/ui/native'
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { View } from 'react-native'
+
+import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
   title: 'Native/Design System/SpendingSummaryRow',

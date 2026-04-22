@@ -1,5 +1,6 @@
 import { iconNames } from '@financial-app/icons'
 import { Button } from '@financial-app/ui'
+
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function

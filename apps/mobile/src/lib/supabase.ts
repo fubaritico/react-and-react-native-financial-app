@@ -1,7 +1,8 @@
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '@env'
 import { createNativeClient } from '@financial-app/shared'
-import type { IAuthStorage } from '@financial-app/shared'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
+import type { IAuthStorage } from '@financial-app/shared'
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   throw new Error(
