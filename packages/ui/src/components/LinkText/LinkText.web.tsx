@@ -1,13 +1,20 @@
+import { cn } from '../../lib/cn'
+
+import styles from './LinkText.styles'
+
 import type { ILinkTextProps } from './LinkText'
 
 /** Web implementation of the LinkText component. */
 export const LinkText = ({ text, linkLabel, onLinkPress }: ILinkTextProps) => (
-  <p className="text-sm text-grey-500 text-center">
+  <p className={cn(styles.text, 'text-center')}>
     {text}{' '}
     <button
       type="button"
       onClick={onLinkPress}
-      className="font-bold text-grey-900 underline hover:opacity-80 transition-opacity cursor-pointer"
+      className={cn(
+        styles.linkLabel,
+        'hover:opacity-80 transition-opacity cursor-pointer'
+      )}
     >
       {linkLabel}
     </button>

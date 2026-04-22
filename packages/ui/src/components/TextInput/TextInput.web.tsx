@@ -2,6 +2,8 @@ import { cn } from '../../lib/cn'
 import { textInputVariants } from '../../variants/textInput.variants'
 import { Icon } from '../Icon/Icon.web'
 
+import styles from './TextInput.styles'
+
 import type { ITextInputProps } from './TextInput'
 
 /** Web implementation of the TextInput component. */
@@ -20,17 +22,15 @@ export const TextInput = ({
   const inputClasses = textInputVariants({ error })
 
   return (
-    <div className="flex flex-col gap-1">
-      <label className="text-xs font-bold text-grey-500">{label}</label>
+    <div className={cn('flex flex-col', styles.wrapper)}>
+      <label className={styles.label}>{label}</label>
       <div
         className={cn(
           inputClasses,
           'flex items-center focus-within:border-grey-900 transition-colors'
         )}
       >
-        {prefix ? (
-          <span className="text-beige-500 text-sm mr-2">{prefix}</span>
-        ) : null}
+        {prefix ? <span className={styles.prefix}>{prefix}</span> : null}
         <input
           type={secureTextEntry ? 'password' : 'text'}
           value={value}
@@ -46,7 +46,7 @@ export const TextInput = ({
       {helperText ? (
         <span
           className={cn(
-            'text-xs text-right',
+            styles.helperText,
             error ? 'text-red' : 'text-grey-500'
           )}
         >

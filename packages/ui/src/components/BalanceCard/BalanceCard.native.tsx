@@ -3,6 +3,8 @@ import { Text, View } from 'react-native'
 import tw from '../../lib/tw'
 import { balanceCardVariants } from '../../variants'
 
+import styles from './BalanceCard.styles'
+
 import type { IBalanceCardProps } from './BalanceCard'
 
 /** Native implementation of the BalanceCard component. */
@@ -16,8 +18,8 @@ export const BalanceCard = ({
 
   return (
     <View style={tw`${balanceCardVariants({ tone })}`}>
-      <Text style={tw`text-sm ${labelColor}`}>{label}</Text>
-      <Text style={tw`text-3xl font-bold ${amountColor}`}>{amount}</Text>
+      <Text style={tw`${styles.label} ${labelColor}`}>{label}</Text>
+      <Text style={tw`${styles.amount} ${amountColor}`}>{amount}</Text>
     </View>
   )
 }

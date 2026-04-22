@@ -1,5 +1,7 @@
 import { ColorDot } from '../ColorDot/ColorDot.web'
 
+import styles from './SpendingSummaryRow.styles'
+
 import type { ISpendingSummaryRowProps } from './SpendingSummaryRow'
 
 /** Web implementation of the SpendingSummaryRow component. */
@@ -10,7 +12,7 @@ export const SpendingSummaryRow = ({
 }: ISpendingSummaryRowProps) => (
   <div className="flex items-center py-2">
     <ColorDot color={color} size={16} />
-    <span className="flex-1 ml-3 text-xs text-grey-500">{label}</span>
-    <span className="text-sm font-bold text-grey-900">{amount}</span>
+    <span className={styles.label}>{label}</span>
+    <span className={styles.amount}>{amount}</span>
   </div>
 )

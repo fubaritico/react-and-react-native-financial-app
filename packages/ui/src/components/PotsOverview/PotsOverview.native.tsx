@@ -3,6 +3,8 @@ import { Text, View } from 'react-native'
 import tw from '../../lib/tw'
 import { SectionLink } from '../SectionLink/SectionLink.native'
 
+import styles from './PotsOverview.styles'
+
 import type { IPotsOverviewProps } from './PotsOverview'
 
 /** Native implementation of the PotsOverview section component. */
@@ -12,13 +14,10 @@ export const PotsOverview = ({
   onSeeDetails,
   icon,
 }: IPotsOverviewProps) => (
-  <View style={tw`bg-white rounded-xl p-5`}>
+  <View style={tw`${styles.root}`}>
     {/* Header row */}
-    <View style={tw`flex-row justify-between items-center mb-3`}>
-      <Text
-        style={tw`text-base font-bold text-grey-900`}
-        accessibilityRole="header"
-      >
+    <View style={tw`${styles.header}`}>
+      <Text style={tw`${styles.title}`} accessibilityRole="header">
         Pots
       </Text>
       <SectionLink label="See Details" onPress={onSeeDetails} />
@@ -27,19 +26,16 @@ export const PotsOverview = ({
     {/* Content */}
     <View>
       {/* Total Saved box */}
-      <View style={tw`bg-beige-100 rounded-xl p-4 flex-row items-center gap-4`}>
+      <View style={tw`${styles.totalSavedBox}`}>
         {/* Icon area */}
-        <View
-          accessibilityLabel="Savings icon"
-          style={tw`bg-grey-900 w-10 h-10 rounded-xl items-center justify-center`}
-        >
-          {icon ?? <Text style={tw`text-white font-bold text-base`}>$</Text>}
+        <View accessibilityLabel="Savings icon" style={tw`${styles.iconArea}`}>
+          {icon ?? <Text style={tw`${styles.iconFallback}`}>$</Text>}
         </View>
 
         {/* Total saved text */}
         <View>
-          <Text style={tw`text-xs text-grey-500`}>Total Saved</Text>
-          <Text style={tw`text-2xl font-bold text-grey-900`}>{totalSaved}</Text>
+          <Text style={tw`${styles.totalLabel}`}>Total Saved</Text>
+          <Text style={tw`${styles.totalAmount}`}>{totalSaved}</Text>
         </View>
       </View>
 
@@ -48,15 +44,10 @@ export const PotsOverview = ({
         {pots.map((pot) => (
           <View key={pot.name} style={tw`w-1/2 py-2`}>
             <View
-              style={[
-                tw`pl-4`,
-                { borderLeftWidth: 4, borderLeftColor: tw.color(pot.color) },
-              ]}
+              style={tw`${styles.potItem} border-l-4 border-l-${pot.color}`}
             >
-              <Text style={tw`text-xs text-grey-500`}>{pot.name}</Text>
-              <Text style={tw`text-sm font-bold text-grey-900`}>
-                {pot.total}
-              </Text>
+              <Text style={tw`${styles.potName}`}>{pot.name}</Text>
+              <Text style={tw`${styles.potTotal}`}>{pot.total}</Text>
             </View>
           </View>
         ))}

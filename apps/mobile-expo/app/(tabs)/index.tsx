@@ -15,6 +15,8 @@ import {
 import { useRouter } from 'expo-router'
 import { ScrollView, Text, View } from 'react-native'
 
+import tw from '../../src/lib/tw'
+
 /**
  * Overview (home) tab — displays balance, pots, transactions, and recurring bills.
  * BudgetsOverview is deferred until DonutChart is ready (Track B).
@@ -57,19 +59,10 @@ export default function OverviewScreen() {
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: '#F8F4F0' }}
-      contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
+      style={tw`flex-1 bg-beige-100`}
+      contentContainerStyle={tw`p-4 pb-8`}
     >
-      <Text
-        style={{
-          fontSize: 32,
-          fontWeight: 'bold',
-          marginBottom: 24,
-          marginTop: 40,
-        }}
-      >
-        Overview
-      </Text>
+      <Text style={tw`text-3xl font-bold mb-6 mt-10`}>Overview</Text>
 
       {/* Balance section */}
       <BalanceCard
@@ -77,15 +70,15 @@ export default function OverviewScreen() {
         amount={formatCurrency(mockBalance.current)}
         tone="dark"
       />
-      <View style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
-        <View style={{ flex: 1 }}>
+      <View style={tw`flex-row gap-3 mt-3`}>
+        <View style={tw`flex-1`}>
           <BalanceCard
             label="Income"
             amount={formatCurrency(mockBalance.income)}
             tone="light"
           />
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={tw`flex-1`}>
           <BalanceCard
             label="Expenses"
             amount={formatCurrency(mockBalance.expenses)}
@@ -95,7 +88,7 @@ export default function OverviewScreen() {
       </View>
 
       {/* Pots section */}
-      <View style={{ marginTop: 24 }}>
+      <View style={tw`mt-6`}>
         <PotsOverview
           totalSaved={formatCurrency(totalSaved)}
           pots={potItems}
@@ -106,7 +99,7 @@ export default function OverviewScreen() {
       </View>
 
       {/* Transactions section */}
-      <View style={{ marginTop: 16 }}>
+      <View style={tw`mt-4`}>
         <TransactionsOverview
           transactions={latestTransactions}
           onViewAll={() => {
@@ -116,7 +109,7 @@ export default function OverviewScreen() {
       </View>
 
       {/* Recurring Bills section */}
-      <View style={{ marginTop: 16 }}>
+      <View style={tw`mt-4`}>
         <RecurringBillsOverview
           paid={formatCurrency(paidTotal)}
           upcoming={formatCurrency(upcomingTotal)}
@@ -128,16 +121,9 @@ export default function OverviewScreen() {
       </View>
 
       {/* BudgetsOverview placeholder — awaiting DonutChart from Track B */}
-      <View
-        style={{
-          marginTop: 16,
-          backgroundColor: '#FFFFFF',
-          borderRadius: 12,
-          padding: 20,
-        }}
-      >
-        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Budgets</Text>
-        <Text style={{ color: '#696868', marginTop: 8 }}>
+      <View style={tw`mt-4 bg-white rounded-xl p-5`}>
+        <Text style={tw`text-base font-bold`}>Budgets</Text>
+        <Text style={tw`text-grey-500 mt-2`}>
           {mockBudgets.length} budget
           {mockBudgets.length !== 1 ? 's' : ''} — awaiting DonutChart
         </Text>

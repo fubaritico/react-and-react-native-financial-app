@@ -1,6 +1,8 @@
 import { cn } from '../../lib/cn'
 import { coloredBorderItemVariants } from '../../variants'
 
+import styles from './StatCard.styles'
+
 import type { IStatCardProps } from './StatCard'
 
 /** Web implementation of the StatCard component. */
@@ -9,7 +11,7 @@ export const StatCard = ({ label, amount, color }: IStatCardProps) => (
     className={cn(coloredBorderItemVariants({ layout: 'stacked' }))}
     style={{ borderLeft: `4px solid var(--color-base-${color}-default)` }}
   >
-    <p className="text-xs text-grey-500">{label}</p>
-    <p className="text-sm font-bold text-grey-900">{amount}</p>
+    <p className={styles.label}>{label}</p>
+    <p className={styles.amount}>{amount}</p>
   </div>
 )
