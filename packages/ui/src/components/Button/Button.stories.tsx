@@ -40,7 +40,7 @@ export const Showcase: Story = {
         title="Tertiary"
         variant="tertiary"
         onPress={noop}
-        icon={<span aria-hidden>&#9656;</span>}
+        icon="caretRight"
       />
       <Button title="Destroy" variant="destroy" onPress={noop} />
     </div>

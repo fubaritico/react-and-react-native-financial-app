@@ -1,3 +1,4 @@
+import { Icon } from '@financial-app/icons'
 import { useState } from 'react'
 
 import { TextInput } from '../TextInput/TextInput.web'
@@ -16,16 +17,20 @@ export const PasswordInput = ({
 }: IPasswordInputProps) => {
   const [visible, setVisible] = useState(false)
 
-  const eyeIcon = showToggle ? (
+  const toggle = showToggle ? (
     <button
       type="button"
       onClick={() => {
         setVisible((v) => !v)
       }}
-      className="ml-2 text-grey-500 hover:text-grey-900 transition-colors cursor-pointer"
+      className="ml-2 hover:opacity-70 transition-opacity cursor-pointer"
       aria-label={visible ? 'Hide password' : 'Show password'}
     >
-      {visible ? '\u25C9' : '\u25CE'}
+      <Icon
+        name={visible ? 'hidePassword' : 'showPassword'}
+        size={16}
+        color="#696868"
+      />
     </button>
   ) : undefined
 
@@ -37,7 +42,7 @@ export const PasswordInput = ({
       placeholder={placeholder}
       helperText={helperText}
       error={error}
-      icon={eyeIcon}
+      trailingElement={toggle}
       secureTextEntry={!visible}
     />
   )
