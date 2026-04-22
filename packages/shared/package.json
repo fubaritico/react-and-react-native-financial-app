@@ -38,6 +38,12 @@
     },
     "./utils": {
       "import": "./src/utils/index.ts"
+    },
+    "./mocks": {
+      "import": "./src/mocks/index.ts"
+    },
+    "./test-utils": {
+      "import": "./src/test-utils/index.ts"
     }
   },
   "scripts": {
@@ -49,6 +55,7 @@
   "dependencies": {
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
+    "@tanstack/react-query": "catalog:",
     "jotai": "^2.12.3",
     "zod": "^3.24.4"
   },
@@ -56,6 +63,8 @@
     "react": "catalog:"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "conventional-changelog": "catalog:",

@@ -28,3 +28,6 @@ export type { IBalance, ITransaction, IBudget, IPot } from './types'
 
 // Utils
 export { formatCurrency, formatDate } from './utils'
+
+// Mocks
+export { mockBalance, mockTransactions, mockBudgets, mockPots } from './mocks'
