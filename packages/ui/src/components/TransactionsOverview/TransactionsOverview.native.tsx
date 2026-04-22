@@ -11,8 +11,8 @@ export const TransactionsOverview = ({
   transactions,
   onViewAll,
 }: ITransactionsOverviewProps) => (
-  <View>
-    <View style={tw`flex-row justify-between items-center`}>
+  <View style={tw`bg-white rounded-xl p-5`}>
+    <View style={tw`flex-row justify-between items-center mb-3`}>
       <Text
         style={tw`text-base font-bold text-grey-900`}
         accessibilityRole="header"
@@ -21,7 +21,7 @@ export const TransactionsOverview = ({
       </Text>
       <SectionLink label="View All" onPress={onViewAll} />
     </View>
-    <View style={tw`bg-white rounded-xl p-5 mt-3`}>
+    <View>
       {transactions.map((item, index) => (
         <TransactionRow
           key={`${item.name}-${String(index)}`}

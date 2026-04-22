@@ -43,4 +43,5 @@
 * **ui:** add Wave 2 + Wave 3 overview components with accessibility fixes ([4e32a4d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4e32a4da7086b3d92976370303a0200382402f4c))
 * **ui:** cross-platform refactor with file extension split (Phase 3) ([75e52eb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/75e52eb986da00dfa20fb92f397f3e93d19026b2))
 * **ui:** refactor Button to 4 Figma variants (primary/secondary/tertiary/destroy) ([ac55aa6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ac55aa642ce2dad6d46bfef5ebfd18aee79f912c))
+* **ui:** use IconName from @financial-app/icons in Button and TextInput ([8209ded](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8209dedff6ddfd72203a4f989274de264330769a))
 * **web:** create apps/web with React Router v7 SSR (Phase 4) ([4ffb08a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4ffb08a4a90266ab12a58dca219742713c843511))
