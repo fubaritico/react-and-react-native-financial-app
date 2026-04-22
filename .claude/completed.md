@@ -368,3 +368,17 @@
     - Added iconSize named prop (xs:14, sm:16, md:18, lg:20, xl:22, xxl:24) with aspect ratio preservation
     - Added icon dropdown controls to Button and TextInput stories
     - Added react-native-svg as peer dependency to ui package
+
+- Fixed Storybook circular import: Icon.constants.ts pattern (33ba134)
+    - Vite `.web.tsx` extension priority causes `./Icon` to resolve to `Icon.web.tsx` instead of `Icon.tsx`
+    - Extracted `iconSizeMap` + `IIconSize` to `Icon.constants.ts` — no Vite shadowing on `.constants.ts`
+    - Moved `IIconNativeProps` / `IIconWebProps` into their respective platform files
+    - `Icon.tsx` is now purely types (no runtime values)
+    - Updated all barrels to import runtime values from `Icon.constants`
+    - Documented pattern in `design-system.md`: never export runtime values from `Component.tsx`
+- Added `iconPosition` prop to Button ('left' | 'right', default 'right') (33ba134)
+    - `flex-row-reverse` applied when `iconPosition === 'left'` on both native and web
+
+- Icon Storybook story (edb2fa9)
+    - Playground: controls for all 21 icons, named iconSize, color picker, accessibilityLabel
+    - Showcase: icon grid with names, named sizes (xs→xxl with px), 6 categories, color override demo

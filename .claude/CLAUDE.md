@@ -144,14 +144,15 @@ packages/
 Read `@completed.md`
 
 ### Next
-- Next: fixes and improvements in @financial-app/ui (fresh session — Icon story, Storybook verification, review remaining items)
-- Then: DonutChart + BudgetsOverview (last Wave 3 items)
+- Next: DonutChart + BudgetsOverview (last Wave 3 items)
 - Then: Phase 8 (API server + HTTP client + testing)
 - BudgetsOverview placeholder on Overview page — awaiting DonutChart from Track B
 
 ### Next (Track B — UI components, separate session)
 - `@financial-app/icons` COMPLETE: 21 icons (data-only package), build script with SVG validation (`pnpm icons`)
 - Icon component moved to @financial-app/ui with iconSize prop (xs:14..xxl:24), aspect ratio preservation, currentColor default
+- Icon.constants.ts pattern established: runtime values extracted from types file to avoid Vite circular import
+- Button: added iconPosition prop ('left' | 'right', default 'right')
 - Button + TextInput icon prop migrated from ReactNode to IconName string; PasswordInput uses real SVG icons
 - Overview sections layout fixed: header row moved inside white card per Figma
 - Wave 2 COMPLETE: 9 overview primitives (ColorDot, Avatar, Divider, SectionLink, BalanceCard, StatCard, TransactionRow, BillSummaryRow, SpendingSummaryRow)
@@ -159,7 +160,8 @@ Read `@completed.md`
 - Review done on Wave 2+3: all critical + high findings fixed (4e32a4d)
 - Wave 1 COMPLETE: Button refactored + TextInput, PasswordInput, LinkText, AuthCard, AuthLayout created
 - Storybook is set up (`pnpm --filter @financial-app/ui storybook`)
-- **Next step: Icon Storybook story**, then DonutChart + BudgetsOverview (last Wave 3 items)
+- Icon Storybook story COMPLETE (edb2fa9): Playground + Showcase (grid, sizes, categories, color override)
+- **Next step: DonutChart + BudgetsOverview** (last Wave 3 items)
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.
