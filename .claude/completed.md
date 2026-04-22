@@ -348,3 +348,23 @@
     - Runtime shape/theme validation deferred to Phase 8 alongside Vitest setup, MSW handlers, and API integration tests
     - Phase 8 plan updated: added Step 7.12 (Testing with Vitest) covering mock data tests, API route tests, HTTP client tests
     - data.json contains full user data for all screens (balance, transactions, budgets, pots)
+
+- Migrated apps/mobile testing from Vitest to Jest (78d160e)
+    - Vitest cannot render RN components — RNTL only works with Jest
+    - jest.config.js: RN preset, moduleNameMapper for shared subpath exports, pnpm transformIgnorePatterns
+    - jest.setup.js: mocks for react-native-svg, safe-area-context, screens, navigation, twrnc
+    - 7 collocated screen tests (one file per screen), OverviewScreen mocks @financial-app/ui + @financial-app/shared barrel
+    - Deleted old __tests__/App.test.tsx (rendered full App — antipattern)
+- Upgraded React ecosystem in catalog: react 19.1.0 → 19.2.5, @types/react ~19.1.0 → ~19.2.14
+- Added to catalog: jest, @types/jest, @testing-library/react-native, react-test-renderer, react-native-svg
+- Fixed stale system npx (v6.14.7 at /usr/local/bin) shadowing nvm's npx (v10.9.2)
+
+- Refactored Icon component from @financial-app/icons to @financial-app/ui (004604f)
+    - Icon is a design system component; icons package stripped to data-only (no React deps)
+    - All 21 source SVGs: hardcoded fills → currentColor, removed width/height attributes
+    - Merged billDue + billPaid + selected → single bill icon (23→21 icons)
+    - Generate script validates SVG prerequisites (currentColor, no width/height)
+    - viewBox dimensions extracted into icon data for natural sizing
+    - Added iconSize named prop (xs:14, sm:16, md:18, lg:20, xl:22, xxl:24) with aspect ratio preservation
+    - Added icon dropdown controls to Button and TextInput stories
+    - Added react-native-svg as peer dependency to ui package

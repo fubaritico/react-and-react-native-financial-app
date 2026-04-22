@@ -144,14 +144,14 @@ packages/
 Read `@completed.md`
 
 ### Next
-- Phase 7 COMPLETE — Step 7.8 (mock data tests) absorbed into Phase 8 (Vitest + MSW alongside API)
-- BudgetsOverview placeholder on Overview page — awaiting DonutChart from Track B
-- Next: align apps/mobile Overview with same mock data
+- Next: fixes and improvements in @financial-app/ui (fresh session — Icon story, Storybook verification, review remaining items)
+- Then: DonutChart + BudgetsOverview (last Wave 3 items)
 - Then: Phase 8 (API server + HTTP client + testing)
-- Investigate: Husky pre-commit hook fails with Turbo in non-TTY mode (all checks pass individually)
+- BudgetsOverview placeholder on Overview page — awaiting DonutChart from Track B
 
 ### Next (Track B — UI components, separate session)
-- `@financial-app/icons` COMPLETE: 23 icons, cross-platform `<Icon name="..." />`, build script (`pnpm icons`)
+- `@financial-app/icons` COMPLETE: 21 icons (data-only package), build script with SVG validation (`pnpm icons`)
+- Icon component moved to @financial-app/ui with iconSize prop (xs:14..xxl:24), aspect ratio preservation, currentColor default
 - Button + TextInput icon prop migrated from ReactNode to IconName string; PasswordInput uses real SVG icons
 - Overview sections layout fixed: header row moved inside white card per Figma
 - Wave 2 COMPLETE: 9 overview primitives (ColorDot, Avatar, Divider, SectionLink, BalanceCard, StatCard, TransactionRow, BillSummaryRow, SpendingSummaryRow)
@@ -159,7 +159,7 @@ Read `@completed.md`
 - Review done on Wave 2+3: all critical + high findings fixed (4e32a4d)
 - Wave 1 COMPLETE: Button refactored + TextInput, PasswordInput, LinkText, AuthCard, AuthLayout created
 - Storybook is set up (`pnpm --filter @financial-app/ui storybook`)
-- **Next step: DonutChart + BudgetsOverview** (last Wave 3 items), then review Figma mockups to identify missing icons and where they're used (nav tabs, section headers, etc.)
+- **Next step: Icon Storybook story**, then DonutChart + BudgetsOverview (last Wave 3 items)
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.
@@ -171,4 +171,6 @@ Read `@completed.md`
 - `expo-dev-client` not yet tested on mobile-expo-ejected
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
 - Husky pre-commit hook fails when Turbo runs in non-TTY git hook context — all checks pass individually, likely output buffering issue. Used HUSKY=0 as workaround for 481e539.
+- RN native component tests (*.native.tsx) require Jest — Vitest cannot mock TurboModuleRegistry. UI package will need dual runners: Jest for native, Vitest for web + variants.
+- @financial-app/shared barrel (index.native.ts) re-exports auth chain — screen tests must mock the barrel to avoid pulling in supabase/babel-runtime. Consider splitting barrel or using subpath imports in screens.
 

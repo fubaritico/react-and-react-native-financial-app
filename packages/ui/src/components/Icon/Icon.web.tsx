@@ -1,7 +1,11 @@
 import { iconData } from '@financial-app/icons'
 
-import type { IIconWebProps } from './Icon'
-import { iconSizeMap } from './Icon'
+import type { IIconProps } from './Icon'
+import { iconSizeMap } from './Icon.constants'
+
+/** Web-specific props passed through to the svg element */
+type IIconWebProps = IIconProps &
+  Omit<React.SVGProps<SVGSVGElement>, 'width' | 'height'>
 
 /**
  * Compute rendered width and height.

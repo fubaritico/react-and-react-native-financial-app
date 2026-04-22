@@ -1,8 +1,12 @@
 import { iconData } from '@financial-app/icons'
+import type { SvgProps } from 'react-native-svg'
 import Svg, { Circle, Path } from 'react-native-svg'
 
-import type { IIconNativeProps } from './Icon'
-import { iconSizeMap } from './Icon'
+import type { IIconProps } from './Icon'
+import { iconSizeMap } from './Icon.constants'
+
+/** Native-specific props passed through to the Svg element */
+type IIconNativeProps = IIconProps & Omit<SvgProps, 'width' | 'height'>
 
 const DEFAULT_NATIVE_COLOR = '#201F24'
 

@@ -1,6 +1,7 @@
 export { Icon } from './components/Icon'
-export type { IIconProps, IIconSize } from './components/Icon/Icon'
-export { iconSizeMap } from './components/Icon/Icon'
+export type { IIconProps } from './components/Icon/Icon'
+export type { IIconSize } from './components/Icon/Icon.constants'
+export { iconSizeMap } from './components/Icon/Icon.constants'
 
 export { Button } from './components/Button'
 export type { IButtonProps } from './components/Button/Button'
