@@ -1,0 +1,17 @@
+/**
+ * Sign-up page — public route, no sidebar.
+ * Placeholder until auth UI components are wired (Phase 8).
+ */
+export default function Signup() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-beige-100">
+      <div className="bg-white rounded-xl p-8 shadow-sm max-w-md w-full mx-4">
+        <h1 className="text-preset-1 text-grey-900 mb-2">Sign Up</h1>
+        <p className="text-preset-4 text-grey-500">
+          Registration form will be wired here once the auth UI components are
+          ready.
+        </p>
+      </div>
+    </div>
+  )
+}

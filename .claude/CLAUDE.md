@@ -144,30 +144,21 @@ packages/
 Read `@completed.md`
 
 ### Next
-- Phase 7, Step 7.2 CONTINUE: create route pages in mobile-expo app/ directory
-- Focus on mobile-expo: overview page + auth, then come back to align apps/mobile
+- Phase 7, Steps 7.4 + 7.5 + 7.7 COMPLETE — mock data, test utils, Overview page wired
+- Phase 7 remaining: Step 7.3 (web routes), Step 7.6 (auth wiring beyond placeholders), Step 7.8 (tests)
+- BudgetsOverview placeholder on Overview page — awaiting DonutChart from Track B
+- Next: align apps/mobile Overview with same mock data, or proceed to Phase 7.3 (web routes)
 
 ### Next (Track B — UI components, separate session)
+- `@financial-app/icons` COMPLETE: 23 icons, cross-platform `<Icon name="..." />`, build script (`pnpm icons`)
+- Button + TextInput icon prop migrated from ReactNode to IconName string; PasswordInput uses real SVG icons
+- Overview sections layout fixed: header row moved inside white card per Figma
 - Wave 2 COMPLETE: 9 overview primitives (ColorDot, Avatar, Divider, SectionLink, BalanceCard, StatCard, TransactionRow, BillSummaryRow, SpendingSummaryRow)
 - Wave 3 PARTIAL: 3 of 4 overview sections done (PotsOverview, TransactionsOverview, RecurringBillsOverview)
-- Remaining: DonutChart + BudgetsOverview (deferred together)
 - Review done on Wave 2+3: all critical + high findings fixed (4e32a4d)
-- **Next step: create `@financial-app/icons` package** (see below), then DonutChart + BudgetsOverview, then review mockups to identify missing icons
 - Wave 1 COMPLETE: Button refactored + TextInput, PasswordInput, LinkText, AuthCard, AuthLayout created
 - Storybook is set up (`pnpm --filter @financial-app/ui storybook`)
-
-#### Icons Package — `@financial-app/icons`
-
-Create a dedicated `packages/icons/` package that converts raw SVG files into React components via a build script.
-
-**Reference**: `vite-mf-monorepo/packages/shared/src/assets/` + `script/export-svgs.js` — proven SVG-to-JSX pipeline using `svg-to-jsx`. Adapted for cross-platform: web output uses standard `<svg>`, native output uses `react-native-svg` components.
-
-**Workflow**:
-1. Drop SVG source files into `packages/icons/src/assets/`
-2. Run `pnpm --filter @financial-app/icons build` — the build script converts each SVG to a React component (TSX), generates a barrel `index.ts`, and compiles with `tsc`
-3. Consumers import icons as named exports: `import { HomeIcon, PotIcon } from '@financial-app/icons'`
-
-**After the package is scaffolded and building**, review the Figma mockups to identify which icons are needed and where they should be used across the app (nav tabs, section headers, action buttons, etc.).
+- **Next step: DonutChart + BudgetsOverview** (last Wave 3 items), then review Figma mockups to identify missing icons and where they're used (nav tabs, section headers, etc.)
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.

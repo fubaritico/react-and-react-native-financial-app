@@ -315,3 +315,16 @@
     - Updated lint script to include App.tsx
     - ParamList types use `type` (not `interface`) — React Navigation's ParamListBase requires implicit index signature
     - **On standby** — mobile-expo is the primary focus. This app will be aligned after overview + auth are done on Expo.
+
+- Phase 7, Steps 7.4 + 7.5 + 7.7 COMPLETE: mock data, test utils, Overview page wired
+    - Step 7.4: created `packages/shared/src/mocks/` — adapted Figma data.json with IDs (txn-001..049, bgt-001..004, pot-001..005) and token theme names (hex → green/cyan/yellow/navy/purple)
+    - Typed exports: mockBalance (IBalance), mockTransactions (ITransaction[]), mockBudgets (IBudget[]), mockPots (IPot[])
+    - Added `./mocks` subpath export to @financial-app/shared, re-exported from both barrels
+    - Added `resolveJsonModule: true` to shared tsconfig
+    - Step 7.5: created `packages/shared/src/test-utils/` — createTestQueryClient (retry disabled), ReactQueryWrapper (fresh QueryClient per render)
+    - Added `./test-utils` subpath export to @financial-app/shared
+    - Added @tanstack/react-query ^5.80.7, @testing-library/react ^16.3.0, @testing-library/jest-dom ^6.6.3 to pnpm catalog
+    - Step 7.7: Overview page (`apps/mobile-expo/app/(tabs)/index.tsx`) wired with BalanceCard (dark/light tone), PotsOverview, TransactionsOverview, RecurringBillsOverview from @financial-app/ui
+    - Router navigation on "See Details" / "View All" callbacks via useRouter
+    - BudgetsOverview placeholder card — awaiting DonutChart from Track B
+    - Verified on iOS simulator — components render correctly with mock data

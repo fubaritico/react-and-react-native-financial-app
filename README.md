@@ -213,9 +213,27 @@ pnpm icons         # Regenerate icon data from SVGs
 pnpm dev           # Start all dev servers in parallel
 
 # Or run individual apps:
-pnpm --filter mobile-expo-financial-app start   # Expo (press i/a for iOS/Android)
-pnpm --filter web-financial-app dev             # Web (React Router dev server)
-pnpm --filter mobile-financial-app start        # Bare RN CLI (Metro bundler)
+pnpm expo:start                # Expo Metro bundler (press i/a for iOS/Android)
+pnpm web:dev                   # Web (React Router dev server)
+pnpm mobile:start              # Bare RN CLI (Metro bundler)
+```
+
+### Expo — simulator / emulator shortcuts
+
+```bash
+# iOS
+pnpm expo:ios                  # Default iPhone simulator
+pnpm expo:ios:iphone           # iPhone 16 Pro simulator
+pnpm expo:ios:ipad             # iPad Pro 11-inch (M4) simulator
+
+# Android
+pnpm expo:android              # Default Android emulator
+pnpm expo:android:phone        # Small_Phone AVD
+pnpm expo:android:tablet       # Medium_Tablet AVD
+
+# Physical devices (interactive picker)
+pnpm expo:ios:device           # Pick from connected iOS devices
+pnpm expo:android:device       # Pick from connected Android devices
 ```
 
 ### Quality checks
