@@ -1,6 +1,5 @@
+import { PotsOverview } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-
-import { PotsOverview } from './PotsOverview.web'
 
 const noop = () => undefined
 
@@ -12,7 +11,7 @@ const defaultPots = [
 ]
 
 const meta = {
-  title: 'Components/PotsOverview',
+  title: 'Web/Design System/PotsOverview',
   component: PotsOverview,
   argTypes: {
     totalSaved: { control: 'text' },

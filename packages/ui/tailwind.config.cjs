@@ -6,6 +6,5 @@ module.exports = {
   content: [
     './src/**/*.web.tsx',
     './src/variants/**/*.ts',
-    './.storybook/**/*.{ts,tsx}',
   ],
 }

@@ -1,3 +1,3 @@
 export { BalanceCard } from './BalanceCard.web'
-export type { IBalanceCardProps } from './BalanceCard'
-export { balanceCardVariants } from './BalanceCard'
+export type { IBalanceCardProps } from './BalanceCard.tsx'
+export { balanceCardVariants } from '../../variants'

@@ -1,6 +1,5 @@
+import { TransactionsOverview } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-
-import { TransactionsOverview } from './TransactionsOverview.web'
 
 const MOCK_TRANSACTIONS = [
   {
@@ -36,7 +35,7 @@ const MOCK_TRANSACTIONS = [
 ]
 
 const meta = {
-  title: 'Components/TransactionsOverview',
+  title: 'Web/Design System/TransactionsOverview',
   component: TransactionsOverview,
   argTypes: {
     onViewAll: { action: 'onViewAll' },

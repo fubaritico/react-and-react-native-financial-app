@@ -1,19 +1,24 @@
+import { iconNames } from '@financial-app/icons'
+import { TextInput } from '@financial-app/ui'
+import type { ITextInputProps } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { useState } from 'react'
-
-import type { IPasswordInputProps } from './PasswordInput'
-import { PasswordInput } from './PasswordInput.web'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
 
-const PlaygroundWrapper = (args: IPasswordInputProps) => {
+const PlaygroundWrapper = (args: ITextInputProps) => {
   const [value, setValue] = useState(args.value)
-  return <PasswordInput {...args} value={value} onChangeText={setValue} />
+  return <TextInput {...args} value={value} onChangeText={setValue} />
 }
 
 const ShowcaseWrapper = () => {
-  const [values, setValues] = useState({ normal: '', helper: '', error: '' })
+  const [values, setValues] = useState({
+    basic: '',
+    prefix: '',
+    helper: '',
+    error: '',
+  })
   const update = (key: keyof typeof values) => (text: string) => {
     setValues((prev) => ({ ...prev, [key]: text }))
   }
@@ -27,23 +32,32 @@ const ShowcaseWrapper = () => {
         width: 360,
       }}
     >
-      <PasswordInput
-        label="Password"
-        value={values.normal}
-        onChangeText={update('normal')}
-        placeholder="Enter password"
+      <TextInput
+        label="Basic Field"
+        value={values.basic}
+        onChangeText={update('basic')}
+        placeholder="Placeholder"
       />
-      <PasswordInput
-        label="Create Password"
+      <TextInput
+        label="Field With Prefix"
+        value={values.prefix}
+        onChangeText={update('prefix')}
+        placeholder="Placeholder"
+        prefix="$"
+      />
+      <TextInput
+        label="With Helper Text"
         value={values.helper}
         onChangeText={update('helper')}
-        helperText="Passwords must be at least 8 characters"
+        placeholder="Placeholder"
+        helperText="Helper text"
       />
-      <PasswordInput
+      <TextInput
         label="Error State"
         value={values.error}
         onChangeText={update('error')}
-        helperText="Password is required"
+        placeholder="Placeholder"
+        helperText="This field is required"
         error
       />
     </div>
@@ -51,22 +65,26 @@ const ShowcaseWrapper = () => {
 }
 
 const meta = {
-  title: 'Components/PasswordInput',
-  component: PasswordInput,
+  title: 'Web/Design System/TextInput',
+  component: TextInput,
   argTypes: {
+    icon: {
+      control: 'select',
+      options: [undefined, ...iconNames],
+    },
     error: { control: 'boolean' },
     label: { control: 'text' },
     placeholder: { control: 'text' },
     helperText: { control: 'text' },
-    showToggle: { control: 'boolean' },
+    prefix: { control: 'text' },
   },
   args: {
-    label: 'Password',
+    label: 'Email',
     value: '',
     onChangeText: noop,
-    showToggle: true,
+    placeholder: 'e.g. john@example.com',
   },
-} satisfies Meta<typeof PasswordInput>
+} satisfies Meta<typeof TextInput>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -76,7 +94,7 @@ export const Playground: Story = {
   render: (args) => <PlaygroundWrapper {...args} />,
 }
 
-/** All states. */
+/** All field variants. */
 export const Showcase: Story = {
   render: () => <ShowcaseWrapper />,
 }

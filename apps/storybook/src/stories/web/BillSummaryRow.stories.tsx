@@ -1,9 +1,8 @@
+import { BillSummaryRow } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
-import { BillSummaryRow } from './BillSummaryRow.web'
-
 const meta = {
-  title: 'Components/BillSummaryRow',
+  title: 'Web/Design System/BillSummaryRow',
   component: BillSummaryRow,
   argTypes: {
     label: { control: 'text' },

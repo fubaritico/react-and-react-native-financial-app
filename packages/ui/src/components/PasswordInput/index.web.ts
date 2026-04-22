@@ -1,2 +1,2 @@
 export { PasswordInput } from './PasswordInput.web'
-export type { IPasswordInputProps } from './PasswordInput'
+export type { IPasswordInputProps } from './PasswordInput.tsx'

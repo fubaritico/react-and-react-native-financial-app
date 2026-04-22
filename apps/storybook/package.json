@@ -1,0 +1,31 @@
+{
+  "name": "storybook-financial-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build -o storybook-static",
+    "lint": "eslint ./src ./.storybook",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@financial-app/icons": "workspace:^",
+    "@financial-app/tokens": "workspace:^",
+    "@financial-app/ui": "workspace:^"
+  },
+  "devDependencies": {
+    "@storybook/react-native-web-vite": "catalog:",
+    "@types/react": "catalog:",
+    "autoprefixer": "catalog:",
+    "postcss": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-native": "catalog:",
+    "react-native-svg": "catalog:",
+    "react-native-web": "catalog:",
+    "storybook": "catalog:",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

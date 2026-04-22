@@ -1,9 +1,8 @@
+import { Avatar } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
-import { Avatar } from './Avatar.web'
-
 const meta = {
-  title: 'Components/Avatar',
+  title: 'Web/Design System/Avatar',
   component: Avatar,
   argTypes: {
     src: { control: 'text' },

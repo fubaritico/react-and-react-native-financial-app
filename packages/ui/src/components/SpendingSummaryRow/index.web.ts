@@ -1,2 +1,2 @@
 export { SpendingSummaryRow } from './SpendingSummaryRow.web'
-export type { ISpendingSummaryRowProps } from './SpendingSummaryRow'
+export type { ISpendingSummaryRowProps } from './SpendingSummaryRow.tsx'

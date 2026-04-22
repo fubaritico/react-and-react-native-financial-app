@@ -1,2 +1,2 @@
 export { TextInput } from './TextInput.web'
-export type { ITextInputProps } from './TextInput'
+export type { ITextInputProps } from './TextInput.tsx'

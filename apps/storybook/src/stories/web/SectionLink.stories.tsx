@@ -1,12 +1,11 @@
+import { SectionLink } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-
-import { SectionLink } from './SectionLink.web'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
 
 const meta = {
-  title: 'Components/SectionLink',
+  title: 'Web/Design System/SectionLink',
   component: SectionLink,
   argTypes: {
     label: { control: 'text' },

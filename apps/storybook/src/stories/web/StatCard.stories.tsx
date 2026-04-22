@@ -1,9 +1,8 @@
+import { StatCard } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
-import { StatCard } from './StatCard.web'
-
 const meta = {
-  title: 'Components/StatCard',
+  title: 'Web/Design System/StatCard',
   component: StatCard,
   argTypes: {
     label: { control: 'text' },

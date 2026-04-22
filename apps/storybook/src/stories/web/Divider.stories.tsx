@@ -1,9 +1,8 @@
+import { Divider } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
-import { Divider } from './Divider.web'
-
 const meta = {
-  title: 'Components/Divider',
+  title: 'Web/Design System/Divider',
   component: Divider,
   argTypes: {
     spacing: {

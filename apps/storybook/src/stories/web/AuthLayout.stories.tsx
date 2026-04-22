@@ -1,17 +1,18 @@
+import {
+  AuthCard,
+  AuthLayout,
+  Button,
+  LinkText,
+  PasswordInput,
+  TextInput,
+} from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { useState } from 'react'
-
-import { Button } from '../Button/Button.web'
-import { LinkText } from '../LinkText/LinkText.web'
-import { PasswordInput } from '../PasswordInput/PasswordInput.web'
-import { TextInput } from '../TextInput/TextInput.web'
-
-import { AuthCard } from './AuthCard.web'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
 
-const LoginForm = () => {
+const LoginContent = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -42,7 +43,7 @@ const LoginForm = () => {
   )
 }
 
-const SignUpForm = () => {
+const SignUpContent = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -82,29 +83,29 @@ const SignUpForm = () => {
 }
 
 const meta = {
-  title: 'Components/AuthCard',
-  component: AuthCard,
-  argTypes: {
-    title: { control: 'text' },
+  title: 'Web/Design System/AuthLayout',
+  component: AuthLayout,
+  parameters: {
+    layout: 'fullscreen',
   },
   args: {
-    title: 'Login',
-    children: <p>Form content goes here</p>,
+    children: <LoginContent />,
   },
-} satisfies Meta<typeof AuthCard>
+} satisfies Meta<typeof AuthLayout>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Interactive playground. */
-export const Playground: Story = {}
+/** Login page layout. */
+export const Login: Story = {
+  args: {
+    children: <LoginContent />,
+  },
+}
 
-/** Login and Sign Up cards with real components. */
-export const Showcase: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start' }}>
-      <LoginForm />
-      <SignUpForm />
-    </div>
-  ),
+/** Sign Up page layout. */
+export const SignUp: Story = {
+  args: {
+    children: <SignUpContent />,
+  },
 }

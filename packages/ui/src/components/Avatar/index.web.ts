@@ -1,2 +1,2 @@
 export { Avatar } from './Avatar.web'
-export type { IAvatarProps } from './Avatar'
+export type { IAvatarProps } from './Avatar.tsx'

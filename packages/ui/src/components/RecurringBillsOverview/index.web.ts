@@ -1,2 +1,2 @@
 export { RecurringBillsOverview } from './RecurringBillsOverview.web'
-export type { IRecurringBillsOverviewProps } from './RecurringBillsOverview'
+export type { IRecurringBillsOverviewProps } from './RecurringBillsOverview.tsx'

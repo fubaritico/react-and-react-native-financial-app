@@ -1,2 +1,2 @@
 export { ColorDot } from './ColorDot.web'
-export type { IColorDotProps } from './ColorDot'
+export type { IColorDotProps } from './ColorDot.tsx'

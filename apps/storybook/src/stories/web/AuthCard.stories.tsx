@@ -1,18 +1,17 @@
+import {
+  AuthCard,
+  Button,
+  LinkText,
+  PasswordInput,
+  TextInput,
+} from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { useState } from 'react'
-
-import { AuthCard } from '../AuthCard/AuthCard.web'
-import { Button } from '../Button/Button.web'
-import { LinkText } from '../LinkText/LinkText.web'
-import { PasswordInput } from '../PasswordInput/PasswordInput.web'
-import { TextInput } from '../TextInput/TextInput.web'
-
-import { AuthLayout } from './AuthLayout.web'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
 
-const LoginContent = () => {
+const LoginForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -43,7 +42,7 @@ const LoginContent = () => {
   )
 }
 
-const SignUpContent = () => {
+const SignUpForm = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -83,29 +82,29 @@ const SignUpContent = () => {
 }
 
 const meta = {
-  title: 'Components/AuthLayout',
-  component: AuthLayout,
-  parameters: {
-    layout: 'fullscreen',
+  title: 'Web/Design System/AuthCard',
+  component: AuthCard,
+  argTypes: {
+    title: { control: 'text' },
   },
   args: {
-    children: <LoginContent />,
+    title: 'Login',
+    children: <p>Form content goes here</p>,
   },
-} satisfies Meta<typeof AuthLayout>
+} satisfies Meta<typeof AuthCard>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Login page layout. */
-export const Login: Story = {
-  args: {
-    children: <LoginContent />,
-  },
-}
+/** Interactive playground. */
+export const Playground: Story = {}
 
-/** Sign Up page layout. */
-export const SignUp: Story = {
-  args: {
-    children: <SignUpContent />,
-  },
+/** Login and Sign Up cards with real components. */
+export const Showcase: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start' }}>
+      <LoginForm />
+      <SignUpForm />
+    </div>
+  ),
 }
