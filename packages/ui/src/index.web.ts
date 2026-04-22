@@ -1,3 +1,7 @@
+export { Icon } from './components/Icon/index.web'
+export type { IIconProps, IIconSize } from './components/Icon/Icon'
+export { iconSizeMap } from './components/Icon/Icon'
+
 export { Button } from './components/Button/index.web'
 export type { IButtonProps } from './components/Button/Button'
 

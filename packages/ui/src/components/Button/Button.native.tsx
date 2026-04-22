@@ -1,8 +1,8 @@
-import { Icon } from '@financial-app/icons'
 import { Pressable, Text } from 'react-native'
 
 import tw from '../../lib/tw'
 import { buttonVariants } from '../../variants'
+import { Icon } from '../Icon/Icon.native'
 
 import type { IButtonProps } from './Button'
 
@@ -44,7 +44,7 @@ export const Button = ({
       {icon ? (
         <Icon
           name={icon}
-          size={12}
+          iconSize="xs"
           color={ICON_COLOR[variant ?? 'primary'] ?? '#FFFFFF'}
         />
       ) : null}

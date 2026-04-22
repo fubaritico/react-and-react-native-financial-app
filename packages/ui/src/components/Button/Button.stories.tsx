@@ -1,3 +1,4 @@
+import { iconNames } from '@financial-app/icons'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 import { Button } from './Button.web'
@@ -12,6 +13,10 @@ const meta = {
     variant: {
       control: 'select',
       options: ['primary', 'secondary', 'tertiary', 'destroy'],
+    },
+    icon: {
+      control: 'select',
+      options: [undefined, ...iconNames],
     },
     fullWidth: { control: 'boolean' },
     disabled: { control: 'boolean' },

@@ -1,25 +1,44 @@
-import { iconData } from '../generated/iconData'
+import { iconData } from '@financial-app/icons'
 
 import type { IIconWebProps } from './Icon'
+import { iconSizeMap } from './Icon'
 
 /**
- * Renders an SVG icon by name using DOM elements.
- * Color defaults to 'currentColor' so it inherits from parent text color.
+ * Compute rendered width and height.
+ * Without iconSize: uses the viewBox natural dimensions.
+ * With iconSize: applies the pixel value to the largest dimension,
+ * scales the other proportionally to preserve aspect ratio.
  */
+function computeDimensions(
+  iconSize: IIconWebProps['iconSize'],
+  naturalW: number,
+  naturalH: number
+) {
+  if (!iconSize) return { width: naturalW, height: naturalH }
+
+  const px = iconSizeMap[iconSize]
+  if (naturalW >= naturalH) {
+    return { width: px, height: Math.round((naturalH / naturalW) * px) }
+  }
+  return { width: Math.round((naturalW / naturalH) * px), height: px }
+}
+
+/** Web implementation of the Icon component. */
 export function Icon({
   name,
-  size = 24,
+  iconSize,
   color = 'currentColor',
   accessibilityLabel,
   ...rest
 }: IIconWebProps) {
   const icon = iconData[name]
+  const { width, height } = computeDimensions(iconSize, icon.width, icon.height)
 
   return (
     <svg
       viewBox={icon.viewBox}
-      width={size}
-      height={size}
+      width={width}
+      height={height}
       fill="none"
       aria-hidden={!accessibilityLabel}
       aria-label={accessibilityLabel}
@@ -28,25 +47,16 @@ export function Icon({
     >
       {icon.elements.map((el, i) => {
         if ('type' in el && el.type === 'circle') {
-          return (
-            <circle
-              key={i}
-              cx={el.cx}
-              cy={el.cy}
-              r={el.r}
-              fill={el.fill ?? color}
-            />
-          )
+          return <circle key={i} cx={el.cx} cy={el.cy} r={el.r} fill={color} />
         }
 
         return (
           <path
             key={i}
             d={el.d}
-            fill={el.fill ?? color}
+            fill={color}
             fillRule={el.fillRule as React.SVGProps<SVGPathElement>['fillRule']}
             clipRule={el.clipRule as React.SVGProps<SVGPathElement>['clipRule']}
-            stroke={el.stroke}
             strokeWidth={el.strokeWidth}
             strokeLinecap={
               el.strokeLinecap as React.SVGProps<SVGPathElement>['strokeLinecap']

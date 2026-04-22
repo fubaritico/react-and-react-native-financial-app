@@ -21,7 +21,8 @@
   },
   "peerDependencies": {
     "react": "catalog:",
-    "react-native": "catalog:"
+    "react-native": "catalog:",
+    "react-native-svg": "catalog:"
   },
   "dependencies": {
     "@financial-app/icons": "workspace:^",
@@ -39,6 +40,7 @@
     "conventional-changelog": "catalog:",
     "postcss": "catalog:",
     "react-dom": "catalog:",
+    "react-native-svg": "catalog:",
     "react-native-web": "catalog:",
     "storybook": "catalog:",
     "tailwindcss": "catalog:",

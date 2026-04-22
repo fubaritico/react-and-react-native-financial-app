@@ -1,3 +1,4 @@
+import { iconNames } from '@financial-app/icons'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { useState } from 'react'
 
@@ -68,6 +69,10 @@ const meta = {
   title: 'Components/TextInput',
   component: TextInput,
   argTypes: {
+    icon: {
+      control: 'select',
+      options: [undefined, ...iconNames],
+    },
     error: { control: 'boolean' },
     label: { control: 'text' },
     placeholder: { control: 'text' },

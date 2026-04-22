@@ -1,7 +1,7 @@
-import { Icon } from '@financial-app/icons'
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 
+import { Icon } from '../Icon/Icon.native'
 import { TextInput } from '../TextInput/TextInput.native'
 
 import type { IPasswordInputProps } from './PasswordInput'
@@ -27,7 +27,7 @@ export const PasswordInput = ({
     >
       <Icon
         name={visible ? 'hidePassword' : 'showPassword'}
-        size={16}
+        iconSize="sm"
         color="#696868"
       />
     </Pressable>

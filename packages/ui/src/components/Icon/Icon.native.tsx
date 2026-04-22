@@ -1,29 +1,47 @@
+import { iconData } from '@financial-app/icons'
 import Svg, { Circle, Path } from 'react-native-svg'
 
-import { iconData } from '../generated/iconData'
-
 import type { IIconNativeProps } from './Icon'
+import { iconSizeMap } from './Icon'
 
 const DEFAULT_NATIVE_COLOR = '#201F24'
 
 /**
- * Renders an SVG icon by name using react-native-svg.
- * Color defaults to the app's dark text color.
+ * Compute rendered width and height.
+ * Without iconSize: uses the viewBox natural dimensions.
+ * With iconSize: applies the pixel value to the largest dimension,
+ * scales the other proportionally to preserve aspect ratio.
  */
+function computeDimensions(
+  iconSize: IIconNativeProps['iconSize'],
+  naturalW: number,
+  naturalH: number
+) {
+  if (!iconSize) return { width: naturalW, height: naturalH }
+
+  const px = iconSizeMap[iconSize]
+  if (naturalW >= naturalH) {
+    return { width: px, height: Math.round((naturalH / naturalW) * px) }
+  }
+  return { width: Math.round((naturalW / naturalH) * px), height: px }
+}
+
+/** Native implementation of the Icon component. */
 export function Icon({
   name,
-  size = 24,
+  iconSize,
   color = DEFAULT_NATIVE_COLOR,
   accessibilityLabel,
   ...rest
 }: IIconNativeProps) {
   const icon = iconData[name]
+  const { width, height } = computeDimensions(iconSize, icon.width, icon.height)
 
   return (
     <Svg
       viewBox={icon.viewBox}
-      width={size}
-      height={size}
+      width={width}
+      height={height}
       fill="none"
       accessibilityLabel={accessibilityLabel}
       accessibilityRole={accessibilityLabel ? 'image' : undefined}
@@ -31,25 +49,16 @@ export function Icon({
     >
       {icon.elements.map((el, i) => {
         if ('type' in el && el.type === 'circle') {
-          return (
-            <Circle
-              key={i}
-              cx={el.cx}
-              cy={el.cy}
-              r={el.r}
-              fill={el.fill ?? color}
-            />
-          )
+          return <Circle key={i} cx={el.cx} cy={el.cy} r={el.r} fill={color} />
         }
 
         return (
           <Path
             key={i}
             d={el.d}
-            fill={el.fill ?? color}
+            fill={color}
             fillRule={el.fillRule as 'nonzero' | 'evenodd' | undefined}
             clipRule={el.clipRule as 'nonzero' | 'evenodd' | undefined}
-            stroke={el.stroke}
             strokeWidth={el.strokeWidth ? Number(el.strokeWidth) : undefined}
             strokeLinecap={
               el.strokeLinecap as 'butt' | 'round' | 'square' | undefined

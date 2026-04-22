@@ -1,6 +1,6 @@
-import { Icon } from '@financial-app/icons'
 import { useState } from 'react'
 
+import { Icon } from '../Icon/Icon.web'
 import { TextInput } from '../TextInput/TextInput.web'
 
 import type { IPasswordInputProps } from './PasswordInput'
@@ -28,7 +28,7 @@ export const PasswordInput = ({
     >
       <Icon
         name={visible ? 'hidePassword' : 'showPassword'}
-        size={16}
+        iconSize="sm"
         color="#696868"
       />
     </button>

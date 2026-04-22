@@ -26,12 +26,23 @@ Icon.native.tsx           react-native-svg — uses #201F24 by default
 2. The build script (`script/generate-icon-data.js`) parses each SVG and extracts viewBox + path data into a single `iconData.ts` file
 3. The `Icon` component looks up the icon by name and renders the correct SVG elements for each platform
 
+## SVG prerequisites
+
+Every SVG file in `src/assets/` **must** meet these rules. The build script validates them and throws an error naming the offending file if any rule is violated.
+
+| Rule | Reason |
+|------|--------|
+| No `width` or `height` attributes on `<svg>` | Sizing is controlled by the `size` prop — use `viewBox` only |
+| All `fill` values must be `"none"` or `"currentColor"` | Icons inherit color from parent context via the `color` prop |
+| All `stroke` values must be `"none"` or `"currentColor"` | Same as above |
+
+When exporting from Figma or other tools, remove hardcoded colors and dimensions before committing.
+
 ## Available icons
 
 | Name | Source file | Description |
 |------|-----------|-------------|
-| `billDue` | icon-bill-due.svg | Bill due indicator (red) |
-| `billPaid` | icon-bill-paid.svg | Bill paid indicator (green) |
+| `bill` | icon-bill.svg | Bill indicator (checkmark circle) |
 | `caretDown` | icon-caret-down.svg | Dropdown arrow |
 | `caretLeft` | icon-caret-left.svg | Left navigation arrow |
 | `caretRight` | icon-caret-right.svg | Right navigation arrow |
@@ -50,7 +61,6 @@ Icon.native.tsx           react-native-svg — uses #201F24 by default
 | `pot` | icon-pot.svg | Pot/savings icon |
 | `recurringBills` | icon-recurring-bills.svg | Recurring bills icon |
 | `search` | icon-search.svg | Search magnifying glass |
-| `selected` | icon-selected.svg | Checkmark circle |
 | `showPassword` | icon-show-password.svg | Password visibility on |
 | `sortMobile` | icon-sort-mobile.svg | Mobile sort toggle |
 
@@ -59,6 +69,7 @@ Icon.native.tsx           react-native-svg — uses #201F24 by default
 1. Drop the `.svg` file into `packages/icons/src/assets/`
    - Filename convention: `icon-my-name.svg` → icon name `myName`
    - Files prefixed with `logo-` keep the prefix: `logo-small.svg` → `logoSmall`
+   - Must follow [SVG prerequisites](#svg-prerequisites) — the build will fail otherwise
 2. Run `pnpm icons` from the monorepo root (or `pnpm --filter @financial-app/icons generate`)
 3. The new icon is immediately available with full TypeScript autocomplete
 

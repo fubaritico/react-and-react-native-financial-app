@@ -6,6 +6,7 @@
 * **mobile:** enable wireless iPhone deployment and fix sandbox violation ([824ba71](https://github.com/fubaritico/react-and-react-native-financial-app/commit/824ba7136ba466297da10c77ad9e1752f93d7026))
 * **monorepo:** align React versions and fix cache issues ([d67c956](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d67c956998a0ce4d5b368f3b814393e8d1c02b58))
 * **tokens:** align alias names with Figma variable naming ([d9345ae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d9345aeb25a587df64a26a4a586352561e071668))
+* **ui:** move header row inside white card in overview sections ([eba1c8b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/eba1c8b64b50362e60961a5a0b274c7e02f4ae39))
 * **ui:** replace default Tailwind colors with token aliases ([5d3939b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5d3939b96aa04c2da8a9fcd7ea22d763b33dad02))
 
 
@@ -44,4 +45,5 @@
 * **ui:** cross-platform refactor with file extension split (Phase 3) ([75e52eb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/75e52eb986da00dfa20fb92f397f3e93d19026b2))
 * **ui:** refactor Button to 4 Figma variants (primary/secondary/tertiary/destroy) ([ac55aa6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ac55aa642ce2dad6d46bfef5ebfd18aee79f912c))
 * **ui:** use IconName from @financial-app/icons in Button and TextInput ([8209ded](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8209dedff6ddfd72203a4f989274de264330769a))
+* **web,expo:** add web routes, responsive layout, device simulator scripts ([481e539](https://github.com/fubaritico/react-and-react-native-financial-app/commit/481e539cb27dc9f23edb54ff846051bf7d6db210))
 * **web:** create apps/web with React Router v7 SSR (Phase 4) ([4ffb08a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4ffb08a4a90266ab12a58dca219742713c843511))
