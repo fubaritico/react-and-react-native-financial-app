@@ -89,16 +89,23 @@ export function Button({ label, onPress, variant, size, disabled }: IButtonProps
 
 Two barrel files per component — one per platform:
 
+**CRITICAL**: NEVER re-export runtime values (variants, constants) via ambiguous `./ComponentName`.
+With `.web.tsx` extension priority (used by some bundlers), `./Button` resolves to `Button.web.tsx`
+(implementation) instead of `Button.tsx` (types file) — breaking variant re-exports.
+Always import variants from `../../variants` directly.
+
 ```ts
 // index.ts — Metro picks this (default entry)
 export { Button } from './Button.native';
 export type { IButtonProps } from './Button';
+export { buttonVariants } from '../../variants';
 ```
 
 ```ts
-// index.web.ts — Vite picks this (via resolve.extensions .web.ts priority)
+// index.web.ts — Vite picks this
 export { Button } from './Button.web';
 export type { IButtonProps } from './Button';
+export { buttonVariants } from '../../variants';
 ```
 
 ## Public API (src/index.ts + src/index.web.ts)

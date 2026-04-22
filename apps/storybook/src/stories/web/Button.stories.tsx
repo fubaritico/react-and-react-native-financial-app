@@ -1,13 +1,12 @@
 import { iconNames } from '@financial-app/icons'
+import { Button } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-
-import { Button } from './Button.web'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
 
 const meta = {
-  title: 'Components/Button',
+  title: 'Web/Design System/Button',
   component: Button,
   argTypes: {
     variant: {

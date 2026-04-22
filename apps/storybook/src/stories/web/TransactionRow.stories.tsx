@@ -1,9 +1,8 @@
+import { TransactionRow } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
-import { TransactionRow } from './TransactionRow.web'
-
 const meta = {
-  title: 'Components/TransactionRow',
+  title: 'Web/Design System/TransactionRow',
   component: TransactionRow,
   argTypes: {
     avatar: { control: 'text' },

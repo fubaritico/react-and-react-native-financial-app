@@ -1,14 +1,12 @@
 import { iconNames } from '@financial-app/icons'
+import { Icon, iconSizeMap } from '@financial-app/ui'
+import type { IIconSize } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
-
-import { iconSizeMap } from './Icon.constants'
-import type { IIconSize } from './Icon.constants'
-import { Icon } from './Icon.web'
 
 const sizeOptions = Object.keys(iconSizeMap) as IIconSize[]
 
 const meta = {
-  title: 'Design System/Icon',
+  title: 'Web/Design System/Icon',
   component: Icon,
   parameters: {
     layout: 'centered',

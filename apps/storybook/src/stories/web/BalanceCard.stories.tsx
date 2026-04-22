@@ -1,9 +1,8 @@
+import { BalanceCard } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
-import { BalanceCard } from './BalanceCard.web'
-
 const meta = {
-  title: 'Components/BalanceCard',
+  title: 'Web/Design System/BalanceCard',
   component: BalanceCard,
   argTypes: {
     tone: { control: 'select', options: ['dark', 'light'] },

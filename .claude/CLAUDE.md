@@ -159,9 +159,9 @@ Read `@completed.md`
 - Wave 3 PARTIAL: 3 of 4 overview sections done (PotsOverview, TransactionsOverview, RecurringBillsOverview)
 - Review done on Wave 2+3: all critical + high findings fixed (4e32a4d)
 - Wave 1 COMPLETE: Button refactored + TextInput, PasswordInput, LinkText, AuthCard, AuthLayout created
-- Storybook is set up (`pnpm --filter @financial-app/ui storybook`)
 - Icon Storybook story COMPLETE (edb2fa9): Playground + Showcase (grid, sizes, categories, color override)
-- **Next step: DonutChart + BudgetsOverview** (last Wave 3 items)
+- **Storybook migration to apps/storybook IN PROGRESS** — moved from packages/ui/.storybook/, 19 web stories + 1 native story migrated, variant barrel fix applied (see memory/storybook-migration.md), **NOT YET VERIFIED IN BROWSER** — next step: run `pnpm storybook` and confirm web + native stories render
+- **Next step after Storybook verification: DonutChart + BudgetsOverview** (last Wave 3 items)
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.

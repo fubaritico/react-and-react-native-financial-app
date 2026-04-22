@@ -1,2 +1,2 @@
 export { Divider } from './Divider.web'
-export type { IDividerProps } from './Divider'
+export type { IDividerProps } from './Divider.tsx'

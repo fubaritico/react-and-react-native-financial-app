@@ -47,7 +47,7 @@
     "lint:root": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "turbo test",
-    "storybook": "pnpm --filter @financial-app/ui storybook",
+    "storybook": "pnpm --filter storybook-financial-app storybook",
     "tokens": "pnpm --filter @financial-app/tokens build",
     "icons": "pnpm --filter @financial-app/icons generate",
 
