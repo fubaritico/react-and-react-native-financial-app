@@ -1,15 +1,64 @@
+import {
+  formatCurrency,
+  formatDate,
+  mockBalance,
+  mockBudgets,
+  mockPots,
+  mockTransactions,
+} from '@financial-app/shared'
+import {
+  BalanceCard,
+  PotsOverview,
+  RecurringBillsOverview,
+  TransactionsOverview,
+} from '@financial-app/ui'
+import { useRouter } from 'expo-router'
 import { ScrollView, Text, View } from 'react-native'
 
 /**
- * Overview (home) tab — placeholder.
- * Will be populated with BalanceCard, TransactionsOverview, BudgetsOverview,
- * PotsOverview, RecurringBillsOverview components from Track B + mock data from Step 7.4.
+ * Overview (home) tab — displays balance, pots, transactions, and recurring bills.
+ * BudgetsOverview is deferred until DonutChart is ready (Track B).
  */
 export default function OverviewScreen() {
+  const router = useRouter()
+
+  const latestTransactions = mockTransactions.slice(0, 5).map((txn) => ({
+    avatar: txn.avatar,
+    name: txn.name,
+    amount: txn.amount,
+    date: formatDate(txn.date),
+  }))
+
+  const potItems = mockPots.map((pot) => ({
+    name: pot.name,
+    total: formatCurrency(pot.total),
+    color: pot.theme,
+  }))
+
+  const totalSaved = mockPots.reduce((sum, pot) => sum + pot.total, 0)
+
+  const recurringTransactions = mockTransactions.filter((txn) => txn.recurring)
+  const paidBills = recurringTransactions.filter(
+    (txn) => new Date(txn.date).getMonth() === 7
+  )
+  const paidTotal = paidBills.reduce(
+    (sum, txn) => sum + Math.abs(txn.amount),
+    0
+  )
+  const upcomingTotal = recurringTransactions
+    .filter((txn) => new Date(txn.date).getMonth() === 6)
+    .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
+  const dueSoonTotal = recurringTransactions
+    .filter((txn) => {
+      const day = new Date(txn.date).getDate()
+      return day <= 5
+    })
+    .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
+
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: '#F8F4F0' }}
-      contentContainerStyle={{ padding: 16 }}
+      contentContainerStyle={{ padding: 16, paddingBottom: 32 }}
     >
       <Text
         style={{
@@ -21,46 +70,78 @@ export default function OverviewScreen() {
       >
         Overview
       </Text>
+
+      {/* Balance section */}
+      <BalanceCard
+        label="Current Balance"
+        amount={formatCurrency(mockBalance.current)}
+        tone="dark"
+      />
+      <View style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
+        <View style={{ flex: 1 }}>
+          <BalanceCard
+            label="Income"
+            amount={formatCurrency(mockBalance.income)}
+            tone="light"
+          />
+        </View>
+        <View style={{ flex: 1 }}>
+          <BalanceCard
+            label="Expenses"
+            amount={formatCurrency(mockBalance.expenses)}
+            tone="light"
+          />
+        </View>
+      </View>
+
+      {/* Pots section */}
+      <View style={{ marginTop: 24 }}>
+        <PotsOverview
+          totalSaved={formatCurrency(totalSaved)}
+          pots={potItems}
+          onSeeDetails={() => {
+            router.push('/(tabs)/pots')
+          }}
+        />
+      </View>
+
+      {/* Transactions section */}
+      <View style={{ marginTop: 16 }}>
+        <TransactionsOverview
+          transactions={latestTransactions}
+          onViewAll={() => {
+            router.push('/(tabs)/transactions')
+          }}
+        />
+      </View>
+
+      {/* Recurring Bills section */}
+      <View style={{ marginTop: 16 }}>
+        <RecurringBillsOverview
+          paid={formatCurrency(paidTotal)}
+          upcoming={formatCurrency(upcomingTotal)}
+          dueSoon={formatCurrency(dueSoonTotal)}
+          onSeeDetails={() => {
+            router.push('/(tabs)/recurring')
+          }}
+        />
+      </View>
+
+      {/* BudgetsOverview placeholder — awaiting DonutChart from Track B */}
       <View
         style={{
-          backgroundColor: '#201F24',
+          marginTop: 16,
+          backgroundColor: '#FFFFFF',
           borderRadius: 12,
           padding: 20,
-          marginBottom: 12,
         }}
       >
-        <Text style={{ color: '#B3B3B3', fontSize: 12 }}>Current Balance</Text>
-        <Text style={{ color: '#FFFFFF', fontSize: 32, fontWeight: 'bold' }}>
-          $4,836.00
+        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Budgets</Text>
+        <Text style={{ color: '#696868', marginTop: 8 }}>
+          {mockBudgets.length} budget
+          {mockBudgets.length !== 1 ? 's' : ''} — awaiting DonutChart
         </Text>
       </View>
-      <View style={{ flexDirection: 'row', gap: 12, marginBottom: 24 }}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: '#FFFFFF',
-            borderRadius: 12,
-            padding: 20,
-          }}
-        >
-          <Text style={{ color: '#696868', fontSize: 12 }}>Income</Text>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>$3,814.25</Text>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: '#FFFFFF',
-            borderRadius: 12,
-            padding: 20,
-          }}
-        >
-          <Text style={{ color: '#696868', fontSize: 12 }}>Expenses</Text>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>$1,700.50</Text>
-        </View>
-      </View>
-      <Text style={{ color: '#696868', textAlign: 'center', marginTop: 40 }}>
-        Placeholder - components from Track B will replace this
-      </Text>
     </ScrollView>
   )
 }
