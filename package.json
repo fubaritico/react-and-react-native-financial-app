@@ -45,6 +45,7 @@
     "test": "turbo test",
     "storybook": "pnpm --filter @financial-app/ui storybook",
     "tokens": "pnpm --filter @financial-app/tokens build",
+    "icons": "pnpm --filter @financial-app/icons generate",
 
     "------------ MAINTENANCE --------------": "",
     "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules",
