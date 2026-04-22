@@ -72,20 +72,38 @@ Use these for day-to-day development. Runs JS via Expo Go on your device or simu
 
 ```bash
 # Start Metro bundler (interactive — pick device from menu)
-pnpm --filter mobile-expo start
+pnpm expo:start
 
 # Clear Metro cache and start
-pnpm --filter mobile-expo start --clear
+pnpm expo:start:clean
 
 # Launch on iOS simulator via Expo Go
-pnpm --filter mobile-expo ios
+pnpm expo:ios
 
 # Launch on Android emulator via Expo Go
-pnpm --filter mobile-expo android
+pnpm expo:android
 
 # Launch on Web
-pnpm --filter mobile-expo web
+pnpm --filter mobile-expo-financial-app web
 ```
+
+### Simulator / emulator device targeting
+
+Target a specific device form factor without the interactive picker:
+
+```bash
+# iOS simulators
+pnpm expo:ios                  # Default iPhone simulator
+pnpm expo:ios:iphone           # iPhone 16 Pro
+pnpm expo:ios:ipad             # iPad Pro 11-inch (M4)
+
+# Android emulators
+pnpm expo:android              # Default emulator
+pnpm expo:android:phone        # Small_Phone AVD
+pnpm expo:android:tablet       # Medium_Tablet AVD
+```
+
+> **Note:** Device names are tied to locally available simulators/AVDs. If you delete or rename a simulator in Xcode or Android Studio, update the corresponding script in `package.json`.
 
 ### Build (native binary — full app experience)
 
@@ -93,16 +111,16 @@ Use these when you need the real app: custom icon, splash screen, native modules
 
 ```bash
 # Build and run on iOS simulator
-pnpm --filter mobile-expo ios:build
+pnpm --filter mobile-expo-financial-app ios:build
 
 # Build and run on physical iPhone (prompts for device selection)
-pnpm --filter mobile-expo ios:build:device
+pnpm expo:ios:device
 
 # Build and run on Android emulator
-pnpm --filter mobile-expo android:build
+pnpm --filter mobile-expo-financial-app android:build
 
 # Build and run on physical Android device
-pnpm --filter mobile-expo android:build:device
+pnpm expo:android:device
 ```
 
 > **First build** generates the `ios/` and `android/` folders (via `expo prebuild`) and runs pod install. Subsequent builds are incremental and much faster.
@@ -162,11 +180,15 @@ pnpm --filter mobile-expo add expo@~54.0.33
 
 ```
 mobile-expo/
-├── App.tsx          # Entry point
-├── app.json         # Expo configuration
-├── index.ts         # App registry
-├── metro.config.js  # Metro config (monorepo watchFolders)
-├── assets/          # Images, fonts...
+├── app/                 # Expo Router file-based routes
+│   ├── _layout.tsx      # Root layout (auth gate)
+│   ├── (auth)/          # Auth stack (login, signup)
+│   └── (tabs)/          # Tab navigator (Overview, Transactions, Budgets, Pots, Recurring)
+├── app.json             # Expo configuration
+├── metro.config.js      # Metro config (monorepo watchFolders)
+├── src/
+│   └── components/      # App-level components (DevBadge, etc.)
+├── assets/              # Images, fonts...
 ├── package.json
 └── tsconfig.json
 ```
