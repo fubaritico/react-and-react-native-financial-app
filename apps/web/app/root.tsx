@@ -1,18 +1,18 @@
-import type { ReactNode } from 'react'
 import {
-  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
 } from 'react-router'
 
 import type { Route } from './+types/root'
+import type { ReactNode } from 'react'
 
 import './app.css'
 
-export function Layout({ children }: { children: ReactNode }) {
+export function Layout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="en">
       <head>
@@ -21,6 +21,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <link rel="icon" type="image/png" href="/favicon.png" />
         <Meta />
         <Links />
+        <title>Financial App</title>
       </head>
       <body>
         {children}

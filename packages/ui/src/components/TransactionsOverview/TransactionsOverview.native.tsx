@@ -1,8 +1,10 @@
 import { Text, View } from 'react-native'
 
 import tw from '../../lib/tw'
-import { SectionLink } from '../SectionLink/SectionLink.native'
-import { TransactionRow } from '../TransactionRow/TransactionRow.native'
+import { SectionLink } from '../SectionLink'
+import { TransactionRow } from '../TransactionRow'
+
+import styles from './TransactionsOverview.styles'
 
 import type { ITransactionsOverviewProps } from './TransactionsOverview'
 
@@ -11,12 +13,9 @@ export const TransactionsOverview = ({
   transactions,
   onViewAll,
 }: ITransactionsOverviewProps) => (
-  <View style={tw`bg-white rounded-xl p-5`}>
-    <View style={tw`flex-row justify-between items-center mb-3`}>
-      <Text
-        style={tw`text-base font-bold text-grey-900`}
-        accessibilityRole="header"
-      >
+  <View style={tw`${styles.root}`}>
+    <View style={tw`${styles.header}`}>
+      <Text style={tw`${styles.title}`} accessibilityRole="header">
         Transactions
       </Text>
       <SectionLink label="View All" onPress={onViewAll} />

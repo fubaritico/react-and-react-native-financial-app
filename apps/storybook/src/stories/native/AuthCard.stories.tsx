@@ -5,9 +5,10 @@ import {
   PasswordInput,
   TextInput,
 } from '@financial-app/ui/native'
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { useState } from 'react'
 import { Text, View } from 'react-native'
+
+import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}

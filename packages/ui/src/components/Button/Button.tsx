@@ -1,8 +1,8 @@
 import type { IconName } from '@financial-app/icons'
-import type { VariantProps } from 'class-variance-authority'
-import type { ViewStyle } from 'react-native'
 
 import type { buttonVariants } from '../../variants'
+import type { VariantProps } from 'class-variance-authority'
+import type { ViewStyle } from 'react-native'
 
 /** Props for the Button component. */
 export interface IButtonProps extends VariantProps<typeof buttonVariants> {

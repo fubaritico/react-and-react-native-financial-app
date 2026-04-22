@@ -12,11 +12,11 @@ import {
   RecurringBillsOverview,
   TransactionsOverview,
 } from '@financial-app/ui'
-import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { useNavigation } from '@react-navigation/native'
 import { ScrollView, Text, View } from 'react-native'
 
 import type { TabParamList } from '../navigation/types'
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 
 /**
  * Overview (home) tab — displays balance, pots, transactions, and recurring bills.

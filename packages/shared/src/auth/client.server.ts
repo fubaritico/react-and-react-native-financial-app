@@ -5,6 +5,7 @@ import {
 } from '@supabase/ssr'
 
 import { createSupabaseAuthAdapter } from './adapter.supabase'
+
 import type { IAuthClient } from './types'
 
 /**

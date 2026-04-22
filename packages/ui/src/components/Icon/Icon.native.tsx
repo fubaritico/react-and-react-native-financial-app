@@ -1,9 +1,10 @@
 import { iconData } from '@financial-app/icons'
-import type { SvgProps } from 'react-native-svg'
 import Svg, { Circle, Path } from 'react-native-svg'
 
-import type { IIconProps } from './Icon'
 import { iconSizeMap } from './Icon.constants'
+
+import type { IIconProps } from './Icon'
+import type { SvgProps } from 'react-native-svg'
 
 /** Native-specific props passed through to the Svg element */
 type IIconNativeProps = IIconProps & Omit<SvgProps, 'width' | 'height'>

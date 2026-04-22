@@ -1,4 +1,5 @@
 import { TransactionRow } from '@financial-app/ui'
+
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {

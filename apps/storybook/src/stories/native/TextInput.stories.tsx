@@ -1,9 +1,11 @@
 import { iconNames } from '@financial-app/icons'
 import { TextInput } from '@financial-app/ui/native'
-import type { ITextInputProps } from '@financial-app/ui/native'
-import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 import { useState } from 'react'
 import { View } from 'react-native'
+
+import type { ITextInputProps } from '@financial-app/ui/native'
+
+import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}

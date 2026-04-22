@@ -1,5 +1,5 @@
-import type { IBudget } from '../../types'
-
 import raw from './data.json'
+
+import type { IBudget } from '../../types'
 
 export const mockBudgets: IBudget[] = raw.budgets

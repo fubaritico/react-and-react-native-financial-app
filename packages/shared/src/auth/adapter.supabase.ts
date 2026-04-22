@@ -1,5 +1,3 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
-
 import type {
   IAuthClient,
   IAuthError,
@@ -10,6 +8,7 @@ import type {
   IUser,
   OAuthProvider,
 } from './types'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 /** Minimal Supabase user shape used for mapping */
 interface ISupabaseUser {

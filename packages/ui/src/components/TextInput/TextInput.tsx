@@ -1,8 +1,8 @@
 import type { IconName } from '@financial-app/icons'
+
+import type { textInputVariants } from '../../variants'
 import type { VariantProps } from 'class-variance-authority'
 import type { ReactNode } from 'react'
-
-import type { textInputVariants } from '../../variants/textInput.variants'
 
 /** Props for the TextInput component. */
 export interface ITextInputProps extends VariantProps<

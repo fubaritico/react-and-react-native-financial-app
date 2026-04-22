@@ -392,3 +392,10 @@
     - Downgraded React 19.2.5 → 19.1.0, @types/react ~19.2.14 → ~19.1.10 (Expo SDK 54 renderer requires 19.1.0)
     - Updated design-system.md rule: barrel files must use explicit .tsx extension for type imports
     - Verified: Storybook renders in browser, Expo iOS simulator runs without errors
+
+- Native Storybook stories COMPLETE (df170e6)
+    - Added 20 native stories for all remaining components (Button already existed)
+    - Total: 21 native stories matching all 21 ui components
+    - All import from `@financial-app/ui/native`, use View/Text for layout wrappers
+    - Includes Playground + Showcase (or equivalent) for each component
+    - Verified in browser via react-native-web-vite

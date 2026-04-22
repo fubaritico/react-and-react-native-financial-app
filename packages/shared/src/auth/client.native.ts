@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 import { createSupabaseAuthAdapter } from './adapter.supabase'
+
 import type { IAuthClient, IAuthStorage } from './types'
 
 /** Optional config for non-Expo environments where EXPO_PUBLIC_* env vars are unavailable */

@@ -1,8 +1,7 @@
+import type { cardVariants } from '../../variants'
 import type { VariantProps } from 'class-variance-authority'
 import type { ReactNode } from 'react'
 import type { ViewStyle } from 'react-native'
-
-import type { cardVariants } from '../../variants'
 
 /** Props for the Card component. */
 export interface ICardProps extends VariantProps<typeof cardVariants> {

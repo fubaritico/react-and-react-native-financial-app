@@ -1,7 +1,8 @@
 import { iconData } from '@financial-app/icons'
 
-import type { IIconProps } from './Icon'
 import { iconSizeMap } from './Icon.constants'
+
+import type { IIconProps } from './Icon'
 
 /** Web-specific props passed through to the svg element */
 type IIconWebProps = IIconProps &

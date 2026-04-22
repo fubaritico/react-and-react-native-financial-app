@@ -1,6 +1,8 @@
 import { iconNames } from '@financial-app/icons'
 import { Icon, iconSizeMap } from '@financial-app/ui'
+
 import type { IIconSize } from '@financial-app/ui'
+
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const sizeOptions = Object.keys(iconSizeMap) as IIconSize[]
