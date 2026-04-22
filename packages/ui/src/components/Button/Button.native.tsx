@@ -4,13 +4,10 @@ import tw from '../../lib/tw'
 import { buttonVariants } from '../../variants'
 import { Icon } from '../Icon/Icon.native'
 
-import type { IButtonProps } from './Button'
+import { ICON_COLOR } from './Button.constants'
+import styles from './Button.styles'
 
-/** Color mapping for icon fill per button variant. */
-const ICON_COLOR: Record<string, string> = {
-  secondary: '#201F24',
-  tertiary: '#696868',
-}
+import type { IButtonProps } from './Button'
 
 /** Native implementation of the Button component. */
 export const Button = ({
@@ -41,7 +38,7 @@ export const Button = ({
         style,
       ]}
     >
-      <Text style={tw`text-sm font-bold ${textColor}`}>{title}</Text>
+      <Text style={tw`${styles.text} ${textColor}`}>{title}</Text>
       {icon ? (
         <Icon
           name={icon}

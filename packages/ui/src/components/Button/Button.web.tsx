@@ -2,13 +2,9 @@ import { cn } from '../../lib/cn'
 import { buttonVariants } from '../../variants'
 import { Icon } from '../Icon/Icon.web'
 
-import type { IButtonProps } from './Button'
+import { ICON_COLOR } from './Button.constants'
 
-/** Color mapping for icon fill per button variant. */
-const ICON_COLOR: Record<string, string> = {
-  secondary: '#201F24',
-  tertiary: '#696868',
-}
+import type { IButtonProps } from './Button'
 
 /** Web implementation of the Button component. */
 export const Button = ({

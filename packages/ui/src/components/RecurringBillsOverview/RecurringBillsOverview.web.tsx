@@ -1,5 +1,8 @@
+import { cn } from '../../lib/cn'
 import { BillSummaryRow } from '../BillSummaryRow/BillSummaryRow.web'
 import { SectionLink } from '../SectionLink/SectionLink.web'
+
+import styles from './RecurringBillsOverview.styles'
 
 import type { IRecurringBillsOverviewProps } from './RecurringBillsOverview'
 
@@ -10,12 +13,12 @@ export const RecurringBillsOverview = ({
   dueSoon,
   onSeeDetails,
 }: IRecurringBillsOverviewProps) => (
-  <section className="bg-white rounded-xl p-5">
-    <div className="flex flex-row justify-between items-center mb-3">
-      <h3 className="text-base font-bold text-grey-900">Recurring Bills</h3>
+  <section className={styles.root}>
+    <div className={cn('flex', styles.header)}>
+      <h3 className={styles.title}>Recurring Bills</h3>
       <SectionLink label="See Details" onPress={onSeeDetails} />
     </div>
-    <div className="flex flex-col gap-3">
+    <div className={cn('flex flex-col', styles.list)}>
       <BillSummaryRow label="Paid Bills" amount={paid} color="green" />
       <BillSummaryRow label="Total Upcoming" amount={upcoming} color="yellow" />
       <BillSummaryRow label="Due Soon" amount={dueSoon} color="cyan" />

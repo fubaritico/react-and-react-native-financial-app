@@ -3,10 +3,11 @@ import { iconData } from '@financial-app/icons'
 import { iconSizeMap } from './Icon.constants'
 
 import type { IIconProps } from './Icon'
+import type { SVGProps } from 'react'
 
 /** Web-specific props passed through to the svg element */
 type IIconWebProps = IIconProps &
-  Omit<React.SVGProps<SVGSVGElement>, 'width' | 'height'>
+  Omit<SVGProps<SVGSVGElement>, 'width' | 'height'>
 
 /**
  * Compute rendered width and height.
@@ -60,14 +61,14 @@ export function Icon({
             key={i}
             d={el.d}
             fill={color}
-            fillRule={el.fillRule as React.SVGProps<SVGPathElement>['fillRule']}
-            clipRule={el.clipRule as React.SVGProps<SVGPathElement>['clipRule']}
+            fillRule={el.fillRule as SVGProps<SVGPathElement>['fillRule']}
+            clipRule={el.clipRule as SVGProps<SVGPathElement>['clipRule']}
             strokeWidth={el.strokeWidth}
             strokeLinecap={
-              el.strokeLinecap as React.SVGProps<SVGPathElement>['strokeLinecap']
+              el.strokeLinecap as SVGProps<SVGPathElement>['strokeLinecap']
             }
             strokeLinejoin={
-              el.strokeLinejoin as React.SVGProps<SVGPathElement>['strokeLinejoin']
+              el.strokeLinejoin as SVGProps<SVGPathElement>['strokeLinejoin']
             }
           />
         )

@@ -4,6 +4,8 @@ import tw from '../../lib/tw'
 import { textInputVariants } from '../../variants/textInput.variants'
 import { Icon } from '../Icon/Icon.native'
 
+import styles from './TextInput.styles'
+
 import type { ITextInputProps } from './TextInput'
 
 /** Native implementation of the TextInput component. */
@@ -22,12 +24,10 @@ export const TextInput = ({
   const inputClasses = textInputVariants({ error })
 
   return (
-    <View style={tw`gap-1`}>
-      <Text style={tw`text-xs font-bold text-grey-500`}>{label}</Text>
+    <View style={tw`${styles.wrapper}`}>
+      <Text style={tw`${styles.label}`}>{label}</Text>
       <View style={tw`${inputClasses} flex-row items-center`}>
-        {prefix ? (
-          <Text style={tw`text-beige-500 text-sm mr-2`}>{prefix}</Text>
-        ) : null}
+        {prefix ? <Text style={tw`${styles.prefix}`}>{prefix}</Text> : null}
         <RNTextInput
           value={value}
           onChangeText={onChangeText}
@@ -41,7 +41,7 @@ export const TextInput = ({
       </View>
       {helperText ? (
         <Text
-          style={tw`text-xs ${error ? 'text-red' : 'text-grey-500'} text-right`}
+          style={tw`${styles.helperText} ${error ? 'text-red' : 'text-grey-500'}`}
         >
           {helperText}
         </Text>

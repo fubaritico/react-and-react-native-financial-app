@@ -3,6 +3,8 @@ import { Text, View } from 'react-native'
 import tw from '../../lib/tw'
 import { cardVariants } from '../../variants'
 
+import styles from './Card.styles'
+
 import type { ICardProps } from './Card'
 
 /** Native implementation of the Card component. */
@@ -11,18 +13,12 @@ export const Card = ({ title, text, children, style }: ICardProps) => {
 
   return (
     <View style={[tw`${baseClasses} shadow-md`, style]}>
-      <Text style={tw`text-lg font-semibold text-foreground mb-2`}>
-        {title}
-      </Text>
-      {text && (
-        <Text style={tw`text-sm text-foreground-muted leading-5`}>{text}</Text>
-      )}
+      <Text style={tw`${styles.title}`}>{title}</Text>
+      {text && <Text style={tw`${styles.text}`}>{text}</Text>}
       {children && (
-        <View style={tw`mt-3`}>
+        <View style={tw`${styles.childrenWrap}`}>
           {typeof children === 'string' ? (
-            <Text style={tw`text-sm text-foreground-muted leading-5`}>
-              {children}
-            </Text>
+            <Text style={tw`${styles.text}`}>{children}</Text>
           ) : (
             children
           )}

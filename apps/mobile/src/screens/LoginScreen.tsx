@@ -1,18 +1,13 @@
 import { Text, View } from 'react-native'
 
+import tw from '../lib/tw'
+
 /** Login screen placeholder — will be replaced by AuthLayout + AuthCard components from Track B. */
 export function LoginScreen() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F8F4F0',
-      }}
-    >
-      <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Login</Text>
-      <Text style={{ marginTop: 8, color: '#696868' }}>Placeholder</Text>
+    <View style={tw`flex-1 justify-center items-center bg-beige-100`}>
+      <Text style={tw`text-2xl font-bold`}>Login</Text>
+      <Text style={tw`mt-2 text-grey-500`}>Placeholder</Text>
     </View>
   )
 }

@@ -2,13 +2,10 @@ import { cn } from '../../lib/cn'
 import { Avatar } from '../Avatar/Avatar.web'
 import { Divider } from '../Divider/Divider.web'
 
-import type { ITransactionRowProps } from './TransactionRow'
+import { formatAmount } from './TransactionRow.constants'
+import styles from './TransactionRow.styles'
 
-/** Formats a number as a signed currency string. */
-const formatAmount = (amount: number): string => {
-  const prefix = amount >= 0 ? '+' : '-'
-  return `${prefix}$${Math.abs(amount).toFixed(2)}`
-}
+import type { ITransactionRowProps } from './TransactionRow'
 
 /** Web implementation of the TransactionRow component. */
 export const TransactionRow = ({
@@ -24,14 +21,12 @@ export const TransactionRow = ({
     <>
       <div className="flex items-center py-3">
         <Avatar src={avatar} name={name} size={40} />
-        <span className="flex-1 ml-3 text-sm font-bold text-grey-900">
-          {name}
-        </span>
+        <span className={styles.name}>{name}</span>
         <div className="text-right">
-          <p className={cn('text-sm font-bold', amountColor)}>
+          <p className={cn(styles.amountText, amountColor)}>
             {formatAmount(amount)}
           </p>
-          <p className="text-xs text-grey-500 mt-1">{date}</p>
+          <p className={styles.date}>{date}</p>
         </div>
       </div>
       {showDivider && <Divider spacing="sm" />}
