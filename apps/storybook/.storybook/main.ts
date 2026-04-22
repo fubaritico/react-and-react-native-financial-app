@@ -20,7 +20,7 @@ const config: StorybookConfig = {
     // Preserve framework aliases (react-native → react-native-web, etc.)
     // The framework may use object form { key: value } or array form [{ find, replacement }]
     const rawAlias = config.resolve?.alias
-    const existingAlias: Array<{ find: string | RegExp; replacement: string }> =
+    const existingAlias: { find: string | RegExp; replacement: string }[] =
       Array.isArray(rawAlias)
         ? rawAlias
         : rawAlias && typeof rawAlias === 'object'
