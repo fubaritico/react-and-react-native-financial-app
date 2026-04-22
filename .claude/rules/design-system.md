@@ -89,22 +89,27 @@ export function Button({ label, onPress, variant, size, disabled }: IButtonProps
 
 Two barrel files per component — one per platform:
 
-**CRITICAL**: NEVER re-export runtime values (variants, constants) via ambiguous `./ComponentName`.
-With `.web.tsx` extension priority (used by some bundlers), `./Button` resolves to `Button.web.tsx`
-(implementation) instead of `Button.tsx` (types file) — breaking variant re-exports.
-Always import variants from `../../variants` directly.
+**CRITICAL**: ALL imports in barrel files must use explicit paths — no ambiguous `./ComponentName`.
+`@storybook/react-native-web-vite` adds `.native.tsx` to resolve.extensions, so `./Button`
+resolves to `Button.native.tsx` instead of `Button.tsx`. Vite's import-analysis plugin scans
+ALL specifiers (including `export type`) before type stripping.
+
+Rules:
+- Components: explicit platform extension (`./Button.native`, `./Button.web`)
+- Types: explicit `.tsx` extension (`./Button.tsx`)
+- Variants: import from `../../variants` (never from `./ComponentName`)
 
 ```ts
 // index.ts — Metro picks this (default entry)
 export { Button } from './Button.native';
-export type { IButtonProps } from './Button';
+export type { IButtonProps } from './Button.tsx';
 export { buttonVariants } from '../../variants';
 ```
 
 ```ts
 // index.web.ts — Vite picks this
 export { Button } from './Button.web';
-export type { IButtonProps } from './Button';
+export type { IButtonProps } from './Button.tsx';
 export { buttonVariants } from '../../variants';
 ```
 

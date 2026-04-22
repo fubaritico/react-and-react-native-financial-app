@@ -149,19 +149,12 @@ Read `@completed.md`
 - BudgetsOverview placeholder on Overview page — awaiting DonutChart from Track B
 
 ### Next (Track B — UI components, separate session)
-- `@financial-app/icons` COMPLETE: 21 icons (data-only package), build script with SVG validation (`pnpm icons`)
-- Icon component moved to @financial-app/ui with iconSize prop (xs:14..xxl:24), aspect ratio preservation, currentColor default
-- Icon.constants.ts pattern established: runtime values extracted from types file to avoid Vite circular import
-- Button: added iconPosition prop ('left' | 'right', default 'right')
-- Button + TextInput icon prop migrated from ReactNode to IconName string; PasswordInput uses real SVG icons
-- Overview sections layout fixed: header row moved inside white card per Figma
-- Wave 2 COMPLETE: 9 overview primitives (ColorDot, Avatar, Divider, SectionLink, BalanceCard, StatCard, TransactionRow, BillSummaryRow, SpendingSummaryRow)
-- Wave 3 PARTIAL: 3 of 4 overview sections done (PotsOverview, TransactionsOverview, RecurringBillsOverview)
-- Review done on Wave 2+3: all critical + high findings fixed (4e32a4d)
-- Wave 1 COMPLETE: Button refactored + TextInput, PasswordInput, LinkText, AuthCard, AuthLayout created
-- Icon Storybook story COMPLETE (edb2fa9): Playground + Showcase (grid, sizes, categories, color override)
-- **Storybook migration to apps/storybook IN PROGRESS** — moved from packages/ui/.storybook/, 19 web stories + 1 native story migrated, variant barrel fix applied (see memory/storybook-migration.md), **NOT YET VERIFIED IN BROWSER** — next step: run `pnpm storybook` and confirm web + native stories render
-- **Next step after Storybook verification: DonutChart + BudgetsOverview** (last Wave 3 items)
+- Storybook migration COMPLETE (7e5b129): apps/storybook/ standalone, 19 web + 1 native story, verified in browser
+- Barrel import fix: explicit .tsx extensions prevent .native.tsx resolution in react-native-web-vite
+- React downgraded to 19.1.0 (Expo SDK 54 renderer compatibility)
+- All stories under Web/Design System/ and Native/Design System/
+- **Next: DonutChart + BudgetsOverview** (last Wave 3 items)
+- Then: remaining native stories (only Button exists)
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.
