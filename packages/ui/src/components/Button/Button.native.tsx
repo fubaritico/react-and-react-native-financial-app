@@ -20,6 +20,7 @@ export const Button = ({
   fullWidth,
   disabled,
   icon,
+  iconPosition = 'right',
   style,
 }: IButtonProps) => {
   const variantClasses = buttonVariants({ variant, fullWidth, disabled })
@@ -35,7 +36,7 @@ export const Button = ({
       onPress={onPress}
       disabled={!!disabled}
       style={({ pressed }) => [
-        tw`${variantClasses} flex-row items-center`,
+        tw`${variantClasses} ${iconPosition === 'left' ? 'flex-row-reverse' : 'flex-row'} items-center`,
         pressed && tw`opacity-70`,
         style,
       ]}

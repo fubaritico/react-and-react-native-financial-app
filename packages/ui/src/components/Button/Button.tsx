@@ -10,8 +10,10 @@ export interface IButtonProps extends VariantProps<typeof buttonVariants> {
   title: string
   /** Callback fired when the button is pressed. */
   onPress: () => void
-  /** Optional icon rendered after the label by name (e.g. "caretRight"). */
+  /** Optional icon rendered next to the label by name (e.g. "caretRight"). */
   icon?: IconName
+  /** Icon position relative to label — defaults to 'right'. */
+  iconPosition?: 'left' | 'right'
   /** Optional style override (native only). */
   style?: ViewStyle | object
 }

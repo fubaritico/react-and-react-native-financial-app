@@ -7,6 +7,7 @@ Every component in packages/ui/src/components/ MUST follow this exact pattern:
 ```
 ComponentName/
   ComponentName.tsx         # types + props interface ONLY — no JSX, no imports from renderers
+  ComponentName.constants.ts # (optional) shared runtime values (maps, defaults) — no renderer imports
   ComponentName.native.tsx  # React Native implementation
   ComponentName.web.tsx     # DOM/HTML implementation
   index.ts                  # native barrel — exports from .native (Metro uses this)
@@ -19,6 +20,12 @@ ComponentName/
 - Extend VariantProps from the component's CVA variant object
 - No JSX, no runtime code, no renderer imports
 - Re-export the variant object so consumers get one import
+- **NEVER export runtime values** (const, function, object) from this file —
+  Vite resolves `./Component` to `Component.web.tsx` before `Component.tsx`
+  (due to `.web.tsx` extension priority), causing a circular import.
+  If a component needs shared runtime constants (e.g. size maps),
+  put them in `ComponentName.constants.ts` and import from there in both
+  `.native.tsx` and `.web.tsx`.
 
 ```ts
 import type { VariantProps } from 'class-variance-authority';
@@ -112,7 +119,8 @@ Every new component must be added to BOTH barrels with:
 ## Checklist for New Component
 
 - [ ] Created ComponentName/ directory
-- [ ] ComponentName.tsx — types only, no JSX
+- [ ] ComponentName.tsx — types only, no JSX, no runtime values
+- [ ] ComponentName.constants.ts — (if needed) shared runtime constants, no renderer imports
 - [ ] ComponentName.native.tsx — uses tw``, no HTML
 - [ ] ComponentName.web.tsx — uses cn(), no RN imports
 - [ ] index.ts — re-exports from .native + types

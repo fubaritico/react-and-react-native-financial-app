@@ -18,6 +18,7 @@ export const Button = ({
   fullWidth,
   disabled,
   icon,
+  iconPosition = 'right',
 }: IButtonProps) => (
   <button
     onClick={onPress}
@@ -25,6 +26,7 @@ export const Button = ({
     className={cn(
       buttonVariants({ variant, fullWidth, disabled }),
       'inline-flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer',
+      iconPosition === 'left' && 'flex-row-reverse',
       disabled && 'cursor-not-allowed'
     )}
   >
