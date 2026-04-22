@@ -8,12 +8,12 @@ export const TransactionsOverview = ({
   transactions,
   onViewAll,
 }: ITransactionsOverviewProps) => (
-  <section>
-    <div className="flex justify-between items-center">
+  <section className="bg-white rounded-xl p-5">
+    <div className="flex justify-between items-center mb-3">
       <h3 className="text-base font-bold text-grey-900">Transactions</h3>
       <SectionLink label="View All" onPress={onViewAll} />
     </div>
-    <div className="bg-white rounded-xl p-5 mt-3">
+    <div>
       {transactions.map((item, index) => (
         <TransactionRow
           key={`${item.name}-${String(index)}`}

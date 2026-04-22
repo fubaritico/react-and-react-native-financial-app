@@ -13,8 +13,8 @@ export const RecurringBillsOverview = ({
   dueSoon,
   onSeeDetails,
 }: IRecurringBillsOverviewProps) => (
-  <View>
-    <View style={tw`flex-row justify-between items-center`}>
+  <View style={tw`bg-white rounded-xl p-5`}>
+    <View style={tw`flex-row justify-between items-center mb-3`}>
       <Text
         style={tw`text-base font-bold text-grey-900`}
         accessibilityRole="header"
@@ -23,7 +23,7 @@ export const RecurringBillsOverview = ({
       </Text>
       <SectionLink label="See Details" onPress={onSeeDetails} />
     </View>
-    <View style={tw`bg-white rounded-xl p-5 mt-3 gap-3`}>
+    <View style={tw`gap-3`}>
       <BillSummaryRow label="Paid Bills" amount={paid} color="green" />
       <BillSummaryRow label="Total Upcoming" amount={upcoming} color="yellow" />
       <BillSummaryRow label="Due Soon" amount={dueSoon} color="cyan" />

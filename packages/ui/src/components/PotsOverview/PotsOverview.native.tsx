@@ -12,9 +12,9 @@ export const PotsOverview = ({
   onSeeDetails,
   icon,
 }: IPotsOverviewProps) => (
-  <View>
+  <View style={tw`bg-white rounded-xl p-5`}>
     {/* Header row */}
-    <View style={tw`flex-row justify-between items-center`}>
+    <View style={tw`flex-row justify-between items-center mb-3`}>
       <Text
         style={tw`text-base font-bold text-grey-900`}
         accessibilityRole="header"
@@ -24,8 +24,8 @@ export const PotsOverview = ({
       <SectionLink label="See Details" onPress={onSeeDetails} />
     </View>
 
-    {/* Card */}
-    <View style={tw`bg-white rounded-xl p-5 mt-3`}>
+    {/* Content */}
+    <View>
       {/* Total Saved box */}
       <View style={tw`bg-beige-100 rounded-xl p-4 flex-row items-center gap-4`}>
         {/* Icon area */}

@@ -10,12 +10,12 @@ export const RecurringBillsOverview = ({
   dueSoon,
   onSeeDetails,
 }: IRecurringBillsOverviewProps) => (
-  <section>
-    <div className="flex flex-row justify-between items-center">
+  <section className="bg-white rounded-xl p-5">
+    <div className="flex flex-row justify-between items-center mb-3">
       <h3 className="text-base font-bold text-grey-900">Recurring Bills</h3>
       <SectionLink label="See Details" onPress={onSeeDetails} />
     </div>
-    <div className="bg-white rounded-xl p-5 mt-3 flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
       <BillSummaryRow label="Paid Bills" amount={paid} color="green" />
       <BillSummaryRow label="Total Upcoming" amount={upcoming} color="yellow" />
       <BillSummaryRow label="Due Soon" amount={dueSoon} color="cyan" />
