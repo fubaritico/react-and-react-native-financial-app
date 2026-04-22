@@ -36,6 +36,7 @@ react-and-react-native-financial-app/
 ├── packages/
 │   ├── tokens/             # @financial-app/tokens — Style Dictionary (DTCG)
 │   ├── tailwind-config/    # @financial-app/tailwind-config — shared Tailwind config
+│   ├── icons/              # @financial-app/icons — cross-platform SVG icon library
 │   ├── ui/                 # @financial-app/ui — cross-platform design system
 │   └── shared/             # @financial-app/shared — auth, types, utils, atoms
 └── scripts/                # Utility scripts (reset, changelogs)
@@ -63,6 +64,7 @@ react-and-react-native-financial-app/
 |---------|------|--------|-------------|
 | `@financial-app/tokens` | `packages/tokens/` | Active | Style Dictionary (DTCG) — colors, spacing, typography, radii |
 | `@financial-app/tailwind-config` | `packages/tailwind-config/` | Active | Shared Tailwind config consuming token outputs |
+| `@financial-app/icons` | `packages/icons/` | Active | Cross-platform SVG icon library — type-safe `<Icon name="..." />` component |
 | `@financial-app/ui` | `packages/ui/` | Active | Cross-platform design system (file extension split: `.native.tsx` / `.web.tsx`) |
 | `@financial-app/shared` | `packages/shared/` | Active | Auth (Supabase), Jotai atoms, domain types, utils |
 | `@financial-app/http-client` | `packages/http-client/` | Planned | HeyAPI client consuming the Express REST API |
@@ -71,10 +73,11 @@ react-and-react-native-financial-app/
 
 ```
 @financial-app/tokens           -> depends on nothing
+@financial-app/icons            -> depends on nothing (react-native-svg is a peer dep)
 @financial-app/tailwind-config  -> @financial-app/tokens
-@financial-app/ui               -> @financial-app/tokens, @financial-app/tailwind-config
+@financial-app/ui               -> @financial-app/tokens, @financial-app/tailwind-config, @financial-app/icons
 @financial-app/shared           -> depends on nothing (pure TS, no renderer)
-apps/*  (mobile, web)           -> @financial-app/ui, @financial-app/shared
+apps/*  (mobile, web)           -> @financial-app/ui, @financial-app/shared, @financial-app/icons
 ```
 
 [Back to top](#table-of-contents)
@@ -201,6 +204,7 @@ All orchestrated commands use **Turborepo** for caching and correct dependency o
 pnpm install       # Install all dependencies
 pnpm build         # Build all packages (tokens → tailwind-config → ui → apps)
 pnpm tokens        # Rebuild token outputs only
+pnpm icons         # Regenerate icon data from SVGs
 ```
 
 ### Development
