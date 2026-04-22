@@ -328,3 +328,23 @@
     - Router navigation on "See Details" / "View All" callbacks via useRouter
     - BudgetsOverview placeholder card — awaiting DonutChart from Track B
     - Verified on iOS simulator — components render correctly with mock data
+
+- Phase 7, Steps 7.3 + 7.6 COMPLETE: web routes + auth placeholders (481e539)
+    - Created responsive layout shell: sidebar on lg+, bottom bar on mobile/tablet
+    - Temporary Sidebar component in apps/web/app/components/ (text-only, awaiting icons)
+    - Overview page wired with mock data + BalanceCard, PotsOverview, TransactionsOverview, RecurringBillsOverview
+    - Responsive grid: single column on mobile, balance cards row at md, 2-col sections at lg
+    - Placeholder routes: login, signup (public, no sidebar), transactions, budgets, pots, recurring (protected)
+    - Auth guard scaffolded in layout loader (commented out, bypassed during Phase 7)
+    - React Router layout route nests protected routes under sidebar shell
+- Added device-specific simulator scripts (481e539)
+    - expo:ios:iphone (iPhone 16 Pro), expo:ios:ipad (iPad Pro 11-inch M4)
+    - expo:android:phone (Small_Phone), expo:android:tablet (Medium_Tablet)
+    - Updated root + mobile-expo READMEs with new scripts and project structure
+- Tested on iPad Pro simulator — Expo app runs correctly with supportsTablet: true
+
+- Phase 7 COMPLETE: Step 7.8 (mock data tests) absorbed into Phase 8
+    - Mock data is type-safe at compile time via explicit annotations (IBalance, ITransaction[], IBudget[], IPot[])
+    - Runtime shape/theme validation deferred to Phase 8 alongside Vitest setup, MSW handlers, and API integration tests
+    - Phase 8 plan updated: added Step 7.12 (Testing with Vitest) covering mock data tests, API route tests, HTTP client tests
+    - data.json contains full user data for all screens (balance, transactions, budgets, pots)
