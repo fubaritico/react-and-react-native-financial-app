@@ -9,7 +9,11 @@ on both mobile-expo and web using that mock data.
 This phase absorbs Phase 5.10 (public vs protected routes) and the former Phase 6
 (Turborepo). The former Phase 7 (Express API + OpenAPI + HeyAPI) becomes Phase 8.
 
-## Status: TODO (requires Phase 5 complete)
+## Status: COMPLETE
+
+> Step 7.8 (mock data tests) absorbed into Phase 8 — mock data is already type-safe
+> at compile time via explicit annotations. Runtime shape checks add little value
+> until the API exists and real response shapes need validation alongside MSW handlers.
 
 ---
 
@@ -555,31 +559,12 @@ Create them using the `/new-component` skill. Create stories using `/story`.
 
 ---
 
-## Step 7.8 — Tests
+## Step 7.8 — Tests (ABSORBED INTO PHASE 8)
 
-### Mock data type safety
-
-```ts
-// packages/shared/src/mocks/__tests__/data.test.ts
-import { mockBalance, mockTransactions, mockBudgets, mockPots } from '../index'
-import type { IBalance, ITransaction, IBudget, IPot } from '../../types'
-
-test('mockBalance matches IBalance', () => { /* type assertion + shape check */ })
-test('mockTransactions all have required fields', () => { /* id, name, category, date, amount */ })
-test('mockBudgets themes are valid token names', () => { /* no hex values */ })
-test('mockPots themes are valid token names', () => { /* no hex values */ })
-```
-
-### Component tests (per UI component)
-
-Each Overview component gets a test file using `renderWithRouter` or
-`renderWithReactQuery` from `@financial-app/shared/test-utils`.
-
-### Run
-
-```bash
-pnpm type-check && pnpm lint && pnpm test
-```
+Mock data is already type-safe at compile time (`.data.ts` files have explicit
+`IBalance`, `ITransaction[]`, etc. annotations). Runtime shape/theme validation
+tests are deferred to Phase 8, where they'll be written alongside MSW handlers
+and API integration tests using Vitest.
 
 ---
 

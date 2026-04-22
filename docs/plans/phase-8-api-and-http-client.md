@@ -753,6 +753,52 @@ Add to `.env.example` and `.gitignore`.
 
 ---
 
+## Step 7.12 — Testing (Vitest)
+
+### Test runner setup
+
+Add Vitest to the monorepo. Each testable package gets its own `vitest.config.ts`.
+
+```bash
+pnpm add -D vitest -w                          # root + catalog
+pnpm --filter @financial-app/shared add -D vitest
+pnpm --filter api-financial-app add -D vitest
+```
+
+### Mock data tests (absorbed from Phase 7, Step 7.8)
+
+```
+packages/shared/src/mocks/__tests__/data.test.ts
+```
+
+- `mockBalance` matches IBalance shape (current, income, expenses are numbers)
+- `mockTransactions` all have required fields (id, name, category, date, amount, avatar, recurring)
+- `mockBudgets` themes are valid token names (no hex values)
+- `mockPots` themes are valid token names (no hex values)
+- `data.json` contains data for all screens (balance, transactions, budgets, pots)
+
+### API route tests
+
+```
+apps/api/src/routes/__tests__/*.test.ts
+```
+
+- Use Vitest + supertest for route handler testing
+- MSW for Supabase client mocking
+- Validate Zod schema enforcement (400 on invalid input)
+- Validate auth middleware (401 on missing/bad token)
+
+### HTTP client tests
+
+```
+packages/http-client/src/__tests__/*.test.ts
+```
+
+- Generated types match expected shapes
+- SDK functions exist for all registered routes
+
+---
+
 ## Workflow
 
 ```
@@ -793,6 +839,9 @@ When the API contract changes:
 - [ ] `packages/http-client/` generates from the OpenAPI spec
 - [ ] Generated SDK is type-safe and exports all operations
 - [ ] At least one app consumes `@financial-app/http-client` successfully
+- [ ] Vitest configured for shared and api packages
+- [ ] Mock data tests pass (shape validation, no hex themes, all fields present)
+- [ ] API route tests pass (Zod validation, auth middleware)
 - [ ] `pnpm type-check && pnpm lint && pnpm test` passes
 
 ## Next
