@@ -1,8 +1,8 @@
-import { Icon } from '@financial-app/icons'
 import { TextInput as RNTextInput, Text, View } from 'react-native'
 
 import tw from '../../lib/tw'
 import { textInputVariants } from '../../variants/textInput.variants'
+import { Icon } from '../Icon/Icon.native'
 
 import type { ITextInputProps } from './TextInput'
 
@@ -37,7 +37,7 @@ export const TextInput = ({
           style={tw`flex-1 text-sm text-grey-900 p-0`}
         />
         {trailingElement ??
-          (icon ? <Icon name={icon} size={16} color="#696868" /> : null)}
+          (icon ? <Icon name={icon} iconSize="sm" color="#696868" /> : null)}
       </View>
       {helperText ? (
         <Text

@@ -21,42 +21,73 @@ function toIconName(filename) {
 }
 
 /**
- * Parse a simple SVG file and extract viewBox + path data.
- * Handles single and multi-path SVGs with common attributes.
+ * Validate an SVG file meets the icon prerequisites.
+ * Throws with the filename if any rule is violated.
+ *
+ * Rules:
+ *  - No width/height attributes on <svg> (use viewBox only)
+ *  - All fill/stroke values must be "none" or "currentColor"
  */
-function parseSvg(svgContent) {
-  const viewBoxMatch = svgContent.match(/viewBox="([^"]+)"/)
-  const widthMatch = svgContent.match(/<svg[^>]+width="(\d+)"/)
-  const heightMatch = svgContent.match(/<svg[^>]+height="(\d+)"/)
+function validateSvg(filename, content) {
+  const errors = []
 
-  const viewBox = viewBoxMatch
-    ? viewBoxMatch[1]
-    : widthMatch && heightMatch
-      ? `0 0 ${widthMatch[1]} ${heightMatch[1]}`
-      : '0 0 24 24'
+  if (/<svg[^>]+\bwidth="/.test(content)) {
+    errors.push('has width attribute on <svg> — remove it, use viewBox only')
+  }
+  if (/<svg[^>]+\bheight="/.test(content)) {
+    errors.push('has height attribute on <svg> — remove it, use viewBox only')
+  }
+
+  const fillMatches = content.matchAll(/fill="([^"]+)"/g)
+  for (const m of fillMatches) {
+    if (m[1] !== 'none' && m[1] !== 'currentColor') {
+      errors.push(`has hardcoded fill="${m[1]}" — use "currentColor" instead`)
+    }
+  }
+
+  const strokeMatches = content.matchAll(/stroke="([^"]+)"/g)
+  for (const m of strokeMatches) {
+    if (m[1] !== 'none' && m[1] !== 'currentColor') {
+      errors.push(`has hardcoded stroke="${m[1]}" — use "currentColor" instead`)
+    }
+  }
+
+  if (errors.length > 0) {
+    throw new Error(
+      `SVG validation failed for ${filename}:\n${errors.map((e) => `  - ${e}`).join('\n')}`
+    )
+  }
+}
+
+/**
+ * Parse a simple SVG file and extract viewBox + path/circle data.
+ * Expects SVGs to already use currentColor (validated upstream).
+ */
+function parseSvg(content) {
+  const viewBoxMatch = content.match(/viewBox="([^"]+)"/)
+  const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 24 24'
+  const [, , vbW, vbH] = viewBox.split(' ').map(Number)
+  const width = vbW || 24
+  const height = vbH || 24
 
   const paths = []
   const pathRegex = /<path\s+([^/]*?)\/?\s*>/g
   let match
 
-  while ((match = pathRegex.exec(svgContent)) !== null) {
+  while ((match = pathRegex.exec(content)) !== null) {
     const attrs = match[1]
     const d = attrs.match(/d="([^"]+)"/)?.[1]
     if (!d) continue
 
-    const fill = attrs.match(/fill="([^"]+)"/)?.[1]
     const fillRule = attrs.match(/fill-rule="([^"]+)"/)?.[1]
     const clipRule = attrs.match(/clip-rule="([^"]+)"/)?.[1]
-    const stroke = attrs.match(/stroke="([^"]+)"/)?.[1]
     const strokeWidth = attrs.match(/stroke-width="([^"]+)"/)?.[1]
     const strokeLinecap = attrs.match(/stroke-linecap="([^"]+)"/)?.[1]
     const strokeLinejoin = attrs.match(/stroke-linejoin="([^"]+)"/)?.[1]
 
     const pathObj = { d }
-    if (fill && fill !== 'none') pathObj.fill = fill
     if (fillRule) pathObj.fillRule = fillRule
     if (clipRule) pathObj.clipRule = clipRule
-    if (stroke && stroke !== 'none') pathObj.stroke = stroke
     if (strokeWidth) pathObj.strokeWidth = strokeWidth
     if (strokeLinecap) pathObj.strokeLinecap = strokeLinecap
     if (strokeLinejoin) pathObj.strokeLinejoin = strokeLinejoin
@@ -64,22 +95,18 @@ function parseSvg(svgContent) {
     paths.push(pathObj)
   }
 
-  // Also parse <circle>, <rect>, <line> if present
   const circleRegex = /<circle\s+([^/]*?)\/?\s*>/g
-  while ((match = circleRegex.exec(svgContent)) !== null) {
+  while ((match = circleRegex.exec(content)) !== null) {
     const attrs = match[1]
     const cx = attrs.match(/cx="([^"]+)"/)?.[1]
     const cy = attrs.match(/cy="([^"]+)"/)?.[1]
     const r = attrs.match(/r="([^"]+)"/)?.[1]
-    const fill = attrs.match(/fill="([^"]+)"/)?.[1]
     if (cx && cy && r) {
-      const circleObj = { type: 'circle', cx, cy, r }
-      if (fill && fill !== 'none') circleObj.fill = fill
-      paths.push(circleObj)
+      paths.push({ type: 'circle', cx, cy, r })
     }
   }
 
-  return { viewBox, paths }
+  return { viewBox, width, height, paths }
 }
 
 /**
@@ -101,27 +128,26 @@ function generateIconData(icons) {
     'export interface IconPathData {',
     '  type?: never',
     '  d: string',
-    '  fill?: string',
     '  fillRule?: string',
     '  clipRule?: string',
-    '  stroke?: string',
     '  strokeWidth?: string',
     '  strokeLinecap?: string',
     '  strokeLinejoin?: string',
     '}',
     '',
     'export interface IconCircleData {',
-    '  type: \'circle\'',
+    "  type: 'circle'",
     '  cx: string',
     '  cy: string',
     '  r: string',
-    '  fill?: string',
     '}',
     '',
     'export type IconElement = IconPathData | IconCircleData',
     '',
     'export interface IconDefinition {',
     '  viewBox: string',
+    '  width: number',
+    '  height: number',
     '  elements: IconElement[]',
     '}',
     '',
@@ -132,6 +158,8 @@ function generateIconData(icons) {
     const icon = icons[name]
     lines.push(`  ${name}: {`)
     lines.push(`    viewBox: '${icon.viewBox}',`)
+    lines.push(`    width: ${icon.width},`)
+    lines.push(`    height: ${icon.height},`)
     lines.push(`    elements: ${JSON.stringify(icon.paths)},`)
     lines.push(`  },`)
   }
@@ -157,6 +185,9 @@ function main() {
 
   for (const file of files) {
     const content = fs.readFileSync(path.join(ASSETS_DIR, file), 'utf-8')
+
+    validateSvg(file, content)
+
     const name = toIconName(file)
     const parsed = parseSvg(content)
 
