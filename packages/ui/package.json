@@ -24,6 +24,7 @@
     "react-native": "catalog:"
   },
   "dependencies": {
+    "@financial-app/icons": "workspace:^",
     "@financial-app/tailwind-config": "workspace:^",
     "@financial-app/tokens": "workspace:^",
     "class-variance-authority": "^0.7.1",

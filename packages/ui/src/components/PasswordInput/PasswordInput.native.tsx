@@ -1,7 +1,7 @@
+import { Icon } from '@financial-app/icons'
 import { useState } from 'react'
-import { Pressable, Text } from 'react-native'
+import { Pressable } from 'react-native'
 
-import tw from '../../lib/tw'
 import { TextInput } from '../TextInput/TextInput.native'
 
 import type { IPasswordInputProps } from './PasswordInput'
@@ -18,15 +18,18 @@ export const PasswordInput = ({
 }: IPasswordInputProps) => {
   const [visible, setVisible] = useState(false)
 
-  const eyeIcon = showToggle ? (
+  const toggle = showToggle ? (
     <Pressable
       onPress={() => {
         setVisible((v) => !v)
       }}
+      accessibilityLabel={visible ? 'Hide password' : 'Show password'}
     >
-      <Text style={tw`text-grey-500 text-base`}>
-        {visible ? '\u25C9' : '\u25CE'}
-      </Text>
+      <Icon
+        name={visible ? 'hidePassword' : 'showPassword'}
+        size={16}
+        color="#696868"
+      />
     </Pressable>
   ) : undefined
 
@@ -38,7 +41,7 @@ export const PasswordInput = ({
       placeholder={placeholder}
       helperText={helperText}
       error={error}
-      icon={eyeIcon}
+      trailingElement={toggle}
       secureTextEntry={!visible}
     />
   )

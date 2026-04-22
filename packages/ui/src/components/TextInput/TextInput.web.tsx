@@ -1,3 +1,5 @@
+import { Icon } from '@financial-app/icons'
+
 import { cn } from '../../lib/cn'
 import { textInputVariants } from '../../variants/textInput.variants'
 
@@ -12,6 +14,7 @@ export const TextInput = ({
   helperText,
   error,
   icon,
+  trailingElement,
   prefix,
   secureTextEntry,
 }: ITextInputProps) => {
@@ -38,7 +41,8 @@ export const TextInput = ({
           placeholder={placeholder}
           className="flex-1 bg-transparent text-sm text-grey-900 outline-none placeholder:text-beige-500"
         />
-        {icon}
+        {trailingElement ??
+          (icon ? <Icon name={icon} size={16} color="#696868" /> : null)}
       </div>
       {helperText ? (
         <span
