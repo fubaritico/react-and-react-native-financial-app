@@ -382,3 +382,13 @@
 - Icon Storybook story (edb2fa9)
     - Playground: controls for all 21 icons, named iconSize, color picker, accessibilityLabel
     - Showcase: icon grid with names, named sizes (xs→xxl with px), 6 categories, color override demo
+
+- Storybook migration COMPLETE (7e5b129)
+    - Moved from packages/ui/.storybook/ to standalone apps/storybook/
+    - 19 web stories + 1 native story (Button), all under Web/Design System/ and Native/Design System/
+    - Fixed barrel import resolution: explicit .tsx extensions in all type imports across 21 index.web.ts + src/index.web.ts
+    - Root cause: @storybook/react-native-web-vite adds .native.tsx to Vite resolve.extensions, ambiguous `./Component` resolved to native impl
+    - Fixed viteFinal alias preservation: handles both object and array alias formats from framework
+    - Downgraded React 19.2.5 → 19.1.0, @types/react ~19.2.14 → ~19.1.10 (Expo SDK 54 renderer requires 19.1.0)
+    - Updated design-system.md rule: barrel files must use explicit .tsx extension for type imports
+    - Verified: Storybook renders in browser, Expo iOS simulator runs without errors
