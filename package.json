@@ -17,7 +17,9 @@
     "expo:android:device": "pnpm --filter mobile-expo-financial-app android:build:device",
     "expo:prebuild": "pnpm --filter mobile-expo-financial-app prebuild",
     "expo:rebuild:ios": "pnpm --filter mobile-expo-financial-app prebuild && pnpm --filter mobile-expo-financial-app ios",
-    "expo:rebuild:android": "pnpm --filter mobile-expo-financial-app prebuild && pnpm --filter mobile-expo-financial-app android",
+    "expo:rebuild:android": "./scripts/rebuild-android.sh apps/mobile-expo",
+    "expo:rebuild:android:phone": "./scripts/rebuild-android.sh apps/mobile-expo Small_Phone",
+    "expo:rebuild:android:tablet": "./scripts/rebuild-android.sh apps/mobile-expo Medium_Tablet",
     "expo:fix": "pnpm --filter mobile-expo-financial-app expo:fix",
     "expo:check": "pnpm --filter mobile-expo-financial-app expo:check",
 
@@ -29,7 +31,9 @@
     "mobile:ios:device": "pnpm --filter mobile-financial-app ios:device",
     "mobile:pods": "pnpm --filter mobile-financial-app pods",
     "mobile:rebuild:ios": "pnpm --filter mobile-financial-app rebuild:ios",
-    "mobile:rebuild:android": "pnpm --filter mobile-financial-app rebuild:android",
+    "mobile:rebuild:android": "./scripts/rebuild-android.sh apps/mobile",
+    "mobile:rebuild:android:phone": "./scripts/rebuild-android.sh apps/mobile Small_Phone",
+    "mobile:rebuild:android:tablet": "./scripts/rebuild-android.sh apps/mobile Medium_Tablet",
 
     "------------ EJECTED (expo ejected) ----": "",
     "ejected:start": "pnpm --filter mobile-expo-ejected-financial-app start",

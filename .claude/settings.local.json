@@ -11,7 +11,9 @@
       "Bash",
       "Skill(commit)",
       "Skill(end-session)",
-      "Skill(start-session)"
+      "Skill(start-session)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs"
     ]
   },
   "deny": [

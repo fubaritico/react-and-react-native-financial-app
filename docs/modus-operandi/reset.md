@@ -75,6 +75,27 @@ pnpm --filter mobile-expo-ejected-financial-app android
 - [ ] iOS simulator: app builds, installs, launches
 - [ ] Android emulator: app builds, installs, launches
 
+## Android Rebuild (per-app, no full reset needed)
+
+For Android-specific issues (cache corruption, Gradle errors, native dep changes),
+use the dedicated rebuild script instead of a full `pnpm reset`:
+
+```bash
+pnpm mobile:rebuild:android   # bare RN CLI
+pnpm expo:rebuild:android     # Expo managed
+```
+
+The script (`scripts/rebuild-android.sh`) handles everything in order:
+1. Stops Gradle daemon (cached JVM — must die first or it recreates caches)
+2. Kills Metro bundler on port 8081
+3. Cleans Gradle build dirs (`build/`, `.gradle/`, `app/.cxx/`)
+4. Cleans Metro/Haste/RN temp caches + Watchman
+5. Runs `expo prebuild --clean` (Expo only, skipped for bare RN)
+6. Builds and launches on emulator
+
+First build after clean takes ~5 min (Gradle re-downloads dependencies).
+Subsequent runs reuse the global Gradle cache and finish much faster.
+
 ## Important Notes
 
 - **Close simulators between apps**: Metro port 8081 is shared. Close the simulator

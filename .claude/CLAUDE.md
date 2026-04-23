@@ -144,18 +144,10 @@ packages/
 Read `@completed.md`
 
 ### Next
-- Next: DonutChart + BudgetsOverview (last Wave 3 items)
+- Next: one-command Android build/fix flow (resolve AsyncStorage Maven artifact issue, create reliable `pnpm mobile:rebuild:android`)
+- Then: DonutChart + BudgetsOverview (last Wave 3 items)
 - Then: Phase 8 (API server + HTTP client + testing)
-- BudgetsOverview placeholder on Overview page — awaiting DonutChart from Track B
-
-### Next (Track B — UI components, separate session)
-- Storybook migration COMPLETE (7e5b129): apps/storybook/ standalone, 19 web + 21 native stories, verified in browser
-- All native stories added (df170e6): all 21 components have native Storybook stories
-- Barrel import fix: explicit .tsx extensions prevent .native.tsx resolution in react-native-web-vite
-- React downgraded to 19.1.0 (Expo SDK 54 renderer compatibility)
-- All stories under Web/Design System/ and Native/Design System/
-- **Next: DonutChart + BudgetsOverview** (last Wave 3 items)
-- Then: correct/polish existing components as needed
+- BudgetsOverview placeholder on Overview page — awaiting DonutChart
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.
@@ -169,4 +161,5 @@ Read `@completed.md`
 - Husky pre-commit hook fails when Turbo runs in non-TTY git hook context — all checks pass individually, likely output buffering issue. Used HUSKY=0 as workaround for 481e539.
 - RN native component tests (*.native.tsx) require Jest — Vitest cannot mock TurboModuleRegistry. UI package will need dual runners: Jest for native, Vitest for web + variants.
 - @financial-app/shared barrel (index.native.ts) re-exports auth chain — screen tests must mock the barrel to avoid pulling in supabase/babel-runtime. Consider splitting barrel or using subpath imports in screens.
+- Android build: `Could not find org.asyncstorage.shared_storage:storage-android:1.0.0` — Maven repo config issue in build.gradle. Blocks `pnpm mobile:rebuild:android`.
 
