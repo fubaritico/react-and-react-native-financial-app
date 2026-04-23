@@ -11,10 +11,7 @@ export default function App() {
       <StatusBar style="light" />
       <DevBadge />
       <Header title="Expo Ejected" subtitle="Design System partagé" />
-      <ScrollView
-        style={tw`flex-1`}
-        contentContainerStyle={tw`p-4`}
-      >
+      <ScrollView style={tw`flex-1`} contentContainerStyle={tw`p-4`}>
         <Card
           title="Bienvenue"
           text="Ceci est une carte du design-system partagé."

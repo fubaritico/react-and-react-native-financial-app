@@ -68,3 +68,9 @@ export type {
 
 export { RecurringBillsOverview } from './components/RecurringBillsOverview/index.web'
 export type { IRecurringBillsOverviewProps } from './components/RecurringBillsOverview/RecurringBillsOverview.tsx'
+
+export { Typography } from './components/Typography/index.web'
+export type {
+  ITypographyProps,
+  ITypographyWebProps,
+} from './components/Typography/Typography.tsx'

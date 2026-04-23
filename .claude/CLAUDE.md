@@ -144,9 +144,8 @@ packages/
 Read `@completed.md`
 
 ### Next
-- Next: DonutChart + BudgetsOverview (last Wave 3 items)
+- Next: DonutChart + BudgetsOverview (last Wave 3 items) — then typography component
 - Then: Phase 8 (API server + HTTP client + testing)
-- BudgetsOverview placeholder on Overview page — awaiting DonutChart
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.

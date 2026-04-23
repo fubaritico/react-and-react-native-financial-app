@@ -68,3 +68,9 @@ export type {
 
 export { RecurringBillsOverview } from './components/RecurringBillsOverview'
 export type { IRecurringBillsOverviewProps } from './components/RecurringBillsOverview/RecurringBillsOverview'
+
+export { Typography } from './components/Typography'
+export type {
+  ITypographyProps,
+  ITypographyNativeProps,
+} from './components/Typography/Typography'
