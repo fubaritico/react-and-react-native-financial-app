@@ -1,18 +1,20 @@
 import { Tabs } from 'expo-router'
 
+import tw from '../../src/lib/tw'
+
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#201F24',
-        tabBarInactiveTintColor: '#B3B3B3',
+        tabBarActiveTintColor: tw.color('nav-active-text'),
+        tabBarInactiveTintColor: tw.color('nav-text'),
         tabBarStyle: {
-          backgroundColor: '#201F24',
+          backgroundColor: tw.color('nav-bg'),
           borderTopWidth: 0,
         },
         tabBarLabelStyle: {
-          fontSize: 10,
+          fontSize: Number(tw.style('text-2xs').fontSize) || 10,
           fontFamily: 'PublicSans-Regular',
         },
       }}

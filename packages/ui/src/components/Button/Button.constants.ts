@@ -1,5 +1,7 @@
-/** Color mapping for icon fill per button variant. */
-export const ICON_COLOR: Record<string, string> = {
-  secondary: '#201F24',
-  tertiary: '#696868',
+/** Token name mapping for icon fill per button variant (resolved via tw.color on native). */
+export const ICON_COLOR_TOKEN: Record<string, string> = {
+  primary: 'primary-foreground',
+  secondary: 'foreground',
+  tertiary: 'foreground-muted',
+  destroy: 'destructive-foreground',
 }

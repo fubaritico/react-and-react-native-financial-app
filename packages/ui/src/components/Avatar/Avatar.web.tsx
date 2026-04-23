@@ -5,9 +5,18 @@ import { cn } from '../../lib/cn'
 import type { IAvatarProps } from './Avatar'
 import type { CSSProperties } from 'react'
 
+/** Returns true when src looks like a loadable URL (absolute or data URI). */
+function isValidImageSrc(src: string): boolean {
+  return (
+    src.startsWith('http://') ||
+    src.startsWith('https://') ||
+    src.startsWith('data:')
+  )
+}
+
 /** Web implementation of the Avatar component. */
 export const Avatar = ({ src, name, size = 40 }: IAvatarProps) => {
-  const [hasError, setHasError] = useState(false)
+  const [hasError, setHasError] = useState(() => !isValidImageSrc(src))
   const initials = name
     .split(' ')
     .map((w) => w[0])
@@ -20,7 +29,7 @@ export const Avatar = ({ src, name, size = 40 }: IAvatarProps) => {
   return hasError ? (
     <span
       className={cn(
-        'inline-flex items-center justify-center rounded-full bg-grey-300 text-xs font-bold text-grey-900',
+        'inline-flex items-center justify-center rounded-full bg-foreground-subtle text-xs font-bold text-foreground',
         'w-[var(--avatar-size)] h-[var(--avatar-size)]'
       )}
       style={sizeStyle}

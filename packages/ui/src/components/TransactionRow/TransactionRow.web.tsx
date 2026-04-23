@@ -13,7 +13,8 @@ export const TransactionRow = ({
   amount,
   date,
 }: ITransactionRowProps) => {
-  const amountColor = amount >= 0 ? 'text-green' : 'text-grey-900'
+  const amountColor =
+    amount >= 0 ? 'text-transaction-positive' : 'text-transaction-negative'
 
   return (
     <div className={styles.root}>

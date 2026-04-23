@@ -1,7 +1,6 @@
 import { cn } from '../../lib/cn'
 import { Icon } from '../Icon/Icon.web'
 
-import { ICON_COLOR } from './Button.constants'
 import { buttonVariants } from './Button.variants'
 
 import type { IButtonProps } from './Button'
@@ -27,12 +26,6 @@ export const Button = ({
     )}
   >
     {title}
-    {icon ? (
-      <Icon
-        name={icon}
-        iconSize="xs"
-        color={ICON_COLOR[variant ?? 'primary'] ?? 'white'}
-      />
-    ) : null}
+    {icon ? <Icon name={icon} iconSize="xs" color="currentColor" /> : null}
   </button>
 )

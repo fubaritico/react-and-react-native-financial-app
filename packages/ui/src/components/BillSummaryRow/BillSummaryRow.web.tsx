@@ -13,7 +13,10 @@ export const BillSummaryRow = ({
   color,
 }: IBillSummaryRowProps) => (
   <div
-    className={cn(billSummaryRowVariants(), 'border-l-[var(--border-color)]')}
+    className={cn(
+      billSummaryRowVariants(),
+      'flex border-l-[var(--border-color)]'
+    )}
     style={
       {
         '--border-color': `var(--color-base-${color}-DEFAULT)`,

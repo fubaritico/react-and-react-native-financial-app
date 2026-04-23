@@ -19,11 +19,11 @@ export const Avatar = ({ src, name, size = 40 }: IAvatarProps) => {
     <View
       accessibilityLabel={name}
       style={[
-        tw`bg-grey-300 rounded-full items-center justify-center`,
+        tw`bg-foreground-subtle rounded-full items-center justify-center`,
         { width: size, height: size },
       ]}
     >
-      <Text style={tw`text-grey-900 text-xs font-bold`}>{initials}</Text>
+      <Text style={tw`text-foreground text-xs font-bold`}>{initials}</Text>
     </View>
   ) : (
     <Image

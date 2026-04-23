@@ -1,4 +1,5 @@
 import { cn } from '../../lib/cn'
+import { Icon } from '../Icon/Icon.web'
 import { SectionLink } from '../SectionLink/SectionLink.web'
 
 import styles from './PotsOverview.styles'
@@ -26,7 +27,9 @@ export const PotsOverview = ({
       <div className={cn('flex', styles.totalSavedBox, 'md:flex-1')}>
         {/* Icon area */}
         <div className={cn('flex', styles.iconArea, 'shrink-0')}>
-          {icon ?? <span className={styles.iconFallback}>$</span>}
+          {icon ?? (
+            <Icon name="pot" iconSize="5xl" color="var(--color-green)" />
+          )}
         </div>
 
         {/* Total saved text */}

@@ -1,4 +1,4 @@
 export default {
-  label: 'text-xs text-grey-500',
-  amount: 'text-sm font-bold text-grey-900',
+  label: 'text-xs text-foreground-muted',
+  amount: 'text-sm font-bold text-foreground',
 }

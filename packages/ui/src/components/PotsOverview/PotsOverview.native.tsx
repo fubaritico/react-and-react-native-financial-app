@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native'
 
 import tw from '../../lib/tw'
+import { Icon } from '../Icon/Icon.native'
 import { SectionLink } from '../SectionLink/SectionLink.native'
 
 import styles from './PotsOverview.styles'
@@ -29,7 +30,7 @@ export const PotsOverview = ({
       <View style={tw`${styles.totalSavedBox}`}>
         {/* Icon area */}
         <View accessibilityLabel="Savings icon" style={tw`${styles.iconArea}`}>
-          {icon ?? <Text style={tw`${styles.iconFallback}`}>$</Text>}
+          {icon ?? <Icon name="pot" iconSize="5xl" color={tw.color('green')} />}
         </View>
 
         {/* Total saved text */}

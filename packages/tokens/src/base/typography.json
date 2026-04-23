@@ -6,6 +6,7 @@
     },
     "size": {
       "$description": "Font size scale matching Figma text presets",
+      "2xs": { "$value": "0.625rem", "$type": "dimension" },
       "xs": { "$value": "0.75rem", "$type": "dimension" },
       "sm": { "$value": "0.875rem", "$type": "dimension" },
       "base": { "$value": "1rem", "$type": "dimension" },
@@ -13,7 +14,8 @@
       "xl": { "$value": "1.25rem", "$type": "dimension" },
       "2xl": { "$value": "1.5rem", "$type": "dimension" },
       "3xl": { "$value": "1.875rem", "$type": "dimension" },
-      "4xl": { "$value": "2rem", "$type": "dimension" }
+      "4xl": { "$value": "2rem", "$type": "dimension" },
+      "5xl": { "$value": "2.125rem", "$type": "dimension" }
     },
     "weight": {
       "$description": "Font weight scale",

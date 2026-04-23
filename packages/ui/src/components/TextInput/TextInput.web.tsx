@@ -27,7 +27,7 @@ export const TextInput = ({
       <div
         className={cn(
           inputClasses,
-          'flex items-center focus-within:border-grey-900 transition-colors'
+          'flex items-center focus-within:border-foreground transition-colors'
         )}
       >
         {prefix ? <span className={styles.prefix}>{prefix}</span> : null}
@@ -38,16 +38,22 @@ export const TextInput = ({
             onChangeText(e.target.value)
           }}
           placeholder={placeholder}
-          className="flex-1 bg-transparent text-sm text-grey-900 outline-none placeholder:text-beige-500"
+          className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-beige-500"
         />
         {trailingElement ??
-          (icon ? <Icon name={icon} iconSize="sm" color="#696868" /> : null)}
+          (icon ? (
+            <Icon
+              name={icon}
+              iconSize="sm"
+              color="var(--color-foreground-muted)"
+            />
+          ) : null)}
       </div>
       {helperText ? (
         <span
           className={cn(
             styles.helperText,
-            error ? 'text-red' : 'text-grey-500'
+            error ? 'text-destructive' : 'text-foreground-muted'
           )}
         >
           {helperText}

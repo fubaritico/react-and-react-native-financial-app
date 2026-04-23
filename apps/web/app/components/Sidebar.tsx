@@ -20,7 +20,7 @@ export function Sidebar() {
     <>
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex lg:flex-col lg:w-[300px] lg:min-h-screen bg-grey-900 rounded-r-xl py-10 px-8">
-        <p className="text-preset-1 text-white mb-16">finance</p>
+        <p className="text-preset-1 text-on-dark mb-16">finance</p>
         <nav className="flex flex-col gap-1">
           {NAV_ITEMS.map(({ to, label }) => (
             <NavLink
@@ -31,7 +31,7 @@ export function Sidebar() {
                   'flex items-center gap-4 px-8 py-4 rounded-r-xl text-preset-4 font-bold transition-colors border-l-4',
                   isActive
                     ? 'bg-beige-100 text-grey-900 border-green'
-                    : 'text-grey-300 border-transparent hover:text-white',
+                    : 'text-grey-300 border-transparent hover:text-on-dark',
                 ].join(' ')
               }
             >
@@ -52,7 +52,7 @@ export function Sidebar() {
                 'flex-1 flex flex-col items-center gap-1 py-2 rounded-t-lg text-center transition-colors border-b-4',
                 isActive
                   ? 'bg-beige-100 text-grey-900 border-green'
-                  : 'text-grey-300 border-transparent hover:text-white',
+                  : 'text-grey-300 border-transparent hover:text-on-dark',
               ].join(' ')
             }
           >

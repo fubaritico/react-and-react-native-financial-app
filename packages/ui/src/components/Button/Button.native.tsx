@@ -3,7 +3,7 @@ import { Pressable, Text } from 'react-native'
 import tw from '../../lib/tw'
 import { Icon } from '../Icon/Icon.native'
 
-import { ICON_COLOR } from './Button.constants'
+import { ICON_COLOR_TOKEN } from './Button.constants'
 import styles from './Button.styles'
 import { buttonVariants } from './Button.variants'
 
@@ -23,10 +23,10 @@ export const Button = ({
   const variantClasses = buttonVariants({ variant, fullWidth, disabled })
   const textColor =
     variant === 'secondary'
-      ? 'text-grey-900'
+      ? 'text-secondary-foreground'
       : variant === 'tertiary'
-        ? 'text-grey-500'
-        : 'text-white'
+        ? 'text-foreground-muted'
+        : 'text-primary-foreground'
 
   return (
     <Pressable
@@ -43,7 +43,7 @@ export const Button = ({
         <Icon
           name={icon}
           iconSize="xs"
-          color={ICON_COLOR[variant ?? 'primary'] ?? '#FFFFFF'}
+          color={tw.color(ICON_COLOR_TOKEN[variant ?? 'primary']) ?? '#FFFFFF'}
         />
       ) : null}
     </Pressable>

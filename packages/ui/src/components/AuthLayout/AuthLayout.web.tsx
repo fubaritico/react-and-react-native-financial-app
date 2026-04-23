@@ -7,14 +7,14 @@ import type { IAuthLayoutProps } from './AuthLayout'
 export const AuthLayout = ({ children }: IAuthLayoutProps) => (
   <div className="min-h-screen bg-beige-100 flex flex-col lg:flex-row">
     {/* Illustration panel — desktop only */}
-    <aside className="hidden lg:flex lg:w-[480px] bg-grey-900 rounded-r-lg flex-col justify-between p-10">
-      <p className="text-white text-xl font-bold">finance</p>
+    <aside className="hidden lg:flex lg:w-[480px] bg-nav-bg rounded-r-lg flex-col justify-between p-10">
+      <p className="text-on-dark text-xl font-bold">finance</p>
       <div className="flex-1 flex items-center justify-center">
         {/* Illustration placeholder — replaced with actual image in app */}
         <div className="w-full h-64 rounded-xl bg-grey-500/20" />
       </div>
       <div>
-        <h2 className="text-white text-2xl font-bold leading-tight">
+        <h2 className="text-on-dark text-2xl font-bold leading-tight">
           Keep track of your money
           <br />
           and save for your future
@@ -27,8 +27,8 @@ export const AuthLayout = ({ children }: IAuthLayoutProps) => (
     </aside>
 
     {/* Logo banner — tablet/mobile only */}
-    <header className="lg:hidden bg-grey-900 py-6 px-10 flex items-center justify-center rounded-b-lg">
-      <p className="text-white text-xl font-bold">finance</p>
+    <header className="lg:hidden bg-nav-bg py-6 px-10 flex items-center justify-center rounded-b-lg">
+      <p className="text-on-dark text-xl font-bold">finance</p>
     </header>
 
     {/* Form area */}

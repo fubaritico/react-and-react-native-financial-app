@@ -1,31 +1,32 @@
 import { Button, Card, Header } from '@financial-app/ui'
 import { StatusBar } from 'expo-status-bar'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 
 import { DevBadge } from './src/components/DevBadge'
+import tw from './src/lib/tw'
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <View style={tw`flex-1 bg-background`}>
       <StatusBar style="light" />
       <DevBadge />
       <Header title="Expo Ejected" subtitle="Design System partagé" />
       <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        style={tw`flex-1`}
+        contentContainerStyle={tw`p-4`}
       >
         <Card
           title="Bienvenue"
           text="Ceci est une carte du design-system partagé."
-          style={styles.card}
+          style={tw`mb-4`}
         />
-        <Card title="Actions" style={styles.card}>
+        <Card title="Actions" style={tw`mb-4`}>
           <Button
             title="Primary"
             onPress={() => {
               alert('Primary!')
             }}
-            style={styles.button}
+            style={tw`mb-2`}
           />
           <Button
             title="Secondary"
@@ -33,7 +34,7 @@ export default function App() {
             onPress={() => {
               alert('Secondary!')
             }}
-            style={styles.button}
+            style={tw`mb-2`}
           />
           <Button
             title="Tertiary"
@@ -47,22 +48,3 @@ export default function App() {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F3F4F6',
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 16,
-  },
-  card: {
-    marginBottom: 16,
-  },
-  button: {
-    marginBottom: 8,
-  },
-})

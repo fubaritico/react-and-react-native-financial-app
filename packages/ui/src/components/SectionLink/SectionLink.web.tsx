@@ -9,7 +9,7 @@ export const SectionLink = ({ label, onPress }: ISectionLinkProps) => (
   <button
     onClick={onPress}
     className={cn(
-      'inline-flex items-center gap-3 hover:text-grey-900 transition-colors cursor-pointer bg-transparent border-0 p-0',
+      'inline-flex items-center gap-3 hover:text-foreground transition-colors cursor-pointer bg-transparent border-0 p-0',
       styles.label
     )}
   >

@@ -124,9 +124,9 @@ export function OverviewScreen() {
       </View>
 
       {/* BudgetsOverview placeholder — awaiting DonutChart from Track B */}
-      <View style={tw`mt-4 bg-white rounded-xl p-5`}>
+      <View style={tw`mt-4 bg-card rounded-xl p-5`}>
         <Text style={tw`text-base font-bold`}>Budgets</Text>
-        <Text style={tw`text-grey-500 mt-2`}>
+        <Text style={tw`text-foreground-muted mt-2`}>
           {mockBudgets.length} budget
           {mockBudgets.length !== 1 ? 's' : ''} — awaiting DonutChart
         </Text>

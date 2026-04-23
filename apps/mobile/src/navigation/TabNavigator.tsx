@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
+import tw from '../lib/tw'
 import { BudgetsScreen } from '../screens/BudgetsScreen'
 import { OverviewScreen } from '../screens/OverviewScreen'
 import { PotsScreen } from '../screens/PotsScreen'
@@ -16,14 +17,14 @@ export function TabNavigator() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#FFFFFF',
-        tabBarInactiveTintColor: '#B3B3B3',
+        tabBarActiveTintColor: tw.color('on-dark'),
+        tabBarInactiveTintColor: tw.color('nav-text'),
         tabBarStyle: {
-          backgroundColor: '#201F24',
+          backgroundColor: tw.color('nav-bg'),
           borderTopWidth: 0,
         },
         tabBarLabelStyle: {
-          fontSize: 10,
+          fontSize: Number(tw.style('text-2xs').fontSize) || 10,
         },
       }}
     >

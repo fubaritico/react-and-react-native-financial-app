@@ -7,10 +7,10 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-grey-900 text-white',
-        secondary: 'bg-beige-100 text-grey-900',
-        tertiary: 'bg-transparent text-grey-500',
-        destroy: 'bg-red text-white',
+        primary: 'bg-primary text-primary-foreground',
+        secondary: 'bg-secondary text-secondary-foreground',
+        tertiary: 'bg-transparent text-foreground-muted',
+        destroy: 'bg-destructive text-destructive-foreground',
       },
       fullWidth: {
         true: 'w-full',
