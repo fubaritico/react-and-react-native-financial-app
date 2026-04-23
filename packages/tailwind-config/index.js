@@ -14,6 +14,7 @@ module.exports = {
       sans: tokens.font['family-sans'].split(', '),
     },
     fontSize: {
+      '2xs': tokens.font['size-2xs'],
       xs: tokens.font['size-xs'],
       sm: tokens.font['size-sm'],
       base: tokens.font['size-base'],
@@ -22,6 +23,7 @@ module.exports = {
       '2xl': tokens.font['size-2xl'],
       '3xl': tokens.font['size-3xl'],
       '4xl': tokens.font['size-4xl'],
+      '5xl': tokens.font['size-5xl'],
     },
     fontWeight: {
       normal: tokens.font['weight-normal'],

@@ -129,9 +129,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         {/* Right column */}
         <div className="flex flex-col gap-6">
           {/* BudgetsOverview placeholder — awaiting DonutChart from Track B */}
-          <div className="bg-white rounded-xl p-6">
-            <h2 className="text-preset-2 text-grey-900">Budgets</h2>
-            <p className="text-preset-4 text-grey-500 mt-2">
+          <div className="bg-card rounded-xl p-6">
+            <h2 className="text-preset-2 text-foreground">Budgets</h2>
+            <p className="text-preset-4 text-foreground-muted mt-2">
               {budgetCount} budget{budgetCount !== 1 ? 's' : ''} — awaiting
               DonutChart
             </p>

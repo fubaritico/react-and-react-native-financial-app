@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 
+import tw from '../../lib/tw'
 import { Icon } from '../Icon/Icon.native'
 import { TextInput } from '../TextInput/TextInput.native'
 
@@ -28,7 +29,7 @@ export const PasswordInput = ({
       <Icon
         name={visible ? 'hidePassword' : 'showPassword'}
         iconSize="sm"
-        color="#696868"
+        color={tw.color('foreground-muted')}
       />
     </Pressable>
   ) : undefined

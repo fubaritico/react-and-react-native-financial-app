@@ -1,3 +1,3 @@
 export default {
-  label: 'text-sm text-grey-500',
+  label: 'text-sm text-foreground-muted',
 }

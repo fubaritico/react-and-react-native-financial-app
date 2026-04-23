@@ -3,6 +3,7 @@
 
 ### Bug Fixes
 
+* **android:** resolve AsyncStorage Maven issue, add rebuild-android script ([dc90bd2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dc90bd2cf061a937fcb3eff87683957806ee6139))
 * **mobile:** enable wireless iPhone deployment and fix sandbox violation ([824ba71](https://github.com/fubaritico/react-and-react-native-financial-app/commit/824ba7136ba466297da10c77ad9e1752f93d7026))
 * **monorepo:** align React versions and fix cache issues ([d67c956](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d67c956998a0ce4d5b368f3b814393e8d1c02b58))
 * **tokens:** align alias names with Figma variable naming ([d9345ae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d9345aeb25a587df64a26a4a586352561e071668))

@@ -1,4 +1,4 @@
 export default {
-  title: 'text-2xl font-bold text-white',
-  subtitle: 'text-sm text-white opacity-80 mt-1',
+  title: 'text-2xl font-bold text-on-dark',
+  subtitle: 'text-sm text-on-dark opacity-80 mt-1',
 }

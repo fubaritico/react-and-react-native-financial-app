@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@financial-app/shared": "workspace:^",
+    "@financial-app/tailwind-config": "workspace:^",
     "@financial-app/ui": "workspace:^",
     "@react-native-google-signin/google-signin": "^16.1.2",
     "expo": "catalog:",
@@ -24,7 +25,8 @@
     "expo-secure-store": "^55.0.13",
     "expo-status-bar": "catalog:",
     "react": "catalog:",
-    "react-native": "catalog:"
+    "react-native": "catalog:",
+    "twrnc": "catalog:"
   },
   "devDependencies": {
     "@types/react": "catalog:",

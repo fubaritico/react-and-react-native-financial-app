@@ -34,14 +34,20 @@ export const TextInput = ({
           placeholder={placeholder}
           placeholderTextColor={tw.color('beige-500')}
           secureTextEntry={secureTextEntry}
-          style={tw`flex-1 text-sm text-grey-900 p-0`}
+          style={tw`flex-1 text-sm text-foreground p-0`}
         />
         {trailingElement ??
-          (icon ? <Icon name={icon} iconSize="sm" color="#696868" /> : null)}
+          (icon ? (
+            <Icon
+              name={icon}
+              iconSize="sm"
+              color={tw.color('foreground-muted')}
+            />
+          ) : null)}
       </View>
       {helperText ? (
         <Text
-          style={tw`${styles.helperText} ${error ? 'text-red' : 'text-grey-500'}`}
+          style={tw`${styles.helperText} ${error ? 'text-destructive' : 'text-foreground-muted'}`}
         >
           {helperText}
         </Text>

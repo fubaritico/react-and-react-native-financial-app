@@ -29,7 +29,7 @@ export const PasswordInput = ({
       <Icon
         name={visible ? 'hidePassword' : 'showPassword'}
         iconSize="sm"
-        color="#696868"
+        color="var(--color-foreground-muted)"
       />
     </button>
   ) : undefined

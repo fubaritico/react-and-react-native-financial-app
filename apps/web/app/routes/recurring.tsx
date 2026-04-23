@@ -5,9 +5,9 @@
 export default function RecurringBills() {
   return (
     <div className="p-6 lg:p-10">
-      <h1 className="text-preset-1 text-grey-900 mb-6">Recurring Bills</h1>
-      <div className="bg-white rounded-xl p-6">
-        <p className="text-preset-4 text-grey-500">
+      <h1 className="text-preset-1 text-foreground mb-6">Recurring Bills</h1>
+      <div className="bg-card rounded-xl p-6">
+        <p className="text-preset-4 text-foreground-muted">
           Recurring bills with paid/upcoming/due soon status, search, and sort
           will be built here.
         </p>

@@ -13,8 +13,8 @@ export const BalanceCard = ({
   amount,
   tone = 'light',
 }: IBalanceCardProps) => {
-  const labelColor = tone === 'dark' ? 'text-white' : 'text-grey-500'
-  const amountColor = tone === 'dark' ? 'text-white' : 'text-grey-900'
+  const labelColor = tone === 'dark' ? 'text-on-dark' : 'text-foreground-muted'
+  const amountColor = tone === 'dark' ? 'text-on-dark' : 'text-foreground'
 
   return (
     <View style={tw`${balanceCardVariants({ tone })}`}>

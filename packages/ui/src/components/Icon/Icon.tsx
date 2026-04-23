@@ -7,7 +7,7 @@ export interface IIconProps {
   name: IconName
   /** Named size — applied to the largest dimension, other scales proportionally */
   iconSize?: IIconSize
-  /** Fill color override — defaults to 'currentColor' (web) or '#201F24' (native) */
+  /** Fill color override — defaults to 'currentColor' (web) or foreground token (native) */
   color?: string
   /** Accessibility label — if omitted, icon is decorative (aria-hidden) */
   accessibilityLabel?: string
