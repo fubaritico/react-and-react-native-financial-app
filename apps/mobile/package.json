@@ -12,7 +12,7 @@
     "clean:ios": "rm -rf ios/build ~/Library/Developer/Xcode/DerivedData/mobile-* && cd ios && pod install && cd ..",
     "clean:android": "cd android && ./gradlew clean && cd ..",
     "rebuild:ios": "rm -rf ios/build ~/Library/Developer/Xcode/DerivedData/mobile-* && cd ios && pod install && cd .. && react-native run-ios --simulator='iPhone 16'",
-    "rebuild:android": "cd android && ./gradlew clean && cd .. && react-native run-android",
+    "rebuild:android": "../../scripts/rebuild-android.sh",
     "changelog": "conventional-changelog -p angular -r 0 --path . > CHANGELOG.md",
     "lint": "eslint ./App.tsx ./src",
     "type-check": "tsc --noEmit",

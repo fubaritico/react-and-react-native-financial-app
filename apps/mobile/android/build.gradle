@@ -18,4 +18,14 @@ buildscript {
     }
 }
 
+allprojects {
+    repositories {
+        maven {
+            // AsyncStorage v3 ships its Android artifact via a local Maven repo.
+            // Without this, Gradle cannot find org.asyncstorage.shared_storage:storage-android.
+            url = uri(project(":react-native-async-storage_async-storage").file("local_repo"))
+        }
+    }
+}
+
 apply plugin: "com.facebook.react.rootproject"

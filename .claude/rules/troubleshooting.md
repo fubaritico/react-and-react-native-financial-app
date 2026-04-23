@@ -15,6 +15,7 @@ Full modus operandi: `docs/modus-operandi/reset.md`
 | Pod install fails | Stale CocoaPods cache | `pod repo update && pod cache clean --all` |
 | `getDevServer is not a function (it is Object)` | `@expo/metro-runtime` or `expo-router` version mismatch with SDK | Run `npx expo install --fix` then `npx expo prebuild --clean && npx expo run:ios` |
 | `Cannot find native module 'ExpoLinking'` | JS bundle updated but native binary is stale (missing new native modules) | `npx expo prebuild --clean && npx expo run:ios` |
+| `Could not find org.asyncstorage.shared_storage:storage-android:1.0.0` | AsyncStorage v3 local Maven repo not configured | Add `allprojects { repositories { maven { url = uri(project(":react-native-async-storage_async-storage").file("local_repo")) } } }` to `android/build.gradle` |
 
 ### Expo Managed (apps/mobile-expo) — Dependency Alignment
 

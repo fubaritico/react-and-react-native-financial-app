@@ -39,7 +39,7 @@ react-and-react-native-financial-app/
 │   ├── icons/              # @financial-app/icons — cross-platform SVG icon library
 │   ├── ui/                 # @financial-app/ui — cross-platform design system
 │   └── shared/             # @financial-app/shared — auth, types, utils, atoms
-└── scripts/                # Utility scripts (reset, changelogs)
+└── scripts/                # Utility scripts (reset, rebuild, changelogs)
 ```
 
 [Back to top](#table-of-contents)
@@ -207,35 +207,6 @@ pnpm tokens        # Rebuild token outputs only
 pnpm icons         # Regenerate icon data from SVGs
 ```
 
-### Development
-
-```bash
-pnpm dev           # Start all dev servers in parallel
-
-# Or run individual apps:
-pnpm expo:start                # Expo Metro bundler (press i/a for iOS/Android)
-pnpm web:dev                   # Web (React Router dev server)
-pnpm mobile:start              # Bare RN CLI (Metro bundler)
-```
-
-### Expo — simulator / emulator shortcuts
-
-```bash
-# iOS
-pnpm expo:ios                  # Default iPhone simulator
-pnpm expo:ios:iphone           # iPhone 16 Pro simulator
-pnpm expo:ios:ipad             # iPad Pro 11-inch (M4) simulator
-
-# Android
-pnpm expo:android              # Default Android emulator
-pnpm expo:android:phone        # Small_Phone AVD
-pnpm expo:android:tablet       # Medium_Tablet AVD
-
-# Physical devices (interactive picker)
-pnpm expo:ios:device           # Pick from connected iOS devices
-pnpm expo:android:device       # Pick from connected Android devices
-```
-
 ### Quality checks
 
 ```bash
@@ -244,13 +215,96 @@ pnpm lint          # ESLint across all packages
 pnpm test          # Jest tests across all packages
 ```
 
-### Cleanup
+### Daily development
+
+For day-to-day JS/TS work (editing components, screens, styles, logic), Metro **hot-reloads**
+changes instantly — no rebuild needed. Just keep Metro running in one terminal.
+
+```bash
+# Web
+pnpm web:dev                   # React Router dev server
+
+# Expo (canonical mobile)
+pnpm expo:start                # Metro bundler (press i/a for iOS/Android)
+pnpm expo:ios                  # Build + launch on default iPhone simulator
+pnpm expo:ios:iphone           # iPhone 16 Pro simulator
+pnpm expo:ios:ipad             # iPad Pro 11-inch (M4) simulator
+pnpm expo:android              # Build + launch on default Android emulator
+pnpm expo:android:phone        # Small_Phone AVD
+pnpm expo:android:tablet       # Medium_Tablet AVD
+pnpm expo:ios:device           # Pick from connected iOS devices
+pnpm expo:android:device       # Pick from connected Android devices
+
+# Bare RN CLI
+pnpm mobile:start              # Metro bundler
+pnpm mobile:ios                # Build + launch on iOS simulator
+pnpm mobile:android            # Build + launch on Android emulator
+
+# Storybook
+pnpm storybook                 # Component browser (web + native stories)
+```
+
+These commands assume a native binary is already installed on the simulator/emulator.
+If it's your first run or you changed native dependencies, use a **rebuild** command instead.
+
+### Rebuild (clean native build from scratch)
+
+Use `rebuild` when the **native layer** changed — adding/removing a native library,
+changing `build.gradle`, `Podfile`, `app.json` native config, or upgrading RN/Expo SDK.
+Also use it when a build fails for no obvious reason (cache corruption).
+
+For pure JS/TS changes, you do **not** need this — Metro hot-reloads automatically.
+
+#### Android
+
+`rebuild:android` (`scripts/rebuild-android.sh`) is a single command that handles everything:
+
+1. Stops Gradle daemon (cached JVM that survives `rm -rf` on disk)
+2. Kills stale Metro on port 8081 (if any)
+3. Cleans Gradle build dirs (`.gradle/`, `build/`, `.cxx/`)
+4. Cleans Metro/Haste/RN temp caches + Watchman
+5. Runs `expo prebuild --clean` (Expo only, skipped for bare RN)
+6. Starts Metro in background, waits for it to be ready
+7. Builds and launches on emulator
+
+```bash
+# Bare RN CLI
+pnpm mobile:rebuild:android           # default emulator
+pnpm mobile:rebuild:android:phone     # Small_Phone AVD
+pnpm mobile:rebuild:android:tablet    # Medium_Tablet AVD
+
+# Expo managed
+pnpm expo:rebuild:android             # default emulator
+pnpm expo:rebuild:android:phone       # Small_Phone AVD
+pnpm expo:rebuild:android:tablet      # Medium_Tablet AVD
+```
+
+First build after a clean takes ~5 min (Gradle re-downloads dependencies).
+Subsequent runs reuse the global Gradle cache and finish faster.
+
+After the script finishes, Metro keeps running in the background.
+The output shows the PID and the command to stop it.
+
+#### iOS
+
+```bash
+pnpm mobile:rebuild:ios        # Bare RN CLI — clean + pod install + build + launch
+pnpm expo:rebuild:ios          # Expo managed — clean + prebuild + build + launch
+```
+
+### Reset (nuclear — full project clean)
+
+Use `pnpm reset` when everything is broken and you want to simulate a fresh clone.
+It removes all `node_modules`, caches, build outputs, reinstalls everything, and rebuilds tokens.
+See [docs/modus-operandi/reset.md](docs/modus-operandi/reset.md) for the full checklist.
 
 ```bash
 pnpm reset         # Full clean + reinstall + pod install + token rebuild
-pnpm clean         # Remove all node_modules
-pnpm clean:build   # Remove all build/dist outputs
+pnpm clean         # Remove all node_modules only
+pnpm clean:build   # Remove all build/dist outputs only
 ```
+
+After a reset, you still need to rebuild native binaries — use the `rebuild` commands above.
 
 [Back to top](#table-of-contents)
 
@@ -383,9 +437,7 @@ mv temp_mobile/android .
 rm -rf temp_mobile
 ```
 
-### Useful Cleanup Commands
-
-#### Check installed versions
+### Checking installed versions
 
 ```bash
 # See how many react-native versions are installed
@@ -393,44 +445,6 @@ ls node_modules/.pnpm | grep "^react-native@0"
 
 # Check version in a package
 cat apps/mobile/node_modules/react-native/package.json | grep version
-```
-
-#### Full cleanup and reinstall
-
-```bash
-# Remove lockfile and reinstall
-rm pnpm-lock.yaml
-pnpm clean && pnpm install
-```
-
-#### iOS Cleanup
-
-```bash
-cd apps/mobile/ios
-rm -rf build Pods Podfile.lock
-pod install
-```
-
-#### Android Cleanup
-
-```bash
-# Remove builds and Gradle caches
-rm -rf apps/mobile/android/build
-rm -rf apps/mobile/android/app/build
-rm -rf apps/mobile/android/.gradle
-rm -rf ~/.gradle/caches
-
-# Uninstall app from emulator
-adb uninstall com.mobile
-
-# Rebuild
-pnpm --filter mobile-financial-app android
-```
-
-#### Reset Metro
-
-```bash
-npx react-native start --reset-cache
 ```
 
 ### Android Debugging
@@ -485,6 +499,29 @@ module.exports = mergeConfig(getDefaultConfig(__dirname), config);
 
 After modification, restart Metro (`Ctrl + C` then `pnpm --filter mobile-financial-app start`).
 
+#### "Unable to load script" or white screen / splash screen stuck
+
+Metro is not running or the emulator can't reach it.
+
+If you used a `rebuild` command, Metro is started automatically — check the output for
+`Metro is ready (PID ...)`. If you used a regular `run` command, start Metro manually:
+
+```bash
+# Terminal 1: start Metro
+pnpm mobile:start   # or pnpm expo:start
+
+# Terminal 2: build + launch
+pnpm mobile:android  # or pnpm expo:android
+```
+
+If Metro is running but the emulator still can't connect, forward the port:
+
+```bash
+adb reverse tcp:8081 tcp:8081
+```
+
+Then reload in the emulator: press `R` twice.
+
 ---
 
 ### iOS
@@ -514,7 +551,7 @@ Install Ruby 3.1.x via rbenv (see section 2 above).
 Metro is not started. Run in a separate terminal:
 
 ```bash
-pnpm --filter mobile-financial-app start
+pnpm mobile:start
 ```
 
 Then reload the app in the simulator (`Cmd + R`).
@@ -546,6 +583,24 @@ echo 'export PATH=$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools' >> 
 source ~/.zshrc
 ```
 
+#### "Could not find org.asyncstorage.shared_storage:storage-android:1.0.0"
+
+AsyncStorage v3 ships its Android artifact via a local Maven repo, not Maven Central.
+The project's `android/build.gradle` must include:
+
+```gradle
+allprojects {
+    repositories {
+        maven {
+            url = uri(project(":react-native-async-storage_async-storage").file("local_repo"))
+        }
+    }
+}
+```
+
+This is already configured in `apps/mobile/android/build.gradle`. If you see this error after
+a fresh clone or reset, verify the block is present.
+
 #### "Included build node_modules/@react-native/gradle-plugin does not exist" error
 
 In a pnpm monorepo, some React Native dependencies are not installed by default. Add the missing dependencies:
@@ -554,20 +609,13 @@ In a pnpm monorepo, some React Native dependencies are not installed by default.
 pnpm --filter mobile-financial-app add -D @react-native/gradle-plugin@0.82.1 @react-native/codegen@0.82.1
 ```
 
-#### "Unable to load script" or white screen error
+#### Any other Android build failure
 
-Metro is not started or the app is not connected.
+When in doubt, use the rebuild command — it handles all cache layers:
 
-1. Start Metro in a separate terminal:
-   ```bash
-   pnpm --filter mobile-financial-app start
-   ```
-
-2. Relaunch the app:
-   ```bash
-   pnpm --filter mobile-financial-app android
-   ```
-
-3. Or reload in the emulator: press `R` twice.
+```bash
+pnpm mobile:rebuild:android        # bare RN CLI
+pnpm expo:rebuild:android          # Expo managed
+```
 
 [Back to top](#table-of-contents)

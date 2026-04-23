@@ -399,3 +399,16 @@
     - All import from `@financial-app/ui/native`, use View/Text for layout wrappers
     - Includes Playground + Showcase (or equivalent) for each component
     - Verified in browser via react-native-web-vite
+
+- Applied eslint updated import rules (747d8e8)
+
+- UI cleanup pass: styles refactoring + inline style fixes (2566e30)
+    - Extracted shared Tailwind classes into `.styles.ts` files for 14 components (AuthCard, BalanceCard, BillSummaryRow, Button, Card, Divider, Header, LinkText, PotsOverview, RecurringBillsOverview, SectionLink, SpendingSummaryRow, StatCard, TextInput, TransactionRow)
+    - Extracted shared runtime constants into `.constants.ts` for Button (ICON_COLOR map) and TransactionRow (formatAmount)
+    - Pattern: variants (CVA) for root element, `.styles.ts` for inner elements — shared between native and web
+    - Converted all inline styles to `tw`` in ui components and app screens (14 screen files across mobile + mobile-expo)
+    - Fixed `React.SVGProps` → `import type { SVGProps }` in Icon.web.tsx
+    - Created app-level tw instances (apps/mobile/src/lib/tw.ts, apps/mobile-expo/src/lib/tw.ts) — apps own their tw, not imported from ui
+    - Added @financial-app/tailwind-config + twrnc dependencies to mobile and mobile-expo apps
+    - Improved reset-project.sh: kill daemons first (Gradle daemon + Metro), clean global Gradle caches (~/.gradle/caches), clear Xcode DerivedData, prune pnpm store, comprehensive documentation
+    - Tested on iOS simulator (mobile + mobile-expo): OK
