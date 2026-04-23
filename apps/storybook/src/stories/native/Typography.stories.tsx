@@ -145,8 +145,8 @@ export const Colors: Story = {
           borderRadius: 8,
         }}
       >
-        <Typography variant="body-bold" color="inverse">
-          Inverse (on dark background)
+        <Typography variant="body-bold" color="on-dark">
+          On Dark (on dark background)
         </Typography>
       </View>
     </View>

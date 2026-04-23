@@ -1,8 +1,9 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import tw from '../../lib/tw'
 import { Icon } from '../Icon/Icon.native'
 import { SectionLink } from '../SectionLink/SectionLink.native'
+import { Typography } from '../Typography/Typography.native'
 
 import styles from './PotsOverview.styles'
 
@@ -18,9 +19,9 @@ export const PotsOverview = ({
   <View style={tw`${styles.root}`}>
     {/* Header row */}
     <View style={tw`${styles.header}`}>
-      <Text style={tw`${styles.title}`} accessibilityRole="header">
+      <Typography variant="subsection-title" accessibilityRole="header">
         Pots
-      </Text>
+      </Typography>
       <SectionLink label="See Details" onPress={onSeeDetails} />
     </View>
 
@@ -35,8 +36,10 @@ export const PotsOverview = ({
 
         {/* Total saved text */}
         <View>
-          <Text style={tw`${styles.totalLabel}`}>Total Saved</Text>
-          <Text style={tw`${styles.totalAmount}`}>{totalSaved}</Text>
+          <Typography variant="body" color="muted">
+            Total Saved
+          </Typography>
+          <Typography variant="display-lg">{totalSaved}</Typography>
         </View>
       </View>
 
@@ -47,8 +50,10 @@ export const PotsOverview = ({
             <View
               style={tw`${styles.potItem} border-l-4 border-l-${pot.color}`}
             >
-              <Text style={tw`${styles.potName}`}>{pot.name}</Text>
-              <Text style={tw`${styles.potTotal}`}>{pot.total}</Text>
+              <Typography variant="caption" color="muted">
+                {pot.name}
+              </Typography>
+              <Typography variant="body-bold">{pot.total}</Typography>
             </View>
           </View>
         ))}

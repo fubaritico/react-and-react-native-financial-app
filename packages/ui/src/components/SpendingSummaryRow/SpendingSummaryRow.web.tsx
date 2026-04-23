@@ -1,6 +1,5 @@
 import { ColorDot } from '../ColorDot/ColorDot.web'
-
-import styles from './SpendingSummaryRow.styles'
+import { Typography } from '../Typography/Typography.web'
 
 import type { ISpendingSummaryRowProps } from './SpendingSummaryRow'
 
@@ -12,7 +11,16 @@ export const SpendingSummaryRow = ({
 }: ISpendingSummaryRowProps) => (
   <div className="flex items-center py-2">
     <ColorDot color={color} size={16} />
-    <span className={styles.label}>{label}</span>
-    <span className={styles.amount}>{amount}</span>
+    <Typography
+      variant="caption"
+      color="muted"
+      as="span"
+      className="flex-1 ml-3"
+    >
+      {label}
+    </Typography>
+    <Typography variant="body-bold" as="span">
+      {amount}
+    </Typography>
   </div>
 )

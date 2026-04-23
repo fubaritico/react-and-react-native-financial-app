@@ -1,6 +1,7 @@
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 
 import tw from '../../lib/tw'
+import { Typography } from '../Typography/Typography.native'
 
 import type { IAuthLayoutProps } from './AuthLayout'
 
@@ -11,7 +12,9 @@ export const AuthLayout = ({ children }: IAuthLayoutProps) => (
     contentContainerStyle={tw`flex-grow`}
   >
     <View style={tw`bg-card-dark py-6 px-10 items-center rounded-b-lg`}>
-      <Text style={tw`text-on-dark text-xl font-bold`}>finance</Text>
+      <Typography variant="section-title" color="on-dark">
+        finance
+      </Typography>
     </View>
     <View style={tw`flex-1 justify-center items-center px-4 py-10`}>
       {children}

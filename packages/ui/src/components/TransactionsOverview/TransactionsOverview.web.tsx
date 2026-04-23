@@ -1,5 +1,6 @@
 import { SectionLink } from '../SectionLink/SectionLink.web'
 import { TransactionRow } from '../TransactionRow/TransactionRow.web'
+import { Typography } from '../Typography/Typography.web'
 
 import styles from './TransactionsOverview.styles'
 
@@ -12,7 +13,9 @@ export const TransactionsOverview = ({
 }: ITransactionsOverviewProps) => (
   <section className={styles.root}>
     <div className={styles.header}>
-      <h3 className={styles.title}>Transactions</h3>
+      <Typography variant="subsection-title" as="h3">
+        Transactions
+      </Typography>
       <SectionLink label="View All" onPress={onViewAll} />
     </div>
     <div className={styles.list}>

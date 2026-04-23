@@ -1,11 +1,12 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import tw from '../../lib/tw'
+import { Typography } from '../Typography/Typography.native'
 
-import styles from './BalanceCard.styles'
 import { balanceCardVariants } from './BalanceCard.variants'
 
 import type { IBalanceCardProps } from './BalanceCard'
+import type { TypographyVariants } from '../Typography/Typography.variants'
 
 /** Native implementation of the BalanceCard component. */
 export const BalanceCard = ({
@@ -13,13 +14,19 @@ export const BalanceCard = ({
   amount,
   tone = 'light',
 }: IBalanceCardProps) => {
-  const labelColor = tone === 'dark' ? 'text-on-dark' : 'text-foreground-muted'
-  const amountColor = tone === 'dark' ? 'text-on-dark' : 'text-foreground'
+  const labelColor: TypographyVariants['color'] =
+    tone === 'dark' ? 'on-dark' : 'muted'
+  const amountColor: TypographyVariants['color'] =
+    tone === 'dark' ? 'on-dark' : 'foreground'
 
   return (
     <View style={tw`${balanceCardVariants({ tone })}`}>
-      <Text style={tw`${styles.label} ${labelColor}`}>{label}</Text>
-      <Text style={tw`${styles.amount} ${amountColor}`}>{amount}</Text>
+      <Typography variant="body" color={labelColor}>
+        {label}
+      </Typography>
+      <Typography variant="heading-xl" color={amountColor}>
+        {amount}
+      </Typography>
     </View>
   )
 }

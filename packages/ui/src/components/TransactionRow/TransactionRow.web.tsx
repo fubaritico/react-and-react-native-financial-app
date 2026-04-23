@@ -1,10 +1,11 @@
-import { cn } from '../../lib/cn'
 import { Avatar } from '../Avatar/Avatar.web'
+import { Typography } from '../Typography/Typography.web'
 
 import { formatAmount } from './TransactionRow.constants'
 import styles from './TransactionRow.styles'
 
 import type { ITransactionRowProps } from './TransactionRow'
+import type { TypographyVariants } from '../Typography/Typography.variants'
 
 /** Web implementation of the TransactionRow component. */
 export const TransactionRow = ({
@@ -13,18 +14,26 @@ export const TransactionRow = ({
   amount,
   date,
 }: ITransactionRowProps) => {
-  const amountColor =
-    amount >= 0 ? 'text-transaction-positive' : 'text-transaction-negative'
+  const amountColor: TypographyVariants['color'] =
+    amount >= 0 ? 'transaction-positive' : 'transaction-negative'
 
   return (
     <div className={styles.root}>
       <Avatar src={avatar} name={name} size={40} />
-      <span className={styles.name}>{name}</span>
+      <Typography
+        variant="body-bold"
+        as="span"
+        className="flex-1 inline-flex items-center"
+      >
+        {name}
+      </Typography>
       <div className="text-right">
-        <p className={cn(styles.amountText, amountColor)}>
+        <Typography variant="body-bold" color={amountColor} as="p">
           {formatAmount(amount)}
-        </p>
-        <p className={styles.date}>{date}</p>
+        </Typography>
+        <Typography variant="caption" color="muted" as="p" className="mt-1">
+          {date}
+        </Typography>
       </div>
     </div>
   )

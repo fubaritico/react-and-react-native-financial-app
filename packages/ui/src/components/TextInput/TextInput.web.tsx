@@ -1,5 +1,6 @@
 import { cn } from '../../lib/cn'
 import { Icon } from '../Icon/Icon.web'
+import { Typography } from '../Typography/Typography.web'
 
 import styles from './TextInput.styles'
 import { textInputVariants } from './TextInput.variants'
@@ -23,14 +24,25 @@ export const TextInput = ({
 
   return (
     <div className={cn('flex flex-col', styles.wrapper)}>
-      <label className={styles.label}>{label}</label>
+      <Typography variant="label" color="muted">
+        {label}
+      </Typography>
       <div
         className={cn(
           inputClasses,
           'flex items-center focus-within:border-foreground transition-colors'
         )}
       >
-        {prefix ? <span className={styles.prefix}>{prefix}</span> : null}
+        {prefix ? (
+          <Typography
+            variant="body"
+            color="beige-500"
+            as="span"
+            className="mr-2"
+          >
+            {prefix}
+          </Typography>
+        ) : null}
         <input
           type={secureTextEntry ? 'password' : 'text'}
           value={value}
@@ -50,14 +62,14 @@ export const TextInput = ({
           ) : null)}
       </div>
       {helperText ? (
-        <span
-          className={cn(
-            styles.helperText,
-            error ? 'text-destructive' : 'text-foreground-muted'
-          )}
+        <Typography
+          variant="caption"
+          color={error ? 'destructive' : 'muted'}
+          align="right"
+          as="span"
         >
           {helperText}
-        </span>
+        </Typography>
       ) : null}
     </div>
   )

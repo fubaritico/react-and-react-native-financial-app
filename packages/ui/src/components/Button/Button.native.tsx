@@ -1,13 +1,22 @@
-import { Pressable, Text } from 'react-native'
+import { Pressable } from 'react-native'
 
 import tw from '../../lib/tw'
 import { Icon } from '../Icon/Icon.native'
+import { Typography } from '../Typography/Typography.native'
 
 import { ICON_COLOR_TOKEN } from './Button.constants'
-import styles from './Button.styles'
 import { buttonVariants } from './Button.variants'
 
 import type { IButtonProps } from './Button'
+import type { TypographyVariants } from '../Typography/Typography.variants'
+
+/** Text color per button variant. */
+const VARIANT_TEXT_COLOR: Record<string, TypographyVariants['color']> = {
+  primary: 'primary-foreground',
+  secondary: 'foreground',
+  tertiary: 'muted',
+  destroy: 'primary-foreground',
+}
 
 /** Native implementation of the Button component. */
 export const Button = ({
@@ -22,11 +31,7 @@ export const Button = ({
 }: IButtonProps) => {
   const variantClasses = buttonVariants({ variant, fullWidth, disabled })
   const textColor =
-    variant === 'secondary'
-      ? 'text-secondary-foreground'
-      : variant === 'tertiary'
-        ? 'text-foreground-muted'
-        : 'text-primary-foreground'
+    VARIANT_TEXT_COLOR[variant ?? 'primary'] ?? 'primary-foreground'
 
   return (
     <Pressable
@@ -38,7 +43,9 @@ export const Button = ({
         style,
       ]}
     >
-      <Text style={tw`${styles.text} ${textColor}`}>{title}</Text>
+      <Typography variant="body-bold" color={textColor}>
+        {title}
+      </Typography>
       {icon ? (
         <Icon
           name={icon}

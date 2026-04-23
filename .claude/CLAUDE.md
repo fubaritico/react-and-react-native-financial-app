@@ -144,7 +144,7 @@ packages/
 Read `@completed.md`
 
 ### Next
-- Next: DonutChart + BudgetsOverview (last Wave 3 items) — then typography component
+- Next: DonutChart + BudgetsOverview (last Wave 3 items)
 - Then: Phase 8 (API server + HTTP client + testing)
 
 ### Known Issues

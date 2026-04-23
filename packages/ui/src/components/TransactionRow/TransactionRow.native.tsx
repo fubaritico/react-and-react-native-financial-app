@@ -1,12 +1,14 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import tw from '../../lib/tw'
 import { Avatar } from '../Avatar/Avatar.native'
+import { Typography } from '../Typography/Typography.native'
 
 import { formatAmount } from './TransactionRow.constants'
 import styles from './TransactionRow.styles'
 
 import type { ITransactionRowProps } from './TransactionRow'
+import type { TypographyVariants } from '../Typography/Typography.variants'
 
 /** Native implementation of the TransactionRow component. */
 export const TransactionRow = ({
@@ -15,18 +17,25 @@ export const TransactionRow = ({
   amount,
   date,
 }: ITransactionRowProps) => {
-  const amountColor =
-    amount >= 0 ? 'text-transaction-positive' : 'text-transaction-negative'
+  const amountColor: TypographyVariants['color'] =
+    amount >= 0 ? 'transaction-positive' : 'transaction-negative'
 
   return (
     <View style={tw`${styles.root}`}>
       <Avatar src={avatar} name={name} size={40} />
-      <Text style={tw`${styles.name}`}>{name}</Text>
+      <Typography
+        variant="body-bold"
+        style={tw`flex-1 inline-flex items-center`}
+      >
+        {name}
+      </Typography>
       <View style={tw`items-end`}>
-        <Text style={tw`${styles.amountText} ${amountColor}`}>
+        <Typography variant="body-bold" color={amountColor}>
           {formatAmount(amount)}
-        </Text>
-        <Text style={tw`${styles.date}`}>{date}</Text>
+        </Typography>
+        <Typography variant="caption" color="muted" style={tw`mt-1`}>
+          {date}
+        </Typography>
       </View>
     </View>
   )

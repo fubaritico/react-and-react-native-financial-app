@@ -1,6 +1,7 @@
 import { cn } from '../../lib/cn'
 import { Icon } from '../Icon/Icon.web'
 import { SectionLink } from '../SectionLink/SectionLink.web'
+import { Typography } from '../Typography/Typography.web'
 
 import styles from './PotsOverview.styles'
 
@@ -17,7 +18,9 @@ export const PotsOverview = ({
   <section className={styles.root}>
     {/* Header row */}
     <div className={cn('flex', styles.header)}>
-      <h3 className={styles.title}>Pots</h3>
+      <Typography variant="subsection-title" as="h3">
+        Pots
+      </Typography>
       <SectionLink label="See Details" onPress={onSeeDetails} />
     </div>
 
@@ -34,8 +37,12 @@ export const PotsOverview = ({
 
         {/* Total saved text */}
         <div>
-          <p className={styles.totalLabel}>Total Saved</p>
-          <p className={styles.totalAmount}>{totalSaved}</p>
+          <Typography variant="body" color="muted" as="p">
+            Total Saved
+          </Typography>
+          <Typography variant="display-lg" as="p">
+            {totalSaved}
+          </Typography>
         </div>
       </div>
 
@@ -54,8 +61,12 @@ export const PotsOverview = ({
                 } as CSSProperties
               }
             >
-              <p className={styles.potName}>{pot.name}</p>
-              <p className={styles.potTotal}>{pot.total}</p>
+              <Typography variant="caption" color="muted" as="p">
+                {pot.name}
+              </Typography>
+              <Typography variant="body-bold" as="p">
+                {pot.total}
+              </Typography>
             </div>
           </div>
         ))}

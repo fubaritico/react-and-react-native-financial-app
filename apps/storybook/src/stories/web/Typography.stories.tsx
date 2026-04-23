@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>
 export const AllVariants: Story = {
   render: () => (
     <div className="space-y-8">
-      <div>
+      <div className="flex flex-col">
         <Typography variant="page-title">Page Title</Typography>
         <Typography variant="caption" color="muted">
           variant=&quot;page-title&quot; — Preset 1: 32px, bold, leading-tight,
@@ -25,7 +25,7 @@ export const AllVariants: Story = {
         </Typography>
       </div>
 
-      <div>
+      <div className="flex flex-col">
         <Typography variant="display">$4,836.00</Typography>
         <Typography variant="caption" color="muted">
           variant=&quot;display&quot; — Preset 1: 32px, bold, leading-tight,
@@ -33,7 +33,7 @@ export const AllVariants: Story = {
         </Typography>
       </div>
 
-      <div>
+      <div className="flex flex-col">
         <Typography variant="section-title">Section Title</Typography>
         <Typography variant="caption" color="muted">
           variant=&quot;section-title&quot; — Preset 2: 20px, bold,
@@ -41,7 +41,7 @@ export const AllVariants: Story = {
         </Typography>
       </div>
 
-      <div>
+      <div className="flex flex-col">
         <Typography variant="subsection-title">Subsection Title</Typography>
         <Typography variant="caption" color="muted">
           variant=&quot;subsection-title&quot; — Preset 3: 16px, bold,
@@ -49,7 +49,7 @@ export const AllVariants: Story = {
         </Typography>
       </div>
 
-      <div>
+      <div className="flex flex-col">
         <Typography variant="body">
           Body text — Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -60,7 +60,7 @@ export const AllVariants: Story = {
         </Typography>
       </div>
 
-      <div>
+      <div className="flex flex-col">
         <Typography variant="body-bold">
           Body bold — Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         </Typography>
@@ -70,7 +70,7 @@ export const AllVariants: Story = {
         </Typography>
       </div>
 
-      <div>
+      <div className="flex flex-col">
         <Typography variant="label">Email</Typography>
         <Typography variant="caption" color="muted">
           variant=&quot;label&quot; — 12px, bold, leading-normal, renders label
@@ -78,7 +78,7 @@ export const AllVariants: Story = {
         </Typography>
       </div>
 
-      <div>
+      <div className="flex flex-col">
         <Typography variant="caption">Caption or helper text</Typography>
         <Typography variant="caption" color="muted">
           variant=&quot;caption&quot; — Preset 5: 12px, normal, leading-normal,
@@ -86,7 +86,7 @@ export const AllVariants: Story = {
         </Typography>
       </div>
 
-      <div>
+      <div className="flex flex-col">
         <Typography variant="caption-bold">Caption bold text</Typography>
         <Typography variant="caption" color="muted">
           variant=&quot;caption-bold&quot; — Preset 5Bold: 12px, bold,
@@ -155,8 +155,8 @@ export const Colors: Story = {
         Destructive (-$55.50)
       </Typography>
       <div className="bg-foreground p-4 rounded-md">
-        <Typography variant="body-bold" color="inverse">
-          Inverse (on dark background)
+        <Typography variant="body-bold" color="on-dark">
+          On Dark (on dark background)
         </Typography>
       </div>
     </div>

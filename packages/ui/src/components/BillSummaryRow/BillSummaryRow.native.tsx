@@ -1,8 +1,8 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import tw from '../../lib/tw'
+import { Typography } from '../Typography/Typography.native'
 
-import styles from './BillSummaryRow.styles'
 import { billSummaryRowVariants } from './BillSummaryRow.variants'
 
 import type { IBillSummaryRowProps } from './BillSummaryRow'
@@ -14,7 +14,9 @@ export const BillSummaryRow = ({
   color,
 }: IBillSummaryRowProps) => (
   <View style={tw`${billSummaryRowVariants()} border-l-${color}`}>
-    <Text style={tw`${styles.label}`}>{label}</Text>
-    <Text style={tw`${styles.amount}`}>{amount}</Text>
+    <Typography variant="caption" color="muted">
+      {label}
+    </Typography>
+    <Typography variant="body-bold">{amount}</Typography>
   </View>
 )

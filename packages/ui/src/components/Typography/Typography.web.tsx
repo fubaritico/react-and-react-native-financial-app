@@ -17,6 +17,7 @@ export function Typography({
   align,
   as,
   numberOfLines,
+  className,
   children,
 }: ITypographyWebProps) {
   const resolvedVariant = variant ?? 'body'
@@ -30,7 +31,8 @@ export function Typography({
         numberOfLines === 1 && 'truncate',
         numberOfLines &&
           numberOfLines > 1 &&
-          `line-clamp-${String(numberOfLines)}`
+          `line-clamp-${String(numberOfLines)}`,
+        className
       ),
     },
     children

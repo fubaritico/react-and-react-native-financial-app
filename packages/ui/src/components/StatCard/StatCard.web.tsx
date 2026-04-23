@@ -1,6 +1,6 @@
 import { cn } from '../../lib/cn'
+import { Typography } from '../Typography/Typography.web'
 
-import styles from './StatCard.styles'
 import { statCardVariants } from './StatCard.variants'
 
 import type { IStatCardProps } from './StatCard'
@@ -16,7 +16,11 @@ export const StatCard = ({ label, amount, color }: IStatCardProps) => (
       } as CSSProperties
     }
   >
-    <p className={styles.label}>{label}</p>
-    <p className={styles.amount}>{amount}</p>
+    <Typography variant="caption" color="muted" as="p">
+      {label}
+    </Typography>
+    <Typography variant="body-bold" as="p">
+      {amount}
+    </Typography>
   </div>
 )

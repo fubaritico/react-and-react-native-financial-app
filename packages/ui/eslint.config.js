@@ -16,7 +16,10 @@ export default tseslint.config(
       },
     },
     rules: {
-      'react-native/no-raw-text': 'error',
+      'react-native/no-raw-text': [
+        'error',
+        { skip: ['Typography'] },
+      ],
       'react-native/no-inline-styles': 'warn',
     },
   },

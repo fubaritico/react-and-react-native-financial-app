@@ -1,6 +1,7 @@
 import { cn } from '../../lib/cn'
 import { BillSummaryRow } from '../BillSummaryRow/BillSummaryRow.web'
 import { SectionLink } from '../SectionLink/SectionLink.web'
+import { Typography } from '../Typography/Typography.web'
 
 import styles from './RecurringBillsOverview.styles'
 
@@ -15,7 +16,9 @@ export const RecurringBillsOverview = ({
 }: IRecurringBillsOverviewProps) => (
   <section className={styles.root}>
     <div className={cn('flex', styles.header)}>
-      <h3 className={styles.title}>Recurring Bills</h3>
+      <Typography variant="subsection-title" as="h3">
+        Recurring Bills
+      </Typography>
       <SectionLink label="See Details" onPress={onSeeDetails} />
     </div>
     <div className={cn('flex flex-col', styles.list)}>

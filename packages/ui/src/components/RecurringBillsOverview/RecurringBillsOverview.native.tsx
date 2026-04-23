@@ -1,8 +1,9 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import tw from '../../lib/tw'
 import { BillSummaryRow } from '../BillSummaryRow/BillSummaryRow.native'
 import { SectionLink } from '../SectionLink/SectionLink.native'
+import { Typography } from '../Typography/Typography.native'
 
 import styles from './RecurringBillsOverview.styles'
 
@@ -17,9 +18,9 @@ export const RecurringBillsOverview = ({
 }: IRecurringBillsOverviewProps) => (
   <View style={tw`${styles.root}`}>
     <View style={tw`${styles.header}`}>
-      <Text style={tw`${styles.title}`} accessibilityRole="header">
+      <Typography variant="subsection-title" accessibilityRole="header">
         Recurring Bills
-      </Text>
+      </Typography>
       <SectionLink label="See Details" onPress={onSeeDetails} />
     </View>
     <View style={tw`${styles.list}`}>

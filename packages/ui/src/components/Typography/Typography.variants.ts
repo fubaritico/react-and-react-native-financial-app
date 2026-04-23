@@ -7,7 +7,11 @@ export const typographyVariants = cva('font-sans', {
     /** Visual style mapping to Figma text presets. */
     variant: {
       'page-title': 'text-4xl font-bold leading-tight',
+      'display-lg': 'text-5xl font-bold leading-tight',
       display: 'text-4xl font-bold leading-tight',
+      'heading-xl': 'text-3xl font-bold leading-tight',
+      'heading-lg': 'text-2xl font-bold leading-tight',
+      'heading-md': 'text-xl font-bold leading-tight',
       'section-title': 'text-xl font-bold leading-tight',
       'subsection-title': 'text-base font-bold leading-normal',
       body: 'text-sm font-normal leading-normal',
@@ -20,9 +24,14 @@ export const typographyVariants = cva('font-sans', {
     color: {
       foreground: 'text-foreground',
       muted: 'text-foreground-muted',
+      'on-dark': 'text-on-dark',
+      'on-dark-muted': 'text-on-dark-muted',
       success: 'text-success',
       destructive: 'text-destructive',
-      inverse: 'text-primary-foreground',
+      'primary-foreground': 'text-primary-foreground',
+      'transaction-positive': 'text-transaction-positive',
+      'transaction-negative': 'text-transaction-negative',
+      'beige-500': 'text-beige-500',
     },
     /** Text alignment. */
     align: {

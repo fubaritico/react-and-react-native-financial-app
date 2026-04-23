@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { cn } from '../../lib/cn'
+import { Typography } from '../Typography/Typography.web'
 
 import type { IAvatarProps } from './Avatar'
 import type { CSSProperties } from 'react'
@@ -29,14 +30,16 @@ export const Avatar = ({ src, name, size = 40 }: IAvatarProps) => {
   return hasError ? (
     <span
       className={cn(
-        'inline-flex items-center justify-center rounded-full bg-foreground-subtle text-xs font-bold text-foreground',
+        'inline-flex items-center justify-center rounded-full bg-foreground-subtle',
         'w-[var(--avatar-size)] h-[var(--avatar-size)]'
       )}
       style={sizeStyle}
       role="img"
       aria-label={name}
     >
-      {initials}
+      <Typography variant="label" as="span">
+        {initials}
+      </Typography>
     </span>
   ) : (
     <img
