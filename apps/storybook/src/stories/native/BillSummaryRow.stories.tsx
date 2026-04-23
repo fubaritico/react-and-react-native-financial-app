@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Native/Design System/BillSummaryRow',
+  title: 'Native/Design System/Molecules/BillSummaryRow',
   component: BillSummaryRow,
   argTypes: {
     label: { control: 'text' },

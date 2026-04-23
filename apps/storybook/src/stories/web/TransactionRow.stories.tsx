@@ -3,7 +3,7 @@ import { TransactionRow } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Web/Design System/TransactionRow',
+  title: 'Web/Design System/Molecules/TransactionRow',
   component: TransactionRow,
   argTypes: {
     avatar: { control: 'text' },

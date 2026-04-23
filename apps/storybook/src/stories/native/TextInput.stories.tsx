@@ -61,7 +61,7 @@ const ShowcaseWrapper = () => {
 }
 
 const meta = {
-  title: 'Native/Design System/TextInput',
+  title: 'Native/Design System/Molecules/TextInput',
   component: TextInput,
   argTypes: {
     icon: {

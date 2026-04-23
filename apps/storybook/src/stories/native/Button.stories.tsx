@@ -7,7 +7,7 @@ import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 const noop = () => {}
 
 const meta = {
-  title: 'Native/Design System/Button',
+  title: 'Native/Design System/Atoms/Button',
   component: Button,
   argTypes: {
     variant: {

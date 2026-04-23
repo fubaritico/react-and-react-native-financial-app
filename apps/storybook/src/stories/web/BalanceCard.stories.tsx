@@ -3,7 +3,7 @@ import { BalanceCard } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Web/Design System/BalanceCard',
+  title: 'Web/Design System/Molecules/BalanceCard',
   component: BalanceCard,
   argTypes: {
     tone: { control: 'select', options: ['dark', 'light'] },

@@ -12,27 +12,16 @@ const defaultPots = [
 ]
 
 const meta = {
-  title: 'Web/Design System/PotsOverview',
+  title: 'Web/Design System/Organisms/PotsOverview',
   component: PotsOverview,
-  argTypes: {
-    totalSaved: { control: 'text' },
-    onSeeDetails: { action: 'see-details pressed' },
-  },
-  args: {
-    totalSaved: '$850',
-    pots: defaultPots,
-    onSeeDetails: noop,
-  },
 } satisfies Meta<typeof PotsOverview>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Interactive playground with all controls. */
-export const Playground: Story = {}
-
 /** Realistic Overview page data with 4 pots. */
 export const Showcase: Story = {
+  args: { totalSaved: '$850', pots: defaultPots, onSeeDetails: noop },
   render: () => (
     <div style={{ maxWidth: 560, padding: 24 }}>
       <PotsOverview totalSaved="$850" pots={defaultPots} onSeeDetails={noop} />

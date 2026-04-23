@@ -3,7 +3,7 @@ import { ColorDot } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Web/Design System/ColorDot',
+  title: 'Web/Design System/Atoms/ColorDot',
   component: ColorDot,
   argTypes: {
     color: {

@@ -7,7 +7,7 @@ import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 const noop = () => {}
 
 const meta = {
-  title: 'Native/Design System/LinkText',
+  title: 'Native/Design System/Atoms/LinkText',
   component: LinkText,
   argTypes: {
     text: { control: 'text' },

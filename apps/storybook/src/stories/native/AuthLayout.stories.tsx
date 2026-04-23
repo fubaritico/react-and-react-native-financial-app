@@ -84,7 +84,7 @@ const SignUpContent = () => {
 }
 
 const meta = {
-  title: 'Native/Design System/AuthLayout',
+  title: 'Native/Design System/Templates/AuthLayout',
   component: AuthLayout,
   parameters: {
     layout: 'fullscreen',

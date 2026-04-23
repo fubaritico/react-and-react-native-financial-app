@@ -1,8 +1,29 @@
 # Rules — UI Package Components
 
+## Atomic Design Structure (mandatory)
+
+Components are organized using Atomic Design in `packages/ui/src/components/`:
+
+```
+components/
+  atoms/          # indivisible elements, no internal UI dependency (Icon, Typography, Button, ColorDot, Divider, Avatar, LinkText)
+  molecules/      # compose atoms (TextInput, PasswordInput, SectionLink, StatCard, BalanceCard, TransactionRow, SpendingSummaryRow, BillSummaryRow)
+  organisms/      # autonomous sections, compose molecules (Card, AuthCard, Header, PotsOverview, TransactionsOverview, RecurringBillsOverview)
+  templates/      # page layouts (AuthLayout)
+```
+
+Rules:
+- Every new component MUST be placed in the correct atomic level
+- Atoms NEVER import from molecules, organisms, or templates
+- Molecules NEVER import from organisms or templates
+- Organisms NEVER import from templates
+- Cross-level imports use explicit relative paths: `../../atoms/Typography/Typography.native`
+- Same-level imports use sibling paths: `../TextInput/TextInput.native`
+- Storybook titles follow the pattern: `'Web/Design System/Atoms/Button'`
+
 ## File Structure (mandatory for every component)
 
-Every component in packages/ui/src/components/ MUST follow this exact pattern:
+Every component follows this exact pattern inside its atomic directory:
 
 ```
 ComponentName/

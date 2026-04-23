@@ -3,7 +3,7 @@ import { Avatar } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Web/Design System/Avatar',
+  title: 'Web/Design System/Atoms/Avatar',
   component: Avatar,
   argTypes: {
     src: { control: 'text' },

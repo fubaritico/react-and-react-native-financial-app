@@ -3,7 +3,7 @@ import { SpendingSummaryRow } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Web/Design System/SpendingSummaryRow',
+  title: 'Web/Design System/Molecules/SpendingSummaryRow',
   component: SpendingSummaryRow,
   argTypes: {
     label: { control: 'text' },

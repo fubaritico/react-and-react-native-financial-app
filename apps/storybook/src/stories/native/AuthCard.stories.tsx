@@ -6,7 +6,7 @@ import {
   TextInput,
 } from '@financial-app/ui/native'
 import { useState } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
@@ -84,25 +84,16 @@ const SignUpForm = () => {
 }
 
 const meta = {
-  title: 'Native/Design System/AuthCard',
+  title: 'Native/Design System/Organisms/AuthCard',
   component: AuthCard,
-  argTypes: {
-    title: { control: 'text' },
-  },
-  args: {
-    title: 'Login',
-    children: <Text>Form content goes here</Text>,
-  },
 } satisfies Meta<typeof AuthCard>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Interactive playground. */
-export const Playground: Story = {}
-
 /** Login and Sign Up cards with real components. */
 export const Showcase: Story = {
+  args: { title: 'Login', children: null },
   render: () => (
     <View style={{ flexDirection: 'row', gap: 32, alignItems: 'flex-start' }}>
       <LoginForm />

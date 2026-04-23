@@ -44,6 +44,7 @@
 * **tailwind-config:** create @financial-app/tailwind-config (Phase 2) ([257f51d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/257f51de7d099f73d2c9754855d1b797c04a2f21))
 * **tokens:** create @financial-app/tokens package (Phase 0) ([76b2857](https://github.com/fubaritico/react-and-react-native-financial-app/commit/76b2857cda2768fa3ac35888dd90244aff5736f0))
 * **ui:** add Icon Storybook story with playground and showcase ([edb2fa9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/edb2fa931b159bfc936ea6c1a039393442dfc577))
+* **ui:** add Typography component with 9 Figma-mapped variants ([a3b6f29](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a3b6f2973bd4559c87dcdd8d67d2fa5b91420567))
 * **ui:** add Wave 1 auth components (TextInput, PasswordInput, LinkText, AuthCard, AuthLayout) ([93d6ee2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/93d6ee268fc52406f412041b13976a24c83ed04d))
 * **ui:** add Wave 2 + Wave 3 overview components with accessibility fixes ([4e32a4d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4e32a4da7086b3d92976370303a0200382402f4c))
 * **ui:** cross-platform refactor with file extension split (Phase 3) ([75e52eb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/75e52eb986da00dfa20fb92f397f3e93d19026b2))

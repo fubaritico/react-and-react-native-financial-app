@@ -3,7 +3,7 @@ import { StatCard } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Web/Design System/StatCard',
+  title: 'Web/Design System/Molecules/StatCard',
   component: StatCard,
   argTypes: {
     label: { control: 'text' },
