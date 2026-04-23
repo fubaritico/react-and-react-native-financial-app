@@ -1,6 +1,5 @@
 import { cn } from '../../lib/cn'
 import { Avatar } from '../Avatar/Avatar.web'
-import { Divider } from '../Divider/Divider.web'
 
 import { formatAmount } from './TransactionRow.constants'
 import styles from './TransactionRow.styles'
@@ -13,23 +12,19 @@ export const TransactionRow = ({
   name,
   amount,
   date,
-  showDivider = true,
 }: ITransactionRowProps) => {
   const amountColor = amount >= 0 ? 'text-green' : 'text-grey-900'
 
   return (
-    <>
-      <div className={styles.root}>
-        <Avatar src={avatar} name={name} size={40} />
-        <span className={styles.name}>{name}</span>
-        <div className="text-right">
-          <p className={cn(styles.amountText, amountColor)}>
-            {formatAmount(amount)}
-          </p>
-          <p className={styles.date}>{date}</p>
-        </div>
+    <div className={styles.root}>
+      <Avatar src={avatar} name={name} size={40} />
+      <span className={styles.name}>{name}</span>
+      <div className="text-right">
+        <p className={cn(styles.amountText, amountColor)}>
+          {formatAmount(amount)}
+        </p>
+        <p className={styles.date}>{date}</p>
       </div>
-      {showDivider && <Divider spacing="sm" />}
-    </>
+    </div>
   )
 }
