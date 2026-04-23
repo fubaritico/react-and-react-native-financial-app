@@ -3,7 +3,7 @@ import { Header } from '@financial-app/ui/native'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Native/Design System/Header',
+  title: 'Native/Design System/Organisms/Header',
   component: Header,
   argTypes: {
     title: { control: 'text' },

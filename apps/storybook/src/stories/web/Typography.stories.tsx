@@ -3,7 +3,7 @@ import { Typography } from '@financial-app/ui'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Web/Design System/Typography',
+  title: 'Web/Design System/Atoms/Typography',
   component: Typography,
   parameters: {
     layout: 'padded',

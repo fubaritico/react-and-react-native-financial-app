@@ -52,7 +52,7 @@ const ShowcaseWrapper = () => {
 }
 
 const meta = {
-  title: 'Web/Design System/PasswordInput',
+  title: 'Web/Design System/Molecules/PasswordInput',
   component: PasswordInput,
   argTypes: {
     error: { control: 'boolean' },

@@ -8,7 +8,7 @@ import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 const sizeOptions = Object.keys(iconSizeMap) as IIconSize[]
 
 const meta = {
-  title: 'Web/Design System/Icon',
+  title: 'Web/Design System/Atoms/Icon',
   component: Icon,
   parameters: {
     layout: 'centered',

@@ -6,7 +6,7 @@ import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 const noop = () => {}
 
 const meta = {
-  title: 'Web/Design System/SectionLink',
+  title: 'Web/Design System/Molecules/SectionLink',
   component: SectionLink,
   argTypes: {
     label: { control: 'text' },

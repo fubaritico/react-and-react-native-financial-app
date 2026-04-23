@@ -83,25 +83,16 @@ const SignUpForm = () => {
 }
 
 const meta = {
-  title: 'Web/Design System/AuthCard',
+  title: 'Web/Design System/Organisms/AuthCard',
   component: AuthCard,
-  argTypes: {
-    title: { control: 'text' },
-  },
-  args: {
-    title: 'Login',
-    children: <p>Form content goes here</p>,
-  },
 } satisfies Meta<typeof AuthCard>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Interactive playground. */
-export const Playground: Story = {}
-
 /** Login and Sign Up cards with real components. */
 export const Showcase: Story = {
+  args: { title: 'Login', children: null },
   render: () => (
     <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start' }}>
       <LoginForm />

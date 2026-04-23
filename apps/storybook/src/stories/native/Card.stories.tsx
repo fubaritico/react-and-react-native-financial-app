@@ -3,7 +3,7 @@ import { Card } from '@financial-app/ui/native'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Native/Design System/Card',
+  title: 'Native/Design System/Organisms/Card',
   component: Card,
   argTypes: {
     title: { control: 'text' },

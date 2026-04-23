@@ -19,7 +19,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Be concise** — no recap, no enumerations, no unsolicited explanations. Act, then report briefly if needed.
 - **Discuss approach FIRST** — never code without confirming approach
 - **Review → Test → Commit** per change — no accumulation
-- **Never execute commands** — propose only. Exceptions: (1) user says "execute", "run", etc. (2) `pnpm type-check && pnpm lint && pnpm test` from root — MUST run after every code change, never skip
+- **Never execute commands** — propose only. Exceptions: (1) user says "execute", "run", etc. (2) `pnpm type-check && pnpm lint && pnpm test` from root then `/review` — MUST run all 4 after every code change, never skip
 - **Risky actions** (git push, reset --hard, rm -rf) require explicit permission EVERY TIME
 - **Never hallucinate** — if uncertain, read code first
 - **Always use context7** for any question about an API, library, or package
@@ -27,7 +27,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Always use pnpm** — never npm or yarn, including for registry lookups (`pnpm view` not `npm view`)
 - **Never `console.log`** — use `console.warn` / `console.error`
 - **Never explicit `any`** — strict TypeScript
-- **Always run** lint + typecheck + test + review once a set of modifications is done
+- **Always run** `pnpm type-check && pnpm lint && pnpm test` then `/review` after every set of modifications — ALL 4 MANDATORY, NEVER SKIP ANY
 - **Always ask** user to run pnpm dev, pnpm prod:server and pnpm storybook after having modified a component
 - **Always create a Storybook story** after every component (`/story`)
 - **Model**: Haiku for questions/research, Sonnet for code/commits — suggest Haiku when appropriate

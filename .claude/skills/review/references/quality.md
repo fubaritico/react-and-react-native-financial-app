@@ -100,6 +100,13 @@
 - **Check**: Single-use utility functions that could be inline
 - **Check**: Over-engineered patterns for simple operations
 
+### QUAL-016: Unnecessary cn() call
+- **Files**: `*.web.tsx`
+- **Check**: `cn()` is for composing **multiple** class sources — never use it with a single argument
+- **Good**: `cn('flex', styles.header)`, `cn(buttonVariants({ variant }), 'hover:opacity-80')`
+- **Bad**: `cn('flex')` — just use `className="flex"`
+- **Rationale**: `cn()` wraps clsx + tailwind-merge. With a single string argument it does nothing — use `className` directly.
+
 ## Low Violations
 
 ### QUAL-012: Missing error context

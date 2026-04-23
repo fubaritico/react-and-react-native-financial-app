@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Native/Design System/BalanceCard',
+  title: 'Native/Design System/Molecules/BalanceCard',
   component: BalanceCard,
   argTypes: {
     tone: { control: 'select', options: ['dark', 'light'] },

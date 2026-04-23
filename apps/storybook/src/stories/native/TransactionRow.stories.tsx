@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Native/Design System/TransactionRow',
+  title: 'Native/Design System/Molecules/TransactionRow',
   component: TransactionRow,
   argTypes: {
     avatar: { control: 'text' },
