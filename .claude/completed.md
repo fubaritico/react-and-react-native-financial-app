@@ -442,3 +442,13 @@
     - Reorganized README: split commands by concern (daily dev → rebuild → reset), explain Metro hot-reload vs native rebuild
     - Updated reset.md and troubleshooting.md with Android rebuild docs
     - Tested: bare RN on Small_Phone + Medium_Tablet — build + launch + Metro connection OK
+
+- Token enforcement audit + semantic migration across entire codebase (188872b)
+    - Replaced all hardcoded hex colors and base aliases with semantic tokens across 57 files
+    - Added font size tokens: 2xs (0.625rem), 5xl (2.125rem); added icon sizes: 3xl (28), 4xl (32), 5xl (36)
+    - Fixed PotsOverview: pot Icon (green, 5xl) per Figma, removed dark background, corrected text sizes (sm/5xl)
+    - Fixed Avatar web: detect invalid relative src upfront (SPA fallback returns 200 HTML for missing images)
+    - Fixed BillSummaryRow web: added missing `display: flex`
+    - Fixed Button web: `currentColor` for icon (inherits from CVA text color)
+    - Migrated mobile-expo-ejected from StyleSheet to twrnc
+    - All 3 mobile apps use token-based tab bar colors via tw.color()
