@@ -1,8 +1,8 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import tw from '../../lib/tw'
+import { Typography } from '../Typography/Typography.native'
 
-import styles from './Header.styles'
 import { headerVariants } from './Header.variants'
 
 import type { IHeaderProps } from './Header'
@@ -10,7 +10,13 @@ import type { IHeaderProps } from './Header'
 /** Native implementation of the Header component. */
 export const Header = ({ title, subtitle }: IHeaderProps) => (
   <View style={tw`${headerVariants()}`}>
-    <Text style={tw`${styles.title}`}>{title}</Text>
-    {subtitle && <Text style={tw`${styles.subtitle}`}>{subtitle}</Text>}
+    <Typography variant="heading-lg" color="on-dark">
+      {title}
+    </Typography>
+    {subtitle && (
+      <Typography variant="body" color="on-dark" style={tw`opacity-80 mt-1`}>
+        {subtitle}
+      </Typography>
+    )}
   </View>
 )

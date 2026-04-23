@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Image, Text, View } from 'react-native'
+import { Image, View } from 'react-native'
 
 import tw from '../../lib/tw'
+import { Typography } from '../Typography/Typography.native'
 
 import type { IAvatarProps } from './Avatar'
 
@@ -23,7 +24,7 @@ export const Avatar = ({ src, name, size = 40 }: IAvatarProps) => {
         { width: size, height: size },
       ]}
     >
-      <Text style={tw`text-foreground text-xs font-bold`}>{initials}</Text>
+      <Typography variant="label">{initials}</Typography>
     </View>
   ) : (
     <Image

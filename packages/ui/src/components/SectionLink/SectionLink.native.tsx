@@ -1,8 +1,7 @@
-import { Pressable, Text } from 'react-native'
+import { Pressable } from 'react-native'
 
 import tw from '../../lib/tw'
-
-import styles from './SectionLink.styles'
+import { Typography } from '../Typography/Typography.native'
 
 import type { ISectionLinkProps } from './SectionLink'
 
@@ -18,9 +17,11 @@ export const SectionLink = ({ label, onPress }: ISectionLinkProps) => (
       pressed && tw`opacity-70`,
     ]}
   >
-    <Text style={tw`${styles.label}`}>{label}</Text>
-    <Text style={tw`${styles.label}`} accessibilityElementsHidden>
+    <Typography variant="body" color="muted">
+      {label}
+    </Typography>
+    <Typography variant="body" color="muted" accessibilityRole="text">
       &#9656;
-    </Text>
+    </Typography>
   </Pressable>
 )

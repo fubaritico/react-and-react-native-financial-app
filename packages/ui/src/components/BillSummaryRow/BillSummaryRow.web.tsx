@@ -1,6 +1,6 @@
 import { cn } from '../../lib/cn'
+import { Typography } from '../Typography/Typography.web'
 
-import styles from './BillSummaryRow.styles'
 import { billSummaryRowVariants } from './BillSummaryRow.variants'
 
 import type { IBillSummaryRowProps } from './BillSummaryRow'
@@ -23,7 +23,11 @@ export const BillSummaryRow = ({
       } as CSSProperties
     }
   >
-    <span className={styles.label}>{label}</span>
-    <span className={styles.amount}>{amount}</span>
+    <Typography variant="caption" color="muted" as="span">
+      {label}
+    </Typography>
+    <Typography variant="body-bold" as="span">
+      {amount}
+    </Typography>
   </div>
 )

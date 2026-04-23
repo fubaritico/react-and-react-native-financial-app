@@ -1,8 +1,9 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import tw from '../../lib/tw'
 import { SectionLink } from '../SectionLink'
 import { TransactionRow } from '../TransactionRow'
+import { Typography } from '../Typography/Typography.native'
 
 import styles from './TransactionsOverview.styles'
 
@@ -15,9 +16,9 @@ export const TransactionsOverview = ({
 }: ITransactionsOverviewProps) => (
   <View style={tw`${styles.root}`}>
     <View style={tw`${styles.header}`}>
-      <Text style={tw`${styles.title}`} accessibilityRole="header">
+      <Typography variant="subsection-title" accessibilityRole="header">
         Transactions
-      </Text>
+      </Typography>
       <SectionLink label="View All" onPress={onViewAll} />
     </View>
     <View style={tw`${styles.list}`}>

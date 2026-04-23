@@ -10,7 +10,7 @@ export interface ITypographyProps extends VariantProps<
   children?: ReactNode
 }
 
-/** Native-specific Typography props. */
+/** Native-specific Typography props (style defined in .native.tsx to avoid RN import). */
 export interface ITypographyNativeProps extends ITypographyProps {
   /** Maximum number of lines before truncation. */
   numberOfLines?: number
@@ -24,4 +24,6 @@ export interface ITypographyWebProps extends ITypographyProps {
   as?: string
   /** Maximum number of lines before truncation (maps to CSS line-clamp). */
   numberOfLines?: number
+  /** Additional CSS classes (layout only — text styles come from variant/color props). */
+  className?: string
 }

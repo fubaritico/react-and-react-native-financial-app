@@ -452,3 +452,24 @@
     - Fixed Button web: `currentColor` for icon (inherits from CVA text color)
     - Migrated mobile-expo-ejected from StyleSheet to twrnc
     - All 3 mobile apps use token-based tab bar colors via tw.color()
+
+- Typography component created (a3b6f29)
+    - 9 variants: page-title, display, section-title, subsection-title, body, body-bold, label, caption, caption-bold
+    - 5 colors: foreground, muted, success, destructive, inverse
+    - 3 alignments: left, center, right
+    - ISP-compliant interfaces: ITypographyProps (shared) → ITypographyNativeProps / ITypographyWebProps
+    - Web: createElement + VARIANT_TO_TAG map (h1/h2/h3/p/span/label), `as` prop override, numberOfLines → truncate/line-clamp
+    - Native: RN Text + twrnc, numberOfLines, accessibilityRole
+    - CVA variants in Typography.variants.ts, tag map in Typography.constants.ts
+    - Storybook stories: web (AllVariants, PageTitle, SectionTitle, SubsectionTitle, Body, WithCustomTag, Colors, Composition) + native (same minus WithCustomTag)
+    - children optional (matches HTMLAttributes pattern, avoids Storybook args requirement on render-only stories)
+
+- Typography retrofit COMPLETE — all 17 ui components migrated
+    - Replaced every bare `Text` (native) and `<h1>/<h2>/<h3>/<p>/<span>/<label>` (web) with `<Typography>` across: Header, Card, AuthCard, StatCard, BalanceCard, TransactionRow, PotsOverview, TransactionsOverview, RecurringBillsOverview, SpendingSummaryRow, BillSummaryRow, LinkText, AuthLayout, Button, TextInput, Avatar, SectionLink
+    - Added 4 new Typography size variants: `display-lg` (text-5xl), `heading-xl` (text-3xl), `heading-lg` (text-2xl), `heading-md` (text-xl)
+    - Replaced `inverse` color with 6 semantic colors: `on-dark`, `on-dark-muted`, `primary-foreground`, `transaction-positive`, `transaction-negative`, `beige-500`
+    - Added `style` prop (native via local interface extension) and `className` prop (web) to Typography for layout overrides
+    - Deleted 8 orphaned `.styles.ts` files: Header, BalanceCard, StatCard, BillSummaryRow, SpendingSummaryRow, LinkText, SectionLink, Button
+    - Remaining `.styles.ts` files trimmed to layout-only classes (no text styles)
+    - ESLint `react-native/no-raw-text` updated with `skip: ['Typography']` in all 4 configs (ui, mobile, mobile-expo, mobile-expo-ejected)
+    - Storybook stories updated: `color="inverse"` → `color="on-dark"`

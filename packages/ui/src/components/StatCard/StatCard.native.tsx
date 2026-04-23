@@ -1,8 +1,8 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 import tw from '../../lib/tw'
+import { Typography } from '../Typography/Typography.native'
 
-import styles from './StatCard.styles'
 import { statCardVariants } from './StatCard.variants'
 
 import type { IStatCardProps } from './StatCard'
@@ -10,7 +10,9 @@ import type { IStatCardProps } from './StatCard'
 /** Native implementation of the StatCard component. */
 export const StatCard = ({ label, amount, color }: IStatCardProps) => (
   <View style={tw`${statCardVariants()} border-l-${color}`}>
-    <Text style={tw`${styles.label}`}>{label}</Text>
-    <Text style={tw`${styles.amount}`}>{amount}</Text>
+    <Typography variant="caption" color="muted">
+      {label}
+    </Typography>
+    <Typography variant="body-bold">{amount}</Typography>
   </View>
 )

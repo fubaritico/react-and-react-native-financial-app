@@ -1,9 +1,10 @@
 import { cn } from '../../lib/cn'
+import { Typography } from '../Typography/Typography.web'
 
-import styles from './BalanceCard.styles'
 import { balanceCardVariants } from './BalanceCard.variants'
 
 import type { IBalanceCardProps } from './BalanceCard'
+import type { TypographyVariants } from '../Typography/Typography.variants'
 
 /** Web implementation of the BalanceCard component. */
 export const BalanceCard = ({
@@ -11,13 +12,19 @@ export const BalanceCard = ({
   amount,
   tone = 'light',
 }: IBalanceCardProps) => {
-  const labelColor = tone === 'dark' ? 'text-on-dark' : 'text-foreground-muted'
-  const amountColor = tone === 'dark' ? 'text-on-dark' : 'text-foreground'
+  const labelColor: TypographyVariants['color'] =
+    tone === 'dark' ? 'on-dark' : 'muted'
+  const amountColor: TypographyVariants['color'] =
+    tone === 'dark' ? 'on-dark' : 'foreground'
 
   return (
     <div className={cn(balanceCardVariants({ tone }))}>
-      <p className={cn(styles.label, labelColor)}>{label}</p>
-      <p className={cn(styles.amount, amountColor)}>{amount}</p>
+      <Typography variant="body" color={labelColor} as="p">
+        {label}
+      </Typography>
+      <Typography variant="heading-xl" color={amountColor} as="p">
+        {amount}
+      </Typography>
     </div>
   )
 }

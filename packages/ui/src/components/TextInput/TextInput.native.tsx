@@ -1,7 +1,8 @@
-import { TextInput as RNTextInput, Text, View } from 'react-native'
+import { TextInput as RNTextInput, View } from 'react-native'
 
 import tw from '../../lib/tw'
 import { Icon } from '../Icon/Icon.native'
+import { Typography } from '../Typography/Typography.native'
 
 import styles from './TextInput.styles'
 import { textInputVariants } from './TextInput.variants'
@@ -25,9 +26,15 @@ export const TextInput = ({
 
   return (
     <View style={tw`${styles.wrapper}`}>
-      <Text style={tw`${styles.label}`}>{label}</Text>
+      <Typography variant="label" color="muted">
+        {label}
+      </Typography>
       <View style={tw`${inputClasses} flex-row items-center`}>
-        {prefix ? <Text style={tw`${styles.prefix}`}>{prefix}</Text> : null}
+        {prefix ? (
+          <Typography variant="body" color="beige-500" style={tw`mr-2`}>
+            {prefix}
+          </Typography>
+        ) : null}
         <RNTextInput
           value={value}
           onChangeText={onChangeText}
@@ -46,11 +53,13 @@ export const TextInput = ({
           ) : null)}
       </View>
       {helperText ? (
-        <Text
-          style={tw`${styles.helperText} ${error ? 'text-destructive' : 'text-foreground-muted'}`}
+        <Typography
+          variant="caption"
+          color={error ? 'destructive' : 'muted'}
+          align="right"
         >
           {helperText}
-        </Text>
+        </Typography>
       ) : null}
     </View>
   )
