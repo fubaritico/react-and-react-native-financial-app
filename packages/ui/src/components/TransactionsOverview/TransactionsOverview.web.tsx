@@ -15,7 +15,7 @@ export const TransactionsOverview = ({
       <h3 className={styles.title}>Transactions</h3>
       <SectionLink label="View All" onPress={onViewAll} />
     </div>
-    <div>
+    <div className={styles.list}>
       {transactions.map((item, index) => (
         <TransactionRow
           key={`${item.name}-${String(index)}`}
@@ -23,7 +23,6 @@ export const TransactionsOverview = ({
           name={item.name}
           amount={item.amount}
           date={item.date}
-          showDivider={index < transactions.length - 1}
         />
       ))}
     </div>

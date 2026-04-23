@@ -8,6 +8,4 @@ export interface ITransactionRowProps {
   amount: number
   /** Formatted date string (e.g., "19 Aug 2024"). */
   date: string
-  /** Whether to show a divider below this row. */
-  showDivider?: boolean
 }

@@ -11,14 +11,12 @@ const meta = {
     name: { control: 'text' },
     amount: { control: 'number' },
     date: { control: 'text' },
-    showDivider: { control: 'boolean' },
   },
   args: {
     avatar: 'https://i.pravatar.cc/80?u=emma',
     name: 'Emma Richardson',
     amount: 75.5,
     date: '19 Aug 2024',
-    showDivider: true,
   },
 } satisfies Meta<typeof TransactionRow>
 
@@ -61,7 +59,6 @@ export const Showcase: Story = {
         name="Urban Services Hub"
         amount={-65.0}
         date="17 Aug 2024"
-        showDivider={false}
       />
     </View>
   ),
