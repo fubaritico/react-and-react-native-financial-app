@@ -413,6 +413,24 @@
     - Improved reset-project.sh: kill daemons first (Gradle daemon + Metro), clean global Gradle caches (~/.gradle/caches), clear Xcode DerivedData, prune pnpm store, comprehensive documentation
     - Tested on iOS simulator (mobile + mobile-expo): OK
 
+- UI package refinement: colocated variants + inline style cleanup (d0abb92)
+    - Moved all CVA variant files from src/variants/ into component folders (ComponentName.variants.ts)
+    - Each component owns its variant — no cross-component sharing (exception: PasswordInput→TextInput composition)
+    - Removed all variant re-exports from barrels and public API (variants are internal)
+    - Deleted src/variants/ directory entirely
+    - Replaced inline style={{}} with CSS variable bridge pattern on web (StatCard, BillSummaryRow, PotsOverview, ColorDot, Avatar)
+    - Fixed CSS var casing: -default → -DEFAULT to match Style Dictionary token output
+    - Updated Tailwind content paths for colocated variant files (*.{web.tsx,variants.ts,styles.ts})
+    - Absorbed constant companion classes into variant bases (shadow-md into Card, border-l-4 into StatCard/BillSummaryRow)
+    - Updated design-system.md and styling.md rules
+    - Discussed testing strategy: single Jest runner with multi-project config (native + web) preferred over dual runners — deferred
+
+- TransactionRow + TransactionsOverview cleanup (7b6718c)
+    - Removed showDivider prop and Divider component from TransactionRow
+    - TransactionsOverview uses CSS divide-y divide-border utility on list container
+    - Semantic token `border` (#f2f2f2) used instead of `grey-100` (Tailwind v3 interprets -100 as opacity modifier)
+    - Updated Storybook stories to remove showDivider references
+
 - Android build fix + rebuild script (dc90bd2)
     - Fixed AsyncStorage v3 Maven repo: added `allprojects.repositories` with local_repo to `apps/mobile/android/build.gradle`
     - Created `scripts/rebuild-android.sh` — single command: kill daemons, clean Gradle/Metro/RN caches, start Metro, build, launch
