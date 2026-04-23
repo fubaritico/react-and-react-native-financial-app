@@ -19,7 +19,7 @@ export const TransactionRow = ({
 
   return (
     <>
-      <div className="flex items-center py-3">
+      <div className={styles.root}>
         <Avatar src={avatar} name={name} size={40} />
         <span className={styles.name}>{name}</span>
         <div className="text-right">

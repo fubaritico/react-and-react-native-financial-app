@@ -4,6 +4,7 @@ import { SectionLink } from '../SectionLink/SectionLink.web'
 import styles from './PotsOverview.styles'
 
 import type { IPotsOverviewProps } from './PotsOverview'
+import type { CSSProperties } from 'react'
 
 /** Web implementation of the PotsOverview section component. */
 export const PotsOverview = ({
@@ -40,10 +41,15 @@ export const PotsOverview = ({
         {pots.map((pot) => (
           <div key={pot.name} className="py-2">
             <div
-              className={styles.potItem}
-              style={{
-                borderLeft: `4px solid var(--color-base-${pot.color}-default)`,
-              }}
+              className={cn(
+                styles.potItem,
+                'border-l-4 border-l-[var(--border-color)]'
+              )}
+              style={
+                {
+                  '--border-color': `var(--color-base-${pot.color}-DEFAULT)`,
+                } as CSSProperties
+              }
             >
               <p className={styles.potName}>{pot.name}</p>
               <p className={styles.potTotal}>{pot.total}</p>

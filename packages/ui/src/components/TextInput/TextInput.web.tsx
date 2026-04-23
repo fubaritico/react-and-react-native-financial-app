@@ -1,8 +1,8 @@
 import { cn } from '../../lib/cn'
-import { textInputVariants } from '../../variants/textInput.variants'
 import { Icon } from '../Icon/Icon.web'
 
 import styles from './TextInput.styles'
+import { textInputVariants } from './TextInput.variants'
 
 import type { ITextInputProps } from './TextInput'
 

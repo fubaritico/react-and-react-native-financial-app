@@ -1,6 +1,6 @@
 import type { IconName } from '@financial-app/icons'
 
-import type { textInputVariants } from '../../variants'
+import type { textInputVariants } from './TextInput.variants'
 import type { VariantProps } from 'class-variance-authority'
 import type { ReactNode } from 'react'
 
@@ -27,5 +27,3 @@ export interface ITextInputProps extends VariantProps<
   /** Masks the input text (native: secureTextEntry, web: type="password"). */
   secureTextEntry?: boolean
 }
-
-export { textInputVariants } from '../../variants/textInput.variants'

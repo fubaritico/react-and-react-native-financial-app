@@ -1,9 +1,9 @@
 import { Text, View } from 'react-native'
 
 import tw from '../../lib/tw'
-import { headerVariants } from '../../variants'
 
 import styles from './Header.styles'
+import { headerVariants } from './Header.variants'
 
 import type { IHeaderProps } from './Header'
 

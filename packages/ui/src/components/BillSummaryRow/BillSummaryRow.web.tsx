@@ -1,9 +1,10 @@
 import { cn } from '../../lib/cn'
-import { coloredBorderItemVariants } from '../../variants'
 
 import styles from './BillSummaryRow.styles'
+import { billSummaryRowVariants } from './BillSummaryRow.variants'
 
 import type { IBillSummaryRowProps } from './BillSummaryRow'
+import type { CSSProperties } from 'react'
 
 /** Web implementation of the BillSummaryRow component. */
 export const BillSummaryRow = ({
@@ -12,8 +13,12 @@ export const BillSummaryRow = ({
   color,
 }: IBillSummaryRowProps) => (
   <div
-    className={cn(coloredBorderItemVariants({ layout: 'row' }), 'bg-beige-100')}
-    style={{ borderLeft: `4px solid var(--color-base-${color}-default)` }}
+    className={cn(billSummaryRowVariants(), 'border-l-[var(--border-color)]')}
+    style={
+      {
+        '--border-color': `var(--color-base-${color}-DEFAULT)`,
+      } as CSSProperties
+    }
   >
     <span className={styles.label}>{label}</span>
     <span className={styles.amount}>{amount}</span>

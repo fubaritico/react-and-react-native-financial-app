@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority'
 
 import type { VariantProps } from 'class-variance-authority'
 
-export const cardVariants = cva('bg-white rounded-xl p-4', {
+export const cardVariants = cva('bg-white rounded-xl p-4 shadow-md', {
   variants: {},
   defaultVariants: {},
 })

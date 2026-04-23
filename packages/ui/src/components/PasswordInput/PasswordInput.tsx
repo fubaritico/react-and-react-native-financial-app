@@ -1,4 +1,4 @@
-import type { textInputVariants } from '../../variants'
+import type { textInputVariants } from '../TextInput/TextInput.variants'
 import type { VariantProps } from 'class-variance-authority'
 
 /** Props for the PasswordInput component. */

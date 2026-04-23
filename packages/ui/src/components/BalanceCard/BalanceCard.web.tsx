@@ -1,7 +1,7 @@
 import { cn } from '../../lib/cn'
-import { balanceCardVariants } from '../../variants'
 
 import styles from './BalanceCard.styles'
+import { balanceCardVariants } from './BalanceCard.variants'
 
 import type { IBalanceCardProps } from './BalanceCard'
 

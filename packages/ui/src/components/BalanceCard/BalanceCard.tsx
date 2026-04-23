@@ -1,4 +1,4 @@
-import type { balanceCardVariants } from '../../variants'
+import type { balanceCardVariants } from './BalanceCard.variants'
 import type { VariantProps } from 'class-variance-authority'
 
 /** Props for the BalanceCard component. */
@@ -10,5 +10,3 @@ export interface IBalanceCardProps extends VariantProps<
   /** Amount to display, formatted as currency string. */
   amount: string
 }
-
-export { balanceCardVariants } from '../../variants'

@@ -6,12 +6,14 @@ Every component in packages/ui/src/components/ MUST follow this exact pattern:
 
 ```
 ComponentName/
-  ComponentName.tsx         # types + props interface ONLY — no JSX, no imports from renderers
-  ComponentName.constants.ts # (optional) shared runtime values (maps, defaults) — no renderer imports
-  ComponentName.native.tsx  # React Native implementation
-  ComponentName.web.tsx     # DOM/HTML implementation
-  index.ts                  # native barrel — exports from .native (Metro uses this)
-  index.web.ts              # web barrel — exports from .web (Vite uses this)
+  ComponentName.tsx            # types + props interface ONLY — no JSX, no imports from renderers
+  ComponentName.variants.ts    # CVA variant object — internal, never exported from package
+  ComponentName.styles.ts      # (optional) inner element Tailwind class strings
+  ComponentName.constants.ts   # (optional) shared runtime values (maps, defaults) — no renderer imports
+  ComponentName.native.tsx     # React Native implementation
+  ComponentName.web.tsx        # DOM/HTML implementation
+  index.ts                     # native barrel — exports from .native (Metro uses this)
+  index.web.ts                 # web barrel — exports from .web (Vite uses this)
 ```
 
 ## ComponentName.tsx — Types File Rules
@@ -19,7 +21,7 @@ ComponentName/
 - Export the Props interface and nothing else
 - Extend VariantProps from the component's CVA variant object
 - No JSX, no runtime code, no renderer imports
-- Re-export the variant object so consumers get one import
+- **NEVER re-export variants** — variants are internal implementation details
 - **NEVER export runtime values** (const, function, object) from this file —
   Vite resolves `./Component` to `Component.web.tsx` before `Component.tsx`
   (due to `.web.tsx` extension priority), causing a circular import.
@@ -29,15 +31,24 @@ ComponentName/
 
 ```ts
 import type { VariantProps } from 'class-variance-authority';
-import type { buttonVariants } from '../../variants/button.variants';
+import type { buttonVariants } from './Button.variants';
 
 export interface IButtonProps extends VariantProps<typeof buttonVariants> {
   label: string;
   onPress: () => void;
 }
-
-export { buttonVariants } from '../../variants/button.variants';
 ```
+
+## ComponentName.variants.ts — Variant Rules
+
+- Lives inside the component folder — never in a shared `variants/` directory
+- Imported by `.native.tsx` and `.web.tsx` via `./ComponentName.variants`
+- Imported by the types file (`.tsx`) as `type` only
+- **Never exported from barrel files** (index.ts, index.web.ts, src/index.ts, src/index.web.ts)
+- Each component owns its own variant — even if two variants look identical, duplicate
+  rather than sharing (3 lines of CVA is better than a cross-component coupling)
+- Exception: composition chains (e.g. PasswordInput composes TextInput) may import from
+  the parent component's variant file
 
 ## ComponentName.native.tsx — Native Rules
 
@@ -50,7 +61,7 @@ export { buttonVariants } from '../../variants/button.variants';
 ```tsx
 import { Pressable, Text } from 'react-native';
 import { tw } from '../../lib/tw';
-import { buttonVariants } from '../../variants/button.variants';
+import { buttonVariants } from './Button.variants';
 import type { IButtonProps } from './Button';
 
 export function Button({ label, onPress, variant, size, disabled }: IButtonProps) {
@@ -72,7 +83,7 @@ export function Button({ label, onPress, variant, size, disabled }: IButtonProps
 
 ```tsx
 import { cn } from '../../lib/cn';
-import { buttonVariants } from '../../variants/button.variants';
+import { buttonVariants } from './Button.variants';
 import type { IButtonProps } from './Button';
 
 export function Button({ label, onPress, variant, size, disabled }: IButtonProps) {
@@ -97,20 +108,18 @@ ALL specifiers (including `export type`) before type stripping.
 Rules:
 - Components: explicit platform extension (`./Button.native`, `./Button.web`)
 - Types: explicit `.tsx` extension (`./Button.tsx`)
-- Variants: import from `../../variants` (never from `./ComponentName`)
+- **Never re-export variants** — they are internal to the component
 
 ```ts
 // index.ts — Metro picks this (default entry)
 export { Button } from './Button.native';
 export type { IButtonProps } from './Button.tsx';
-export { buttonVariants } from '../../variants';
 ```
 
 ```ts
 // index.web.ts — Vite picks this
 export { Button } from './Button.web';
 export type { IButtonProps } from './Button.tsx';
-export { buttonVariants } from '../../variants';
 ```
 
 ## Public API (src/index.ts + src/index.web.ts)
@@ -126,18 +135,19 @@ The `@financial-app/ui` package.json `exports` map routes each platform:
 Every new component must be added to BOTH barrels with:
 - Named component export
 - Named type export
-- Named variant export (so consumers can compose)
+
+**Variants are never exported from the package** — consumers use props, not internals.
 
 ## Checklist for New Component
 
 - [ ] Created ComponentName/ directory
 - [ ] ComponentName.tsx — types only, no JSX, no runtime values
+- [ ] ComponentName.variants.ts — CVA object, colocated in component folder
 - [ ] ComponentName.constants.ts — (if needed) shared runtime constants, no renderer imports
 - [ ] ComponentName.native.tsx — uses tw``, no HTML
 - [ ] ComponentName.web.tsx — uses cn(), no RN imports
-- [ ] index.ts — re-exports from .native + types
-- [ ] index.web.ts — re-exports from .web + types
-- [ ] variants/[name].variants.ts — CVA object created
+- [ ] index.ts — re-exports component + types only (no variants)
+- [ ] index.web.ts — re-exports component + types only (no variants)
 - [ ] JSDocs for properties, functions, state variables
-- [ ] src/index.ts — component exported (native barrel)
-- [ ] src/index.web.ts — component exported (web barrel)
+- [ ] src/index.ts — component + type exported (native barrel)
+- [ ] src/index.web.ts — component + type exported (web barrel)

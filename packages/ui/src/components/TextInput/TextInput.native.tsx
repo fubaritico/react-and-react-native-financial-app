@@ -1,10 +1,10 @@
 import { TextInput as RNTextInput, Text, View } from 'react-native'
 
 import tw from '../../lib/tw'
-import { textInputVariants } from '../../variants/textInput.variants'
 import { Icon } from '../Icon/Icon.native'
 
 import styles from './TextInput.styles'
+import { textInputVariants } from './TextInput.variants'
 
 import type { ITextInputProps } from './TextInput'
 
