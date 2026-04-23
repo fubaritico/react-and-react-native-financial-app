@@ -412,3 +412,15 @@
     - Added @financial-app/tailwind-config + twrnc dependencies to mobile and mobile-expo apps
     - Improved reset-project.sh: kill daemons first (Gradle daemon + Metro), clean global Gradle caches (~/.gradle/caches), clear Xcode DerivedData, prune pnpm store, comprehensive documentation
     - Tested on iOS simulator (mobile + mobile-expo): OK
+
+- Android build fix + rebuild script (dc90bd2)
+    - Fixed AsyncStorage v3 Maven repo: added `allprojects.repositories` with local_repo to `apps/mobile/android/build.gradle`
+    - Created `scripts/rebuild-android.sh` — single command: kill daemons, clean Gradle/Metro/RN caches, start Metro, build, launch
+    - Device targeting: phone/tablet AVD variants via second argument
+    - 6 root scripts: `mobile:rebuild:android[:phone|:tablet]`, `expo:rebuild:android[:phone|:tablet]`
+    - Metro started in background with port readiness check (waits for 8081, 30s timeout)
+    - `adb reverse tcp:8081 tcp:8081` for device-targeted builds
+    - Proper AVD boot wait via `sys.boot_completed` property
+    - Reorganized README: split commands by concern (daily dev → rebuild → reset), explain Metro hot-reload vs native rebuild
+    - Updated reset.md and troubleshooting.md with Android rebuild docs
+    - Tested: bare RN on Small_Phone + Medium_Tablet — build + launch + Metro connection OK

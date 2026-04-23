@@ -13,7 +13,8 @@ Never skip layers. Never reference colors or spacing values that aren't from tok
 
 ## CVA Variant Rules
 
-Variant files live in packages/ui/src/variants/[name].variants.ts
+Variant files live inside each component folder: `ComponentName/ComponentName.variants.ts`
+They are internal to the UI package — never exported to consumers.
 
 ### Safe classes for shared variants (both engines understand these)
 ```

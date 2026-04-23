@@ -1,11 +1,11 @@
 import { Pressable, Text } from 'react-native'
 
 import tw from '../../lib/tw'
-import { buttonVariants } from '../../variants'
 import { Icon } from '../Icon/Icon.native'
 
 import { ICON_COLOR } from './Button.constants'
 import styles from './Button.styles'
+import { buttonVariants } from './Button.variants'
 
 import type { IButtonProps } from './Button'
 

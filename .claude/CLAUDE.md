@@ -144,8 +144,7 @@ packages/
 Read `@completed.md`
 
 ### Next
-- Next: one-command Android build/fix flow (resolve AsyncStorage Maven artifact issue, create reliable `pnpm mobile:rebuild:android`)
-- Then: DonutChart + BudgetsOverview (last Wave 3 items)
+- Next: DonutChart + BudgetsOverview (last Wave 3 items)
 - Then: Phase 8 (API server + HTTP client + testing)
 - BudgetsOverview placeholder on Overview page — awaiting DonutChart
 
@@ -161,5 +160,5 @@ Read `@completed.md`
 - Husky pre-commit hook fails when Turbo runs in non-TTY git hook context — all checks pass individually, likely output buffering issue. Used HUSKY=0 as workaround for 481e539.
 - RN native component tests (*.native.tsx) require Jest — Vitest cannot mock TurboModuleRegistry. UI package will need dual runners: Jest for native, Vitest for web + variants.
 - @financial-app/shared barrel (index.native.ts) re-exports auth chain — screen tests must mock the barrel to avoid pulling in supabase/babel-runtime. Consider splitting barrel or using subpath imports in screens.
-- Android build: `Could not find org.asyncstorage.shared_storage:storage-android:1.0.0` — Maven repo config issue in build.gradle. Blocks `pnpm mobile:rebuild:android`.
+- Android build: AsyncStorage v3 Maven repo issue FIXED (dc90bd2). `rebuild-android.sh` handles all cache/daemon cleanup.
 

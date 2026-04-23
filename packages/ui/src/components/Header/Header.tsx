@@ -1,4 +1,4 @@
-import type { headerVariants } from '../../variants'
+import type { headerVariants } from './Header.variants'
 import type { VariantProps } from 'class-variance-authority'
 
 /** Props for the Header component. */
@@ -8,5 +8,3 @@ export interface IHeaderProps extends VariantProps<typeof headerVariants> {
   /** Optional secondary text below the title. */
   subtitle?: string
 }
-
-export { headerVariants } from '../../variants'

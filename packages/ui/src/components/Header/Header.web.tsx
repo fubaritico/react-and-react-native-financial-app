@@ -1,7 +1,7 @@
 import { cn } from '../../lib/cn'
-import { headerVariants } from '../../variants'
 
 import styles from './Header.styles'
+import { headerVariants } from './Header.variants'
 
 import type { IHeaderProps } from './Header'
 

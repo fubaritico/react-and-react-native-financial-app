@@ -68,20 +68,3 @@ export type {
 
 export { RecurringBillsOverview } from './components/RecurringBillsOverview/index.web'
 export type { IRecurringBillsOverviewProps } from './components/RecurringBillsOverview/RecurringBillsOverview.tsx'
-
-export {
-  buttonVariants,
-  cardVariants,
-  headerVariants,
-  textInputVariants,
-  balanceCardVariants,
-  coloredBorderItemVariants,
-} from './variants'
-export type {
-  ButtonVariants,
-  CardVariants,
-  HeaderVariants,
-  TextInputVariants,
-  BalanceCardVariants,
-  ColoredBorderItemVariants,
-} from './variants'

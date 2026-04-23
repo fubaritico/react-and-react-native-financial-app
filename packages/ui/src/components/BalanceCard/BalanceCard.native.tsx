@@ -1,9 +1,9 @@
 import { Text, View } from 'react-native'
 
 import tw from '../../lib/tw'
-import { balanceCardVariants } from '../../variants'
 
 import styles from './BalanceCard.styles'
+import { balanceCardVariants } from './BalanceCard.variants'
 
 import type { IBalanceCardProps } from './BalanceCard'
 

@@ -1,8 +1,8 @@
 import { cn } from '../../lib/cn'
-import { buttonVariants } from '../../variants'
 import { Icon } from '../Icon/Icon.web'
 
 import { ICON_COLOR } from './Button.constants'
+import { buttonVariants } from './Button.variants'
 
 import type { IButtonProps } from './Button'
 

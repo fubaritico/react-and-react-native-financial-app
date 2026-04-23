@@ -10,8 +10,8 @@ const uiDir = path.dirname(
 module.exports = {
   ...baseConfig,
   content: [
-    path.join(uiDir, 'src/**/*.web.tsx'),
-    path.join(uiDir, 'src/variants/**/*.ts'),
+    path.join(uiDir, 'src/components/**/*.{web.tsx,variants.ts,styles.ts}'),
+    path.join(uiDir, 'src/lib/**/*.ts'),
     './src/**/*.{ts,tsx}',
     './.storybook/**/*.{ts,tsx}',
   ],

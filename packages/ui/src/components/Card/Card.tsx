@@ -1,4 +1,4 @@
-import type { cardVariants } from '../../variants'
+import type { cardVariants } from './Card.variants'
 import type { VariantProps } from 'class-variance-authority'
 import type { ReactNode } from 'react'
 import type { ViewStyle } from 'react-native'
@@ -14,5 +14,3 @@ export interface ICardProps extends VariantProps<typeof cardVariants> {
   /** Optional style override (native only). */
   style?: ViewStyle | object
 }
-
-export { cardVariants } from '../../variants'

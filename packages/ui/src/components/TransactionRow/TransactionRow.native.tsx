@@ -21,7 +21,7 @@ export const TransactionRow = ({
 
   return (
     <>
-      <View style={tw`flex-row items-center py-3`}>
+      <View style={tw`${styles.root}`}>
         <Avatar src={avatar} name={name} size={40} />
         <Text style={tw`${styles.name}`}>{name}</Text>
         <View style={tw`items-end`}>
