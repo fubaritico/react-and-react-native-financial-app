@@ -19,6 +19,9 @@ const meta = {
     amount: '$190.00',
     color: 'green',
   },
+  parameters: {
+    backgrounds: 'white',
+  },
 } satisfies Meta<typeof BillSummaryRow>
 
 export default meta

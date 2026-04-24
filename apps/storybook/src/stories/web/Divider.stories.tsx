@@ -1,10 +1,13 @@
-import { Divider } from '@financial-app/ui'
+import { Divider, Typography } from '@financial-app/ui'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
   title: 'Web/Design System/Atoms/Divider',
   component: Divider,
+  parameters: {
+    backgrounds: 'white',
+  },
   argTypes: {
     spacing: {
       control: 'select',
@@ -19,30 +22,58 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Interactive playground with all controls. */
+/** Interactive playground — divider between two content blocks. */
 export const Playground: Story = {
   decorators: [
     (Story: React.ComponentType) => (
-      <div style={{ width: 400, padding: 16 }}>
-        <p>Content above</p>
+      <div
+        style={{
+          width: 400,
+          padding: 24,
+          backgroundColor: '#fff',
+          borderRadius: 12,
+          boxShadow: '0 1px 4px rgba(0,0,0,.08)',
+        }}
+      >
+        <Typography variant="body">First item</Typography>
         <Story />
-        <p>Content below</p>
+        <Typography variant="body">Second item</Typography>
       </div>
     ),
   ],
 }
 
-/** All spacing variants. */
+/** All spacing variants inside a card-like container. */
 export const Showcase: Story = {
   render: () => (
-    <div style={{ width: 400, padding: 16 }}>
-      <p>Small spacing</p>
-      <Divider spacing="sm" />
-      <p>Medium spacing (default)</p>
-      <Divider spacing="md" />
-      <p>Large spacing</p>
+    <div
+      style={{
+        width: 400,
+        padding: 24,
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        boxShadow: '0 1px 4px rgba(0,0,0,.08)',
+      }}
+    >
+      <Typography variant="subsection-title">Spacing variants</Typography>
       <Divider spacing="lg" />
-      <p>End</p>
+
+      <Typography variant="body-bold">sm</Typography>
+      <Typography variant="caption" color="muted">
+        4px vertical margin
+      </Typography>
+      <Divider spacing="sm" />
+
+      <Typography variant="body-bold">md (default)</Typography>
+      <Typography variant="caption" color="muted">
+        8px vertical margin
+      </Typography>
+      <Divider spacing="md" />
+
+      <Typography variant="body-bold">lg</Typography>
+      <Typography variant="caption" color="muted">
+        16px vertical margin
+      </Typography>
     </div>
   ),
 }

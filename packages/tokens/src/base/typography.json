@@ -2,7 +2,7 @@
   "font": {
     "family": {
       "$description": "Font family stacks",
-      "sans": { "$value": "'Public Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'", "$type": "fontFamily" }
+      "sans": { "$value": "'Public Sans Variable', 'Public Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'", "$type": "fontFamily" }
     },
     "size": {
       "$description": "Font size scale matching Figma text presets",
