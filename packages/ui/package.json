@@ -30,6 +30,7 @@
     "@financial-app/icons": "workspace:^",
     "@financial-app/tailwind-config": "workspace:^",
     "@financial-app/tokens": "workspace:^",
+    "@fontsource-variable/public-sans": "^5.2.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.5.0",

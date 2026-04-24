@@ -1,3 +1,5 @@
+import '@fontsource-variable/public-sans'
+
 // Atoms
 export { Icon } from './components/atoms/Icon/index.web'
 export type { IIconProps } from './components/atoms/Icon/Icon.tsx'
