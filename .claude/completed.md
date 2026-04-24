@@ -473,3 +473,29 @@
     - Remaining `.styles.ts` files trimmed to layout-only classes (no text styles)
     - ESLint `react-native/no-raw-text` updated with `skip: ['Typography']` in all 4 configs (ui, mobile, mobile-expo, mobile-expo-ejected)
     - Storybook stories updated: `color="inverse"` → `color="on-dark"`
+
+- Atomic Design reorganization (55f177c)
+    - Moved 22 components into atoms/molecules/organisms/templates directories
+    - atoms: Icon, Typography, Button, ColorDot, Divider, Avatar, LinkText
+    - molecules: TextInput, PasswordInput, SectionLink, StatCard, BalanceCard, TransactionRow, SpendingSummaryRow, BillSummaryRow
+    - organisms: Card, AuthCard, Header, PotsOverview, TransactionsOverview, RecurringBillsOverview
+    - templates: AuthLayout
+    - Updated all cross-component imports with atomic-level paths
+    - Updated barrels with explicit .tsx type extensions
+    - Updated 42 Storybook titles with atomic categories
+    - Removed useless Playground stories from 4 organisms (AuthCard, PotsOverview, RecurringBillsOverview, TransactionsOverview)
+    - Added Atomic Design structure rule to design-system.md
+    - Added QUAL-016 review rule: cn() only for composing multiple class sources
+    - Made /review mandatory in post-code sequence (CLAUDE.md + memory)
+
+- Embedded Public Sans font in ui package (88dd1ad)
+    - Added `@fontsource-variable/public-sans` as ui dependency, imported in `src/index.web.ts`
+    - Updated typography token: `'Public Sans Variable'` first in font stack to match fontsource `@font-face`
+    - Font loads automatically for all web consumers via Typography — no manual import needed in apps
+    - Removed manual `font-family` from storybook.css and web app.css
+- Storybook background toggle via decorator (88dd1ad)
+    - Per-story `parameters.backgrounds` config: `'beige'` (default) or `'white'`
+    - Decorator sets `document.body.style.backgroundColor` — SB v10 built-in backgrounds addon not available with `react-native-web-vite`
+- Divider stories rewritten with realistic card context + Typography (88dd1ad)
+- BillSummaryRow stories set to white background for visibility (88dd1ad)
+- Dismissed 5 Dependabot alerts (transitive deps from Expo SDK 54 / RN 0.81 — no user input exposure)

@@ -144,7 +144,14 @@ packages/
 Read `@completed.md`
 
 ### Next
-- Next: DonutChart + BudgetsOverview (last Wave 3 items)
+- Dropdown compound component (prerequisite for DataTable ActionBar)
+- Pagination molecule (prerequisite for DataTable)
+- Implement DataTable component (14-step plan ready: `docs/plans/datatable-implementation.md`)
+  - Order: Dropdown → Pagination → DataTable
+  - Load rules: `new-component.md`, `design-system.md`, `styling.md`
+- Modals compound component
+  - Ref screenshots (desktop): `Screenshot 2026-04-23 at 19.06.51`, `Screenshot 2026-04-23 at 19.07.03`, `Screenshot 2026-04-23 at 19.06.42`, `Screenshot 2026-04-23 at 19.06.32`
+- Then: DonutChart + BudgetsOverview (last Wave 3 items)
 - Then: Phase 8 (API server + HTTP client + testing)
 
 ### Known Issues
