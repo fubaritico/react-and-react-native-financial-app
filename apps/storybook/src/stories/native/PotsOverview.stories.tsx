@@ -1,4 +1,5 @@
 import { PotsOverview } from '@financial-app/ui/native'
+import i18n from 'i18next'
 import { View } from 'react-native'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
@@ -22,10 +23,18 @@ type Story = StoryObj<typeof meta>
 
 /** Realistic Overview page data with 4 pots. */
 export const Showcase: Story = {
-  args: { totalSaved: '$850', pots: defaultPots, onSeeDetails: noop },
-  render: () => (
+  args: {
+    title: i18n.t('potsOverview.title'),
+    seeDetailsLabel: i18n.t('common.seeDetails'),
+    totalSavedLabel: i18n.t('potsOverview.totalSaved'),
+    savingsIconLabel: i18n.t('accessibility.savingsIcon'),
+    totalSaved: '$850',
+    pots: defaultPots,
+    onSeeDetails: noop,
+  },
+  render: (args) => (
     <View style={{ maxWidth: 560, padding: 24 }}>
-      <PotsOverview totalSaved="$850" pots={defaultPots} onSeeDetails={noop} />
+      <PotsOverview {...args} />
     </View>
   ),
 }

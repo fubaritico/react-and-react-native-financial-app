@@ -12,6 +12,14 @@ export interface IPotItem {
 
 /** Props for the PotsOverview component. */
 export interface IPotsOverviewProps {
+  /** Section title (e.g., "Pots"). */
+  title: string
+  /** Label for the "See Details" link. */
+  seeDetailsLabel: string
+  /** Label for the "Total Saved" line. */
+  totalSavedLabel: string
+  /** Accessibility label for the savings icon. */
+  savingsIconLabel: string
   /** Total saved across all pots, formatted as currency string. */
   totalSaved: string
   /** Array of pot items to display in the grid. */

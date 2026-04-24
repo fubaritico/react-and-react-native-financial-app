@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { useTranslation } from 'react-i18next'
 
 import tw from '../lib/tw'
 import { BudgetsScreen } from '../screens/BudgetsScreen'
@@ -13,6 +14,8 @@ const Tab = createBottomTabNavigator<TabParamList>()
 
 /** Bottom tab navigator — mirrors the 5 tabs from mobile-expo (Expo Router). */
 export function TabNavigator() {
+  const { t } = useTranslation()
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -28,14 +31,30 @@ export function TabNavigator() {
         },
       }}
     >
-      <Tab.Screen name="Overview" component={OverviewScreen} />
-      <Tab.Screen name="Transactions" component={TransactionsScreen} />
-      <Tab.Screen name="Budgets" component={BudgetsScreen} />
-      <Tab.Screen name="Pots" component={PotsScreen} />
+      <Tab.Screen
+        name="Overview"
+        component={OverviewScreen}
+        options={{ title: t('navigation.overview') }}
+      />
+      <Tab.Screen
+        name="Transactions"
+        component={TransactionsScreen}
+        options={{ title: t('navigation.transactions') }}
+      />
+      <Tab.Screen
+        name="Budgets"
+        component={BudgetsScreen}
+        options={{ title: t('navigation.budgets') }}
+      />
+      <Tab.Screen
+        name="Pots"
+        component={PotsScreen}
+        options={{ title: t('navigation.pots') }}
+      />
       <Tab.Screen
         name="Recurring"
         component={RecurringScreen}
-        options={{ title: 'Recurring Bills' }}
+        options={{ title: t('navigation.recurringBills') }}
       />
     </Tab.Navigator>
   )

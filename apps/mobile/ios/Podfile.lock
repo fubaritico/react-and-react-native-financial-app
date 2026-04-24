@@ -2426,6 +2426,34 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
+  - RNLocalize (3.7.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - RNScreens (4.16.0):
     - boost
     - DoubleConversion
@@ -2620,6 +2648,7 @@ DEPENDENCIES:
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - SocketRocket (~> 0.7.1)
@@ -2784,6 +2813,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
@@ -2872,6 +2903,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 8fcbba0660bec98799b0e9bfc5fddb01801851de
   ReactCommon: 8df6e27c060970b9fb77a86e69a1cf9b934ea458
   RNGoogleSignin: fa028e2f7f3560a657c298fe367ab9511df2fcb0
+  RNLocalize: cb5b0df30f7c0cbaf2de6b48cdb12673b79e442a
   RNScreens: 74985ca8e102294a60cec7513fa84c936fa0b20b
   RNSVG: 81134639f861f002d999de10df56c26c5e496d71
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748

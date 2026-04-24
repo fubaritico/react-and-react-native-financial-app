@@ -48,6 +48,7 @@
 * **ui:** add Wave 1 auth components (TextInput, PasswordInput, LinkText, AuthCard, AuthLayout) ([93d6ee2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/93d6ee268fc52406f412041b13976a24c83ed04d))
 * **ui:** add Wave 2 + Wave 3 overview components with accessibility fixes ([4e32a4d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4e32a4da7086b3d92976370303a0200382402f4c))
 * **ui:** cross-platform refactor with file extension split (Phase 3) ([75e52eb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/75e52eb986da00dfa20fb92f397f3e93d19026b2))
+* **ui:** embed Public Sans font + Storybook background toggle ([88dd1ad](https://github.com/fubaritico/react-and-react-native-financial-app/commit/88dd1ad3259b974ecff5ed05659caf15d468897a))
 * **ui:** refactor Button to 4 Figma variants (primary/secondary/tertiary/destroy) ([ac55aa6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ac55aa642ce2dad6d46bfef5ebfd18aee79f912c))
 * **ui:** use IconName from @financial-app/icons in Button and TextInput ([8209ded](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8209dedff6ddfd72203a4f989274de264330769a))
 * **web,expo:** add web routes, responsive layout, device simulator scripts ([481e539](https://github.com/fubaritico/react-and-react-native-financial-app/commit/481e539cb27dc9f23edb54ff846051bf7d6db210))

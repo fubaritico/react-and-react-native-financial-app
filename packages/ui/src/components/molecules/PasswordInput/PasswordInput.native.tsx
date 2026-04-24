@@ -16,6 +16,8 @@ export const PasswordInput = ({
   helperText,
   error,
   showToggle = true,
+  showPasswordLabel = 'Show password',
+  hidePasswordLabel = 'Hide password',
 }: IPasswordInputProps) => {
   const [visible, setVisible] = useState(false)
 
@@ -24,7 +26,7 @@ export const PasswordInput = ({
       onPress={() => {
         setVisible((v) => !v)
       }}
-      accessibilityLabel={visible ? 'Hide password' : 'Show password'}
+      accessibilityLabel={visible ? hidePasswordLabel : showPasswordLabel}
     >
       <Icon
         name={visible ? 'hidePassword' : 'showPassword'}

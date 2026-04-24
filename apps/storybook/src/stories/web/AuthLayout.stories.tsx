@@ -6,6 +6,7 @@ import {
   PasswordInput,
   TextInput,
 } from '@financial-app/ui'
+import i18n from 'i18next'
 import { useState } from 'react'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
@@ -91,6 +92,9 @@ const meta = {
   },
   args: {
     children: <LoginContent />,
+    appName: i18n.t('app.name'),
+    tagline: i18n.t('app.tagline'),
+    description: i18n.t('app.description'),
   },
 } satisfies Meta<typeof AuthLayout>
 

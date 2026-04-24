@@ -18,8 +18,11 @@
     "@react-router/node": "^7.14.1",
     "@react-router/serve": "^7.14.1",
     "isbot": "^5.1.39",
+    "i18next": "catalog:",
+    "i18next-browser-languagedetector": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-i18next": "catalog:",
     "react-router": "^7.14.1"
   },
   "devDependencies": {

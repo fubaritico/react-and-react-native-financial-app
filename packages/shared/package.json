@@ -44,6 +44,9 @@
     },
     "./test-utils": {
       "import": "./src/test-utils/index.ts"
+    },
+    "./i18n": {
+      "import": "./src/i18n/index.ts"
     }
   },
   "scripts": {
@@ -56,6 +59,7 @@
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
     "@tanstack/react-query": "catalog:",
+    "i18next": "catalog:",
     "jotai": "^2.12.3",
     "zod": "^3.24.4"
   },

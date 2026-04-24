@@ -1,8 +1,11 @@
 import { Tabs } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 
 import tw from '../../src/lib/tw'
 
 export default function TabLayout() {
+  const { t } = useTranslation()
+
   return (
     <Tabs
       screenOptions={{
@@ -19,11 +22,20 @@ export default function TabLayout() {
         },
       }}
     >
-      <Tabs.Screen name="index" options={{ title: 'Overview' }} />
-      <Tabs.Screen name="transactions" options={{ title: 'Transactions' }} />
-      <Tabs.Screen name="budgets" options={{ title: 'Budgets' }} />
-      <Tabs.Screen name="pots" options={{ title: 'Pots' }} />
-      <Tabs.Screen name="recurring" options={{ title: 'Recurring Bills' }} />
+      <Tabs.Screen name="index" options={{ title: t('navigation.overview') }} />
+      <Tabs.Screen
+        name="transactions"
+        options={{ title: t('navigation.transactions') }}
+      />
+      <Tabs.Screen
+        name="budgets"
+        options={{ title: t('navigation.budgets') }}
+      />
+      <Tabs.Screen name="pots" options={{ title: t('navigation.pots') }} />
+      <Tabs.Screen
+        name="recurring"
+        options={{ title: t('navigation.recurringBills') }}
+      />
     </Tabs>
   )
 }

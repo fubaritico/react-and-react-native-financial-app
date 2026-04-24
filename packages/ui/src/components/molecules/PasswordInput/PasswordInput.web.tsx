@@ -14,6 +14,8 @@ export const PasswordInput = ({
   helperText,
   error,
   showToggle = true,
+  showPasswordLabel = 'Show password',
+  hidePasswordLabel = 'Hide password',
 }: IPasswordInputProps) => {
   const [visible, setVisible] = useState(false)
 
@@ -24,7 +26,7 @@ export const PasswordInput = ({
         setVisible((v) => !v)
       }}
       className="ml-2 hover:opacity-70 transition-opacity cursor-pointer"
-      aria-label={visible ? 'Hide password' : 'Show password'}
+      aria-label={visible ? hidePasswordLabel : showPasswordLabel}
     >
       <Icon
         name={visible ? 'hidePassword' : 'showPassword'}

@@ -1,3 +1,5 @@
+import './i18n'
+
 import {
   Links,
   Meta,
@@ -37,6 +39,8 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  // Error boundary cannot use hooks (not inside I18nextProvider).
+  // Keep hardcoded English strings for error pages.
   let message = 'Oops!'
   let details = 'An unexpected error occurred.'
   let stack: string | undefined
