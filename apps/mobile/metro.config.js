@@ -12,17 +12,33 @@ const monorepoRoot = path.resolve(projectRoot, '../..');
  */
 const defaultConfig = getDefaultConfig(projectRoot);
 
+// Force singleton resolution — pnpm creates separate virtual store entries when
+// peer dep contexts differ (e.g. @babel/core versions). Without this, Metro may
+// resolve a JS copy that doesn't match the linked native binary, causing crashes.
+const singletonPkgs = ['react-native-svg'];
+const appNodeModules = path.resolve(projectRoot, 'node_modules');
+
 const config = {
   watchFolders: [monorepoRoot],
   resolver: {
     nodeModulesPaths: [
-      path.resolve(projectRoot, 'node_modules'),
+      appNodeModules,
       path.resolve(monorepoRoot, 'node_modules'),
     ],
     sourceExts: [
       'native.tsx', 'native.ts', 'native.jsx', 'native.js',
       ...defaultConfig.resolver.sourceExts,
     ],
+    resolveRequest: (context, moduleName, platform) => {
+      if (singletonPkgs.includes(moduleName)) {
+        return context.resolveRequest(
+          { ...context, originModulePath: path.resolve(projectRoot, 'package.json') },
+          moduleName,
+          platform,
+        );
+      }
+      return context.resolveRequest(context, moduleName, platform);
+    },
   },
 };
 

@@ -1,4 +1,5 @@
 import { TransactionsOverview } from '@financial-app/ui/native'
+import i18n from 'i18next'
 import { View } from 'react-native'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
@@ -46,13 +47,15 @@ type Story = StoryObj<typeof meta>
 
 /** Realistic overview section as seen on the Overview page. */
 export const Showcase: Story = {
-  args: { transactions: MOCK_TRANSACTIONS, onViewAll: () => undefined },
-  render: () => (
+  args: {
+    title: i18n.t('transactionsOverview.title'),
+    viewAllLabel: i18n.t('common.viewAll'),
+    transactions: MOCK_TRANSACTIONS,
+    onViewAll: () => undefined,
+  },
+  render: (args) => (
     <View style={{ maxWidth: 500, padding: 24, backgroundColor: '#F8F4F0' }}>
-      <TransactionsOverview
-        transactions={MOCK_TRANSACTIONS}
-        onViewAll={() => undefined}
-      />
+      <TransactionsOverview {...args} />
     </View>
   ),
 }

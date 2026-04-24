@@ -12,6 +12,10 @@ export interface ITransactionOverviewItem {
 
 /** Props for the TransactionsOverview component. */
 export interface ITransactionsOverviewProps {
+  /** Section title (e.g., "Transactions"). */
+  title: string
+  /** Label for the "View All" link. */
+  viewAllLabel: string
   /** Array of transactions to display (max 5). */
   transactions: ITransactionOverviewItem[]
   /** Callback when "View All" is pressed. */

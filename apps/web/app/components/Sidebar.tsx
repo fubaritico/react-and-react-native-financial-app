@@ -1,11 +1,12 @@
+import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router'
 
-const NAV_ITEMS = [
-  { to: '/', label: 'Overview' },
-  { to: '/transactions', label: 'Transactions' },
-  { to: '/budgets', label: 'Budgets' },
-  { to: '/pots', label: 'Pots' },
-  { to: '/recurring', label: 'Recurring Bills' },
+const NAV_KEYS = [
+  { to: '/', key: 'navigation.overview' },
+  { to: '/transactions', key: 'navigation.transactions' },
+  { to: '/budgets', key: 'navigation.budgets' },
+  { to: '/pots', key: 'navigation.pots' },
+  { to: '/recurring', key: 'navigation.recurringBills' },
 ] as const
 
 /**
@@ -16,13 +17,15 @@ const NAV_ITEMS = [
  * Tablet/mobile (< lg): horizontal bottom bar.
  */
 export function Sidebar() {
+  const { t } = useTranslation()
+
   return (
     <>
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex lg:flex-col lg:w-[300px] lg:min-h-screen bg-grey-900 rounded-r-xl py-10 px-8">
-        <p className="text-preset-1 text-on-dark mb-16">finance</p>
+        <p className="text-preset-1 text-on-dark mb-16">{t('app.name')}</p>
         <nav className="flex flex-col gap-1">
-          {NAV_ITEMS.map(({ to, label }) => (
+          {NAV_KEYS.map(({ to, key }) => (
             <NavLink
               key={to}
               to={to}
@@ -35,7 +38,7 @@ export function Sidebar() {
                 ].join(' ')
               }
             >
-              {label}
+              {t(key)}
             </NavLink>
           ))}
         </nav>
@@ -43,7 +46,7 @@ export function Sidebar() {
 
       {/* Mobile / tablet bottom bar */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 flex lg:hidden bg-grey-900 px-4 pt-2 pb-2 rounded-t-lg">
-        {NAV_ITEMS.map(({ to, label }) => (
+        {NAV_KEYS.map(({ to, key }) => (
           <NavLink
             key={to}
             to={to}
@@ -57,7 +60,7 @@ export function Sidebar() {
             }
           >
             <span className="text-[11px] md:text-preset-5 font-bold leading-tight truncate max-w-full">
-              {label}
+              {t(key)}
             </span>
           </NavLink>
         ))}

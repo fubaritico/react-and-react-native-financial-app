@@ -1,3 +1,5 @@
+import './src/i18n'
+
 import { NavigationContainer } from '@react-navigation/native'
 import { StatusBar } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'

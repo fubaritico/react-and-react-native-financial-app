@@ -13,6 +13,7 @@ import {
   TransactionsOverview,
 } from '@financial-app/ui'
 import { useRouter } from 'expo-router'
+import { useTranslation } from 'react-i18next'
 import { ScrollView, Text, View } from 'react-native'
 
 import tw from '../../src/lib/tw'
@@ -23,6 +24,7 @@ import tw from '../../src/lib/tw'
  */
 export default function OverviewScreen() {
   const router = useRouter()
+  const { t } = useTranslation()
 
   const latestTransactions = mockTransactions.slice(0, 5).map((txn) => ({
     avatar: txn.avatar,
@@ -62,25 +64,27 @@ export default function OverviewScreen() {
       style={tw`flex-1 bg-beige-100`}
       contentContainerStyle={tw`p-4 pb-8`}
     >
-      <Text style={tw`text-3xl font-bold mb-6 mt-10`}>Overview</Text>
+      <Text style={tw`text-3xl font-bold mb-6 mt-10`}>
+        {t('overview.title')}
+      </Text>
 
       {/* Balance section */}
       <BalanceCard
-        label="Current Balance"
+        label={t('overview.currentBalance')}
         amount={formatCurrency(mockBalance.current)}
         tone="dark"
       />
       <View style={tw`flex-row gap-3 mt-3`}>
         <View style={tw`flex-1`}>
           <BalanceCard
-            label="Income"
+            label={t('overview.income')}
             amount={formatCurrency(mockBalance.income)}
             tone="light"
           />
         </View>
         <View style={tw`flex-1`}>
           <BalanceCard
-            label="Expenses"
+            label={t('overview.expenses')}
             amount={formatCurrency(mockBalance.expenses)}
             tone="light"
           />
@@ -90,6 +94,10 @@ export default function OverviewScreen() {
       {/* Pots section */}
       <View style={tw`mt-6`}>
         <PotsOverview
+          title={t('potsOverview.title')}
+          seeDetailsLabel={t('common.seeDetails')}
+          totalSavedLabel={t('potsOverview.totalSaved')}
+          savingsIconLabel={t('accessibility.savingsIcon')}
           totalSaved={formatCurrency(totalSaved)}
           pots={potItems}
           onSeeDetails={() => {
@@ -101,6 +109,8 @@ export default function OverviewScreen() {
       {/* Transactions section */}
       <View style={tw`mt-4`}>
         <TransactionsOverview
+          title={t('transactionsOverview.title')}
+          viewAllLabel={t('common.viewAll')}
           transactions={latestTransactions}
           onViewAll={() => {
             router.push('/(tabs)/transactions')
@@ -111,6 +121,11 @@ export default function OverviewScreen() {
       {/* Recurring Bills section */}
       <View style={tw`mt-4`}>
         <RecurringBillsOverview
+          title={t('recurringBillsOverview.title')}
+          seeDetailsLabel={t('common.seeDetails')}
+          paidBillsLabel={t('recurringBillsOverview.paidBills')}
+          totalUpcomingLabel={t('recurringBillsOverview.totalUpcoming')}
+          dueSoonLabel={t('recurringBillsOverview.dueSoon')}
           paid={formatCurrency(paidTotal)}
           upcoming={formatCurrency(upcomingTotal)}
           dueSoon={formatCurrency(dueSoonTotal)}
@@ -122,10 +137,9 @@ export default function OverviewScreen() {
 
       {/* BudgetsOverview placeholder — awaiting DonutChart from Track B */}
       <View style={tw`mt-4 bg-card rounded-xl p-5`}>
-        <Text style={tw`text-base font-bold`}>Budgets</Text>
+        <Text style={tw`text-base font-bold`}>{t('budgets.title')}</Text>
         <Text style={tw`text-foreground-muted mt-2`}>
-          {mockBudgets.length} budget
-          {mockBudgets.length !== 1 ? 's' : ''} — awaiting DonutChart
+          {t('budgets.awaitingChart', { count: mockBudgets.length })}
         </Text>
       </View>
     </ScrollView>

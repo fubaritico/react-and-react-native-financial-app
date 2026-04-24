@@ -12,6 +12,7 @@ import {
   RecurringBillsOverview,
   TransactionsOverview,
 } from '@financial-app/ui'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import type { Route } from './+types/home'
@@ -65,6 +66,7 @@ export function loader() {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const {
     balance,
@@ -79,27 +81,29 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="p-6 lg:p-10">
-      <h1 className="text-preset-1 text-grey-900 mb-8">Overview</h1>
+      <h1 className="text-preset-1 text-grey-900 mb-8">
+        {t('overview.title')}
+      </h1>
 
       {/* Balance cards — stack on mobile, row on md+ */}
       <div className="flex flex-col md:flex-row gap-3 md:gap-6">
         <div className="md:flex-1">
           <BalanceCard
-            label="Current Balance"
+            label={t('overview.currentBalance')}
             amount={formatCurrency(balance.current)}
             tone="dark"
           />
         </div>
         <div className="md:flex-1">
           <BalanceCard
-            label="Income"
+            label={t('overview.income')}
             amount={formatCurrency(balance.income)}
             tone="light"
           />
         </div>
         <div className="md:flex-1">
           <BalanceCard
-            label="Expenses"
+            label={t('overview.expenses')}
             amount={formatCurrency(balance.expenses)}
             tone="light"
           />
@@ -111,6 +115,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         {/* Left column */}
         <div className="flex flex-col gap-6">
           <PotsOverview
+            title={t('potsOverview.title')}
+            seeDetailsLabel={t('common.seeDetails')}
+            totalSavedLabel={t('potsOverview.totalSaved')}
+            savingsIconLabel={t('accessibility.savingsIcon')}
             totalSaved={formatCurrency(totalSaved)}
             pots={potItems}
             onSeeDetails={() => {
@@ -119,6 +127,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           />
 
           <TransactionsOverview
+            title={t('transactionsOverview.title')}
+            viewAllLabel={t('common.viewAll')}
             transactions={latestTransactions}
             onViewAll={() => {
               void navigate('/transactions')
@@ -130,14 +140,20 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <div className="flex flex-col gap-6">
           {/* BudgetsOverview placeholder — awaiting DonutChart from Track B */}
           <div className="bg-card rounded-xl p-6">
-            <h2 className="text-preset-2 text-foreground">Budgets</h2>
+            <h2 className="text-preset-2 text-foreground">
+              {t('budgets.title')}
+            </h2>
             <p className="text-preset-4 text-foreground-muted mt-2">
-              {budgetCount} budget{budgetCount !== 1 ? 's' : ''} — awaiting
-              DonutChart
+              {t('budgets.awaitingChart', { count: budgetCount })}
             </p>
           </div>
 
           <RecurringBillsOverview
+            title={t('recurringBillsOverview.title')}
+            seeDetailsLabel={t('common.seeDetails')}
+            paidBillsLabel={t('recurringBillsOverview.paidBills')}
+            totalUpcomingLabel={t('recurringBillsOverview.totalUpcoming')}
+            dueSoonLabel={t('recurringBillsOverview.dueSoon')}
             paid={formatCurrency(paidTotal)}
             upcoming={formatCurrency(upcomingTotal)}
             dueSoon={formatCurrency(dueSoonTotal)}

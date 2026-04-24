@@ -1,5 +1,17 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 
+// Initialize i18n for tests
+const i18n = require('i18next')
+const { initReactI18next } = require('react-i18next')
+const { i18nConfig } = require('../../packages/shared/src/i18n/config')
+
+i18n.use(initReactI18next).init({ ...i18nConfig, lng: 'en' })
+
+// Mock react-native-localize
+jest.mock('react-native-localize', () => ({
+  getLocales: () => [{ languageCode: 'en' }],
+}))
+
 // Mock react-native-svg (native module used by @financial-app/icons)
 jest.mock('react-native-svg', () => {
   const { View } = require('react-native')

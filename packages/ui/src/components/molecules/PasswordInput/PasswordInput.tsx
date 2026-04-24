@@ -17,4 +17,8 @@ export interface IPasswordInputProps extends VariantProps<
   helperText?: string
   /** Whether to show the visibility toggle button. */
   showToggle?: boolean
+  /** Accessibility label for the "show password" toggle. */
+  showPasswordLabel?: string
+  /** Accessibility label for the "hide password" toggle. */
+  hidePasswordLabel?: string
 }

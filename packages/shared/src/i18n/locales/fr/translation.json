@@ -1,0 +1,71 @@
+{
+  "common": {
+    "seeDetails": "Voir les détails",
+    "viewAll": "Voir tout",
+    "placeholder": "Espace réservé"
+  },
+  "navigation": {
+    "overview": "Aperçu",
+    "transactions": "Transactions",
+    "budgets": "Budgets",
+    "pots": "Cagnottes",
+    "recurringBills": "Factures récurrentes"
+  },
+  "overview": {
+    "title": "Aperçu",
+    "currentBalance": "Solde actuel",
+    "income": "Revenus",
+    "expenses": "Dépenses"
+  },
+  "potsOverview": {
+    "title": "Cagnottes",
+    "totalSaved": "Total épargné"
+  },
+  "transactionsOverview": {
+    "title": "Transactions"
+  },
+  "recurringBillsOverview": {
+    "title": "Factures récurrentes",
+    "paidBills": "Factures payées",
+    "totalUpcoming": "Total à venir",
+    "dueSoon": "Échéance proche"
+  },
+  "passwordInput": {
+    "hidePassword": "Masquer le mot de passe",
+    "showPassword": "Afficher le mot de passe"
+  },
+  "auth": {
+    "login": "Connexion",
+    "signup": "Inscription"
+  },
+  "budgets": {
+    "title": "Budgets",
+    "awaitingChart_one": "{{count}} budget — en attente du DonutChart",
+    "awaitingChart_other": "{{count}} budgets — en attente du DonutChart"
+  },
+  "pots": {
+    "title": "Cagnottes"
+  },
+  "recurring": {
+    "title": "Factures récurrentes"
+  },
+  "transactions": {
+    "title": "Transactions"
+  },
+  "accessibility": {
+    "savingsIcon": "Icône d'épargne"
+  },
+  "app": {
+    "name": "finance",
+    "title": "Application financière",
+    "tagline": "Suivez votre argent\net épargnez pour l'avenir",
+    "description": "L'application de finances personnelles vous donne le contrôle de vos dépenses. Suivez vos transactions, définissez des budgets et alimentez facilement vos cagnottes."
+  },
+  "errors": {
+    "oops": "Oups !",
+    "unexpected": "Une erreur inattendue s'est produite.",
+    "notFound": "404",
+    "notFoundMessage": "La page demandée est introuvable.",
+    "error": "Erreur"
+  }
+}

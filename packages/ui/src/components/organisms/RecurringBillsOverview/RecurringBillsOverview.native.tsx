@@ -11,22 +11,33 @@ import type { IRecurringBillsOverviewProps } from './RecurringBillsOverview'
 
 /** Native implementation of the RecurringBillsOverview section component. */
 export const RecurringBillsOverview = ({
+  title,
+  seeDetailsLabel,
+  paidBillsLabel,
+  totalUpcomingLabel,
+  dueSoonLabel,
   paid,
   upcoming,
   dueSoon,
   onSeeDetails,
-}: IRecurringBillsOverviewProps) => (
-  <View style={tw`${styles.root}`}>
-    <View style={tw`${styles.header}`}>
-      <Typography variant="subsection-title" accessibilityRole="header">
-        Recurring Bills
-      </Typography>
-      <SectionLink label="See Details" onPress={onSeeDetails} />
+}: IRecurringBillsOverviewProps) => {
+  return (
+    <View style={tw`${styles.root}`}>
+      <View style={tw`${styles.header}`}>
+        <Typography variant="subsection-title" accessibilityRole="header">
+          {title}
+        </Typography>
+        <SectionLink label={seeDetailsLabel} onPress={onSeeDetails} />
+      </View>
+      <View style={tw`${styles.list}`}>
+        <BillSummaryRow label={paidBillsLabel} amount={paid} color="green" />
+        <BillSummaryRow
+          label={totalUpcomingLabel}
+          amount={upcoming}
+          color="yellow"
+        />
+        <BillSummaryRow label={dueSoonLabel} amount={dueSoon} color="cyan" />
+      </View>
     </View>
-    <View style={tw`${styles.list}`}>
-      <BillSummaryRow label="Paid Bills" amount={paid} color="green" />
-      <BillSummaryRow label="Total Upcoming" amount={upcoming} color="yellow" />
-      <BillSummaryRow label="Due Soon" amount={dueSoon} color="cyan" />
-    </View>
-  </View>
-)
+  )
+}

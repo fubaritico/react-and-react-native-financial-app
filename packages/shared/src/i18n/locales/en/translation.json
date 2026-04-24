@@ -1,0 +1,71 @@
+{
+  "common": {
+    "seeDetails": "See Details",
+    "viewAll": "View All",
+    "placeholder": "Placeholder"
+  },
+  "navigation": {
+    "overview": "Overview",
+    "transactions": "Transactions",
+    "budgets": "Budgets",
+    "pots": "Pots",
+    "recurringBills": "Recurring Bills"
+  },
+  "overview": {
+    "title": "Overview",
+    "currentBalance": "Current Balance",
+    "income": "Income",
+    "expenses": "Expenses"
+  },
+  "potsOverview": {
+    "title": "Pots",
+    "totalSaved": "Total Saved"
+  },
+  "transactionsOverview": {
+    "title": "Transactions"
+  },
+  "recurringBillsOverview": {
+    "title": "Recurring Bills",
+    "paidBills": "Paid Bills",
+    "totalUpcoming": "Total Upcoming",
+    "dueSoon": "Due Soon"
+  },
+  "passwordInput": {
+    "hidePassword": "Hide password",
+    "showPassword": "Show password"
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign Up"
+  },
+  "budgets": {
+    "title": "Budgets",
+    "awaitingChart_one": "{{count}} budget — awaiting DonutChart",
+    "awaitingChart_other": "{{count}} budgets — awaiting DonutChart"
+  },
+  "pots": {
+    "title": "Pots"
+  },
+  "recurring": {
+    "title": "Recurring Bills"
+  },
+  "transactions": {
+    "title": "Transactions"
+  },
+  "accessibility": {
+    "savingsIcon": "Savings icon"
+  },
+  "app": {
+    "name": "finance",
+    "title": "Financial App",
+    "tagline": "Keep track of your money\nand save for your future",
+    "description": "Personal finance app puts you in control of your spending. Track transactions, set budgets, and add to savings pots easily."
+  },
+  "errors": {
+    "oops": "Oops!",
+    "unexpected": "An unexpected error occurred.",
+    "notFound": "404",
+    "notFoundMessage": "The requested page could not be found.",
+    "error": "Error"
+  }
+}

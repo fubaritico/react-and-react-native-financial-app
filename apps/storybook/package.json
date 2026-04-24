@@ -10,8 +10,11 @@
   },
   "dependencies": {
     "@financial-app/icons": "workspace:^",
+    "@financial-app/shared": "workspace:^",
     "@financial-app/tokens": "workspace:^",
-    "@financial-app/ui": "workspace:^"
+    "@financial-app/ui": "workspace:^",
+    "i18next": "catalog:",
+    "react-i18next": "catalog:"
   },
   "devDependencies": {
     "@storybook/react-native-web-vite": "catalog:",
