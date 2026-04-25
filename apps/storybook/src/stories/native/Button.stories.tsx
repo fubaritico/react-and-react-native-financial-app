@@ -12,7 +12,11 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'tertiary', 'destroy'],
+      options: ['primary', 'secondary', 'tertiary', 'destroy', 'outline'],
+    },
+    size: {
+      control: 'select',
+      options: ['md', 'sm', 'nav'],
     },
     icon: {
       control: 'select',

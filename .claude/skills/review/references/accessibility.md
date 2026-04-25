@@ -112,11 +112,13 @@ Each rule maps to one or more WCAG 2.1 Level AA success criteria.
 - **Files**: `*.web.tsx`
 - **Check**: Custom interactive components must be keyboard-accessible
 - **Check**: `onKeyDown`/`onKeyUp` handlers for custom widgets
-- **Check**: Visible focus indicators (`:focus-visible` styles)
+- **Check**: ALL interactive elements (`<button>`, `<a>`, custom clickables) MUST have `focus-visible` styles
+- **Required pattern**: `focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900`
 - **Check**: No `outline: none` without replacement focus style
 
 ### A11Y-008: Missing accessibilityState (native)
 - **Files**: `*.native.tsx`
+- **Check**: ALL interactive elements (Pressable, TouchableOpacity) MUST include `accessibilityState` matching their state
 - **Check**: Disabled elements must have `accessibilityState={{ disabled: true }}`
 - **Check**: Selected/checked items must have `accessibilityState={{ selected: true }}`
 - **Check**: Expanded/collapsed must have `accessibilityState={{ expanded: true/false }}`

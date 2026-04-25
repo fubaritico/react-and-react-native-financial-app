@@ -1,4 +1,4 @@
-# 1.0.0 (2026-04-24)
+# 1.0.0 (2026-04-25)
 
 
 ### Bug Fixes
@@ -26,6 +26,7 @@
 * **config:** add setup-tokens-package and migrate-to-nativewind-v5 skills ([1d9caa6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1d9caa60ec308b74bed7ee14282645261bffa92a))
 * **config:** add setup-ui-package skill with architecture reference ([44982df](https://github.com/fubaritico/react-and-react-native-financial-app/commit/44982df4e2fb4aa4d4a03ba965b4cfac2cf0d72a))
 * **expo:** add expo-dev-client and native build scripts ([1b26c7f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1b26c7f61490496cf77043e28ff08033829bc8e9))
+* **i18n:** add react-i18next with EN/FR translations across all apps ([987131e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/987131eefff0e106daaa0c42637890719c1ca4ab))
 * **icons:** add @financial-app/icons package with cross-platform Icon component ([8195d3d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8195d3d406e0f330afda450ec9c69cd219c5083d))
 * **icons:** add Fb app icon to all mobile apps ([e18ea02](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e18ea02267c836173524182be2629b4d8cd3142b))
 * **mobile-expo:** add Expo Router with tabs + auth routes ([929dd51](https://github.com/fubaritico/react-and-react-native-financial-app/commit/929dd517782edfa4b692e01a4f27e5b02c776cfd))

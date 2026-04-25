@@ -15,6 +15,7 @@
 ### ARCH-002: Hardcoded design values
 - **Files**: All (except `packages/tokens/src/**`)
 - **Check**: No raw hex colors (`#RRGGBB`), pixel values for spacing/sizing, or font sizes
+- **Check**: No Tailwind arbitrary values (`bg-[#1a1a2e]`, `text-[14px]`, `p-[12px]`) — always use classes that resolve to `@financial-app/tokens` values via the tailwind config
 - **Must use**: Token references (tw classes, CSS variables, or token JS imports)
 - **Exception**: `0`, `1px` for borders, `100%`, `auto`, `inherit`
 

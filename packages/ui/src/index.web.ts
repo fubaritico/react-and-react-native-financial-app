@@ -52,6 +52,9 @@ export type { ISpendingSummaryRowProps } from './components/molecules/SpendingSu
 export { BillSummaryRow } from './components/molecules/BillSummaryRow/index.web'
 export type { IBillSummaryRowProps } from './components/molecules/BillSummaryRow/BillSummaryRow.tsx'
 
+export { Pagination } from './components/molecules/Pagination/index.web'
+export type { IPaginationProps } from './components/molecules/Pagination/Pagination.tsx'
+
 // Organisms
 export { Card } from './components/organisms/Card/index.web'
 export type { ICardProps } from './components/organisms/Card/Card.tsx'

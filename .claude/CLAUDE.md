@@ -143,6 +143,8 @@ packages/
 
 Read `@completed.md`
 
+- feat(i18n): react-i18next with EN/FR translations across all apps (987131e) — shared config in @financial-app/shared, per-app init (expo-localization, react-native-localize, i18next-browser-languagedetector), UI components refactored to props-based i18n, Storybook stories updated with i18n.t() pattern
+
 ### Next
 - Dropdown compound component (prerequisite for DataTable ActionBar)
 - Pagination molecule (prerequisite for DataTable)
@@ -167,4 +169,6 @@ Read `@completed.md`
 - RN native component tests (*.native.tsx) require Jest — Vitest cannot mock TurboModuleRegistry. UI package will use single Jest runner with multi-project config (native + web projects) — not yet implemented.
 - @financial-app/shared barrel (index.native.ts) re-exports auth chain — screen tests must mock the barrel to avoid pulling in supabase/babel-runtime. Consider splitting barrel or using subpath imports in screens.
 - Android build: AsyncStorage v3 Maven repo issue FIXED (dc90bd2). `rebuild-android.sh` handles all cache/daemon cleanup.
+- Review A11Y-008: PasswordInput toggle missing accessibilityState/aria-pressed for visibility state — pre-existing, low priority
+- pnpm virtual store creates duplicate entries when peer dep contexts differ (e.g. react-dom versions) — fixed for i18n by removing react-i18next from UI, but bare RN still needs react-native-svg singleton hack in metro.config.js
 
