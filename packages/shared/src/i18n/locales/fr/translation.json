@@ -52,6 +52,13 @@
   "transactions": {
     "title": "Transactions"
   },
+  "pagination": {
+    "prev": "Préc",
+    "next": "Suiv",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "page": "Page {{number}}"
+  },
   "accessibility": {
     "savingsIcon": "Icône d'épargne"
   },

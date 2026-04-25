@@ -12,7 +12,11 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'tertiary', 'destroy'],
+      options: ['primary', 'secondary', 'tertiary', 'destroy', 'outline'],
+    },
+    size: {
+      control: 'select',
+      options: ['md', 'sm', 'nav'],
     },
     icon: {
       control: 'select',
@@ -48,6 +52,7 @@ export const Showcase: Story = {
         icon="caretRight"
       />
       <Button title="Destroy" variant="destroy" onPress={noop} />
+      <Button title="Outline" variant="outline" onPress={noop} />
     </div>
   ),
 }
@@ -72,6 +77,7 @@ export const Disabled: Story = {
       <Button title="Secondary" variant="secondary" disabled onPress={noop} />
       <Button title="Tertiary" variant="tertiary" disabled onPress={noop} />
       <Button title="Destroy" variant="destroy" disabled onPress={noop} />
+      <Button title="Outline" variant="outline" disabled onPress={noop} />
     </div>
   ),
 }

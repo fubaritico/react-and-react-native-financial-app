@@ -77,6 +77,7 @@ export interface IButtonProps extends VariantProps<typeof buttonVariants> {
 - Use tw`...` from shared tw instance for all styles
 - Consume variants via: tw`${variantFn({ ...props })}`
 - Use Pressable over TouchableOpacity for new components
+- All interactive elements (Pressable) MUST include `accessibilityState` matching their disabled/selected state
 - Platform-specific additions (gesture, haptics) go here only
 
 ```tsx
@@ -101,6 +102,9 @@ export function Button({ label, onPress, variant, size, disabled }: IButtonProps
 - Use cn() for className composition (clsx + tailwind-merge)
 - Compose web-only classes ON TOP of shared variants
 - Web-only classes allowed here: hover:, focus:, active:, transition-, cursor-, shadow-
+- All interactive elements MUST have `focus-visible` styles for keyboard navigation:
+  `focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900`
+- Never use Tailwind arbitrary values (`bg-[#1a1a2e]`, `text-[14px]`, `p-[12px]`) — always use classes that resolve to `@financial-app/tokens` values via the tailwind config
 
 ```tsx
 import { cn } from '../../lib/cn';

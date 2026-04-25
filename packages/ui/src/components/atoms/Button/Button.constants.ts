@@ -4,4 +4,5 @@ export const ICON_COLOR_TOKEN: Record<string, string> = {
   secondary: 'foreground',
   tertiary: 'foreground-muted',
   destroy: 'destructive-foreground',
+  outline: 'foreground',
 }
