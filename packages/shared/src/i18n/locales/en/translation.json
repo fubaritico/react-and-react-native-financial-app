@@ -59,6 +59,10 @@
     "nextPage": "Next page",
     "page": "Page {{number}}"
   },
+  "dropdown": {
+    "close": "Close",
+    "select": "Select"
+  },
   "accessibility": {
     "savingsIcon": "Savings icon"
   },

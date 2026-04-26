@@ -38,7 +38,9 @@
   },
   "devDependencies": {
     "@types/react": "catalog:",
+    "@types/react-dom": "~19.1.0",
     "conventional-changelog": "catalog:",
+    "react-dom": "catalog:",
     "react-native-svg": "catalog:",
     "typescript": "catalog:"
   }

@@ -33,5 +33,14 @@ module.exports = {
       tight: tokens.font['lineHeight-tight'],
       normal: tokens.font['lineHeight-normal'],
     },
+    keyframes: {
+      'slide-up': {
+        from: { transform: 'translateY(100%)' },
+        to: { transform: 'translateY(0)' },
+      },
+    },
+    animation: {
+      'slide-up': 'slide-up 250ms ease-out',
+    },
   },
 }

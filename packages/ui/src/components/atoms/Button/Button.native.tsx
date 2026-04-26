@@ -31,6 +31,8 @@ export const Button = ({
   icon,
   iconPosition = 'right',
   accessibilityLabel,
+  ariaExpanded,
+  className,
   style,
 }: IButtonProps) => {
   const variantClasses = buttonVariants({ variant, size, fullWidth, disabled })
@@ -43,9 +45,12 @@ export const Button = ({
       disabled={!!disabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
-      accessibilityState={{ disabled: !!disabled }}
+      accessibilityState={{
+        disabled: !!disabled,
+        ...(ariaExpanded != null && { expanded: ariaExpanded }),
+      }}
       style={({ pressed }) => [
-        tw`${variantClasses} ${iconPosition === 'left' ? 'flex-row-reverse' : 'flex-row'} items-center`,
+        tw`${variantClasses} ${iconPosition === 'left' ? 'flex-row-reverse' : 'flex-row'} items-center ${className ?? ''}`,
         pressed && tw`opacity-70`,
         style,
       ]}

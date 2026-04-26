@@ -55,6 +55,29 @@ export type { IBillSummaryRowProps } from './components/molecules/BillSummaryRow
 export { Pagination } from './components/molecules/Pagination/index.web'
 export type { IPaginationProps } from './components/molecules/Pagination/Pagination.tsx'
 
+export { Dropdown } from './components/molecules/Dropdown/index.web'
+export type {
+  IDropdownProps,
+  IDropdownOption,
+} from './components/molecules/Dropdown/Dropdown.tsx'
+
+export { Menu } from './components/molecules/Menu/index.web'
+export type {
+  IMenuProps,
+  IMenuItemProps,
+} from './components/molecules/Menu/Menu.tsx'
+
+export { Drawer } from './components/molecules/Drawer/index.web'
+export type {
+  IDrawerProps,
+  IDrawerHeaderProps,
+  IDrawerBodyProps,
+} from './components/molecules/Drawer/Drawer.tsx'
+
+// Atoms
+export { Portal } from './components/atoms/Portal/index.web'
+export type { IPortalProps } from './components/atoms/Portal/Portal.tsx'
+
 // Organisms
 export { Card } from './components/organisms/Card/index.web'
 export type { ICardProps } from './components/organisms/Card/Card.tsx'

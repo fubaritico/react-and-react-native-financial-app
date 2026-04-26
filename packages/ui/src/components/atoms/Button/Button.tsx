@@ -2,8 +2,8 @@ import type { IconName } from '@financial-app/icons'
 
 import type { buttonVariants } from './Button.variants'
 import type { VariantProps } from 'class-variance-authority'
-import type { ReactNode } from 'react'
-import type { ViewStyle } from 'react-native'
+import type { ReactNode, Ref } from 'react'
+import type { View, ViewStyle } from 'react-native'
 
 /** Props for the Button component. */
 export interface IButtonProps extends VariantProps<typeof buttonVariants> {
@@ -21,6 +21,16 @@ export interface IButtonProps extends VariantProps<typeof buttonVariants> {
   accessibilityLabel?: string
   /** ARIA current state for active indicators (e.g. current page, active tab). Web only. */
   ariaCurrent?: 'page' | 'step' | 'location' | 'date' | 'time' | true
+  /** ARIA popup type — indicates the button opens a popup element. Web uses aria-haspopup, native uses accessibilityHint. */
+  ariaHaspopup?: 'listbox' | 'menu' | 'dialog' | 'grid' | 'tree' | true
+  /** Whether the controlled popup is currently expanded. Web uses aria-expanded, native uses accessibilityState.expanded. */
+  ariaExpanded?: boolean
+  /** DOM id of the controlled popup element (web only). */
+  ariaControls?: string
+  /** Additional CSS classes for the button container (web: className, native: tw classes). */
+  className?: string
+  /** Ref to the underlying button element (HTMLButtonElement on web, View on native). */
+  ref?: Ref<HTMLButtonElement> | Ref<View>
   /** Optional style override (native only). */
   style?: ViewStyle | object
 }
