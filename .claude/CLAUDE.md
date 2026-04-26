@@ -144,12 +144,11 @@ packages/
 Read `@completed.md`
 
 - feat(i18n): react-i18next with EN/FR translations across all apps (987131e) — shared config in @financial-app/shared, per-app init (expo-localization, react-native-localize, i18next-browser-languagedetector), UI components refactored to props-based i18n, Storybook stories updated with i18n.t() pattern
+- feat(ui): Pagination molecule + Button refactor (f3b844b) — cross-platform Pagination with Odaseva props, sliding window + ellipsis algorithms, responsive web (matchMedia), Button refactored for composability (children, outline variant, nav/sm sizes, ariaCurrent), i18n pagination keys EN/FR, review rules updated (focus-visible, accessibilityState, QUAL-017, ARCH-002)
+- feat(ui): Dropdown molecule + Portal/Drawer/Menu/Listbox foundation (b4d2468) — new foundation molecules (Listbox, Menu with keyboard nav, Drawer bottom sheet, Portal atom), cross-platform Dropdown compound component (desktop: floating Menu with auto-flip + optional Portal; mobile: dark Drawer), Button extended with ariaHaspopup/ariaExpanded/ariaControls/className/ref, Storybook stories for all new components
 
 ### Next
-- Dropdown compound component (prerequisite for DataTable ActionBar)
-- Pagination molecule (prerequisite for DataTable)
 - Implement DataTable component (14-step plan ready: `docs/plans/datatable-implementation.md`)
-  - Order: Dropdown → Pagination → DataTable
   - Load rules: `new-component.md`, `design-system.md`, `styling.md`
 - Modals compound component
   - Ref screenshots (desktop): `Screenshot 2026-04-23 at 19.06.51`, `Screenshot 2026-04-23 at 19.07.03`, `Screenshot 2026-04-23 at 19.06.42`, `Screenshot 2026-04-23 at 19.06.32`
