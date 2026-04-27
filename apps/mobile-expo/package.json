@@ -37,6 +37,7 @@
     "expo-router": "catalog:",
     "expo-secure-store": "~15.0.8",
     "expo-status-bar": "catalog:",
+    "jotai": "catalog:",
     "i18next": "catalog:",
     "react": "catalog:",
     "react-i18next": "catalog:",

@@ -1,6 +1,7 @@
 import './src/i18n'
 
 import { NavigationContainer } from '@react-navigation/native'
+import { Provider as JotaiProvider } from 'jotai'
 import { StatusBar } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 
@@ -9,13 +10,15 @@ import { RootNavigator } from './src/navigation/RootNavigator'
 
 function App() {
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle="light-content" />
-      <DevBadge />
-      <NavigationContainer>
-        <RootNavigator />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <JotaiProvider>
+      <SafeAreaProvider>
+        <StatusBar barStyle="light-content" />
+        <DevBadge />
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </JotaiProvider>
   )
 }
 

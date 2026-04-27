@@ -1,5 +1,6 @@
 import './i18n'
 
+import { Provider as JotaiProvider } from 'jotai'
 import {
   Links,
   Meta,
@@ -35,7 +36,11 @@ export function Layout({ children }: Readonly<{ children: ReactNode }>) {
 }
 
 export default function App() {
-  return <Outlet />
+  return (
+    <JotaiProvider>
+      <Outlet />
+    </JotaiProvider>
+  )
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

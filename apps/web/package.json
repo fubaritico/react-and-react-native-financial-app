@@ -18,6 +18,7 @@
     "@react-router/node": "^7.14.1",
     "@react-router/serve": "^7.14.1",
     "isbot": "^5.1.39",
+    "jotai": "catalog:",
     "i18next": "catalog:",
     "i18next-browser-languagedetector": "catalog:",
     "react": "catalog:",

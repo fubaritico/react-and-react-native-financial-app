@@ -60,7 +60,7 @@
     "@supabase/supabase-js": "^2.49.4",
     "@tanstack/react-query": "catalog:",
     "i18next": "catalog:",
-    "jotai": "^2.12.3",
+    "jotai": "catalog:",
     "zod": "^3.24.4"
   },
   "peerDependencies": {

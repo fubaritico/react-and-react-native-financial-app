@@ -2,6 +2,7 @@ import '../src/i18n'
 
 import { Slot } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { Provider as JotaiProvider } from 'jotai'
 
 import { DevBadge } from '../src/components/DevBadge'
 
@@ -16,10 +17,10 @@ export default function RootLayout() {
   // TODO (Phase 7.6): wire auth gate with isAuthenticatedAtom
   // const isAuthenticated = useAtomValue(isAuthenticatedAtom)
   return (
-    <>
+    <JotaiProvider>
       <StatusBar style="light" />
       <DevBadge />
       <Slot />
-    </>
+    </JotaiProvider>
   )
 }
