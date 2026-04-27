@@ -109,6 +109,23 @@ export default tseslint.config(
               group: 'internal',
               position: 'before',
             },
+            {
+              pattern: '@Lib/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@Atoms/**',
+              group: 'internal',
+            },
+            {
+              pattern: '@Molecules/**',
+              group: 'internal',
+            },
+            {
+              pattern: '@Organisms/**',
+              group: 'internal',
+            },
           ],
           alphabetize: {
             order: 'asc',
