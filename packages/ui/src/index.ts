@@ -77,6 +77,27 @@ export { Portal } from './components/atoms/Portal'
 export type { IPortalProps } from './components/atoms/Portal/Portal.tsx'
 
 // Organisms
+export { DataTable } from './components/organisms/DataTable'
+export type { IDataTableProps } from './components/organisms/DataTable/DataTable.tsx'
+export {
+  SimpleCell,
+  AmountCell,
+  DateCell,
+  AvatarNameCell,
+  BillTitleCell,
+  StatusCell,
+  SortableHeader,
+} from './components/organisms/DataTable/cells/index'
+export type {
+  StatusCellFn,
+  BillStatus,
+  HeaderCellFn,
+  HeaderAlign,
+} from './components/organisms/DataTable/cells/index'
+
+export { DataTablePagination } from './components/molecules/DataTablePagination'
+export type { IDataTablePaginationProps } from './components/molecules/DataTablePagination/DataTablePagination.tsx'
+
 export { Card } from './components/organisms/Card'
 export type { ICardProps } from './components/organisms/Card/Card.tsx'
 
