@@ -63,6 +63,10 @@
     "close": "Fermer",
     "select": "Sélectionner"
   },
+  "modal": {
+    "close": "Fermer",
+    "cancel": "Annuler"
+  },
   "accessibility": {
     "savingsIcon": "Icône d'épargne"
   },

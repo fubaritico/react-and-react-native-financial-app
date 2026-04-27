@@ -63,6 +63,10 @@
     "close": "Close",
     "select": "Select"
   },
+  "modal": {
+    "close": "Close",
+    "cancel": "Cancel"
+  },
   "accessibility": {
     "savingsIcon": "Savings icon"
   },

@@ -103,6 +103,15 @@ export type {
 export { RecurringBillsOverview } from './components/organisms/RecurringBillsOverview/index.web'
 export type { IRecurringBillsOverviewProps } from './components/organisms/RecurringBillsOverview/RecurringBillsOverview.tsx'
 
+export { Modal } from './components/organisms/Modal/index.web'
+export type {
+  IModalProps,
+  IModalHeaderProps,
+  IModalBodyProps,
+  IModalFooterProps,
+  IModalFooterAction,
+} from './components/organisms/Modal/Modal.tsx'
+
 // Templates
 export { AuthLayout } from './components/templates/AuthLayout/index.web'
 export type { IAuthLayoutProps } from './components/templates/AuthLayout/AuthLayout.tsx'

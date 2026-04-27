@@ -21,7 +21,16 @@ export type { INativeClientConfig } from './auth/client.native'
 export type { IAuthResult } from './auth/guard'
 
 // Atoms
-export { userAtom, isAuthenticatedAtom, isLoadingAtom } from './atoms'
+export {
+  userAtom,
+  isAuthenticatedAtom,
+  isLoadingAtom,
+  modalConfigAtom,
+} from './atoms'
+export type { IModalAction, IModalConfig, ModalActionVariant } from './atoms'
+
+// Hooks
+export { useModal } from './hooks/useModal'
 
 // Types
 export type { IBalance, ITransaction, IBudget, IPot } from './types'
