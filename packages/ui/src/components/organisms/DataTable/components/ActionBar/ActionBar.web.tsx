@@ -1,5 +1,5 @@
-import { cn } from '../../../../lib/cn'
-import { TextInput } from '../../../molecules/TextInput/TextInput.web'
+import { cn } from '../../../../../lib/cn'
+import { TextInput } from '../../../../molecules/TextInput/TextInput.web'
 
 import { actionBarStyles } from './ActionBar.styles'
 
@@ -17,7 +17,7 @@ export function ActionBar({
   searchLabel = 'Search',
 }: IActionBarProps) {
   return (
-    <div className={cn(actionBarStyles.container)}>
+    <div className={actionBarStyles.container}>
       {leftActions && leftActions.length > 0 ? (
         <div className={cn(actionBarStyles.leftActions, 'flex-1')}>
           {leftActions}

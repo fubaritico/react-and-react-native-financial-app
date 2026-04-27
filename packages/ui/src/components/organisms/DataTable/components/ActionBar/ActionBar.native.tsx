@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 
-import tw from '../../../../lib/tw'
-import { TextInput } from '../../../molecules/TextInput/TextInput.native'
+import tw from '../../../../../lib/tw'
+import { TextInput } from '../../../../molecules/TextInput/TextInput.native'
 
 import { actionBarStyles } from './ActionBar.styles'
 

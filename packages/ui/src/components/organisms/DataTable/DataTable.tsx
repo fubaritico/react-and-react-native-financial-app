@@ -25,6 +25,11 @@ export interface IDataTableProps<TData> {
   paginationPrevLabel?: string
   /** Label for the next button (desktop). */
   paginationNextLabel?: string
+  /** Available page size options (e.g. [10, 25, 50]).
+   *  When provided, a rows-per-page Dropdown is shown alongside pagination. */
+  rowsPerPageOptions?: number[]
+  /** Label displayed before the rows-per-page selector (e.g. "Rows per page") */
+  rowsPerPageLabel?: string
 
   // --- Row interaction ---
 

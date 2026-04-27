@@ -3,10 +3,10 @@ import { Fragment, useState } from 'react'
 import { FlatList, Pressable, View, useWindowDimensions } from 'react-native'
 
 import tw from '../../../lib/tw'
-import { Typography } from '../../atoms/Typography/Typography.native'
-import { DataTablePagination } from '../../molecules/DataTablePagination/DataTablePagination.native'
 
-import { ActionBar } from './ActionBar/ActionBar.native'
+import { ActionBar } from './components/ActionBar/ActionBar.native'
+import { NoResults } from './components/NoResults/NoResults.native'
+import { TableFooter } from './components/TableFooter/TableFooter.native'
 import { COMPACT_BREAKPOINT } from './DataTable.constants'
 import { dataTableStyles } from './DataTable.styles'
 import { dataTableRowVariants } from './DataTable.variants'
@@ -36,6 +36,8 @@ export function DataTable<TData>({
   onSearchChange,
   searchPlaceholder,
   searchLabel,
+  rowsPerPageOptions,
+  rowsPerPageLabel,
 }: IDataTableProps<TData>) {
   const { width } = useWindowDimensions()
   const isCompact = !!renderCompactRow && width < compactBreakpoint
@@ -110,13 +112,7 @@ export function DataTable<TData>({
     return content
   }
 
-  const renderEmpty = () => (
-    <View style={tw`${dataTableStyles.emptyRow}`}>
-      <Typography variant="body" color="muted">
-        {emptyMessage}
-      </Typography>
-    </View>
-  )
+  const renderEmpty = () => <NoResults message={emptyMessage} />
 
   const skeletonData = Array.from({ length: pageSize }, (_, i) => i)
 
@@ -187,10 +183,12 @@ export function DataTable<TData>({
         />
       )}
 
-      {/* Pagination */}
+      {/* Footer */}
       {showPagination && (
-        <DataTablePagination
+        <TableFooter
           table={table as unknown as Table<unknown>}
+          rowsPerPageOptions={rowsPerPageOptions ?? [pageSize]}
+          rowsPerPageLabel={rowsPerPageLabel}
           prevLabel={paginationPrevLabel}
           nextLabel={paginationNextLabel}
         />

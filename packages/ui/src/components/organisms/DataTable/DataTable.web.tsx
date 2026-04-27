@@ -2,10 +2,10 @@ import { flexRender } from '@tanstack/react-table'
 import { Fragment, useEffect, useRef, useState } from 'react'
 
 import { cn } from '../../../lib/cn'
-import { Typography } from '../../atoms/Typography/Typography.web'
-import { DataTablePagination } from '../../molecules/DataTablePagination/DataTablePagination.web'
 
-import { ActionBar } from './ActionBar/ActionBar.web'
+import { ActionBar } from './components/ActionBar/ActionBar.web'
+import { NoResults } from './components/NoResults/NoResults.web'
+import { TableFooter } from './components/TableFooter/TableFooter.web'
 import { COMPACT_BREAKPOINT } from './DataTable.constants'
 import { dataTableStyles } from './DataTable.styles'
 import { dataTableRowVariants } from './DataTable.variants'
@@ -34,6 +34,8 @@ export function DataTable<TData>({
   onSearchChange,
   searchPlaceholder,
   searchLabel,
+  rowsPerPageOptions,
+  rowsPerPageLabel,
 }: IDataTableProps<TData>) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(
@@ -129,9 +131,29 @@ export function DataTable<TData>({
                   className={cn(
                     dataTableRowVariants({ divider: true }),
                     'hover:bg-beige-100 transition-colors',
-                    onRowPress ? 'cursor-pointer' : ''
+                    onRowPress
+                      ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900'
+                      : ''
                   )}
-                  onClick={() => onRowPress?.(row)}
+                  onClick={
+                    onRowPress
+                      ? () => {
+                          onRowPress(row)
+                        }
+                      : undefined
+                  }
+                  role={onRowPress ? 'button' : undefined}
+                  tabIndex={onRowPress ? 0 : undefined}
+                  onKeyDown={
+                    onRowPress
+                      ? (e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            onRowPress(row)
+                          }
+                        }
+                      : undefined
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <Fragment key={cell.id}>
@@ -147,13 +169,8 @@ export function DataTable<TData>({
             {/* Empty state */}
             {isEmpty && (
               <tr>
-                <td
-                  colSpan={table.getAllColumns().length}
-                  className="py-8 text-center"
-                >
-                  <Typography variant="body" color="muted">
-                    {emptyMessage}
-                  </Typography>
+                <td colSpan={table.getAllColumns().length}>
+                  <NoResults message={emptyMessage} />
                 </td>
               </tr>
             )}
@@ -178,7 +195,11 @@ export function DataTable<TData>({
             rows.map((row, index) => (
               <div
                 key={row.id}
-                className={cn(onRowPress ? 'cursor-pointer' : '')}
+                className={cn(
+                  onRowPress
+                    ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900'
+                    : ''
+                )}
                 onClick={() => onRowPress?.(row)}
                 role={onRowPress ? 'button' : undefined}
                 tabIndex={onRowPress ? 0 : undefined}
@@ -198,22 +219,18 @@ export function DataTable<TData>({
             ))}
 
           {/* Empty state */}
-          {isEmpty && (
-            <div className="py-8 text-center">
-              <Typography variant="body" color="muted">
-                {emptyMessage}
-              </Typography>
-            </div>
-          )}
+          {isEmpty && <NoResults message={emptyMessage} />}
         </div>
       )}
 
-      {/* Pagination */}
+      {/* Footer */}
       {showPagination && (
-        <DataTablePagination
+        <TableFooter
           table={
             table as unknown as import('@tanstack/react-table').Table<unknown>
           }
+          rowsPerPageOptions={rowsPerPageOptions ?? [pageSize]}
+          rowsPerPageLabel={rowsPerPageLabel}
           prevLabel={paginationPrevLabel}
           nextLabel={paginationNextLabel}
         />
