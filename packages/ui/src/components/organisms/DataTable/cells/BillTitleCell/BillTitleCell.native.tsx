@@ -3,8 +3,9 @@ import { View } from 'react-native'
 import tw from '../../../../../lib/tw'
 import { Avatar } from '../../../../atoms/Avatar/Avatar.native'
 import { Typography } from '../../../../atoms/Typography/Typography.native'
+import { TableCell } from '../../components/TableCell/TableCell.native'
 
-import type { BillTitleCellFn } from './BillTitleCell'
+import type { BillTitleCellFn } from './BillTitleCell.tsx'
 import type { Row } from '@tanstack/react-table'
 
 /**
@@ -23,16 +24,13 @@ export const BillTitleCell =
     const theme = original[themeKey] ?? ''
 
     return (
-      <View style={tw`flex-row items-center gap-3`}>
+      <TableCell style={tw`flex-row items-center gap-3`}>
         <View
-          style={[
-            tw`rounded-full`,
-            { borderLeftWidth: 4, borderLeftColor: theme },
-          ]}
+          style={[tw`rounded-full border-l-[4px]`, { borderLeftColor: theme }]}
         >
           <Avatar src={avatar} name={name} size={40} />
         </View>
         <Typography variant="body-bold">{name}</Typography>
-      </View>
+      </TableCell>
     )
   }

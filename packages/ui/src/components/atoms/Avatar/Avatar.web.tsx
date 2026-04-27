@@ -30,7 +30,7 @@ export const Avatar = ({ src, name, size = 40 }: IAvatarProps) => {
   return hasError ? (
     <span
       className={cn(
-        'inline-flex items-center justify-center rounded-full bg-foreground-subtle',
+        'flex items-center justify-center rounded-full bg-foreground-subtle shrink-0',
         'w-[var(--avatar-size)] h-[var(--avatar-size)]'
       )}
       style={sizeStyle}

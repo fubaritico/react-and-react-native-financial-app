@@ -1,240 +1,178 @@
 import { flexRender } from '@tanstack/react-table'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import clsx from 'clsx'
+import { Fragment, useEffect } from 'react'
 
-import { cn } from '../../../lib/cn'
+import {
+  ActionBar,
+  NoResults,
+  Table,
+  TableBody,
+  TableFooter,
+  TableHeader,
+  TableRow,
+} from './components/index.web'
+import { MIN_PAGE_SIZE } from './DataTable.constants'
 
-import { ActionBar } from './components/ActionBar/ActionBar.web'
-import { NoResults } from './components/NoResults/NoResults.web'
-import { TableFooter } from './components/TableFooter/TableFooter.web'
-import { COMPACT_BREAKPOINT } from './DataTable.constants'
-import { dataTableStyles } from './DataTable.styles'
-import { dataTableRowVariants } from './DataTable.variants'
+import type { BaseDataTableProps } from './DataTable.types'
+import type { Table as TableType } from '@tanstack/react-table'
 
-import type { IDataTableProps } from './DataTable'
+export type DataTableProps<TData> = BaseDataTableProps<TData> & {
+  /* Extra CSS classes for the action bar */
+  actionBarClassName?: string
+  /* Extra CSS classes for the root wrapper */
+  className?: string
+  /* Extra CSS classes for the table header */
+  headerClassName?: string
+  /* Use along with sticky header to get a fixed height for the table (header and body) */
+  maxHeight?: number
+  /* Disable shadow on the wrapper */
+  noShadow?: boolean
+  /* When enabled, will keep the table cell header on top of the table when scrolling body */
+  stickyHeader?: boolean
+  /* Extra CSS classes for the table body */
+  tBodyClassName?: string
+}
 
-/**
- * DataTable organism (web).
- * Renders a semantic `<table>` in columnar mode (tablet/desktop)
- * or a stacked list via `renderCompactRow` in compact mode (phone).
- */
-export function DataTable<TData>({
-  table,
-  loading,
-  rowsSkeleton: RowSkeleton,
-  emptyMessage = 'No results.',
-  pagination,
-  paginationPrevLabel,
-  paginationNextLabel,
-  onRowPress,
-  renderCompactRow,
-  compactBreakpoint = COMPACT_BREAKPOINT,
+export default function DataTable<TData>({
   actionBar,
-  noActionBar,
+  actionBarClassName,
+  className,
+  dataTestId,
+  headerClassName,
+  initTableAt,
   leftActions,
-  onSearchChange,
-  searchPlaceholder,
-  searchLabel,
-  rowsPerPageOptions,
-  rowsPerPageLabel,
-}: IDataTableProps<TData>) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [width, setWidth] = useState(
-    typeof window !== 'undefined' ? window.innerWidth : 1024
-  )
-
+  loading,
+  maxHeight,
+  noActionBar,
+  noShadow,
+  showRowsPerPage,
+  noPagination,
+  onGlobalFilterChange,
+  onRowClick,
+  rowsSkeleton: RowSkeleton,
+  stickyHeader,
+  tableStateManager,
+  tBodyClassName,
+}: Readonly<DataTableProps<TData>>) {
   useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
+    if (initTableAt) tableStateManager.setPageIndex(initTableAt)
+  }, [initTableAt, tableStateManager])
 
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setWidth(entry.contentRect.width)
-      }
-    })
-    observer.observe(el)
-    return () => {
-      observer.disconnect()
-    }
-  }, [])
+  if (stickyHeader && !maxHeight) {
+    throw new Error(
+      '[DataTable] maxHeight is required when stickyHeader is enabled'
+    )
+  }
 
-  const isCompact = !!renderCompactRow && width < compactBreakpoint
-  const rows = table.getRowModel().rows
-  const pageSize = table.getState().pagination.pageSize
-  const hasData = !loading && rows.length > 0
-  const isEmpty = !loading && rows.length === 0
-  const showPagination =
-    pagination && !loading && table.getRowCount() > pageSize
-
-  const [searchValue, setSearchValue] = useState('')
-
-  const handleSearchChange = (value: string) => {
-    setSearchValue(value)
-    onSearchChange?.(value)
+  if (!stickyHeader && maxHeight) {
+    throw new Error(
+      '[DataTable] stickyHeader is required when maxHeight is defined'
+    )
   }
 
   return (
-    <div ref={containerRef} className={cn(dataTableStyles.container)}>
-      {/* ActionBar */}
-      {!noActionBar && !actionBar && onSearchChange && (
+    <div
+      className={clsx(
+        'bg-white rounded-bl-lg rounded-lg overflow-clip p-6 lg:p-8',
+        { 'shadow-md': !noShadow },
+        className
+      )}
+      data-test={dataTestId ?? 'root'}
+    >
+      {!noActionBar && !actionBar && (
         <ActionBar
+          tableConfiguration={tableStateManager as TableType<unknown>}
+          className={actionBarClassName}
           leftActions={leftActions}
-          searchValue={searchValue}
-          onSearchChange={handleSearchChange}
-          searchPlaceholder={searchPlaceholder}
-          searchLabel={searchLabel}
+          stickyHeader={stickyHeader}
+          onGlobalFilterChange={onGlobalFilterChange}
         />
       )}
       {actionBar}
-
-      {/* Columnar mode (tablet/desktop) */}
-      {!isCompact && (
-        <table className="w-full">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="border-b border-border">
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="py-3 px-4 text-left align-middle"
-                  >
+      <Table maxHeight={maxHeight}>
+        <TableHeader
+          className={clsx(
+            { 'sticky top-0 z-30': stickyHeader },
+            headerClassName
+          )}
+        >
+          {tableStateManager.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id} className="border-t-0">
+              {headerGroup.headers.map((header) => {
+                return (
+                  <Fragment key={header.id}>
                     {header.isPlaceholder
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {/* Loading skeleton */}
+                  </Fragment>
+                )
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody className={tBodyClassName}>
+          <>
             {loading &&
               RowSkeleton &&
-              Array.from({ length: pageSize }, (_, i) => (
-                <tr key={`skeleton-${String(i)}`}>
-                  <td
-                    colSpan={table.getAllColumns().length}
-                    className="px-4 py-4"
+              Array.from({ length: MIN_PAGE_SIZE }, (_, index) => (
+                <RowSkeleton key={`row-skeleton-${String(index)}`} />
+              ))}
+            {!loading &&
+              tableStateManager.getRowModel().rows.length > 0 &&
+              tableStateManager.getRowModel().rows.map((row) => {
+                const isSelected = row.getIsSelected()
+
+                return (
+                  <TableRow
+                    className={clsx('h-[54px]', {
+                      'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900':
+                        !!onRowClick,
+                    })}
+                    data-test={`row-${row.id}`}
+                    data-state={isSelected && 'selected'}
+                    enableHover
+                    key={`row-${row.id}`}
+                    role={onRowClick ? 'button' : undefined}
+                    tabIndex={onRowClick ? 0 : undefined}
+                    onClick={() => onRowClick?.(row)}
                   >
-                    <RowSkeleton />
-                  </td>
-                </tr>
-              ))}
-
-            {/* Data rows */}
-            {hasData &&
-              rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className={cn(
-                    dataTableRowVariants({ divider: true }),
-                    'hover:bg-beige-100 transition-colors',
-                    onRowPress
-                      ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900'
-                      : ''
-                  )}
-                  onClick={
-                    onRowPress
-                      ? () => {
-                          onRowPress(row)
-                        }
-                      : undefined
-                  }
-                  role={onRowPress ? 'button' : undefined}
-                  tabIndex={onRowPress ? 0 : undefined}
-                  onKeyDown={
-                    onRowPress
-                      ? (e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault()
-                            onRowPress(row)
-                          }
-                        }
-                      : undefined
-                  }
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <Fragment key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </Fragment>
-                  ))}
-                </tr>
-              ))}
-
-            {/* Empty state */}
-            {isEmpty && (
-              <tr>
-                <td colSpan={table.getAllColumns().length}>
-                  <NoResults message={emptyMessage} />
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      )}
-
-      {/* Compact mode (phone) */}
-      {isCompact && (
-        <div className="divide-y divide-border">
-          {/* Loading skeleton */}
-          {loading &&
-            RowSkeleton &&
-            Array.from({ length: pageSize }, (_, i) => (
-              <div key={`skeleton-${String(i)}`} className="py-4 px-4">
-                <RowSkeleton />
-              </div>
-            ))}
-
-          {/* Data rows */}
-          {hasData &&
-            rows.map((row, index) => (
-              <div
-                key={row.id}
-                className={cn(
-                  onRowPress
-                    ? 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900'
-                    : ''
-                )}
-                onClick={() => onRowPress?.(row)}
-                role={onRowPress ? 'button' : undefined}
-                tabIndex={onRowPress ? 0 : undefined}
-                onKeyDown={
-                  onRowPress
-                    ? (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          onRowPress(row)
-                        }
-                      }
-                    : undefined
+                    {row.getVisibleCells().map((cell) => (
+                      <Fragment key={`cell-${row.id}-${cell.id}`}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </Fragment>
+                    ))}
+                  </TableRow>
+                )
+              })}
+            {!loading && tableStateManager.getRowModel().rows.length === 0 && (
+              <NoResults
+                columnLength={
+                  tableStateManager
+                    .getAllColumns()
+                    .filter((column) => column.getIsVisible()).length
                 }
-              >
-                {renderCompactRow({ row, index })}
-              </div>
-            ))}
+              />
+            )}
+          </>
+        </TableBody>
+      </Table>
 
-          {/* Empty state */}
-          {isEmpty && <NoResults message={emptyMessage} />}
-        </div>
-      )}
-
-      {/* Footer */}
-      {showPagination && (
-        <TableFooter
-          table={
-            table as unknown as import('@tanstack/react-table').Table<unknown>
-          }
-          rowsPerPageOptions={rowsPerPageOptions ?? [pageSize]}
-          rowsPerPageLabel={rowsPerPageLabel}
-          prevLabel={paginationPrevLabel}
-          nextLabel={paginationNextLabel}
-        />
-      )}
+      {/* PAGINATION BLOCK */}
+      {!loading &&
+        tableStateManager.getRowCount() > MIN_PAGE_SIZE &&
+        !noPagination && (
+          <TableFooter
+            tableStateManager={tableStateManager as TableType<unknown>}
+            showRowsPerPage={showRowsPerPage}
+            fullWidthPagination={!showRowsPerPage}
+          />
+        )}
     </div>
   )
 }

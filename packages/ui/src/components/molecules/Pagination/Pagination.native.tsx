@@ -18,20 +18,23 @@ export function Pagination({
   canPreviousPage,
   countPages,
   currentPage,
+  fullWidth,
   gotoNext,
   gotoPrevious,
   handleChangePage,
   prevAriaLabel = 'Previous page',
   nextAriaLabel = 'Next page',
   pageAriaLabel = (n) => `Page ${String(n)}`,
-}: IPaginationProps) {
+}: Readonly<IPaginationProps>) {
   const pages: PageItem[] = useMemo(
     () => getCompactRange(countPages, currentPage),
     [countPages, currentPage]
   )
 
   return (
-    <View style={tw`${styles.root} justify-center gap-2`}>
+    <View
+      style={tw`${styles.root} gap-2 ${fullWidth ? 'w-full justify-between' : 'justify-center'}`}
+    >
       {/* Previous arrow */}
       <Button
         variant="outline"

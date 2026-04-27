@@ -7,6 +7,8 @@ export interface IPaginationProps {
   countPages: number
   /** Current page index (0-based) */
   currentPage: number
+  /** If true, the pagination takes the full available width of its container */
+  fullWidth?: boolean
   /** Navigate to the first page */
   gotoFirst: () => void
   /** Navigate to the last page */

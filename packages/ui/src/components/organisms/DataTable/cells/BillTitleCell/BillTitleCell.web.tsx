@@ -1,7 +1,8 @@
 import { Avatar } from '../../../../atoms/Avatar/Avatar.web'
 import { Typography } from '../../../../atoms/Typography/Typography.web'
+import { TableCell } from '../../components/TableCell/TableCell.web'
 
-import type { BillTitleCellFn } from './BillTitleCell'
+import type { BillTitleCellFn } from './BillTitleCell.tsx'
 import type { Row } from '@tanstack/react-table'
 import type { CSSProperties } from 'react'
 
@@ -23,11 +24,11 @@ export const BillTitleCell =
     const borderStyle = { '--bill-theme': theme } as CSSProperties
 
     return (
-      <div className="flex items-center gap-3" style={borderStyle}>
+      <TableCell className="flex items-center gap-3" style={borderStyle}>
         <div className="rounded-full border-l-4 border-l-[var(--bill-theme)]">
           <Avatar src={avatar} name={name} size={40} />
         </div>
         <Typography variant="body-bold">{name}</Typography>
-      </div>
+      </TableCell>
     )
   }

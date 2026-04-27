@@ -13,7 +13,8 @@ export function DataTablePagination({
   prevAriaLabel,
   nextAriaLabel,
   pageAriaLabel,
-}: IDataTablePaginationProps) {
+  fullWidth,
+}: Readonly<IDataTablePaginationProps>) {
   const { pageIndex } = table.getState().pagination
 
   return (
@@ -22,6 +23,7 @@ export function DataTablePagination({
       canPreviousPage={table.getCanPreviousPage()}
       countPages={table.getPageCount()}
       currentPage={pageIndex}
+      fullWidth={fullWidth}
       gotoFirst={() => {
         table.setPageIndex(0)
       }}

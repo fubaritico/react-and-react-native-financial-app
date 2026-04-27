@@ -9,7 +9,7 @@ import type { ITruncatedContentProps } from './TruncatedContent'
 export function TruncatedContent({
   value,
   numberOfLines = 1,
-}: ITruncatedContentProps) {
+}: Readonly<ITruncatedContentProps>) {
   return (
     <Typography variant="body" numberOfLines={numberOfLines}>
       {value}

@@ -17,6 +17,7 @@ export function Pagination({
   canPreviousPage,
   countPages,
   currentPage,
+  fullWidth,
   gotoNext,
   gotoPrevious,
   handleChangePage,
@@ -25,7 +26,7 @@ export function Pagination({
   prevAriaLabel = 'Previous page',
   nextAriaLabel = 'Next page',
   pageAriaLabel = (n) => `Page ${String(n)}`,
-}: IPaginationProps) {
+}: Readonly<IPaginationProps>) {
   const [isCompact, setIsCompact] = useState(false)
 
   useEffect(() => {
@@ -54,7 +55,8 @@ export function Pagination({
       aria-label="Pagination"
       className={cn(
         styles.root,
-        'flex justify-center gap-2 md:justify-between md:gap-0'
+        'flex justify-center gap-2 md:justify-between md:gap-0',
+        fullWidth ? 'w-full justify-between' : 'justify-center'
       )}
     >
       {/* Previous */}

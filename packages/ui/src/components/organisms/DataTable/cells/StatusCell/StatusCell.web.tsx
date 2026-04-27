@@ -1,8 +1,9 @@
 import { Typography } from '../../../../atoms/Typography/Typography.web'
+import { TableCell } from '../../components/TableCell/TableCell.web'
 
-import { getOrdinalDay } from './StatusCell'
+import { getOrdinalDay } from './StatusCell.constants'
 
-import type { BillStatus, StatusCellFn } from './StatusCell'
+import type { BillStatus, StatusCellFn } from './StatusCell.tsx'
 import type { Row } from '@tanstack/react-table'
 
 /**
@@ -13,9 +14,10 @@ import type { Row } from '@tanstack/react-table'
  * - upcoming → muted text, no indicator
  * @param dateKey - accessor key for the ISO date string
  * @param statusKey - accessor key for the BillStatus value
+ * @param className - extra classes from configuration
  */
 export const StatusCell =
-  (dateKey: string, statusKey: string): StatusCellFn =>
+  (dateKey: string, statusKey: string, className?: string): StatusCellFn =>
   <TData,>({ row }: { row: Row<TData> }) => {
     const dateString = row.getValue<string>(dateKey)
     const status = row.getValue<BillStatus>(statusKey)
@@ -32,15 +34,17 @@ export const StatusCell =
       status === 'paid' ? '✓' : status === 'due-soon' ? '!' : null
 
     return (
-      <span className="inline-flex items-center gap-2">
-        <Typography variant="caption" color={color} as="span">
-          Monthly -{ordinal}
-        </Typography>
-        {indicator ? (
-          <Typography variant="caption-bold" color={color} as="span">
-            {indicator}
+      <TableCell tabIndex={0} className={className}>
+        <span className="inline-flex items-center gap-2">
+          <Typography variant="caption" color={color} as="span">
+            Monthly -{ordinal}
           </Typography>
-        ) : null}
-      </span>
+          {indicator ? (
+            <Typography variant="caption-bold" color={color} as="span">
+              {indicator}
+            </Typography>
+          ) : null}
+        </span>
+      </TableCell>
     )
   }

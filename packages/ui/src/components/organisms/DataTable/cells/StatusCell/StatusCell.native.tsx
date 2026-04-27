@@ -1,11 +1,10 @@
-import { View } from 'react-native'
-
 import tw from '../../../../../lib/tw'
 import { Typography } from '../../../../atoms/Typography/Typography.native'
+import { TableCell } from '../../components/TableCell/TableCell.native'
 
-import { getOrdinalDay } from './StatusCell'
+import { getOrdinalDay } from './StatusCell.constants'
 
-import type { BillStatus, StatusCellFn } from './StatusCell'
+import type { BillStatus, StatusCellFn } from './StatusCell.tsx'
 import type { Row } from '@tanstack/react-table'
 
 /**
@@ -35,7 +34,7 @@ export const StatusCell =
       status === 'paid' ? '✓' : status === 'due-soon' ? '!' : null
 
     return (
-      <View style={tw`flex-row items-center gap-2`}>
+      <TableCell style={tw`flex-row items-center gap-2`}>
         <Typography variant="caption" color={color}>
           Monthly -{ordinal}
         </Typography>
@@ -44,6 +43,6 @@ export const StatusCell =
             {indicator}
           </Typography>
         ) : null}
-      </View>
+      </TableCell>
     )
   }

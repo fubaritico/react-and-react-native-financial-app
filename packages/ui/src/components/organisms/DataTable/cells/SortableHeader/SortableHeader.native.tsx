@@ -3,8 +3,9 @@ import { Pressable, View } from 'react-native'
 import tw from '../../../../../lib/tw'
 import { Icon } from '../../../../atoms/Icon/Icon.native'
 import { Typography } from '../../../../atoms/Typography/Typography.native'
+import { TableHead } from '../../components/TableHead/TableHead.native'
 
-import type { HeaderAlign, HeaderCellFn } from './SortableHeader'
+import type { HeaderAlign, HeaderCellFn } from './SortableHeader.tsx'
 import type { Column } from '@tanstack/react-table'
 
 /**
@@ -15,33 +16,46 @@ import type { Column } from '@tanstack/react-table'
  * @param align - text alignment ('left' | 'right'), defaults to 'left'
  */
 export const SortableHeader =
-  (label: string, align: HeaderAlign = 'left'): HeaderCellFn =>
+  (
+    label: string,
+    align: HeaderAlign = 'left',
+    className?: string,
+    dataType?: string
+  ): HeaderCellFn =>
   <TData,>({ column }: { column: Column<TData> }) => {
     const sorted = column.getIsSorted()
     const isAsc = sorted === 'asc'
 
     return (
-      <Pressable
-        onPress={() => {
-          column.toggleSorting(sorted === 'asc')
-        }}
-        accessibilityRole="button"
-        accessibilityLabel={`Sort by ${label}`}
-        accessibilityState={{ selected: !!sorted }}
-        style={tw`flex-row items-center gap-1 ${align === 'right' ? 'justify-end' : ''}`}
+      <TableHead
+        style={[
+          tw`${align === 'right' ? 'text-right ml-auto' : 'text-left mr-auto'}`,
+          className && tw`${className}`,
+        ]}
+        data-type={dataType}
       >
-        <Typography variant="caption" color="muted">
-          {label}
-        </Typography>
-        {sorted ? (
-          <View style={isAsc ? tw`rotate-180` : undefined}>
-            <Icon
-              name="caretDown"
-              iconSize="xxs"
-              color={tw.color('foreground-muted')}
-            />
-          </View>
-        ) : null}
-      </Pressable>
+        <Pressable
+          onPress={() => {
+            column.toggleSorting(sorted === 'asc')
+          }}
+          accessibilityRole="button"
+          accessibilityLabel={`Sort by ${label}`}
+          accessibilityState={{ selected: !!sorted }}
+          style={tw`flex-row items-center gap-1`}
+        >
+          <Typography variant="caption" color="muted">
+            {label}
+          </Typography>
+          {sorted ? (
+            <View style={isAsc ? tw`rotate-180` : undefined}>
+              <Icon
+                name="caretDown"
+                iconSize="xxs"
+                color={tw.color('foreground-muted')}
+              />
+            </View>
+          ) : null}
+        </Pressable>
+      </TableHead>
     )
   }

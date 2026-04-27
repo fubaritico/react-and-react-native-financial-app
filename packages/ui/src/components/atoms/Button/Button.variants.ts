@@ -9,7 +9,7 @@ export const buttonVariants = cva('items-center justify-center rounded-md', {
       secondary: 'bg-secondary text-secondary-foreground',
       tertiary: 'bg-transparent text-foreground-muted',
       destroy: 'bg-destructive text-destructive-foreground',
-      outline: 'border border-border-muted bg-transparent text-foreground',
+      outline: 'border border-border-muted bg-transparent text-beige-500',
     },
     size: {
       md: 'py-3 px-5',

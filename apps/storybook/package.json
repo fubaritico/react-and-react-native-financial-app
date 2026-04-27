@@ -13,6 +13,7 @@
     "@financial-app/shared": "workspace:^",
     "@financial-app/tokens": "workspace:^",
     "@financial-app/ui": "workspace:^",
+    "@tanstack/react-table": "catalog:",
     "i18next": "catalog:",
     "react-i18next": "catalog:"
   },

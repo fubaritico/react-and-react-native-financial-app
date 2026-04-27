@@ -1,5 +1,5 @@
 import { flexRender } from '@tanstack/react-table'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { FlatList, Pressable, View, useWindowDimensions } from 'react-native'
 
 import tw from '../../../lib/tw'
@@ -7,12 +7,38 @@ import tw from '../../../lib/tw'
 import { ActionBar } from './components/ActionBar/ActionBar.native'
 import { NoResults } from './components/NoResults/NoResults.native'
 import { TableFooter } from './components/TableFooter/TableFooter.native'
-import { COMPACT_BREAKPOINT } from './DataTable.constants'
+import { TableRow } from './components/TableRow/TableRow.native'
+import { COMPACT_BREAKPOINT, MIN_PAGE_SIZE } from './DataTable.constants'
 import { dataTableStyles } from './DataTable.styles'
 import { dataTableRowVariants } from './DataTable.variants'
 
-import type { IDataTableProps } from './DataTable'
+import type { BaseDataTableProps } from './DataTable.types'
 import type { Row, Table } from '@tanstack/react-table'
+import type { ReactElement } from 'react'
+
+export type NativeDataTableProps<TData> = BaseDataTableProps<TData> & {
+  /** Custom row renderer for phone/compact layout.
+   *  When provided and screen width < compactBreakpoint, this replaces columnar rendering. */
+  renderCompactRow?: (info: { row: Row<TData>; index: number }) => ReactElement
+  /** Width threshold below which compact mode activates (default: 768). */
+  compactBreakpoint?: number
+  /** Message shown when !loading && rows.length === 0. */
+  emptyMessage?: string
+  /** Show pagination. Only rendered when !loading && rowCount > pageSize. */
+  pagination?: boolean
+  /** Label for the previous button (desktop). */
+  paginationPrevLabel?: string
+  /** Label for the next button (desktop). */
+  paginationNextLabel?: string
+  /** Available page size options (e.g. [10, 25, 50]). */
+  rowsPerPageOptions?: number[]
+  /** Label displayed before the rows-per-page selector. */
+  rowsPerPageLabel?: string
+  /** Search input placeholder */
+  searchPlaceholder?: string
+  /** Label for the search input (accessibility). Defaults to "Search". */
+  searchLabel?: string
+}
 
 /**
  * DataTable organism (native).
@@ -20,45 +46,52 @@ import type { Row, Table } from '@tanstack/react-table'
  * columnar on tablets (>= breakpoint), compact on phones.
  */
 export function DataTable<TData>({
-  table,
+  tableStateManager,
   loading,
   rowsSkeleton: RowSkeleton,
   emptyMessage = 'No results.',
   pagination,
   paginationPrevLabel,
   paginationNextLabel,
-  onRowPress,
+  onRowClick,
+  onGlobalFilterChange,
   renderCompactRow,
   compactBreakpoint = COMPACT_BREAKPOINT,
   actionBar,
   noActionBar,
   leftActions,
-  onSearchChange,
+  showRowsPerPage,
   searchPlaceholder,
   searchLabel,
   rowsPerPageOptions,
   rowsPerPageLabel,
-}: IDataTableProps<TData>) {
+  initTableAt,
+}: NativeDataTableProps<TData>) {
   const { width } = useWindowDimensions()
+  const isTablet = width >= 768
   const isCompact = !!renderCompactRow && width < compactBreakpoint
 
-  const rows = table.getRowModel().rows
-  const pageSize = table.getState().pagination.pageSize
+  const rows = tableStateManager.getRowModel().rows
+  const pageSize = tableStateManager.getState().pagination.pageSize
   const isEmpty = !loading && rows.length === 0
   const showPagination =
-    pagination && !loading && table.getRowCount() > pageSize
+    pagination && !loading && tableStateManager.getRowCount() > pageSize
 
   const [searchValue, setSearchValue] = useState('')
 
+  useEffect(() => {
+    if (initTableAt) tableStateManager.setPageIndex(initTableAt)
+  }, [initTableAt, tableStateManager])
+
   const handleSearchChange = (value: string) => {
     setSearchValue(value)
-    onSearchChange?.(value)
+    onGlobalFilterChange?.(value)
   }
 
   const renderColumnarRow = ({ item: row }: { item: Row<TData> }) => {
     const rowContent = (
       <View
-        style={tw`${dataTableStyles.bodyRow} ${dataTableRowVariants({ divider: true })}`}
+        style={tw`${dataTableStyles.bodyRow} ${dataTableRowVariants({ divider: true })} `}
       >
         {row.getVisibleCells().map((cell) => (
           <View key={cell.id} style={tw`${dataTableStyles.bodyCell}`}>
@@ -70,13 +103,14 @@ export function DataTable<TData>({
       </View>
     )
 
-    if (onRowPress) {
+    if (onRowClick) {
       return (
         <Pressable
           onPress={() => {
-            onRowPress(row)
+            onRowClick(row)
           }}
           accessibilityRole="button"
+          accessibilityState={{ disabled: false }}
         >
           {rowContent}
         </Pressable>
@@ -96,13 +130,14 @@ export function DataTable<TData>({
     if (!renderCompactRow) return null
     const content = renderCompactRow({ row, index })
 
-    if (onRowPress) {
+    if (onRowClick) {
       return (
         <Pressable
           onPress={() => {
-            onRowPress(row)
+            onRowClick(row)
           }}
           accessibilityRole="button"
+          accessibilityState={{ disabled: false }}
         >
           {content}
         </Pressable>
@@ -114,12 +149,17 @@ export function DataTable<TData>({
 
   const renderEmpty = () => <NoResults message={emptyMessage} />
 
-  const skeletonData = Array.from({ length: pageSize }, (_, i) => i)
+  const skeletonData = Array.from({ length: MIN_PAGE_SIZE }, (_, i) => i)
 
   return (
-    <View style={tw`${dataTableStyles.container}`}>
+    <View
+      style={[
+        tw`${dataTableStyles.container}`,
+        tw`${isTablet ? 'p-8' : 'p-6'}`,
+      ]}
+    >
       {/* ActionBar */}
-      {!noActionBar && !actionBar && onSearchChange && (
+      {!noActionBar && !actionBar && onGlobalFilterChange && (
         <ActionBar
           leftActions={leftActions}
           searchValue={searchValue}
@@ -144,8 +184,11 @@ export function DataTable<TData>({
       {!loading && !isCompact && (
         <>
           {/* Header row */}
-          {table.getHeaderGroups().map((headerGroup) => (
-            <View key={headerGroup.id} style={tw`${dataTableStyles.headerRow}`}>
+          {tableStateManager.getHeaderGroups().map((headerGroup) => (
+            <TableRow
+              key={headerGroup.id}
+              style={tw`${dataTableStyles.headerRow} border-t-0`}
+            >
               {headerGroup.headers.map((header) => (
                 <View key={header.id} style={tw`${dataTableStyles.headerCell}`}>
                   {header.isPlaceholder
@@ -156,7 +199,7 @@ export function DataTable<TData>({
                       )}
                 </View>
               ))}
-            </View>
+            </TableRow>
           ))}
 
           <FlatList
@@ -186,11 +229,13 @@ export function DataTable<TData>({
       {/* Footer */}
       {showPagination && (
         <TableFooter
-          table={table as unknown as Table<unknown>}
+          tableStateManager={tableStateManager as unknown as Table<unknown>}
           rowsPerPageOptions={rowsPerPageOptions ?? [pageSize]}
           rowsPerPageLabel={rowsPerPageLabel}
           prevLabel={paginationPrevLabel}
           nextLabel={paginationNextLabel}
+          showRowsPerPage={showRowsPerPage}
+          fullWidthPagination={!showRowsPerPage}
         />
       )}
     </View>

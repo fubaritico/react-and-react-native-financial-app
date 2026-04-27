@@ -1,7 +1,8 @@
 import { Avatar } from '../../../../atoms/Avatar/Avatar.web'
 import { Typography } from '../../../../atoms/Typography/Typography.web'
+import { TableCell } from '../../components/TableCell/TableCell.web'
 
-import type { AvatarNameCellFn } from './AvatarNameCell'
+import type { AvatarNameCellFn } from './AvatarNameCell.tsx'
 import type { Row } from '@tanstack/react-table'
 
 /**
@@ -12,28 +13,20 @@ import type { Row } from '@tanstack/react-table'
  * @param subtitleKey - optional accessor key for a subtitle line (e.g. category)
  */
 export const AvatarNameCell =
-  (
-    avatarKey: string,
-    nameKey: string,
-    subtitleKey?: string
-  ): AvatarNameCellFn =>
+  (avatarKey: string, nameKey: string): AvatarNameCellFn =>
   <TData,>({ row }: { row: Row<TData> }) => {
     const original = row.original as Record<string, string>
     const avatar = original[avatarKey] ?? ''
     const name = row.getValue<string>(nameKey)
-    const subtitle = subtitleKey ? row.getValue<string>(subtitleKey) : undefined
 
     return (
-      <div className="flex items-center gap-3">
-        <Avatar src={avatar} name={name} size={40} />
-        <div>
-          <Typography variant="body-bold">{name}</Typography>
-          {subtitle ? (
-            <Typography variant="caption" color="muted">
-              {subtitle}
-            </Typography>
-          ) : null}
+      <TableCell>
+        <div className="flex items-center gap-3 min-w-0 pr-3">
+          <Avatar src={avatar} name={name} size={40} />
+          <Typography variant="body-bold" as="span" className="truncate">
+            {name}
+          </Typography>
         </div>
-      </div>
+      </TableCell>
     )
   }

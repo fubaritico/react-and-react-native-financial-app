@@ -482,6 +482,9 @@ importers:
       '@financial-app/ui':
         specifier: workspace:^
         version: link:../../packages/ui
+      '@tanstack/react-table':
+        specifier: 'catalog:'
+        version: 8.21.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       i18next:
         specifier: 'catalog:'
         version: 25.10.10(typescript@5.9.3)

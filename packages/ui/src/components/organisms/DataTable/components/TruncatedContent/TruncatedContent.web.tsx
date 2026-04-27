@@ -7,12 +7,14 @@ import type { ITruncatedContentProps } from './TruncatedContent'
  * Truncates text with CSS and shows full value via native title tooltip on hover.
  */
 export function TruncatedContent({
+  variant = 'body',
+  color,
   value,
   numberOfLines = 1,
-}: ITruncatedContentProps) {
+}: Readonly<ITruncatedContentProps>) {
   return (
     <div className="min-w-0 max-w-full" title={value}>
-      <Typography variant="body" numberOfLines={numberOfLines}>
+      <Typography numberOfLines={numberOfLines} variant={variant} color={color}>
         {value}
       </Typography>
     </div>

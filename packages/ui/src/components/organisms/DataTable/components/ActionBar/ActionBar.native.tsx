@@ -5,7 +5,7 @@ import { TextInput } from '../../../../molecules/TextInput/TextInput.native'
 
 import { actionBarStyles } from './ActionBar.styles'
 
-import type { IActionBarProps } from './ActionBar'
+import type { IActionBarNativeProps } from './ActionBar.tsx'
 
 /**
  * ActionBar sub-component (native).
@@ -17,7 +17,7 @@ export function ActionBar({
   onSearchChange,
   searchPlaceholder = 'Search',
   searchLabel = 'Search',
-}: IActionBarProps) {
+}: Readonly<IActionBarNativeProps>) {
   return (
     <View style={tw`${actionBarStyles.container}`}>
       {leftActions && leftActions.length > 0 ? (

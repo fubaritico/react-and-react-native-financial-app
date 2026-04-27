@@ -17,7 +17,7 @@ export function DropdownFilter({
   onFiltersChange,
   accessibilityLabel,
   drawerTitle,
-}: IDropdownFilterProps) {
+}: Readonly<IDropdownFilterProps>) {
   const allOptions = [{ value: buttonLabel, label: buttonLabel }, ...options]
 
   const currentValue =

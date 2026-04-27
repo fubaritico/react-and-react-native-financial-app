@@ -1,14 +1,22 @@
 import { Typography } from '../../../../atoms/Typography/Typography.web'
 
-import type { INoResultsProps } from './NoResults'
+import type { INoResultsProps } from './NoResults.tsx'
 
-/** Empty state placeholder for DataTable (web). */
-export function NoResults({ message }: INoResultsProps) {
+/**
+ * Empty state placeholder for DataTable (web).
+ * Renders a table row with full-width colspan.
+ */
+export function NoResults({
+  message = 'No results.',
+  columnLength,
+}: Readonly<INoResultsProps>) {
   return (
-    <div className="py-8 text-center">
-      <Typography variant="body" color="muted">
-        {message}
-      </Typography>
-    </div>
+    <tr>
+      <td colSpan={columnLength} className="py-8 text-center">
+        <Typography variant="body" color="muted">
+          {message}
+        </Typography>
+      </td>
+    </tr>
   )
 }

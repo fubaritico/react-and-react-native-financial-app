@@ -1,7 +1,22 @@
+import type { Table } from '@tanstack/react-table'
 import type { ReactElement } from 'react'
 
-/** Props for the ActionBar sub-component (internal — not exported from package). */
+/** ActionBar props (web) — reads filter state from table instance. */
 export interface IActionBarProps {
+  /** TanStack Table instance */
+  tableConfiguration: Table<unknown>
+  /** Extra CSS classes */
+  className?: string
+  /** Filter/action elements rendered on the left side */
+  leftActions?: ReactElement[]
+  /** When enabled, makes the bar sticky */
+  stickyHeader?: boolean
+  /** Global filter change callback */
+  onGlobalFilterChange?: (value: string) => void
+}
+
+/** ActionBar props (native) — controlled search state. */
+export interface IActionBarNativeProps {
   /** Filter/action elements rendered on the left side */
   leftActions?: ReactElement[]
   /** Current search input value */

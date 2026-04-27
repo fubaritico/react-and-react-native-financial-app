@@ -6,4 +6,6 @@ export interface IAvatarProps {
   name: string
   /** Size in pixels. Defaults to 40. */
   size?: number
+  /** extra classes from parent */
+  className?: string
 }

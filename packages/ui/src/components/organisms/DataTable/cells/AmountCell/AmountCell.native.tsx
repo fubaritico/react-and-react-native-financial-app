@@ -1,8 +1,11 @@
+import tw from '../../../../../lib/tw'
 import { Typography } from '../../../../atoms/Typography/Typography.native'
+import { TableCell } from '../../components/TableCell/TableCell.native'
 
-import { formatSignedCurrency } from './AmountCell'
+import { formatSignedCurrency } from './AmountCell.constants'
 
-import type { AmountCellFn } from './AmountCell'
+import type { AmountCellFn } from './AmountCell.tsx'
+import type { HeaderAlign } from '../SortableHeader'
 import type { Row } from '@tanstack/react-table'
 
 /**
@@ -10,19 +13,32 @@ import type { Row } from '@tanstack/react-table'
  * Positive amounts render in green (transaction-positive),
  * negative amounts render in default foreground (body-bold).
  * @param keyName - accessor key for the numeric amount
+ * @param align - text alignment ('left' | 'right'), defaults to 'left'
+ * @param className - extra classes from configuration
  */
 export const AmountCell =
-  (keyName: string): AmountCellFn =>
+  (
+    keyName: string,
+    align: HeaderAlign = 'left',
+    className?: string
+  ): AmountCellFn =>
   <TData,>({ row }: { row: Row<TData> }) => {
     const amount = row.getValue<number>(keyName)
     const isPositive = amount >= 0
 
     return (
-      <Typography
-        variant="body-bold"
-        color={isPositive ? 'transaction-positive' : 'foreground'}
+      <TableCell
+        style={[
+          tw`flex-row items-center gap-1 ${align === 'right' ? 'justify-end' : ''}`,
+          className && tw`${className}`,
+        ]}
       >
-        {formatSignedCurrency(amount)}
-      </Typography>
+        <Typography
+          variant="body-bold"
+          color={isPositive ? 'transaction-positive' : 'foreground'}
+        >
+          {formatSignedCurrency(amount)}
+        </Typography>
+      </TableCell>
     )
   }

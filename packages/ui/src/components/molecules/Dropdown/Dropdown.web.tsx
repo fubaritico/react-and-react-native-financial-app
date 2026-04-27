@@ -226,12 +226,11 @@ export function Dropdown({
               accessibilityLabel ?? `${label ?? 'Select'}: ${selectedLabel}`
             }
             className={cn(
-              'gap-4',
-              'hover:border-foreground transition-colors',
-              isOpen && 'border-foreground'
+              'gap-4 transition-colors border-beige-500 text-beige-500',
+              isOpen && 'border-beige-500'
             )}
           >
-            <Typography variant="body-bold" as="span">
+            <Typography variant="body" as="span">
               {selectedLabel}
             </Typography>
             <Icon

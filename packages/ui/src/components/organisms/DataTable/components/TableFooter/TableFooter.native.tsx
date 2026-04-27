@@ -5,7 +5,7 @@ import { Typography } from '../../../../atoms/Typography/Typography.native'
 import { DataTablePagination } from '../../../../molecules/DataTablePagination/DataTablePagination.native'
 import { Dropdown } from '../../../../molecules/Dropdown/Dropdown.native'
 
-import type { ITableFooterProps } from './TableFooter'
+import type { ITableFooterProps } from './TableFooter.tsx'
 
 /**
  * Table footer (native).
@@ -13,7 +13,7 @@ import type { ITableFooterProps } from './TableFooter'
  * Mirrors Odaseva TableFooter layout.
  */
 export function TableFooter({
-  table,
+  tableStateManager,
   rowsPerPageOptions,
   rowsPerPageLabel = 'Rows per page',
   rowsPerPageAccessibilityLabel,
@@ -23,43 +23,49 @@ export function TableFooter({
   prevAriaLabel,
   nextAriaLabel,
   pageAriaLabel,
-}: ITableFooterProps) {
-  const { pageSize } = table.getState().pagination
+  showRowsPerPage,
+  fullWidthPagination,
+}: Readonly<ITableFooterProps>) {
+  const { pageSize } = tableStateManager.getState().pagination
   const showPagination =
-    table.getRowCount() > table.getState().pagination.pageSize
+    tableStateManager.getRowCount() >
+    tableStateManager.getState().pagination.pageSize
 
   return (
     <View
-      style={tw`items-center justify-between border-t border-border px-3 py-4`}
+      style={tw`items-center py-4 ${showRowsPerPage ? 'justify-between' : 'justify-center'}`}
     >
       {/* Rows per page selector */}
-      <View style={tw`flex-row items-center gap-2`}>
-        <Dropdown
-          options={rowsPerPageOptions.map((size) => ({
-            value: String(size),
-            label: String(size),
-          }))}
-          selectedValue={String(pageSize)}
-          onSelect={(value) => {
-            table.setPageSize(Number(value))
-          }}
-          accessibilityLabel={rowsPerPageAccessibilityLabel}
-          drawerTitle={rowsPerPageDrawerTitle}
-        />
-        <Typography variant="body" color="muted">
-          {rowsPerPageLabel}
-        </Typography>
-      </View>
+      {showRowsPerPage && (
+        <View style={tw`flex-row items-center gap-2`}>
+          <Dropdown
+            options={(rowsPerPageOptions ?? []).map((size) => ({
+              value: String(size),
+              label: String(size),
+            }))}
+            selectedValue={String(pageSize)}
+            onSelect={(value) => {
+              tableStateManager.setPageSize(Number(value))
+            }}
+            accessibilityLabel={rowsPerPageAccessibilityLabel}
+            drawerTitle={rowsPerPageDrawerTitle}
+          />
+          <Typography variant="body" color="muted">
+            {rowsPerPageLabel}
+          </Typography>
+        </View>
+      )}
 
       {/* Pagination */}
       {showPagination && (
         <DataTablePagination
-          table={table}
+          table={tableStateManager}
           prevLabel={prevLabel}
           nextLabel={nextLabel}
           prevAriaLabel={prevAriaLabel}
           nextAriaLabel={nextAriaLabel}
           pageAriaLabel={pageAriaLabel}
+          fullWidth={fullWidthPagination}
         />
       )}
     </View>

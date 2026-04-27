@@ -1,39 +1,44 @@
-import { cn } from '../../../../../lib/cn'
+import clsx from 'clsx'
+
 import { TextInput } from '../../../../molecules/TextInput/TextInput.web'
 
-import { actionBarStyles } from './ActionBar.styles'
-
-import type { IActionBarProps } from './ActionBar'
+import type { IActionBarProps } from './ActionBar.tsx'
 
 /**
  * ActionBar sub-component (web).
+ * Reads global filter state from the table instance.
  * Renders leftActions + search input in a horizontal row.
  */
 export function ActionBar({
+  className,
   leftActions,
-  searchValue,
-  onSearchChange,
-  searchPlaceholder = 'Search',
-  searchLabel = 'Search',
-}: IActionBarProps) {
+  onGlobalFilterChange,
+  stickyHeader,
+  tableConfiguration,
+}: Readonly<IActionBarProps>) {
+  const globalFilter: unknown = tableConfiguration.getState().globalFilter
+  const filterValue = typeof globalFilter === 'string' ? globalFilter : ''
+
   return (
-    <div className={actionBarStyles.container}>
-      {leftActions && leftActions.length > 0 ? (
-        <div className={cn(actionBarStyles.leftActions, 'flex-1')}>
-          {leftActions}
+    <div
+      className={clsx(
+        'flex items-center p-4 gap-4',
+        { sticky: stickyHeader },
+        className
+      )}
+    >
+      <div className="flex grow gap-4">{leftActions}</div>
+      {onGlobalFilterChange && (
+        <div className="relative">
+          <TextInput
+            label="Search"
+            value={filterValue}
+            onChangeText={onGlobalFilterChange}
+            placeholder="Search..."
+            icon="search"
+          />
         </div>
-      ) : null}
-      <div
-        className={leftActions && leftActions.length > 0 ? 'flex-1' : 'w-full'}
-      >
-        <TextInput
-          label={searchLabel}
-          value={searchValue}
-          onChangeText={onSearchChange}
-          placeholder={searchPlaceholder}
-          icon="search"
-        />
-      </div>
+      )}
     </div>
   )
 }

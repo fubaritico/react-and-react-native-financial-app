@@ -1,8 +1,9 @@
 import { Typography } from '../../../../atoms/Typography/Typography.web'
+import { TableCell } from '../../components/TableCell/TableCell.web'
 
-import { formatDisplayDate } from './DateCell'
+import { formatDisplayDate } from './DateCell.constants'
 
-import type { DateCellFn } from './DateCell'
+import type { DateCellFn } from './DateCell.tsx'
 import type { Row } from '@tanstack/react-table'
 
 /**
@@ -12,13 +13,19 @@ import type { Row } from '@tanstack/react-table'
  * @param keyName - accessor key for the ISO date string
  */
 export const DateCell =
-  (keyName: string): DateCellFn =>
+  (keyName: string, className?: string): DateCellFn =>
   <TData,>({ row }: { row: Row<TData> }) => {
     const dateString = row.getValue<string>(keyName)
 
     return (
-      <Typography variant="body" color="muted">
-        {formatDisplayDate(dateString)}
-      </Typography>
+      <TableCell
+        aria-label={`${keyName}-${dateString}`}
+        className={className}
+        tabIndex={0}
+      >
+        <Typography variant="caption" color="muted">
+          {formatDisplayDate(dateString)}
+        </Typography>
+      </TableCell>
     )
   }

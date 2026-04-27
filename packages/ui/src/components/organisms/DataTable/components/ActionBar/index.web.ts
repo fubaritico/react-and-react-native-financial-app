@@ -1,2 +1,2 @@
 export { ActionBar } from './ActionBar.web'
-export type { IActionBarProps } from './ActionBar.tsx'
+export type { IActionBarNativeProps, IActionBarProps } from './ActionBar.tsx'

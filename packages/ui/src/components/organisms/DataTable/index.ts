@@ -1,2 +1,2 @@
 export { DataTable } from './DataTable.native'
-export type { IDataTableProps } from './DataTable.tsx'
+export type { BaseDataTableProps } from './DataTable.types'

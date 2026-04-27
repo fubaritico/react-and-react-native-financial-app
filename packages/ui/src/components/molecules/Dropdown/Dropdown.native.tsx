@@ -27,7 +27,7 @@ export function Dropdown({
   drawerTitle,
   drawerCloseLabel = 'Close',
   trigger,
-}: IDropdownProps) {
+}: Readonly<IDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false)
 
   const selectedLabel = useMemo(

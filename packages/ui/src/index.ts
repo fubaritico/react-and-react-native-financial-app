@@ -78,7 +78,7 @@ export type { IPortalProps } from './components/atoms/Portal/Portal.tsx'
 
 // Organisms
 export { DataTable } from './components/organisms/DataTable'
-export type { IDataTableProps } from './components/organisms/DataTable/DataTable.tsx'
+export type { BaseDataTableProps } from './components/organisms/DataTable/DataTable.types'
 export {
   SimpleCell,
   AmountCell,

@@ -13,4 +13,6 @@ export interface IDataTablePaginationProps {
   nextAriaLabel?: string
   /** Factory for per-page accessible labels. Receives 1-based page number. Defaults to "Page {n}". */
   pageAriaLabel?: (page: number) => string
+  /** If true, the pagination takes the full available width of its container */
+  fullWidth?: boolean
 }
