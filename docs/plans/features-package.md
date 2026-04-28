@@ -64,10 +64,10 @@ packages/features/
       createPotModalConfigs.ts          # IModalConfig factories (add, edit, addMoney, withdraw)
       index.ts
     overview/
-      OverviewPotsSection.tsx           # PotsOverview block (already exists in ui, may stay or move)
-      OverviewTransactionsSection.tsx   # TransactionsOverview block
-      OverviewBillsSection.tsx          # RecurringBillsOverview block
-      OverviewBudgetsSection.tsx        # DonutChart + spending summary
+      PotsOverview.tsx                  # migrated from ui/organisms — pot summary grid
+      TransactionsOverview.tsx          # migrated from ui/organisms — recent transactions list
+      RecurringBillsOverview.tsx        # migrated from ui/organisms — bills summary with status dots
+      BudgetsOverview.tsx               # new — DonutChart + spending summary
       index.ts
     index.ts                            # public barrel
 ```
@@ -221,21 +221,50 @@ export function PotCard({
 }
 ```
 
+## Boundary: ui (DS) vs features
+
+The line is **"reusable out of context" vs "coupled to a specific screen"**.
+
+- **ui** = generic primitives, reusable in any screen or app (Card, Modal, DataTable, Button, Typography, …)
+- **features** = compositions of DS primitives configured for a specific screen, even if purely presentational
+
+Atomic Design remains valid for `ui` — it categorizes by composition complexity:
+- **atoms**: Icon, Typography, Button, ColorDot, Divider, Avatar, LinkText
+- **molecules**: TextInput, PasswordInput, SectionLink, StatCard, BalanceCard, TransactionRow, SpendingSummaryRow, BillSummaryRow, Pagination, Dropdown, …
+- **organisms**: Card, AuthCard, Header, Modal, DataTable — generic complex components
+- **templates**: AuthLayout
+
+Organisms is not "screen sections" — it is "autonomous complex components that compose molecules".
+
 ## What Stays in ui vs What Moves to features
 
 | Component | Package | Reason |
 |-----------|---------|--------|
-| DataTable, Modal, Card, Button, ... | ui | Generic DS primitives |
-| TransactionsOverview, PotsOverview, ... | ui | DS organisms (summary blocks for Overview page) |
-| TransactionsDataTable | features | Configured DataTable instance with specific columns |
-| RecurringBillsTable | features | Configured DataTable instance |
-| AddBudgetContent | features | Modal body content |
-| PotCard (full page version) | features | Composed block with actions |
-| BudgetCategoryCard | features | Composed block with progress + latest spending |
+| DataTable, Modal, Card, Button, … | ui | Generic DS primitives |
+| PotsOverview | features/overview | Coupled to Overview screen + IPot[] shape |
+| TransactionsOverview | features/overview | Coupled to Overview screen + ITransaction[] shape |
+| RecurringBillsOverview | features/overview | Coupled to Overview screen + bill data shape |
+| BudgetsOverview (new) | features/overview | DonutChart + spending summary for Overview screen |
+| TransactionsDataTable | features/transactions | Configured DataTable with specific columns |
+| RecurringBillsTable | features/recurring-bills | Configured DataTable instance |
+| AddBudgetContent | features/budgets | Modal body content |
+| PotCard (full page version) | features/pots | Composed block with actions |
+| BudgetCategoryCard | features/budgets | Composed block with progress + latest spending |
 
-Note: the existing Overview organisms (PotsOverview, TransactionsOverview, RecurringBillsOverview)
-stay in ui for now — they are self-contained summary blocks. The overview/ feature slice is
-optional and can be revisited if those organisms grow to need data/callbacks.
+### Overview migration notes
+
+The 3 existing Overview organisms (PotsOverview, TransactionsOverview, RecurringBillsOverview)
+are presentational but screen-specific — they compose DS primitives (Card, SectionLink,
+TransactionRow, etc.) with a data shape tied to the Overview page. They will never be reused
+on another screen.
+
+Migration steps:
+1. Move source files from `ui/src/components/organisms/` to `features/src/overview/`
+2. Convert from file extension split (`.native.tsx` + `.web.tsx`) to single `.tsx` files
+   that compose DS components via props (DS handles platform split underneath)
+3. Remove from ui barrels (`src/index.ts`, `src/index.web.ts`, `src/components/organisms/`)
+4. Update app imports: `@financial-app/ui` → `@financial-app/features/overview`
+5. Update Storybook stories (move to features story section or keep in ui storybook)
 
 ## package.json
 
@@ -265,14 +294,23 @@ optional and can be revisited if those organisms grow to need data/callbacks.
 ## Scaffold Steps
 
 1. Create `packages/features/` directory + `package.json` + `tsconfig.json`
-2. Add `@financial-app/features` as dependency to mobile-expo and web apps
-3. Create `src/transactions/` — TransactionsDataTable + useTransactionsColumns + barrel
-4. Wire into Transactions page (both apps)
-5. Create remaining feature slices as pages are built
+2. Add `@financial-app/features` as dependency to mobile-expo, web, and storybook apps
+3. Migrate Overview organisms from ui to features:
+   a. Move PotsOverview, TransactionsOverview, RecurringBillsOverview source files
+   b. Convert from file extension split to single `.tsx` composing DS via props
+   c. Remove from ui barrels and organisms directory
+   d. Update app imports (mobile-expo overview screen, web overview route)
+   e. Move or update Storybook stories
+4. Create `src/transactions/` — TransactionsDataTable + useTransactionsColumns + barrel
+5. Wire TransactionsDataTable into Transactions page (both apps)
+6. Create remaining feature slices as pages are built (budgets, pots, recurring-bills)
 
 ## Completion Criteria
 
 - [ ] Package created, installs, type-checks
+- [ ] Overview organisms migrated from ui to features/overview/
+- [ ] ui/organisms contains only generic complex components (Card, AuthCard, Header, Modal, DataTable)
+- [ ] App imports updated — no broken references
 - [ ] TransactionsDataTable renders in Storybook (features story)
 - [ ] TransactionsDataTable wired into web Transactions route
 - [ ] TransactionsDataTable wired into mobile-expo Transactions screen
