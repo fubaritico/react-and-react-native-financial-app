@@ -1,6 +1,7 @@
-import { cn } from '../../../../../lib/cn'
-import { Icon } from '../../../../atoms/Icon/Icon.web'
-import { Typography } from '../../../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Icon, Typography } from '#Atoms/index.web'
+
 import { TableHead } from '../../components/TableHead/TableHead.web'
 
 import type { HeaderAlign, HeaderCellFn } from './SortableHeader.tsx'

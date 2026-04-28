@@ -1,19 +1,21 @@
 import { View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
+
+import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
 
 import { balanceCardVariants } from './BalanceCard.variants'
 
 import type { IBalanceCardProps } from './BalanceCard'
-import type { TypographyVariants } from '../../atoms/Typography/Typography.variants'
+
+import { Typography } from '#Atoms'
 
 /** Native implementation of the BalanceCard component. */
 export const BalanceCard = ({
   label,
   amount,
   tone = 'light',
-}: IBalanceCardProps) => {
+}: Readonly<IBalanceCardProps>) => {
   const labelColor: TypographyVariants['color'] =
     tone === 'dark' ? 'on-dark' : 'muted'
   const amountColor: TypographyVariants['color'] =

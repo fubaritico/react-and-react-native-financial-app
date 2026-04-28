@@ -1,12 +1,17 @@
-import { cn } from '../../../lib/cn'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Typography } from '#Atoms/index.web'
 
 import styles from './AuthCard.styles'
 
 import type { IAuthCardProps } from './AuthCard'
 
 /** Web implementation of the AuthCard component. */
-export const AuthCard = ({ title, children, footer }: IAuthCardProps) => (
+export const AuthCard = ({
+  title,
+  children,
+  footer,
+}: Readonly<IAuthCardProps>) => (
   <div className="bg-card rounded-lg px-8 py-8 flex flex-col gap-8 w-full max-w-md shadow-lg">
     <Typography variant="heading-lg" as="h1">
       {title}

@@ -1,14 +1,14 @@
 import { useCallback, useMemo, useState } from 'react'
 import { View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Button } from '../../atoms/Button/Button.native'
-import { Icon } from '../../atoms/Icon/Icon.native'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
+
 import { Drawer } from '../Drawer/Drawer.native'
 import { Menu } from '../Menu/Menu.native'
 
 import type { IDropdownProps } from './Dropdown'
+
+import { Button, Icon, Typography } from '#Atoms'
 
 /**
  * Native Dropdown — always opens a Drawer (bottom sheet) in dark mode.

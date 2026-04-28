@@ -1,4 +1,4 @@
-import { cn } from '../../../lib/cn'
+import { cn } from '#Lib/cn'
 
 import { listboxListVariants } from './Listbox.variants'
 
@@ -21,7 +21,7 @@ export function ListboxList({
   children,
   accessibilityLabel,
   ...rest
-}: IListboxListWebProps) {
+}: Readonly<IListboxListWebProps>) {
   return (
     <ul
       role="listbox"

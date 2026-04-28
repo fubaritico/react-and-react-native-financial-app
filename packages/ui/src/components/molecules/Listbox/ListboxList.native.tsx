@@ -1,6 +1,6 @@
 import { ScrollView } from 'react-native'
 
-import tw from '../../../lib/tw'
+import tw from '#Lib/tw'
 
 import { listboxListVariants } from './Listbox.variants'
 
@@ -15,7 +15,7 @@ export function ListboxList({
   children,
   className,
   accessibilityLabel,
-}: IListboxListProps) {
+}: Readonly<IListboxListProps>) {
   return (
     <ScrollView
       accessibilityRole="menu"

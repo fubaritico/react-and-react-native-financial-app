@@ -1,13 +1,13 @@
 import { View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Icon } from '../../atoms/Icon/Icon.native'
-import { Typography } from '../../atoms/Typography/Typography.native'
-import { SectionLink } from '../../molecules/SectionLink/SectionLink.native'
+import tw from '#Lib/tw'
 
 import styles from './PotsOverview.styles'
 
 import type { IPotsOverviewProps } from './PotsOverview'
+
+import { Icon, Typography } from '#Atoms'
+import { SectionLink } from '#Molecules'
 
 /** Native implementation of the PotsOverview section component. */
 export const PotsOverview = ({
@@ -19,7 +19,7 @@ export const PotsOverview = ({
   pots,
   onSeeDetails,
   icon,
-}: IPotsOverviewProps) => {
+}: Readonly<IPotsOverviewProps>) => {
   return (
     <View style={tw`${styles.root}`}>
       {/* Header row */}

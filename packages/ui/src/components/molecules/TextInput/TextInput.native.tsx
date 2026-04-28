@@ -1,13 +1,13 @@
 import { TextInput as RNTextInput, View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Icon } from '../../atoms/Icon/Icon.native'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
 
 import styles from './TextInput.styles'
 import { textInputVariants } from './TextInput.variants'
 
 import type { ITextInputProps } from './TextInput'
+
+import { Icon, Typography } from '#Atoms'
 
 /** Native implementation of the TextInput component. */
 export const TextInput = ({
@@ -21,7 +21,7 @@ export const TextInput = ({
   trailingElement,
   prefix,
   secureTextEntry,
-}: ITextInputProps) => {
+}: Readonly<ITextInputProps>) => {
   const inputClasses = textInputVariants({ error })
 
   return (

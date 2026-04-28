@@ -17,6 +17,18 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "rootDirs": [".", ".react-router/types"],
-    "types": ["vite/client"]
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "#Lib/*": ["../../packages/ui/src/lib/*"],
+      "#Atoms": ["../../packages/ui/src/components/atoms"],
+      "#Atoms/*": ["../../packages/ui/src/components/atoms/*"],
+      "#Molecules": ["../../packages/ui/src/components/molecules"],
+      "#Molecules/*": ["../../packages/ui/src/components/molecules/*"],
+      "#Organisms": ["../../packages/ui/src/components/organisms"],
+      "#Organisms/*": ["../../packages/ui/src/components/organisms/*"],
+      "#Templates": ["../../packages/ui/src/components/templates"],
+      "#Templates/*": ["../../packages/ui/src/components/templates/*"]
+    }
   }
 }

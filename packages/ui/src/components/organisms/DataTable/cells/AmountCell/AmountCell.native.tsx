@@ -1,5 +1,5 @@
-import tw from '../../../../../lib/tw'
-import { Typography } from '../../../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
+
 import { TableCell } from '../../components/TableCell/TableCell.native'
 
 import { formatSignedCurrency } from './AmountCell.constants'
@@ -7,6 +7,8 @@ import { formatSignedCurrency } from './AmountCell.constants'
 import type { AmountCellFn } from './AmountCell.tsx'
 import type { HeaderAlign } from '../SortableHeader'
 import type { Row } from '@tanstack/react-table'
+
+import { Typography } from '#Atoms'
 
 /**
  * Amount cell factory — displays a signed currency value with color.

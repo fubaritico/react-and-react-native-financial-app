@@ -2,7 +2,7 @@ import { flexRender } from '@tanstack/react-table'
 import { Fragment, useEffect, useState } from 'react'
 import { FlatList, Pressable, View, useWindowDimensions } from 'react-native'
 
-import tw from '../../../lib/tw'
+import tw from '#Lib/tw'
 
 import { ActionBar } from './components/ActionBar/ActionBar.native'
 import { NoResults } from './components/NoResults/NoResults.native'
@@ -66,7 +66,7 @@ export function DataTable<TData>({
   rowsPerPageOptions,
   rowsPerPageLabel,
   initTableAt,
-}: NativeDataTableProps<TData>) {
+}: Readonly<NativeDataTableProps<TData>>) {
   const { width } = useWindowDimensions()
   const isTablet = width >= 768
   const isCompact = !!renderCompactRow && width < compactBreakpoint

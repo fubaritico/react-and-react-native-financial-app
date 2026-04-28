@@ -1,5 +1,7 @@
-import { cn } from '../../../../../lib/cn'
-import { Typography } from '../../../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Typography } from '#Atoms/index.web'
+
 import { TableCell } from '../../components/TableCell/TableCell.web'
 
 import { formatSignedCurrency } from './AmountCell.constants'

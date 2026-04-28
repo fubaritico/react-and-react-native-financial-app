@@ -7,7 +7,7 @@ import type { IPortalProps } from './Portal'
  * Web Portal — renders children into a detached DOM node appended
  * to a shared `#portal` root. Creates the root lazily if it does not exist.
  */
-export function Portal({ children, id }: IPortalProps) {
+export function Portal({ children, id }: Readonly<IPortalProps>) {
   const [container] = useState(() => {
     const el = document.createElement('div')
     if (id) el.id = id

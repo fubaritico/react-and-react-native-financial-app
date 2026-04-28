@@ -1,4 +1,5 @@
-import type { IDropdownOption } from '../../../../molecules/Dropdown/Dropdown.tsx'
+import type { IDropdownOption } from '#Molecules/Dropdown/Dropdown.tsx'
+
 import type { ColumnFiltersState } from '@tanstack/react-table'
 
 export interface IDropdownFilterProps {

@@ -1,6 +1,7 @@
 import { Pressable } from 'react-native'
 
-import tw from '../../../lib/tw'
+import tw from '#Lib/tw'
+
 import { Icon } from '../Icon/Icon.native'
 import { Typography } from '../Typography/Typography.native'
 
@@ -34,7 +35,7 @@ export const Button = ({
   ariaExpanded,
   className,
   style,
-}: IButtonProps) => {
+}: Readonly<IButtonProps>) => {
   const variantClasses = buttonVariants({ variant, size, fullWidth, disabled })
   const textColor =
     VARIANT_TEXT_COLOR[variant ?? 'primary'] ?? 'primary-foreground'

@@ -499,3 +499,27 @@
 - Divider stories rewritten with realistic card context + Typography (88dd1ad)
 - BillSummaryRow stories set to white background for visibility (88dd1ad)
 - Dismissed 5 Dependabot alerts (transitive deps from Expo SDK 54 / RN 0.81 — no user input exposure)
+
+- feat(ui): add DataTable shell + SortableHeader + ActionBar + Pagination — steps 4-11 (57c849f)
+    - Step 4: SortableHeader — platform-split header cell factory, caretDown icon rotated 180° for asc, hidden when unsorted, Pressable (native) / button with focus-visible (web)
+    - Step 5: cells barrels — index.ts + index.web.ts aggregating all 7 cell factories (SimpleCell, AmountCell, DateCell, AvatarNameCell, BillTitleCell, StatusCell, SortableHeader)
+    - Step 6: DataTablePagination molecule — thin adapter bridging TanStack Table state to existing Pagination molecule (both platforms)
+    - Step 7: ActionBar sub-component (internal, not exported) — leftActions array + TextInput search, platform-split
+    - Step 8: DataTable.tsx types (IDataTableProps<TData>), DataTable.constants.ts (DEFAULT_PAGE_SIZE=10, COMPACT_BREAKPOINT=768), DataTable.variants.ts (row divider), DataTable.styles.ts (layout classes)
+    - Step 9: DataTable.web.tsx — semantic <table> columnar mode + compact renderCompactRow mode, ResizeObserver for responsive, 3-state rendering (loading skeleton/data/empty), conditional pagination
+    - Step 10: DataTable.native.tsx — FlatList dual mode (columnar for tablet, compact for phone), useWindowDimensions, same 3-state rendering + conditional pagination
+    - Step 11: DataTable + DataTablePagination + all cell factories registered in both public API barrels (src/index.ts + src/index.web.ts)
+
+- feat(ui): add DataTable sub-components + reorganize into components/ — step 12 (9a10c01)
+    - 6 new sub-components adapted from Odaseva reference (copy → adapt pattern):
+      - NoResults: empty state placeholder with Typography (native + web)
+      - TableFooter: rows-per-page Dropdown + DataTablePagination (replaces direct usage)
+      - DropdownFilter: Dropdown + combineColumnFilters toggle pattern for ColumnFiltersState
+      - TruncatedContent: CSS truncate + title tooltip (web) / numberOfLines (native)
+      - filters/: assertNumberFilter, doesNotContainString (FilterFn utilities)
+      - sorting/: sortNumbers generic SortingFn
+    - Structural: moved ActionBar, NoResults, TableFooter, DropdownFilter, TruncatedContent into DataTable/components/ subdirectory (mirrors Odaseva structure)
+    - Added rowsPerPageOptions/rowsPerPageLabel props to IDataTableProps
+    - Added focus-visible + role/tabIndex/onKeyDown to interactive rows on web (A11Y-007 fix)
+    - Fixed QUAL-016: removed unnecessary cn() single-arg call in ActionBar.web.tsx
+    - Review: 99/100 ready (1 pre-existing medium ARCH-011 in SimpleCell)

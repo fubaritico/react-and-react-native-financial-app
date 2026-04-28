@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-import { cn } from '../../../../../lib/cn'
+import { cn } from '#Lib/cn'
 
 import type { TdHTMLAttributes } from 'react'
 

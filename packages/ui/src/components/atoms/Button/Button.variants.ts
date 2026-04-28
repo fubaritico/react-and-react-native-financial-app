@@ -2,6 +2,7 @@ import { cva } from 'class-variance-authority'
 
 import type { VariantProps } from 'class-variance-authority'
 
+/** CVA variants for the Button component — controls visual style (variant), size, full-width layout, and disabled state */
 export const buttonVariants = cva('items-center justify-center rounded-md', {
   variants: {
     variant: {

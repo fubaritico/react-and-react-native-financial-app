@@ -1,4 +1,5 @@
-import type { TypographyVariants } from '../../../../atoms/Typography/Typography.variants'
+import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
+
 import type { Row } from '@tanstack/react-table'
 import type { ReactElement } from 'react'
 

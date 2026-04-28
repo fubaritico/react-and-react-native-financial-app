@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
-import { cn } from '../../../lib/cn'
+import { cn } from '#Lib/cn'
+
 import { Typography } from '../Typography/Typography.web'
 
 import type { IAvatarProps } from './Avatar'
@@ -16,7 +17,7 @@ function isValidImageSrc(src: string): boolean {
 }
 
 /** Web implementation of the Avatar component. */
-export const Avatar = ({ src, name, size = 40 }: IAvatarProps) => {
+export const Avatar = ({ src, name, size = 40 }: Readonly<IAvatarProps>) => {
   const [hasError, setHasError] = useState(() => !isValidImageSrc(src))
   const initials = name
     .split(' ')

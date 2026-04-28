@@ -1,13 +1,13 @@
 import { View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Typography } from '../../atoms/Typography/Typography.native'
-import { BillSummaryRow } from '../../molecules/BillSummaryRow/BillSummaryRow.native'
-import { SectionLink } from '../../molecules/SectionLink/SectionLink.native'
+import tw from '#Lib/tw'
 
 import styles from './RecurringBillsOverview.styles'
 
 import type { IRecurringBillsOverviewProps } from './RecurringBillsOverview'
+
+import { Typography } from '#Atoms'
+import { BillSummaryRow, SectionLink } from '#Molecules'
 
 /** Native implementation of the RecurringBillsOverview section component. */
 export const RecurringBillsOverview = ({
@@ -20,7 +20,7 @@ export const RecurringBillsOverview = ({
   upcoming,
   dueSoon,
   onSeeDetails,
-}: IRecurringBillsOverviewProps) => {
+}: Readonly<IRecurringBillsOverviewProps>) => {
   return (
     <View style={tw`${styles.root}`}>
       <View style={tw`${styles.header}`}>

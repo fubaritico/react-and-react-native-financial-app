@@ -1,12 +1,13 @@
 import { Pressable, View } from 'react-native'
 
-import tw from '../../../../../lib/tw'
-import { Icon } from '../../../../atoms/Icon/Icon.native'
-import { Typography } from '../../../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
+
 import { TableHead } from '../../components/TableHead/TableHead.native'
 
 import type { HeaderAlign, HeaderCellFn } from './SortableHeader.tsx'
 import type { Column } from '@tanstack/react-table'
+
+import { Icon, Typography } from '#Atoms'
 
 /**
  * Sortable header cell factory (native).

@@ -1,4 +1,5 @@
-import { cn } from '../../../lib/cn'
+import { cn } from '#Lib/cn'
+
 import { Icon } from '../Icon/Icon.web'
 
 import { buttonVariants } from './Button.variants'
@@ -24,7 +25,7 @@ export const Button = ({
   ariaControls,
   className,
   ref,
-}: IButtonProps) => (
+}: Readonly<IButtonProps>) => (
   <button
     ref={ref as Ref<HTMLButtonElement>}
     onClick={onPress}

@@ -26,7 +26,7 @@ function Menu({
   children,
   className,
   accessibilityLabel,
-}: IMenuProps) {
+}: Readonly<IMenuProps>) {
   const itemsRef = useRef<Map<number, ItemEntry>>(new Map())
   const menuId = useId()
 

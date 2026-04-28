@@ -1,5 +1,5 @@
-import { Avatar } from '../../../../atoms/Avatar/Avatar.web'
-import { Typography } from '../../../../atoms/Typography/Typography.web'
+import { Avatar, Typography } from '#Atoms/index.web'
+
 import { TableCell } from '../../components/TableCell/TableCell.web'
 
 import type { AvatarNameCellFn } from './AvatarNameCell.tsx'

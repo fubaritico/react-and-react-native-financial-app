@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-import { cn } from '../../../lib/cn'
-import { Portal } from '../../atoms/Portal/Portal.web'
+import { cn } from '#Lib/cn'
+
+import { Portal } from '#Atoms/index.web'
 
 import { drawerVariants } from './Drawer.variants'
 import { DrawerBody } from './DrawerBody.web'
@@ -32,7 +33,7 @@ function Drawer({
   className,
   children,
   accessibilityLabel,
-}: IDrawerProps) {
+}: Readonly<IDrawerProps>) {
   const wasOpenRef = useRef(false)
 
   /** Closes the drawer when Escape key is pressed */

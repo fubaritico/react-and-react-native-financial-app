@@ -1,12 +1,13 @@
-import { cn } from '../../../lib/cn'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Typography } from '#Atoms/index.web'
 
 import { headerVariants } from './Header.variants'
 
 import type { IHeaderProps } from './Header'
 
 /** Web implementation of the Header component. */
-export const Header = ({ title, subtitle }: IHeaderProps) => (
+export const Header = ({ title, subtitle }: Readonly<IHeaderProps>) => (
   <header className={cn(headerVariants())}>
     <Typography variant="heading-lg" color="on-dark" as="h1">
       {title}

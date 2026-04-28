@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
-import { Icon } from '../../atoms/Icon/Icon.web'
+import { Icon } from '#Atoms/index.web'
+
 import { TextInput } from '../TextInput/TextInput.web'
 
 import type { IPasswordInputProps } from './PasswordInput'
@@ -16,7 +17,7 @@ export const PasswordInput = ({
   showToggle = true,
   showPasswordLabel = 'Show password',
   hidePasswordLabel = 'Hide password',
-}: IPasswordInputProps) => {
+}: Readonly<IPasswordInputProps>) => {
   const [visible, setVisible] = useState(false)
 
   const toggle = showToggle ? (

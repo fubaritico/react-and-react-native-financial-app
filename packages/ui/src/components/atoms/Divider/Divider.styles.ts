@@ -1,3 +1,4 @@
+/** Layout-only Tailwind classes for Divider inner elements */
 export default {
   base: 'h-px w-full bg-grey-100',
   spacing: {

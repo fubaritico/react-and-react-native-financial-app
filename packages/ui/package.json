@@ -13,6 +13,17 @@
     "./package.json": "./package.json"
   },
   "react-native": "./src/index.ts",
+  "imports": {
+    "#Lib/*": "./src/lib/*",
+    "#Atoms": "./src/components/atoms/index.ts",
+    "#Atoms/*": "./src/components/atoms/*",
+    "#Molecules": "./src/components/molecules/index.ts",
+    "#Molecules/*": "./src/components/molecules/*",
+    "#Organisms": "./src/components/organisms/index.ts",
+    "#Organisms/*": "./src/components/organisms/*",
+    "#Templates": "./src/components/templates/index.ts",
+    "#Templates/*": "./src/components/templates/*"
+  },
   "private": true,
   "scripts": {
     "changelog": "conventional-changelog -p angular -r 0 --path . > CHANGELOG.md",

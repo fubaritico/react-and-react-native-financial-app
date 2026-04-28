@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import { TextInput } from '../../../../molecules/TextInput/TextInput.web'
+import { TextInput } from '#Molecules/index.web'
 
 import type { IActionBarProps } from './ActionBar.tsx'
 

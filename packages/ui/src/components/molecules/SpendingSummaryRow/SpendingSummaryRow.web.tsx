@@ -1,5 +1,4 @@
-import { ColorDot } from '../../atoms/ColorDot/ColorDot.web'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { ColorDot, Typography } from '#Atoms/index.web'
 
 import type { ISpendingSummaryRowProps } from './SpendingSummaryRow'
 
@@ -8,7 +7,7 @@ export const SpendingSummaryRow = ({
   label,
   amount,
   color,
-}: ISpendingSummaryRowProps) => (
+}: Readonly<ISpendingSummaryRowProps>) => (
   <div className="flex items-center py-2">
     <ColorDot color={color} size={16} />
     <Typography

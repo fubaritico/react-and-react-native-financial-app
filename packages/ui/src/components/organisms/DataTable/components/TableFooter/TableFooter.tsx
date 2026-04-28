@@ -1,5 +1,6 @@
 import type { Table } from '@tanstack/react-table'
 
+/** Props for TableFooter — renders the rows-per-page selector and pagination controls. */
 export interface ITableFooterProps {
   /** TanStack Table instance — used to read/control pagination state */
   tableStateManager: Table<unknown>

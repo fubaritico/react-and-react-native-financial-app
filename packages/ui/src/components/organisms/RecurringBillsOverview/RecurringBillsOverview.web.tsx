@@ -1,7 +1,7 @@
-import { cn } from '../../../lib/cn'
-import { Typography } from '../../atoms/Typography/Typography.web'
-import { BillSummaryRow } from '../../molecules/BillSummaryRow/BillSummaryRow.web'
-import { SectionLink } from '../../molecules/SectionLink/SectionLink.web'
+import { cn } from '#Lib/cn'
+
+import { Typography } from '#Atoms/index.web'
+import { BillSummaryRow, SectionLink } from '#Molecules/index.web'
 
 import styles from './RecurringBillsOverview.styles'
 
@@ -18,7 +18,7 @@ export const RecurringBillsOverview = ({
   upcoming,
   dueSoon,
   onSeeDetails,
-}: IRecurringBillsOverviewProps) => {
+}: Readonly<IRecurringBillsOverviewProps>) => {
   return (
     <section className={styles.root}>
       <div className={cn('flex', styles.header)}>

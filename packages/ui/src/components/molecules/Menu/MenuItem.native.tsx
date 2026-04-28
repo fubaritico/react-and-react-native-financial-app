@@ -15,7 +15,7 @@ export function MenuItem({
   disabled = false,
   children,
   index,
-}: IMenuItemProps) {
+}: Readonly<IMenuItemProps>) {
   const context = useContext(MenuContext)
   if (!context) throw new Error('Menu.Item must be used within Menu')
 

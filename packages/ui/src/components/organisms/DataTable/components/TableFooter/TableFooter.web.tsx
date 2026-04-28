@@ -1,7 +1,8 @@
-import { cn } from '../../../../../lib/cn'
-import { Typography } from '../../../../atoms/Typography/Typography.web'
-import { DataTablePagination } from '../../../../molecules/DataTablePagination/DataTablePagination.web'
-import { Dropdown } from '../../../../molecules/Dropdown/Dropdown.web'
+import { cn } from '#Lib/cn'
+
+import { Typography } from '#Atoms/index.web'
+import { DataTablePagination, Dropdown } from '#Molecules/index.web'
+
 import { MIN_PAGE_SIZE } from '../../DataTable.constants'
 
 import type { ITableFooterProps } from './TableFooter.tsx'

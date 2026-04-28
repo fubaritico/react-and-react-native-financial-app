@@ -1,4 +1,4 @@
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { Typography } from '#Atoms/index.web'
 
 import type { IAuthLayoutProps } from './AuthLayout'
 
@@ -11,7 +11,7 @@ export function AuthLayout({
   appName,
   tagline,
   description,
-}: IAuthLayoutProps) {
+}: Readonly<IAuthLayoutProps>) {
   return (
     <div className="min-h-screen bg-beige-100 flex flex-col lg:flex-row">
       {/* Illustration panel — desktop only */}

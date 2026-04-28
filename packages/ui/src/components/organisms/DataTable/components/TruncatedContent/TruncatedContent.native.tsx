@@ -1,6 +1,6 @@
-import { Typography } from '../../../../atoms/Typography/Typography.native'
-
 import type { ITruncatedContentProps } from './TruncatedContent'
+
+import { Typography } from '#Atoms'
 
 /**
  * TruncatedContent (native).

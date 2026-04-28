@@ -1,15 +1,21 @@
 import { View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
 
 import styles from './Card.styles'
 import { cardVariants } from './Card.variants'
 
 import type { ICardProps } from './Card'
 
+import { Typography } from '#Atoms'
+
 /** Native implementation of the Card component. */
-export const Card = ({ title, text, children, style }: ICardProps) => (
+export const Card = ({
+  title,
+  text,
+  children,
+  style,
+}: Readonly<ICardProps>) => (
   <View style={[tw`${cardVariants()}`, style]}>
     <Typography variant="subsection-title" style={tw`mb-2`}>
       {title}

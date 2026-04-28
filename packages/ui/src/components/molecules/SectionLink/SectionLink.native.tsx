@@ -1,12 +1,16 @@
 import { Pressable } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
 
 import type { ISectionLinkProps } from './SectionLink'
 
+import { Typography } from '#Atoms'
+
 /** Native implementation of the SectionLink component. */
-export const SectionLink = ({ label, onPress }: ISectionLinkProps) => (
+export const SectionLink = ({
+  label,
+  onPress,
+}: Readonly<ISectionLinkProps>) => (
   <Pressable
     onPress={onPress}
     accessibilityLabel={label}

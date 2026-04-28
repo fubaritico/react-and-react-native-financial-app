@@ -17,4 +17,24 @@ config.resolver.sourceExts = [
   ...config.resolver.sourceExts,
 ];
 
+const uiSrcDir = path.resolve(monorepoRoot, 'packages/ui/src');
+const uiAliases = {
+  '#Lib': path.join(uiSrcDir, 'lib'),
+  '#Atoms': path.join(uiSrcDir, 'components/atoms'),
+  '#Molecules': path.join(uiSrcDir, 'components/molecules'),
+  '#Organisms': path.join(uiSrcDir, 'components/organisms'),
+  '#Templates': path.join(uiSrcDir, 'components/templates'),
+};
+
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  for (const [alias, target] of Object.entries(uiAliases)) {
+    if (moduleName === alias || moduleName.startsWith(alias + '/')) {
+      const rest = moduleName === alias ? '' : moduleName.slice(alias.length + 1);
+      const resolved = rest ? path.join(target, rest) : target;
+      return context.resolveRequest(context, resolved, platform);
+    }
+  }
+  return context.resolveRequest(context, moduleName, platform);
+};
+
 module.exports = config;

@@ -2,7 +2,7 @@ import type { IColorDotProps } from './ColorDot'
 import type { CSSProperties } from 'react'
 
 /** Web implementation of the ColorDot component. */
-export const ColorDot = ({ color, size = 16 }: IColorDotProps) => (
+export const ColorDot = ({ color, size = 16 }: Readonly<IColorDotProps>) => (
   <span
     role="img"
     aria-label={`${color} indicator`}

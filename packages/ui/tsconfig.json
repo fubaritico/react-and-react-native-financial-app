@@ -9,7 +9,19 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "#Lib/*": ["./src/lib/*"],
+      "#Atoms": ["./src/components/atoms"],
+      "#Atoms/*": ["./src/components/atoms/*"],
+      "#Molecules": ["./src/components/molecules"],
+      "#Molecules/*": ["./src/components/molecules/*"],
+      "#Organisms": ["./src/components/organisms"],
+      "#Organisms/*": ["./src/components/organisms/*"],
+      "#Templates": ["./src/components/templates"],
+      "#Templates/*": ["./src/components/templates/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

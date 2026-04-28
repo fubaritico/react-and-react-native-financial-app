@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import { cn } from '../../../lib/cn'
-import { Button } from '../../atoms/Button/Button.web'
-import { Icon } from '../../atoms/Icon/Icon.web'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Button, Icon, Typography } from '#Atoms/index.web'
 
 import { getCompactRange, getFullRange } from './Pagination.constants'
 import styles from './Pagination.styles'

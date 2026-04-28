@@ -1,12 +1,13 @@
 import { View } from 'react-native'
 
-import tw from '../../../../../lib/tw'
-import { Avatar } from '../../../../atoms/Avatar/Avatar.native'
-import { Typography } from '../../../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
+
 import { TableCell } from '../../components/TableCell/TableCell.native'
 
 import type { AvatarNameCellFn } from './AvatarNameCell.tsx'
 import type { Row } from '@tanstack/react-table'
+
+import { Avatar, Typography } from '#Atoms'
 
 /**
  * Avatar + Name cell factory (native).

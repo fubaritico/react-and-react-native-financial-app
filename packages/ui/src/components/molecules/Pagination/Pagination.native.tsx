@@ -1,16 +1,15 @@
 import { useMemo } from 'react'
 import { View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Button } from '../../atoms/Button/Button.native'
-import { Icon } from '../../atoms/Icon/Icon.native'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
 
 import { getCompactRange } from './Pagination.constants'
 import styles from './Pagination.styles'
 
 import type { IPaginationProps } from './Pagination'
 import type { PageItem } from './Pagination.constants'
+
+import { Button, Icon, Typography } from '#Atoms'
 
 /** Compact pagination control for React Native. Always uses the ellipsis layout. */
 export function Pagination({

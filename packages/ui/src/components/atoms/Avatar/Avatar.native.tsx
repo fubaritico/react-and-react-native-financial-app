@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Image, View } from 'react-native'
 
-import tw from '../../../lib/tw'
+import tw from '#Lib/tw'
+
 import { Typography } from '../Typography/Typography.native'
 
 import type { IAvatarProps } from './Avatar'
 
 /** Native implementation of the Avatar component. */
-export const Avatar = ({ src, name, size = 40 }: IAvatarProps) => {
+export const Avatar = ({ src, name, size = 40 }: Readonly<IAvatarProps>) => {
   const [hasError, setHasError] = useState(false)
   const initials = name
     .split(' ')

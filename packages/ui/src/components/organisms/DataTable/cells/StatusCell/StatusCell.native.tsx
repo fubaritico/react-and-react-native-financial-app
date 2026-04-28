@@ -1,11 +1,13 @@
-import tw from '../../../../../lib/tw'
-import { Typography } from '../../../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
+
 import { TableCell } from '../../components/TableCell/TableCell.native'
 
 import { getOrdinalDay } from './StatusCell.constants'
 
 import type { BillStatus, StatusCellFn } from './StatusCell.tsx'
 import type { Row } from '@tanstack/react-table'
+
+import { Typography } from '#Atoms'
 
 /**
  * Status cell factory (native).

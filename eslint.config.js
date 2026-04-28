@@ -110,20 +110,20 @@ export default tseslint.config(
               position: 'before',
             },
             {
-              pattern: '@Lib/**',
+              pattern: '#Lib/**',
               group: 'internal',
               position: 'before',
             },
             {
-              pattern: '@Atoms/**',
+              pattern: '#Atoms/**',
               group: 'internal',
             },
             {
-              pattern: '@Molecules/**',
+              pattern: '#Molecules/**',
               group: 'internal',
             },
             {
-              pattern: '@Organisms/**',
+              pattern: '#Organisms/**',
               group: 'internal',
             },
           ],

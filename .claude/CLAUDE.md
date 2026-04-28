@@ -146,12 +146,18 @@ Read `@completed.md`
 - feat(i18n): react-i18next with EN/FR translations across all apps (987131e) — shared config in @financial-app/shared, per-app init (expo-localization, react-native-localize, i18next-browser-languagedetector), UI components refactored to props-based i18n, Storybook stories updated with i18n.t() pattern
 - feat(ui): Pagination molecule + Button refactor (f3b844b) — cross-platform Pagination with Odaseva props, sliding window + ellipsis algorithms, responsive web (matchMedia), Button refactored for composability (children, outline variant, nav/sm sizes, ariaCurrent), i18n pagination keys EN/FR, review rules updated (focus-visible, accessibilityState, QUAL-017, ARCH-002)
 - feat(ui): Dropdown molecule + Portal/Drawer/Menu/Listbox foundation (b4d2468) — new foundation molecules (Listbox, Menu with keyboard nav, Drawer bottom sheet, Portal atom), cross-platform Dropdown compound component (desktop: floating Menu with auto-flip + optional Portal; mobile: dark Drawer), Button extended with ariaHaspopup/ariaExpanded/ariaControls/className/ref, Storybook stories for all new components
+- feat(state): wire Jotai Provider in all apps + centralize in catalog (a664939) — Jotai added to pnpm catalog, Provider wrapping all 3 apps (mobile-expo, mobile, web)
+- feat(ui): add Modal organism + shared modal service (7898692) — cross-platform compound component (Modal.Header/Body/Footer), focus trap, Escape-to-close, backdrop click, scroll lock, 44x44 touch targets, return-focus-on-close, Jotai-based useModal hook in shared, web+native Storybook stories
+- feat(ui): add DataTable cell factories — steps 1-3 (98801b1) — @tanstack/react-table added to catalog + ui deps, 6 cross-platform cell factories (SimpleCell, DateCell, AmountCell, AvatarNameCell, BillTitleCell, StatusCell) with HOF pattern, inlined Intl formatters (currency, date, ordinal), all in subdirectories with barrel files
+- feat(ui): add DataTable shell, SortableHeader, ActionBar, Pagination — steps 4-11 (57c849f) — SortableHeader (caretDown icon, rotation for asc, hidden when unsorted), cells barrels, DataTablePagination adapter (bridges TanStack Table to Pagination molecule), ActionBar sub-component (leftActions + TextInput search), DataTable types/constants/variants/styles, DataTable.web.tsx (semantic table + compact renderCompactRow + ResizeObserver), DataTable.native.tsx (FlatList dual mode + useWindowDimensions), 3-state rendering (loading/data/empty), registered in both public API barrels
+- feat(ui): add DataTable sub-components + reorganize into components/ — step 12 (9a10c01) — NoResults, TableFooter (rows-per-page + pagination), DropdownFilter (toggle pattern), TruncatedContent (truncate + tooltip), filters/ (assertNumberFilter, doesNotContainString), sorting/ (sortNumbers). All adapted from Odaseva reference. Sub-components moved into DataTable/components/. A11Y-007 fixed (focus-visible on interactive rows).
+- feat(ui): add TransactionsDataTable stories + table sub-components + a11y fixes (2e3c04b) — TransactionsDataTable web+native stories (Odaseva DataTableExample pattern), responsive column visibility (matchMedia columnVisibility), responsive action bar (desktop labels+dropdowns, mobile icon triggers+drawers), table sub-components aligned with Odaseva ref (Table, TableHeader, TableBody, TableRow, TableHead, TableCell), a11y fixes (focus-visible/role/tabIndex on clickable web rows, accessibilityState on native Pressable), pagination fix (removed hardcoded state.pagination), cross-platform violation fix (StatusCell.native importing TableCell.web), storybook tsconfig fix (vite/client types for import.meta.env)
 
 ### Next
-- Implement DataTable component (14-step plan ready: `docs/plans/datatable-implementation.md`)
-  - Load rules: `new-component.md`, `design-system.md`, `styling.md`
-- Modals compound component
-  - Ref screenshots (desktop): `Screenshot 2026-04-23 at 19.06.51`, `Screenshot 2026-04-23 at 19.07.03`, `Screenshot 2026-04-23 at 19.06.42`, `Screenshot 2026-04-23 at 19.06.32`
+- Wire TransactionsDataTable into Transactions page (step 13)
+- Full CRUD for Transactions and Recurring Bills (decided: not read-only)
+- Foresee empty states for all screens (for when API is wired)
+- Goal: Transactions page with mock data + "Add Transaction" button
 - Then: DonutChart + BudgetsOverview (last Wave 3 items)
 - Then: Phase 8 (API server + HTTP client + testing)
 
@@ -164,7 +170,7 @@ Read `@completed.md`
 - Responsive phone/tablet layouts: need to research Expo Router adaptive layouts + useWindowDimensions patterns with context7 before building Overview components
 - `expo-dev-client` not yet tested on mobile-expo-ejected
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
-- Husky pre-commit hook fails when Turbo runs in non-TTY git hook context — all checks pass individually, likely output buffering issue. Used HUSKY=0 as workaround for 481e539.
+- Husky pre-commit hook fails when Turbo runs in non-TTY git hook context — all checks pass individually, likely output buffering issue. Used HUSKY=0 as workaround for 481e539. Fixed in 2e3c04b: root causes were StatusCell.native.tsx importing TableCell.web (cross-platform violation pulling DOM types into bare RN) + storybook tsconfig missing vite/client types.
 - RN native component tests (*.native.tsx) require Jest — Vitest cannot mock TurboModuleRegistry. UI package will use single Jest runner with multi-project config (native + web projects) — not yet implemented.
 - @financial-app/shared barrel (index.native.ts) re-exports auth chain — screen tests must mock the barrel to avoid pulling in supabase/babel-runtime. Consider splitting barrel or using subpath imports in screens.
 - Android build: AsyncStorage v3 Maven repo issue FIXED (dc90bd2). `rebuild-android.sh` handles all cache/daemon cleanup.

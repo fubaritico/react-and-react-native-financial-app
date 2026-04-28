@@ -1,4 +1,4 @@
-import { Dropdown } from '../../../../molecules/Dropdown/Dropdown.web'
+import { Dropdown } from '#Molecules/index.web'
 
 import { combineColumnFilters } from './DropdownFilter'
 

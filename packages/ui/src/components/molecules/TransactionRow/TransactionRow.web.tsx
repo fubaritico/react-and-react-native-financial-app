@@ -1,11 +1,10 @@
-import { Avatar } from '../../atoms/Avatar/Avatar.web'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { Avatar, Typography } from '#Atoms/index.web'
+import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
 
 import { formatAmount } from './TransactionRow.constants'
 import styles from './TransactionRow.styles'
 
 import type { ITransactionRowProps } from './TransactionRow'
-import type { TypographyVariants } from '../../atoms/Typography/Typography.variants'
 
 /** Web implementation of the TransactionRow component. */
 export const TransactionRow = ({
@@ -13,7 +12,7 @@ export const TransactionRow = ({
   name,
   amount,
   date,
-}: ITransactionRowProps) => {
+}: Readonly<ITransactionRowProps>) => {
   const amountColor: TypographyVariants['color'] =
     amount >= 0 ? 'transaction-positive' : 'transaction-negative'
 

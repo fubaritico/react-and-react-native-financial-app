@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
 } from 'react-native'
 
-import tw from '../../../lib/tw'
+import tw from '#Lib/tw'
 
 import { drawerVariants } from './Drawer.variants'
 import { DrawerBody } from './DrawerBody.native'
@@ -31,7 +31,7 @@ function Drawer({
   overlay = true,
   children,
   accessibilityLabel,
-}: IDrawerProps) {
+}: Readonly<IDrawerProps>) {
   const { height } = useWindowDimensions()
   const slideAnim = useRef(new Animated.Value(height)).current
 

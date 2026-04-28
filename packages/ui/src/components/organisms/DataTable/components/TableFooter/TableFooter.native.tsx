@@ -1,11 +1,11 @@
 import { View } from 'react-native'
 
-import tw from '../../../../../lib/tw'
-import { Typography } from '../../../../atoms/Typography/Typography.native'
-import { DataTablePagination } from '../../../../molecules/DataTablePagination/DataTablePagination.native'
-import { Dropdown } from '../../../../molecules/Dropdown/Dropdown.native'
+import tw from '#Lib/tw'
 
 import type { ITableFooterProps } from './TableFooter.tsx'
+
+import { Typography } from '#Atoms'
+import { DataTablePagination, Dropdown } from '#Molecules'
 
 /**
  * Table footer (native).

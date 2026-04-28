@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 
-import { cn } from '../../../lib/cn'
-import { Button } from '../../atoms/Button/Button.web'
-import { Icon } from '../../atoms/Icon/Icon.web'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Button, Icon, Typography } from '#Atoms/index.web'
 
 import { modalStyles } from './Modal.styles'
 import { modalPanelVariants } from './Modal.variants'
@@ -21,7 +20,10 @@ const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 /** Modal.Header — title + close (X) button */
-function ModalHeader({ title, closeLabel = 'Close' }: IModalHeaderProps) {
+function ModalHeader({
+  title,
+  closeLabel = 'Close',
+}: Readonly<IModalHeaderProps>) {
   const { onClose } = useModalContext()
   return (
     <div className={cn(modalStyles.header, 'flex')}>
@@ -44,7 +46,7 @@ function ModalHeader({ title, closeLabel = 'Close' }: IModalHeaderProps) {
 }
 
 /** Modal.Body — scrollable content area */
-function ModalBody({ children }: IModalBodyProps) {
+function ModalBody({ children }: Readonly<IModalBodyProps>) {
   return (
     <div className={cn(modalStyles.body, 'overflow-y-auto max-h-[60vh]')}>
       {children}
@@ -53,7 +55,10 @@ function ModalBody({ children }: IModalBodyProps) {
 }
 
 /** Modal.Footer — action buttons + cancel */
-function ModalFooter({ actions, cancelLabel = 'Cancel' }: IModalFooterProps) {
+function ModalFooter({
+  actions,
+  cancelLabel = 'Cancel',
+}: Readonly<IModalFooterProps>) {
   const { onClose } = useModalContext()
   return (
     <div className={cn(modalStyles.footer, 'flex flex-col')}>
@@ -83,7 +88,12 @@ function ModalFooter({ actions, cancelLabel = 'Cancel' }: IModalFooterProps) {
  * Renders a centered dialog with Portal, backdrop, focus trap, and Escape-to-close on web.
  * Use Modal.Header, Modal.Body, Modal.Footer as children.
  */
-function Modal({ isOpen, onClose, children, accessibilityLabel }: IModalProps) {
+function Modal({
+  isOpen,
+  onClose,
+  children,
+  accessibilityLabel,
+}: Readonly<IModalProps>) {
   const ctx = useMemo(() => ({ onClose }), [onClose])
   const dialogRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<Element | null>(null)

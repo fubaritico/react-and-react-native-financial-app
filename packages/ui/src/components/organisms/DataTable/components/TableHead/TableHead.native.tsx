@@ -1,6 +1,6 @@
 import { StyleProp, View, ViewStyle } from 'react-native'
 
-import tw from '../../../../../lib/tw'
+import tw from '#Lib/tw'
 
 import type { ITableHeadProps } from './TableHead.tsx'
 

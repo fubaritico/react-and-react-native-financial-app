@@ -1,7 +1,7 @@
 import { iconData } from '@financial-app/icons'
 import Svg, { Circle, Path } from 'react-native-svg'
 
-import tw from '../../../lib/tw'
+import tw from '#Lib/tw'
 
 import { iconSizeMap } from './Icon.constants'
 
@@ -40,7 +40,7 @@ export function Icon({
   color = DEFAULT_NATIVE_COLOR,
   accessibilityLabel,
   ...rest
-}: IIconNativeProps) {
+}: Readonly<IIconNativeProps>) {
   const icon = iconData[name]
   const { width, height } = computeDimensions(iconSize, icon.width, icon.height)
 

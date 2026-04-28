@@ -1,14 +1,15 @@
 import { View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Avatar } from '../../atoms/Avatar/Avatar.native'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
+
+import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
 
 import { formatAmount } from './TransactionRow.constants'
 import styles from './TransactionRow.styles'
 
 import type { ITransactionRowProps } from './TransactionRow'
-import type { TypographyVariants } from '../../atoms/Typography/Typography.variants'
+
+import { Avatar, Typography } from '#Atoms'
 
 /** Native implementation of the TransactionRow component. */
 export const TransactionRow = ({
@@ -16,7 +17,7 @@ export const TransactionRow = ({
   name,
   amount,
   date,
-}: ITransactionRowProps) => {
+}: Readonly<ITransactionRowProps>) => {
   const amountColor: TypographyVariants['color'] =
     amount >= 0 ? 'transaction-positive' : 'transaction-negative'
 

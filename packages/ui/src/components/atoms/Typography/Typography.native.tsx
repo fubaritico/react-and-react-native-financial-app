@@ -1,6 +1,6 @@
 import { Text } from 'react-native'
 
-import tw from '../../../lib/tw'
+import tw from '#Lib/tw'
 
 import { typographyVariants } from './Typography.variants'
 
@@ -25,7 +25,7 @@ export function Typography({
   accessibilityRole,
   style,
   children,
-}: ITypographyNativeStyledProps) {
+}: Readonly<ITypographyNativeStyledProps>) {
   return (
     <Text
       style={[tw`${typographyVariants({ variant, color, align })}`, style]}

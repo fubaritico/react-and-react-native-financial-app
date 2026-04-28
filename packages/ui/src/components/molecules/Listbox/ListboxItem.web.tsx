@@ -1,5 +1,6 @@
-import { cn } from '../../../lib/cn'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Typography } from '#Atoms/index.web'
 
 import { listboxItemVariants } from './Listbox.variants'
 
@@ -26,7 +27,7 @@ export function ListboxItem({
   onPress,
   id,
   ...rest
-}: IListboxItemWebProps) {
+}: Readonly<IListboxItemWebProps>) {
   return (
     <li
       id={id}

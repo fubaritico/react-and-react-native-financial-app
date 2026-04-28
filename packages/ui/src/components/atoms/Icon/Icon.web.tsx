@@ -36,7 +36,7 @@ export function Icon({
   color = 'currentColor',
   accessibilityLabel,
   ...rest
-}: IIconWebProps) {
+}: Readonly<IIconWebProps>) {
   const icon = iconData[name]
   const { width, height } = computeDimensions(iconSize, icon.width, icon.height)
 

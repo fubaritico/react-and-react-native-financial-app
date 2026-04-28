@@ -1,3 +1,4 @@
+/** Layout-only Tailwind classes for ActionBar inner elements */
 export const actionBarStyles = {
   container: 'flex-row items-center gap-3 py-3',
   leftActions: 'flex-row items-center gap-3',

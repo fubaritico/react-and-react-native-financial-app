@@ -22,7 +22,6 @@
     "expo:rebuild:android:tablet": "./scripts/rebuild-android.sh apps/mobile-expo Medium_Tablet",
     "expo:fix": "pnpm --filter mobile-expo-financial-app expo:fix",
     "expo:check": "pnpm --filter mobile-expo-financial-app expo:check",
-
     "------------ MOBILE (bare RN CLI) ------": "",
     "mobile:start": "pnpm --filter mobile-financial-app start",
     "mobile:start:clean": "pnpm --filter mobile-financial-app start:clean",
@@ -34,15 +33,12 @@
     "mobile:rebuild:android": "./scripts/rebuild-android.sh apps/mobile",
     "mobile:rebuild:android:phone": "./scripts/rebuild-android.sh apps/mobile Small_Phone",
     "mobile:rebuild:android:tablet": "./scripts/rebuild-android.sh apps/mobile Medium_Tablet",
-
     "------------ EJECTED (expo ejected) ----": "",
     "ejected:start": "pnpm --filter mobile-expo-ejected-financial-app start",
     "ejected:ios": "pnpm --filter mobile-expo-ejected-financial-app ios:build",
     "ejected:android": "pnpm --filter mobile-expo-ejected-financial-app android:build",
-
     "------------ WEB ----------------------": "",
     "web:dev": "pnpm --filter web-financial-app dev",
-
     "------------ TOOLING ------------------": "",
     "build": "turbo build",
     "dev": "turbo dev",
@@ -54,7 +50,6 @@
     "storybook": "pnpm --filter storybook-financial-app storybook",
     "tokens": "pnpm --filter @financial-app/tokens build",
     "icons": "pnpm --filter @financial-app/icons generate",
-
     "------------ MAINTENANCE --------------": "",
     "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules",
     "clean:build": "rm -rf packages/*/build packages/*/dist apps/*/dist",
@@ -78,10 +73,13 @@
     "prettier": "catalog:",
     "tailwindcss": "catalog:",
     "turbo": "catalog:",
-    "typescript-eslint": "catalog:"
+    "typescript-eslint": "catalog:",
+    "vite-tsconfig-paths": "^6.1.1"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"],
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ],
     "overrides": {
       "react-native": "0.81.5",
       "@react-native/babel-plugin-codegen": "0.81.5",

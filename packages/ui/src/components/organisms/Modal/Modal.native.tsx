@@ -1,10 +1,7 @@
 import { useMemo } from 'react'
 import { Pressable, Modal as RNModal, ScrollView, View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Button } from '../../atoms/Button/Button.native'
-import { Icon } from '../../atoms/Icon/Icon.native'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
 
 import { modalStyles } from './Modal.styles'
 import { modalOverlayVariants, modalPanelVariants } from './Modal.variants'
@@ -18,8 +15,13 @@ import type {
   IModalProps,
 } from './Modal'
 
+import { Button, Icon, Typography } from '#Atoms'
+
 /** Modal.Header — title + close (X) button */
-function ModalHeader({ title, closeLabel = 'Close' }: IModalHeaderProps) {
+function ModalHeader({
+  title,
+  closeLabel = 'Close',
+}: Readonly<IModalHeaderProps>) {
   const { onClose } = useModalContext()
   return (
     <View style={tw`${modalStyles.header}`}>
@@ -41,12 +43,15 @@ function ModalHeader({ title, closeLabel = 'Close' }: IModalHeaderProps) {
 }
 
 /** Modal.Body — scrollable content area */
-function ModalBody({ children }: IModalBodyProps) {
+function ModalBody({ children }: Readonly<IModalBodyProps>) {
   return <ScrollView style={tw`${modalStyles.body}`}>{children}</ScrollView>
 }
 
 /** Modal.Footer — action buttons + cancel */
-function ModalFooter({ actions, cancelLabel = 'Cancel' }: IModalFooterProps) {
+function ModalFooter({
+  actions,
+  cancelLabel = 'Cancel',
+}: Readonly<IModalFooterProps>) {
   const { onClose } = useModalContext()
   return (
     <View style={tw`${modalStyles.footer}`}>
@@ -76,7 +81,12 @@ function ModalFooter({ actions, cancelLabel = 'Cancel' }: IModalFooterProps) {
  * Renders a centered dialog with backdrop overlay on native (RN Modal).
  * Use Modal.Header, Modal.Body, Modal.Footer as children.
  */
-function Modal({ isOpen, onClose, children, accessibilityLabel }: IModalProps) {
+function Modal({
+  isOpen,
+  onClose,
+  children,
+  accessibilityLabel,
+}: Readonly<IModalProps>) {
   const ctx = useMemo(() => ({ onClose }), [onClose])
 
   if (!isOpen) return null

@@ -1,5 +1,6 @@
-import { cn } from '../../../lib/cn'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Typography } from '#Atoms/index.web'
 
 import { billSummaryRowVariants } from './BillSummaryRow.variants'
 
@@ -11,7 +12,7 @@ export const BillSummaryRow = ({
   label,
   amount,
   color,
-}: IBillSummaryRowProps) => (
+}: Readonly<IBillSummaryRowProps>) => (
   <div
     className={cn(
       billSummaryRowVariants(),

@@ -1,6 +1,5 @@
-import { Typography } from '../../atoms/Typography/Typography.web'
-import { SectionLink } from '../../molecules/SectionLink/SectionLink.web'
-import { TransactionRow } from '../../molecules/TransactionRow/TransactionRow.web'
+import { Typography } from '#Atoms/index.web'
+import { SectionLink, TransactionRow } from '#Molecules/index.web'
 
 import styles from './TransactionsOverview.styles'
 
@@ -12,7 +11,7 @@ export const TransactionsOverview = ({
   viewAllLabel,
   transactions,
   onViewAll,
-}: ITransactionsOverviewProps) => {
+}: Readonly<ITransactionsOverviewProps>) => {
   return (
     <section className={styles.root}>
       <div className={styles.header}>

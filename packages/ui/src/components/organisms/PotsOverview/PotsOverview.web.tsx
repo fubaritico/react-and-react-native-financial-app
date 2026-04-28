@@ -1,7 +1,7 @@
-import { cn } from '../../../lib/cn'
-import { Icon } from '../../atoms/Icon/Icon.web'
-import { Typography } from '../../atoms/Typography/Typography.web'
-import { SectionLink } from '../../molecules/SectionLink/SectionLink.web'
+import { cn } from '#Lib/cn'
+
+import { Icon, Typography } from '#Atoms/index.web'
+import { SectionLink } from '#Molecules/index.web'
 
 import styles from './PotsOverview.styles'
 
@@ -18,7 +18,7 @@ export const PotsOverview = ({
   pots,
   onSeeDetails,
   icon,
-}: IPotsOverviewProps) => {
+}: Readonly<IPotsOverviewProps>) => {
   return (
     <section className={styles.root}>
       {/* Header row */}

@@ -8,11 +8,10 @@ import {
   useState,
 } from 'react'
 
-import { cn } from '../../../lib/cn'
-import { Button } from '../../atoms/Button/Button.web'
-import { Icon } from '../../atoms/Icon/Icon.web'
-import { Portal } from '../../atoms/Portal/Portal.web'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Button, Icon, Portal, Typography } from '#Atoms/index.web'
+
 import { Drawer } from '../Drawer/Drawer.web'
 import { Menu } from '../Menu/Menu.web'
 
@@ -48,7 +47,7 @@ export function Dropdown({
   drawerCloseLabel = 'Close',
   withPortal,
   trigger,
-}: IDropdownProps) {
+}: Readonly<IDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)

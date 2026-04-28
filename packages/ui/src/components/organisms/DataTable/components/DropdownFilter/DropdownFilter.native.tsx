@@ -1,8 +1,8 @@
-import { Dropdown } from '../../../../molecules/Dropdown/Dropdown.native'
-
 import { combineColumnFilters } from './DropdownFilter'
 
 import type { IDropdownFilterProps } from './DropdownFilter'
+
+import { Dropdown } from '#Molecules'
 
 /**
  * DropdownFilter (native).

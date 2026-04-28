@@ -1,11 +1,13 @@
-import tw from '../../../../../lib/tw'
-import { Typography } from '../../../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
+
 import { TableCell } from '../../components/TableCell/TableCell.native'
 
 import { formatDisplayDate } from './DateCell.constants'
 
 import type { DateCellFn } from './DateCell.tsx'
 import type { Row } from '@tanstack/react-table'
+
+import { Typography } from '#Atoms'
 
 /**
  * Date cell factory — displays a formatted date string.

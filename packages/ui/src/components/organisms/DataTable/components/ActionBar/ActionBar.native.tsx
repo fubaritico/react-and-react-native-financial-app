@@ -1,11 +1,12 @@
 import { View } from 'react-native'
 
-import tw from '../../../../../lib/tw'
-import { TextInput } from '../../../../molecules/TextInput/TextInput.native'
+import tw from '#Lib/tw'
 
 import { actionBarStyles } from './ActionBar.styles'
 
 import type { IActionBarNativeProps } from './ActionBar.tsx'
+
+import { TextInput } from '#Molecules'
 
 /**
  * ActionBar sub-component (native).

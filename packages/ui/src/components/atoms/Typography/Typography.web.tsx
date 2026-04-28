@@ -1,6 +1,6 @@
 import { createElement } from 'react'
 
-import { cn } from '../../../lib/cn'
+import { cn } from '#Lib/cn'
 
 import { VARIANT_TO_TAG } from './Typography.constants'
 import { typographyVariants } from './Typography.variants'
@@ -19,7 +19,7 @@ export function Typography({
   numberOfLines,
   className,
   children,
-}: ITypographyWebProps) {
+}: Readonly<ITypographyWebProps>) {
   const resolvedVariant = variant ?? 'body'
   const tag = as ?? VARIANT_TO_TAG[resolvedVariant]
 

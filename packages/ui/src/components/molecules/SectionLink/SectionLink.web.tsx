@@ -1,10 +1,14 @@
-import { cn } from '../../../lib/cn'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Typography } from '#Atoms/index.web'
 
 import type { ISectionLinkProps } from './SectionLink'
 
 /** Web implementation of the SectionLink component. */
-export const SectionLink = ({ label, onPress }: ISectionLinkProps) => (
+export const SectionLink = ({
+  label,
+  onPress,
+}: Readonly<ISectionLinkProps>) => (
   <button
     onClick={onPress}
     className={cn(

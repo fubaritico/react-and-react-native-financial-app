@@ -1,12 +1,13 @@
 import { ScrollView, View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
 
 import type { IAuthLayoutProps } from './AuthLayout'
 
+import { Typography } from '#Atoms'
+
 /** Native implementation of the AuthLayout component. */
-export function AuthLayout({ children, appName }: IAuthLayoutProps) {
+export function AuthLayout({ children, appName }: Readonly<IAuthLayoutProps>) {
   return (
     <ScrollView
       style={tw`flex-1 bg-beige-100`}

@@ -1,13 +1,12 @@
 import { View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Button } from '../../atoms/Button/Button.native'
-import { Icon } from '../../atoms/Icon/Icon.native'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
 
 import { useDrawerContext } from './DrawerContext'
 
 import type { IDrawerHeaderProps } from './Drawer'
+
+import { Button, Icon, Typography } from '#Atoms'
 
 /**
  * Native Drawer.Header — renders children on the left and a close button on the right.
@@ -15,7 +14,7 @@ import type { IDrawerHeaderProps } from './Drawer'
 export function DrawerHeader({
   children,
   closeLabel = 'Close',
-}: IDrawerHeaderProps) {
+}: Readonly<IDrawerHeaderProps>) {
   const { variant, onClose } = useDrawerContext()
   const isDark = variant === 'dark'
 

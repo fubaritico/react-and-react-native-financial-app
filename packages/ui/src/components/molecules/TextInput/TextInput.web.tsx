@@ -1,6 +1,6 @@
-import { cn } from '../../../lib/cn'
-import { Icon } from '../../atoms/Icon/Icon.web'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Icon, Typography } from '#Atoms/index.web'
 
 import styles from './TextInput.styles'
 import { textInputVariants } from './TextInput.variants'
@@ -19,7 +19,7 @@ export const TextInput = ({
   trailingElement,
   prefix,
   secureTextEntry,
-}: ITextInputProps) => {
+}: Readonly<ITextInputProps>) => {
   const inputClasses = textInputVariants({ error })
 
   return (

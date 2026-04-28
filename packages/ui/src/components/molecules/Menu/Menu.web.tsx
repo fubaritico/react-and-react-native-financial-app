@@ -1,6 +1,7 @@
 import { useCallback, useId, useMemo, useRef, useState } from 'react'
 
-import { cn } from '../../../lib/cn'
+import { cn } from '#Lib/cn'
+
 import { ListboxList } from '../Listbox/ListboxList.web'
 
 import { MenuContext } from './MenuContext'
@@ -31,7 +32,7 @@ function Menu({
   className,
   children,
   accessibilityLabel,
-}: IMenuProps) {
+}: Readonly<IMenuProps>) {
   const [activeIndex, setActiveIndex] = useState(-1)
   const itemsRef = useRef<Map<number, ItemEntry>>(new Map())
   const menuId = useId()

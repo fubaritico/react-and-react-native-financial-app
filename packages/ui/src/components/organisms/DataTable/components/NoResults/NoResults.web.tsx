@@ -1,4 +1,4 @@
-import { Typography } from '../../../../atoms/Typography/Typography.web'
+import { Typography } from '#Atoms/index.web'
 
 import type { INoResultsProps } from './NoResults.tsx'
 

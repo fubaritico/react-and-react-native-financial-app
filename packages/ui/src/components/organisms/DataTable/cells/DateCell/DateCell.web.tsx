@@ -1,4 +1,5 @@
-import { Typography } from '../../../../atoms/Typography/Typography.web'
+import { Typography } from '#Atoms/index.web'
+
 import { TableCell } from '../../components/TableCell/TableCell.web'
 
 import { formatDisplayDate } from './DateCell.constants'

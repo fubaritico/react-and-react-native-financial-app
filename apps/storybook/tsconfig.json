@@ -9,7 +9,19 @@
     "types": ["vite/client"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "#Lib/*": ["../../packages/ui/src/lib/*"],
+      "#Atoms": ["../../packages/ui/src/components/atoms"],
+      "#Atoms/*": ["../../packages/ui/src/components/atoms/*"],
+      "#Molecules": ["../../packages/ui/src/components/molecules"],
+      "#Molecules/*": ["../../packages/ui/src/components/molecules/*"],
+      "#Organisms": ["../../packages/ui/src/components/organisms"],
+      "#Organisms/*": ["../../packages/ui/src/components/organisms/*"],
+      "#Templates": ["../../packages/ui/src/components/templates"],
+      "#Templates/*": ["../../packages/ui/src/components/templates/*"]
+    }
   },
   "include": ["src/**/*", ".storybook/**/*"],
   "exclude": ["node_modules"]

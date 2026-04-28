@@ -1,3 +1,4 @@
+/** Layout-only Tailwind classes for DataTable inner elements */
 export const dataTableStyles = {
   container: 'w-full',
   headerRow: 'flex-row border-b border-border',

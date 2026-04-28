@@ -1,13 +1,13 @@
 import { View } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Typography } from '../../atoms/Typography/Typography.native'
-import { SectionLink } from '../../molecules/SectionLink/SectionLink.native'
-import { TransactionRow } from '../../molecules/TransactionRow/TransactionRow.native'
+import tw from '#Lib/tw'
 
 import styles from './TransactionsOverview.styles'
 
 import type { ITransactionsOverviewProps } from './TransactionsOverview'
+
+import { Typography } from '#Atoms'
+import { SectionLink, TransactionRow } from '#Molecules'
 
 /** Native implementation of the TransactionsOverview section component. */
 export const TransactionsOverview = ({
@@ -15,7 +15,7 @@ export const TransactionsOverview = ({
   viewAllLabel,
   transactions,
   onViewAll,
-}: ITransactionsOverviewProps) => {
+}: Readonly<ITransactionsOverviewProps>) => {
   return (
     <View style={tw`${styles.root}`}>
       <View style={tw`${styles.header}`}>

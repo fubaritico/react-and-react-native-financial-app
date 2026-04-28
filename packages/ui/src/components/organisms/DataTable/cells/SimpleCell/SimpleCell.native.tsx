@@ -1,9 +1,11 @@
-import tw from '../../../../../lib/tw'
-import { Typography } from '../../../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
+
 import { TableCell } from '../../components/TableCell/TableCell.native'
 
 import type { SimpleCellConfig, SimpleCellFn } from './SimpleCell.tsx'
 import type { Row } from '@tanstack/react-table'
+
+import { Typography } from '#Atoms'
 
 /**
  * Simple cell factory — displays a raw value with Typography.

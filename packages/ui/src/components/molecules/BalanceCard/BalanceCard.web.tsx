@@ -1,17 +1,18 @@
-import { cn } from '../../../lib/cn'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+
+import { Typography } from '#Atoms/index.web'
+import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
 
 import { balanceCardVariants } from './BalanceCard.variants'
 
 import type { IBalanceCardProps } from './BalanceCard'
-import type { TypographyVariants } from '../../atoms/Typography/Typography.variants'
 
 /** Web implementation of the BalanceCard component. */
 export const BalanceCard = ({
   label,
   amount,
   tone = 'light',
-}: IBalanceCardProps) => {
+}: Readonly<IBalanceCardProps>) => {
   const labelColor: TypographyVariants['color'] =
     tone === 'dark' ? 'on-dark' : 'muted'
   const amountColor: TypographyVariants['color'] =

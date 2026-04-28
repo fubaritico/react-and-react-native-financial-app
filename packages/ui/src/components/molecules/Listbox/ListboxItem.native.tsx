@@ -1,11 +1,12 @@
 import { Pressable } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
 
 import { listboxItemVariants } from './Listbox.variants'
 
 import type { IListboxItemProps } from './Listbox'
+
+import { Typography } from '#Atoms'
 
 /**
  * Native ListboxItem — styled Pressable for listbox-style items.
@@ -18,7 +19,7 @@ export function ListboxItem({
   disabled = false,
   children,
   onPress,
-}: IListboxItemProps) {
+}: Readonly<IListboxItemProps>) {
   const activeStyle =
     isActive && !disabled
       ? variant === 'dark'

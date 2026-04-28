@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Pressable } from 'react-native'
 
-import tw from '../../../lib/tw'
-import { Icon } from '../../atoms/Icon/Icon.native'
+import tw from '#Lib/tw'
+
 import { TextInput } from '../TextInput/TextInput.native'
 
 import type { IPasswordInputProps } from './PasswordInput'
+
+import { Icon } from '#Atoms'
 
 /** Native implementation of the PasswordInput component. */
 export const PasswordInput = ({
@@ -18,7 +20,7 @@ export const PasswordInput = ({
   showToggle = true,
   showPasswordLabel = 'Show password',
   hidePasswordLabel = 'Hide password',
-}: IPasswordInputProps) => {
+}: Readonly<IPasswordInputProps>) => {
   const [visible, setVisible] = useState(false)
 
   const toggle = showToggle ? (

@@ -1,6 +1,8 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import tsconfigPaths from 'vite-tsconfig-paths'
+
 import type { StorybookConfig } from '@storybook/react-native-web-vite'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -49,6 +51,11 @@ const config: StorybookConfig = {
         },
       ],
     }
+
+    config.plugins = [
+      ...(config.plugins ?? []),
+      tsconfigPaths({ projects: [path.join(uiPkgDir, 'tsconfig.json')] }),
+    ]
 
     config.server = {
       ...config.server,
