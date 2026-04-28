@@ -1,10 +1,32 @@
-/** Layout-only Tailwind classes for DataTable inner elements */
-export const dataTableStyles = {
+/** Shared layout classes for DataTable inner elements (safe for both native and web) */
+export const shared = {
+  /** Root container full width */
   container: 'w-full',
+  /** Header row layout with bottom border */
   headerRow: 'flex-row border-b border-border',
+  /** Header cell padding */
   headerCell: 'flex-1 py-3',
+  /** Body row horizontal layout */
   bodyRow: 'flex-row items-center',
+  /** Body cell padding */
   bodyCell: 'flex-1 py-4',
+  /** Empty state centering */
   emptyRow: 'py-8 items-center justify-center',
-  compactList: '',
+} as const
+
+/** Web-only classes for DataTable (shadow, sticky, cursor, focus) */
+export const web = {
+  /** Root card surface + clipping + padding */
+  root: 'bg-white rounded-bl-lg rounded-lg overflow-clip',
+  /** Shadow on wrapper (conditional via noShadow prop) */
+  shadow: 'shadow-md',
+  /** Responsive horizontal padding */
+  padding: 'p-6 lg:p-8',
+  /** Sticky table header */
+  stickyHeader: 'sticky top-0 z-30',
+  /** Interactive row cursor + focus ring */
+  interactiveRow:
+    'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',
+  /** Fixed row height */
+  rowHeight: 'h-[54px]',
 } as const

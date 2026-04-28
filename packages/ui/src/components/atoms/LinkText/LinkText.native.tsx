@@ -4,6 +4,8 @@ import tw from '#Lib/tw'
 
 import { Typography } from '../Typography/Typography.native'
 
+import { shared } from './LinkText.styles'
+
 import type { ILinkTextProps } from './LinkText'
 
 /** Native implementation of the LinkText component. */
@@ -17,10 +19,7 @@ export const LinkText = ({
       {text}
     </Typography>
     <Pressable onPress={onLinkPress}>
-      <Typography
-        variant="body"
-        style={tw`font-bold text-foreground underline`}
-      >
+      <Typography variant="body" style={tw`${shared.link}`}>
         {linkLabel}
       </Typography>
     </Pressable>

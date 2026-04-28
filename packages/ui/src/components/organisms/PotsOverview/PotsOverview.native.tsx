@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import styles from './PotsOverview.styles'
+import { shared } from './PotsOverview.styles'
 
 import type { IPotsOverviewProps } from './PotsOverview'
 
@@ -21,9 +21,9 @@ export const PotsOverview = ({
   icon,
 }: Readonly<IPotsOverviewProps>) => {
   return (
-    <View style={tw`${styles.root}`}>
+    <View style={tw`${shared.root}`}>
       {/* Header row */}
-      <View style={tw`${styles.header}`}>
+      <View style={tw`${shared.header}`}>
         <Typography variant="subsection-title" accessibilityRole="header">
           {title}
         </Typography>
@@ -33,11 +33,11 @@ export const PotsOverview = ({
       {/* Content */}
       <View>
         {/* Total Saved box */}
-        <View style={tw`${styles.totalSavedBox}`}>
+        <View style={tw`${shared.totalSavedBox}`}>
           {/* Icon area */}
           <View
             accessibilityLabel={savingsIconLabel}
-            style={tw`${styles.iconArea}`}
+            style={tw`${shared.iconArea}`}
           >
             {icon ?? (
               <Icon name="pot" iconSize="5xl" color={tw.color('green')} />
@@ -58,7 +58,7 @@ export const PotsOverview = ({
           {pots.map((pot) => (
             <View key={pot.name} style={tw`w-1/2 py-2`}>
               <View
-                style={tw`${styles.potItem} border-l-4 border-l-${pot.color}`}
+                style={tw`${shared.potItem} border-l-4 border-l-${pot.color}`}
               >
                 <Typography variant="caption" color="muted">
                   {pot.name}

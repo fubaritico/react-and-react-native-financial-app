@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import styles from './Card.styles'
+import { shared } from './Card.styles'
 import { cardVariants } from './Card.variants'
 
 import type { ICardProps } from './Card'
@@ -26,7 +26,7 @@ export const Card = ({
       </Typography>
     )}
     {children && (
-      <View style={tw`${styles.childrenWrap}`}>
+      <View style={tw`${shared.childrenWrap}`}>
         {typeof children === 'string' ? (
           <Typography variant="body" color="muted">
             {children}

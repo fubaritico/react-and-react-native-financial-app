@@ -12,6 +12,7 @@ import {
   TableRow,
 } from './components/index.web'
 import { MIN_PAGE_SIZE } from './DataTable.constants'
+import { web } from './DataTable.styles'
 
 import type { BaseDataTableProps } from './DataTable.types'
 import type { Table as TableType } from '@tanstack/react-table'
@@ -73,8 +74,9 @@ export default function DataTable<TData>({
   return (
     <div
       className={clsx(
-        'bg-white rounded-bl-lg rounded-lg overflow-clip p-6 lg:p-8',
-        { 'shadow-md': !noShadow },
+        web.root,
+        web.padding,
+        { [web.shadow]: !noShadow },
         className
       )}
       data-test={dataTestId ?? 'root'}
@@ -92,7 +94,7 @@ export default function DataTable<TData>({
       <Table maxHeight={maxHeight}>
         <TableHeader
           className={clsx(
-            { 'sticky top-0 z-30': stickyHeader },
+            { [web.stickyHeader]: stickyHeader },
             headerClassName
           )}
         >
@@ -127,9 +129,8 @@ export default function DataTable<TData>({
 
                 return (
                   <TableRow
-                    className={clsx('h-[54px]', {
-                      'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900':
-                        !!onRowClick,
+                    className={clsx(web.rowHeight, {
+                      [web.interactiveRow]: !!onRowClick,
                     })}
                     data-test={`row-${row.id}`}
                     data-state={isSelected && 'selected'}

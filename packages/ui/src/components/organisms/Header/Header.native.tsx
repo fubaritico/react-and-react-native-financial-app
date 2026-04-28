@@ -2,6 +2,7 @@ import { View } from 'react-native'
 
 import tw from '#Lib/tw'
 
+import { shared } from './Header.styles'
 import { headerVariants } from './Header.variants'
 
 import type { IHeaderProps } from './Header'
@@ -15,7 +16,7 @@ export const Header = ({ title, subtitle }: Readonly<IHeaderProps>) => (
       {title}
     </Typography>
     {subtitle && (
-      <Typography variant="body" color="on-dark" style={tw`opacity-80 mt-1`}>
+      <Typography variant="body" color="on-dark" style={tw`${shared.subtitle}`}>
         {subtitle}
       </Typography>
     )}

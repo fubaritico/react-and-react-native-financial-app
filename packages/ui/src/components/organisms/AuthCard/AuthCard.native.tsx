@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import styles from './AuthCard.styles'
+import { shared } from './AuthCard.styles'
 
 import type { IAuthCardProps } from './AuthCard'
 
@@ -14,9 +14,9 @@ export const AuthCard = ({
   children,
   footer,
 }: Readonly<IAuthCardProps>) => (
-  <View style={tw`bg-card rounded-lg px-5 py-8 gap-8`}>
+  <View style={tw`${shared.root} px-5`}>
     <Typography variant="heading-lg">{title}</Typography>
-    <View style={tw`${styles.childrenWrap}`}>{children}</View>
+    <View style={tw`${shared.childrenWrap}`}>{children}</View>
     {footer ? <View>{footer}</View> : null}
   </View>
 )

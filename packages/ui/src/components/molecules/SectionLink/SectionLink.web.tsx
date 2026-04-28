@@ -2,6 +2,8 @@ import { cn } from '#Lib/cn'
 
 import { Typography } from '#Atoms/index.web'
 
+import { shared, web } from './SectionLink.styles'
+
 import type { ISectionLinkProps } from './SectionLink'
 
 /** Web implementation of the SectionLink component. */
@@ -11,10 +13,7 @@ export const SectionLink = ({
 }: Readonly<ISectionLinkProps>) => (
   <button
     onClick={onPress}
-    className={cn(
-      'inline-flex items-center gap-3 hover:text-foreground transition-colors cursor-pointer bg-transparent border-0 p-0',
-      'text-sm text-foreground-muted'
-    )}
+    className={cn(shared.root, web.root, 'text-sm text-foreground-muted')}
   >
     <Typography variant="body" color="muted" as="span">
       {label}

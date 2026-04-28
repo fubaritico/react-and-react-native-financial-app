@@ -2,14 +2,14 @@ import { cn } from '#Lib/cn'
 
 import { Typography } from '#Atoms/index.web'
 
-import styles from './Card.styles'
+import { shared, web } from './Card.styles'
 import { cardVariants } from './Card.variants'
 
 import type { ICardProps } from './Card'
 
 /** Web implementation of the Card component. */
 export const Card = ({ title, text, children }: Readonly<ICardProps>) => (
-  <div className={cn(cardVariants())}>
+  <div className={cn(cardVariants(), web.root)}>
     <Typography variant="subsection-title" as="h3" className="mb-2">
       {title}
     </Typography>
@@ -18,6 +18,6 @@ export const Card = ({ title, text, children }: Readonly<ICardProps>) => (
         {text}
       </Typography>
     )}
-    {children && <div className={styles.childrenWrap}>{children}</div>}
+    {children && <div className={shared.childrenWrap}>{children}</div>}
   </div>
 )

@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import styles from './RecurringBillsOverview.styles'
+import { shared } from './RecurringBillsOverview.styles'
 
 import type { IRecurringBillsOverviewProps } from './RecurringBillsOverview'
 
@@ -22,14 +22,14 @@ export const RecurringBillsOverview = ({
   onSeeDetails,
 }: Readonly<IRecurringBillsOverviewProps>) => {
   return (
-    <View style={tw`${styles.root}`}>
-      <View style={tw`${styles.header}`}>
+    <View style={tw`${shared.root}`}>
+      <View style={tw`${shared.header}`}>
         <Typography variant="subsection-title" accessibilityRole="header">
           {title}
         </Typography>
         <SectionLink label={seeDetailsLabel} onPress={onSeeDetails} />
       </View>
-      <View style={tw`${styles.list}`}>
+      <View style={tw`${shared.list}`}>
         <BillSummaryRow label={paidBillsLabel} amount={paid} color="green" />
         <BillSummaryRow
           label={totalUpcomingLabel}

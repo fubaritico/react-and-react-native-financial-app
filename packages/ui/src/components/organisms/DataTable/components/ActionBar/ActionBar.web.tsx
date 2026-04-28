@@ -2,6 +2,8 @@ import clsx from 'clsx'
 
 import { TextInput } from '#Molecules/index.web'
 
+import { web } from './ActionBar.styles'
+
 import type { IActionBarProps } from './ActionBar.tsx'
 
 /**
@@ -20,14 +22,8 @@ export function ActionBar({
   const filterValue = typeof globalFilter === 'string' ? globalFilter : ''
 
   return (
-    <div
-      className={clsx(
-        'flex items-center p-4 gap-4',
-        { sticky: stickyHeader },
-        className
-      )}
-    >
-      <div className="flex grow gap-4">{leftActions}</div>
+    <div className={clsx(web.container, { sticky: stickyHeader }, className)}>
+      <div className={web.leftActionsWrap}>{leftActions}</div>
       {onGlobalFilterChange && (
         <div className="relative">
           <TextInput

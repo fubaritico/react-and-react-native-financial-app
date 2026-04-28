@@ -5,7 +5,7 @@ import tw from '#Lib/tw'
 import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
 
 import { formatAmount } from './TransactionRow.constants'
-import styles from './TransactionRow.styles'
+import { shared } from './TransactionRow.styles'
 
 import type { ITransactionRowProps } from './TransactionRow'
 
@@ -22,7 +22,7 @@ export const TransactionRow = ({
     amount >= 0 ? 'transaction-positive' : 'transaction-negative'
 
   return (
-    <View style={tw`${styles.root}`}>
+    <View style={tw`${shared.root}`}>
       <Avatar src={avatar} name={name} size={40} />
       <Typography
         variant="body-bold"

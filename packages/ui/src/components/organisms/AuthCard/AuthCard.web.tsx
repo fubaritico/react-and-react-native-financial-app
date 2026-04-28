@@ -2,7 +2,7 @@ import { cn } from '#Lib/cn'
 
 import { Typography } from '#Atoms/index.web'
 
-import styles from './AuthCard.styles'
+import { shared, web } from './AuthCard.styles'
 
 import type { IAuthCardProps } from './AuthCard'
 
@@ -12,11 +12,11 @@ export const AuthCard = ({
   children,
   footer,
 }: Readonly<IAuthCardProps>) => (
-  <div className="bg-card rounded-lg px-8 py-8 flex flex-col gap-8 w-full max-w-md shadow-lg">
+  <div className={cn(shared.root, web.root)}>
     <Typography variant="heading-lg" as="h1">
       {title}
     </Typography>
-    <div className={cn('flex flex-col', styles.childrenWrap)}>{children}</div>
+    <div className={cn('flex flex-col', shared.childrenWrap)}>{children}</div>
     {footer ? <div>{footer}</div> : null}
   </div>
 )

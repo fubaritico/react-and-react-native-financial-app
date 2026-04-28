@@ -2,6 +2,8 @@ import { cn } from '#Lib/cn'
 
 import { Typography } from '../Typography/Typography.web'
 
+import { shared, web } from './LinkText.styles'
+
 import type { ILinkTextProps } from './LinkText'
 
 /** Web implementation of the LinkText component. */
@@ -15,10 +17,7 @@ export const LinkText = ({
     <button
       type="button"
       onClick={onLinkPress}
-      className={cn(
-        'font-bold text-foreground underline',
-        'hover:opacity-80 transition-opacity cursor-pointer'
-      )}
+      className={cn(shared.link, web.link)}
     >
       {linkLabel}
     </button>

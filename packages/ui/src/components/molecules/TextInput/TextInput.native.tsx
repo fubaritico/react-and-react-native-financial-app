@@ -2,7 +2,7 @@ import { TextInput as RNTextInput, View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import styles from './TextInput.styles'
+import { shared } from './TextInput.styles'
 import { textInputVariants } from './TextInput.variants'
 
 import type { ITextInputProps } from './TextInput'
@@ -25,7 +25,7 @@ export const TextInput = ({
   const inputClasses = textInputVariants({ error })
 
   return (
-    <View style={tw`${styles.wrapper}`}>
+    <View style={tw`${shared.wrapper}`}>
       <Typography variant="label" color="muted">
         {label}
       </Typography>

@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import tw from '#Lib/tw'
 
 import { getCompactRange } from './Pagination.constants'
-import styles from './Pagination.styles'
+import { shared } from './Pagination.styles'
 
 import type { IPaginationProps } from './Pagination'
 import type { PageItem } from './Pagination.constants'
@@ -32,7 +32,7 @@ export function Pagination({
 
   return (
     <View
-      style={tw`${styles.root} gap-2 ${fullWidth ? 'w-full justify-between' : 'justify-center'}`}
+      style={tw`${shared.root} gap-2 ${fullWidth ? 'w-full justify-between' : 'justify-center'}`}
     >
       {/* Previous arrow */}
       <Button
@@ -42,11 +42,11 @@ export function Pagination({
         disabled={!canPreviousPage}
         accessibilityLabel={prevAriaLabel}
       >
-        <Icon name="caretLeft" iconSize="xxs" style={tw`${styles.iconColor}`} />
+        <Icon name="caretLeft" iconSize="xxs" style={tw`${shared.iconColor}`} />
       </Button>
 
       {/* Page buttons */}
-      <View style={tw`${styles.pageContainer}`}>
+      <View style={tw`${shared.pageContainer}`}>
         {pages.map((item, index) =>
           item === 'ellipsis' ? (
             <View
@@ -91,7 +91,7 @@ export function Pagination({
         <Icon
           name="caretRight"
           iconSize="xxs"
-          style={tw`${styles.iconColor}`}
+          style={tw`${shared.iconColor}`}
         />
       </Button>
     </View>

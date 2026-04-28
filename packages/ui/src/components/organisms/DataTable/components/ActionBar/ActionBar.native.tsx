@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import { actionBarStyles } from './ActionBar.styles'
+import { shared } from './ActionBar.styles'
 
 import type { IActionBarNativeProps } from './ActionBar.tsx'
 
@@ -20,11 +20,9 @@ export function ActionBar({
   searchLabel = 'Search',
 }: Readonly<IActionBarNativeProps>) {
   return (
-    <View style={tw`${actionBarStyles.container}`}>
+    <View style={tw`${shared.container}`}>
       {leftActions && leftActions.length > 0 ? (
-        <View style={tw`${actionBarStyles.leftActions} flex-1`}>
-          {leftActions}
-        </View>
+        <View style={tw`${shared.leftActions} flex-1`}>{leftActions}</View>
       ) : null}
       <View
         style={tw`${leftActions && leftActions.length > 0 ? 'flex-1' : 'w-full'}`}

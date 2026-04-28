@@ -36,9 +36,14 @@ Atoms NEVER import from molecules/organisms/templates. Molecules NEVER import fr
 
 `packages/ui/src/components/{level}/$Name/$Name.variants.ts`
 
+CVA handles the **root element** styling with classes safe for both platforms.
+
 ```ts
 import { cva } from 'class-variance-authority'
 
+import type { VariantProps } from 'class-variance-authority'
+
+/** CVA variants for the $Name component — controls [describe what it styles] */
 export const $nameVariants = cva(
   'base-classes-safe-for-both-platforms',
   {
@@ -57,11 +62,68 @@ export const $nameVariants = cva(
     defaultVariants: { variant: 'primary', size: 'md' },
   }
 )
+
+export type $NameVariants = VariantProps<typeof $nameVariants>
 ```
 
-FORBIDDEN in variants: `hover:*`, `focus:*`, `active:*`, `transition-*`, `cursor-*`, `shadow-*`, `ring-*`, `outline-*`.
+FORBIDDEN in variants: `hover:*`, `focus:*`, `active:*`, `transition-*`, `cursor-*`, `shadow-*`, `ring-*`, `outline-*`, `animate-*`.
 
-### 2. Create types file
+### 2. Create styles file
+
+`packages/ui/src/components/{level}/$Name/$Name.styles.ts`
+
+The styles file centralizes **all Tailwind class strings** that live outside CVA variants.
+It has two named exports — `shared` and `web`:
+
+- **`shared`** — layout classes identical in both native and web (flex, gap, margin, padding on inner elements). Both `.native.tsx` and `.web.tsx` import these.
+- **`web`** — web-only classes that would break native (hover, focus-visible, transition, cursor, shadow, animate, ring, outline, overflow, sticky, z-index). Only `.web.tsx` imports these.
+
+```ts
+/** Shared layout classes for $Name inner elements (safe for both native and web) */
+export const shared = {
+  /** Wrapper around children content */
+  childrenWrap: 'mt-3',
+  /** Row layout for header area */
+  header: 'flex-row items-center justify-between',
+} as const
+
+/** Web-only classes for $Name (hover, focus, transition, shadow, cursor, animate) */
+export const web = {
+  /** Shadow + hover feedback on root */
+  root: 'shadow-md hover:shadow-lg transition-shadow',
+  /** Focus-visible ring for keyboard navigation */
+  focusRing: 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',
+} as const
+```
+
+**Rules:**
+- Every key MUST have a JSDoc comment
+- NEVER put text styling here — text classes belong in `<Typography>` props
+- NEVER put renderer imports here (no react-native, no DOM types)
+- NEVER import `shared` in `.web.tsx` via `#Atoms` barrel — use relative `./Component.styles`
+- If a component has NO inner elements and NO web-only classes, skip this file
+- `shared` can be empty if all shared classes are in CVA; `web` can be empty if no web-only behavior
+
+**Canonical example — Card:**
+
+```ts
+/** Shared layout classes for Card inner elements (safe for both native and web) */
+export const shared = {
+  /** Spacing above children content area */
+  childrenWrap: 'mt-3',
+} as const
+
+/** Web-only classes for Card (hover, focus, transition, shadow, cursor, animate) */
+export const web = {
+  /** Elevated shadow on card surface */
+  root: 'shadow-md',
+} as const
+```
+
+Native usage: `tw\`${shared.childrenWrap}\``
+Web usage: `cn(cardVariants(), web.root)` and `className={shared.childrenWrap}`
+
+### 3. Create types file
 
 `packages/ui/src/components/{level}/$Name/$Name.tsx`
 
@@ -80,23 +142,27 @@ export interface I$NameProps extends VariantProps<typeof $nameVariants> {
 }
 ```
 
-### 3. Create native implementation
+### 4. Create native implementation
 
 `packages/ui/src/components/{level}/$Name/$Name.native.tsx`
 
 - Use Pressable, Text, View from react-native
-- Use `tw\`${$nameVariants({ ...variantProps })}\`` for styles
+- Use `tw\`${$nameVariants({ ...variantProps })}\`` for root element
+- Use `tw\`${shared.keyName}\`` for inner elements (from `.styles.ts`)
 - All text via `<Typography>` — no bare `<Text>`
 - No HTML elements, no cn(), no StyleSheet
+- NEVER import `web` from `.styles.ts`
 
 ```tsx
 import { Pressable } from 'react-native'
-import { tw } from '../../../lib/tw'
-import { Typography } from '../../atoms/Typography/Typography.native'
+import tw from '#Lib/tw'
+import { Typography } from '#Atoms'
+import { shared } from './$Name.styles'
 import { $nameVariants } from './$Name.variants'
 import type { I$NameProps } from './$Name'
 
-export function $Name({ onPress, variant, size, disabled }: I$NameProps) {
+/** Native implementation of the $Name component. */
+export function $Name({ onPress, variant, size, disabled }: Readonly<I$NameProps>) {
   return (
     <Pressable
       onPress={onPress}
@@ -109,28 +175,31 @@ export function $Name({ onPress, variant, size, disabled }: I$NameProps) {
 }
 ```
 
-### 4. Create web implementation
+### 5. Create web implementation
 
 `packages/ui/src/components/{level}/$Name/$Name.web.tsx`
 
 - Use HTML semantic elements (button, div, span, etc.)
-- Use `cn($nameVariants({ ...variantProps }), 'web-only-classes')`
+- Use `cn($nameVariants({ ...variantProps }), web.root)` for root element
+- Use `shared.keyName` for inner elements, `web.keyName` for web-only behavior
 - All text via `<Typography>` — no bare `<p>/<span>/<h1>`
 - No RN imports, no StyleSheet, no tw``
-- Web-only classes allowed here: hover:, focus:, transition-, cursor-, shadow-
+- Web-only classes come from `web` in `.styles.ts` — NOT hardcoded inline
 
 ```tsx
-import { cn } from '../../../lib/cn'
-import { Typography } from '../../atoms/Typography/Typography.web'
+import { cn } from '#Lib/cn'
+import { Typography } from '#Atoms/index.web'
+import { shared, web } from './$Name.styles'
 import { $nameVariants } from './$Name.variants'
 import type { I$NameProps } from './$Name'
 
-export function $Name({ onPress, variant, size, disabled }: I$NameProps) {
+/** Web implementation of the $Name component. */
+export function $Name({ onPress, variant, size, disabled }: Readonly<I$NameProps>) {
   return (
     <button
       onClick={onPress}
       disabled={!!disabled}
-      className={cn($nameVariants({ variant, size, disabled }), 'hover:opacity-80 transition-opacity cursor-pointer')}
+      className={cn($nameVariants({ variant, size, disabled }), web.root, web.focusRing)}
     >
       <Typography variant="body">...</Typography>
     </button>
@@ -138,7 +207,7 @@ export function $Name({ onPress, variant, size, disabled }: I$NameProps) {
 }
 ```
 
-### 5. Create barrel files (TWO — one per platform)
+### 6. Create barrel files (TWO — one per platform)
 
 ALL imports must use explicit paths — no ambiguous `./ComponentName`.
 
@@ -156,9 +225,9 @@ export { $Name } from './$Name.web'
 export type { I$NameProps } from './$Name.tsx'
 ```
 
-Variants are NEVER exported from barrel files.
+Variants and styles are NEVER exported from barrel files.
 
-### 6. Register in public API (BOTH top-level barrels)
+### 7. Register in public API (BOTH top-level barrels)
 
 **`packages/ui/src/index.ts`** (native)
 
@@ -174,20 +243,19 @@ export { $Name } from './components/{level}/$Name/index.web'
 export type { I$NameProps } from './components/{level}/$Name/index.web'
 ```
 
-Variants are NEVER exported from the package.
+Variants and styles are NEVER exported from the package.
 
-### 7. Optional files (create only if needed)
+### 8. Optional files (create only if needed)
 
-- **`$Name.styles.ts`** — plain object of Tailwind class strings for layout-only inner elements (margins, flex, gaps). Text classes belong in Typography props.
 - **`$Name.constants.ts`** — shared runtime values (maps, helper functions) when duplicated between native/web. No renderer imports.
 
-### 8. Run checks
+### 9. Run checks
 
 ```bash
 pnpm type-check && pnpm lint && pnpm test
 ```
 
-### 9. Create story
+### 10. Create story
 
 Invoke `/story $Name` after component creation.
 
@@ -197,12 +265,17 @@ Invoke `/story $Name` after component creation.
 - [ ] Variant file colocated in component folder (not in shared `variants/`)
 - [ ] No renderer imports in variant file
 - [ ] No JSX or runtime values in types file
+- [ ] `.styles.ts` with `shared` + `web` named exports (skip only if no inner elements AND no web-only classes)
+- [ ] Every key in `.styles.ts` has a JSDoc comment
+- [ ] `.native.tsx` imports only `shared` from `.styles.ts` — never `web`
+- [ ] `.web.tsx` imports both `shared` and `web` from `.styles.ts`
+- [ ] No web-only classes hardcoded inline in `.web.tsx` — all in `web` export of `.styles.ts`
 - [ ] No HTML elements in .native.tsx
 - [ ] No RN/StyleSheet imports in .web.tsx
 - [ ] No web-only Tailwind classes in variant base or variants object
 - [ ] All text uses `<Typography>` — no bare Text/p/span/h1
 - [ ] TWO barrel files: index.ts + index.web.ts with explicit extensions
-- [ ] Variants NOT exported from barrels or public API
+- [ ] Variants and styles NOT exported from barrels or public API
 - [ ] Component + type exported from BOTH src/index.ts and src/index.web.ts
 - [ ] JSDocs on props interface properties
 - [ ] Story created

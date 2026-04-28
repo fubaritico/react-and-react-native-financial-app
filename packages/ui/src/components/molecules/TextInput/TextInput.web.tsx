@@ -2,7 +2,7 @@ import { cn } from '#Lib/cn'
 
 import { Icon, Typography } from '#Atoms/index.web'
 
-import styles from './TextInput.styles'
+import { shared, web } from './TextInput.styles'
 import { textInputVariants } from './TextInput.variants'
 
 import type { ITextInputProps } from './TextInput'
@@ -23,16 +23,11 @@ export const TextInput = ({
   const inputClasses = textInputVariants({ error })
 
   return (
-    <div className={cn('flex flex-col', styles.wrapper)}>
+    <div className={cn('flex flex-col', shared.wrapper)}>
       <Typography variant="label" color="muted">
         {label}
       </Typography>
-      <div
-        className={cn(
-          inputClasses,
-          'flex items-center focus-within:border-foreground transition-colors'
-        )}
-      >
+      <div className={cn(inputClasses, 'flex items-center', web.inputRow)}>
         {prefix ? (
           <Typography
             variant="body"
@@ -50,7 +45,10 @@ export const TextInput = ({
             onChangeText(e.target.value)
           }}
           placeholder={placeholder}
-          className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-beige-500"
+          className={cn(
+            'flex-1 bg-transparent text-sm text-foreground',
+            web.input
+          )}
         />
         {trailingElement ??
           (icon ? (

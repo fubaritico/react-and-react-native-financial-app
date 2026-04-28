@@ -3,7 +3,7 @@ import { Pressable, Modal as RNModal, ScrollView, View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import { modalStyles } from './Modal.styles'
+import { shared } from './Modal.styles'
 import { modalOverlayVariants, modalPanelVariants } from './Modal.variants'
 import { ModalContext } from './ModalContext'
 import { useModalContext } from './ModalContext'
@@ -24,13 +24,13 @@ function ModalHeader({
 }: Readonly<IModalHeaderProps>) {
   const { onClose } = useModalContext()
   return (
-    <View style={tw`${modalStyles.header}`}>
+    <View style={tw`${shared.header}`}>
       <Typography variant="heading-md" color="foreground" style={tw`flex-1`}>
         {title}
       </Typography>
       <Pressable
         onPress={onClose}
-        style={tw`${modalStyles.closeButton}`}
+        style={tw`${shared.closeButton}`}
         accessibilityRole="button"
         accessibilityLabel={closeLabel}
         accessibilityState={{ disabled: false }}
@@ -44,7 +44,7 @@ function ModalHeader({
 
 /** Modal.Body — scrollable content area */
 function ModalBody({ children }: Readonly<IModalBodyProps>) {
-  return <ScrollView style={tw`${modalStyles.body}`}>{children}</ScrollView>
+  return <ScrollView style={tw`${shared.body}`}>{children}</ScrollView>
 }
 
 /** Modal.Footer — action buttons + cancel */
@@ -54,7 +54,7 @@ function ModalFooter({
 }: Readonly<IModalFooterProps>) {
   const { onClose } = useModalContext()
   return (
-    <View style={tw`${modalStyles.footer}`}>
+    <View style={tw`${shared.footer}`}>
       {actions.map((action) => (
         <Button
           key={action.label}

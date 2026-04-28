@@ -3,7 +3,7 @@ import { cn } from '#Lib/cn'
 import { Typography } from '#Atoms/index.web'
 import { BillSummaryRow, SectionLink } from '#Molecules/index.web'
 
-import styles from './RecurringBillsOverview.styles'
+import { shared } from './RecurringBillsOverview.styles'
 
 import type { IRecurringBillsOverviewProps } from './RecurringBillsOverview'
 
@@ -20,14 +20,14 @@ export const RecurringBillsOverview = ({
   onSeeDetails,
 }: Readonly<IRecurringBillsOverviewProps>) => {
   return (
-    <section className={styles.root}>
-      <div className={cn('flex', styles.header)}>
+    <section className={shared.root}>
+      <div className={cn('flex', shared.header)}>
         <Typography variant="subsection-title" as="h3">
           {title}
         </Typography>
         <SectionLink label={seeDetailsLabel} onPress={onSeeDetails} />
       </div>
-      <div className={cn('flex flex-col', styles.list)}>
+      <div className={cn('flex flex-col', shared.list)}>
         <BillSummaryRow label={paidBillsLabel} amount={paid} color="green" />
         <BillSummaryRow
           label={totalUpcomingLabel}

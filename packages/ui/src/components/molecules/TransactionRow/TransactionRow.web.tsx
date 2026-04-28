@@ -2,7 +2,7 @@ import { Avatar, Typography } from '#Atoms/index.web'
 import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
 
 import { formatAmount } from './TransactionRow.constants'
-import styles from './TransactionRow.styles'
+import { shared } from './TransactionRow.styles'
 
 import type { ITransactionRowProps } from './TransactionRow'
 
@@ -17,7 +17,7 @@ export const TransactionRow = ({
     amount >= 0 ? 'transaction-positive' : 'transaction-negative'
 
   return (
-    <div className={styles.root}>
+    <div className={shared.root}>
       <Avatar src={avatar} name={name} size={40} />
       <Typography
         variant="body-bold"

@@ -2,6 +2,8 @@ import { Pressable } from 'react-native'
 
 import tw from '#Lib/tw'
 
+import { shared } from './SectionLink.styles'
+
 import type { ISectionLinkProps } from './SectionLink'
 
 import { Typography } from '#Atoms'
@@ -17,7 +19,7 @@ export const SectionLink = ({
     accessibilityRole="button"
     hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
     style={({ pressed }) => [
-      tw`flex-row items-center gap-3`,
+      tw`flex-row ${shared.root}`,
       pressed && tw`opacity-70`,
     ]}
   >

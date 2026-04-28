@@ -135,6 +135,20 @@
 - **Exception**: Purely decorative/structural strings like "..." (ellipsis) are acceptable
 - **Rationale**: UI components are i18n-agnostic — they receive translated strings as props
 
+### QUAL-018: Shared/web-only classes not extracted to `.styles.ts`
+- **Files**: `packages/ui/src/components/**/*.native.tsx`, `packages/ui/src/components/**/*.web.tsx`
+- **Check 1 — Duplicated layout classes**: Tailwind class strings that appear identically in both `.native.tsx` and `.web.tsx` but are NOT in `.variants.ts` or `.styles.ts` (e.g. `flex-row items-center gap-3` copy-pasted in both files)
+- **Check 2 — Inline web-only classes**: Web-only classes (`hover:*`, `focus:*`, `focus-visible:*`, `focus-within:*`, `active:*`, `transition-*`, `cursor-*`, `shadow-*`, `ring-*`, `outline-*`, `animate-*`, `motion-safe:*`) hardcoded inline in `.web.tsx` instead of extracted to the `web` export in `.styles.ts`
+- **Check 3 — Native importing `web`**: `.native.tsx` importing the `web` export from `.styles.ts`
+- **Required structure** in `.styles.ts`:
+  ```ts
+  export const shared = { /* layout classes for both platforms */ } as const
+  export const web = { /* web-only classes */ } as const
+  ```
+- **Exception**: Components with no inner elements AND no web-only classes may skip `.styles.ts`
+- **Exception**: Single-use web-only class on root element composed via `cn(variants(), web.root)` — if the component literally has ONE web-only class and no inner elements, inline is tolerable but `.styles.ts` is preferred
+- **Rationale**: Centralizes class strings, prevents silent native breakage from web-only classes, makes platform-specific styling auditable
+
 ### QUAL-015: Interface naming convention
 - **Files**: All `*.ts`, `*.tsx`
 - **Check**: All interface names MUST start with `I` prefix (e.g., `IAuthClient`, `IAuthStorage`, `IButtonProps`)

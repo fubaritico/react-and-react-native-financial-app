@@ -2,6 +2,7 @@ import { cn } from '#Lib/cn'
 
 import { Typography } from '#Atoms/index.web'
 
+import { shared } from './Header.styles'
 import { headerVariants } from './Header.variants'
 
 import type { IHeaderProps } from './Header'
@@ -17,7 +18,7 @@ export const Header = ({ title, subtitle }: Readonly<IHeaderProps>) => (
         variant="body"
         color="on-dark"
         as="p"
-        className="opacity-80 mt-1"
+        className={shared.subtitle}
       >
         {subtitle}
       </Typography>

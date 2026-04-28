@@ -5,7 +5,7 @@ import { cn } from '#Lib/cn'
 import { Button, Icon, Typography } from '#Atoms/index.web'
 
 import { getCompactRange, getFullRange } from './Pagination.constants'
-import styles from './Pagination.styles'
+import { shared } from './Pagination.styles'
 
 import type { IPaginationProps } from './Pagination'
 import type { PageItem } from './Pagination.constants'
@@ -53,7 +53,7 @@ export function Pagination({
     <nav
       aria-label="Pagination"
       className={cn(
-        styles.root,
+        shared.root,
         'flex justify-center gap-2 md:justify-between md:gap-0',
         fullWidth ? 'w-full justify-between' : 'justify-center'
       )}
@@ -67,7 +67,7 @@ export function Pagination({
           disabled={!canPreviousPage}
           accessibilityLabel={prevAriaLabel}
         >
-          <Icon name="caretLeft" iconSize="xxs" className={styles.iconColor} />
+          <Icon name="caretLeft" iconSize="xxs" className={shared.iconColor} />
         </Button>
       ) : (
         <Button
@@ -77,7 +77,7 @@ export function Pagination({
           disabled={!canPreviousPage}
           accessibilityLabel={prevAriaLabel}
         >
-          <Icon name="caretLeft" iconSize="xxs" className={styles.iconColor} />
+          <Icon name="caretLeft" iconSize="xxs" className={shared.iconColor} />
           <Typography variant="body" as="span">
             {prevLabel}
           </Typography>
@@ -85,7 +85,7 @@ export function Pagination({
       )}
 
       {/* Page buttons */}
-      <div className={cn(styles.pageContainer, 'flex')}>
+      <div className={cn(shared.pageContainer, 'flex')}>
         {pages.map((item, index) =>
           item === 'ellipsis' ? (
             <span
@@ -129,7 +129,7 @@ export function Pagination({
           disabled={!canNextPage}
           accessibilityLabel={nextAriaLabel}
         >
-          <Icon name="caretRight" iconSize="xxs" className={styles.iconColor} />
+          <Icon name="caretRight" iconSize="xxs" className={shared.iconColor} />
         </Button>
       ) : (
         <Button
@@ -142,7 +142,7 @@ export function Pagination({
           <Typography variant="body" as="span">
             {nextLabel}
           </Typography>
-          <Icon name="caretRight" iconSize="xxs" className={styles.iconColor} />
+          <Icon name="caretRight" iconSize="xxs" className={shared.iconColor} />
         </Button>
       )}
     </nav>

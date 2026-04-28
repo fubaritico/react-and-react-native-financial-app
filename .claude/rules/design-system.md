@@ -29,7 +29,7 @@ Every component follows this exact pattern inside its atomic directory:
 ComponentName/
   ComponentName.tsx            # types + props interface ONLY — no JSX, no imports from renderers
   ComponentName.variants.ts    # CVA variant object — internal, never exported from package
-  ComponentName.styles.ts      # (optional) inner element Tailwind class strings
+  ComponentName.styles.ts      # shared + web-only Tailwind class strings (two named exports)
   ComponentName.constants.ts   # (optional) shared runtime values (maps, defaults) — no renderer imports
   ComponentName.native.tsx     # React Native implementation
   ComponentName.web.tsx        # DOM/HTML implementation
@@ -71,11 +71,42 @@ export interface IButtonProps extends VariantProps<typeof buttonVariants> {
 - Exception: composition chains (e.g. PasswordInput composes TextInput) may import from
   the parent component's variant file
 
+## ComponentName.styles.ts — Styles File Rules
+
+Centralizes all Tailwind class strings that live outside CVA variants. Two named exports:
+
+- **`shared`** — layout classes safe for both native and web (flex, gap, margin, padding on inner elements)
+- **`web`** — web-only classes that would break native (hover, focus-visible, transition, cursor, shadow, animate, ring, outline)
+
+```ts
+/** Shared layout classes for Card inner elements (safe for both native and web) */
+export const shared = {
+  /** Spacing above children content area */
+  childrenWrap: 'mt-3',
+} as const
+
+/** Web-only classes for Card (hover, focus, transition, shadow, cursor, animate) */
+export const web = {
+  /** Elevated shadow on card surface */
+  root: 'shadow-md',
+} as const
+```
+
+Rules:
+- Every key MUST have a JSDoc comment
+- NEVER put text styling here — text classes belong in `<Typography>` props
+- NEVER put renderer imports here (no react-native, no DOM types)
+- `.native.tsx` imports ONLY `shared` — never `web`
+- `.web.tsx` imports both `shared` and `web`
+- **Never exported from barrel files** — internal to the component, like variants
+- Skip this file ONLY if the component has no inner elements AND no web-only classes
+
 ## ComponentName.native.tsx — Native Rules
 
 - Import ONLY from react-native — no HTML elements ever
 - Use tw`...` from shared tw instance for all styles
 - Consume variants via: tw`${variantFn({ ...props })}`
+- Import `shared` from `.styles.ts` for inner element classes — never import `web`
 - Use Pressable over TouchableOpacity for new components
 - All interactive elements (Pressable) MUST include `accessibilityState` matching their disabled/selected state
 - Platform-specific additions (gesture, haptics) go here only
@@ -100,8 +131,8 @@ export function Button({ label, onPress, variant, size, disabled }: IButtonProps
 
 - Use HTML semantic elements — no View, Text, or StyleSheet ever
 - Use cn() for className composition (clsx + tailwind-merge)
-- Compose web-only classes ON TOP of shared variants
-- Web-only classes allowed here: hover:, focus:, active:, transition-, cursor-, shadow-
+- Import both `shared` and `web` from `.styles.ts` — compose web-only classes from `web`, not hardcoded inline
+- Web-only classes (`hover:`, `focus:`, `transition-`, `cursor-`, `shadow-`, `animate-`) MUST live in the `web` export of `.styles.ts`
 - All interactive elements MUST have `focus-visible` styles for keyboard navigation:
   `focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900`
 - Never use Tailwind arbitrary values (`bg-[#1a1a2e]`, `text-[14px]`, `p-[12px]`) — always use classes that resolve to `@financial-app/tokens` values via the tailwind config
@@ -161,18 +192,19 @@ Every new component must be added to BOTH barrels with:
 - Named component export
 - Named type export
 
-**Variants are never exported from the package** — consumers use props, not internals.
+**Variants and styles are never exported from the package** — consumers use props, not internals.
 
 ## Checklist for New Component
 
 - [ ] Created ComponentName/ directory
 - [ ] ComponentName.tsx — types only, no JSX, no runtime values
 - [ ] ComponentName.variants.ts — CVA object, colocated in component folder
+- [ ] ComponentName.styles.ts — `shared` + `web` named exports (skip only if no inner elements AND no web-only classes)
 - [ ] ComponentName.constants.ts — (if needed) shared runtime constants, no renderer imports
-- [ ] ComponentName.native.tsx — uses tw``, no HTML
-- [ ] ComponentName.web.tsx — uses cn(), no RN imports
-- [ ] index.ts — re-exports component + types only (no variants)
-- [ ] index.web.ts — re-exports component + types only (no variants)
-- [ ] JSDocs for properties, functions, state variables
+- [ ] ComponentName.native.tsx — uses tw``, imports only `shared` from .styles.ts, no HTML
+- [ ] ComponentName.web.tsx — uses cn(), imports `shared` + `web` from .styles.ts, no RN imports, no inline web-only classes
+- [ ] index.ts — re-exports component + types only (no variants, no styles)
+- [ ] index.web.ts — re-exports component + types only (no variants, no styles)
+- [ ] JSDocs for properties, functions, state variables, and every .styles.ts key
 - [ ] src/index.ts — component + type exported (native barrel)
 - [ ] src/index.web.ts — component + type exported (web barrel)

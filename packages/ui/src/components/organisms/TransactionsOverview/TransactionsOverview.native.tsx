@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import styles from './TransactionsOverview.styles'
+import { shared } from './TransactionsOverview.styles'
 
 import type { ITransactionsOverviewProps } from './TransactionsOverview'
 
@@ -17,14 +17,14 @@ export const TransactionsOverview = ({
   onViewAll,
 }: Readonly<ITransactionsOverviewProps>) => {
   return (
-    <View style={tw`${styles.root}`}>
-      <View style={tw`${styles.header}`}>
+    <View style={tw`${shared.root}`}>
+      <View style={tw`${shared.header}`}>
         <Typography variant="subsection-title" accessibilityRole="header">
           {title}
         </Typography>
         <SectionLink label={viewAllLabel} onPress={onViewAll} />
       </View>
-      <View style={tw`${styles.list}`}>
+      <View style={tw`${shared.list}`}>
         {transactions.map((item, index) => (
           <TransactionRow
             key={`${item.name}-${String(index)}`}

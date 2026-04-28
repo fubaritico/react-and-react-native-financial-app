@@ -2,6 +2,7 @@ import { cn } from '#Lib/cn'
 
 import { Icon } from '../Icon/Icon.web'
 
+import { web } from './Button.styles'
 import { buttonVariants } from './Button.variants'
 
 import type { IButtonProps } from './Button'
@@ -37,10 +38,10 @@ export const Button = ({
     aria-controls={ariaControls}
     className={cn(
       buttonVariants({ variant, size, fullWidth, disabled }),
-      'inline-flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer',
-      'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',
+      web.root,
+      web.focusRing,
       iconPosition === 'left' && 'flex-row-reverse',
-      disabled && 'cursor-not-allowed',
+      disabled && web.disabled,
       className
     )}
   >

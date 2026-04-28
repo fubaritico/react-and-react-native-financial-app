@@ -4,6 +4,8 @@ import { Icon } from '#Atoms/index.web'
 
 import { TextInput } from '../TextInput/TextInput.web'
 
+import { web } from './PasswordInput.styles'
+
 import type { IPasswordInputProps } from './PasswordInput'
 
 /** Web implementation of the PasswordInput component. */
@@ -26,7 +28,7 @@ export const PasswordInput = ({
       onClick={() => {
         setVisible((v) => !v)
       }}
-      className="ml-2 hover:opacity-70 transition-opacity cursor-pointer"
+      className={web.toggle}
       aria-label={visible ? hidePasswordLabel : showPasswordLabel}
     >
       <Icon

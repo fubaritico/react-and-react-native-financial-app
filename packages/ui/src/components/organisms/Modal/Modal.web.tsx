@@ -4,7 +4,7 @@ import { cn } from '#Lib/cn'
 
 import { Button, Icon, Typography } from '#Atoms/index.web'
 
-import { modalStyles } from './Modal.styles'
+import { shared, web } from './Modal.styles'
 import { modalPanelVariants } from './Modal.variants'
 import { ModalContext, useModalContext } from './ModalContext'
 
@@ -26,17 +26,14 @@ function ModalHeader({
 }: Readonly<IModalHeaderProps>) {
   const { onClose } = useModalContext()
   return (
-    <div className={cn(modalStyles.header, 'flex')}>
+    <div className={cn(shared.header, 'flex')}>
       <Typography variant="heading-md" color="foreground" className="flex-1">
         {title}
       </Typography>
       <button
         type="button"
         onClick={onClose}
-        className={cn(
-          modalStyles.closeButton,
-          'flex cursor-pointer hover:opacity-70 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900'
-        )}
+        className={cn(shared.closeButton, 'flex', web.closeButton)}
         aria-label={closeLabel}
       >
         <Icon name="closeModal" iconSize="lg" />
@@ -47,11 +44,7 @@ function ModalHeader({
 
 /** Modal.Body — scrollable content area */
 function ModalBody({ children }: Readonly<IModalBodyProps>) {
-  return (
-    <div className={cn(modalStyles.body, 'overflow-y-auto max-h-[60vh]')}>
-      {children}
-    </div>
-  )
+  return <div className={cn(shared.body, web.body)}>{children}</div>
 }
 
 /** Modal.Footer — action buttons + cancel */
@@ -61,7 +54,7 @@ function ModalFooter({
 }: Readonly<IModalFooterProps>) {
   const { onClose } = useModalContext()
   return (
-    <div className={cn(modalStyles.footer, 'flex flex-col')}>
+    <div className={cn(shared.footer, 'flex flex-col')}>
       {actions.map((action) => (
         <Button
           key={action.label}
@@ -172,7 +165,7 @@ function Modal({
     <ModalContext.Provider value={ctx}>
       {/* Fullscreen overlay container */}
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-5"
+        className={web.overlay}
         onClick={handleBackdropClick}
         role="presentation"
       >
@@ -183,7 +176,7 @@ function Modal({
           aria-modal="true"
           aria-label={accessibilityLabel}
           tabIndex={-1}
-          className={cn(modalPanelVariants({}), 'shadow-lg focus:outline-none')}
+          className={cn(modalPanelVariants({}), web.panel)}
         >
           {children}
         </div>

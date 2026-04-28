@@ -3,7 +3,7 @@ import { cn } from '#Lib/cn'
 import { Icon, Typography } from '#Atoms/index.web'
 import { SectionLink } from '#Molecules/index.web'
 
-import styles from './PotsOverview.styles'
+import { shared, web } from './PotsOverview.styles'
 
 import type { IPotsOverviewProps } from './PotsOverview'
 import type { CSSProperties } from 'react'
@@ -20,9 +20,9 @@ export const PotsOverview = ({
   icon,
 }: Readonly<IPotsOverviewProps>) => {
   return (
-    <section className={styles.root}>
+    <section className={shared.root}>
       {/* Header row */}
-      <div className={cn('flex', styles.header)}>
+      <div className={cn('flex', shared.header)}>
         <Typography variant="subsection-title" as="h3">
           {title}
         </Typography>
@@ -30,12 +30,14 @@ export const PotsOverview = ({
       </div>
 
       {/* Content: stacked on mobile, side by side on desktop */}
-      <div className="flex flex-col md:flex-row md:gap-5">
+      <div className={web.content}>
         {/* Total Saved box */}
-        <div className={cn('flex', styles.totalSavedBox, 'md:flex-1')}>
+        <div
+          className={cn('flex', shared.totalSavedBox, web.totalSavedBoxExtra)}
+        >
           {/* Icon area */}
           <div
-            className={cn('flex', styles.iconArea, 'shrink-0')}
+            className={cn('flex', shared.iconArea, web.iconAreaExtra)}
             aria-label={savingsIconLabel}
           >
             {icon ?? (
@@ -55,12 +57,12 @@ export const PotsOverview = ({
         </div>
 
         {/* Pots grid — 2 columns */}
-        <div className="grid grid-cols-2 gap-x-4 mt-4 md:mt-0 md:flex-1">
+        <div className={web.potsGrid}>
           {pots.map((pot) => (
             <div key={pot.name} className="py-2">
               <div
                 className={cn(
-                  styles.potItem,
+                  shared.potItem,
                   'border-l-4 border-l-[var(--border-color)]'
                 )}
                 style={

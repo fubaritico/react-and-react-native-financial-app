@@ -1,15 +1,17 @@
 # Rules — Styling (CVA + Tailwind + twrnc)
 
-## The Three Layers
+## The Four Layers
 
 ```
 Layer 1: tokens           packages/tokens/src/*.json          — designers edit this
 Layer 2: tailwind-config  packages/tailwind-config/index.js   — consumes token build
-Layer 3: variants         packages/ui/src/variants/ — CVA objects
-Layer 4: components       *.native.tsx / *.web.tsx             — consume variants
+Layer 3: variants          ComponentName.variants.ts            — CVA, root element, cross-platform safe
+Layer 4: styles            ComponentName.styles.ts              — shared layout + web-only classes
+Layer 5: components        *.native.tsx / *.web.tsx             — consume variants + styles
 ```
 
 Never skip layers. Never reference colors or spacing values that aren't from tokens.
+Variants handle the root element. Styles handle inner elements + web-only behavior.
 
 ## CVA Variant Rules
 

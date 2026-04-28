@@ -4,6 +4,7 @@ import { cn } from '#Lib/cn'
 
 import { Portal } from '#Atoms/index.web'
 
+import { web } from './Drawer.styles'
 import { drawerVariants } from './Drawer.variants'
 import { DrawerBody } from './DrawerBody.web'
 import { DrawerContext } from './DrawerContext'
@@ -68,21 +69,15 @@ function Drawer({
     <Portal>
       <DrawerContext.Provider value={{ variant, onClose }}>
         {overlay && (
-          <div
-            className="fixed inset-0 z-50 bg-black/50"
-            onClick={onClose}
-            aria-hidden="true"
-          />
+          <div className={web.overlay} onClick={onClose} aria-hidden="true" />
         )}
         <div
           role="dialog"
           aria-modal={overlay}
           aria-label={accessibilityLabel}
           className={cn(
-            'fixed inset-x-0 bottom-0 z-50',
-            'flex flex-col max-h-[60vh]',
-            'shadow-2xl',
-            shouldAnimate && 'motion-safe:animate-slide-up',
+            web.root,
+            shouldAnimate && web.animate,
             drawerVariants({ variant }),
             className
           )}

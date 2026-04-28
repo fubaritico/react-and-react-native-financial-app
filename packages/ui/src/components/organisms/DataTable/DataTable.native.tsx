@@ -9,7 +9,7 @@ import { NoResults } from './components/NoResults/NoResults.native'
 import { TableFooter } from './components/TableFooter/TableFooter.native'
 import { TableRow } from './components/TableRow/TableRow.native'
 import { COMPACT_BREAKPOINT, MIN_PAGE_SIZE } from './DataTable.constants'
-import { dataTableStyles } from './DataTable.styles'
+import { shared } from './DataTable.styles'
 import { dataTableRowVariants } from './DataTable.variants'
 
 import type { BaseDataTableProps } from './DataTable.types'
@@ -91,10 +91,10 @@ export function DataTable<TData>({
   const renderColumnarRow = ({ item: row }: { item: Row<TData> }) => {
     const rowContent = (
       <View
-        style={tw`${dataTableStyles.bodyRow} ${dataTableRowVariants({ divider: true })} `}
+        style={tw`${shared.bodyRow} ${dataTableRowVariants({ divider: true })} `}
       >
         {row.getVisibleCells().map((cell) => (
-          <View key={cell.id} style={tw`${dataTableStyles.bodyCell}`}>
+          <View key={cell.id} style={tw`${shared.bodyCell}`}>
             <Fragment>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </Fragment>
@@ -152,12 +152,7 @@ export function DataTable<TData>({
   const skeletonData = Array.from({ length: MIN_PAGE_SIZE }, (_, i) => i)
 
   return (
-    <View
-      style={[
-        tw`${dataTableStyles.container}`,
-        tw`${isTablet ? 'p-8' : 'p-6'}`,
-      ]}
-    >
+    <View style={[tw`${shared.container}`, tw`${isTablet ? 'p-8' : 'p-6'}`]}>
       {/* ActionBar */}
       {!noActionBar && !actionBar && onGlobalFilterChange && (
         <ActionBar
@@ -187,10 +182,10 @@ export function DataTable<TData>({
           {tableStateManager.getHeaderGroups().map((headerGroup) => (
             <TableRow
               key={headerGroup.id}
-              style={tw`${dataTableStyles.headerRow} border-t-0`}
+              style={tw`${shared.headerRow} border-t-0`}
             >
               {headerGroup.headers.map((header) => (
-                <View key={header.id} style={tw`${dataTableStyles.headerCell}`}>
+                <View key={header.id} style={tw`${shared.headerCell}`}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(
