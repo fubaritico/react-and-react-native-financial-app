@@ -25,6 +25,9 @@ export type { IAvatarProps } from './components/atoms/Avatar/Avatar.tsx'
 export { LinkText } from './components/atoms/LinkText'
 export type { ILinkTextProps } from './components/atoms/LinkText/LinkText.tsx'
 
+export { NavItem } from './components/atoms/NavItem'
+export type { INavItemProps } from './components/atoms/NavItem/NavItem.tsx'
+
 // Molecules
 export { TextInput } from './components/molecules/TextInput'
 export type { ITextInputProps } from './components/molecules/TextInput/TextInput.tsx'

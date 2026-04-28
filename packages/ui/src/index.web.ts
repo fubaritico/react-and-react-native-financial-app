@@ -27,6 +27,9 @@ export type { IAvatarProps } from './components/atoms/Avatar/Avatar.tsx'
 export { LinkText } from './components/atoms/LinkText/index.web'
 export type { ILinkTextProps } from './components/atoms/LinkText/LinkText.tsx'
 
+export { NavItem } from './components/atoms/NavItem/index.web'
+export type { INavItemProps } from './components/atoms/NavItem/NavItem.tsx'
+
 // Molecules
 export { TextInput } from './components/molecules/TextInput/index.web'
 export type { ITextInputProps } from './components/molecules/TextInput/TextInput.tsx'
@@ -121,6 +124,12 @@ export type {
   ITransactionsOverviewProps,
   ITransactionOverviewItem,
 } from './components/organisms/TransactionsOverview/TransactionsOverview.tsx'
+
+export { Navigation } from './components/organisms/Navigation/index.web'
+export type {
+  INavigationProps,
+  INavItemConfig,
+} from './components/organisms/Navigation/Navigation.tsx'
 
 export { RecurringBillsOverview } from './components/organisms/RecurringBillsOverview/index.web'
 export type { IRecurringBillsOverviewProps } from './components/organisms/RecurringBillsOverview/RecurringBillsOverview.tsx'

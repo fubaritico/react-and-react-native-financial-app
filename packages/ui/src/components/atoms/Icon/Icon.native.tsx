@@ -46,10 +46,13 @@ export function Icon({
 
   return (
     <Svg
+      key={color}
       viewBox={icon.viewBox}
       width={width}
       height={height}
       fill="none"
+      color={color}
+      pointerEvents="none"
       accessibilityLabel={accessibilityLabel}
       accessibilityRole={accessibilityLabel ? 'image' : undefined}
       {...rest}

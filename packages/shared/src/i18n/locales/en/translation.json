@@ -9,7 +9,8 @@
     "transactions": "Transactions",
     "budgets": "Budgets",
     "pots": "Pots",
-    "recurringBills": "Recurring Bills"
+    "recurringBills": "Recurring Bills",
+    "minimizeMenu": "Minimize Menu"
   },
   "overview": {
     "title": "Overview",

@@ -32,6 +32,9 @@ export const typographyVariants = cva('font-sans', {
       'transaction-positive': 'text-transaction-positive',
       'transaction-negative': 'text-transaction-negative',
       'beige-500': 'text-beige-500',
+      'nav-text': 'text-nav-text',
+      'nav-active': 'text-nav-active-text',
+      inherit: 'text-inherit',
     },
     /** Text alignment. */
     align: {
@@ -43,7 +46,6 @@ export const typographyVariants = cva('font-sans', {
   defaultVariants: {
     variant: 'body',
     color: 'foreground',
-    align: 'left',
   },
 })
 

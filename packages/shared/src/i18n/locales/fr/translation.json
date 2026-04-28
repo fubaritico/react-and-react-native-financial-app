@@ -9,7 +9,8 @@
     "transactions": "Transactions",
     "budgets": "Budgets",
     "pots": "Cagnottes",
-    "recurringBills": "Factures récurrentes"
+    "recurringBills": "Factures récurrentes",
+    "minimizeMenu": "Réduire le menu"
   },
   "overview": {
     "title": "Aperçu",
