@@ -18,7 +18,7 @@ const DEFAULT_ROW_OPTIONS = [
 /**
  * Table footer (web).
  * Rows-per-page selector on the left, pagination on the right.
- * Mirrors Odaseva TableFooter layout.
+ * Rows-per-page selector on the left, pagination on the right.
  */
 export function TableFooter({
   tableStateManager,

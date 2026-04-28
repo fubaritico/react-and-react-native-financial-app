@@ -4,7 +4,7 @@
 
 Build a cross-platform, composable DataTable component powered by `@tanstack/react-table`
 for the Transactions and Recurring Bills screens. The design follows a **cell factory pattern**
-inspired by the Odaseva reference project, adapted for our file extension split architecture.
+using a **cell factory pattern** adapted for our file extension split architecture.
 
 ## Prerequisites
 
@@ -20,9 +20,7 @@ Order: **Dropdown → Pagination → DataTable**
 
 ## Reference
 
-- Odaseva DataTable: HOF cell factories + `useColumnsDefinition` hooks + `<table>` rendering
-  - Source: `/Users/stephanecottereau/Desktop/WebstormProjects/Odaseva/react/odaseva-platform/src/components/components/DataTable/`
-  - Example: `/Users/stephanecottereau/Desktop/WebstormProjects/Odaseva/react/odaseva-platform/src/components/organisms/DataTableExample/`
+- Internal reference: HOF cell factories + `useColumnsDefinition` hooks + `<table>` rendering
 
 ## Screen Specifications
 
@@ -131,7 +129,7 @@ DataTable (organism)
 ### ActionBar — Built-In Toolbar
 
 ActionBar is a **sub-component inside DataTable**, not a separate screen-level concern.
-It renders above the table with three modes (same pattern as the Odaseva reference):
+It renders above the table with three modes (same established pattern):
 
 1. **Default**: `leftActions` array + built-in search input → renders the standard ActionBar
 2. **Custom**: `actionBar` prop → fully replaces the default ActionBar
@@ -321,7 +319,7 @@ export interface IDataTableProps<TData> {
   /** When true, renders skeleton rows instead of data rows */
   loading?: boolean
   /** Skeleton row component rendered `pageSize` times when loading.
-   *  Same pattern as Odaseva: DataTable doesn't own the skeleton shape —
+   *  Established pattern: DataTable doesn't own the skeleton shape —
    *  the consumer provides it so it matches the table's column layout. */
   rowsSkeleton?: ComponentType
   /** Message shown when !loading && rows.length === 0 (filtered to nothing, or empty data).
@@ -370,7 +368,7 @@ export interface IDataTableProps<TData> {
 
 ### Rendering Logic (both DataTable.web.tsx and DataTable.native.tsx)
 
-Same 3-state pattern as Odaseva reference:
+Same 3-state pattern:
 
 ```
 if (loading && rowsSkeleton):
@@ -755,7 +753,7 @@ export interface IActionBarProps {
 - Consumer passes responsive elements in `leftActions` — on phone they might
   be icon-only buttons, on tablet/desktop full dropdowns
 
-**How DataTable renders ActionBar (same pattern as Odaseva):**
+**How DataTable renders ActionBar (same established pattern):**
 ```typescript
 {!noActionBar && !actionBar && (
   <ActionBar
@@ -866,7 +864,7 @@ const isCompact = !!renderCompactRow && width < (compactBreakpoint ?? COMPACT_BR
 **Key implementation details:**
 - Iterate `table.getHeaderGroups()` → render `<th>` with `flexRender(header.column.columnDef.header, header.getContext())`
 - Iterate `table.getRowModel().rows` → render `<tr>` with `<td>` per cell via `flexRender(cell.column.columnDef.cell, cell.getContext())`
-- **3-state rendering** (same as Odaseva DataTable.tsx):
+- **3-state rendering** (3-state rendering):
   - `loading && RowSkeleton` → render `pageSize` skeleton rows (hide real data + headers in compact)
   - `!loading && rows.length > 0` → render data rows
   - `!loading && rows.length === 0` → render no-results message (columnar: `<tr><td colSpan>`, compact: centered div)
@@ -1109,7 +1107,7 @@ export function useTransactionColumns(): ColumnDef<ITransaction>[] {
 }
 ```
 
-### Wrapper Component Pattern (same signature as Odaseva DataTableExample)
+### Wrapper Component Pattern (wrapper component pattern)
 
 The wrapper component (`DataTableTransactions`, `DataTableRecurringBills`, etc.) is a
 **standalone component** consumed by the screen/route. It:
@@ -1187,7 +1185,7 @@ export function DataTableTransactions({ data, loading }: IDataTableTransactionsP
 }
 ```
 
-**Key points (from Odaseva reference):**
+**Key points (key points):**
 - `data` comes from the consumer (screen/route) — the wrapper does NOT fetch data
 - `loading` comes from the consumer — the wrapper passes it through to DataTable
 - `rowsSkeleton` is a component provided by the wrapper — DataTable renders N instances when `loading`

@@ -3,7 +3,7 @@ import type { FilterFn, Row } from '@tanstack/react-table'
 /**
  * Filter that checks a numeric cell value against a threshold.
  * filterValue: { type: 'over' | 'under', value: string }
- * Copied from Odaseva DataTable assertNumberFilter.
+ * Numeric threshold filter for TanStack Table columns.
  */
 export const assertNumberFilter: FilterFn<unknown> = (
   row: Row<unknown>,
@@ -26,7 +26,7 @@ export const assertNumberFilter: FilterFn<unknown> = (
 
 /**
  * Filter that checks if the cell value does NOT contain any of the strings in the list.
- * Copied from Odaseva DataTable doesNotContainString.
+ * Exclusion filter for TanStack Table columns.
  */
 export const doesNotContainString: FilterFn<unknown> = (
   row: Row<unknown>,

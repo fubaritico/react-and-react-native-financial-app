@@ -2,7 +2,7 @@ import type { Row, RowData, SortingFn } from '@tanstack/react-table'
 
 /**
  * Sort values as numbers. Parses strings if needed, falls back to 0.
- * Copied from Odaseva DataTable sortNumbers.
+ * Numeric sorting function for TanStack Table columns.
  */
 export const sortNumbers =
   <T extends RowData>(): SortingFn<T> =>

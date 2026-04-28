@@ -10,7 +10,7 @@ import { DataTablePagination, Dropdown } from '#Molecules'
 /**
  * Table footer (native).
  * Rows-per-page selector on the left, pagination on the right.
- * Mirrors Odaseva TableFooter layout.
+ * Rows-per-page selector on the left, pagination on the right.
  */
 export function TableFooter({
   tableStateManager,

@@ -511,14 +511,14 @@
     - Step 11: DataTable + DataTablePagination + all cell factories registered in both public API barrels (src/index.ts + src/index.web.ts)
 
 - feat(ui): add DataTable sub-components + reorganize into components/ — step 12 (9a10c01)
-    - 6 new sub-components adapted from Odaseva reference (copy → adapt pattern):
+    - 6 new sub-components:
       - NoResults: empty state placeholder with Typography (native + web)
       - TableFooter: rows-per-page Dropdown + DataTablePagination (replaces direct usage)
       - DropdownFilter: Dropdown + combineColumnFilters toggle pattern for ColumnFiltersState
       - TruncatedContent: CSS truncate + title tooltip (web) / numberOfLines (native)
       - filters/: assertNumberFilter, doesNotContainString (FilterFn utilities)
       - sorting/: sortNumbers generic SortingFn
-    - Structural: moved ActionBar, NoResults, TableFooter, DropdownFilter, TruncatedContent into DataTable/components/ subdirectory (mirrors Odaseva structure)
+    - Structural: moved ActionBar, NoResults, TableFooter, DropdownFilter, TruncatedContent into DataTable/components/ subdirectory
     - Added rowsPerPageOptions/rowsPerPageLabel props to IDataTableProps
     - Added focus-visible + role/tabIndex/onKeyDown to interactive rows on web (A11Y-007 fix)
     - Fixed QUAL-016: removed unnecessary cn() single-arg call in ActionBar.web.tsx

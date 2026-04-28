@@ -117,7 +117,7 @@ function useTransactionsColumns(): ColumnDef<ITransaction>[] {
 }
 
 // ---------------------------------------------------------------------------
-// TransactionsDataTable — wrapper component (Odaseva DataTableExample pattern)
+// TransactionsDataTable — wrapper component (configures table + columns + state)
 // ---------------------------------------------------------------------------
 
 interface ITransactionsDataTableProps {

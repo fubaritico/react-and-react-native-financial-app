@@ -23,7 +23,7 @@ export interface IDropdownFilterProps {
  * Toggle a column filter value.
  * If the selected value equals the toggling value, the filter is removed.
  * Otherwise the filter is added or updated.
- * Copied from Odaseva DataTable combineColumnFilters.
+ * Toggles a column filter value in the filters array.
  */
 export function combineColumnFilters(
   prev: ColumnFiltersState,
