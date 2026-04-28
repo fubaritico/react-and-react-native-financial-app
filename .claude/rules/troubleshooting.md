@@ -78,6 +78,31 @@ The reset script (`pnpm reset`) handles most of these automatically.
 > trust caches. If your simulator or physical device stops being recognized after a cleanup,
 > re-download the runtime in Xcode > Settings > Components and re-pair your device.
 
+### Expo Modes — QR Code / Simulateur / Device
+
+| Je veux... | Prérequis | Commande |
+|---|---|---|
+| **QR code → iPhone (Expo Go)** | Expo Go installé, PAS de dossier `ios/`/`android/` | `npx expo start` puis flash QR |
+| **Simulateur iPhone** | Xcode + simulateur installé | `pnpm expo:ios:iphone` (build + install) puis `npx expo start --dev-client` |
+| **Simulateur iPad** | Xcode + simulateur iPad installé | `pnpm expo:ios:ipad` (build + install) puis `npx expo start --dev-client` |
+| **iPhone physique (dev build)** | Apple Developer account, device registered | `pnpm expo:ios:device` puis `npx expo start --dev-client` |
+| **Android émulateur** | Android Studio + AVD | `pnpm expo:android` |
+
+**Piège principal** : si `ios/` ou `android/` existent → `expo start` passe en mode dev-client
+automatiquement. Le QR code ne fonctionne plus avec Expo Go.
+
+| Symptôme | Cause | Fix |
+|---|---|---|
+| "is no longer available" (QR code iPhone) | `ios/` existe → mode dev-client, mais pas de build installé | `rm -rf ios android` pour revenir à Expo Go, OU `npx expo run:ios --device` pour installer le dev build |
+| QR code ouvre Expo Go mais crash | SDK mismatch entre app et Expo Go | Mettre à jour Expo Go depuis l'App Store |
+| "Could not connect to server" | Mac et iPhone pas sur le même Wi-Fi, ou firewall | Vérifier Wi-Fi, `npx expo start --tunnel` en fallback |
+| Metro ne sert pas après `expo start` | Port 8081 occupé par un autre Metro | `lsof -ti:8081 \| xargs kill -9` |
+
+**Règle simple** :
+- Expo Go (QR code rapide) = pas de dossier natif, pas de `--dev-client`
+- Dev build (simulateur/device) = `prebuild` + `run:ios/android`, puis `--dev-client`
+- Ne jamais mélanger les deux sur le même device
+
 ### Simulator Management
 
 - Close simulator between app switches (Metro port conflict)
