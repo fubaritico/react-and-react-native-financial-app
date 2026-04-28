@@ -154,8 +154,15 @@ Read `@completed.md`
 - feat(ui): add TransactionsDataTable stories + table sub-components + a11y fixes (2e3c04b) — TransactionsDataTable web+native stories (wrapper component pattern), responsive column visibility (matchMedia columnVisibility), responsive action bar (desktop labels+dropdowns, mobile icon triggers+drawers), table sub-components (Table, TableHeader, TableBody, TableRow, TableHead, TableCell), a11y fixes (focus-visible/role/tabIndex on clickable web rows, accessibilityState on native Pressable), pagination fix (removed hardcoded state.pagination), cross-platform violation fix (StatusCell.native importing TableCell.web), storybook tsconfig fix (vite/client types for import.meta.env)
 - chore(ui): uniformize props (Readonly), add JSDoc, migrate to #Alias imports (9b96828) — Readonly<> on all DS component params, JSDoc on variants/styles/constants/types, #Lib/#Atoms/#Molecules/#Organisms/#Templates aliases replacing ../../../ relative paths, intermediate barrel files per atomic level, tsconfig paths in ui + all 5 apps, vite-tsconfig-paths in storybook + web, Metro resolveRequest in all 3 mobile apps, features-package plan (docs/plans/features-package.md)
 - chore: remove all external project references from codebase (936783f) — scrubbed all external attribution from source, docs, plans, session state, and memory
+- refactor(ui): standardize .styles.ts pattern with shared/web named exports (8e3abd4) — migrated all component .styles.ts to shared/web named exports (Card, Modal, DataTable, AuthCard, PotsOverview, TransactionsOverview, RecurringBillsOverview, ActionBar, Pagination, Divider, TextInput, TransactionRow), created new .styles.ts for Button, LinkText, SectionLink, PasswordInput, Drawer, Header. Updated new-component skill (mandatory step 2), review skill (QUAL-018), design-system.md, styling.md. Card shadow-md moved from CVA to web.root.
+- docs: updated features-package.md — Overview organisms move to features, ui keeps atomic DS (c0e02a6)
+- feat(ui): add NavItem atom + Navigation organism + Colors story (e5aacd2) — NavItem cross-platform atom (CVA: active/orientation/collapsed), Navigation web-only organism (sidebar expanded/collapsed + bottom bar), responsive phone/tablet (useWindowDimensions, collapsed on phone), tabBarBackground for rounded corners, Icon.native fixes (color prop on Svg, pointerEvents="none"), Typography nav-text/nav-active color variants, Colors story (full token palette), i18n minimizeMenu key, web Sidebar refactored to use Navigation
+- docs: add Expo modes guide + troubleshooting updates (aa1f7a9) — new docs/modus-operandi/expo-modes.md
 
 ### Next
+- Navigation web: graphic design refinement still in progress (user doing manual pass)
+- NavItem/Navigation Storybook stories (web + native) still needed
+- `/review` not yet run on NavItem/Navigation changes
 - Wire TransactionsDataTable into Transactions page (step 13)
 - Full CRUD for Transactions and Recurring Bills (decided: not read-only)
 - Foresee empty states for all screens (for when API is wired)
@@ -169,6 +176,11 @@ Read `@completed.md`
 - Review SEC-002: bare RN uses plain AsyncStorage for tokens (unencrypted) — acceptable for learning reference, not published
 - Google client IDs empty in .env files — need Google Cloud Console setup before testing OAuth
 
+- twrnc `rounded-t-lg` doesn't apply border radius on native — must use explicit RN style `{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }`
+- twrnc `flex-1` in CVA column variant may not propagate to Pressable — added explicit `{ flex: 1 }` style in NavItem.native.tsx
+- react-native-svg: `fill` prop on `<Path>` may not update on re-render — added `key={color}` on `<Svg>` + `color={color}` prop to set currentColor. Also `pointerEvents="none"` needed to prevent SVG from capturing touches.
+- `tabBarStyle` in React Navigation doesn't support `borderRadius` — use `tabBarBackground` with a custom View for rounded tab bar corners
+- Expo Go vs dev-client mode: presence of `ios/`/`android/` dirs auto-switches to dev-client. See `docs/modus-operandi/expo-modes.md`
 - Responsive phone/tablet layouts: need to research Expo Router adaptive layouts + useWindowDimensions patterns with context7 before building Overview components
 - `expo-dev-client` not yet tested on mobile-expo-ejected
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
