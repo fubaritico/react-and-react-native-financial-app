@@ -1,0 +1,42 @@
+{
+  "name": "@financial-app/features",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "react-native": "./src/index.ts",
+      "default": "./src/index.web.ts"
+    },
+    "./overview": {
+      "react-native": "./src/overview/index.ts",
+      "default": "./src/overview/index.web.ts"
+    },
+    "./overview/web": "./src/overview/index.web.ts",
+    "./overview/native": "./src/overview/index.ts",
+    "./package.json": "./package.json"
+  },
+  "react-native": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "lint": "eslint ./src",
+    "type-check": "tsc --noEmit",
+    "test": "echo 'no tests yet'"
+  },
+  "dependencies": {
+    "@financial-app/tailwind-config": "workspace:^",
+    "@financial-app/ui": "workspace:^",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.5.0",
+    "twrnc": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-native": "catalog:"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "typescript": "catalog:"
+  }
+}

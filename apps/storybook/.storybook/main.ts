@@ -8,6 +8,7 @@ import type { StorybookConfig } from '@storybook/react-native-web-vite'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const workspaceRoot = path.resolve(__dirname, '../../..')
 const uiPkgDir = path.join(workspaceRoot, 'packages/ui')
+const featuresPkgDir = path.join(workspaceRoot, 'packages/features')
 
 const config: StorybookConfig = {
   framework: '@storybook/react-native-web-vite',
@@ -49,12 +50,34 @@ const config: StorybookConfig = {
           find: /^@financial-app\/ui$/,
           replacement: path.join(uiPkgDir, 'src/index.web.ts'),
         },
+        // @financial-app/features aliases
+        {
+          find: /^@financial-app\/features\/overview\/web$/,
+          replacement: path.join(featuresPkgDir, 'src/overview/index.web.ts'),
+        },
+        {
+          find: /^@financial-app\/features\/overview\/native$/,
+          replacement: path.join(featuresPkgDir, 'src/overview/index.ts'),
+        },
+        {
+          find: /^@financial-app\/features\/overview$/,
+          replacement: path.join(featuresPkgDir, 'src/overview/index.web.ts'),
+        },
+        {
+          find: /^@financial-app\/features$/,
+          replacement: path.join(featuresPkgDir, 'src/index.web.ts'),
+        },
       ],
     }
 
     config.plugins = [
       ...(config.plugins ?? []),
-      tsconfigPaths({ projects: [path.join(uiPkgDir, 'tsconfig.json')] }),
+      tsconfigPaths({
+        projects: [
+          path.join(uiPkgDir, 'tsconfig.json'),
+          path.join(featuresPkgDir, 'tsconfig.json'),
+        ],
+      }),
     ]
 
     config.server = {

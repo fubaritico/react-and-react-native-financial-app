@@ -1,11 +1,17 @@
-import { Typography } from '#Atoms/index.web'
-import { SectionLink, TransactionRow } from '#Molecules/index.web'
+import {
+  SectionLink,
+  TransactionRow,
+  Typography,
+} from '@financial-app/ui/native'
+import { View } from 'react-native'
+
+import tw from '../../lib/tw'
 
 import { shared } from './TransactionsOverview.styles'
 
 import type { ITransactionsOverviewProps } from './TransactionsOverview'
 
-/** Web implementation of the TransactionsOverview section component. */
+/** Native implementation of the TransactionsOverview section component. */
 export const TransactionsOverview = ({
   title,
   viewAllLabel,
@@ -13,14 +19,14 @@ export const TransactionsOverview = ({
   onViewAll,
 }: Readonly<ITransactionsOverviewProps>) => {
   return (
-    <section className={shared.root}>
-      <div className={shared.header}>
-        <Typography variant="subsection-title" as="h3">
+    <View style={tw`${shared.root}`}>
+      <View style={tw`${shared.header}`}>
+        <Typography variant="subsection-title" accessibilityRole="header">
           {title}
         </Typography>
         <SectionLink label={viewAllLabel} onPress={onViewAll} />
-      </div>
-      <div className={shared.list}>
+      </View>
+      <View style={tw`${shared.list}`}>
         {transactions.map((item, index) => (
           <TransactionRow
             key={`${item.name}-${String(index)}`}
@@ -30,7 +36,7 @@ export const TransactionsOverview = ({
             date={item.date}
           />
         ))}
-      </div>
-    </section>
+      </View>
+    </View>
   )
 }

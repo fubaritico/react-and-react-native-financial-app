@@ -113,26 +113,11 @@ export type { IHeaderProps } from './components/organisms/Header/Header.tsx'
 export { AuthCard } from './components/organisms/AuthCard/index.web'
 export type { IAuthCardProps } from './components/organisms/AuthCard/AuthCard.tsx'
 
-export { PotsOverview } from './components/organisms/PotsOverview/index.web'
-export type {
-  IPotsOverviewProps,
-  IPotItem,
-} from './components/organisms/PotsOverview/PotsOverview.tsx'
-
-export { TransactionsOverview } from './components/organisms/TransactionsOverview/index.web'
-export type {
-  ITransactionsOverviewProps,
-  ITransactionOverviewItem,
-} from './components/organisms/TransactionsOverview/TransactionsOverview.tsx'
-
 export { Navigation } from './components/organisms/Navigation/index.web'
 export type {
   INavigationProps,
   INavItemConfig,
 } from './components/organisms/Navigation/Navigation.tsx'
-
-export { RecurringBillsOverview } from './components/organisms/RecurringBillsOverview/index.web'
-export type { IRecurringBillsOverviewProps } from './components/organisms/RecurringBillsOverview/RecurringBillsOverview.tsx'
 
 export { Modal } from './components/organisms/Modal/index.web'
 export type {

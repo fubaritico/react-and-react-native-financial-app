@@ -1,4 +1,4 @@
-import { PotsOverview } from '@financial-app/ui/native'
+import { PotsOverview } from '@financial-app/features/overview/native'
 import i18n from 'i18next'
 import { View } from 'react-native'
 
@@ -14,7 +14,7 @@ const defaultPots = [
 ]
 
 const meta = {
-  title: 'Native/Design System/Organisms/PotsOverview',
+  title: 'Native/Features/Overview/PotsOverview',
   component: PotsOverview,
 } satisfies Meta<typeof PotsOverview>
 

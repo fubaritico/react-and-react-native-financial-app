@@ -9,6 +9,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@financial-app/features": "workspace:^",
     "@financial-app/icons": "workspace:^",
     "@financial-app/shared": "workspace:^",
     "@financial-app/tokens": "workspace:^",

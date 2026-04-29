@@ -1,4 +1,4 @@
-import { TransactionsOverview } from '@financial-app/ui/native'
+import { TransactionsOverview } from '@financial-app/features/overview/native'
 import i18n from 'i18next'
 import { View } from 'react-native'
 
@@ -38,7 +38,7 @@ const MOCK_TRANSACTIONS = [
 ]
 
 const meta = {
-  title: 'Native/Design System/Organisms/TransactionsOverview',
+  title: 'Native/Features/Overview/TransactionsOverview',
   component: TransactionsOverview,
 } satisfies Meta<typeof TransactionsOverview>
 

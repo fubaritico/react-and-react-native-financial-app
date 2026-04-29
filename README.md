@@ -10,7 +10,8 @@ React Native · Expo SDK 54 · React · TypeScript · pnpm · Turborepo · twrnc
 
 ## Table of Contents
 
-- [Project Structure](#project-structure)
+- [About this project](#project-structure)
+- [Project Structure](#about-this-project)
 - [Packages](#packages)
 - [Prerequisites](#prerequisites)
 - [Environment Setup (macOS)](#environment-setup-macos)
@@ -18,6 +19,20 @@ React Native · Expo SDK 54 · React · TypeScript · pnpm · Turborepo · twrnc
 - [How the Monorepo Works](#how-the-monorepo-works)
 - [React Native Version Alignment (0.81.5)](#react-native-version-alignment-0815)
 - [Troubleshooting](#troubleshooting)
+
+---
+
+## About this project
+
+This project started from the perspective of a React developer asking: **"How do I build a consistent design across web and mobile?"**
+
+The answer is a shared design system (`@financial-app/ui`) where styles are shared between web and native component implementations via a file extension split (`.web.tsx` / `.native.tsx`). Styling uses Tailwind CSS on web and `twrnc` on native, with shared variant logic through CVA (class-variance-authority). This keeps both platforms visually aligned while respecting each renderer's idioms. A migration to NativeWind (Tailwind v4 + unified `className`) is planned once it reaches stable release.
+
+Three mobile apps coexist for comparison: `mobile` (bare React Native CLI), `mobile-expo` (Expo managed — the canonical app), and `mobile-expo-ejected` (ejected Expo). A `web` app uses React Router v7 in framework mode. An API server built on Express delivers the backend.
+
+Business logic shared across all apps (auth, state, types, utils) lives in the `shared` package. Screen-specific compositions of design system primitives — configured DataTables, modal content, overview sections — live in the `features` package, keeping both the design system and the apps focused on their own concerns.
+
+[Back to top](#table-of-contents)
 
 ---
 
@@ -31,6 +46,7 @@ react-and-react-native-financial-app/
 ├── apps/
 │   ├── mobile-expo/        # Expo SDK 54 (canonical mobile app)
 │   ├── web/                # React Router v7 + Vite (SSR)
+│   ├── storybook/          # Storybook — component browser (web + native)
 │   ├── mobile/             # Bare React Native CLI (learning reference)
 │   └── mobile-expo-ejected/ # Ejected Expo (learning reference)
 ├── packages/
@@ -38,6 +54,7 @@ react-and-react-native-financial-app/
 │   ├── tailwind-config/    # @financial-app/tailwind-config — shared Tailwind config
 │   ├── icons/              # @financial-app/icons — cross-platform SVG icon library
 │   ├── ui/                 # @financial-app/ui — cross-platform design system
+│   ├── features/           # @financial-app/features — screen-specific composed blocks
 │   └── shared/             # @financial-app/shared — auth, types, utils, atoms
 └── scripts/                # Utility scripts (reset, rebuild, changelogs)
 ```
@@ -50,22 +67,24 @@ react-and-react-native-financial-app/
 
 ### Apps
 
-| App | Path | Status | Description |
-|-----|------|--------|-------------|
-| `mobile-expo` | `apps/mobile-expo/` | Active | Expo managed (SDK 54) — canonical mobile app, primary focus |
-| `web` | `apps/web/` | Active | React Router v7 + Vite with SSR |
-| `mobile` | `apps/mobile/` | Active | Bare React Native CLI — learning reference |
-| `mobile-expo-ejected` | `apps/mobile-expo-ejected/` | Active | Expo bare/ejected — learning reference |
-| `api` | `apps/api/` | Planned | Express REST API (OpenAPI + zod-to-openapi) |
+| App                    | Path                        | Status  | Description                                                   |
+|------------------------|-----------------------------|---------|---------------------------------------------------------------|
+| `mobile-expo`          | `apps/mobile-expo/`         | Active  | Expo managed (SDK 54) — canonical mobile app, primary focus   |
+| `web`                  | `apps/web/`                 | Active  | React Router v7 + Vite with SSR                               |
+| `mobile`               | `apps/mobile/`              | Active  | Bare React Native CLI — learning reference                    |
+| `mobile-expo-ejected`  | `apps/mobile-expo-ejected/` | Active  | Expo bare/ejected — learning reference                        |
+| `storybook`            | `apps/storybook/`           | Active  | Component browser (web + native stories via react-native-web) |
+| `api`                  | `apps/api/`                 | Planned | Express REST API (OpenAPI + zod-to-openapi)                   |
 
 ### Shared Packages
 
 | Package | Path | Status | Description |
-|---------|------|--------|-------------|
+|---|---|---|---|
 | `@financial-app/tokens` | `packages/tokens/` | Active | Style Dictionary (DTCG) — colors, spacing, typography, radii |
 | `@financial-app/tailwind-config` | `packages/tailwind-config/` | Active | Shared Tailwind config consuming token outputs |
 | `@financial-app/icons` | `packages/icons/` | Active | Cross-platform SVG icon library — type-safe `<Icon name="..." />` component |
 | `@financial-app/ui` | `packages/ui/` | Active | Cross-platform design system (file extension split: `.native.tsx` / `.web.tsx`) |
+| `@financial-app/features` | `packages/features/` | Active | Screen-specific composed blocks (overview, transactions, budgets, pots) |
 | `@financial-app/shared` | `packages/shared/` | Active | Auth (Supabase), Jotai atoms, domain types, utils |
 | `@financial-app/http-client` | `packages/http-client/` | Planned | HeyAPI client consuming the Express REST API |
 
@@ -76,8 +95,9 @@ react-and-react-native-financial-app/
 @financial-app/icons            -> depends on nothing (react-native-svg is a peer dep)
 @financial-app/tailwind-config  -> @financial-app/tokens
 @financial-app/ui               -> @financial-app/tokens, @financial-app/tailwind-config, @financial-app/icons
+@financial-app/features         -> @financial-app/ui, @financial-app/tailwind-config
 @financial-app/shared           -> depends on nothing (pure TS, no renderer)
-apps/*  (mobile, web)           -> @financial-app/ui, @financial-app/shared, @financial-app/icons
+apps/*  (mobile, web)           -> @financial-app/features, @financial-app/ui, @financial-app/shared, @financial-app/icons
 ```
 
 [Back to top](#table-of-contents)

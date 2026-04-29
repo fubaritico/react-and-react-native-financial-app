@@ -20,6 +20,7 @@ export default defineConfig({
    */
   ssr: {
     noExternal: [
+      '@financial-app/features',
       '@financial-app/ui',
       '@financial-app/tailwind-config',
       '@financial-app/tokens',

@@ -1,13 +1,11 @@
+import { Icon, SectionLink, Typography } from '@financial-app/ui/native'
 import { View } from 'react-native'
 
-import tw from '#Lib/tw'
+import tw from '../../lib/tw'
 
 import { shared } from './PotsOverview.styles'
 
 import type { IPotsOverviewProps } from './PotsOverview'
-
-import { Icon, Typography } from '#Atoms'
-import { SectionLink } from '#Molecules'
 
 /** Native implementation of the PotsOverview section component. */
 export const PotsOverview = ({

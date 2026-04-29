@@ -1,15 +1,12 @@
-import { View } from 'react-native'
+import { BillSummaryRow, SectionLink, Typography } from '@financial-app/ui'
 
-import tw from '#Lib/tw'
+import { cn } from '../../lib/cn'
 
 import { shared } from './RecurringBillsOverview.styles'
 
 import type { IRecurringBillsOverviewProps } from './RecurringBillsOverview'
 
-import { Typography } from '#Atoms'
-import { BillSummaryRow, SectionLink } from '#Molecules'
-
-/** Native implementation of the RecurringBillsOverview section component. */
+/** Web implementation of the RecurringBillsOverview section component. */
 export const RecurringBillsOverview = ({
   title,
   seeDetailsLabel,
@@ -22,14 +19,14 @@ export const RecurringBillsOverview = ({
   onSeeDetails,
 }: Readonly<IRecurringBillsOverviewProps>) => {
   return (
-    <View style={tw`${shared.root}`}>
-      <View style={tw`${shared.header}`}>
-        <Typography variant="subsection-title" accessibilityRole="header">
+    <section className={shared.root}>
+      <div className={cn('flex', shared.header)}>
+        <Typography variant="subsection-title" as="h3">
           {title}
         </Typography>
         <SectionLink label={seeDetailsLabel} onPress={onSeeDetails} />
-      </View>
-      <View style={tw`${shared.list}`}>
+      </div>
+      <div className={cn('flex flex-col', shared.list)}>
         <BillSummaryRow label={paidBillsLabel} amount={paid} color="green" />
         <BillSummaryRow
           label={totalUpcomingLabel}
@@ -37,7 +34,7 @@ export const RecurringBillsOverview = ({
           color="yellow"
         />
         <BillSummaryRow label={dueSoonLabel} amount={dueSoon} color="cyan" />
-      </View>
-    </View>
+      </div>
+    </section>
   )
 }

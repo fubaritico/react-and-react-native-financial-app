@@ -1,10 +1,10 @@
-import { RecurringBillsOverview } from '@financial-app/ui'
+import { RecurringBillsOverview } from '@financial-app/features'
 import i18n from 'i18next'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const meta = {
-  title: 'Web/Design System/Organisms/RecurringBillsOverview',
+  title: 'Web/Features/Overview/RecurringBillsOverview',
   component: RecurringBillsOverview,
 } satisfies Meta<typeof RecurringBillsOverview>
 

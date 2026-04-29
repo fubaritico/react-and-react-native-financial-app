@@ -1,7 +1,6 @@
-import { cn } from '#Lib/cn'
+import { Icon, SectionLink, Typography } from '@financial-app/ui'
 
-import { Icon, Typography } from '#Atoms/index.web'
-import { SectionLink } from '#Molecules/index.web'
+import { cn } from '../../lib/cn'
 
 import { shared, web } from './PotsOverview.styles'
 

@@ -11,6 +11,7 @@
     "lint": "eslint ./app"
   },
   "dependencies": {
+    "@financial-app/features": "workspace:^",
     "@financial-app/shared": "workspace:^",
     "@financial-app/tailwind-config": "workspace:^",
     "@financial-app/tokens": "workspace:^",

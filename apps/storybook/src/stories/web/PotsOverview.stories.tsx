@@ -1,4 +1,4 @@
-import { PotsOverview } from '@financial-app/ui'
+import { PotsOverview } from '@financial-app/features'
 import i18n from 'i18next'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
@@ -13,7 +13,7 @@ const defaultPots = [
 ]
 
 const meta = {
-  title: 'Web/Design System/Organisms/PotsOverview',
+  title: 'Web/Features/Overview/PotsOverview',
   component: PotsOverview,
 } satisfies Meta<typeof PotsOverview>
 

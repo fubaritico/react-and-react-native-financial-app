@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-native",
+    "strict": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "#Lib/*": ["../ui/src/lib/*"],
+      "#Atoms": ["../ui/src/components/atoms"],
+      "#Atoms/*": ["../ui/src/components/atoms/*"],
+      "#Molecules": ["../ui/src/components/molecules"],
+      "#Molecules/*": ["../ui/src/components/molecules/*"],
+      "#Organisms": ["../ui/src/components/organisms"],
+      "#Organisms/*": ["../ui/src/components/organisms/*"],
+      "#Templates": ["../ui/src/components/templates"],
+      "#Templates/*": ["../ui/src/components/templates/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

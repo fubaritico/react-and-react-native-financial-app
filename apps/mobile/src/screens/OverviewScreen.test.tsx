@@ -10,6 +10,10 @@ jest.mock('@financial-app/shared', () => ({
 // Mock @financial-app/ui to avoid twrnc native bridge calls.
 jest.mock('@financial-app/ui', () => ({
   BalanceCard: () => null,
+}))
+
+// Mock @financial-app/features to avoid twrnc native bridge calls.
+jest.mock('@financial-app/features', () => ({
   PotsOverview: () => null,
   TransactionsOverview: () => null,
   RecurringBillsOverview: () => null,

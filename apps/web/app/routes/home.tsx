@@ -1,4 +1,9 @@
 import {
+  PotsOverview,
+  RecurringBillsOverview,
+  TransactionsOverview,
+} from '@financial-app/features'
+import {
   formatCurrency,
   formatDate,
   mockBalance,
@@ -6,12 +11,7 @@ import {
   mockPots,
   mockTransactions,
 } from '@financial-app/shared'
-import {
-  BalanceCard,
-  PotsOverview,
-  RecurringBillsOverview,
-  TransactionsOverview,
-} from '@financial-app/ui'
+import { BalanceCard } from '@financial-app/ui'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 

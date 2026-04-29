@@ -19,6 +19,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@financial-app/features": "workspace:^",
     "@financial-app/icons": "workspace:^",
     "@financial-app/shared": "workspace:^",
     "@financial-app/tailwind-config": "workspace:^",

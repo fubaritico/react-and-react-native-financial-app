@@ -1,4 +1,4 @@
-import { TransactionsOverview } from '@financial-app/ui'
+import { TransactionsOverview } from '@financial-app/features'
 import i18n from 'i18next'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
@@ -37,7 +37,7 @@ const MOCK_TRANSACTIONS = [
 ]
 
 const meta = {
-  title: 'Web/Design System/Organisms/TransactionsOverview',
+  title: 'Web/Features/Overview/TransactionsOverview',
   component: TransactionsOverview,
 } satisfies Meta<typeof TransactionsOverview>
 
