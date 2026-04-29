@@ -14,6 +14,7 @@
 
 ### Features
 
+* add @financial-app/features package, migrate Overview organisms from ui ([b89673f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b89673f32cc8ea7e6036f005afd82ced06b36f94))
 * add DevBadge component to all 3 mobile apps ([bff5832](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bff58324984c0594a1b2e6c7766f528565e1a852))
 * added .nvmrc and .gitattributes files ([836d77d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/836d77dd5681ea7ecd79ef0dd7bb74c7f5fabc7a))
 * added env for BDD credentials ([c08b401](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c08b4019e8528439de6b969fc9cec13b2595601a))
@@ -42,6 +43,7 @@
 * **shared:** create @financial-app/shared package (Phase 5.1 + 5.7) ([6cb1d2c](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6cb1d2c95e6e5c120727fc33d7dd8f061d006ff2))
 * **state:** wire Jotai Provider in all apps + centralize in catalog ([a664939](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a664939082b0495731d4e72b11947e9fed0041a4))
 * **storybook:** add native stories for all 20 remaining components ([df170e6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/df170e66ed5358a6d42bb53b9dbb8b28efed178e))
+* **storybook:** add NavItem + Navigation stories ([93f2509](https://github.com/fubaritico/react-and-react-native-financial-app/commit/93f25096501a339c0b5d2b85deb44f37b15bbd29))
 * styles based on nativewind and used by apps and ds ([d95e9f2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d95e9f2966e13816f1cb7ef78b9fc786e1c4ec47))
 * **tailwind-config:** create @financial-app/tailwind-config (Phase 2) ([257f51d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/257f51de7d099f73d2c9754855d1b797c04a2f21))
 * **tokens:** create @financial-app/tokens package (Phase 0) ([76b2857](https://github.com/fubaritico/react-and-react-native-financial-app/commit/76b2857cda2768fa3ac35888dd90244aff5736f0))

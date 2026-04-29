@@ -17,12 +17,14 @@ import type { Row } from '@tanstack/react-table'
  * @param keyName - accessor key for the numeric amount
  * @param align - text alignment ('left' | 'right'), defaults to 'left'
  * @param className - extra classes from configuration
+ * @param locale - BCP 47 locale tag (defaults to 'en-US')
  */
 export const AmountCell =
   (
     keyName: string,
     align: HeaderAlign = 'left',
-    className?: string
+    className?: string,
+    locale?: string
   ): AmountCellFn =>
   <TData,>({ row }: { row: Row<TData> }) => {
     const amount = row.getValue<number>(keyName)
@@ -41,7 +43,7 @@ export const AmountCell =
           color={isPositive ? 'transaction-positive' : 'foreground'}
           align={align}
         >
-          {formatSignedCurrency(amount)}
+          {formatSignedCurrency(amount, locale)}
         </Typography>
       </TableCell>
     )

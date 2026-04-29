@@ -10,3 +10,6 @@ export type {
   ITransactionOverviewItem,
   IRecurringBillsOverviewProps,
 } from './overview'
+
+export { TransactionsDataTable } from './transactions'
+export type { ITransactionsDataTableProps } from './transactions'

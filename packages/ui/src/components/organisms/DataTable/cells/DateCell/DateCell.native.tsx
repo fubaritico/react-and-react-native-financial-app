@@ -15,9 +15,10 @@ import { Typography } from '#Atoms'
  * Display value is human-readable: "19 Aug 2024".
  * @param keyName - accessor key for the ISO date string
  * @param className - extra classes from parent
+ * @param locale - BCP 47 locale tag (defaults to 'en-US')
  */
 export const DateCell =
-  (keyName: string, className?: string): DateCellFn =>
+  (keyName: string, className?: string, locale?: string): DateCellFn =>
   <TData,>({ row }: { row: Row<TData> }) => {
     const dateString = row.getValue<string>(keyName)
 
@@ -27,7 +28,7 @@ export const DateCell =
         style={className && tw`${className}`}
       >
         <Typography variant="caption" color="muted">
-          {formatDisplayDate(dateString)}
+          {formatDisplayDate(dateString, locale)}
         </Typography>
       </TableCell>
     )

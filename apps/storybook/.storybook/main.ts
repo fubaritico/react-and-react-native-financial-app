@@ -64,6 +64,24 @@ const config: StorybookConfig = {
           replacement: path.join(featuresPkgDir, 'src/overview/index.web.ts'),
         },
         {
+          find: /^@financial-app\/features\/transactions\/web$/,
+          replacement: path.join(
+            featuresPkgDir,
+            'src/transactions/index.web.ts'
+          ),
+        },
+        {
+          find: /^@financial-app\/features\/transactions\/native$/,
+          replacement: path.join(featuresPkgDir, 'src/transactions/index.ts'),
+        },
+        {
+          find: /^@financial-app\/features\/transactions$/,
+          replacement: path.join(
+            featuresPkgDir,
+            'src/transactions/index.web.ts'
+          ),
+        },
+        {
           find: /^@financial-app\/features$/,
           replacement: path.join(featuresPkgDir, 'src/index.web.ts'),
         },

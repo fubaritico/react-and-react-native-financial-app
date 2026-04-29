@@ -625,12 +625,18 @@ importers:
 
   packages/features:
     dependencies:
+      '@financial-app/shared':
+        specifier: workspace:^
+        version: link:../shared
       '@financial-app/tailwind-config':
         specifier: workspace:^
         version: link:../tailwind-config
       '@financial-app/ui':
         specifier: workspace:^
         version: link:../ui
+      '@tanstack/react-table':
+        specifier: 'catalog:'
+        version: 8.21.3(react-dom@19.2.5(react@19.1.0))(react@19.1.0)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -650,6 +656,9 @@ importers:
         specifier: 'catalog:'
         version: 4.15.0(react-native@0.81.5(@babel/core@7.29.0)(@react-native-community/cli@20.0.0(typescript@5.9.3))(@react-native/metro-config@0.81.5(@babel/core@7.29.0))(@types/react@19.1.17)(react@19.1.0))(yaml@2.8.2)
     devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.6.0
       '@types/react':
         specifier: 'catalog:'
         version: 19.1.17
@@ -11563,6 +11572,12 @@ snapshots:
       '@tanstack/table-core': 8.21.3
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
+
+  '@tanstack/react-table@8.21.3(react-dom@19.2.5(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@tanstack/table-core': 8.21.3
+      react: 19.1.0
+      react-dom: 19.2.5(react@19.1.0)
 
   '@tanstack/table-core@8.21.3': {}
 
