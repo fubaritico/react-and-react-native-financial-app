@@ -10,6 +10,7 @@ void i18n.use(initReactI18next).init(i18nConfig)
 const BACKGROUNDS: Record<string, string> = {
   beige: '#f8f4f0',
   white: '#ffffff',
+  dark: '#201F24',
 }
 
 interface IStoryContext {
