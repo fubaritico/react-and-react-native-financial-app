@@ -1,11 +1,10 @@
 import tw from '#Lib/tw'
 
-import { TableCell } from '../../components/TableCell/TableCell.native'
+import { TableCell } from '#Organisms/DataTable/components/TableCell/TableCell.native'
+import { TruncatedContent } from '#Organisms/DataTable/components/TruncatedContent/TruncatedContent.native'
 
 import type { SimpleCellConfig, SimpleCellFn } from './SimpleCell.tsx'
 import type { Row } from '@tanstack/react-table'
-
-import { Typography } from '#Atoms'
 
 /**
  * Simple cell factory — displays a raw value with Typography.
@@ -26,9 +25,11 @@ export const SimpleCell =
 
     return (
       <TableCell style={className && tw`${className}`}>
-        <Typography variant={variant} color={color}>
-          {String(value)}
-        </Typography>
+        <TruncatedContent
+          value={String(value)}
+          variant={variant}
+          color={color}
+        />
       </TableCell>
     )
   }

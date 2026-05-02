@@ -1,4 +1,4 @@
-import { Button, Drawer, Menu, Typography } from '@financial-app/ui'
+import { BottomSheet, Button, Menu, Typography } from '@financial-app/ui'
 import { useState } from 'react'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
@@ -7,8 +7,8 @@ import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 const noop = () => {}
 
 const meta = {
-  title: 'Web/Design System/Molecules/Drawer',
-  component: Drawer,
+  title: 'Web/Design System/Molecules/BottomSheet',
+  component: BottomSheet,
   parameters: { layout: 'centered' },
   argTypes: {
     variant: {
@@ -20,7 +20,7 @@ const meta = {
     onClose: { table: { disable: true } },
     children: { table: { disable: true } },
   },
-} satisfies Meta<typeof Drawer>
+} satisfies Meta<typeof BottomSheet>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -44,23 +44,23 @@ const PlaygroundComponent = (args: {
   return (
     <>
       <Button
-        title="Open Drawer"
+        title="Open BottomSheet"
         variant="primary"
         onPress={() => {
           setOpen(true)
         }}
       />
-      <Drawer
+      <BottomSheet
         open={open}
         onClose={() => {
           setOpen(false)
         }}
         variant={args.variant}
         overlay={args.overlay}
-        accessibilityLabel="Sort options drawer"
+        accessibilityLabel="Sort options bottom sheet"
       >
-        <Drawer.Header closeLabel="Close">Sort by</Drawer.Header>
-        <Drawer.Body>
+        <BottomSheet.Header closeLabel="Close">Sort by</BottomSheet.Header>
+        <BottomSheet.Body>
           <Menu
             variant={args.variant}
             selectedValue={selected}
@@ -77,13 +77,13 @@ const PlaygroundComponent = (args: {
               </Menu.Item>
             ))}
           </Menu>
-        </Drawer.Body>
-      </Drawer>
+        </BottomSheet.Body>
+      </BottomSheet>
     </>
   )
 }
 
-/** Interactive playground — open drawer, pick a sort option. */
+/** Interactive playground — open bottom sheet, pick a sort option. */
 export const Playground: Story = {
   args: {
     open: false,
@@ -126,51 +126,51 @@ const ShowcaseComponent = () => {
         }}
       />
 
-      <Drawer
+      <BottomSheet
         open={lightOpen}
         onClose={() => {
           setLightOpen(false)
         }}
         variant="light"
         overlay
-        accessibilityLabel="Light drawer"
+        accessibilityLabel="Light bottom sheet"
       >
-        <Drawer.Header>Light Drawer</Drawer.Header>
-        <Drawer.Body>
+        <BottomSheet.Header>Light BottomSheet</BottomSheet.Header>
+        <BottomSheet.Body>
           <Typography variant="body" as="p">
             Light variant with overlay. Press Escape or click close to dismiss.
           </Typography>
-        </Drawer.Body>
-      </Drawer>
+        </BottomSheet.Body>
+      </BottomSheet>
 
-      <Drawer
+      <BottomSheet
         open={darkOpen}
         onClose={() => {
           setDarkOpen(false)
         }}
         variant="dark"
         overlay
-        accessibilityLabel="Dark drawer"
+        accessibilityLabel="Dark bottom sheet"
       >
-        <Drawer.Header>Dark Drawer</Drawer.Header>
-        <Drawer.Body>
+        <BottomSheet.Header>Dark BottomSheet</BottomSheet.Header>
+        <BottomSheet.Body>
           <Typography variant="body" color="on-dark" as="p">
             Dark variant with grey-900 background and light text.
           </Typography>
-        </Drawer.Body>
-      </Drawer>
+        </BottomSheet.Body>
+      </BottomSheet>
 
-      <Drawer
+      <BottomSheet
         open={scrollOpen}
         onClose={() => {
           setScrollOpen(false)
         }}
         variant="dark"
         overlay
-        accessibilityLabel="Scrollable drawer"
+        accessibilityLabel="Scrollable bottom sheet"
       >
-        <Drawer.Header>Scrollable Content</Drawer.Header>
-        <Drawer.Body>
+        <BottomSheet.Header>Scrollable Content</BottomSheet.Header>
+        <BottomSheet.Body>
           {Array.from({ length: 20 }, (_, i) => (
             <div
               key={i}
@@ -181,13 +181,13 @@ const ShowcaseComponent = () => {
               </Typography>
             </div>
           ))}
-        </Drawer.Body>
-      </Drawer>
+        </BottomSheet.Body>
+      </BottomSheet>
     </div>
   )
 }
 
-/** Light, dark, and scrollable drawer variants. */
+/** Light, dark, and scrollable bottom sheet variants. */
 export const Showcase: Story = {
   args: { open: false, onClose: noop, children: null },
   render: () => <ShowcaseComponent />,

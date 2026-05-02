@@ -68,15 +68,15 @@ export type {
   IMenuItemProps,
 } from './components/molecules/Menu/Menu.tsx'
 
-export { Drawer } from './components/molecules/Drawer'
+export { BottomSheet } from './components/molecules/BottomSheet'
 export type {
-  IDrawerProps,
-  IDrawerHeaderProps,
-  IDrawerBodyProps,
-} from './components/molecules/Drawer/Drawer.tsx'
+  IBottomSheetProps,
+  IBottomSheetHeaderProps,
+  IBottomSheetBodyProps,
+} from './components/molecules/BottomSheet/BottomSheet.tsx'
 
 // Atoms
-export { Portal } from './components/atoms/Portal'
+export { Portal, PortalProvider } from './components/atoms/Portal'
 export type { IPortalProps } from './components/atoms/Portal/Portal.tsx'
 
 // Organisms

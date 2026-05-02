@@ -6,12 +6,12 @@
 Layer 1: tokens           packages/tokens/src/*.json          — designers edit this
 Layer 2: tailwind-config  packages/tailwind-config/index.js   — consumes token build
 Layer 3: variants          ComponentName.variants.ts            — CVA, root element, cross-platform safe
-Layer 4: styles            ComponentName.styles.ts              — shared layout + web-only classes
+Layer 4: styles            ComponentName.styles.ts              — shared + web-only + native-only classes
 Layer 5: components        *.native.tsx / *.web.tsx             — consume variants + styles
 ```
 
 Never skip layers. Never reference colors or spacing values that aren't from tokens.
-Variants handle the root element. Styles handle inner elements + web-only behavior.
+Variants handle the root element. Styles handle inner elements + platform-specific behavior (web-only and native-only).
 
 ## CVA Variant Rules
 

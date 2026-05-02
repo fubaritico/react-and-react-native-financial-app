@@ -17,7 +17,6 @@ export function Pagination({
   canPreviousPage,
   countPages,
   currentPage,
-  fullWidth,
   gotoNext,
   gotoPrevious,
   handleChangePage,
@@ -31,9 +30,7 @@ export function Pagination({
   )
 
   return (
-    <View
-      style={tw`${shared.root} gap-2 ${fullWidth ? 'w-full justify-between' : 'justify-center'}`}
-    >
+    <View style={tw`${shared.root} justify-center`}>
       {/* Previous arrow */}
       <Button
         variant="outline"

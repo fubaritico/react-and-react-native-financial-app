@@ -1,4 +1,4 @@
-import { Button, Card, Header } from '@financial-app/ui'
+import { Button, Card, Header, PortalProvider } from '@financial-app/ui'
 import { StatusBar } from 'expo-status-bar'
 import { ScrollView, View } from 'react-native'
 
@@ -7,11 +7,12 @@ import tw from './src/lib/tw'
 
 export default function App() {
   return (
-    <View style={tw`flex-1 bg-background`}>
-      <StatusBar style="light" />
-      <DevBadge />
-      <Header title="Expo Ejected" subtitle="Design System partagé" />
-      <ScrollView style={tw`flex-1`} contentContainerStyle={tw`p-4`}>
+    <PortalProvider>
+      <View style={tw`flex-1 bg-background`}>
+        <StatusBar style="light" />
+        <DevBadge />
+        <Header title="Expo Ejected" subtitle="Design System partagé" />
+        <ScrollView style={tw`flex-1`} contentContainerStyle={tw`p-4`}>
         <Card
           title="Bienvenue"
           text="Ceci est une carte du design-system partagé."
@@ -41,7 +42,8 @@ export default function App() {
             }}
           />
         </Card>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </PortalProvider>
   )
 }

@@ -29,7 +29,7 @@ export function Pagination({
   const [isCompact, setIsCompact] = useState(false)
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
+    const mq = window.matchMedia('(max-width: 1023px)')
     setIsCompact(mq.matches)
 
     const handler = (e: MediaQueryListEvent) => {
@@ -54,8 +54,10 @@ export function Pagination({
       aria-label="Pagination"
       className={cn(
         shared.root,
-        'flex justify-center gap-2 md:justify-between md:gap-0',
-        fullWidth ? 'w-full justify-between' : 'justify-center'
+        'flex justify-center',
+        fullWidth
+          ? 'w-full justify-center lg:justify-between'
+          : 'justify-center'
       )}
     >
       {/* Previous */}

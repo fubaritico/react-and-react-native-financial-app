@@ -16,7 +16,7 @@ export function DropdownFilter({
   filterId,
   onFiltersChange,
   accessibilityLabel,
-  drawerTitle,
+  bottomSheetTitle,
 }: Readonly<IDropdownFilterProps>) {
   const allOptions = [{ value: buttonLabel, label: buttonLabel }, ...options]
 
@@ -40,7 +40,7 @@ export function DropdownFilter({
         onFiltersChange(newFilters)
       }}
       accessibilityLabel={accessibilityLabel}
-      drawerTitle={drawerTitle}
+      bottomSheetTitle={bottomSheetTitle}
     />
   )
 }

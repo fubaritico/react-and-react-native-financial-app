@@ -1,3 +1,7 @@
+import { View } from 'react-native'
+
+import tw from '#Lib/tw'
+
 import type { ITruncatedContentProps } from './TruncatedContent'
 
 import { Typography } from '#Atoms'
@@ -11,8 +15,10 @@ export function TruncatedContent({
   numberOfLines = 1,
 }: Readonly<ITruncatedContentProps>) {
   return (
-    <Typography variant="body" numberOfLines={numberOfLines}>
-      {value}
-    </Typography>
+    <View style={tw`min-w-0 max-w-full`}>
+      <Typography variant="body" numberOfLines={numberOfLines}>
+        {value}
+      </Typography>
+    </View>
   )
 }

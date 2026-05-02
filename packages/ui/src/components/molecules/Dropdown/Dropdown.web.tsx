@@ -12,7 +12,7 @@ import { cn } from '#Lib/cn'
 
 import { Button, Icon, Portal, Typography } from '#Atoms/index.web'
 
-import { Drawer } from '../Drawer/Drawer.web'
+import { BottomSheet } from '../BottomSheet/BottomSheet.web'
 import { Menu } from '../Menu/Menu.web'
 
 import type { IDropdownProps } from './Dropdown'
@@ -26,7 +26,7 @@ const MENU_GAP = 8
  * Web Dropdown — responsive compound component.
  *
  * - Desktop (lg+): opens a floating Menu below (or above) the trigger
- * - Mobile/tablet (< lg): opens a full-width Drawer from the bottom
+ * - Mobile/tablet (< lg): opens a full-width BottomSheet from the bottom
  *
  * When `withPortal` is true the floating menu is rendered in a Portal,
  * escaping overflow-hidden ancestors. The menu auto-flips above the
@@ -43,8 +43,8 @@ export function Dropdown({
   onSelect,
   accessibilityLabel,
   menuAccessibilityLabel,
-  drawerTitle,
-  drawerCloseLabel = 'Close',
+  bottomSheetTitle,
+  bottomSheetCloseLabel = 'Close',
   withPortal,
   trigger,
 }: Readonly<IDropdownProps>) {
@@ -248,19 +248,19 @@ export function Dropdown({
       {/* Desktop: floating Menu (portal) */}
       {isOpen && isDesktop && withPortal && <Portal>{floatingMenu}</Portal>}
 
-      {/* Mobile/tablet: Drawer */}
+      {/* Mobile/tablet: BottomSheet */}
       {!isDesktop && (
-        <Drawer
+        <BottomSheet
           open={isOpen}
           onClose={handleClose}
           variant="dark"
           overlay
           accessibilityLabel={menuAccessibilityLabel}
         >
-          <Drawer.Header closeLabel={drawerCloseLabel}>
-            {drawerTitle ?? label}
-          </Drawer.Header>
-          <Drawer.Body>
+          <BottomSheet.Header closeLabel={bottomSheetCloseLabel}>
+            {bottomSheetTitle ?? label}
+          </BottomSheet.Header>
+          <BottomSheet.Body>
             <Menu
               selectedValue={selectedValue}
               variant="dark"
@@ -271,8 +271,8 @@ export function Dropdown({
             >
               {menuItems}
             </Menu>
-          </Drawer.Body>
-        </Drawer>
+          </BottomSheet.Body>
+        </BottomSheet>
       )}
     </div>
   )

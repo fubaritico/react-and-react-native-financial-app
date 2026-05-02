@@ -1,7 +1,7 @@
 /** Shared layout classes for DataTable inner elements (safe for both native and web) */
 export const shared = {
   /** Root container full width */
-  container: 'w-full',
+  root: 'bg-white rounded-lg overflow-clip w-full',
   /** Header row layout with bottom border */
   headerRow: 'flex-row border-b border-border',
   /** Header cell padding */
@@ -16,8 +16,6 @@ export const shared = {
 
 /** Web-only classes for DataTable (shadow, sticky, cursor, focus) */
 export const web = {
-  /** Root card surface + clipping + padding */
-  root: 'bg-white rounded-bl-lg rounded-lg overflow-clip',
   /** Shadow on wrapper (conditional via noShadow prop) */
   shadow: 'shadow-md',
   /** Responsive horizontal padding */

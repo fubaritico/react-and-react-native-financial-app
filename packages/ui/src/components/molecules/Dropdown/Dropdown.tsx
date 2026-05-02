@@ -22,12 +22,12 @@ export interface IDropdownProps {
   onSelect: (value: string) => void
   /** Accessible label for the trigger button */
   accessibilityLabel?: string
-  /** Accessible label for the menu/drawer */
+  /** Accessible label for the menu/bottom sheet */
   menuAccessibilityLabel?: string
-  /** Drawer header title (shown in mobile/tablet drawer mode) */
-  drawerTitle?: string
-  /** Close button label for drawer (a11y) */
-  drawerCloseLabel?: string
+  /** BottomSheet header title (shown in mobile/tablet bottom sheet mode) */
+  bottomSheetTitle?: string
+  /** Close button label for bottom sheet (a11y) */
+  bottomSheetCloseLabel?: string
   /** Render the floating menu inside a Portal (web desktop only). Useful when the dropdown is inside an overflow-hidden container. */
   withPortal?: boolean
   /** Custom trigger content — overrides default button rendering */

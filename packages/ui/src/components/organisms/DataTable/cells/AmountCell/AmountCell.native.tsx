@@ -32,10 +32,8 @@ export const AmountCell =
 
     return (
       <TableCell
-        style={[
-          tw`flex-row items-center gap-1 ${align === 'right' ? 'justify-end' : ''}`,
-          className && tw`${className}`,
-        ]}
+        align={align}
+        style={[tw`flex-row items-center gap-1`, className && tw`${className}`]}
       >
         <Typography
           variant="body-bold"

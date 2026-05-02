@@ -2,24 +2,25 @@ import { cn } from '#Lib/cn'
 
 import { Button, Icon, Typography } from '#Atoms/index.web'
 
-import { useDrawerContext } from './DrawerContext'
+import { useBottomSheetContext } from './BottomSheetContext'
 
-import type { IDrawerHeaderProps } from './Drawer'
+import type { IBottomSheetHeaderProps } from './BottomSheet'
 
 /**
- * Web Drawer.Header — renders children on the left and a close button on the right.
+ * Web BottomSheet.Header — renders children on the left and a close button on the right.
  * Uses design tokens consistent with the current variant.
  */
-export function DrawerHeader({
+export function BottomSheetHeader({
   className,
   children,
   closeLabel = 'Close',
-}: Readonly<IDrawerHeaderProps>) {
-  const { variant, onClose } = useDrawerContext()
+}: Readonly<IBottomSheetHeaderProps>) {
+  const { variant, onClose } = useBottomSheetContext()
   const isDark = variant === 'dark'
 
   return (
     <div
+      data-name="bottom-sheet-header"
       className={cn(
         'flex items-center justify-between px-5 py-3 border-b',
         isDark ? 'border-grey-500' : 'border-border',

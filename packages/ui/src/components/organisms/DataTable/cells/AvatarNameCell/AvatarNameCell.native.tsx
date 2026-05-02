@@ -23,10 +23,14 @@ export const AvatarNameCell =
     const name = row.getValue<string>(nameKey)
 
     return (
-      <TableCell style={tw`flex-row items-center gap-3`}>
-        <Avatar src={avatar} name={name} size={40} />
-        <View style={tw`min-w-0 shrink`}>
-          <Typography variant="body-bold">{name}</Typography>
+      <TableCell>
+        <View style={[tw`flex-row items-center gap-3 pr-3`, { flex: 1 }]}>
+          <Avatar src={avatar} name={name} size={40} />
+          <View style={{ flex: 1, width: 0 }}>
+            <Typography variant="body-bold" numberOfLines={1}>
+              {name}
+            </Typography>
+          </View>
         </View>
       </TableCell>
     )

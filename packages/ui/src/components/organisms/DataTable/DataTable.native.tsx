@@ -94,7 +94,10 @@ export function DataTable<TData>({
         style={tw`${shared.bodyRow} ${dataTableRowVariants({ divider: true })} `}
       >
         {row.getVisibleCells().map((cell) => (
-          <View key={cell.id} style={tw`${shared.bodyCell}`}>
+          <View
+            key={cell.id}
+            style={tw`py-4 overflow-hidden ${(cell.column.columnDef.meta as Record<string, string> | undefined)?.className ?? 'flex-1'}`}
+          >
             <Fragment>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </Fragment>
@@ -110,6 +113,7 @@ export function DataTable<TData>({
             onRowClick(row)
           }}
           accessibilityRole="button"
+          accessibilityLabel={`Row ${row.id}`}
           accessibilityState={{ disabled: false }}
         >
           {rowContent}
@@ -137,6 +141,7 @@ export function DataTable<TData>({
             onRowClick(row)
           }}
           accessibilityRole="button"
+          accessibilityLabel={`Row ${row.id}`}
           accessibilityState={{ disabled: false }}
         >
           {content}
@@ -152,7 +157,7 @@ export function DataTable<TData>({
   const skeletonData = Array.from({ length: MIN_PAGE_SIZE }, (_, i) => i)
 
   return (
-    <View style={[tw`${shared.container}`, tw`${isTablet ? 'p-8' : 'p-6'}`]}>
+    <View style={[tw`${shared.root}`, tw`${isTablet ? 'p-8' : 'p-0'}`]}>
       {/* ActionBar */}
       {!noActionBar && !actionBar && onGlobalFilterChange && (
         <ActionBar
@@ -184,16 +189,26 @@ export function DataTable<TData>({
               key={headerGroup.id}
               style={tw`${shared.headerRow} border-t-0`}
             >
-              {headerGroup.headers.map((header) => (
-                <View key={header.id} style={tw`${shared.headerCell}`}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </View>
-              ))}
+              {headerGroup.headers.map((header) => {
+                const colClassName = (
+                  header.column.columnDef.meta as
+                    | Record<string, string>
+                    | undefined
+                )?.className
+                return (
+                  <View
+                    key={header.id}
+                    style={tw`py-3 ${colClassName ?? 'flex-1'}`}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </View>
+                )
+              })}
             </TableRow>
           ))}
 

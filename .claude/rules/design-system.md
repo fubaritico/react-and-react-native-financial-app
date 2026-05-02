@@ -73,10 +73,11 @@ export interface IButtonProps extends VariantProps<typeof buttonVariants> {
 
 ## ComponentName.styles.ts — Styles File Rules
 
-Centralizes all Tailwind class strings that live outside CVA variants. Two named exports:
+Centralizes all Tailwind class strings that live outside CVA variants. Three named exports:
 
 - **`shared`** — layout classes safe for both native and web (flex, gap, margin, padding on inner elements)
-- **`web`** — web-only classes that would break native (hover, focus-visible, transition, cursor, shadow, animate, ring, outline)
+- **`web`** — web-only classes that would break native (hover, focus-visible, transition, cursor, shadow, animate, ring, outline, inline-block, fixed, sticky)
+- **`native`** — native-only classes that are unnecessary or behave differently on web (e.g. explicit `flex-row` on View containers, absolute positioning patterns specific to RN layout)
 
 ```ts
 /** Shared layout classes for Card inner elements (safe for both native and web) */
@@ -90,23 +91,27 @@ export const web = {
   /** Elevated shadow on card surface */
   root: 'shadow-md',
 } as const
+
+/** Native-only classes for Card (RN layout quirks, explicit flex-row, absolute positioning) */
+export const native = {} as const
 ```
 
 Rules:
 - Every key MUST have a JSDoc comment
 - NEVER put text styling here — text classes belong in `<Typography>` props
 - NEVER put renderer imports here (no react-native, no DOM types)
-- `.native.tsx` imports ONLY `shared` — never `web`
-- `.web.tsx` imports both `shared` and `web`
+- `.native.tsx` imports `shared` and `native` — never `web`
+- `.web.tsx` imports `shared` and `web` — never `native`
 - **Never exported from barrel files** — internal to the component, like variants
-- Skip this file ONLY if the component has no inner elements AND no web-only classes
+- Skip this file ONLY if the component has no inner elements AND no web-only/native-only classes
+- When a class doesn't work cross-platform, move it to the correct platform export (`web` or `native`) instead of leaving it inline
 
 ## ComponentName.native.tsx — Native Rules
 
 - Import ONLY from react-native — no HTML elements ever
-- Use tw`...` from shared tw instance for all styles
+- Use `tw``...`` from shared tw instance for all styles — never mix with `StyleSheet.create()` in the same file
 - Consume variants via: tw`${variantFn({ ...props })}`
-- Import `shared` from `.styles.ts` for inner element classes — never import `web`
+- Import `shared` and `native` from `.styles.ts` for inner element classes — never import `web`
 - Use Pressable over TouchableOpacity for new components
 - All interactive elements (Pressable) MUST include `accessibilityState` matching their disabled/selected state
 - Platform-specific additions (gesture, haptics) go here only
@@ -131,7 +136,7 @@ export function Button({ label, onPress, variant, size, disabled }: IButtonProps
 
 - Use HTML semantic elements — no View, Text, or StyleSheet ever
 - Use cn() for className composition (clsx + tailwind-merge)
-- Import both `shared` and `web` from `.styles.ts` — compose web-only classes from `web`, not hardcoded inline
+- Import `shared` and `web` from `.styles.ts` — compose web-only classes from `web`, not hardcoded inline — never import `native`
 - Web-only classes (`hover:`, `focus:`, `transition-`, `cursor-`, `shadow-`, `animate-`) MUST live in the `web` export of `.styles.ts`
 - All interactive elements MUST have `focus-visible` styles for keyboard navigation:
   `focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900`

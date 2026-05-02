@@ -21,14 +21,17 @@ export const TextInput = ({
   trailingElement,
   prefix,
   secureTextEntry,
+  maxLength,
 }: Readonly<ITextInputProps>) => {
   const inputClasses = textInputVariants({ error })
 
   return (
     <View style={tw`${shared.wrapper}`}>
-      <Typography variant="label" color="muted">
-        {label}
-      </Typography>
+      {label && (
+        <Typography variant="label" color="muted">
+          {label}
+        </Typography>
+      )}
       <View style={tw`${inputClasses} flex-row items-center`}>
         {prefix ? (
           <Typography variant="body" color="beige-500" style={tw`mr-2`}>
@@ -41,6 +44,7 @@ export const TextInput = ({
           placeholder={placeholder}
           placeholderTextColor={tw.color('beige-500')}
           secureTextEntry={secureTextEntry}
+          maxLength={maxLength}
           style={tw`flex-1 text-sm text-foreground p-0`}
         />
         {trailingElement ??

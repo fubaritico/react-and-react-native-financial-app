@@ -19,24 +19,25 @@ export function useTransactionsColumns(
     () => [
       {
         accessorKey: 'name',
-        header: SortableHeader('Recipient / Sender'),
+        header: SortableHeader('Recipient / Sender', 'left', 'w-1/2'),
         cell: AvatarNameCell('avatar', 'name'),
+        meta: { className: 'w-1/2' },
       },
       {
         accessorKey: 'category',
-        header: SortableHeader('Category'),
+        header: SortableHeader('Category', 'left'),
         cell: SimpleCell('category', undefined, 'muted'),
         filterFn: 'equals' as const,
       },
       {
         accessorKey: 'date',
-        header: SortableHeader('Transaction Date'),
+        header: SortableHeader('Transaction Date', 'left'),
         cell: DateCell('date', undefined, locale),
       },
       {
         accessorKey: 'amount',
         header: SortableHeader('Amount', 'right'),
-        cell: AmountCell('amount', undefined, undefined, locale),
+        cell: AmountCell('amount', 'right', undefined, locale),
       },
     ],
     [locale]

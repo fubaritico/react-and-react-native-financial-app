@@ -10,7 +10,18 @@ import type { ITableCellProps } from './TableCell.tsx'
  */
 export function TableCell({
   children,
+  align,
   style,
-}: Readonly<ITableCellProps & { style: StyleProp<ViewStyle> }>) {
-  return <View style={[tw`flex-1 py-4 px-4`, style]}>{children}</View>
+}: Readonly<ITableCellProps & { style?: StyleProp<ViewStyle> }>) {
+  return (
+    <View
+      style={[
+        tw`h-[80px] flex flex-row items-center w-full`,
+        tw`${align === 'right' ? 'justify-end ml-auto' : 'justify-start mr-auto'}`,
+        style,
+      ]}
+    >
+      {children}
+    </View>
+  )
 }

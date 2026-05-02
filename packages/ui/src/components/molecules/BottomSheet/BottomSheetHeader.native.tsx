@@ -2,24 +2,25 @@ import { View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import { useDrawerContext } from './DrawerContext'
+import { useBottomSheetContext } from './BottomSheetContext'
 
-import type { IDrawerHeaderProps } from './Drawer'
+import type { IBottomSheetHeaderProps } from './BottomSheet'
 
 import { Button, Icon, Typography } from '#Atoms'
 
 /**
- * Native Drawer.Header — renders children on the left and a close button on the right.
+ * Native BottomSheet.Header — renders children on the left and a close button on the right.
  */
-export function DrawerHeader({
+export function BottomSheetHeader({
   children,
   closeLabel = 'Close',
-}: Readonly<IDrawerHeaderProps>) {
-  const { variant, onClose } = useDrawerContext()
+}: Readonly<IBottomSheetHeaderProps>) {
+  const { variant, onClose } = useBottomSheetContext()
   const isDark = variant === 'dark'
 
   return (
     <View
+      data-name="bottom-sheet-header"
       style={tw`flex-row items-center justify-between px-5 py-3 border-b ${isDark ? 'border-grey-500' : 'border-border'}`}
     >
       <View style={tw`flex-1`}>

@@ -14,7 +14,8 @@
       "Skill(start-session)",
       "mcp__context7__resolve-library-id",
       "mcp__context7__query-docs",
-      "Skill(story)"
+      "Skill(story)",
+      "mcp__ide__getDiagnostics"
     ]
   },
   "deny": [

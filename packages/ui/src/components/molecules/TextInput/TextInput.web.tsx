@@ -19,14 +19,17 @@ export const TextInput = ({
   trailingElement,
   prefix,
   secureTextEntry,
+  maxLength,
 }: Readonly<ITextInputProps>) => {
   const inputClasses = textInputVariants({ error })
 
   return (
     <div className={cn('flex flex-col', shared.wrapper)}>
-      <Typography variant="label" color="muted">
-        {label}
-      </Typography>
+      {label && (
+        <Typography variant="label" color="muted">
+          {label}
+        </Typography>
+      )}
       <div className={cn(inputClasses, 'flex items-center', web.inputRow)}>
         {prefix ? (
           <Typography
@@ -45,6 +48,7 @@ export const TextInput = ({
             onChangeText(e.target.value)
           }}
           placeholder={placeholder}
+          maxLength={maxLength}
           className={cn(
             'flex-1 bg-transparent text-sm text-foreground',
             web.input

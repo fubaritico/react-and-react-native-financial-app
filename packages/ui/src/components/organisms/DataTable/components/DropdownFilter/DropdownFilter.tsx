@@ -15,8 +15,8 @@ export interface IDropdownFilterProps {
   onFiltersChange: (filters: ColumnFiltersState) => void
   /** Accessible label for the dropdown trigger */
   accessibilityLabel?: string
-  /** Drawer header title (mobile) */
-  drawerTitle?: string
+  /** BottomSheet header title (mobile) */
+  bottomSheetTitle?: string
 }
 
 /**
@@ -35,12 +35,13 @@ export function combineColumnFilters(
     return prev.filter((filter) => filter.id !== filterName)
   }
 
-  const columnFilter = prev.find((filter) => filter.id === filterName)
+  const existingIndex = prev.findIndex((filter) => filter.id === filterName)
 
-  if (columnFilter) {
-    columnFilter.value = value
-  } else {
-    prev.push({ id: filterName, value })
+  if (existingIndex !== -1) {
+    return prev.map((filter, i) =>
+      i === existingIndex ? { ...filter, value } : filter
+    )
   }
-  return [...prev]
+
+  return [...prev, { id: filterName, value }]
 }

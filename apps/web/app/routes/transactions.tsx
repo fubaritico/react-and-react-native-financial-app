@@ -1,22 +1,21 @@
+import { TransactionsDataTable } from '@financial-app/features'
+import { mockTransactions } from '@financial-app/shared'
+import { Typography } from '@financial-app/ui'
 import { useTranslation } from 'react-i18next'
 
 /**
- * Transactions page — protected route (auth guard commented out during Phase 7).
- * Placeholder until the full transactions list + search/filter is built.
+ * Transactions page — displays the full transactions list with search, sort, and category filter.
+ * TODO (Phase 8): replace mockTransactions with real API data.
  */
 export default function Transactions() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   return (
     <div className="p-6 lg:p-10">
-      <h1 className="text-preset-1 text-foreground mb-6">
+      <Typography variant="page-title" as="h1" className="mb-6">
         {t('transactions.title')}
-      </h1>
-      <div className="bg-card rounded-xl p-6">
-        <p className="text-preset-4 text-foreground-muted">
-          {t('common.placeholder')}
-        </p>
-      </div>
+      </Typography>
+      <TransactionsDataTable data={mockTransactions} locale={i18n.language} />
     </div>
   )
 }

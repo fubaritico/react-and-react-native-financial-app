@@ -26,4 +26,6 @@ export interface ITextInputProps extends VariantProps<
   prefix?: string
   /** Masks the input text (native: secureTextEntry, web: type="password"). */
   secureTextEntry?: boolean
+  /** Maximum number of characters allowed. */
+  maxLength?: number
 }

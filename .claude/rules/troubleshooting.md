@@ -16,6 +16,7 @@ Full modus operandi: `docs/modus-operandi/reset.md`
 | `getDevServer is not a function (it is Object)` | `@expo/metro-runtime` or `expo-router` version mismatch with SDK | Run `npx expo install --fix` then `npx expo prebuild --clean && npx expo run:ios` |
 | `Cannot find native module 'ExpoLinking'` | JS bundle updated but native binary is stale (missing new native modules) | `npx expo prebuild --clean && npx expo run:ios` |
 | `Could not find org.asyncstorage.shared_storage:storage-android:1.0.0` | AsyncStorage v3 local Maven repo not configured | Add `allprojects { repositories { maven { url = uri(project(":react-native-async-storage_async-storage").file("local_repo")) } } }` to `android/build.gradle` |
+| `__fbBatchedBridgeConfig is not set` (Jest) | pnpm created 2+ copies of react-native (different peer dep contexts) — preset mocks only apply to one | `moduleNameMapper` to force singleton — see "Jest + pnpm Monorepo" section below |
 
 ### Expo Managed (apps/mobile-expo) — Dependency Alignment
 
@@ -102,6 +103,57 @@ automatiquement. Le QR code ne fonctionne plus avec Expo Go.
 - Expo Go (QR code rapide) = pas de dossier natif, pas de `--dev-client`
 - Dev build (simulateur/device) = `prebuild` + `run:ios/android`, puis `--dev-client`
 - Ne jamais mélanger les deux sur le même device
+
+### Jest + pnpm Monorepo — react-native Singleton
+
+**Symptom**: `__fbBatchedBridgeConfig is not set, cannot invoke native modules` when running
+Jest tests that render components from workspace packages (`@financial-app/ui`, `@financial-app/features`).
+
+**Root cause**: pnpm creates separate copies of `react-native` when peer dependency contexts
+differ (e.g. `@babel/core@7.28.5` vs `@babel/core@7.29.0`). The Jest preset (`preset: 'react-native'`)
+mocks internal RN modules (`Text`, `View`, `ScrollView`, etc.) only for the copy resolved from
+the **app's** `node_modules`. But workspace packages resolve a **different** copy → no mocks → crash.
+
+**Diagnosis**:
+```bash
+# List react-native copies — more than 1 = problem
+ls node_modules/.pnpm/ | grep "^react-native@"
+
+# Check which copy the app resolves
+pnpm --filter <app> exec node -e "console.log(require.resolve('react-native/package.json'))"
+
+# Check which copy a workspace package resolves
+pnpm --filter <app> exec node -e "console.log(require.resolve('react-native', { paths: ['../../packages/ui/src/'] }))"
+```
+
+**Fix**: force all react-native imports to the app's copy via `moduleNameMapper` in `jest.config.js`:
+
+```js
+const rnRoot = path.dirname(require.resolve('react-native/package.json'))
+
+module.exports = {
+  preset: 'react-native',
+  moduleNameMapper: {
+    '^react-native$': rnRoot,
+    '^react-native/(.*)$': `${rnRoot}/$1`,
+    // Same pattern for other native singletons:
+    '^react-native-svg$': '<rootDir>/jest.mocks/react-native-svg.js',
+    '^twrnc$': '<rootDir>/jest.mocks/twrnc.js',
+  },
+}
+```
+
+Mock files go in `<app>/jest.mocks/` — simple stubs returning `View` or proxy objects.
+
+**Key insight**: if tests work everywhere else (standalone projects, CI examples, RNTL docs),
+the problem is YOUR setup, not Jest or RN. Investigate the resolution chain, don't accept
+"it can't work" as an answer.
+
+References:
+- [callstack/react-native-testing-library #1559](https://github.com/callstack/react-native-testing-library/issues/1559)
+- RN 0.81 `jest/setup.js` mocks internals via `m#` module map — only applies to one copy
+- RN 0.81 `jest/react-native-env.js` sets `customExportConditions = ['require', 'react-native']`
+- RN 0.85 moves the preset to `@react-native/jest-preset` (dedicated package)
 
 ### Simulator Management
 

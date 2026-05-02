@@ -12,6 +12,9 @@
         "300": { "$value": "#B3B3B3", "$type": "color" },
         "100": { "$value": "#F2F2F2", "$type": "color" }
       },
+      "black": {
+        "DEFAULT": { "$value": "#000000", "$type": "color" }
+      },
       "white": {
         "DEFAULT": { "$value": "#FFFFFF", "$type": "color" }
       },

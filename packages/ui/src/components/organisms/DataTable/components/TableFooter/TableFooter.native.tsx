@@ -17,7 +17,7 @@ export function TableFooter({
   rowsPerPageOptions,
   rowsPerPageLabel = 'Rows per page',
   rowsPerPageAccessibilityLabel,
-  rowsPerPageDrawerTitle,
+  rowsPerPageBottomSheetTitle,
   prevLabel,
   nextLabel,
   prevAriaLabel,
@@ -48,7 +48,7 @@ export function TableFooter({
               tableStateManager.setPageSize(Number(value))
             }}
             accessibilityLabel={rowsPerPageAccessibilityLabel}
-            drawerTitle={rowsPerPageDrawerTitle}
+            bottomSheetTitle={rowsPerPageBottomSheetTitle}
           />
           <Typography variant="body" color="muted">
             {rowsPerPageLabel}

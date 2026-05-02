@@ -118,7 +118,7 @@ export function TransactionsDataTable({
           onSelect={handleSortChange}
           accessibilityLabel="Sort transactions"
           menuAccessibilityLabel="Sort options"
-          drawerTitle="Sort by"
+          bottomSheetTitle="Sort by"
           trigger={
             isMobile
               ? () => <Icon name="sortMobile" iconSize="md" />
@@ -136,7 +136,7 @@ export function TransactionsDataTable({
           onSelect={handleCategoryChange}
           accessibilityLabel="Filter by category"
           menuAccessibilityLabel="Category options"
-          drawerTitle="Category"
+          bottomSheetTitle="Category"
           trigger={
             isMobile
               ? () => <Icon name="filterMobile" iconSize="md" />

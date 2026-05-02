@@ -1,5 +1,6 @@
 import '../src/i18n'
 
+import { PortalProvider } from '@financial-app/ui/native'
 import { Slot } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { Provider as JotaiProvider } from 'jotai'
@@ -18,9 +19,11 @@ export default function RootLayout() {
   // const isAuthenticated = useAtomValue(isAuthenticatedAtom)
   return (
     <JotaiProvider>
-      <StatusBar style="light" />
-      <DevBadge />
-      <Slot />
+      <PortalProvider>
+        <StatusBar style="light" />
+        <DevBadge />
+        <Slot />
+      </PortalProvider>
     </JotaiProvider>
   )
 }

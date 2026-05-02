@@ -2,8 +2,8 @@ import { cva } from 'class-variance-authority'
 
 import type { VariantProps } from 'class-variance-authority'
 
-/** Variants for the Drawer root container */
-export const drawerVariants = cva('rounded-t-xl', {
+/** Variants for the BottomSheet root container */
+export const bottomSheetVariants = cva('rounded-t-xl', {
   variants: {
     variant: {
       light: 'bg-white text-foreground',
@@ -13,4 +13,4 @@ export const drawerVariants = cva('rounded-t-xl', {
   defaultVariants: { variant: 'dark' },
 })
 
-export type DrawerVariants = VariantProps<typeof drawerVariants>
+export type BottomSheetVariants = VariantProps<typeof bottomSheetVariants>

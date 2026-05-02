@@ -22,6 +22,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Never execute commands** — propose only. Exceptions: (1) user says "execute", "run", etc. (2) `pnpm type-check && pnpm lint && pnpm test` from root then `/review` — MUST run all 4 after every code change, never skip
 - **Risky actions** (git push, reset --hard, rm -rf) require explicit permission EVERY TIME
 - **Never hallucinate** — if uncertain, read code first
+- **If it works elsewhere, it works here** — when something fails, NEVER conclude "it can't work" or write workaround mocks. Search how other projects do it (GitHub, issues, docs), find the root cause in YOUR setup (resolution paths, singleton issues, config), and fix it. If thousands of devs use Jest+RN successfully, the problem is your config, not the tool.
 - **Always use context7** for any question about an API, library, or package
 - **Secrets** — live in `.env*` files — never in rules, memory, or code
 - **Always use pnpm** — never npm or yarn, including for registry lookups (`pnpm view` not `npm view`)
@@ -158,14 +159,17 @@ Read `@completed.md`
 - docs: updated features-package.md — Overview organisms move to features, ui keeps atomic DS (c0e02a6)
 - feat(ui): add NavItem atom + Navigation organism + Colors story (e5aacd2) — NavItem cross-platform atom (CVA: active/orientation/collapsed), Navigation web-only organism (sidebar expanded/collapsed + bottom bar), responsive phone/tablet (useWindowDimensions, collapsed on phone), tabBarBackground for rounded corners, Icon.native fixes (color prop on Svg, pointerEvents="none"), Typography nav-text/nav-active color variants, Colors story (full token palette), i18n minimizeMenu key, web Sidebar refactored to use Navigation
 - docs: add Expo modes guide + troubleshooting updates (aa1f7a9) — new docs/modus-operandi/expo-modes.md
+- feat: add @financial-app/features package, migrate Overview organisms from ui (b89673f) — new packages/features with dual-platform exports, moved PotsOverview/TransactionsOverview/RecurringBillsOverview from ui organisms to features/overview, own tw/cn instances, explicit subpath imports (@financial-app/ui/native for .native.tsx), updated all 3 apps + storybook imports, README updated with project structure + features package
+- feat(storybook): add NavItem + Navigation stories (93f2509) — web + native NavItem stories (Playground, SidebarItems, BottomBarItems, Collapsed), web Navigation stories (Playground, Interactive, Expanded, Collapsed), dark background support in Storybook
+- feat(features): extract TransactionsDataTable + locale support (a227c46) — TransactionsDataTable restructured into directory (constants/utils split, CompactTransactionRow in components/), sort state sync (useMemo derived from sorting), locale param added to DateCell/AmountCell factories (ui), locale prop threaded through TransactionsDataTable → columns → CompactTransactionRow, Storybook stories simplified to consume from @financial-app/features
+- refactor(ui): rename Drawer → BottomSheet + Portal system fix + iPad DataTable fixes (uncommitted) — Drawer renamed to BottomSheet across entire codebase (component, types, props, stories, features, barrels), Portal system fixed (key-based API with useId, Map-based PortalProvider, debug logs removed), BottomSheet.native overlay restored (Pressable bg-black/50 onPress={onClose}), data-name attributes added on all key Views, AvatarNameCell iPad text truncation fixed (numberOfLines + width:0 trick), DataTable column widths aligned with web (meta.className pattern), BottomSheetBody flex-1 bug fixed. Type-check + lint + test all pass. /review not yet run. Not yet committed.
 
 ### Next
+- Commit BottomSheet rename + run /review
+- User to test on iPad: verify BottomSheet overlay, 2-tap switching behavior, text truncation
+- Wire TransactionsDataTable into app routes (web, mobile-expo) with `locale={i18n.language}`
 - Navigation web: graphic design refinement still in progress (user doing manual pass)
-- NavItem/Navigation Storybook stories (web + native) still needed
-- `/review` not yet run on NavItem/Navigation changes
-- Wire TransactionsDataTable into Transactions page (step 13)
 - Full CRUD for Transactions and Recurring Bills (decided: not read-only)
-- Foresee empty states for all screens (for when API is wired)
 - Goal: Transactions page with mock data + "Add Transaction" button
 - Then: DonutChart + BudgetsOverview (last Wave 3 items)
 - Then: Phase 8 (API server + HTTP client + testing)
@@ -186,9 +190,13 @@ Read `@completed.md`
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
 - Husky pre-commit hook fails when Turbo runs in non-TTY git hook context — all checks pass individually, likely output buffering issue. Used HUSKY=0 as workaround for 481e539. Fixed in 2e3c04b: root causes were StatusCell.native.tsx importing TableCell.web (cross-platform violation pulling DOM types into bare RN) + storybook tsconfig missing vite/client types.
 - RN native component tests (*.native.tsx) require Jest — Vitest cannot mock TurboModuleRegistry. UI package will use single Jest runner with multi-project config (native + web projects) — not yet implemented.
+- Jest pnpm singleton fix DONE: pnpm creates 2 copies of react-native (different @babel/core peer contexts), preset mocks only apply to one → `moduleNameMapper` forces singleton. See `troubleshooting.md` "Jest + pnpm Monorepo" section.
 - @financial-app/shared barrel (index.native.ts) re-exports auth chain — screen tests must mock the barrel to avoid pulling in supabase/babel-runtime. Consider splitting barrel or using subpath imports in screens.
 - Android build: AsyncStorage v3 Maven repo issue FIXED (dc90bd2). `rebuild-android.sh` handles all cache/daemon cleanup.
 - Review A11Y-008: PasswordInput toggle missing accessibilityState/aria-pressed for visibility state — pre-existing, low priority
 - pnpm virtual store creates duplicate entries when peer dep contexts differ (e.g. react-dom versions) — fixed for i18n by removing react-i18next from UI, but bare RN still needs react-native-svg singleton hack in metro.config.js
 - #Alias web barrel convention: .web.tsx files must import from `#Atoms/index.web` (not `#Atoms`) because tsc resolves the bare alias to the native barrel (index.ts). Document in design-system.md rules.
+- Native BottomSheet: 2-tap switching between sheets is accepted behavior (overlay Pressable blocks touches to triggers behind it). See memory/bottomsheet-portal.md for full context on RN touch system limitations.
+- RN `overflow: visible` does NOT work on iOS to show content outside a parent View — RN clips regardless. Do not attempt 0-height + overflow:visible patterns.
+- RN `pointerEvents="box-none"` only passes touches to children, NOT to sibling Views in the tree.
 

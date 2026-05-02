@@ -86,7 +86,7 @@ const AddBudgetComponent = () => {
           <View style={{ marginTop: 20, gap: 16 }}>
             <Dropdown
               label="Budget Category"
-              drawerTitle="Budget Category"
+              bottomSheetTitle="Budget Category"
               options={budgetCategoryOptions}
               selectedValue="entertainment"
               onSelect={noop}
@@ -102,7 +102,7 @@ const AddBudgetComponent = () => {
             />
             <Dropdown
               label="Theme"
-              drawerTitle="Theme"
+              bottomSheetTitle="Theme"
               options={themeOptions}
               selectedValue="green"
               onSelect={noop}
@@ -214,7 +214,7 @@ const EditBudgetComponent = () => {
           <View style={{ marginTop: 20, gap: 16 }}>
             <Dropdown
               label="Budget Category"
-              drawerTitle="Budget Category"
+              bottomSheetTitle="Budget Category"
               options={budgetCategoryOptions.slice(0, 2)}
               selectedValue="entertainment"
               onSelect={noop}
@@ -230,7 +230,7 @@ const EditBudgetComponent = () => {
             />
             <Dropdown
               label="Theme"
-              drawerTitle="Theme"
+              bottomSheetTitle="Theme"
               options={themeOptions.slice(0, 2)}
               selectedValue="green"
               onSelect={noop}

@@ -1,4 +1,4 @@
-import { Button, Drawer, Menu } from '@financial-app/ui/native'
+import { BottomSheet, Button, Menu } from '@financial-app/ui/native'
 import { useState } from 'react'
 import { View } from 'react-native'
 
@@ -8,8 +8,8 @@ import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 const noop = () => {}
 
 const meta = {
-  title: 'Native/Design System/Molecules/Drawer',
-  component: Drawer,
+  title: 'Native/Design System/Molecules/BottomSheet',
+  component: BottomSheet,
   parameters: { layout: 'centered' },
   argTypes: {
     variant: {
@@ -21,7 +21,7 @@ const meta = {
     onClose: { table: { disable: true } },
     children: { table: { disable: true } },
   },
-} satisfies Meta<typeof Drawer>
+} satisfies Meta<typeof BottomSheet>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -45,23 +45,23 @@ const PlaygroundComponent = (args: {
   return (
     <View>
       <Button
-        title="Open Drawer"
+        title="Open BottomSheet"
         variant="primary"
         onPress={() => {
           setOpen(true)
         }}
       />
-      <Drawer
+      <BottomSheet
         open={open}
         onClose={() => {
           setOpen(false)
         }}
         variant={args.variant}
         overlay={args.overlay}
-        accessibilityLabel="Sort options drawer"
+        accessibilityLabel="Sort options bottom sheet"
       >
-        <Drawer.Header closeLabel="Close">Sort by</Drawer.Header>
-        <Drawer.Body>
+        <BottomSheet.Header closeLabel="Close">Sort by</BottomSheet.Header>
+        <BottomSheet.Body>
           <Menu
             variant={args.variant}
             selectedValue={selected}
@@ -78,13 +78,13 @@ const PlaygroundComponent = (args: {
               </Menu.Item>
             ))}
           </Menu>
-        </Drawer.Body>
-      </Drawer>
+        </BottomSheet.Body>
+      </BottomSheet>
     </View>
   )
 }
 
-/** Interactive playground — open drawer, pick a sort option. */
+/** Interactive playground — open bottom sheet, pick a sort option. */
 export const Playground: Story = {
   args: {
     open: false,

@@ -1,4 +1,4 @@
-# 1.0.0 (2026-04-28)
+# 1.0.0 (2026-05-02)
 
 
 ### Bug Fixes
@@ -14,6 +14,7 @@
 
 ### Features
 
+* add @financial-app/features package, migrate Overview organisms from ui ([b89673f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b89673f32cc8ea7e6036f005afd82ced06b36f94))
 * add DevBadge component to all 3 mobile apps ([bff5832](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bff58324984c0594a1b2e6c7766f528565e1a852))
 * added .nvmrc and .gitattributes files ([836d77d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/836d77dd5681ea7ecd79ef0dd7bb74c7f5fabc7a))
 * added env for BDD credentials ([c08b401](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c08b4019e8528439de6b969fc9cec13b2595601a))
@@ -26,6 +27,7 @@
 * **config:** add setup-tokens-package and migrate-to-nativewind-v5 skills ([1d9caa6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1d9caa60ec308b74bed7ee14282645261bffa92a))
 * **config:** add setup-ui-package skill with architecture reference ([44982df](https://github.com/fubaritico/react-and-react-native-financial-app/commit/44982df4e2fb4aa4d4a03ba965b4cfac2cf0d72a))
 * **expo:** add expo-dev-client and native build scripts ([1b26c7f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1b26c7f61490496cf77043e28ff08033829bc8e9))
+* **features:** extract TransactionsDataTable into directory structure + locale support ([a227c46](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a227c462157f02dd1f4633c31309dd7be38679ad))
 * **i18n:** add react-i18next with EN/FR translations across all apps ([987131e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/987131eefff0e106daaa0c42637890719c1ca4ab))
 * **icons:** add @financial-app/icons package with cross-platform Icon component ([8195d3d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8195d3d406e0f330afda450ec9c69cd219c5083d))
 * **icons:** add Fb app icon to all mobile apps ([e18ea02](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e18ea02267c836173524182be2629b4d8cd3142b))
@@ -42,6 +44,7 @@
 * **shared:** create @financial-app/shared package (Phase 5.1 + 5.7) ([6cb1d2c](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6cb1d2c95e6e5c120727fc33d7dd8f061d006ff2))
 * **state:** wire Jotai Provider in all apps + centralize in catalog ([a664939](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a664939082b0495731d4e72b11947e9fed0041a4))
 * **storybook:** add native stories for all 20 remaining components ([df170e6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/df170e66ed5358a6d42bb53b9dbb8b28efed178e))
+* **storybook:** add NavItem + Navigation stories ([93f2509](https://github.com/fubaritico/react-and-react-native-financial-app/commit/93f25096501a339c0b5d2b85deb44f37b15bbd29))
 * styles based on nativewind and used by apps and ds ([d95e9f2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d95e9f2966e13816f1cb7ef78b9fc786e1c4ec47))
 * **tailwind-config:** create @financial-app/tailwind-config (Phase 2) ([257f51d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/257f51de7d099f73d2c9754855d1b797c04a2f21))
 * **tokens:** create @financial-app/tokens package (Phase 0) ([76b2857](https://github.com/fubaritico/react-and-react-native-financial-app/commit/76b2857cda2768fa3ac35888dd90244aff5736f0))
@@ -51,6 +54,7 @@
 * **ui:** add Dropdown molecule + Portal/Drawer/Menu/Listbox foundation ([b4d2468](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b4d2468f1c2bb3ae04d0fa4f2d62852e3dcda0ae))
 * **ui:** add Icon Storybook story with playground and showcase ([edb2fa9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/edb2fa931b159bfc936ea6c1a039393442dfc577))
 * **ui:** add Modal organism + shared modal service (Jotai) ([7898692](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7898692e4578a326ec0cca92323ef324ed36b87a))
+* **ui:** add NavItem atom + Navigation organism + Colors story ([e5aacd2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e5aacd246c6cfc3e91d3f52b84fd88ad2b23aa33))
 * **ui:** add Pagination molecule + refactor Button for composability ([f3b844b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/f3b844b271295b4e0e487606b6735f411817a869))
 * **ui:** add TransactionsDataTable stories + table sub-components + a11y fixes ([2e3c04b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2e3c04b1a9c799c9eea09abe9d4dd6a5ce8e613f))
 * **ui:** add Typography component with 9 Figma-mapped variants ([a3b6f29](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a3b6f2973bd4559c87dcdd8d67d2fa5b91420567))

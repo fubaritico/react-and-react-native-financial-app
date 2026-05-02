@@ -2,6 +2,12 @@ const path = require('path')
 
 const sharedPkg = path.resolve(__dirname, '../../packages/shared/src')
 
+// Resolve the single react-native copy used by this app.
+// pnpm may install multiple copies (different @babel/core peer contexts),
+// causing Jest preset mocks to apply to one copy while workspace packages
+// import from the other. This forces all imports to the app's copy.
+const rnRoot = path.dirname(require.resolve('react-native/package.json'))
+
 module.exports = {
   preset: 'react-native',
   setupFiles: ['./jest.setup.js'],
@@ -12,5 +18,9 @@ module.exports = {
   moduleNameMapper: {
     '^@financial-app/shared/mocks$': `${sharedPkg}/mocks/index.ts`,
     '^@financial-app/shared/utils$': `${sharedPkg}/utils/index.ts`,
+    '^react-native-svg$': '<rootDir>/jest.mocks/react-native-svg.js',
+    '^twrnc$': '<rootDir>/jest.mocks/twrnc.js',
+    '^react-native$': rnRoot,
+    '^react-native/(.*)$': `${rnRoot}/$1`,
   },
 }

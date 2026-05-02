@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import { cn } from '#Lib/cn'
 
 import { TextInput } from '#Molecules/index.web'
 
@@ -22,7 +22,7 @@ export function ActionBar({
   const filterValue = typeof globalFilter === 'string' ? globalFilter : ''
 
   return (
-    <div className={clsx(web.container, { sticky: stickyHeader }, className)}>
+    <div className={cn(web.container, { sticky: stickyHeader }, className)}>
       <div className={web.leftActionsWrap}>{leftActions}</div>
       {onGlobalFilterChange && (
         <div className="relative">

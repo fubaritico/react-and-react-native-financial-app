@@ -1,6 +1,7 @@
 import { flexRender } from '@tanstack/react-table'
-import clsx from 'clsx'
 import { Fragment, useEffect } from 'react'
+
+import { cn } from '#Lib/cn'
 
 import {
   ActionBar,
@@ -12,7 +13,7 @@ import {
   TableRow,
 } from './components/index.web'
 import { MIN_PAGE_SIZE } from './DataTable.constants'
-import { web } from './DataTable.styles'
+import { shared, web } from './DataTable.styles'
 
 import type { BaseDataTableProps } from './DataTable.types'
 import type { Table as TableType } from '@tanstack/react-table'
@@ -73,8 +74,8 @@ export default function DataTable<TData>({
 
   return (
     <div
-      className={clsx(
-        web.root,
+      className={cn(
+        shared.root,
         web.padding,
         { [web.shadow]: !noShadow },
         className
@@ -93,10 +94,7 @@ export default function DataTable<TData>({
       {actionBar}
       <Table maxHeight={maxHeight}>
         <TableHeader
-          className={clsx(
-            { [web.stickyHeader]: stickyHeader },
-            headerClassName
-          )}
+          className={cn({ [web.stickyHeader]: stickyHeader }, headerClassName)}
         >
           {tableStateManager.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="border-t-0">
@@ -129,16 +127,26 @@ export default function DataTable<TData>({
 
                 return (
                   <TableRow
-                    className={clsx(web.rowHeight, {
+                    className={cn(web.rowHeight, {
                       [web.interactiveRow]: !!onRowClick,
                     })}
                     data-test={`row-${row.id}`}
                     data-state={isSelected && 'selected'}
                     enableHover
                     key={`row-${row.id}`}
-                    role={onRowClick ? 'button' : undefined}
                     tabIndex={onRowClick ? 0 : undefined}
                     onClick={() => onRowClick?.(row)}
+                    onKeyDown={
+                      onRowClick
+                        ? (e: React.KeyboardEvent) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault()
+                              onRowClick(row)
+                            }
+                          }
+                        : undefined
+                    }
+                    aria-label={onRowClick ? `Row ${row.id}` : undefined}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <Fragment key={`cell-${row.id}-${cell.id}`}>

@@ -34,7 +34,7 @@ const meta = {
   parameters: { layout: 'centered' },
   argTypes: {
     label: { control: 'text' },
-    drawerTitle: { control: 'text' },
+    bottomSheetTitle: { control: 'text' },
     selectedValue: {
       control: 'select',
       options: sortOptions.map((o) => o.value),
@@ -48,7 +48,7 @@ type Story = StoryObj<typeof meta>
 
 const PlaygroundComponent = (args: {
   label?: string
-  drawerTitle?: string
+  bottomSheetTitle?: string
   selectedValue: string
 }) => {
   const [selected, setSelected] = useState(args.selectedValue)
@@ -56,7 +56,7 @@ const PlaygroundComponent = (args: {
     <View style={{ alignItems: 'flex-start' }}>
       <Dropdown
         label={args.label}
-        drawerTitle={args.drawerTitle}
+        bottomSheetTitle={args.bottomSheetTitle}
         options={sortOptions}
         selectedValue={selected}
         onSelect={setSelected}
@@ -67,11 +67,11 @@ const PlaygroundComponent = (args: {
   )
 }
 
-/** Interactive playground — opens dark drawer on tap. */
+/** Interactive playground — opens dark bottom sheet on tap. */
 export const Playground: Story = {
   args: {
     label: 'Sort by',
-    drawerTitle: 'Sort by',
+    bottomSheetTitle: 'Sort by',
     selectedValue: 'latest',
     options: sortOptions,
     onSelect: noop,
@@ -79,7 +79,7 @@ export const Playground: Story = {
   render: (args) => (
     <PlaygroundComponent
       label={args.label}
-      drawerTitle={args.drawerTitle}
+      bottomSheetTitle={args.bottomSheetTitle}
       selectedValue={args.selectedValue}
     />
   ),
@@ -93,7 +93,7 @@ const ShowcaseComponent = () => {
     <View style={{ gap: 24 }}>
       <Dropdown
         label="Sort by"
-        drawerTitle="Sort by"
+        bottomSheetTitle="Sort by"
         options={sortOptions}
         selectedValue={sortValue}
         onSelect={setSortValue}
@@ -102,7 +102,7 @@ const ShowcaseComponent = () => {
       />
       <Dropdown
         label="Category"
-        drawerTitle="Category"
+        bottomSheetTitle="Category"
         options={categoryOptions}
         selectedValue={categoryValue}
         onSelect={setCategoryValue}

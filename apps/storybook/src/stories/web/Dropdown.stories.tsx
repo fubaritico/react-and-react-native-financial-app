@@ -33,7 +33,7 @@ const meta = {
   parameters: { layout: 'centered' },
   argTypes: {
     label: { control: 'text' },
-    drawerTitle: { control: 'text' },
+    bottomSheetTitle: { control: 'text' },
     selectedValue: {
       control: 'select',
       options: sortOptions.map((o) => o.value),
@@ -47,14 +47,14 @@ type Story = StoryObj<typeof meta>
 
 const PlaygroundComponent = (args: {
   label?: string
-  drawerTitle?: string
+  bottomSheetTitle?: string
   selectedValue: string
 }) => {
   const [selected, setSelected] = useState(args.selectedValue)
   return (
     <Dropdown
       label={args.label}
-      drawerTitle={args.drawerTitle}
+      bottomSheetTitle={args.bottomSheetTitle}
       options={sortOptions}
       selectedValue={selected}
       onSelect={setSelected}
@@ -64,11 +64,11 @@ const PlaygroundComponent = (args: {
   )
 }
 
-/** Interactive playground — trigger opens menu on desktop, drawer on mobile. */
+/** Interactive playground — trigger opens menu on desktop, bottom sheet on mobile. */
 export const Playground: Story = {
   args: {
     label: 'Sort by',
-    drawerTitle: 'Sort by',
+    bottomSheetTitle: 'Sort by',
     selectedValue: 'latest',
     options: sortOptions,
     onSelect: noop,
@@ -76,7 +76,7 @@ export const Playground: Story = {
   render: (args) => (
     <PlaygroundComponent
       label={args.label}
-      drawerTitle={args.drawerTitle}
+      bottomSheetTitle={args.bottomSheetTitle}
       selectedValue={args.selectedValue}
     />
   ),
@@ -109,7 +109,7 @@ const ShowcaseComponent = () => {
       >
         <Dropdown
           label="Sort by"
-          drawerTitle="Sort by"
+          bottomSheetTitle="Sort by"
           options={sortOptions}
           selectedValue={sortValue}
           onSelect={setSortValue}
@@ -118,7 +118,7 @@ const ShowcaseComponent = () => {
         />
         <Dropdown
           label="Category"
-          drawerTitle="Category"
+          bottomSheetTitle="Category"
           options={categoryOptions}
           selectedValue={categoryValue}
           onSelect={setCategoryValue}

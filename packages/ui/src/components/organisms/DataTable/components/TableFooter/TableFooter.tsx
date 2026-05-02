@@ -11,8 +11,8 @@ export interface ITableFooterProps {
   rowsPerPageLabel?: string
   /** Accessible label for the rows-per-page dropdown */
   rowsPerPageAccessibilityLabel?: string
-  /** Drawer header title for the rows-per-page selector (mobile) */
-  rowsPerPageDrawerTitle?: string
+  /** BottomSheet header title for the rows-per-page selector (mobile) */
+  rowsPerPageBottomSheetTitle?: string
   /** Shows the rows per page dropdown */
   showRowsPerPage?: boolean
   /** Label for the previous button (desktop) */

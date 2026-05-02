@@ -135,17 +135,20 @@
 - **Exception**: Purely decorative/structural strings like "..." (ellipsis) are acceptable
 - **Rationale**: UI components are i18n-agnostic — they receive translated strings as props
 
-### QUAL-018: Shared/web-only classes not extracted to `.styles.ts`
+### QUAL-018: Platform-specific classes not extracted to `.styles.ts`
 - **Files**: `packages/ui/src/components/**/*.native.tsx`, `packages/ui/src/components/**/*.web.tsx`
 - **Check 1 — Duplicated layout classes**: Tailwind class strings that appear identically in both `.native.tsx` and `.web.tsx` but are NOT in `.variants.ts` or `.styles.ts` (e.g. `flex-row items-center gap-3` copy-pasted in both files)
-- **Check 2 — Inline web-only classes**: Web-only classes (`hover:*`, `focus:*`, `focus-visible:*`, `focus-within:*`, `active:*`, `transition-*`, `cursor-*`, `shadow-*`, `ring-*`, `outline-*`, `animate-*`, `motion-safe:*`) hardcoded inline in `.web.tsx` instead of extracted to the `web` export in `.styles.ts`
-- **Check 3 — Native importing `web`**: `.native.tsx` importing the `web` export from `.styles.ts`
+- **Check 2 — Inline web-only classes**: Web-only classes (`hover:*`, `focus:*`, `focus-visible:*`, `focus-within:*`, `active:*`, `transition-*`, `cursor-*`, `shadow-*`, `ring-*`, `outline-*`, `animate-*`, `motion-safe:*`, `inline-block`, `fixed`, `sticky`) hardcoded inline in `.web.tsx` instead of extracted to the `web` export in `.styles.ts`
+- **Check 3 — Inline native-only classes**: Native-only classes (explicit `flex-row` on View containers, RN-specific absolute positioning patterns) hardcoded inline in `.native.tsx` instead of extracted to the `native` export in `.styles.ts`
+- **Check 4 — Cross-platform import violation**: `.native.tsx` importing the `web` export, or `.web.tsx` importing the `native` export from `.styles.ts`
+- **Check 5 — Web-only class in `shared`**: Classes that only work on web (e.g. `inline-block`, `-translate-x-1/2` without RN support) placed in the `shared` export instead of `web`
 - **Required structure** in `.styles.ts`:
   ```ts
   export const shared = { /* layout classes for both platforms */ } as const
   export const web = { /* web-only classes */ } as const
+  export const native = { /* native-only classes */ } as const
   ```
-- **Exception**: Components with no inner elements AND no web-only classes may skip `.styles.ts`
+- **Exception**: Components with no inner elements AND no platform-specific classes may skip `.styles.ts`
 - **Exception**: Single-use web-only class on root element composed via `cn(variants(), web.root)` — if the component literally has ONE web-only class and no inner elements, inline is tolerable but `.styles.ts` is preferred
 - **Rationale**: Centralizes class strings, prevents silent native breakage from web-only classes, makes platform-specific styling auditable
 

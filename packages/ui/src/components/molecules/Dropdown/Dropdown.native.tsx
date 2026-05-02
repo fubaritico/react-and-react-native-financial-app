@@ -3,7 +3,7 @@ import { View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import { Drawer } from '../Drawer/Drawer.native'
+import { BottomSheet } from '../BottomSheet/BottomSheet.native'
 import { Menu } from '../Menu/Menu.native'
 
 import type { IDropdownProps } from './Dropdown'
@@ -11,10 +11,10 @@ import type { IDropdownProps } from './Dropdown'
 import { Button, Icon, Typography } from '#Atoms'
 
 /**
- * Native Dropdown — always opens a Drawer (bottom sheet) in dark mode.
+ * Native Dropdown — always opens a BottomSheet in dark mode.
  *
  * Trigger button shows the selected label + a caret-down icon.
- * On press, a dark-themed Drawer slides up from the bottom with
+ * On press, a dark-themed BottomSheet slides up from the bottom with
  * Menu items inside.
  */
 export function Dropdown({
@@ -24,8 +24,8 @@ export function Dropdown({
   onSelect,
   accessibilityLabel,
   menuAccessibilityLabel,
-  drawerTitle,
-  drawerCloseLabel = 'Close',
+  bottomSheetTitle,
+  bottomSheetCloseLabel = 'Close',
   trigger,
 }: Readonly<IDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false)
@@ -95,18 +95,18 @@ export function Dropdown({
         </Button>
       )}
 
-      {/* Drawer (always dark on native) */}
-      <Drawer
+      {/* BottomSheet (always dark on native) */}
+      <BottomSheet
         open={isOpen}
         onClose={handleClose}
         variant="dark"
         overlay
         accessibilityLabel={menuAccessibilityLabel}
       >
-        <Drawer.Header closeLabel={drawerCloseLabel}>
-          {drawerTitle ?? label}
-        </Drawer.Header>
-        <Drawer.Body>
+        <BottomSheet.Header closeLabel={bottomSheetCloseLabel}>
+          {bottomSheetTitle ?? label}
+        </BottomSheet.Header>
+        <BottomSheet.Body>
           <Menu
             selectedValue={selectedValue}
             variant="dark"
@@ -125,8 +125,8 @@ export function Dropdown({
               </Menu.Item>
             ))}
           </Menu>
-        </Drawer.Body>
-      </Drawer>
+        </BottomSheet.Body>
+      </BottomSheet>
     </View>
   )
 }

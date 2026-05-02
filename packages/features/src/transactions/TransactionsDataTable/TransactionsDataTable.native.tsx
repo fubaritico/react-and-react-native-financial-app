@@ -77,7 +77,6 @@ export function TransactionsDataTable({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
-        padding: 12,
       }}
     >
       <View style={{ flex: 1 }}>
@@ -97,7 +96,7 @@ export function TransactionsDataTable({
         }}
       >
         <Dropdown
-          drawerTitle="Sort by"
+          bottomSheetTitle="Sort by"
           options={SORT_OPTIONS}
           selectedValue={sortOption}
           onSelect={handleSortChange}
@@ -105,7 +104,7 @@ export function TransactionsDataTable({
           trigger={() => <Icon name="sortMobile" iconSize="md" />}
         />
         <Dropdown
-          drawerTitle="Category"
+          bottomSheetTitle="Category"
           options={CATEGORY_OPTIONS}
           selectedValue={categoryOption}
           onSelect={handleCategoryChange}
