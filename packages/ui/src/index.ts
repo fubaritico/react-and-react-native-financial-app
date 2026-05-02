@@ -28,6 +28,12 @@ export type { ILinkTextProps } from './components/atoms/LinkText/LinkText.tsx'
 export { NavItem } from './components/atoms/NavItem'
 export type { INavItemProps } from './components/atoms/NavItem/NavItem.tsx'
 
+export { DonutChart } from './components/atoms/DonutChart'
+export type {
+  IDonutChartProps,
+  IDonutSegment,
+} from './components/atoms/DonutChart/DonutChart.tsx'
+
 // Molecules
 export { TextInput } from './components/molecules/TextInput'
 export type { ITextInputProps } from './components/molecules/TextInput/TextInput.tsx'

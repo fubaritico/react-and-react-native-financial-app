@@ -27,10 +27,11 @@ Every component follows this exact pattern inside its atomic directory:
 
 ```
 ComponentName/
-  ComponentName.tsx            # types + props interface ONLY — no JSX, no imports from renderers
+  ComponentName.tsx            # ALL types + interfaces ONLY — no JSX, no imports from renderers
   ComponentName.variants.ts    # CVA variant object — internal, never exported from package
   ComponentName.styles.ts      # shared + web-only Tailwind class strings (two named exports)
-  ComponentName.constants.ts   # (optional) shared runtime values (maps, defaults) — no renderer imports
+  ComponentName.constants.ts   # (optional) constants ONLY (numbers, strings, maps) — no functions, no types, no renderer imports
+  ComponentName.utils.ts       # (optional) shared utility functions — imports from .constants.ts + .tsx, no renderer imports
   ComponentName.native.tsx     # React Native implementation
   ComponentName.web.tsx        # DOM/HTML implementation
   index.ts                     # native barrel — exports from .native (Metro uses this)
@@ -39,7 +40,8 @@ ComponentName/
 
 ## ComponentName.tsx — Types File Rules
 
-- Export the Props interface and nothing else
+- Export ALL types and interfaces for the component (props, internal types, return types)
+- This is the SINGLE source of truth for all types — `.constants.ts` and `.utils.ts` must NOT define types
 - Extend VariantProps from the component's CVA variant object
 - No JSX, no runtime code, no renderer imports
 - **NEVER re-export variants** — variants are internal implementation details

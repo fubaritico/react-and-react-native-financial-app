@@ -152,6 +152,19 @@
 - **Exception**: Single-use web-only class on root element composed via `cn(variants(), web.root)` — if the component literally has ONE web-only class and no inner elements, inline is tolerable but `.styles.ts` is preferred
 - **Rationale**: Centralizes class strings, prevents silent native breakage from web-only classes, makes platform-specific styling auditable
 
+### QUAL-019: File responsibility violations (constants / utils / types)
+- **Files**: `packages/ui/src/components/**/*.constants.ts`, `packages/ui/src/components/**/*.utils.ts`, `packages/ui/src/components/**/*.tsx` (types file)
+- **Check 1 — Functions in constants**: `.constants.ts` files must contain ONLY constants (numeric values, string maps, enums, config objects). Functions belong in `.utils.ts`.
+- **Check 2 — Types in constants**: Interfaces and type aliases must NOT be defined in `.constants.ts`. All types/interfaces belong in the `.tsx` types file.
+- **Check 3 — Types in utils**: `.utils.ts` must NOT define interfaces or type aliases. It should import them from the `.tsx` types file.
+- **Check 4 — Constants in utils**: Static values (numbers, strings, config objects) belong in `.constants.ts`, not `.utils.ts`.
+- **Required separation**:
+  - `.tsx` = all types/interfaces (props, internal types, return types)
+  - `.constants.ts` = all static values (numbers, strings, maps, enums)
+  - `.utils.ts` = all shared logic/functions (consumed by both `.native.tsx` and `.web.tsx`)
+- **Exception**: Components with no shared logic don't need `.utils.ts`. Components with no shared constants don't need `.constants.ts`.
+- **Rationale**: Clear separation of concerns — values vs logic vs types — prevents circular imports and keeps each file focused
+
 ### QUAL-015: Interface naming convention
 - **Files**: All `*.ts`, `*.tsx`
 - **Check**: All interface names MUST start with `I` prefix (e.g., `IAuthClient`, `IAuthStorage`, `IButtonProps`)

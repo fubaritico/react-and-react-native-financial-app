@@ -30,6 +30,12 @@ export type { ILinkTextProps } from './components/atoms/LinkText/LinkText.tsx'
 export { NavItem } from './components/atoms/NavItem/index.web'
 export type { INavItemProps } from './components/atoms/NavItem/NavItem.tsx'
 
+export { DonutChart } from './components/atoms/DonutChart/index.web'
+export type {
+  IDonutChartProps,
+  IDonutSegment,
+} from './components/atoms/DonutChart/DonutChart.tsx'
+
 // Molecules
 export { TextInput } from './components/molecules/TextInput/index.web'
 export type { ITextInputProps } from './components/molecules/TextInput/TextInput.tsx'

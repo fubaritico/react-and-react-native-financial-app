@@ -255,7 +255,10 @@ Variants and styles are NEVER exported from the package.
 
 ### 8. Optional files (create only if needed)
 
-- **`$Name.constants.ts`** — shared runtime values (maps, helper functions) when duplicated between native/web. No renderer imports.
+- **`$Name.constants.ts`** — shared runtime constants ONLY (numeric values, string maps, enums, config objects). No functions, no types, no renderer imports.
+- **`$Name.utils.ts`** — shared utility/helper functions when duplicated between native/web. May import from `.constants.ts` and `.tsx` (types). No renderer imports.
+
+**Separation rule**: constants hold _values_, utils hold _logic_, types file holds _all types/interfaces_. Never put functions in `.constants.ts` or types in `.constants.ts`.
 
 ### 9. Run checks
 
@@ -282,6 +285,9 @@ Invoke `/story $Name` after component creation.
 - [ ] No HTML elements in .native.tsx
 - [ ] No RN/StyleSheet imports in .web.tsx
 - [ ] No web-only Tailwind classes in variant base or variants object
+- [ ] `.constants.ts` contains ONLY constants (no functions, no types)
+- [ ] `.utils.ts` contains ONLY functions (no types — import them from `.tsx`)
+- [ ] All types/interfaces live in the `.tsx` types file (not in constants or utils)
 - [ ] All text uses `<Typography>` — no bare Text/p/span/h1
 - [ ] TWO barrel files: index.ts + index.web.ts with explicit extensions
 - [ ] Variants and styles NOT exported from barrels or public API
