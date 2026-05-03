@@ -39,6 +39,9 @@ export type {
 export { Currency } from './components/atoms/Currency/index.web'
 export type { ICurrencyProps } from './components/atoms/Currency/Currency.tsx'
 
+export { ProgressBar } from './components/atoms/ProgressBar/index.web'
+export type { IProgressBarProps } from './components/atoms/ProgressBar/ProgressBar.tsx'
+
 // Molecules
 export { TextInput } from './components/molecules/TextInput/index.web'
 export type { ITextInputProps } from './components/molecules/TextInput/TextInput.tsx'
