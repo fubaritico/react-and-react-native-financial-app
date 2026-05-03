@@ -14,6 +14,7 @@ jest.mock('@financial-app/ui', () => ({
 
 // Mock @financial-app/features to avoid twrnc native bridge calls.
 jest.mock('@financial-app/features', () => ({
+  BudgetOverview: () => null,
   PotsOverview: () => null,
   TransactionsOverview: () => null,
   RecurringBillsOverview: () => null,
@@ -31,8 +32,8 @@ describe('OverviewScreen', () => {
     expect(screen.getByText('Overview')).toBeTruthy()
   })
 
-  it('renders budgets placeholder', () => {
+  it('renders balance section', () => {
     render(<OverviewScreen />)
-    expect(screen.getByText('Budgets')).toBeTruthy()
+    expect(screen.getByText('Overview')).toBeTruthy()
   })
 })

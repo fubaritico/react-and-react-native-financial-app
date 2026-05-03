@@ -674,6 +674,9 @@ importers:
 
   packages/shared:
     dependencies:
+      '@financial-app/tokens':
+        specifier: workspace:^
+        version: link:../tokens
       '@supabase/ssr':
         specifier: ^0.6.1
         version: 0.6.1(@supabase/supabase-js@2.104.0)

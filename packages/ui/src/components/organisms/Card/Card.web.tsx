@@ -10,9 +10,15 @@ import type { ICardProps } from './Card'
 /** Web implementation of the Card component. */
 export const Card = ({ title, text, children }: Readonly<ICardProps>) => (
   <div className={cn(cardVariants(), web.root)}>
-    <Typography variant="subsection-title" as="h3" className="mb-2">
-      {title}
-    </Typography>
+    {title && (
+      <Typography
+        variant="subsection-title"
+        as="h3"
+        className={shared.titleSpacing}
+      >
+        {title}
+      </Typography>
+    )}
     {text && (
       <Typography variant="body" color="muted">
         {text}

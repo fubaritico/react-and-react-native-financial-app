@@ -1,4 +1,5 @@
 import {
+  BudgetOverview,
   PotsOverview,
   RecurringBillsOverview,
   TransactionsOverview,
@@ -38,11 +39,23 @@ export function OverviewScreen() {
 
   const potItems = mockPots.map((pot) => ({
     name: pot.name,
-    total: formatCurrency(pot.total),
+    total: pot.total,
     color: pot.theme,
   }))
 
   const totalSaved = mockPots.reduce((sum, pot) => sum + pot.total, 0)
+
+  const budgetItems = mockBudgets.map((budget) => {
+    const spent = mockTransactions
+      .filter((txn) => txn.category === budget.category && txn.amount < 0)
+      .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
+    return {
+      category: budget.category,
+      maximum: budget.maximum,
+      spent,
+      color: budget.theme,
+    }
+  })
 
   const recurringTransactions = mockTransactions.filter((txn) => txn.recurring)
   const paidBills = recurringTransactions.filter(
@@ -101,7 +114,7 @@ export function OverviewScreen() {
           seeDetailsLabel={t('common.seeDetails')}
           totalSavedLabel={t('potsOverview.totalSaved')}
           savingsIconLabel={t('accessibility.savingsIcon')}
-          totalSaved={formatCurrency(totalSaved)}
+          totalSaved={totalSaved}
           pots={potItems}
           onSeeDetails={() => {
             navigation.navigate('Pots')
@@ -138,12 +151,16 @@ export function OverviewScreen() {
         />
       </View>
 
-      {/* BudgetsOverview placeholder — awaiting DonutChart from Track B */}
-      <View style={tw`mt-4 bg-card rounded-xl p-5`}>
-        <Text style={tw`text-base font-bold`}>{t('budgets.title')}</Text>
-        <Text style={tw`text-foreground-muted mt-2`}>
-          {t('budgets.awaitingChart', { count: mockBudgets.length })}
-        </Text>
+      {/* Budgets section */}
+      <View style={tw`mt-4`}>
+        <BudgetOverview
+          title={t('budgets.title')}
+          seeDetailsLabel={t('common.seeDetails')}
+          budgets={budgetItems}
+          onSeeDetails={() => {
+            navigation.navigate('Budgets')
+          }}
+        />
       </View>
     </ScrollView>
   )

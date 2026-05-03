@@ -1,6 +1,10 @@
-import { BillSummaryRow, SectionLink, Typography } from '@financial-app/ui'
-
-import { cn } from '../../lib/cn'
+import {
+  BillSummaryRow,
+  Card,
+  SectionLink,
+  Typography,
+  cn,
+} from '@financial-app/ui'
 
 import { shared } from './RecurringBillsOverview.styles'
 
@@ -19,7 +23,7 @@ export const RecurringBillsOverview = ({
   onSeeDetails,
 }: Readonly<IRecurringBillsOverviewProps>) => {
   return (
-    <section className={shared.root}>
+    <Card>
       <div className={cn('flex', shared.header)}>
         <Typography variant="subsection-title" as="h3">
           {title}
@@ -35,6 +39,6 @@ export const RecurringBillsOverview = ({
         />
         <BillSummaryRow label={dueSoonLabel} amount={dueSoon} color="cyan" />
       </div>
-    </section>
+    </Card>
   )
 }

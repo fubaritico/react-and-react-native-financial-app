@@ -2,6 +2,7 @@ export {
   PotsOverview,
   TransactionsOverview,
   RecurringBillsOverview,
+  BudgetOverview,
 } from './overview'
 export type {
   IPotsOverviewProps,
@@ -9,6 +10,8 @@ export type {
   ITransactionsOverviewProps,
   ITransactionOverviewItem,
   IRecurringBillsOverviewProps,
+  IBudgetOverviewProps,
+  IBudgetOverviewItem,
 } from './overview'
 
 export { TransactionsDataTable } from './transactions'

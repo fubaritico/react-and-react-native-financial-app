@@ -1,11 +1,11 @@
 import {
   BillSummaryRow,
+  Card,
   SectionLink,
   Typography,
+  tw,
 } from '@financial-app/ui/native'
 import { View } from 'react-native'
-
-import tw from '../../lib/tw'
 
 import { shared } from './RecurringBillsOverview.styles'
 
@@ -24,7 +24,7 @@ export const RecurringBillsOverview = ({
   onSeeDetails,
 }: Readonly<IRecurringBillsOverviewProps>) => {
   return (
-    <View style={tw`${shared.root}`}>
+    <Card>
       <View style={tw`${shared.header}`}>
         <Typography variant="subsection-title" accessibilityRole="header">
           {title}
@@ -40,6 +40,6 @@ export const RecurringBillsOverview = ({
         />
         <BillSummaryRow label={dueSoonLabel} amount={dueSoon} color="cyan" />
       </View>
-    </View>
+    </Card>
   )
 }

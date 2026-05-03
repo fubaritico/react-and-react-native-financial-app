@@ -34,6 +34,9 @@ export type {
   IDonutSegment,
 } from './components/atoms/DonutChart/DonutChart.tsx'
 
+export { Currency } from './components/atoms/Currency'
+export type { ICurrencyProps } from './components/atoms/Currency/Currency.tsx'
+
 // Molecules
 export { TextInput } from './components/molecules/TextInput'
 export type { ITextInputProps } from './components/molecules/TextInput/TextInput.tsx'
@@ -55,6 +58,9 @@ export type { ITransactionRowProps } from './components/molecules/TransactionRow
 
 export { SpendingSummaryRow } from './components/molecules/SpendingSummaryRow'
 export type { ISpendingSummaryRowProps } from './components/molecules/SpendingSummaryRow/SpendingSummaryRow.tsx'
+
+export { ColorBarItem } from './components/molecules/ColorBarItem'
+export type { IColorBarItemProps } from './components/molecules/ColorBarItem/ColorBarItem.tsx'
 
 export { BillSummaryRow } from './components/molecules/BillSummaryRow'
 export type { IBillSummaryRowProps } from './components/molecules/BillSummaryRow/BillSummaryRow.tsx'
@@ -124,6 +130,9 @@ export type {
   IModalFooterProps,
   IModalFooterAction,
 } from './components/organisms/Modal/Modal.tsx'
+
+// Utilities
+export { default as tw } from './lib/tw'
 
 // Templates
 export { AuthLayout } from './components/templates/AuthLayout'

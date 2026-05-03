@@ -1,11 +1,11 @@
 import {
+  Card,
   SectionLink,
   TransactionRow,
   Typography,
+  tw,
 } from '@financial-app/ui/native'
 import { View } from 'react-native'
-
-import tw from '../../lib/tw'
 
 import { shared } from './TransactionsOverview.styles'
 
@@ -19,7 +19,7 @@ export const TransactionsOverview = ({
   onViewAll,
 }: Readonly<ITransactionsOverviewProps>) => {
   return (
-    <View style={tw`${shared.root}`}>
+    <Card>
       <View style={tw`${shared.header}`}>
         <Typography variant="subsection-title" accessibilityRole="header">
           {title}
@@ -37,6 +37,6 @@ export const TransactionsOverview = ({
           />
         ))}
       </View>
-    </View>
+    </Card>
   )
 }

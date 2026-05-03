@@ -1,7 +1,13 @@
-import { Icon, SectionLink, Typography } from '@financial-app/ui/native'
+import {
+  Card,
+  ColorBarItem,
+  Currency,
+  Icon,
+  SectionLink,
+  Typography,
+  tw,
+} from '@financial-app/ui/native'
 import { View } from 'react-native'
-
-import tw from '../../lib/tw'
 
 import { shared } from './PotsOverview.styles'
 
@@ -17,9 +23,11 @@ export const PotsOverview = ({
   pots,
   onSeeDetails,
   icon,
+  locale = 'en-US',
+  currency = 'USD',
 }: Readonly<IPotsOverviewProps>) => {
   return (
-    <View style={tw`${shared.root}`}>
+    <Card>
       {/* Header row */}
       <View style={tw`${shared.header}`}>
         <Typography variant="subsection-title" accessibilityRole="header">
@@ -47,7 +55,13 @@ export const PotsOverview = ({
             <Typography variant="body" color="muted">
               {totalSavedLabel}
             </Typography>
-            <Typography variant="display-lg">{totalSaved}</Typography>
+            <Currency
+              amount={totalSaved}
+              locale={locale}
+              currency={currency}
+              digits={0}
+              variant="display-lg"
+            />
           </View>
         </View>
 
@@ -55,18 +69,17 @@ export const PotsOverview = ({
         <View style={tw`flex-row flex-wrap mt-4`}>
           {pots.map((pot) => (
             <View key={pot.name} style={tw`w-1/2 py-2`}>
-              <View
-                style={tw`${shared.potItem} border-l-4 border-l-${pot.color}`}
-              >
-                <Typography variant="caption" color="muted">
-                  {pot.name}
-                </Typography>
-                <Typography variant="body-bold">{pot.total}</Typography>
-              </View>
+              <ColorBarItem
+                label={pot.name}
+                amount={pot.total}
+                color={pot.color}
+                locale={locale}
+                currency={currency}
+              />
             </View>
           ))}
         </View>
       </View>
-    </View>
+    </Card>
   )
 }

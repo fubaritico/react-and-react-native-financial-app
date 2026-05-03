@@ -1,7 +1,8 @@
-import { View } from 'react-native'
+import { View, useWindowDimensions } from 'react-native'
 
 import tw from '#Lib/tw'
 
+import { TABLET_BREAKPOINT } from './Card.constants'
 import { shared } from './Card.styles'
 import { cardVariants } from './Card.variants'
 
@@ -15,26 +16,36 @@ export const Card = ({
   text,
   children,
   style,
-}: Readonly<ICardProps>) => (
-  <View style={[tw`${cardVariants()}`, style]}>
-    <Typography variant="subsection-title" style={tw`mb-2`}>
-      {title}
-    </Typography>
-    {text && (
-      <Typography variant="body" color="muted">
-        {text}
-      </Typography>
-    )}
-    {children && (
-      <View style={tw`${shared.childrenWrap}`}>
-        {typeof children === 'string' ? (
-          <Typography variant="body" color="muted">
-            {children}
-          </Typography>
-        ) : (
-          children
-        )}
-      </View>
-    )}
-  </View>
-)
+}: Readonly<ICardProps>) => {
+  const { width } = useWindowDimensions()
+  const responsivePadding = width >= TABLET_BREAKPOINT ? 'p-6' : 'p-4'
+
+  return (
+    <View style={[tw`${cardVariants()} ${responsivePadding}`, style]}>
+      {title && (
+        <Typography
+          variant="subsection-title"
+          style={tw`${shared.titleSpacing}`}
+        >
+          {title}
+        </Typography>
+      )}
+      {text && (
+        <Typography variant="body" color="muted">
+          {text}
+        </Typography>
+      )}
+      {children && (
+        <View style={tw`${shared.childrenWrap}`}>
+          {typeof children === 'string' ? (
+            <Typography variant="body" color="muted">
+              {children}
+            </Typography>
+          ) : (
+            children
+          )}
+        </View>
+      )}
+    </View>
+  )
+}

@@ -1,4 +1,5 @@
 import {
+  BudgetOverview,
   PotsOverview,
   RecurringBillsOverview,
   TransactionsOverview,
@@ -28,7 +29,7 @@ export function loader() {
 
   const potItems = mockPots.map((pot) => ({
     name: pot.name,
-    total: formatCurrency(pot.total),
+    total: pot.total,
     color: pot.theme,
   }))
 
@@ -52,15 +53,27 @@ export function loader() {
     })
     .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
 
+  const budgetItems = mockBudgets.map((budget) => {
+    const spent = mockTransactions
+      .filter((txn) => txn.category === budget.category && txn.amount < 0)
+      .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
+    return {
+      category: budget.category,
+      maximum: budget.maximum,
+      spent,
+      color: budget.theme,
+    }
+  })
+
   return {
     balance: mockBalance,
     latestTransactions,
     potItems,
     totalSaved,
+    budgetItems,
     paidTotal,
     upcomingTotal,
     dueSoonTotal,
-    budgetCount: mockBudgets.length,
   }
 }
 
@@ -73,10 +86,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     latestTransactions,
     potItems,
     totalSaved,
+    budgetItems,
     paidTotal,
     upcomingTotal,
     dueSoonTotal,
-    budgetCount,
   } = loaderData
 
   return (
@@ -119,7 +132,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             seeDetailsLabel={t('common.seeDetails')}
             totalSavedLabel={t('potsOverview.totalSaved')}
             savingsIconLabel={t('accessibility.savingsIcon')}
-            totalSaved={formatCurrency(totalSaved)}
+            totalSaved={totalSaved}
             pots={potItems}
             onSeeDetails={() => {
               void navigate('/pots')
@@ -138,15 +151,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
         {/* Right column */}
         <div className="flex flex-col gap-6">
-          {/* BudgetsOverview placeholder — awaiting DonutChart from Track B */}
-          <div className="bg-card rounded-xl p-6">
-            <h2 className="text-preset-2 text-foreground">
-              {t('budgets.title')}
-            </h2>
-            <p className="text-preset-4 text-foreground-muted mt-2">
-              {t('budgets.awaitingChart', { count: budgetCount })}
-            </p>
-          </div>
+          <BudgetOverview
+            title={t('budgets.title')}
+            seeDetailsLabel={t('common.seeDetails')}
+            budgets={budgetItems}
+            onSeeDetails={() => {
+              void navigate('/budgets')
+            }}
+          />
 
           <RecurringBillsOverview
             title={t('recurringBillsOverview.title')}

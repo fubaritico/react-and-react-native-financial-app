@@ -1,4 +1,9 @@
-import { SectionLink, TransactionRow, Typography } from '@financial-app/ui'
+import {
+  Card,
+  SectionLink,
+  TransactionRow,
+  Typography,
+} from '@financial-app/ui'
 
 import { shared } from './TransactionsOverview.styles'
 
@@ -12,7 +17,7 @@ export const TransactionsOverview = ({
   onViewAll,
 }: Readonly<ITransactionsOverviewProps>) => {
   return (
-    <section className={shared.root}>
+    <Card>
       <div className={shared.header}>
         <Typography variant="subsection-title" as="h3">
           {title}
@@ -30,6 +35,6 @@ export const TransactionsOverview = ({
           />
         ))}
       </div>
-    </section>
+    </Card>
   )
 }

@@ -4,8 +4,8 @@ import type { ReactNode } from 'react'
 export interface IPotItem {
   /** Pot name (e.g., "Savings", "Gift"). */
   name: string
-  /** Pot total, formatted as currency string (e.g., "$159"). */
-  total: string
+  /** Pot total as a numeric amount. */
+  total: number
   /** Token color name for the left border (e.g., "green", "navy"). */
   color: string
 }
@@ -20,12 +20,16 @@ export interface IPotsOverviewProps {
   totalSavedLabel: string
   /** Accessibility label for the savings icon. */
   savingsIconLabel: string
-  /** Total saved across all pots, formatted as currency string. */
-  totalSaved: string
+  /** Total saved across all pots as a numeric amount. */
+  totalSaved: number
   /** Array of pot items to display in the grid. */
   pots: IPotItem[]
   /** Callback when "See Details" is pressed. */
   onSeeDetails: () => void
   /** Optional icon for the Total Saved box. */
   icon?: ReactNode
+  /** BCP 47 locale tag for currency formatting (defaults to 'en-US'). */
+  locale?: string
+  /** ISO 4217 currency code (defaults to 'USD'). */
+  currency?: string
 }

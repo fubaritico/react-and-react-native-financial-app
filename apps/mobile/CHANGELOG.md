@@ -1,4 +1,4 @@
-## 0.0.1 (2026-05-02)
+## 0.0.1 (2026-05-03)
 
 
 ### Bug Fixes
@@ -51,6 +51,7 @@
 * **ui:** add DataTable cell factories (steps 1-3) ([98801b1](https://github.com/fubaritico/react-and-react-native-financial-app/commit/98801b17fb13af04e86da6c72601f65f99547780))
 * **ui:** add DataTable shell, SortableHeader, ActionBar, Pagination (steps 4-11) ([57c849f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/57c849fc1e8baf9681abf47dd245ac217985dd26))
 * **ui:** add DataTable sub-components + reorganize into components/ (steps 12) ([9a10c01](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9a10c01b328dbce4f3f32096eae8310c4bfe4252))
+* **ui:** add DonutChart atom + enforce constants/utils/types separation ([4016897](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4016897f46a15f2f895b5b256968089965421b64))
 * **ui:** add Dropdown molecule + Portal/Drawer/Menu/Listbox foundation ([b4d2468](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b4d2468f1c2bb3ae04d0fa4f2d62852e3dcda0ae))
 * **ui:** add Icon Storybook story with playground and showcase ([edb2fa9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/edb2fa931b159bfc936ea6c1a039393442dfc577))
 * **ui:** add Modal organism + shared modal service (Jotai) ([7898692](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7898692e4578a326ec0cca92323ef324ed36b87a))

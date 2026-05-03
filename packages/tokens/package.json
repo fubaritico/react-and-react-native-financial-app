@@ -12,7 +12,8 @@
     },
     "./css": "./build/css/variables.css",
     "./tailwind": "./build/tailwind/tailwind.tokens.js",
-    "./native": "./build/native/tokens.native.js"
+    "./native": "./build/native/tokens.native.js",
+    "./map": "./build/ts/tokens.ts"
   },
   "react-native": "./build/native/tokens.native.js",
   "scripts": {

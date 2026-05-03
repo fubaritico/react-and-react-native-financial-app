@@ -6,7 +6,7 @@ import type { ViewStyle } from 'react-native'
 /** Props for the Card component. */
 export interface ICardProps extends VariantProps<typeof cardVariants> {
   /** Card heading text. */
-  title: string
+  title?: string
   /** Optional body text below the title. */
   text?: string
   /** Optional child elements rendered below the body text. */

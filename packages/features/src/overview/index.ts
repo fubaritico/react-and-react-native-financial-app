@@ -9,3 +9,9 @@ export type {
 
 export { RecurringBillsOverview } from './RecurringBillsOverview'
 export type { IRecurringBillsOverviewProps } from './RecurringBillsOverview'
+
+export { BudgetOverview } from './BudgetOverview'
+export type {
+  IBudgetOverviewProps,
+  IBudgetOverviewItem,
+} from './BudgetOverview'

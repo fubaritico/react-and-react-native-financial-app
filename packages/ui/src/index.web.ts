@@ -36,6 +36,9 @@ export type {
   IDonutSegment,
 } from './components/atoms/DonutChart/DonutChart.tsx'
 
+export { Currency } from './components/atoms/Currency/index.web'
+export type { ICurrencyProps } from './components/atoms/Currency/Currency.tsx'
+
 // Molecules
 export { TextInput } from './components/molecules/TextInput/index.web'
 export type { ITextInputProps } from './components/molecules/TextInput/TextInput.tsx'
@@ -57,6 +60,9 @@ export type { ITransactionRowProps } from './components/molecules/TransactionRow
 
 export { SpendingSummaryRow } from './components/molecules/SpendingSummaryRow/index.web'
 export type { ISpendingSummaryRowProps } from './components/molecules/SpendingSummaryRow/SpendingSummaryRow.tsx'
+
+export { ColorBarItem } from './components/molecules/ColorBarItem/index.web'
+export type { IColorBarItemProps } from './components/molecules/ColorBarItem/ColorBarItem.tsx'
 
 export { BillSummaryRow } from './components/molecules/BillSummaryRow/index.web'
 export type { IBillSummaryRowProps } from './components/molecules/BillSummaryRow/BillSummaryRow.tsx'
@@ -84,7 +90,7 @@ export type {
 } from './components/molecules/BottomSheet/BottomSheet.tsx'
 
 // Atoms
-export { Portal } from './components/atoms/Portal/index.web'
+export { Portal, PortalProvider } from './components/atoms/Portal/index.web'
 export type { IPortalProps } from './components/atoms/Portal/Portal.tsx'
 
 // Organisms
@@ -133,6 +139,9 @@ export type {
   IModalFooterProps,
   IModalFooterAction,
 } from './components/organisms/Modal/Modal.tsx'
+
+// Utilities
+export { cn } from './lib/cn'
 
 // Templates
 export { AuthLayout } from './components/templates/AuthLayout/index.web'

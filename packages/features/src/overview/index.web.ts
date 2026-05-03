@@ -12,3 +12,9 @@ export type {
 
 export { RecurringBillsOverview } from './RecurringBillsOverview/index.web'
 export type { IRecurringBillsOverviewProps } from './RecurringBillsOverview/RecurringBillsOverview.tsx'
+
+export { BudgetOverview } from './BudgetOverview/index.web'
+export type {
+  IBudgetOverviewProps,
+  IBudgetOverviewItem,
+} from './BudgetOverview/BudgetOverview.tsx'

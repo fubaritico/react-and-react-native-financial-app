@@ -36,7 +36,17 @@ export { useModal } from './hooks/useModal'
 export type { IBalance, ITransaction, IBudget, IPot } from './types'
 
 // Utils
-export { formatCurrency, formatDate } from './utils'
+export {
+  formatCurrency,
+  convertCurrency,
+  formatDate,
+  resolveTokenColor,
+} from './utils'
+export type {
+  SupportedCurrency,
+  CurrencySign,
+  IFormatCurrencyOptions,
+} from './utils'
 
 // Mocks
 export { mockBalance, mockTransactions, mockBudgets, mockPots } from './mocks'

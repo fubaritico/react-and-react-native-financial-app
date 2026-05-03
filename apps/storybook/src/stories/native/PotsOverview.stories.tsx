@@ -7,10 +7,10 @@ import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 const noop = () => undefined
 
 const defaultPots = [
-  { name: 'Savings', total: '$159', color: 'green' },
-  { name: 'Gift', total: '$40', color: 'navy' },
-  { name: 'Concert Ticket', total: '$110', color: 'cyan' },
-  { name: 'New Laptop', total: '$10', color: 'yellow' },
+  { name: 'Savings', total: 159, color: 'green' },
+  { name: 'Gift', total: 40, color: 'navy' },
+  { name: 'Concert Ticket', total: 110, color: 'cyan' },
+  { name: 'New Laptop', total: 10, color: 'yellow' },
 ]
 
 const meta = {
@@ -28,7 +28,7 @@ export const Showcase: Story = {
     seeDetailsLabel: i18n.t('common.seeDetails'),
     totalSavedLabel: i18n.t('potsOverview.totalSaved'),
     savingsIconLabel: i18n.t('accessibility.savingsIcon'),
-    totalSaved: '$850',
+    totalSaved: 850,
     pots: defaultPots,
     onSeeDetails: noop,
   },
