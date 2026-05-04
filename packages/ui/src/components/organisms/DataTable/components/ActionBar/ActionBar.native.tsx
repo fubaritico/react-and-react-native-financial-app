@@ -4,37 +4,43 @@ import tw from '#Lib/tw'
 
 import { shared } from './ActionBar.styles'
 
-import type { IActionBarNativeProps } from './ActionBar.tsx'
+import type { IActionBarProps } from './ActionBar.tsx'
 
 import { TextInput } from '#Molecules'
 
 /**
  * ActionBar sub-component (native).
- * Renders leftActions + search input in a horizontal row.
+ * Renders rightActions + search input in a horizontal row.
  */
 export function ActionBar({
-  leftActions,
-  searchValue,
-  onSearchChange,
+  rightActions,
+  globalFilterValue,
+  onGlobalFilterChange,
   searchPlaceholder = 'Search',
-  searchLabel = 'Search',
-}: Readonly<IActionBarNativeProps>) {
+  searchLabel,
+}: Readonly<IActionBarProps>) {
+  /**
+   * called on global filter change will update the table manager state
+   * @param value
+   */
+  const handleGlobalFilterChange = (value: string) => {
+    onGlobalFilterChange?.(value)
+  }
+
   return (
     <View style={tw`${shared.container}`}>
-      {leftActions && leftActions.length > 0 ? (
-        <View style={tw`${shared.leftActions} flex-1`}>{leftActions}</View>
-      ) : null}
-      <View
-        style={tw`${leftActions && leftActions.length > 0 ? 'flex-1' : 'w-full'}`}
-      >
+      <View style={tw`${rightActions ? 'grow' : 'w-full'}`}>
         <TextInput
-          label={searchLabel}
-          value={searchValue}
-          onChangeText={onSearchChange}
+          value={globalFilterValue ?? ''}
+          onChangeText={handleGlobalFilterChange}
           placeholder={searchPlaceholder}
+          accessibilityLabel={searchLabel ?? searchPlaceholder}
           icon="search"
         />
       </View>
+      {rightActions ? (
+        <View style={tw`${shared.rightActions}`}>{rightActions}</View>
+      ) : null}
     </View>
   )
 }

@@ -504,7 +504,7 @@
     - Step 4: SortableHeader — platform-split header cell factory, caretDown icon rotated 180° for asc, hidden when unsorted, Pressable (native) / button with focus-visible (web)
     - Step 5: cells barrels — index.ts + index.web.ts aggregating all 7 cell factories (SimpleCell, AmountCell, DateCell, AvatarNameCell, BillTitleCell, StatusCell, SortableHeader)
     - Step 6: DataTablePagination molecule — thin adapter bridging TanStack Table state to existing Pagination molecule (both platforms)
-    - Step 7: ActionBar sub-component (internal, not exported) — leftActions array + TextInput search, platform-split
+    - Step 7: ActionBar sub-component (internal, not exported) — rightActions array + TextInput search, platform-split
     - Step 8: DataTable.tsx types (IDataTableProps<TData>), DataTable.constants.ts (DEFAULT_PAGE_SIZE=10, COMPACT_BREAKPOINT=768), DataTable.variants.ts (row divider), DataTable.styles.ts (layout classes)
     - Step 9: DataTable.web.tsx — semantic <table> columnar mode + compact renderCompactRow mode, ResizeObserver for responsive, 3-state rendering (loading skeleton/data/empty), conditional pagination
     - Step 10: DataTable.native.tsx — FlatList dual mode (columnar for tablet, compact for phone), useWindowDimensions, same 3-state rendering + conditional pagination

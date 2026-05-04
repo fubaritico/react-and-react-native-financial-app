@@ -20,6 +20,7 @@ export const TextInput = ({
   prefix,
   secureTextEntry,
   maxLength,
+  accessibilityLabel,
 }: Readonly<ITextInputProps>) => {
   const inputClasses = textInputVariants({ error })
 
@@ -49,6 +50,7 @@ export const TextInput = ({
           }}
           placeholder={placeholder}
           maxLength={maxLength}
+          aria-label={accessibilityLabel ?? label}
           className={cn(
             'flex-1 bg-transparent text-sm text-foreground',
             web.input

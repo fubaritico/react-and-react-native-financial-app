@@ -22,6 +22,7 @@ export const TextInput = ({
   prefix,
   secureTextEntry,
   maxLength,
+  accessibilityLabel,
 }: Readonly<ITextInputProps>) => {
   const inputClasses = textInputVariants({ error })
 
@@ -45,6 +46,7 @@ export const TextInput = ({
           placeholderTextColor={tw.color('beige-500')}
           secureTextEntry={secureTextEntry}
           maxLength={maxLength}
+          accessibilityLabel={accessibilityLabel ?? label}
           style={tw`flex-1 text-sm text-foreground p-0`}
         />
         {trailingElement ??

@@ -9,7 +9,7 @@ export interface ITextInputProps extends VariantProps<
   typeof textInputVariants
 > {
   /** Label displayed above the input. */
-  label: string
+  label?: string
   /** Current input value. */
   value: string
   /** Callback fired when the input value changes. */
@@ -28,4 +28,6 @@ export interface ITextInputProps extends VariantProps<
   secureTextEntry?: boolean
   /** Maximum number of characters allowed. */
   maxLength?: number
+  /** Accessible label when no visible label is present (native: accessibilityLabel, web: aria-label). */
+  accessibilityLabel?: string
 }

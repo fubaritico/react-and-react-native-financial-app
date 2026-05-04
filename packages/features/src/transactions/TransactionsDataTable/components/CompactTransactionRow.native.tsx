@@ -1,4 +1,4 @@
-import { Avatar, Typography } from '@financial-app/ui/native'
+import { Avatar, Typography, tw } from '@financial-app/ui/native'
 import { View } from 'react-native'
 
 import type { ITransaction } from '@financial-app/shared'
@@ -33,23 +33,15 @@ export function CompactTransactionRow({
   }).format(new Date(date))
 
   return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 12,
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-      }}
-    >
+    <View style={tw`flex-row items-center gap-3 py-3 px-4`}>
       <Avatar src={avatar} name={name} size={40} />
-      <View style={{ flex: 1, minWidth: 0 }}>
+      <View style={tw`flex-1 min-w-0`}>
         <Typography variant="body-bold">{name}</Typography>
         <Typography variant="caption" color="muted">
           {category}
         </Typography>
       </View>
-      <View style={{ alignItems: 'flex-end', flexShrink: 0 }}>
+      <View style={tw`items-end shrink-0`}>
         <Typography
           variant="body-bold"
           color={isPositive ? 'transaction-positive' : 'foreground'}

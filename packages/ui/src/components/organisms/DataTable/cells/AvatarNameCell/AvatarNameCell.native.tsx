@@ -24,9 +24,9 @@ export const AvatarNameCell =
 
     return (
       <TableCell>
-        <View style={[tw`flex-row items-center gap-3 pr-3`, { flex: 1 }]}>
+        <View style={[tw`flex-row items-center gap-3 pr-3 flex-1`]}>
           <Avatar src={avatar} name={name} size={40} />
-          <View style={{ flex: 1, width: 0 }}>
+          <View style={tw`flex-1 w-0`}>
             <Typography variant="body-bold" numberOfLines={1}>
               {name}
             </Typography>

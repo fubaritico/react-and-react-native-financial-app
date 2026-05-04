@@ -54,12 +54,12 @@ export function DataTable<TData>({
   paginationPrevLabel,
   paginationNextLabel,
   onRowClick,
+  globalFilterValue,
   onGlobalFilterChange,
   renderCompactRow,
   compactBreakpoint = COMPACT_BREAKPOINT,
-  actionBar,
-  noActionBar,
-  leftActions,
+  showActionBar,
+  rightActions,
   showRowsPerPage,
   searchPlaceholder,
   searchLabel,
@@ -77,7 +77,7 @@ export function DataTable<TData>({
   const showPagination =
     pagination && !loading && tableStateManager.getRowCount() > pageSize
 
-  const [searchValue, setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState(globalFilterValue ?? '')
 
   useEffect(() => {
     if (initTableAt) tableStateManager.setPageIndex(initTableAt)
@@ -96,7 +96,7 @@ export function DataTable<TData>({
         {row.getVisibleCells().map((cell) => (
           <View
             key={cell.id}
-            style={tw`py-4 overflow-hidden ${(cell.column.columnDef.meta as Record<string, string> | undefined)?.className ?? 'flex-1'}`}
+            style={tw`py-4 ${(cell.column.columnDef.meta as Record<string, string> | undefined)?.className ?? 'flex-1'}`}
           >
             <Fragment>
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -159,16 +159,15 @@ export function DataTable<TData>({
   return (
     <View style={[tw`${shared.root}`, tw`${isTablet ? 'p-8' : 'p-0'}`]}>
       {/* ActionBar */}
-      {!noActionBar && !actionBar && onGlobalFilterChange && (
+      {showActionBar && (
         <ActionBar
-          leftActions={leftActions}
-          searchValue={searchValue}
-          onSearchChange={handleSearchChange}
+          rightActions={rightActions}
+          globalFilterValue={searchValue}
+          onGlobalFilterChange={handleSearchChange}
           searchPlaceholder={searchPlaceholder}
           searchLabel={searchLabel}
         />
       )}
-      {actionBar}
 
       {/* Loading skeleton */}
       {loading && RowSkeleton && (

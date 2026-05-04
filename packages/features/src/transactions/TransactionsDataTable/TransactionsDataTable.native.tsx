@@ -1,4 +1,4 @@
-import { DataTable, Dropdown, Icon, TextInput } from '@financial-app/ui/native'
+import { DataTable, Dropdown, Icon } from '@financial-app/ui/native'
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -7,7 +7,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
-import { View } from 'react-native'
 
 import type { ITransaction } from '@financial-app/shared'
 
@@ -72,58 +71,36 @@ export function TransactionsDataTable({
   }
 
   const actionBar = (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 12,
-      }}
-    >
-      <View style={{ flex: 1 }}>
-        <TextInput
-          label=""
-          placeholder="Search transaction"
-          icon="search"
-          value={globalFilter}
-          onChangeText={setGlobalFilter}
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 8,
-        }}
-      >
-        <Dropdown
-          bottomSheetTitle="Sort by"
-          options={SORT_OPTIONS}
-          selectedValue={sortOption}
-          onSelect={handleSortChange}
-          accessibilityLabel="Sort transactions"
-          trigger={() => <Icon name="sortMobile" iconSize="md" />}
-        />
-        <Dropdown
-          bottomSheetTitle="Category"
-          options={CATEGORY_OPTIONS}
-          selectedValue={categoryOption}
-          onSelect={handleCategoryChange}
-          accessibilityLabel="Filter by category"
-          trigger={() => <Icon name="filterMobile" iconSize="md" />}
-        />
-      </View>
-    </View>
+    <>
+      <Dropdown
+        bottomSheetTitle="Sort by"
+        options={SORT_OPTIONS}
+        selectedValue={sortOption}
+        onSelect={handleSortChange}
+        accessibilityLabel="Sort transactions"
+        trigger={() => <Icon name="sortMobile" iconSize="md" />}
+      />
+      <Dropdown
+        bottomSheetTitle="Category"
+        options={CATEGORY_OPTIONS}
+        selectedValue={categoryOption}
+        onSelect={handleCategoryChange}
+        accessibilityLabel="Filter by category"
+        trigger={() => <Icon name="filterMobile" iconSize="md" />}
+      />
+    </>
   )
 
   return (
     <DataTable
       tableStateManager={table}
       loading={loading}
+      globalFilterValue={globalFilter}
+      onGlobalFilterChange={setGlobalFilter}
       pagination
       paginationPrevLabel="Prev"
       paginationNextLabel="Next"
-      actionBar={actionBar}
-      noActionBar
+      rightActions={actionBar}
       renderCompactRow={({ row }: { row: Row<ITransaction> }) => (
         <CompactTransactionRow row={row} locale={locale} />
       )}

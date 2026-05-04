@@ -1,10 +1,4 @@
-import {
-  DataTable,
-  Dropdown,
-  Icon,
-  TextInput,
-  Typography,
-} from '@financial-app/ui'
+import { DataTable, Dropdown, Icon, Typography } from '@financial-app/ui'
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -95,64 +89,51 @@ export function TransactionsDataTable({
     }
   }
 
-  const actionBar = (
-    <div className="flex items-center gap-4 pt-3 pb-6 flex-wrap">
-      <div className="flex-1 min-w-48 max-w-72">
-        <TextInput
-          label=""
-          placeholder="Search transaction"
-          icon="search"
-          value={globalFilter}
-          onChangeText={setGlobalFilter}
-        />
-      </div>
-      <div className="flex items-center gap-3 ml-auto">
-        {!isMobile && (
-          <Typography variant="body" color="muted" as="span">
-            Sort by
-          </Typography>
-        )}
-        <Dropdown
-          options={SORT_OPTIONS}
-          selectedValue={sortOption}
-          onSelect={handleSortChange}
-          accessibilityLabel="Sort transactions"
-          menuAccessibilityLabel="Sort options"
-          bottomSheetTitle="Sort by"
-          trigger={
-            isMobile
-              ? () => <Icon name="sortMobile" iconSize="md" />
-              : undefined
-          }
-        />
-        {!isMobile && (
-          <Typography variant="body" color="muted" as="span">
-            Category
-          </Typography>
-        )}
-        <Dropdown
-          options={CATEGORY_OPTIONS}
-          selectedValue={categoryOption}
-          onSelect={handleCategoryChange}
-          accessibilityLabel="Filter by category"
-          menuAccessibilityLabel="Category options"
-          bottomSheetTitle="Category"
-          trigger={
-            isMobile
-              ? () => <Icon name="filterMobile" iconSize="md" />
-              : undefined
-          }
-        />
-      </div>
-    </div>
+  const rightActions = (
+    <>
+      {!isMobile && (
+        <Typography variant="body" color="muted" as="span">
+          Sort by
+        </Typography>
+      )}
+      <Dropdown
+        options={SORT_OPTIONS}
+        selectedValue={sortOption}
+        onSelect={handleSortChange}
+        accessibilityLabel="Sort transactions"
+        menuAccessibilityLabel="Sort options"
+        bottomSheetTitle="Sort by"
+        trigger={
+          isMobile ? () => <Icon name="sortMobile" iconSize="md" /> : undefined
+        }
+      />
+      {!isMobile && (
+        <Typography variant="body" color="muted" as="span">
+          Category
+        </Typography>
+      )}
+      <Dropdown
+        options={CATEGORY_OPTIONS}
+        selectedValue={categoryOption}
+        onSelect={handleCategoryChange}
+        accessibilityLabel="Filter by category"
+        menuAccessibilityLabel="Category options"
+        bottomSheetTitle="Category"
+        trigger={
+          isMobile
+            ? () => <Icon name="filterMobile" iconSize="md" />
+            : undefined
+        }
+      />
+    </>
   )
 
   return (
     <DataTable
       tableStateManager={table}
       loading={loading}
-      actionBar={actionBar}
-      noActionBar
+      rightActions={rightActions}
+      showActionBar
     />
   )
 }

@@ -10,7 +10,7 @@ using a **cell factory pattern** adapted for our file extension split architectu
 
 Before starting this plan, the following components MUST exist:
 
-- **Dropdown** — compound component used in ActionBar `leftActions` (Sort dropdown, Category dropdown).
+- **Dropdown** — compound component used in ActionBar `rightActions` (Sort dropdown, Category dropdown).
   Without it, ActionBar can only render the search input.
 - **DataTablePagination** — Step 6 of this plan creates it, but the Pagination atom
   (prev/next buttons, page numbers) is a dependency. Create the Pagination component first
@@ -131,15 +131,15 @@ DataTable (organism)
 ActionBar is a **sub-component inside DataTable**, not a separate screen-level concern.
 It renders above the table with three modes (same established pattern):
 
-1. **Default**: `leftActions` array + built-in search input → renders the standard ActionBar
+1. **Default**: `rightActions` array + built-in search input → renders the standard ActionBar
 2. **Custom**: `actionBar` prop → fully replaces the default ActionBar
-3. **Hidden**: `noActionBar={true}` → no toolbar at all
+3. **Hidden**: `showActionBar={true}` → no toolbar at all
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │ ActionBar                                           │
 │  ┌──────────────┐  ┌──────────┐   ┌──────────────┐  │
-│  │ leftActions[0]│  │ ...[1]   │   │  Search 🔍   │  │
+│  │ rightActions[0]│  │ ...[1]   │   │  Search 🔍   │  │
 │  └──────────────┘  └──────────┘   └──────────────┘  │
 ├─────────────────────────────────────────────────────┤
 │ Table header / rows / pagination                    │
@@ -153,8 +153,8 @@ It renders above the table with three modes (same established pattern):
 | **Transactions** | Search + sort icon + filter icon | Search + Sort dropdown + Category dropdown | Search + Sort dropdown + Category dropdown |
 | **Recurring Bills** | Search + sort icon | Search + Sort dropdown | Search + Sort dropdown |
 
-On phone, `leftActions` collapses to icon buttons (sort/filter toggles that open
-a bottom sheet or dropdown). On tablet/desktop, `leftActions` renders full dropdowns inline.
+On phone, `rightActions` collapses to icon buttons (sort/filter toggles that open
+a bottom sheet or dropdown). On tablet/desktop, `rightActions` renders full dropdowns inline.
 This responsive behavior is handled by the consumer — they pass different elements
 per breakpoint, or pass responsive components that adapt themselves.
 
@@ -350,14 +350,14 @@ export interface IDataTableProps<TData> {
   // --- ActionBar props ---
 
   /** Custom component that fully replaces the default ActionBar.
-   *  When provided, leftActions and onSearchChange are ignored. */
+   *  When provided, rightActions and onSearchChange are ignored. */
   actionBar?: ReactElement
   /** Hide the ActionBar entirely (no search, no filters) */
-  noActionBar?: boolean
+  showActionBar?: boolean
   /** Array of React elements rendered on the left side of the ActionBar
    *  (dropdowns, filter buttons, icon toggles, etc.).
    *  Consumer controls what goes here — DataTable just renders them in a flex row. */
-  leftActions?: ReactElement[]
+  rightActions?: ReactElement[]
   /** Callback when the built-in search input value changes.
    *  Typically wired to table.setGlobalFilter(). */
   onSearchChange?: (value: string) => void
@@ -393,7 +393,7 @@ export interface IActionBarProps {
   /** TanStack Table instance (for reading globalFilter state) */
   table: Table<unknown>
   /** Filter/action elements rendered on the left */
-  leftActions?: ReactElement[]
+  rightActions?: ReactElement[]
   /** Search input change callback */
   onSearchChange?: (value: string) => void
   /** Search input placeholder */
@@ -720,8 +720,8 @@ for search — no custom input needed.
 ```
 organisms/DataTable/ActionBar/
   ActionBar.tsx                # IActionBarProps — types only
-  ActionBar.native.tsx         # View flex-row: leftActions + TextInput search
-  ActionBar.web.tsx            # div flex-row: leftActions + TextInput search
+  ActionBar.native.tsx         # View flex-row: rightActions + TextInput search
+  ActionBar.web.tsx            # div flex-row: rightActions + TextInput search
   ActionBar.styles.ts          # layout classes (flex, gap, padding)
   index.ts / index.web.ts
 ```
@@ -732,7 +732,7 @@ export interface IActionBarProps {
   /** TanStack Table instance (for reading globalFilter state) */
   table: Table<unknown>
   /** Filter/action elements rendered on the left */
-  leftActions?: ReactElement[]
+  rightActions?: ReactElement[]
   /** Search input change callback */
   onSearchChange?: (value: string) => void
   /** Search input placeholder */
@@ -743,22 +743,22 @@ export interface IActionBarProps {
 **Rendering (both platforms — same structure, different containers):**
 ```
 ┌──────────────────────────────────────────────────┐
-│  [leftActions[0]] [leftActions[1]]    [Search 🔍] │
+│  [rightActions[0]] [rightActions[1]]    [Search 🔍] │
 │  ← flex-grow →                        ← fixed →  │
 └──────────────────────────────────────────────────┘
 ```
 
-- Left: `leftActions` array rendered in a flex-grow container with gap
+- Left: `rightActions` array rendered in a flex-grow container with gap
 - Right: `TextInput` with search icon, value from `table.getState().globalFilter`
-- Consumer passes responsive elements in `leftActions` — on phone they might
+- Consumer passes responsive elements in `rightActions` — on phone they might
   be icon-only buttons, on tablet/desktop full dropdowns
 
 **How DataTable renders ActionBar (same established pattern):**
 ```typescript
-{!noActionBar && !actionBar && (
+{!showActionBar && !actionBar && (
   <ActionBar
     table={table}
-    leftActions={leftActions}
+    rightActions={rightActions}
     onSearchChange={onSearchChange}
     searchPlaceholder={searchPlaceholder}
   />
@@ -766,11 +766,11 @@ export interface IActionBarProps {
 {actionBar}
 ```
 
-- No `noActionBar` + no `actionBar` → default ActionBar
+- No `showActionBar` + no `actionBar` → default ActionBar
 - `actionBar` provided → custom replacement (full override)
-- `noActionBar={true}` → nothing
+- `showActionBar={true}` → nothing
 
-**Completion:** ActionBar renders with search + leftActions on both platforms.
+**Completion:** ActionBar renders with search + rightActions on both platforms.
 
 ---
 
@@ -830,8 +830,8 @@ const isCompact = !!renderCompactRow && width < (compactBreakpoint ?? COMPACT_BR
 **Rendering — Columnar mode (tablet/desktop, width >= 768):**
 ```html
 <div class="...">                                  <!-- container -->
-  <!-- ActionBar (search + leftActions) -->
-  <ActionBar table={table} leftActions={...} onSearchChange={...} />
+  <!-- ActionBar (search + rightActions) -->
+  <ActionBar table={table} rightActions={...} onSearchChange={...} />
   <table class="w-full">
     <thead>
       <tr class="border-b border-border">
@@ -852,8 +852,8 @@ const isCompact = !!renderCompactRow && width < (compactBreakpoint ?? COMPACT_BR
 **Rendering — Compact mode (phone, width < 768):**
 ```html
 <div class="...">                                  <!-- container -->
-  <!-- ActionBar still renders (compact leftActions + search) -->
-  <ActionBar table={table} leftActions={...} onSearchChange={...} />
+  <!-- ActionBar still renders (compact rightActions + search) -->
+  <ActionBar table={table} rightActions={...} onSearchChange={...} />
   <div class="divide-y divide-border">             <!-- list -->
     {rows.map((row, index) => renderCompactRow({ row, index }))}
   </div>
@@ -892,7 +892,7 @@ const isCompact = !!renderCompactRow && width < (compactBreakpoint ?? COMPACT_BR
 **Rendering — Columnar mode (tablet, width >= 768):**
 ```
 <View>                                             <!-- container -->
-  <ActionBar table={table} leftActions={...} onSearchChange={...} />
+  <ActionBar table={table} rightActions={...} onSearchChange={...} />
   <View style={tw`flex-row border-b border-border`}>   <!-- header row -->
     <View style={tw`flex-1`}>                      <!-- per column -->
       {flexRender(header.column.columnDef.header, header.getContext())}
@@ -916,7 +916,7 @@ const isCompact = !!renderCompactRow && width < (compactBreakpoint ?? COMPACT_BR
 **Rendering — Compact mode (phone, width < 768):**
 ```
 <View>
-  <ActionBar table={table} leftActions={...} onSearchChange={...} />
+  <ActionBar table={table} rightActions={...} onSearchChange={...} />
   <FlatList
     data={table.getRowModel().rows}
     renderItem={({ item: row, index }) => renderCompactRow({ row, index })}
@@ -1051,8 +1051,8 @@ Then `/review`.
 - [ ] DataTable.web.tsx renders semantic `<table>` with flexRender
 - [ ] DataTable.web.tsx switches to compact mode on narrow viewport
 - [ ] DataTable.native.tsx renders FlatList in both columnar and compact mode
-- [ ] ActionBar renders search (TextInput) + leftActions on both platforms
-- [ ] ActionBar hidden when `noActionBar={true}`, replaced when `actionBar` provided
+- [ ] ActionBar renders search (TextInput) + rightActions on both platforms
+- [ ] ActionBar hidden when `showActionBar={true}`, replaced when `actionBar` provided
 - [ ] Loading: skeleton rows rendered when `loading && rowsSkeleton`, data rows hidden
 - [ ] Empty: no-results message when `!loading && rows.length === 0`
 - [ ] Pagination only shown when `!loading && rowCount > pageSize && pagination`
@@ -1167,7 +1167,7 @@ export function DataTableTransactions({ data, loading }: IDataTableTransactionsP
       pagination
       searchPlaceholder="Search transaction"
       onSearchChange={(v) => table.setGlobalFilter(v)}
-      leftActions={[
+      rightActions={[
         <SortDropdown key="sort" value={sorting} onChange={setSorting} />,
         <CategoryDropdown key="category" value={categoryFilter} onChange={setCategoryFilter} />,
       ]}
@@ -1203,7 +1203,7 @@ export function DataTableTransactions({ data, loading }: IDataTableTransactionsP
 
 ## What This Plan Does NOT Cover
 
-- **Dropdown component** — Sort/Category dropdowns passed via `leftActions` are separate
+- **Dropdown component** — Sort/Category dropdowns passed via `rightActions` are separate
   components (see Dropdown compound component in CLAUDE.md Next). ActionBar renders
   whatever elements the consumer passes — it doesn't own filter logic.
 - **Error state** — `error` prop not included yet (deferred). Screens handle error display above/around the DataTable wrapper for now. Can be added later if needed.

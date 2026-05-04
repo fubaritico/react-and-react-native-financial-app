@@ -16,7 +16,7 @@ import { MIN_PAGE_SIZE } from './DataTable.constants'
 import { shared, web } from './DataTable.styles'
 
 import type { BaseDataTableProps } from './DataTable.types'
-import type { Table as TableType } from '@tanstack/react-table'
+import type { Table as TableState } from '@tanstack/react-table'
 
 export type DataTableProps<TData> = BaseDataTableProps<TData> & {
   /* Extra CSS classes for the action bar */
@@ -36,16 +36,15 @@ export type DataTableProps<TData> = BaseDataTableProps<TData> & {
 }
 
 export default function DataTable<TData>({
-  actionBar,
   actionBarClassName,
   className,
   dataTestId,
   headerClassName,
   initTableAt,
-  leftActions,
+  rightActions,
   loading,
   maxHeight,
-  noActionBar,
+  showActionBar,
   noShadow,
   showRowsPerPage,
   noPagination,
@@ -76,22 +75,25 @@ export default function DataTable<TData>({
     <div
       className={cn(
         shared.root,
+        web.overflow,
         web.padding,
         { [web.shadow]: !noShadow },
         className
       )}
       data-test={dataTestId ?? 'root'}
     >
-      {!noActionBar && !actionBar && (
+      {showActionBar && (
         <ActionBar
-          tableConfiguration={tableStateManager as TableType<unknown>}
           className={actionBarClassName}
-          leftActions={leftActions}
+          globalFilterValue={
+            tableStateManager.getState().globalFilter as string
+          }
+          rightActions={rightActions}
           stickyHeader={stickyHeader}
           onGlobalFilterChange={onGlobalFilterChange}
         />
       )}
-      {actionBar}
+
       <Table maxHeight={maxHeight}>
         <TableHeader
           className={cn({ [web.stickyHeader]: stickyHeader }, headerClassName)}
@@ -177,7 +179,9 @@ export default function DataTable<TData>({
         tableStateManager.getRowCount() > MIN_PAGE_SIZE &&
         !noPagination && (
           <TableFooter
-            tableStateManager={tableStateManager as TableType<unknown>}
+            tableStateManager={
+              tableStateManager as unknown as TableState<unknown>
+            }
             showRowsPerPage={showRowsPerPage}
             fullWidthPagination={!showRowsPerPage}
           />
