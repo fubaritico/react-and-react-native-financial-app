@@ -168,19 +168,19 @@ Read `@completed.md`
 - feat(features): add BudgetOverview + Currency + ColorBarItem + Card refactor (76d6e32) — BudgetOverview cross-platform organism (responsive tablet horizontal layout: chart left + legend right via two-level wrapper pattern mirroring web), Currency atom (formatCurrency display component), ColorBarItem molecule (colored bar + label + amount), Card refactored (responsive padding, shared.titleSpacing extracted from inline), formatCurrency + color utilities in @financial-app/shared, features/src/lib/ deleted (cn/tw now imported from @financial-app/ui), Storybook stories for BudgetOverview + ColorBarItem (web + native)
 - feat(ui): add ProgressBar atom with thick/thin variants + stories (e515450) — cross-platform progress bar (thick: h-8 p-1 rounded-md track + rounded-sm fill; thin: h-2 rounded-lg), CSS variable bridge for web color, twrnc interpolation for native, optional metaLeft/metaRight ReactNode slots, stories wrapped in Card with token-referenced colors, review score 94/100
 - feat(ui): add LatestSpending molecule + Divider className prop + stories (9dd358e) — cross-platform LatestSpending molecule (beige sub-card, header with SectionLink, divider-separated rows with avatar/name/amount/date), Divider extended with optional className prop for custom colors, first divider skipped (index > 0), itemRight uses flex-col for vertical alignment, stories with LongLabels variant for truncation testing, review score 97/100
+- feat(features): add BudgetCategoryCard organism + Dropdown destructive/divider support (bff58d2) — BudgetCategoryCard cross-platform organism (ProgressBar + LatestSpending + Card with ColorDot, Dropdown menu for edit/delete), Dropdown enhanced with dividerBefore + destructive option support through Listbox → Menu → Dropdown chain, ListboxVariantProps extends pattern, i18n translation keys for all budget card labels (EN/FR), rules updated to enforce translation keys for default prop values, Menu stories fixed for CVA null variant type
 
 ### Next — Phase: Pages with Mock Data
 
-**Current task**: Build the Budget page/screen components — remaining pieces:
-- Create **BudgetCategoryCard** organism in `@financial-app/features` (ProgressBar + LatestSpending + Card)
-- Screenshots in `files/proto/screen` and specs in `readme/budget view component`
+**Current task**: Wire Budget page/screen with mock data
+- BudgetOverview + BudgetCategoryCard organisms are done
 - Wire into routes with mock data from `data.json`
 - Text truncation (ellipsis) for long names in LatestSpending — deferred to next CSS pass
 
 **Page pipeline** (all using data.json):
 1. Overview — dashboard: balance, income/expenses, pots summary, recent transactions, budgets donut, recurring bills summary
 2. Transactions — TransactionsDataTable (already in features) wired into route with `locale={i18n.language}`
-3. Budgets — ✅ BudgetOverview done, remaining: budget category detail cards (progress bar + latest spending)
+3. Budgets — ✅ BudgetOverview done, ✅ BudgetCategoryCard done, wire into route
 4. Pots — pot cards with progress bars + Add Money / Withdraw buttons (display first)
 5. Recurring Bills — total card + summary + bills list with status
 
