@@ -7,7 +7,7 @@ export const shared = {
   /** Single transaction item row */
   itemRow: 'flex flex-row items-center py-3 gap-3',
   /** Name text taking remaining space */
-  name: 'flex-1',
+  name: 'flex-1 truncate',
   /** Right-aligned amount + date column */
   itemRight: 'flex flex-col items-end',
   /** Spacing above date text */
