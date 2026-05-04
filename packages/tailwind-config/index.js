@@ -1,9 +1,7 @@
 const tokens = require('@financial-app/tokens/tailwind')
-const containerQueries = require('@tailwindcss/container-queries')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  plugins: [containerQueries],
   theme: {
     colors: {
       ...tokens.color,

@@ -25,7 +25,8 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-i18next": "catalog:",
-    "react-router": "^7.14.1"
+    "react-router": "^7.14.1",
+    "@tailwindcss/container-queries": "^0.1.1"
   },
   "devDependencies": {
     "@react-router/dev": "^7.14.1",
