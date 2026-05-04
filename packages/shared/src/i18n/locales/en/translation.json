@@ -42,7 +42,14 @@
   "budgets": {
     "title": "Budgets",
     "awaitingChart_one": "{{count}} budget — awaiting DonutChart",
-    "awaitingChart_other": "{{count}} budgets — awaiting DonutChart"
+    "awaitingChart_other": "{{count}} budgets — awaiting DonutChart",
+    "maximumOf": "Maximum of",
+    "spent": "Spent",
+    "remaining": "Remaining",
+    "latestSpending": "Latest Spending",
+    "seeAll": "See All",
+    "editBudget": "Edit Budget",
+    "deleteBudget": "Delete Budget"
   },
   "pots": {
     "title": "Pots"

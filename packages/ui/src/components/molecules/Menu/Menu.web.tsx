@@ -26,12 +26,13 @@ interface ItemEntry {
  */
 function Menu({
   selectedValue,
-  variant = 'light',
+  variant,
   onSelect,
   onClose,
   className,
   children,
   accessibilityLabel,
+  shape,
 }: Readonly<IMenuProps>) {
   const [activeIndex, setActiveIndex] = useState(-1)
   const itemsRef = useRef<Map<number, ItemEntry>>(new Map())
@@ -149,6 +150,7 @@ function Menu({
   return (
     <MenuContext.Provider value={contextValue}>
       <ListboxList
+        shape={shape}
         variant={variant}
         accessibilityLabel={accessibilityLabel}
         tabIndex={0}

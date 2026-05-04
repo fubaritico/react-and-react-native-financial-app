@@ -129,11 +129,12 @@
 ### QUAL-017: Hardcoded user-facing text in components
 - **Files**: `packages/ui/src/components/**/*.native.tsx`, `packages/ui/src/components/**/*.web.tsx`
 - **Check**: No hardcoded user-visible strings (labels, button text, placeholders, aria-labels) inside component implementations
+- **Check**: Default prop values containing user-facing text (e.g. `editLabel = 'Edit Budget'`) must have a corresponding translation key
 - **Must**: Expose text as a prop on the component interface (with an English default if appropriate)
-- **Must**: Have a corresponding translation entry in `packages/shared/src/i18n/locales/{en,fr}/translation.json`
+- **Must**: Have a corresponding translation entry in `packages/shared/src/i18n/locales/{en,fr}/translation.json` — including for default prop values
 - **Must**: Stories and app consumers pass text via `i18n.t('key')`
 - **Exception**: Purely decorative/structural strings like "..." (ellipsis) are acceptable
-- **Rationale**: UI components are i18n-agnostic — they receive translated strings as props
+- **Rationale**: UI components are i18n-agnostic — they receive translated strings as props. Default values are fallbacks, not a substitute for translation keys.
 
 ### QUAL-018: Platform-specific classes not extracted to `.styles.ts`
 - **Files**: `packages/ui/src/components/**/*.native.tsx`, `packages/ui/src/components/**/*.web.tsx`

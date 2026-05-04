@@ -38,6 +38,13 @@ ComponentName/
   index.web.ts                 # web barrel — exports from .web (Vite uses this)
 ```
 
+## i18n — No Hardcoded User-Facing Text
+
+Every user-facing string (labels, placeholders, aria-labels, button text, default prop values)
+must have a corresponding translation entry in `packages/shared/src/i18n/locales/{en,fr}/translation.json`.
+This includes default prop values like `editLabel = 'Edit Budget'` — the English default is an acceptable
+fallback, but a translation key MUST exist so consumers can pass `i18n.t('key')`.
+
 ## ComponentName.tsx — Types File Rules
 
 - Export ALL types and interfaces for the component (props, internal types, return types)

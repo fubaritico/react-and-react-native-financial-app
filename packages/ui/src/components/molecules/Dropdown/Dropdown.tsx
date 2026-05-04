@@ -8,6 +8,10 @@ export interface IDropdownOption {
   label: string
   /** Whether this option is non-interactive */
   disabled?: boolean
+  /** Renders a Divider before this item */
+  dividerBefore?: boolean
+  /** Renders in destructive (red) styling */
+  destructive?: boolean
 }
 
 /** Props for the Dropdown component */

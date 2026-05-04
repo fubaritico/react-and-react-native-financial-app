@@ -20,6 +20,7 @@ export function ListboxList({
   className,
   children,
   accessibilityLabel,
+  shape,
   ...rest
 }: Readonly<IListboxListWebProps>) {
   return (
@@ -27,7 +28,7 @@ export function ListboxList({
       role="listbox"
       aria-label={accessibilityLabel}
       className={cn(
-        listboxListVariants({ variant }),
+        listboxListVariants({ variant, shape }),
         'list-none max-h-60 overflow-y-auto shadow-md',
         className
       )}

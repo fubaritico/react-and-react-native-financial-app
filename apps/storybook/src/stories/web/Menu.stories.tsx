@@ -40,7 +40,7 @@ const PlaygroundComponent = (args: {
   return (
     <div style={{ width: 200 }}>
       <Menu
-        variant={args.variant}
+        variant={args.variant ?? undefined}
         selectedValue={selected}
         onSelect={setSelected}
         accessibilityLabel="Sort options"
@@ -65,7 +65,7 @@ export const Playground: Story = {
   render: (args) => (
     <PlaygroundComponent
       selectedValue={args.selectedValue}
-      variant={args.variant}
+      variant={args.variant ?? undefined}
     />
   ),
 }

@@ -42,7 +42,14 @@
   "budgets": {
     "title": "Budgets",
     "awaitingChart_one": "{{count}} budget — en attente du DonutChart",
-    "awaitingChart_other": "{{count}} budgets — en attente du DonutChart"
+    "awaitingChart_other": "{{count}} budgets — en attente du DonutChart",
+    "maximumOf": "Maximum de",
+    "spent": "Dépensé",
+    "remaining": "Restant",
+    "latestSpending": "Dépenses récentes",
+    "seeAll": "Voir tout",
+    "editBudget": "Modifier le budget",
+    "deleteBudget": "Supprimer le budget"
   },
   "pots": {
     "title": "Cagnottes"

@@ -55,6 +55,8 @@
 * **ui:** add DonutChart atom + enforce constants/utils/types separation ([4016897](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4016897f46a15f2f895b5b256968089965421b64))
 * **ui:** add Dropdown molecule + Portal/Drawer/Menu/Listbox foundation ([b4d2468](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b4d2468f1c2bb3ae04d0fa4f2d62852e3dcda0ae))
 * **ui:** add Icon Storybook story with playground and showcase ([edb2fa9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/edb2fa931b159bfc936ea6c1a039393442dfc577))
+* **ui:** add LatestSpending molecule + Divider className prop + stories ([8f414e6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8f414e63b89047d8a446b9fab51b155e060aed6b))
+* **ui:** add LatestSpending molecule + Divider className prop + stories ([9dd358e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9dd358e3a0dad3df62d1c0a731a81435d5e76ae5))
 * **ui:** add Modal organism + shared modal service (Jotai) ([7898692](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7898692e4578a326ec0cca92323ef324ed36b87a))
 * **ui:** add NavItem atom + Navigation organism + Colors story ([e5aacd2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e5aacd246c6cfc3e91d3f52b84fd88ad2b23aa33))
 * **ui:** add Pagination molecule + refactor Button for composability ([f3b844b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/f3b844b271295b4e0e487606b6735f411817a869))

@@ -1,12 +1,14 @@
+import { listboxListVariants } from '#Molecules/Listbox/Listbox.variants'
+
+import type { VariantProps } from 'class-variance-authority'
 import type { ReactNode } from 'react'
 
 /** Color scheme for listbox components */
 export type ListboxVariant = 'light' | 'dark'
+export type ListboxVariantProps = VariantProps<typeof listboxListVariants>
 
 /** Props for the ListboxList container */
-export interface IListboxListProps {
-  /** Color scheme */
-  variant?: ListboxVariant
+export interface IListboxListProps extends ListboxVariantProps {
   /** List content (ListboxItem children) */
   children: ReactNode
   /** Additional CSS class (web) */
@@ -16,15 +18,15 @@ export interface IListboxListProps {
 }
 
 /** Props for individual ListboxItem */
-export interface IListboxItemProps {
-  /** Color scheme */
-  variant?: ListboxVariant
+export interface IListboxItemProps extends ListboxVariantProps {
   /** Whether this item has keyboard/hover focus */
   isActive?: boolean
   /** Whether this item is the persistently selected value */
   isSelected?: boolean
   /** Whether the item is non-interactive */
   disabled?: boolean
+  /** Whether the item uses destructive (red) styling */
+  destructive?: boolean
   /** Item content */
   children: ReactNode
   /** Additional CSS class (web) */

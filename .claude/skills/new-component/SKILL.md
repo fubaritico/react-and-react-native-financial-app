@@ -306,6 +306,7 @@ But **every user-facing string** (labels, placeholders, aria-labels, button text
 3. Be passed via `i18n.t('key')` in Storybook stories and app-level consumers
 
 Never hardcode visible text inside a component — even short labels like "OK", "Cancel", "Next".
+This includes default prop values (e.g. `editLabel = 'Edit Budget'`) — the English default is acceptable as a fallback, but a translation key MUST exist for it.
 
 ## Gotchas
 

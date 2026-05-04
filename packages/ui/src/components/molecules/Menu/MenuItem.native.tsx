@@ -13,6 +13,7 @@ import type { IMenuItemProps } from './Menu'
 export function MenuItem({
   value,
   disabled = false,
+  destructive = false,
   children,
   index,
 }: Readonly<IMenuItemProps>) {
@@ -36,6 +37,7 @@ export function MenuItem({
       variant={variant}
       isSelected={isSelected}
       disabled={disabled}
+      destructive={destructive}
       onPress={() => {
         if (!disabled) onSelect(value)
       }}

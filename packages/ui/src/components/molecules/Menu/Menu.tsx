@@ -1,12 +1,10 @@
-import type { ListboxVariant } from '../Listbox/Listbox'
+import type { ListboxVariantProps } from '../Listbox/Listbox'
 import type { ReactNode } from 'react'
 
 /** Props for the Menu compound component */
-export interface IMenuProps {
+export interface IMenuProps extends ListboxVariantProps {
   /** Currently selected item value (controls bold highlight) */
   selectedValue?: string
-  /** Color scheme: light (default) or dark */
-  variant?: ListboxVariant
   /** Called when an item is selected via click or keyboard */
   onSelect?: (value: string) => void
   /** Called when Escape is pressed or menu should close */
@@ -27,6 +25,8 @@ export interface IMenuItemProps {
   index: number
   /** Whether the item is non-interactive */
   disabled?: boolean
+  /** Whether the item uses destructive (red) styling */
+  destructive?: boolean
   /** Item label */
   children: ReactNode
   /** Additional CSS class (web) */

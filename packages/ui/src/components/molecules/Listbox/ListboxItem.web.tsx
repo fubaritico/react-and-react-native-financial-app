@@ -22,6 +22,7 @@ export function ListboxItem({
   isActive = false,
   isSelected = false,
   disabled = false,
+  destructive = false,
   className,
   children,
   onPress,
@@ -46,14 +47,20 @@ export function ListboxItem({
           (variant === 'dark' ? 'bg-grey-500' : 'bg-beige-100'),
         !disabled &&
           !isActive &&
-          (variant === 'dark' ? 'hover:bg-grey-500' : 'hover:bg-beige-100'),
+          (variant === 'dark' ? 'hover:bg-grey-500/20' : 'hover:bg-beige-100'),
         className
       )}
       {...rest}
     >
       <Typography
         variant={isSelected ? 'body-bold' : 'body'}
-        color={variant === 'dark' ? 'on-dark' : 'foreground'}
+        color={
+          destructive
+            ? 'destructive'
+            : variant === 'dark'
+              ? 'on-dark'
+              : 'foreground'
+        }
         as="span"
       >
         {children}

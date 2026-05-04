@@ -17,6 +17,7 @@ export function ListboxItem({
   isActive = false,
   isSelected = false,
   disabled = false,
+  destructive = false,
   children,
   onPress,
 }: Readonly<IListboxItemProps>) {
@@ -43,7 +44,13 @@ export function ListboxItem({
     >
       <Typography
         variant={isSelected ? 'body-bold' : 'body'}
-        color={variant === 'dark' ? 'on-dark' : 'foreground'}
+        color={
+          destructive
+            ? 'destructive'
+            : variant === 'dark'
+              ? 'on-dark'
+              : 'foreground'
+        }
       >
         {children}
       </Typography>

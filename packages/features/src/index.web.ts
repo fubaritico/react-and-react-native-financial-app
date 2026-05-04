@@ -16,3 +16,6 @@ export type {
 
 export { TransactionsDataTable } from './transactions/index.web'
 export type { ITransactionsDataTableProps } from './transactions/index.web'
+
+export { BudgetCategoryCard } from './budget/index.web'
+export type { IBudgetCategoryCardProps } from './budget/index.web'

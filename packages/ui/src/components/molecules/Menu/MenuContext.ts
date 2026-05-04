@@ -1,15 +1,13 @@
 import { createContext } from 'react'
 
-import type { ListboxVariant } from '../Listbox/Listbox'
+import type { ListboxVariantProps } from '../Listbox/Listbox'
 
 /** Shared state for Menu compound sub-components */
-export interface IMenuContextValue {
+export interface IMenuContextValue extends ListboxVariantProps {
   /** Index of the keyboard-focused item */
   activeIndex: number
   /** Currently selected value */
   selectedValue: string | undefined
-  /** Color scheme */
-  variant: ListboxVariant
   /** Callback to select an item */
   onSelect: (value: string) => void
   /** Register an item for keyboard navigation */

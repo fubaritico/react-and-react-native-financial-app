@@ -22,6 +22,7 @@ interface ItemEntry {
 function Menu({
   selectedValue,
   variant = 'light',
+  shape = 'square',
   onSelect,
   children,
   className,
@@ -83,6 +84,7 @@ function Menu({
     <MenuContext.Provider value={contextValue}>
       <ListboxList
         variant={variant}
+        shape={shape}
         className={className}
         accessibilityLabel={accessibilityLabel}
       >

@@ -7,8 +7,9 @@ import { BottomSheet } from '../BottomSheet/BottomSheet.native'
 import { Menu } from '../Menu/Menu.native'
 
 import type { IDropdownProps } from './Dropdown'
+import type { ReactNode } from 'react'
 
-import { Button, Icon, Typography } from '#Atoms'
+import { Button, Divider, Icon, Typography } from '#Atoms'
 
 /**
  * Native Dropdown — always opens a BottomSheet in dark mode.
@@ -113,17 +114,32 @@ export function Dropdown({
             onSelect={handleSelect}
             accessibilityLabel={menuAccessibilityLabel}
             className="border-0 p-0"
+            shape="square"
           >
-            {options.map((option, index) => (
-              <Menu.Item
-                key={option.value}
-                value={option.value}
-                index={index}
-                disabled={option.disabled}
-              >
-                {option.label}
-              </Menu.Item>
-            ))}
+            {options.flatMap((option, index) => {
+              const items: ReactNode[] = []
+              if (option.dividerBefore) {
+                items.push(
+                  <Divider
+                    spacing="md"
+                    key={`divider-${option.value}`}
+                    className="bg-grey-500/50"
+                  />
+                )
+              }
+              items.push(
+                <Menu.Item
+                  key={option.value}
+                  value={option.value}
+                  index={index}
+                  disabled={option.disabled}
+                  destructive={option.destructive}
+                >
+                  {option.label}
+                </Menu.Item>
+              )
+              return items
+            })}
           </Menu>
         </BottomSheet.Body>
       </BottomSheet>

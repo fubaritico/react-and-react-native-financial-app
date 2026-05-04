@@ -20,6 +20,12 @@
     },
     "./transactions/web": "./src/transactions/index.web.ts",
     "./transactions/native": "./src/transactions/index.ts",
+    "./budget": {
+      "react-native": "./src/budget/index.ts",
+      "default": "./src/budget/index.web.ts"
+    },
+    "./budget/web": "./src/budget/index.web.ts",
+    "./budget/native": "./src/budget/index.ts",
     "./package.json": "./package.json"
   },
   "react-native": "./src/index.ts",

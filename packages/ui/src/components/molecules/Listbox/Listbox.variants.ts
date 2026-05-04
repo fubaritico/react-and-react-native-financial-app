@@ -3,14 +3,18 @@ import { cva } from 'class-variance-authority'
 import type { VariantProps } from 'class-variance-authority'
 
 /** Variants for the ListboxList container */
-export const listboxListVariants = cva('rounded-lg p-1', {
+export const listboxListVariants = cva('p-1', {
   variants: {
     variant: {
       light: 'bg-white border border-border',
       dark: 'bg-grey-900 border border-grey-500',
     },
+    shape: {
+      rounded: 'rounded-lg',
+      square: 'rounded-none',
+    },
   },
-  defaultVariants: { variant: 'light' },
+  defaultVariants: { variant: 'light', shape: 'rounded' },
 })
 
 /** Variants for individual ListboxItem */

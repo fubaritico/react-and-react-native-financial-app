@@ -10,12 +10,13 @@ import {
 
 import { cn } from '#Lib/cn'
 
-import { Button, Icon, Portal, Typography } from '#Atoms/index.web'
+import { Button, Divider, Icon, Portal, Typography } from '#Atoms/index.web'
 
 import { BottomSheet } from '../BottomSheet/BottomSheet.web'
 import { Menu } from '../Menu/Menu.web'
 
 import type { IDropdownProps } from './Dropdown'
+import type { ReactNode } from 'react'
 
 const LG_BREAKPOINT = 1024
 
@@ -153,16 +154,30 @@ export function Dropdown({
     }
   }, [isOpen, isDesktop, withPortal])
 
-  const menuItems = options.map((option, index) => (
-    <Menu.Item
-      key={option.value}
-      value={option.value}
-      index={index}
-      disabled={option.disabled}
-    >
-      {option.label}
-    </Menu.Item>
-  ))
+  const menuItems = options.flatMap((option, index) => {
+    const items: ReactNode[] = []
+    if (option.dividerBefore) {
+      items.push(
+        <Divider
+          spacing={isDesktop ? 'sm' : 'md'}
+          key={`divider-${option.value}`}
+          className={!isDesktop ? 'bg-grey-500/50' : 'bg-grey-100'}
+        />
+      )
+    }
+    items.push(
+      <Menu.Item
+        key={option.value}
+        value={option.value}
+        index={index}
+        disabled={option.disabled}
+        destructive={option.destructive}
+      >
+        {option.label}
+      </Menu.Item>
+    )
+    return items
+  })
 
   const floatingMenu = (
     <div
@@ -184,6 +199,7 @@ export function Dropdown({
         onClose={handleClose}
         accessibilityLabel={menuAccessibilityLabel}
         className="w-max min-w-full"
+        shape="square"
       >
         {menuItems}
       </Menu>
@@ -268,6 +284,7 @@ export function Dropdown({
               onClose={handleClose}
               accessibilityLabel={menuAccessibilityLabel}
               className="border-0 p-0"
+              shape="square"
             >
               {menuItems}
             </Menu>

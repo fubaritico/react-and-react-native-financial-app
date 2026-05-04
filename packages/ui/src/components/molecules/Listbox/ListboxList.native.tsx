@@ -15,12 +15,13 @@ export function ListboxList({
   children,
   className,
   accessibilityLabel,
+  shape = 'square',
 }: Readonly<IListboxListProps>) {
   return (
     <ScrollView
       accessibilityRole="menu"
       accessibilityLabel={accessibilityLabel}
-      style={tw`${listboxListVariants({ variant })} max-h-60 ${className ?? ''}`}
+      style={tw`${listboxListVariants({ variant, shape })} max-h-60 ${className ?? ''}`}
     >
       {children}
     </ScrollView>
