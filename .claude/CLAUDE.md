@@ -179,8 +179,8 @@ Read `@completed.md`
 - Text truncation (ellipsis) for long names in LatestSpending — deferred to next CSS pass
 
 **Page pipeline** (all using data.json):
-1. Overview — dashboard: balance, income/expenses, pots summary, recent transactions, budgets donut, recurring bills summary
-2. Transactions — TransactionsDataTable (already in features) wired into route with `locale={i18n.language}`
+1. Overview — ✅ Done (wired into routes)
+2. Transactions — ✅ Done (wired into routes)
 3. Budgets — ✅ Done (BudgetOverview + BudgetCategoryCard wired into routes)
 4. Pots — pot cards with progress bars + Add Money / Withdraw buttons (display first)
 5. Recurring Bills — total card + summary + bills list with status
