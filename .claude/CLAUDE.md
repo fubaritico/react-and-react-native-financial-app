@@ -169,18 +169,19 @@ Read `@completed.md`
 - feat(ui): add ProgressBar atom with thick/thin variants + stories (e515450) — cross-platform progress bar (thick: h-8 p-1 rounded-md track + rounded-sm fill; thin: h-2 rounded-lg), CSS variable bridge for web color, twrnc interpolation for native, optional metaLeft/metaRight ReactNode slots, stories wrapped in Card with token-referenced colors, review score 94/100
 - feat(ui): add LatestSpending molecule + Divider className prop + stories (9dd358e) — cross-platform LatestSpending molecule (beige sub-card, header with SectionLink, divider-separated rows with avatar/name/amount/date), Divider extended with optional className prop for custom colors, first divider skipped (index > 0), itemRight uses flex-col for vertical alignment, stories with LongLabels variant for truncation testing, review score 97/100
 - feat(features): add BudgetCategoryCard organism + Dropdown destructive/divider support (bff58d2) — BudgetCategoryCard cross-platform organism (ProgressBar + LatestSpending + Card with ColorDot, Dropdown menu for edit/delete), Dropdown enhanced with dividerBefore + destructive option support through Listbox → Menu → Dropdown chain, ListboxVariantProps extends pattern, i18n translation keys for all budget card labels (EN/FR), rules updated to enforce translation keys for default prop values, Menu stories fixed for CVA null variant type
+- feat(pages): wire Budget route across all 3 apps with shared data util (ff168a2) — buildBudgetPageData() shared function in @financial-app/shared, web loader + mobile-expo/mobile useMemo, BudgetOverview + BudgetCategoryCard rendered with mock data
+- fix: move container-queries plugin from shared config to web-only (499da13) — @tailwindcss/container-queries moved from @financial-app/tailwind-config to apps/web (twrnc crashes on theme() calls)
+- fix(ui): review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code (1017710) — import type in DataTable.types.ts, showActionBar guard inversion fixed in native, shrink/overflow-clip moved to web-only styles, accessibilityLabel prop added to TextInput, dead DataTable.tsx deleted, native export added to styles files, ActionBar refactored (single IActionBarProps, rightActions, positive showActionBar)
 
 ### Next — Phase: Pages with Mock Data
 
-**Current task**: Wire Budget page/screen with mock data
-- BudgetOverview + BudgetCategoryCard organisms are done
-- Wire into routes with mock data from `data.json`
+**Current task**: Wire remaining pages with mock data
 - Text truncation (ellipsis) for long names in LatestSpending — deferred to next CSS pass
 
 **Page pipeline** (all using data.json):
 1. Overview — dashboard: balance, income/expenses, pots summary, recent transactions, budgets donut, recurring bills summary
 2. Transactions — TransactionsDataTable (already in features) wired into route with `locale={i18n.language}`
-3. Budgets — ✅ BudgetOverview done, ✅ BudgetCategoryCard done, wire into route
+3. Budgets — ✅ Done (BudgetOverview + BudgetCategoryCard wired into routes)
 4. Pots — pot cards with progress bars + Add Money / Withdraw buttons (display first)
 5. Recurring Bills — total card + summary + bills list with status
 
@@ -194,6 +195,7 @@ Read `@completed.md`
 - iPad: verify BottomSheet overlay, 2-tap switching, text truncation
 
 ### Known Issues
+- data-name attributes in .native.tsx files are intentional — used for debug tree inspection + future data-testid for Appium e2e tests. NOT a review finding.
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.
 - Review ARCH-003b: factories read env vars directly instead of accepting params — trades testability for DX. Revisit if unit testing becomes painful.
 - Review SEC-002: bare RN uses plain AsyncStorage for tokens (unencrypted) — acceptable for learning reference, not published
