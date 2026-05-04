@@ -41,11 +41,16 @@ export {
   convertCurrency,
   formatDate,
   resolveTokenColor,
+  buildBudgetPageData,
 } from './utils'
 export type {
   SupportedCurrency,
   CurrencySign,
   IFormatCurrencyOptions,
+  IBudgetItem,
+  IBudgetSpendingItem,
+  IBudgetCategoryCard,
+  IBudgetPageData,
 } from './utils'
 
 // Mocks

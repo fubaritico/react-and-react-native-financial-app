@@ -49,7 +49,9 @@
     "latestSpending": "Dépenses récentes",
     "seeAll": "Voir tout",
     "editBudget": "Modifier le budget",
-    "deleteBudget": "Supprimer le budget"
+    "deleteBudget": "Supprimer le budget",
+    "addNewBudget": "+ Nouveau budget",
+    "spendingSummary": "Résumé des dépenses"
   },
   "pots": {
     "title": "Cagnottes"

@@ -49,7 +49,9 @@
     "latestSpending": "Latest Spending",
     "seeAll": "See All",
     "editBudget": "Edit Budget",
-    "deleteBudget": "Delete Budget"
+    "deleteBudget": "Delete Budget",
+    "addNewBudget": "+ Add New Budget",
+    "spendingSummary": "Spending Summary"
   },
   "pots": {
     "title": "Pots"

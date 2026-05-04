@@ -22,7 +22,7 @@ export default function AppLayout() {
   return (
     <div className="flex min-h-screen bg-beige-100">
       <Sidebar />
-      <main className="flex-1 overflow-y-auto pb-24 lg:pb-0">
+      <main className="@container flex-1 overflow-y-auto pb-24 lg:pb-0">
         <Outlet />
       </main>
     </div>

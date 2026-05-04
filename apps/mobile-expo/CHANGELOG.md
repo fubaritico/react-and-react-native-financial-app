@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-03)
+# 1.0.0 (2026-05-04)
 
 
 ### Bug Fixes
@@ -27,6 +27,8 @@
 * **config:** add setup-tokens-package and migrate-to-nativewind-v5 skills ([1d9caa6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1d9caa60ec308b74bed7ee14282645261bffa92a))
 * **config:** add setup-ui-package skill with architecture reference ([44982df](https://github.com/fubaritico/react-and-react-native-financial-app/commit/44982df4e2fb4aa4d4a03ba965b4cfac2cf0d72a))
 * **expo:** add expo-dev-client and native build scripts ([1b26c7f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1b26c7f61490496cf77043e28ff08033829bc8e9))
+* **features:** add BudgetCategoryCard organism + Dropdown destructive/divider support ([bff58d2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bff58d21b342014f1ffcd323cec9112a2ccfddff))
+* **features:** add BudgetOverview + Currency + ColorBarItem + Card refactor ([76d6e32](https://github.com/fubaritico/react-and-react-native-financial-app/commit/76d6e321435d071a0ae57966501c8b3fdc79ac54))
 * **features:** extract TransactionsDataTable into directory structure + locale support ([a227c46](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a227c462157f02dd1f4633c31309dd7be38679ad))
 * **i18n:** add react-i18next with EN/FR translations across all apps ([987131e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/987131eefff0e106daaa0c42637890719c1ca4ab))
 * **icons:** add @financial-app/icons package with cross-platform Icon component ([8195d3d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8195d3d406e0f330afda450ec9c69cd219c5083d))
@@ -54,9 +56,12 @@
 * **ui:** add DonutChart atom + enforce constants/utils/types separation ([4016897](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4016897f46a15f2f895b5b256968089965421b64))
 * **ui:** add Dropdown molecule + Portal/Drawer/Menu/Listbox foundation ([b4d2468](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b4d2468f1c2bb3ae04d0fa4f2d62852e3dcda0ae))
 * **ui:** add Icon Storybook story with playground and showcase ([edb2fa9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/edb2fa931b159bfc936ea6c1a039393442dfc577))
+* **ui:** add LatestSpending molecule + Divider className prop + stories ([8f414e6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8f414e63b89047d8a446b9fab51b155e060aed6b))
+* **ui:** add LatestSpending molecule + Divider className prop + stories ([9dd358e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9dd358e3a0dad3df62d1c0a731a81435d5e76ae5))
 * **ui:** add Modal organism + shared modal service (Jotai) ([7898692](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7898692e4578a326ec0cca92323ef324ed36b87a))
 * **ui:** add NavItem atom + Navigation organism + Colors story ([e5aacd2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e5aacd246c6cfc3e91d3f52b84fd88ad2b23aa33))
 * **ui:** add Pagination molecule + refactor Button for composability ([f3b844b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/f3b844b271295b4e0e487606b6735f411817a869))
+* **ui:** add ProgressBar atom with thick/thin variants + stories ([e515450](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e515450b14339082021534117ccaaab3809acecf))
 * **ui:** add TransactionsDataTable stories + table sub-components + a11y fixes ([2e3c04b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2e3c04b1a9c799c9eea09abe9d4dd6a5ce8e613f))
 * **ui:** add Typography component with 9 Figma-mapped variants ([a3b6f29](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a3b6f2973bd4559c87dcdd8d67d2fa5b91420567))
 * **ui:** add Wave 1 auth components (TextInput, PasswordInput, LinkText, AuthCard, AuthLayout) ([93d6ee2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/93d6ee268fc52406f412041b13976a24c83ed04d))
