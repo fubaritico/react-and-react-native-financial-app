@@ -30,6 +30,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Never explicit `any`** — strict TypeScript
 - **Always run** `pnpm type-check && pnpm lint && pnpm test` then `/review` after every set of modifications — ALL 4 MANDATORY, NEVER SKIP ANY
 - **Always ask** user to run pnpm dev, pnpm prod:server and pnpm storybook after having modified a component
+- **Always use** the design system when coding components, NEVER code simple tags, asks user if components exist, if not create them
 - **Always create a Storybook story** after every component (`/story`)
 - **Model**: Haiku for questions/research, Sonnet for code/commits — suggest Haiku when appropriate
 - **For React**: instead of using `React.` for react types, import the type from react
@@ -162,17 +163,35 @@ Read `@completed.md`
 - feat: add @financial-app/features package, migrate Overview organisms from ui (b89673f) — new packages/features with dual-platform exports, moved PotsOverview/TransactionsOverview/RecurringBillsOverview from ui organisms to features/overview, own tw/cn instances, explicit subpath imports (@financial-app/ui/native for .native.tsx), updated all 3 apps + storybook imports, README updated with project structure + features package
 - feat(storybook): add NavItem + Navigation stories (93f2509) — web + native NavItem stories (Playground, SidebarItems, BottomBarItems, Collapsed), web Navigation stories (Playground, Interactive, Expanded, Collapsed), dark background support in Storybook
 - feat(features): extract TransactionsDataTable + locale support (a227c46) — TransactionsDataTable restructured into directory (constants/utils split, CompactTransactionRow in components/), sort state sync (useMemo derived from sorting), locale param added to DateCell/AmountCell factories (ui), locale prop threaded through TransactionsDataTable → columns → CompactTransactionRow, Storybook stories simplified to consume from @financial-app/features
-- refactor(ui): rename Drawer → BottomSheet + Portal system fix + iPad DataTable fixes (uncommitted) — Drawer renamed to BottomSheet across entire codebase (component, types, props, stories, features, barrels), Portal system fixed (key-based API with useId, Map-based PortalProvider, debug logs removed), BottomSheet.native overlay restored (Pressable bg-black/50 onPress={onClose}), data-name attributes added on all key Views, AvatarNameCell iPad text truncation fixed (numberOfLines + width:0 trick), DataTable column widths aligned with web (meta.className pattern), BottomSheetBody flex-1 bug fixed. Type-check + lint + test all pass. /review not yet run. Not yet committed.
+- refactor(ui): rename Drawer → BottomSheet + Portal system + Avatar fix + review fixes (8bd731c) — Drawer→BottomSheet rename across codebase, Portal rewritten (key-based useId + Map-based PortalProvider), BottomSheet.native tw-only (no StyleSheet.create), Avatar.native Fresco 1x1 detection (onLoad dimensions), black token added, combineColumnFilters mutation fix, .styles.ts 3 exports pattern (shared/web/native), TextInput maxLength prop, rules/skills updated (no StyleSheet+tw mixing, QUAL-018 expanded)
+- feat(ui): add DonutChart atom + enforce constants/utils/types separation (4016897) — cross-platform SVG donut chart (annular sector arc math, highlight ring overlay with semi-transparent white circle), strict file responsibility separation enforced (constants=values, utils=functions, types=all interfaces), new QUAL-019 review rule, new-component skill + design-system.md updated, web+native Storybook stories (8 web, 5 native)
+- feat(features): add BudgetOverview + Currency + ColorBarItem + Card refactor (76d6e32) — BudgetOverview cross-platform organism (responsive tablet horizontal layout: chart left + legend right via two-level wrapper pattern mirroring web), Currency atom (formatCurrency display component), ColorBarItem molecule (colored bar + label + amount), Card refactored (responsive padding, shared.titleSpacing extracted from inline), formatCurrency + color utilities in @financial-app/shared, features/src/lib/ deleted (cn/tw now imported from @financial-app/ui), Storybook stories for BudgetOverview + ColorBarItem (web + native)
+- feat(ui): add ProgressBar atom with thick/thin variants + stories (e515450) — cross-platform progress bar (thick: h-8 p-1 rounded-md track + rounded-sm fill; thin: h-2 rounded-lg), CSS variable bridge for web color, twrnc interpolation for native, optional metaLeft/metaRight ReactNode slots, stories wrapped in Card with token-referenced colors, review score 94/100
+- feat(ui): add LatestSpending molecule + Divider className prop + stories (9dd358e) — cross-platform LatestSpending molecule (beige sub-card, header with SectionLink, divider-separated rows with avatar/name/amount/date), Divider extended with optional className prop for custom colors, first divider skipped (index > 0), itemRight uses flex-col for vertical alignment, stories with LongLabels variant for truncation testing, review score 97/100
 
-### Next
-- Commit BottomSheet rename + run /review
-- User to test on iPad: verify BottomSheet overlay, 2-tap switching behavior, text truncation
-- Wire TransactionsDataTable into app routes (web, mobile-expo) with `locale={i18n.language}`
-- Navigation web: graphic design refinement still in progress (user doing manual pass)
-- Full CRUD for Transactions and Recurring Bills (decided: not read-only)
-- Goal: Transactions page with mock data + "Add Transaction" button
-- Then: DonutChart + BudgetsOverview (last Wave 3 items)
-- Then: Phase 8 (API server + HTTP client + testing)
+### Next — Phase: Pages with Mock Data
+
+**Current task**: Build the Budget page/screen components — remaining pieces:
+- Create **BudgetCategoryCard** organism in `@financial-app/features` (ProgressBar + LatestSpending + Card)
+- Screenshots in `files/proto/screen` and specs in `readme/budget view component`
+- Wire into routes with mock data from `data.json`
+- Text truncation (ellipsis) for long names in LatestSpending — deferred to next CSS pass
+
+**Page pipeline** (all using data.json):
+1. Overview — dashboard: balance, income/expenses, pots summary, recent transactions, budgets donut, recurring bills summary
+2. Transactions — TransactionsDataTable (already in features) wired into route with `locale={i18n.language}`
+3. Budgets — ✅ BudgetOverview done, remaining: budget category detail cards (progress bar + latest spending)
+4. Pots — pot cards with progress bars + Add Money / Withdraw buttons (display first)
+5. Recurring Bills — total card + summary + bills list with status
+
+**Then**:
+- CRUD modals (Add/Edit/Delete Budget, Add/Edit/Delete Pot, Add/Withdraw Money)
+- Phase 8: API server + HTTP client + testing
+- Feed real May 2026 data to validate end-to-end
+- Navigation web: graphic design refinement (user doing manual pass)
+
+**Pending tests**:
+- iPad: verify BottomSheet overlay, 2-tap switching, text truncation
 
 ### Known Issues
 - Review SEC-006: `redirectTo` in oauth.ts not validated — open redirect risk. Defer until login UI is built.
@@ -199,4 +218,5 @@ Read `@completed.md`
 - Native BottomSheet: 2-tap switching between sheets is accepted behavior (overlay Pressable blocks touches to triggers behind it). See memory/bottomsheet-portal.md for full context on RN touch system limitations.
 - RN `overflow: visible` does NOT work on iOS to show content outside a parent View — RN clips regardless. Do not attempt 0-height + overflow:visible patterns.
 - RN `pointerEvents="box-none"` only passes touches to children, NOT to sibling Views in the tree.
+- Android Fresco: returns onLoad with 1x1 transparent base64 PNG instead of onError when image URL 404s — Avatar detects via dimension check (MIN_VALID_SIZE = 2)
 

@@ -103,6 +103,7 @@ export const native = {} as const
 - NEVER put text styling here — text classes belong in `<Typography>` props
 - NEVER put renderer imports here (no react-native, no DOM types)
 - NEVER import styles via `#Atoms` barrel — use relative `./Component.styles`
+- ALWAYS use the design system when coding components, NEVER code simple tags, asks user if components exist, if not create them
 - `.native.tsx` imports `shared` + `native` — never `web`
 - `.web.tsx` imports `shared` + `web` — never `native`
 - If a component has NO inner elements and NO platform-specific classes, skip this file
