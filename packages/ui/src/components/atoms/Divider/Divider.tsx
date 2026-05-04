@@ -2,4 +2,6 @@
 export interface IDividerProps {
   /** Optional additional spacing class (native only — ignored on web). */
   spacing?: 'sm' | 'md' | 'lg'
+  /** Extra classes (mostly for color). */
+  className?: string
 }

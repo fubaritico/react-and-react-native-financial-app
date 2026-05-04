@@ -67,6 +67,12 @@ export type { ISpendingSummaryRowProps } from './components/molecules/SpendingSu
 export { ColorBarItem } from './components/molecules/ColorBarItem/index.web'
 export type { IColorBarItemProps } from './components/molecules/ColorBarItem/ColorBarItem.tsx'
 
+export { LatestSpending } from './components/molecules/LatestSpending/index.web'
+export type {
+  ILatestSpendingProps,
+  ILatestSpendingItem,
+} from './components/molecules/LatestSpending/LatestSpending.tsx'
+
 export { BillSummaryRow } from './components/molecules/BillSummaryRow/index.web'
 export type { IBillSummaryRowProps } from './components/molecules/BillSummaryRow/BillSummaryRow.tsx'
 

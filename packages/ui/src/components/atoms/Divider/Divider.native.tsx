@@ -7,6 +7,11 @@ import { shared } from './Divider.styles'
 import type { IDividerProps } from './Divider'
 
 /** Native implementation of the Divider component. */
-export const Divider = ({ spacing = 'md' }: Readonly<IDividerProps>) => (
-  <View style={tw`${shared.base} ${shared.spacing[spacing]}`} />
+export const Divider = ({
+  spacing = 'md',
+  className,
+}: Readonly<IDividerProps>) => (
+  <View
+    style={tw`${shared.base} ${shared.spacing[spacing]} ${className ?? ''}`}
+  />
 )
