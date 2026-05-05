@@ -132,6 +132,8 @@ export function TransactionsDataTable({
     <DataTable
       tableStateManager={table}
       loading={loading}
+      globalFilterValue={globalFilter}
+      onGlobalFilterChange={setGlobalFilter}
       rightActions={rightActions}
       showActionBar
     />

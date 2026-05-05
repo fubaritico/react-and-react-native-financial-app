@@ -1,4 +1,4 @@
-## 0.0.1 (2026-05-04)
+## 0.0.1 (2026-05-05)
 
 
 ### Bug Fixes
@@ -6,10 +6,12 @@
 * **android:** resolve AsyncStorage Maven issue, add rebuild-android script ([dc90bd2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dc90bd2cf061a937fcb3eff87683957806ee6139))
 * **mobile:** enable wireless iPhone deployment and fix sandbox violation ([824ba71](https://github.com/fubaritico/react-and-react-native-financial-app/commit/824ba7136ba466297da10c77ad9e1752f93d7026))
 * **monorepo:** align React versions and fix cache issues ([d67c956](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d67c956998a0ce4d5b368f3b814393e8d1c02b58))
+* move container-queries plugin from shared config to web-only ([499da13](https://github.com/fubaritico/react-and-react-native-financial-app/commit/499da13914bc40a60011a1ad64cb35dbc1012596))
 * **tokens:** align alias names with Figma variable naming ([d9345ae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d9345aeb25a587df64a26a4a586352561e071668))
 * **ui:** extract Icon runtime constants, add Button iconPosition prop ([33ba134](https://github.com/fubaritico/react-and-react-native-financial-app/commit/33ba134745e277d1e51e0e524842fd8fa1cbf626))
 * **ui:** move header row inside white card in overview sections ([eba1c8b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/eba1c8b64b50362e60961a5a0b274c7e02f4ae39))
 * **ui:** replace default Tailwind colors with token aliases ([5d3939b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5d3939b96aa04c2da8a9fcd7ea22d763b33dad02))
+* **ui:** review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code ([1017710](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1017710203dda1a752bd9dab5d5a294c93c8721a))
 
 
 ### Features
@@ -42,6 +44,7 @@
 * **mobile:** set ejected expo project ([aa156fc](https://github.com/fubaritico/react-and-react-native-financial-app/commit/aa156fc87b8658222436e709bb2b18fb6b6a107e))
 * **mobile:** set project with expo ([dae87e9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dae87e9708fe26bfac0f9fc223c00951bbd6088e))
 * **monorepo:** add changelog generation and type-check scripts ([0d4e8e4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d4e8e4152898ac353d95b283d2390d1f9b84f18))
+* **pages:** wire Budget route across all 3 apps with shared data util ([ff168a2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ff168a229e0ff81f21a75c09e1b435226d72929c))
 * **shared,mobile-expo:** add mock data, test utils, wire Overview page ([1f863a4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1f863a4d90e5f4d2831cbb3c2db147d2c14dcf0b))
 * **shared:** create @financial-app/shared package (Phase 5.1 + 5.7) ([6cb1d2c](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6cb1d2c95e6e5c120727fc33d7dd8f061d006ff2))
 * **state:** wire Jotai Provider in all apps + centralize in catalog ([a664939](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a664939082b0495731d4e72b11947e9fed0041a4))

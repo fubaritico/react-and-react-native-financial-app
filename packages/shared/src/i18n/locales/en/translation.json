@@ -54,7 +54,14 @@
     "spendingSummary": "Spending Summary"
   },
   "pots": {
-    "title": "Pots"
+    "title": "Pots",
+    "totalSaved": "Total Saved",
+    "targetOf": "Target of",
+    "addMoney": "+ Add Money",
+    "withdraw": "Withdraw",
+    "editPot": "Edit Pot",
+    "deletePot": "Delete Pot",
+    "addNewPot": "+ Add New Pot"
   },
   "recurring": {
     "title": "Recurring Bills"

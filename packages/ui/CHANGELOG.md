@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-04)
+# 1.0.0 (2026-05-05)
 
 
 ### Bug Fixes
@@ -11,6 +11,7 @@
 * **ui:** extract Icon runtime constants, add Button iconPosition prop ([33ba134](https://github.com/fubaritico/react-and-react-native-financial-app/commit/33ba134745e277d1e51e0e524842fd8fa1cbf626))
 * **ui:** move header row inside white card in overview sections ([eba1c8b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/eba1c8b64b50362e60961a5a0b274c7e02f4ae39))
 * **ui:** replace default Tailwind colors with token aliases ([5d3939b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5d3939b96aa04c2da8a9fcd7ea22d763b33dad02))
+* **ui:** review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code ([1017710](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1017710203dda1a752bd9dab5d5a294c93c8721a))
 
 
 ### Features

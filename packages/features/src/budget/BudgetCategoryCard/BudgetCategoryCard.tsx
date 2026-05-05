@@ -13,19 +13,19 @@ export interface IBudgetCategoryCardProps {
   /** Latest transaction items to display in the spending sub-card. */
   items: readonly ILatestSpendingItem[]
   /** Label prefix for the maximum line (e.g. "Maximum of"). */
-  maximumOfLabel?: string
+  maximumOfLabel: string
   /** Label for the spent column (e.g. "Spent"). */
-  spentLabel?: string
+  spentLabel: string
   /** Label for the remaining column (e.g. "Remaining"). */
-  remainingLabel?: string
+  remainingLabel: string
   /** Title for the latest spending section (e.g. "Latest Spending"). */
-  latestSpendingTitle?: string
+  latestSpendingTitle: string
   /** Label for the "See All" link. */
-  seeAllLabel?: string
+  seeAllLabel: string
   /** Label for the edit action in the ellipsis menu. */
-  editLabel?: string
+  editLabel: string
   /** Label for the delete action in the ellipsis menu. */
-  deleteLabel?: string
+  deleteLabel: string
   /** Callback when "See All" is pressed. */
   onSeeAll?: () => void
   /** Callback when "Edit Budget" is selected. */

@@ -54,7 +54,14 @@
     "spendingSummary": "Résumé des dépenses"
   },
   "pots": {
-    "title": "Cagnottes"
+    "title": "Cagnottes",
+    "totalSaved": "Total épargné",
+    "targetOf": "Objectif de",
+    "addMoney": "+ Ajouter",
+    "withdraw": "Retirer",
+    "editPot": "Modifier la cagnotte",
+    "deletePot": "Supprimer la cagnotte",
+    "addNewPot": "+ Nouvelle cagnotte"
   },
   "recurring": {
     "title": "Factures récurrentes"

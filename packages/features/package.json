@@ -26,6 +26,12 @@
     },
     "./budget/web": "./src/budget/index.web.ts",
     "./budget/native": "./src/budget/index.ts",
+    "./pots": {
+      "react-native": "./src/pots/index.ts",
+      "default": "./src/pots/index.web.ts"
+    },
+    "./pots/web": "./src/pots/index.web.ts",
+    "./pots/native": "./src/pots/index.ts",
     "./package.json": "./package.json"
   },
   "react-native": "./src/index.ts",

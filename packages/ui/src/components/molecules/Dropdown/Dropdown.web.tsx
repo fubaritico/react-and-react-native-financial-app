@@ -199,7 +199,7 @@ export function Dropdown({
         onClose={handleClose}
         accessibilityLabel={menuAccessibilityLabel}
         className="w-max min-w-full"
-        shape="square"
+        shape="rounded"
       >
         {menuItems}
       </Menu>

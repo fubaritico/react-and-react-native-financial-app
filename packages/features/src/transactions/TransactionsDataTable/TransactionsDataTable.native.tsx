@@ -105,6 +105,7 @@ export function TransactionsDataTable({
         <CompactTransactionRow row={row} locale={locale} />
       )}
       compactBreakpoint={768}
+      showActionBar
     />
   )
 }

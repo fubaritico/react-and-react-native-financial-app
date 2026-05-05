@@ -109,7 +109,7 @@ type Story = StoryObj<typeof meta>
 /** Interactive playground with all controls. */
 export const Playground: Story = {
   render: (args) => (
-    <View style={{ maxWidth: 600 }}>
+    <View style={{ width: 600 }}>
       <BudgetCategoryCard {...args} />
     </View>
   ),
@@ -118,7 +118,7 @@ export const Playground: Story = {
 /** Entertainment — $15 spent of $50, green theme. */
 export const Entertainment: Story = {
   render: (args) => (
-    <View style={{ maxWidth: 600 }}>
+    <View style={{ width: 600 }}>
       <BudgetCategoryCard {...args} />
     </View>
   ),
@@ -134,7 +134,7 @@ export const Bills: Story = {
     items: billsItems,
   },
   render: (args) => (
-    <View style={{ maxWidth: 600 }}>
+    <View style={{ width: 600 }}>
       <BudgetCategoryCard {...args} />
     </View>
   ),
@@ -150,7 +150,7 @@ export const DiningOutOverBudget: Story = {
     items: diningOutItems,
   },
   render: (args) => (
-    <View style={{ maxWidth: 600 }}>
+    <View style={{ width: 600 }}>
       <BudgetCategoryCard {...args} />
     </View>
   ),
@@ -166,7 +166,7 @@ export const NoItems: Story = {
     items: [],
   },
   render: (args) => (
-    <View style={{ maxWidth: 600 }}>
+    <View style={{ width: 600 }}>
       <BudgetCategoryCard {...args} />
     </View>
   ),

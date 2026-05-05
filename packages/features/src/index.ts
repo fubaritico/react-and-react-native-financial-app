@@ -19,3 +19,6 @@ export type { ITransactionsDataTableProps } from './transactions'
 
 export { BudgetCategoryCard } from './budget'
 export type { IBudgetCategoryCardProps } from './budget'
+
+export { PotCard } from './pots'
+export type { IPotCardProps } from './pots'
