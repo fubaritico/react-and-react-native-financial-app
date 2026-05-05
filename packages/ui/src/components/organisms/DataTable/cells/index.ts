@@ -5,6 +5,7 @@ export { DateCell } from './DateCell/index'
 // Platform-split cells — native barrel
 export { AvatarNameCell } from './AvatarNameCell/index'
 export { BillTitleCell } from './BillTitleCell/index'
+export { CategoryIconCell } from './CategoryIconCell/index'
 export { StatusCell } from './StatusCell/index'
 export { SortableHeader } from './SortableHeader/index'
 

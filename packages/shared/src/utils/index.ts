@@ -13,3 +13,9 @@ export type {
   IBudgetCategoryCard,
   IBudgetPageData,
 } from './budget'
+export { buildRecurringBillsPageData } from './recurring'
+export type {
+  BillStatus,
+  IRecurringBill,
+  IRecurringBillsPageData,
+} from './recurring'

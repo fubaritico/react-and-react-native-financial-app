@@ -42,6 +42,7 @@ export {
   formatDate,
   resolveTokenColor,
   buildBudgetPageData,
+  buildRecurringBillsPageData,
 } from './utils'
 export type {
   SupportedCurrency,
@@ -51,6 +52,9 @@ export type {
   IBudgetSpendingItem,
   IBudgetCategoryCard,
   IBudgetPageData,
+  BillStatus,
+  IRecurringBill,
+  IRecurringBillsPageData,
 } from './utils'
 
 // Mocks

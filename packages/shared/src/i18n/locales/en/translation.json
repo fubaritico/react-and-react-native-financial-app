@@ -64,7 +64,14 @@
     "addNewPot": "+ Add New Pot"
   },
   "recurring": {
-    "title": "Recurring Bills"
+    "title": "Recurring Bills",
+    "totalBills": "Total Bills",
+    "summary": "Summary",
+    "paidBills": "Paid Bills",
+    "totalUpcoming": "Total Upcoming",
+    "dueSoon": "Due Soon",
+    "sortBy": "Sort by",
+    "sortBills": "Sort bills"
   },
   "transactions": {
     "title": "Transactions"

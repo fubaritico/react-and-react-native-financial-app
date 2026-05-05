@@ -36,6 +36,7 @@ export function ActionBar({
           placeholder={searchPlaceholder}
           accessibilityLabel={searchLabel ?? searchPlaceholder}
           icon="search"
+          style="max-w-[320px]"
         />
       </View>
       {rightActions ? (

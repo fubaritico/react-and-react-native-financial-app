@@ -21,11 +21,12 @@ export const TextInput = ({
   secureTextEntry,
   maxLength,
   accessibilityLabel,
-}: Readonly<ITextInputProps>) => {
+  className,
+}: Readonly<ITextInputProps & { className?: string }>) => {
   const inputClasses = textInputVariants({ error })
 
   return (
-    <div className={cn('flex flex-col', shared.wrapper)}>
+    <div className={cn('flex flex-col', shared.wrapper, className)}>
       {label && (
         <Typography variant="label" color="muted">
           {label}

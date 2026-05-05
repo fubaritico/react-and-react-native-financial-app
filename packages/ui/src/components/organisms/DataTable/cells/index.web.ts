@@ -5,6 +5,7 @@ export { DateCell } from './DateCell/index.web'
 // Platform-split cells — web barrel
 export { AvatarNameCell } from './AvatarNameCell/index.web'
 export { BillTitleCell } from './BillTitleCell/index.web'
+export { CategoryIconCell } from './CategoryIconCell/index.web'
 export { StatusCell } from './StatusCell/index.web'
 export { SortableHeader } from './SortableHeader/index.web'
 

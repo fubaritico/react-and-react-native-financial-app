@@ -45,6 +45,7 @@
 * **mobile:** set project with expo ([dae87e9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dae87e9708fe26bfac0f9fc223c00951bbd6088e))
 * **monorepo:** add changelog generation and type-check scripts ([0d4e8e4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d4e8e4152898ac353d95b283d2390d1f9b84f18))
 * **pages:** wire Budget route across all 3 apps with shared data util ([ff168a2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ff168a229e0ff81f21a75c09e1b435226d72929c))
+* **pages:** wire Pots route + PotCard component + i18n + UI fixes ([bc3242b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bc3242b38f139c0292767a2c2cb984cee4549369))
 * **shared,mobile-expo:** add mock data, test utils, wire Overview page ([1f863a4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1f863a4d90e5f4d2831cbb3c2db147d2c14dcf0b))
 * **shared:** create @financial-app/shared package (Phase 5.1 + 5.7) ([6cb1d2c](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6cb1d2c95e6e5c120727fc33d7dd8f061d006ff2))
 * **state:** wire Jotai Provider in all apps + centralize in catalog ([a664939](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a664939082b0495731d4e72b11947e9fed0041a4))

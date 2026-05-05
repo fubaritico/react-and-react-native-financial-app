@@ -64,7 +64,14 @@
     "addNewPot": "+ Nouvelle cagnotte"
   },
   "recurring": {
-    "title": "Factures récurrentes"
+    "title": "Factures récurrentes",
+    "totalBills": "Total des factures",
+    "summary": "Résumé",
+    "paidBills": "Factures payées",
+    "totalUpcoming": "Total à venir",
+    "dueSoon": "Échéance proche",
+    "sortBy": "Trier par",
+    "sortBills": "Trier les factures"
   },
   "transactions": {
     "title": "Transactions"

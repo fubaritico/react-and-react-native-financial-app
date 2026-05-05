@@ -6,6 +6,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const ASSETS_DIR = path.join(__dirname, '../src/assets')
+const CATEGORIES_DIR = path.join(ASSETS_DIR, 'categories')
 const OUTPUT_DIR = path.join(__dirname, '../src/generated')
 
 /**
@@ -198,6 +199,28 @@ function main() {
 
     icons[name] = parsed
     console.warn(`  ${file} → ${name} (${parsed.paths.length} element(s))`)
+  }
+
+  // Category icons (src/assets/categories/) — prefixed with "category"
+  if (fs.existsSync(CATEGORIES_DIR)) {
+    const catFiles = fs.readdirSync(CATEGORIES_DIR).filter((f) => f.endsWith('.svg'))
+    for (const file of catFiles) {
+      const content = fs.readFileSync(path.join(CATEGORIES_DIR, file), 'utf-8')
+
+      validateSvg(file, content)
+
+      const baseName = toIconName(file)
+      const name = 'category' + baseName.charAt(0).toUpperCase() + baseName.slice(1)
+      const parsed = parseSvg(content)
+
+      if (parsed.paths.length === 0) {
+        console.warn(`  Skipping categories/${file} — no paths found`)
+        continue
+      }
+
+      icons[name] = parsed
+      console.warn(`  categories/${file} → ${name} (${parsed.paths.length} element(s))`)
+    }
   }
 
   if (!fs.existsSync(OUTPUT_DIR)) {

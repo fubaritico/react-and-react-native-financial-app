@@ -23,11 +23,12 @@ export const TextInput = ({
   secureTextEntry,
   maxLength,
   accessibilityLabel,
-}: Readonly<ITextInputProps>) => {
+  style,
+}: Readonly<ITextInputProps & { style?: string }>) => {
   const inputClasses = textInputVariants({ error })
 
   return (
-    <View style={tw`${shared.wrapper}`}>
+    <View style={[tw`${shared.wrapper}`, tw`${style ?? ''}`]}>
       {label && (
         <Typography variant="label" color="muted">
           {label}

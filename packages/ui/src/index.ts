@@ -40,6 +40,9 @@ export type { ICurrencyProps } from './components/atoms/Currency/Currency.tsx'
 export { ProgressBar } from './components/atoms/ProgressBar'
 export type { IProgressBarProps } from './components/atoms/ProgressBar/ProgressBar.tsx'
 
+export { Status } from './components/atoms/Status'
+export type { IStatusProps } from './components/atoms/Status/Status.tsx'
+
 // Molecules
 export { TextInput } from './components/molecules/TextInput'
 export type { ITextInputProps } from './components/molecules/TextInput/TextInput.tsx'
@@ -109,6 +112,7 @@ export {
   DateCell,
   AvatarNameCell,
   BillTitleCell,
+  CategoryIconCell,
   StatusCell,
   SortableHeader,
 } from './components/organisms/DataTable/cells/index'

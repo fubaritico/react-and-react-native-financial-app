@@ -22,3 +22,9 @@ export type { IBudgetCategoryCardProps } from './budget'
 
 export { PotCard } from './pots'
 export type { IPotCardProps } from './pots'
+
+export { RecurringBillsDataTable } from './recurring-bills'
+export type { IRecurringBillsDataTableProps } from './recurring-bills'
+
+export { BillsSummary } from './recurring-bills'
+export type { IBillsSummaryProps, IBillsSummaryRow } from './recurring-bills'

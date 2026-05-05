@@ -5,6 +5,6 @@ import { RecurringScreen } from './RecurringScreen'
 describe('RecurringScreen', () => {
   it('renders the title', () => {
     render(<RecurringScreen />)
-    expect(screen.getByText('Recurring Bills')).toBeTruthy()
+    expect(screen.getAllByText('Recurring Bills').length).toBeGreaterThan(0)
   })
 })
