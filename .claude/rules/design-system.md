@@ -17,8 +17,9 @@ Rules:
 - Atoms NEVER import from molecules, organisms, or templates
 - Molecules NEVER import from organisms or templates
 - Organisms NEVER import from templates
-- Cross-level imports use explicit relative paths: `../../atoms/Typography/Typography.native`
-- Same-level imports use sibling paths: `../TextInput/TextInput.native`
+- Cross-level imports use `#` aliases: `#Atoms`, `#Molecules`, `#Organisms`, `#Templates`, `#Lib/tw`, `#Lib/cn`
+- Same-component imports use relative paths: `./Alert.styles`, `./Alert.variants`
+- Same-level sibling imports use relative paths: `../TextInput/TextInput.native`
 - Storybook titles follow the pattern: `'Web/Design System/Atoms/Button'`
 
 ## File Structure (mandatory for every component)
@@ -126,18 +127,23 @@ Rules:
 - Platform-specific additions (gesture, haptics) go here only
 
 ```tsx
-import { Pressable, Text } from 'react-native';
-import { tw } from '../../lib/tw';
-import { buttonVariants } from './Button.variants';
-import type { IButtonProps } from './Button';
+import { Pressable } from 'react-native'
 
-export function Button({ label, onPress, variant, size, disabled }: IButtonProps) {
+import tw from '#Lib/tw'
+
+import { buttonVariants } from './Button.variants'
+
+import type { IButtonProps } from './Button'
+
+import { Typography } from '#Atoms'
+
+export function Button({ label, onPress, variant, size, disabled }: Readonly<IButtonProps>) {
   return (
     <Pressable onPress={onPress} disabled={!!disabled}
       style={tw`${buttonVariants({ variant, size, disabled })}`}>
-      <Text>{label}</Text>
+      <Typography variant="body">{label}</Typography>
     </Pressable>
-  );
+  )
 }
 ```
 
@@ -152,18 +158,68 @@ export function Button({ label, onPress, variant, size, disabled }: IButtonProps
 - Never use Tailwind arbitrary values (`bg-[#1a1a2e]`, `text-[14px]`, `p-[12px]`) — always use classes that resolve to `@financial-app/tokens` values via the tailwind config
 
 ```tsx
-import { cn } from '../../lib/cn';
-import { buttonVariants } from './Button.variants';
-import type { IButtonProps } from './Button';
+import { cn } from '#Lib/cn'
 
-export function Button({ label, onPress, variant, size, disabled }: IButtonProps) {
+import { Typography } from '#Atoms/index.web'
+
+import { buttonVariants } from './Button.variants'
+import { web } from './Button.styles'
+
+import type { IButtonProps } from './Button'
+
+export function Button({ label, onPress, variant, size, disabled }: Readonly<IButtonProps>) {
   return (
     <button onClick={onPress} disabled={!!disabled}
-      className={cn(buttonVariants({ variant, size, disabled }), 'hover:opacity-80 transition-opacity cursor-pointer')}>
-      {label}
+      className={cn(buttonVariants({ variant, size, disabled }), web.interactive)}>
+      <Typography variant="body">{label}</Typography>
     </button>
-  );
+  )
 }
+```
+
+## #Alias Resolution + Import Order
+
+### Alias resolution rule (CRITICAL)
+
+tsconfig `#Atoms` → `components/atoms/index.ts` (the **native** barrel).
+- `.native.tsx` → import from bare `#Atoms` (resolves to native barrel — correct)
+- `.web.tsx` → import from `#Atoms/index.web` (explicit web barrel — MANDATORY)
+- Same rule for `#Molecules`, `#Organisms`, `#Templates`
+- `#Lib` has no platform split — bare `#Lib/cn` or `#Lib/tw` is fine everywhere
+
+If a `.web.tsx` imports bare `#Atoms`, tsc pulls the native barrel → native code in the web bundle.
+
+### ESLint `import/order` consequence
+
+The root `eslint.config.js` has pathGroups for `#Atoms/**`, `#Molecules/**`, etc.
+Bare `#Atoms` (no slash) does NOT match `#Atoms/**` — ESLint sorts it **after** the `type` group.
+`#Atoms/index.web` (with slash) matches `#Atoms/**` — stays in the `internal` group.
+
+Each group MUST be separated by a blank line (`'newlines-between': 'always'`).
+
+### `.native.tsx` import order:
+```ts
+import { View } from 'react-native'          // 1. external
+
+import tw from '#Lib/tw'                      // 2. #Lib (internal before)
+
+import { shared } from './Alert.styles'       // 3. sibling (./)
+import { alertVariants } from './Alert.variants'
+
+import type { IAlertProps } from './Alert'    // 4. type
+
+import { Icon, Typography } from '#Atoms'     // 5. bare #Atoms (after type)
+```
+
+### `.web.tsx` import order:
+```ts
+import { cn } from '#Lib/cn'                         // 1. #Lib (internal before)
+
+import { Icon, Typography } from '#Atoms/index.web'  // 2. #Atoms/index.web (internal)
+
+import { shared, web } from './Alert.styles'          // 3. sibling (./)
+
+import type { IAlertProps } from './Alert'            // 4. type
 ```
 
 ## index.ts / index.web.ts — Re-export Rules

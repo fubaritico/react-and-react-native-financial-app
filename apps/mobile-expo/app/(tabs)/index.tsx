@@ -5,104 +5,166 @@ import {
   TransactionsOverview,
 } from '@financial-app/features'
 import {
+  getBalanceOptions,
+  getBudgetsOptions,
+  getPotsOptions,
+  getRecurringBillsOptions,
+  getTransactionsOptions,
+} from '@financial-app/http-client'
+import {
+  buildRecurringBillsPageData,
   formatCurrency,
   formatDate,
-  mockBalance,
-  mockBudgets,
-  mockPots,
-  mockTransactions,
 } from '@financial-app/shared'
-import { BalanceCard } from '@financial-app/ui'
+import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollView, Text, View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 
 import tw from '../../src/lib/tw'
 
+/** Current budget month — matches seed data. */
+const BUDGET_MONTH = '2024-08'
+
 /**
- * Overview (home) tab — displays balance, pots, transactions, and recurring bills.
- * BudgetsOverview is deferred until DonutChart is ready (Track B).
+ * Overview (home) tab — displays balance, pots, transactions, budgets, and recurring bills.
+ * All data fetched via TanStack Query from the API.
  */
 export default function OverviewScreen() {
   const router = useRouter()
   const { t } = useTranslation()
 
-  const latestTransactions = mockTransactions.slice(0, 5).map((txn) => ({
-    avatar: txn.avatar,
-    name: txn.name,
-    amount: txn.amount,
-    date: formatDate(txn.date),
-  }))
+  const {
+    data: balance,
+    isLoading: balanceLoading,
+    error: balanceError,
+  } = useQuery(getBalanceOptions())
+  const {
+    data: txnResult,
+    isLoading: txnLoading,
+    error: txnError,
+  } = useQuery(getTransactionsOptions({ query: { limit: 5, sort: 'latest' } }))
+  const {
+    data: pots,
+    isLoading: potsLoading,
+    error: potsError,
+  } = useQuery(getPotsOptions())
+  const {
+    data: budgets,
+    isLoading: budgetsLoading,
+    error: budgetsError,
+  } = useQuery(getBudgetsOptions({ query: { month: BUDGET_MONTH } }))
+  const {
+    data: recurringBills,
+    isLoading: recurringLoading,
+    error: recurringError,
+  } = useQuery(getRecurringBillsOptions())
 
-  const potItems = mockPots.map((pot) => ({
-    name: pot.name,
-    total: pot.total,
-    color: pot.theme,
-  }))
+  const isLoading =
+    balanceLoading ||
+    txnLoading ||
+    potsLoading ||
+    budgetsLoading ||
+    recurringLoading
 
-  const totalSaved = mockPots.reduce((sum, pot) => sum + pot.total, 0)
+  const hasError =
+    balanceError ?? txnError ?? potsError ?? budgetsError ?? recurringError
 
-  const budgetItems = mockBudgets.map((budget) => {
-    const spent = mockTransactions
-      .filter((txn) => txn.category === budget.category && txn.amount < 0)
-      .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
-    return {
-      category: budget.category,
-      maximum: budget.maximum,
-      spent,
-      color: budget.theme,
-    }
-  })
-
-  const recurringTransactions = mockTransactions.filter((txn) => txn.recurring)
-  const paidBills = recurringTransactions.filter(
-    (txn) => new Date(txn.date).getMonth() === 7
+  const latestTransactions = useMemo(
+    () =>
+      (txnResult?.data ?? []).map((txn) => ({
+        avatar: txn.avatar,
+        name: txn.name,
+        amount: txn.amount,
+        date: formatDate(txn.date),
+      })),
+    [txnResult]
   )
-  const paidTotal = paidBills.reduce(
-    (sum, txn) => sum + Math.abs(txn.amount),
-    0
+
+  const potItems = useMemo(
+    () =>
+      (pots ?? []).map((pot) => ({
+        name: pot.name,
+        total: pot.total,
+        color: pot.theme,
+      })),
+    [pots]
   )
-  const upcomingTotal = recurringTransactions
-    .filter((txn) => new Date(txn.date).getMonth() === 6)
-    .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
-  const dueSoonTotal = recurringTransactions
-    .filter((txn) => {
-      const day = new Date(txn.date).getDate()
-      return day <= 5
-    })
-    .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
+
+  const totalSaved = useMemo(
+    () => (pots ?? []).reduce((sum, pot) => sum + pot.total, 0),
+    [pots]
+  )
+
+  const budgetItems = useMemo(
+    () =>
+      (budgets ?? []).map((budget) => ({
+        category: budget.category,
+        maximum: budget.maximum,
+        spent: budget.spent,
+        color: budget.theme,
+      })),
+    [budgets]
+  )
+
+  const recurringData = useMemo(
+    () => (recurringBills ? buildRecurringBillsPageData(recurringBills) : null),
+    [recurringBills]
+  )
+
+  if (isLoading) {
+    return (
+      <View style={tw`flex-1 bg-beige-100`}>
+        <Spinner />
+      </View>
+    )
+  }
+
+  if (hasError) {
+    return (
+      <View style={tw`flex-1 bg-beige-100 p-6`}>
+        <Alert severity="error" message={t('common.errorLoading')} />
+      </View>
+    )
+  }
 
   return (
     <ScrollView
       style={tw`flex-1 bg-beige-100`}
       contentContainerStyle={tw`p-4 pb-8`}
     >
-      <Text style={tw`text-3xl font-bold mb-6 mt-10`}>
+      <Typography variant="page-title" style={tw`mb-6 mt-10`}>
         {t('overview.title')}
-      </Text>
+      </Typography>
 
       {/* Balance section */}
-      <BalanceCard
-        label={t('overview.currentBalance')}
-        amount={formatCurrency(mockBalance.current)}
-        tone="dark"
-      />
-      <View style={tw`flex-row gap-3 mt-3`}>
-        <View style={tw`flex-1`}>
+      {balance && (
+        <>
           <BalanceCard
-            label={t('overview.income')}
-            amount={formatCurrency(mockBalance.income)}
-            tone="light"
+            label={t('overview.currentBalance')}
+            amount={formatCurrency(balance.current)}
+            tone="dark"
           />
-        </View>
-        <View style={tw`flex-1`}>
-          <BalanceCard
-            label={t('overview.expenses')}
-            amount={formatCurrency(mockBalance.expenses)}
-            tone="light"
-          />
-        </View>
-      </View>
+          <View style={tw`flex-row gap-3 mt-3`}>
+            <View style={tw`flex-1`}>
+              <BalanceCard
+                label={t('overview.income')}
+                amount={formatCurrency(balance.income)}
+                tone="light"
+              />
+            </View>
+            <View style={tw`flex-1`}>
+              <BalanceCard
+                label={t('overview.expenses')}
+                amount={formatCurrency(balance.expenses)}
+                tone="light"
+              />
+            </View>
+          </View>
+        </>
+      )}
 
       {/* Pots section */}
       <View style={tw`mt-6`}>
@@ -132,21 +194,23 @@ export default function OverviewScreen() {
       </View>
 
       {/* Recurring Bills section */}
-      <View style={tw`mt-4`}>
-        <RecurringBillsOverview
-          title={t('recurringBillsOverview.title')}
-          seeDetailsLabel={t('common.seeDetails')}
-          paidBillsLabel={t('recurringBillsOverview.paidBills')}
-          totalUpcomingLabel={t('recurringBillsOverview.totalUpcoming')}
-          dueSoonLabel={t('recurringBillsOverview.dueSoon')}
-          paid={formatCurrency(paidTotal)}
-          upcoming={formatCurrency(upcomingTotal)}
-          dueSoon={formatCurrency(dueSoonTotal)}
-          onSeeDetails={() => {
-            router.push('/(tabs)/recurring')
-          }}
-        />
-      </View>
+      {recurringData && (
+        <View style={tw`mt-4`}>
+          <RecurringBillsOverview
+            title={t('recurringBillsOverview.title')}
+            seeDetailsLabel={t('common.seeDetails')}
+            paidBillsLabel={t('recurringBillsOverview.paidBills')}
+            totalUpcomingLabel={t('recurringBillsOverview.totalUpcoming')}
+            dueSoonLabel={t('recurringBillsOverview.dueSoon')}
+            paid={recurringData.paidTotal}
+            upcoming={recurringData.upcomingTotal}
+            dueSoon={recurringData.dueSoonTotal}
+            onSeeDetails={() => {
+              router.push('/(tabs)/recurring')
+            }}
+          />
+        </View>
+      )}
 
       {/* Budgets section */}
       <View style={tw`mt-4`}>

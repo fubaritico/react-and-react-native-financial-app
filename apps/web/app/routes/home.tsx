@@ -5,126 +5,172 @@ import {
   TransactionsOverview,
 } from '@financial-app/features'
 import {
+  getBalanceOptions,
+  getBudgetsOptions,
+  getPotsOptions,
+  getRecurringBillsOptions,
+  getTransactionsOptions,
+} from '@financial-app/http-client'
+import {
+  buildRecurringBillsPageData,
   formatCurrency,
   formatDate,
-  mockBalance,
-  mockBudgets,
-  mockPots,
-  mockTransactions,
 } from '@financial-app/shared'
-import { BalanceCard } from '@financial-app/ui'
+import { Alert, BalanceCard, Skeleton, Typography } from '@financial-app/ui'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
-import type { Route } from './+types/home'
+import { queryClient } from '../lib/query-client'
 
-// TODO (Phase 8): replace mock data with real API call via requireAuth + HTTP client
-export function loader() {
-  const latestTransactions = mockTransactions.slice(0, 5).map((txn) => ({
-    avatar: txn.avatar,
-    name: txn.name,
-    amount: txn.amount,
-    date: formatDate(txn.date),
-  }))
+/** Current budget month — matches seed data. */
+const BUDGET_MONTH = '2024-08'
 
-  const potItems = mockPots.map((pot) => ({
-    name: pot.name,
-    total: pot.total,
-    color: pot.theme,
-  }))
+const balanceOpts = getBalanceOptions()
+const txnOpts = getTransactionsOptions({
+  query: { limit: 5, sort: 'latest' },
+})
+const potsOpts = getPotsOptions()
+const budgetsOpts = getBudgetsOptions({ query: { month: BUDGET_MONTH } })
+const recurringOpts = getRecurringBillsOptions()
 
-  const totalSaved = mockPots.reduce((sum, pot) => sum + pot.total, 0)
-
-  const recurringTransactions = mockTransactions.filter((txn) => txn.recurring)
-  const paidBills = recurringTransactions.filter(
-    (txn) => new Date(txn.date).getMonth() === 7
-  )
-  const paidTotal = paidBills.reduce(
-    (sum, txn) => sum + Math.abs(txn.amount),
-    0
-  )
-  const upcomingTotal = recurringTransactions
-    .filter((txn) => new Date(txn.date).getMonth() === 6)
-    .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
-  const dueSoonTotal = recurringTransactions
-    .filter((txn) => {
-      const day = new Date(txn.date).getDate()
-      return day <= 5
-    })
-    .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
-
-  const budgetItems = mockBudgets.map((budget) => {
-    const spent = mockTransactions
-      .filter((txn) => txn.category === budget.category && txn.amount < 0)
-      .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
-    return {
-      category: budget.category,
-      maximum: budget.maximum,
-      spent,
-      color: budget.theme,
-    }
-  })
-
-  return {
-    balance: mockBalance,
-    latestTransactions,
-    potItems,
-    totalSaved,
-    budgetItems,
-    paidTotal,
-    upcomingTotal,
-    dueSoonTotal,
-  }
+export async function clientLoader() {
+  await Promise.all([
+    queryClient.ensureQueryData(balanceOpts),
+    queryClient.ensureQueryData(txnOpts),
+    queryClient.ensureQueryData(potsOpts),
+    queryClient.ensureQueryData(budgetsOpts),
+    queryClient.ensureQueryData(recurringOpts),
+  ])
+  return null
 }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+export function HydrateFallback() {
+  return (
+    <div className="p-6 lg:p-10">
+      <Skeleton variant="line" width="w-48" height="h-8" className="mb-8" />
+      <div className="flex flex-col gap-3 md:flex-row md:gap-6">
+        <Skeleton variant="rectangle" height="h-24" className="md:flex-1" />
+        <Skeleton variant="rectangle" height="h-24" className="md:flex-1" />
+        <Skeleton variant="rectangle" height="h-24" className="md:flex-1" />
+      </div>
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="flex flex-col gap-6">
+          <Skeleton variant="rectangle" height="h-48" />
+          <Skeleton variant="rectangle" height="h-64" />
+        </div>
+        <div className="flex flex-col gap-6">
+          <Skeleton variant="rectangle" height="h-64" />
+          <Skeleton variant="rectangle" height="h-48" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function Home() {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
-  const {
-    balance,
-    latestTransactions,
-    potItems,
-    totalSaved,
-    budgetItems,
-    paidTotal,
-    upcomingTotal,
-    dueSoonTotal,
-  } = loaderData
+  const { data: balance, error: balanceError } = useQuery(balanceOpts)
+  const { data: transactions, error: txnError } = useQuery(txnOpts)
+  const { data: pots, error: potsError } = useQuery(potsOpts)
+  const { data: budgets, error: budgetsError } = useQuery(budgetsOpts)
+  const { data: recurringBills, error: recurringError } =
+    useQuery(recurringOpts)
+
+  const latestTransactions = useMemo(
+    () =>
+      (transactions?.data ?? []).map((txn) => ({
+        avatar: txn.avatar,
+        name: txn.name,
+        amount: txn.amount,
+        date: formatDate(txn.date),
+      })),
+    [transactions]
+  )
+
+  const potItems = useMemo(
+    () =>
+      (pots ?? []).map((pot) => ({
+        name: pot.name,
+        total: pot.total,
+        color: pot.theme,
+      })),
+    [pots]
+  )
+
+  const totalSaved = useMemo(
+    () => (pots ?? []).reduce((sum, pot) => sum + pot.total, 0),
+    [pots]
+  )
+
+  const budgetItems = useMemo(
+    () =>
+      (budgets ?? []).map((budget) => ({
+        category: budget.category,
+        maximum: budget.maximum,
+        spent: budget.spent,
+        color: budget.theme,
+      })),
+    [budgets]
+  )
+
+  const recurringData = useMemo(
+    () => (recurringBills ? buildRecurringBillsPageData(recurringBills) : null),
+    [recurringBills]
+  )
+
+  const error =
+    balanceError ?? txnError ?? potsError ?? budgetsError ?? recurringError
+
+  if (error) {
+    return (
+      <div className="p-6 lg:p-10">
+        <Typography variant="page-title" as="h1" className="mb-4">
+          {t('overview.title')}
+        </Typography>
+        <Alert severity="error" message={t('common.errorLoading')} />
+      </div>
+    )
+  }
 
   return (
     <div className="p-6 lg:p-10">
-      <h1 className="text-preset-1 text-grey-900 mb-8">
+      <Typography variant="page-title" as="h1" className="mb-8">
         {t('overview.title')}
-      </h1>
+      </Typography>
 
       {/* Balance cards — stack on mobile, row on md+ */}
-      <div className="flex flex-col md:flex-row gap-3 md:gap-6">
-        <div className="md:flex-1">
-          <BalanceCard
-            label={t('overview.currentBalance')}
-            amount={formatCurrency(balance.current)}
-            tone="dark"
-          />
+      {balance && (
+        <div className="flex flex-col gap-3 md:flex-row md:gap-6">
+          <div className="md:flex-1">
+            <BalanceCard
+              label={t('overview.currentBalance')}
+              amount={formatCurrency(balance.current)}
+              tone="dark"
+            />
+          </div>
+          <div className="md:flex-1">
+            <BalanceCard
+              label={t('overview.income')}
+              amount={formatCurrency(balance.income)}
+              tone="light"
+            />
+          </div>
+          <div className="md:flex-1">
+            <BalanceCard
+              label={t('overview.expenses')}
+              amount={formatCurrency(balance.expenses)}
+              tone="light"
+            />
+          </div>
         </div>
-        <div className="md:flex-1">
-          <BalanceCard
-            label={t('overview.income')}
-            amount={formatCurrency(balance.income)}
-            tone="light"
-          />
-        </div>
-        <div className="md:flex-1">
-          <BalanceCard
-            label={t('overview.expenses')}
-            amount={formatCurrency(balance.expenses)}
-            tone="light"
-          />
-        </div>
-      </div>
+      )}
 
       {/* Main sections — single column on mobile, 2-col grid on lg+ */}
-      <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Left column */}
         <div className="flex flex-col gap-6">
           <PotsOverview
@@ -160,19 +206,21 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             }}
           />
 
-          <RecurringBillsOverview
-            title={t('recurringBillsOverview.title')}
-            seeDetailsLabel={t('common.seeDetails')}
-            paidBillsLabel={t('recurringBillsOverview.paidBills')}
-            totalUpcomingLabel={t('recurringBillsOverview.totalUpcoming')}
-            dueSoonLabel={t('recurringBillsOverview.dueSoon')}
-            paid={formatCurrency(paidTotal)}
-            upcoming={formatCurrency(upcomingTotal)}
-            dueSoon={formatCurrency(dueSoonTotal)}
-            onSeeDetails={() => {
-              void navigate('/recurring')
-            }}
-          />
+          {recurringData && (
+            <RecurringBillsOverview
+              title={t('recurringBillsOverview.title')}
+              seeDetailsLabel={t('common.seeDetails')}
+              paidBillsLabel={t('recurringBillsOverview.paidBills')}
+              totalUpcomingLabel={t('recurringBillsOverview.totalUpcoming')}
+              dueSoonLabel={t('recurringBillsOverview.dueSoon')}
+              paid={recurringData.paidTotal}
+              upcoming={recurringData.upcomingTotal}
+              dueSoon={recurringData.dueSoonTotal}
+              onSeeDetails={() => {
+                void navigate('/recurring')
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

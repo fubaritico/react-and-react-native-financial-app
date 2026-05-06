@@ -1,9 +1,8 @@
 import { BillsSummary, RecurringBillsDataTable } from '@financial-app/features'
-import {
-  buildRecurringBillsPageData,
-  mockTransactions,
-} from '@financial-app/shared'
-import { BalanceCard, Typography } from '@financial-app/ui'
+import { getRecurringBillsOptions } from '@financial-app/http-client'
+import { buildRecurringBillsPageData } from '@financial-app/shared'
+import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
+import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
@@ -15,47 +14,57 @@ import tw from '../lib/tw'
 export function RecurringScreen() {
   const { t, i18n } = useTranslation()
 
-  const pageData = useMemo(
-    () => buildRecurringBillsPageData(mockTransactions),
-    []
-  )
-
   const {
-    totalBills,
-    paidCount,
-    paidTotal,
-    upcomingCount,
-    upcomingTotal,
-    dueSoonCount,
-    dueSoonTotal,
-    bills,
-  } = pageData
+    data: recurringBills,
+    isLoading,
+    error,
+  } = useQuery(getRecurringBillsOptions())
+
+  const pageData = useMemo(
+    () => (recurringBills ? buildRecurringBillsPageData(recurringBills) : null),
+    [recurringBills]
+  )
 
   const summaryRows: IBillsSummaryRow[] = useMemo(
-    () => [
-      { label: t('recurring.paidBills'), count: paidCount, total: paidTotal },
-      {
-        label: t('recurring.totalUpcoming'),
-        count: upcomingCount,
-        total: upcomingTotal,
-      },
-      {
-        label: t('recurring.dueSoon'),
-        count: dueSoonCount,
-        total: dueSoonTotal,
-        color: 'destructive' as const,
-      },
-    ],
-    [
-      t,
-      paidCount,
-      paidTotal,
-      upcomingCount,
-      upcomingTotal,
-      dueSoonCount,
-      dueSoonTotal,
-    ]
+    () =>
+      pageData
+        ? [
+            {
+              label: t('recurring.paidBills'),
+              count: pageData.paidCount,
+              total: pageData.paidTotal,
+            },
+            {
+              label: t('recurring.totalUpcoming'),
+              count: pageData.upcomingCount,
+              total: pageData.upcomingTotal,
+            },
+            {
+              label: t('recurring.dueSoon'),
+              count: pageData.dueSoonCount,
+              total: pageData.dueSoonTotal,
+              color: 'destructive' as const,
+            },
+          ]
+        : [],
+    [pageData, t]
   )
+
+  if (isLoading || !pageData) {
+    return (
+      <View style={tw`flex-1 bg-beige-100`}>
+        <Spinner />
+      </View>
+    )
+  }
+
+  if (error) {
+    return (
+      <View style={tw`flex-1 bg-beige-100 p-6`}>
+        <Alert severity="error" message={t('common.errorLoading')} />
+      </View>
+    )
+  }
 
   return (
     <ScrollView
@@ -70,7 +79,7 @@ export function RecurringScreen() {
       {/* Total Bills */}
       <BalanceCard
         label={t('recurring.totalBills')}
-        amount={totalBills}
+        amount={pageData.totalBills}
         tone="dark"
       />
 
@@ -81,7 +90,7 @@ export function RecurringScreen() {
 
       {/* DataTable */}
       <View style={tw`mt-4`}>
-        <RecurringBillsDataTable data={bills} locale={i18n.language} />
+        <RecurringBillsDataTable data={pageData.bills} locale={i18n.language} />
       </View>
     </ScrollView>
   )

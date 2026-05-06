@@ -1,5 +1,8 @@
 import './i18n'
 
+import { client } from '@financial-app/http-client/client'
+import { useAuthListener, useConfigureHttpClient } from '@financial-app/shared'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { Provider as JotaiProvider } from 'jotai'
 import {
   Links,
@@ -10,10 +13,24 @@ import {
   isRouteErrorResponse,
 } from 'react-router'
 
+import { queryClient } from './lib/query-client'
+import { authClient } from './lib/supabase'
+
 import type { Route } from './+types/root'
 import type { ReactNode } from 'react'
 
 import './app.css'
+
+const API_URL =
+  (import.meta.env.VITE_API_URL as string | undefined) ??
+  'http://localhost:3001'
+
+/** Bootstraps auth listener and HTTP client configuration */
+function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
+  useAuthListener(authClient)
+  useConfigureHttpClient(client, authClient, API_URL)
+  return children
+}
 
 export function Layout({ children }: Readonly<{ children: ReactNode }>) {
   return (
@@ -38,7 +55,11 @@ export function Layout({ children }: Readonly<{ children: ReactNode }>) {
 export default function App() {
   return (
     <JotaiProvider>
-      <Outlet />
+      <QueryClientProvider client={queryClient}>
+        <AuthBootstrap>
+          <Outlet />
+        </AuthBootstrap>
+      </QueryClientProvider>
     </JotaiProvider>
   )
 }

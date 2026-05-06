@@ -2,7 +2,8 @@
   "common": {
     "seeDetails": "See Details",
     "viewAll": "View All",
-    "placeholder": "Placeholder"
+    "placeholder": "Placeholder",
+    "errorLoading": "Failed to load data. Please try again."
   },
   "navigation": {
     "overview": "Overview",

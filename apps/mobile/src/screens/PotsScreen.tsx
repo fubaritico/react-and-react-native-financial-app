@@ -1,6 +1,7 @@
 import { PotCard } from '@financial-app/features'
-import { mockPots } from '@financial-app/shared'
-import { Button, Typography } from '@financial-app/ui'
+import { getPotsOptions } from '@financial-app/http-client'
+import { Alert, Button, Spinner, Typography } from '@financial-app/ui'
+import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
@@ -11,6 +12,24 @@ const noop = () => {}
 
 export function PotsScreen() {
   const { t } = useTranslation()
+
+  const { data: pots, isLoading, error } = useQuery(getPotsOptions())
+
+  if (isLoading) {
+    return (
+      <View style={tw`flex-1 bg-beige-100`}>
+        <Spinner />
+      </View>
+    )
+  }
+
+  if (error) {
+    return (
+      <View style={tw`flex-1 bg-beige-100 p-6`}>
+        <Alert severity="error" message={t('common.errorLoading')} />
+      </View>
+    )
+  }
 
   return (
     <ScrollView
@@ -29,7 +48,7 @@ export function PotsScreen() {
       </View>
 
       {/* Pot Cards */}
-      {mockPots.map((pot) => (
+      {(pots ?? []).map((pot) => (
         <View key={pot.id} style={tw`mt-4`}>
           <PotCard
             name={pot.name}

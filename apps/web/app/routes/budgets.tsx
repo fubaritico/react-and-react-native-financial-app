@@ -1,25 +1,73 @@
 import { BudgetCategoryCard, BudgetOverview } from '@financial-app/features'
 import {
-  buildBudgetPageData,
-  mockBudgets,
-  mockTransactions,
-} from '@financial-app/shared'
-import { Button, Typography } from '@financial-app/ui'
+  getBudgetsOptions,
+  getTransactionsOptions,
+} from '@financial-app/http-client'
+import { buildBudgetPageData } from '@financial-app/shared'
+import { Alert, Button, Skeleton, Typography } from '@financial-app/ui'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { Route } from './+types/budgets'
+import { queryClient } from '../lib/query-client'
+
+/** Current budget month — matches seed data. */
+const BUDGET_MONTH = '2024-08'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function -- disabled button, wired in CRUD phase
 const noop = () => {}
 
-// TODO (Phase 8): replace mock data with real API call via requireAuth + HTTP client
-export function loader() {
-  return buildBudgetPageData(mockBudgets, mockTransactions)
+const budgetsOpts = getBudgetsOptions({ query: { month: BUDGET_MONTH } })
+const txnOpts = getTransactionsOptions({ query: { limit: 1000 } })
+
+export async function clientLoader() {
+  await Promise.all([
+    queryClient.ensureQueryData(budgetsOpts),
+    queryClient.ensureQueryData(txnOpts),
+  ])
+  return null
 }
 
-export default function Budgets({ loaderData }: Route.ComponentProps) {
+export function HydrateFallback() {
+  return (
+    <div className="p-6 lg:p-10">
+      <div className="mb-8 flex items-center justify-between">
+        <Skeleton variant="line" width="w-40" height="h-8" />
+        <Skeleton variant="rectangle" width="w-36" height="h-10" />
+      </div>
+      <div className="grid grid-cols-1 gap-6 @[1100px]:grid-cols-[1fr_1.5fr]">
+        <Skeleton variant="rectangle" height="h-72" />
+        <div className="flex flex-col gap-6">
+          <Skeleton variant="rectangle" height="h-64" />
+          <Skeleton variant="rectangle" height="h-64" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function Budgets() {
   const { t } = useTranslation()
-  const { budgetItems, categoryCards } = loaderData
+
+  const { data: budgets, error: budgetsError } = useQuery(budgetsOpts)
+  const { data: txnResult, error: txnError } = useQuery(txnOpts)
+
+  const { budgetItems, categoryCards } = useMemo(
+    () => buildBudgetPageData(budgets ?? [], txnResult?.data ?? []),
+    [budgets, txnResult]
+  )
+
+  const error = budgetsError ?? txnError
+  if (error) {
+    return (
+      <div className="p-6 lg:p-10">
+        <Typography variant="page-title" as="h1" className="mb-4">
+          {t('budgets.title')}
+        </Typography>
+        <Alert severity="error" message={t('common.errorLoading')} />
+      </div>
+    )
+  }
 
   return (
     <div className="p-6 lg:p-10">

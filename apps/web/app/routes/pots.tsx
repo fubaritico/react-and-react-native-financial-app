@@ -1,13 +1,52 @@
 import { PotCard } from '@financial-app/features'
-import { mockPots } from '@financial-app/shared'
-import { Button, Typography } from '@financial-app/ui'
+import { getPotsOptions } from '@financial-app/http-client'
+import { Alert, Button, Skeleton, Typography } from '@financial-app/ui'
+import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+
+import { queryClient } from '../lib/query-client'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function -- disabled button, wired in CRUD phase
 const noop = () => {}
 
+const potsOpts = getPotsOptions()
+
+export async function clientLoader() {
+  await queryClient.ensureQueryData(potsOpts)
+  return null
+}
+
+export function HydrateFallback() {
+  return (
+    <div className="p-6 lg:p-10">
+      <div className="mb-8 flex items-center justify-between">
+        <Skeleton variant="line" width="w-24" height="h-8" />
+        <Skeleton variant="rectangle" width="w-32" height="h-10" />
+      </div>
+      <div className="grid grid-cols-1 gap-6 @[1100px]:grid-cols-2">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Skeleton key={i} variant="rectangle" height="h-56" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function Pots() {
   const { t } = useTranslation()
+
+  const { data: pots, error } = useQuery(potsOpts)
+
+  if (error) {
+    return (
+      <div className="p-6 lg:p-10">
+        <Typography variant="page-title" as="h1" className="mb-4">
+          {t('pots.title')}
+        </Typography>
+        <Alert severity="error" message={t('common.errorLoading')} />
+      </div>
+    )
+  }
 
   return (
     <div className="p-6 lg:p-10">
@@ -26,7 +65,7 @@ export default function Pots() {
 
       {/* 2-col grid when content area >= 1100px */}
       <div className="grid grid-cols-1 gap-6 @[1100px]:grid-cols-2">
-        {mockPots.map((pot) => (
+        {(pots ?? []).map((pot) => (
           <PotCard
             key={pot.id}
             name={pot.name}

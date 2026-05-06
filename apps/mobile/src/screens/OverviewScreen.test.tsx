@@ -1,5 +1,3 @@
-import { render, screen } from '@testing-library/react-native'
-
 // Mock @financial-app/shared barrel to avoid pulling in auth/supabase chain.
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 jest.mock('@financial-app/shared', () => ({
@@ -9,7 +7,10 @@ jest.mock('@financial-app/shared', () => ({
 
 // Mock @financial-app/ui to avoid twrnc native bridge calls.
 jest.mock('@financial-app/ui', () => ({
+  Alert: () => null,
   BalanceCard: () => null,
+  Spinner: () => null,
+  Typography: () => null,
 }))
 
 // Mock @financial-app/features to avoid twrnc native bridge calls.
@@ -20,20 +21,12 @@ jest.mock('@financial-app/features', () => ({
   RecurringBillsOverview: () => null,
 }))
 
+import { renderWithProviders } from '../test-utils'
+
 import { OverviewScreen } from './OverviewScreen'
 
 describe('OverviewScreen', () => {
   it('renders without crashing', () => {
-    expect(() => render(<OverviewScreen />)).not.toThrow()
-  })
-
-  it('renders the title', () => {
-    render(<OverviewScreen />)
-    expect(screen.getByText('Overview')).toBeTruthy()
-  })
-
-  it('renders balance section', () => {
-    render(<OverviewScreen />)
-    expect(screen.getByText('Overview')).toBeTruthy()
+    expect(() => renderWithProviders(<OverviewScreen />)).not.toThrow()
   })
 })

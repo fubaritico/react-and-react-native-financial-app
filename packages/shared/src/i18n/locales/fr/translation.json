@@ -2,7 +2,8 @@
   "common": {
     "seeDetails": "Voir les détails",
     "viewAll": "Voir tout",
-    "placeholder": "Espace réservé"
+    "placeholder": "Espace réservé",
+    "errorLoading": "Échec du chargement des données. Veuillez réessayer."
   },
   "navigation": {
     "overview": "Aperçu",

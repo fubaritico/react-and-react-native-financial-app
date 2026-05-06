@@ -28,19 +28,35 @@ export interface IBudgetPageData {
   categoryCards: IBudgetCategoryCard[]
 }
 
+/**
+ * Computes spent amount for a budget category.
+ * Uses pre-computed `budget.spent` from the API when available,
+ * falls back to summing negative transactions for the category.
+ */
+function getSpent(
+  budget: IBudget,
+  categoryTransactions: readonly ITransaction[]
+): number {
+  if (budget.spent != null) return budget.spent
+  return categoryTransactions.reduce(
+    (sum, txn) => sum + Math.abs(txn.amount),
+    0
+  )
+}
+
 /** Derives budget overview items and category cards from raw budgets + transactions. */
 export function buildBudgetPageData(
   budgets: readonly IBudget[],
   transactions: readonly ITransaction[]
 ): IBudgetPageData {
   const budgetItems: IBudgetItem[] = budgets.map((budget) => {
-    const spent = transactions
-      .filter((txn) => txn.category === budget.category && txn.amount < 0)
-      .reduce((sum, txn) => sum + Math.abs(txn.amount), 0)
+    const categoryTxns = transactions.filter(
+      (txn) => txn.category === budget.category && txn.amount < 0
+    )
     return {
       category: budget.category,
       maximum: budget.maximum,
-      spent,
+      spent: getSpent(budget, categoryTxns),
       color: budget.theme,
     }
   })
@@ -49,11 +65,6 @@ export function buildBudgetPageData(
     const categoryTransactions = transactions
       .filter((txn) => txn.category === budget.category && txn.amount < 0)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
-    const spent = categoryTransactions.reduce(
-      (sum, txn) => sum + Math.abs(txn.amount),
-      0
-    )
 
     const items: IBudgetSpendingItem[] = categoryTransactions
       .slice(0, LATEST_SPENDING_COUNT)
@@ -67,7 +78,7 @@ export function buildBudgetPageData(
     return {
       category: budget.category,
       maximum: budget.maximum,
-      spent,
+      spent: getSpent(budget, categoryTransactions),
       color: budget.theme,
       items,
     }

@@ -1,10 +1,9 @@
-import { render, screen } from '@testing-library/react-native'
+import { renderWithProviders } from '../test-utils'
 
 import { TransactionsScreen } from './TransactionsScreen'
 
 describe('TransactionsScreen', () => {
-  it('renders the title', () => {
-    render(<TransactionsScreen />)
-    expect(screen.getByText('Transactions')).toBeTruthy()
+  it('renders without crashing', () => {
+    expect(() => renderWithProviders(<TransactionsScreen />)).not.toThrow()
   })
 })

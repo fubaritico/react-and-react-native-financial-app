@@ -18,6 +18,7 @@ module.exports = {
   moduleNameMapper: {
     '^@financial-app/shared/mocks$': `${sharedPkg}/mocks/index.ts`,
     '^@financial-app/shared/utils$': `${sharedPkg}/utils/index.ts`,
+    '^@financial-app/http-client$': '<rootDir>/jest.mocks/http-client.js',
     '^react-native-svg$': '<rootDir>/jest.mocks/react-native-svg.js',
     '^twrnc$': '<rootDir>/jest.mocks/twrnc.js',
     '^react-native$': rnRoot,

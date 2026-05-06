@@ -33,6 +33,10 @@ export interface IBudget {
   maximum: number
   /** Color theme token name for UI display */
   theme: string
+  /** Budget month in YYYY-MM format (present when fetched from API) */
+  month?: string
+  /** Pre-computed spent amount (present when fetched from API via RPC) */
+  spent?: number
 }
 
 export interface IPot {

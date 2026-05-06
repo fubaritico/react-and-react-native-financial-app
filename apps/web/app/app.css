@@ -1,4 +1,5 @@
 @import '@financial-app/tokens/css';
+@import '@financial-app/ui/styles';
 
 @tailwind base;
 @tailwind components;
