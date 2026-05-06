@@ -19,6 +19,7 @@ React Native · Expo SDK 54 · React · TypeScript · pnpm · Turborepo · twrnc
 - [How the Monorepo Works](#how-the-monorepo-works)
 - [React Native Version Alignment (0.81.5)](#react-native-version-alignment-0815)
 - [Troubleshooting](#troubleshooting)
+- [Documentation](#documentation)
 
 ---
 
@@ -74,7 +75,7 @@ react-and-react-native-financial-app/
 | `mobile`               | `apps/mobile/`              | Active  | Bare React Native CLI — learning reference                    |
 | `mobile-expo-ejected`  | `apps/mobile-expo-ejected/` | Active  | Expo bare/ejected — learning reference                        |
 | `storybook`            | `apps/storybook/`           | Active  | Component browser (web + native stories via react-native-web) |
-| `api`                  | `apps/api/`                 | Planned | Express REST API (OpenAPI + zod-to-openapi)                   |
+| `api`                  | `apps/api/`                 | Active  | Express 5 REST API ([README](apps/api/README.md))             |
 
 ### Shared Packages
 
@@ -262,6 +263,10 @@ pnpm mobile:android            # Build + launch on Android emulator
 
 # Storybook
 pnpm storybook                 # Component browser (web + native stories)
+
+# API
+pnpm api:dev                   # Express dev server (http://localhost:3001)
+                               # Swagger UI at http://localhost:3001/docs
 ```
 
 These commands assume a native binary is already installed on the simulator/emulator.
@@ -637,5 +642,51 @@ When in doubt, use the rebuild command — it handles all cache layers:
 pnpm mobile:rebuild:android        # bare RN CLI
 pnpm expo:rebuild:android          # Expo managed
 ```
+
+[Back to top](#table-of-contents)
+
+---
+
+## Documentation
+
+### Guides (Modus Operandi)
+
+Step-by-step operational guides for common workflows.
+
+| Guide | Description |
+|-------|-------------|
+| [Supabase Setup](docs/modus-operandi/supabase-setup.md) | Create project, run schema + seed, configure env vars |
+| [Expo Modes](docs/modus-operandi/expo-modes.md) | QR code vs dev-client, simulators, physical devices |
+| [iPhone Wireless Deploy](docs/modus-operandi/iphone-wireless-deploy.md) | Physical device deployment via Wi-Fi (bare RN CLI) |
+| [Full Reset](docs/modus-operandi/reset.md) | Nuclear clean + reinstall procedure |
+
+### Implementation Plans
+
+Phased plans for the full project build. See [docs/plans/README.md](docs/plans/README.md) for the index.
+
+| Phase | Plan | Goal |
+|-------|------|------|
+| 0 | [Cleanup](docs/plans/phase-0-cleanup.md) | Canonical app decision, restructure to apps/ |
+| 1 | [Tokens](docs/plans/phase-1-tokens.md) | Style Dictionary token pipeline |
+| 2 | [Tailwind Config](docs/plans/phase-2-tailwind-config.md) | Shared Tailwind config package |
+| 3 | [Design System](docs/plans/phase-3-design-system.md) | Cross-platform file extension split + CVA |
+| 4 | [Web App](docs/plans/phase-4-web-app.md) | React Router + Vite web app scaffold |
+| 5 | [Shared](docs/plans/phase-5-shared.md) | Supabase, Jotai, TanStack Query shared package |
+| 7 | [Home Page](docs/plans/phase-7-home-page.md) | Turborepo + routing + mock data + Home page |
+| 8 | [API + HTTP Client](docs/plans/phase-8-api-and-http-client.md) | Express API (OpenAPI) + HeyAPI HTTP client |
+
+### Additional Plans
+
+| Plan | Description |
+|------|-------------|
+| [Features Package](docs/plans/features-package.md) | Overview organisms move to features, ui keeps atomic DS |
+| [DataTable Implementation](docs/plans/datatable-implementation.md) | Full DataTable component build (cells, shell, pagination) |
+| [UI Components Track B](docs/plans/ui-components-track-b.md) | Auth + overview component pipeline |
+
+### App READMEs
+
+| App | README |
+|-----|--------|
+| API Server | [apps/api/README.md](apps/api/README.md) |
 
 [Back to top](#table-of-contents)
