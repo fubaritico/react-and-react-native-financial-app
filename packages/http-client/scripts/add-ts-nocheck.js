@@ -41,41 +41,51 @@ async function processDirectory(dir, relativePath = '') {
       newContent = newContent.replace(/from ['"]([^'"]+)\.ts['"]/g, "from '$1.js'")
 
       await writeFile(fullPath, newContent, 'utf-8')
-      console.log(`Added @ts-nocheck to ${join(relativePath, entry.name)}`)
+      console.warn(`Added @ts-nocheck to ${join(relativePath, entry.name)}`)
     }
   }
 }
 
-async function addTanStackQueryExport() {
+async function addMissingExports() {
   const indexPath = join(clientDir, 'index.ts')
   const tanstackDir = join(clientDir, '@tanstack')
 
+  let content = await readFile(indexPath, 'utf-8')
+  let modified = false
+
+  // Add TanStack Query re-export if @tanstack dir exists
   try {
     await stat(tanstackDir)
+    if (!content.includes('@tanstack/react-query.gen')) {
+      content += "export * from './@tanstack/react-query.gen'\n"
+      modified = true
+      console.warn('Added TanStack Query export to index.ts')
+    } else {
+      console.warn('TanStack Query already exported')
+    }
   } catch {
-    console.log('No @tanstack directory found, skipping export addition')
-    return
+    console.warn('No @tanstack directory found, skipping TanStack export')
   }
 
-  const content = await readFile(indexPath, 'utf-8')
-
-  // Check if already exported
-  if (content.includes('@tanstack/react-query.gen')) {
-    console.log('TanStack Query already exported')
-    return
+  // Add client singleton re-export (needed for apps to call client.setConfig())
+  if (!content.includes("from './client.gen'")) {
+    content += "export { client } from './client.gen'\n"
+    modified = true
+    console.warn('Added client singleton export to index.ts')
+  } else {
+    console.warn('Client singleton already exported')
   }
 
-  // Add export for TanStack Query
-  const newContent = content + "export * from './@tanstack/react-query.gen'\n"
-  await writeFile(indexPath, newContent, 'utf-8')
-  console.log('Added TanStack Query export to index.ts')
+  if (modified) {
+    await writeFile(indexPath, content, 'utf-8')
+  }
 }
 
 async function main() {
   try {
     await processDirectory(clientDir)
-    await addTanStackQueryExport()
-    console.log('Done!')
+    await addMissingExports()
+    console.warn('Done!')
   } catch (error) {
     console.error('Error in post-generation script:', error)
     process.exit(1)

@@ -42,6 +42,9 @@
     "./mocks": {
       "import": "./src/mocks/index.ts"
     },
+    "./query": {
+      "import": "./src/query/index.ts"
+    },
     "./test-utils": {
       "import": "./src/test-utils/index.ts"
     },

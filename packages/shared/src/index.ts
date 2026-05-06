@@ -31,6 +31,10 @@ export type { IModalAction, IModalConfig, ModalActionVariant } from './atoms'
 
 // Hooks
 export { useModal } from './hooks/useModal'
+export { useConfigureHttpClient } from './hooks/useConfigureHttpClient'
+
+// Query
+export { createAppQueryClient } from './query'
 
 // Types
 export type { IBalance, ITransaction, IBudget, IPot } from './types'

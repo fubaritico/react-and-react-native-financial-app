@@ -26,11 +26,13 @@
   "dependencies": {
     "@expo/metro-runtime": "catalog:",
     "@financial-app/features": "workspace:^",
+    "@financial-app/http-client": "workspace:^",
     "@financial-app/icons": "workspace:^",
     "@financial-app/shared": "workspace:^",
     "@financial-app/tailwind-config": "workspace:^",
     "@financial-app/ui": "workspace:^",
     "@react-native-google-signin/google-signin": "^16.1.2",
+    "@tanstack/react-query": "catalog:",
     "expo": "catalog:",
     "expo-constants": "~18.0.13",
     "expo-dev-client": "catalog:",
