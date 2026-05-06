@@ -194,3 +194,26 @@ as $$
   where b.user_id = p_user_id and b.month = p_month
   group by b.id, b.category, b.maximum, b.theme, b.month;
 $$;
+
+-- get_recurring_bills: recurring transactions for a user, deduplicated by name (latest occurrence)
+create or replace function public.get_recurring_bills(p_user_id uuid)
+returns table (
+  id       uuid,
+  avatar   text,
+  name     text,
+  category text,
+  date     timestamptz,
+  amount   numeric,
+  recurring boolean
+)
+language sql
+stable
+security invoker
+set search_path = ''
+as $$
+  select distinct on (t.name)
+    t.id, t.avatar, t.name, t.category, t.date, t.amount, t.recurring
+  from public.transactions t
+  where t.user_id = p_user_id and t.recurring = true
+  order by t.name, t.date desc;
+$$;

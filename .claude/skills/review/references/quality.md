@@ -172,3 +172,28 @@
 - **Forbidden**: `export interface AuthStorage { ... }` — must be `export interface IAuthStorage { ... }`
 - **Exception**: None — this applies to all interfaces, including Props, domain types, and abstractions
 - **Rationale**: Distinguishes interfaces from types, classes, and concrete implementations at a glance
+
+## API-Specific Violations
+
+### QUAL-020: Route handler exceeds 30 lines
+- **Files**: `apps/api/src/routes/*.ts`
+- **Check**: Individual route handler functions must stay under 30 lines of logic
+- **Suggestion**: Extract Supabase query logic into a helper function (like `updatePotTotal`)
+- **Rationale**: Keeps handlers readable — validation, query, error check, response
+
+### QUAL-021: Inconsistent error response shape
+- **Files**: `apps/api/src/routes/*.ts`
+- **Check**: All error responses must use `{ error: string }` — no other shape
+- **Forbidden**: `{ message: '...' }`, `{ errors: [...] }`, bare string responses
+- **Check**: Status codes must match semantics: 400 (validation), 401 (auth), 404 (not found), 500 (internal)
+
+### QUAL-022: Supabase error not handled
+- **Files**: `apps/api/src/routes/*.ts`
+- **Check**: Every `await supabase.*` call must be followed by an `if (error)` check
+- **Forbidden**: Destructuring only `data` without `error`: `const { data } = await supabase...`
+- **Rationale**: Supabase never throws — errors are returned in the response object
+
+### QUAL-023: Missing OpenAPI example metadata
+- **Files**: `apps/api/src/schemas/*.ts`
+- **Check**: Every Zod schema field should have `.openapi({ example: '...' })` metadata
+- **Rationale**: Examples appear in Swagger UI, making the API self-documenting

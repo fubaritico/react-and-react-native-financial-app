@@ -61,6 +61,30 @@
 - **Check**: Only request permissions actually needed
 - **Check**: CORS should not be `*` in production configs
 
+## API-Specific Violations
+
+### SEC-013: Route missing requireAuth middleware
+- **Files**: `apps/api/src/routes/*.ts`
+- **Check**: Every router must call `router.use(requireAuth)` at the top — no unprotected data routes
+- **Exception**: `/health` endpoint (mounted directly on `app`, not on a router)
+
+### SEC-014: Service role key exposed to client
+- **Files**: All (except `apps/api/`)
+- **Check**: `SUPABASE_SERVICE_ROLE_KEY` must NEVER appear in client-side code, configs, or bundles
+- **Check**: No import of `apps/api/src/lib/supabase` from packages or other apps
+
+### SEC-015: Supabase query missing user_id filter
+- **Files**: `apps/api/src/routes/*.ts`
+- **Check**: Every `.from()` query must include `.eq('user_id', res.locals.userId)`
+- **Check**: Every `.rpc()` call must pass `p_user_id: res.locals.userId`
+- **Rationale**: Service role key bypasses RLS — user_id filtering is the access control
+
+### SEC-016: Unvalidated request body/query
+- **Files**: `apps/api/src/routes/*.ts`
+- **Check**: POST/PUT handlers must use `validateBody(Schema)` middleware
+- **Check**: GET handlers with query params must use `validateQuery(Schema)` middleware
+- **Check**: No `req.body` or `req.query` access without prior Zod validation
+
 ## Low Violations
 
 ### SEC-012: Outdated security patterns

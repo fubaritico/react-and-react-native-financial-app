@@ -136,6 +136,7 @@ packages/
 | `tokens.md`          | All infrmation about token use and setup                        |
 | `monorepo.md`        | Description of the expected project architecture                |
 | `troubleshooting.md` | Debug, architectural decisions                                  |
+| `api.md`             | API server patterns, routes, Supabase queries, auth, validation |
 
 **Before coding**: ask which reference files are needed — do NOT start coding without the relevant files loaded.
 
@@ -231,5 +232,5 @@ Read `@completed.md`
 - RN `overflow: visible` does NOT work on iOS to show content outside a parent View — RN clips regardless. Do not attempt 0-height + overflow:visible patterns.
 - RN `pointerEvents="box-none"` only passes touches to children, NOT to sibling Views in the tree.
 - Android Fresco: returns onLoad with 1x1 transparent base64 PNG instead of onError when image URL 404s — Avatar detects via dimension check (MIN_VALID_SIZE = 2)
-- Supabase project credentials stored in `files/critical` (gitignored) — never commit. Test user: `test@test.com` / UUID `6f97d356-54a2-48fe-bda6-6fb828093321`
+- Supabase project credentials stored in `files/critical` (gitignored) — never commit. Test user: `s_cottereau@yahoo.fr` / UUID `d8e4f26e-dc4f-41a7-8e66-1b1805a00b41`
 

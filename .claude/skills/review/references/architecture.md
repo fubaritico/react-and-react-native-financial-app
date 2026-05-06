@@ -94,3 +94,28 @@
 - **Files**: `packages/*/src/index.ts`
 - **Check**: Exported items that are not imported anywhere in the monorepo
 - **Note**: Low severity — may be intentional for future use
+
+## API-Specific Violations
+
+### ARCH-013: Route without OpenAPI registration
+- **Files**: `apps/api/src/routes/*.ts`
+- **Check**: Every Express handler (`router.get`, `router.post`, etc.) must have a corresponding `registry.registerPath()` call above it
+- **Rationale**: Routes without OpenAPI registration don't appear in Swagger UI and won't generate HTTP client methods
+
+### ARCH-014: Zod schema without .openapi() metadata
+- **Files**: `apps/api/src/schemas/*.ts`
+- **Check**: Every schema must be registered via `registry.register('Name', z.object(...))`
+- **Check**: Every field should have `.openapi({ example: '...' })` for Swagger UI documentation
+- **Exception**: Nested sub-schemas reused across multiple entities may skip `.openapi()` on individual fields
+
+### ARCH-015: Route not mounted in index.ts
+- **Files**: `apps/api/src/index.ts`, `apps/api/src/routes/*.ts`
+- **Check**: Every exported router in `routes/` must have a corresponding `app.use('/path', router)` in `index.ts`
+- **Check**: Route path must match entity name (e.g. `budgetsRouter` → `/budgets`)
+
+### ARCH-016: Business logic in route handler
+- **Files**: `apps/api/src/routes/*.ts`
+- **Check**: Route handlers should follow the pattern: validate → query → error check → response
+- **Check**: Complex business logic (multi-step operations, calculations, conditional flows) must be extracted into named helper functions within the same file or a `services/` directory
+- **Example**: `updatePotTotal()` extracts fetch-validate-update logic out of the handler
+- **Threshold**: If a handler does more than one Supabase call, extract the logic
