@@ -31,6 +31,8 @@ export const typographyVariants = cva('font-sans', {
       'primary-foreground': 'text-primary-foreground',
       'transaction-positive': 'text-transaction-positive',
       'transaction-negative': 'text-transaction-negative',
+      warning: 'text-warning',
+      blue: 'text-blue',
       'beige-500': 'text-beige-500',
       'nav-text': 'text-nav-text',
       'nav-active': 'text-nav-active-text',

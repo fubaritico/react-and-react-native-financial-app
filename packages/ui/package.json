@@ -10,6 +10,7 @@
     },
     "./web": "./src/index.web.ts",
     "./native": "./src/index.ts",
+    "./styles": "./src/styles/components.css",
     "./package.json": "./package.json"
   },
   "react-native": "./src/index.ts",
@@ -50,7 +51,7 @@
   },
   "devDependencies": {
     "@types/react": "catalog:",
-    "@types/react-dom": "~19.1.0",
+    "@types/react-dom": "catalog:",
     "conventional-changelog": "catalog:",
     "react-dom": "catalog:",
     "react-native-svg": "catalog:",

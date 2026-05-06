@@ -1,3 +1,5 @@
+@import '@financial-app/ui/styles';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

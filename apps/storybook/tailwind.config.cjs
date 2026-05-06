@@ -11,7 +11,7 @@ const featuresDir = path.resolve(__dirname, '../../packages/features')
 module.exports = {
   ...baseConfig,
   content: [
-    path.join(uiDir, 'src/components/**/*.{web.tsx,variants.ts,styles.ts}'),
+    path.join(uiDir, 'src/components/**/*.{web.tsx,variants.ts,styles.ts,constants.ts}'),
     path.join(uiDir, 'src/lib/**/*.ts'),
     path.join(featuresDir, 'src/**/*.{web.tsx,styles.ts}'),
     './src/**/*.{ts,tsx}',
