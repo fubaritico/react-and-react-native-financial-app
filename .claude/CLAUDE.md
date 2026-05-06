@@ -172,23 +172,33 @@ Read `@completed.md`
 - feat(pages): wire Budget route across all 3 apps with shared data util (ff168a2) — buildBudgetPageData() shared function in @financial-app/shared, web loader + mobile-expo/mobile useMemo, BudgetOverview + BudgetCategoryCard rendered with mock data
 - fix: move container-queries plugin from shared config to web-only (499da13) — @tailwindcss/container-queries moved from @financial-app/tailwind-config to apps/web (twrnc crashes on theme() calls)
 - fix(ui): review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code (1017710) — import type in DataTable.types.ts, showActionBar guard inversion fixed in native, shrink/overflow-clip moved to web-only styles, accessibilityLabel prop added to TextInput, dead DataTable.tsx deleted, native export added to styles files, ActionBar refactored (single IActionBarProps, rightActions, positive showActionBar)
+- feat(pages): wire Pots route + PotCard component + i18n + UI fixes (bc3242b) — PotCard cross-platform organism (features/pots) with Card+ColorDot+ProgressBar thin+Dropdown ellipsis+two action buttons, wired into all 3 apps with mock data + @container grid on web, i18n keys EN/FR, label props made required (PotCard + BudgetCategoryCard), Button CVA text-preset-4-bold (font-sans text-sm font-bold leading-normal), story wrappers maxWidth→width 600, Dropdown Menu shape rounded, TransactionsDataTable showActionBar native + globalFilter web, budget/index.web.ts barrel fix
+- feat(pages): wire Recurring Bills route + BillsSummary + fixes (0776593) — BillsSummary component in features/recurring-bills (web+native), CompactBillRow for phone layout (renderCompactRow pattern), Status atom extracted from StatusCell + icon color fix (tw.color() for native SVG fill), CategoryIconCell factory (icon+name+status on mobile), RecurringBillsDataTable wired in all 3 apps, buildRecurringBillsPageData in @financial-app/shared, i18n recurring.summary key, new category icons (10 SVGs), review score 97/100
+- feat(db): add Supabase schema, seed data, and setup guide (1aade95) — 4 tables (balances, transactions, budgets, pots) with RLS policies, indexes, updated_at triggers, 2 RPC functions (get_balance, get_budgets_with_spent), seed.sql with all mock data, supabase-setup.md step-by-step guide, all .env/.env.example updated for new Supabase project (wfovogtulmjynujtfiml)
 
-### Next — Phase: Pages with Mock Data
+### Next — Phase 8A: API Server + HTTP Client
 
-**Current task**: Wire remaining pages with mock data
-- Text truncation (ellipsis) for long names in LatestSpending — deferred to next CSS pass
+**Current task**: Scaffold `apps/api/` (Express 5 + Zod + OpenAPI + Swagger UI + auth middleware)
+- DB is live with seeded data on `wfovogtulmjynujtfiml.supabase.co`
+- Plan: `docs/plans/phase-8-api-and-http-client.md`
+- Skill: `.claude/skills/api-openapi`
 
-**Page pipeline** (all using data.json):
-1. Overview — ✅ Done (wired into routes)
-2. Transactions — ✅ Done (wired into routes)
-3. Budgets — ✅ Done (BudgetOverview + BudgetCategoryCard wired into routes)
-4. Pots — pot cards with progress bars + Add Money / Withdraw buttons (display first)
-5. Recurring Bills — total card + summary + bills list with status
+**Phase 8A pipeline**:
+1. DB schema + seed + setup guide — ✅ Done (1aade95)
+2. Scaffold `apps/api/` — Express + middleware + Supabase lib
+3. Zod schemas — all entity schemas with OpenAPI metadata
+4. Routes — balance → transactions → budgets → pots → recurring-bills
+5. OpenAPI spec generation + Swagger UI
+6. `packages/http-client/` — HeyAPI scaffold + generation
+7. TanStack Query hooks — in `packages/shared/src/hooks/`
+8. App wiring — auth gate + QueryClientProvider + HTTP client config
+9. Page migration — replace mocks with hooks
+10. Dev seed endpoint — `POST /dev/seed`
+11. Tests — API + hooks
 
 **Then**:
 - CRUD modals (Add/Edit/Delete Budget, Add/Edit/Delete Pot, Add/Withdraw Money)
-- Phase 8: API server + HTTP client + testing
-- Feed real May 2026 data to validate end-to-end
+- Phase 8B: Plaid integration (separate)
 - Navigation web: graphic design refinement (user doing manual pass)
 
 **Pending tests**:
@@ -221,4 +231,5 @@ Read `@completed.md`
 - RN `overflow: visible` does NOT work on iOS to show content outside a parent View — RN clips regardless. Do not attempt 0-height + overflow:visible patterns.
 - RN `pointerEvents="box-none"` only passes touches to children, NOT to sibling Views in the tree.
 - Android Fresco: returns onLoad with 1x1 transparent base64 PNG instead of onError when image URL 404s — Avatar detects via dimension check (MIN_VALID_SIZE = 2)
+- Supabase project credentials stored in `files/critical` (gitignored) — never commit. Test user: `test@test.com` / UUID `6f97d356-54a2-48fe-bda6-6fb828093321`
 

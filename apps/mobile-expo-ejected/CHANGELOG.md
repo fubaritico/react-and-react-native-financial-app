@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-02)
+# 1.0.0 (2026-05-06)
 
 
 ### Bug Fixes
@@ -6,10 +6,12 @@
 * **android:** resolve AsyncStorage Maven issue, add rebuild-android script ([dc90bd2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dc90bd2cf061a937fcb3eff87683957806ee6139))
 * **mobile:** enable wireless iPhone deployment and fix sandbox violation ([824ba71](https://github.com/fubaritico/react-and-react-native-financial-app/commit/824ba7136ba466297da10c77ad9e1752f93d7026))
 * **monorepo:** align React versions and fix cache issues ([d67c956](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d67c956998a0ce4d5b368f3b814393e8d1c02b58))
+* move container-queries plugin from shared config to web-only ([499da13](https://github.com/fubaritico/react-and-react-native-financial-app/commit/499da13914bc40a60011a1ad64cb35dbc1012596))
 * **tokens:** align alias names with Figma variable naming ([d9345ae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d9345aeb25a587df64a26a4a586352561e071668))
 * **ui:** extract Icon runtime constants, add Button iconPosition prop ([33ba134](https://github.com/fubaritico/react-and-react-native-financial-app/commit/33ba134745e277d1e51e0e524842fd8fa1cbf626))
 * **ui:** move header row inside white card in overview sections ([eba1c8b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/eba1c8b64b50362e60961a5a0b274c7e02f4ae39))
 * **ui:** replace default Tailwind colors with token aliases ([5d3939b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5d3939b96aa04c2da8a9fcd7ea22d763b33dad02))
+* **ui:** review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code ([1017710](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1017710203dda1a752bd9dab5d5a294c93c8721a))
 
 
 ### Features
@@ -27,6 +29,8 @@
 * **config:** add setup-tokens-package and migrate-to-nativewind-v5 skills ([1d9caa6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1d9caa60ec308b74bed7ee14282645261bffa92a))
 * **config:** add setup-ui-package skill with architecture reference ([44982df](https://github.com/fubaritico/react-and-react-native-financial-app/commit/44982df4e2fb4aa4d4a03ba965b4cfac2cf0d72a))
 * **expo:** add expo-dev-client and native build scripts ([1b26c7f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1b26c7f61490496cf77043e28ff08033829bc8e9))
+* **features:** add BudgetCategoryCard organism + Dropdown destructive/divider support ([bff58d2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bff58d21b342014f1ffcd323cec9112a2ccfddff))
+* **features:** add BudgetOverview + Currency + ColorBarItem + Card refactor ([76d6e32](https://github.com/fubaritico/react-and-react-native-financial-app/commit/76d6e321435d071a0ae57966501c8b3fdc79ac54))
 * **features:** extract TransactionsDataTable into directory structure + locale support ([a227c46](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a227c462157f02dd1f4633c31309dd7be38679ad))
 * **i18n:** add react-i18next with EN/FR translations across all apps ([987131e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/987131eefff0e106daaa0c42637890719c1ca4ab))
 * **icons:** add @financial-app/icons package with cross-platform Icon component ([8195d3d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8195d3d406e0f330afda450ec9c69cd219c5083d))
@@ -40,6 +44,9 @@
 * **mobile:** set ejected expo project ([aa156fc](https://github.com/fubaritico/react-and-react-native-financial-app/commit/aa156fc87b8658222436e709bb2b18fb6b6a107e))
 * **mobile:** set project with expo ([dae87e9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dae87e9708fe26bfac0f9fc223c00951bbd6088e))
 * **monorepo:** add changelog generation and type-check scripts ([0d4e8e4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d4e8e4152898ac353d95b283d2390d1f9b84f18))
+* **pages:** wire Budget route across all 3 apps with shared data util ([ff168a2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ff168a229e0ff81f21a75c09e1b435226d72929c))
+* **pages:** wire Pots route + PotCard component + i18n + UI fixes ([bc3242b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bc3242b38f139c0292767a2c2cb984cee4549369))
+* **pages:** wire Recurring Bills route + BillsSummary + fixes ([0776593](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0776593711bf409af2ea1d909b916261e13af1cd))
 * **shared,mobile-expo:** add mock data, test utils, wire Overview page ([1f863a4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1f863a4d90e5f4d2831cbb3c2db147d2c14dcf0b))
 * **shared:** create @financial-app/shared package (Phase 5.1 + 5.7) ([6cb1d2c](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6cb1d2c95e6e5c120727fc33d7dd8f061d006ff2))
 * **state:** wire Jotai Provider in all apps + centralize in catalog ([a664939](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a664939082b0495731d4e72b11947e9fed0041a4))
@@ -51,11 +58,15 @@
 * **ui:** add DataTable cell factories (steps 1-3) ([98801b1](https://github.com/fubaritico/react-and-react-native-financial-app/commit/98801b17fb13af04e86da6c72601f65f99547780))
 * **ui:** add DataTable shell, SortableHeader, ActionBar, Pagination (steps 4-11) ([57c849f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/57c849fc1e8baf9681abf47dd245ac217985dd26))
 * **ui:** add DataTable sub-components + reorganize into components/ (steps 12) ([9a10c01](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9a10c01b328dbce4f3f32096eae8310c4bfe4252))
+* **ui:** add DonutChart atom + enforce constants/utils/types separation ([4016897](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4016897f46a15f2f895b5b256968089965421b64))
 * **ui:** add Dropdown molecule + Portal/Drawer/Menu/Listbox foundation ([b4d2468](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b4d2468f1c2bb3ae04d0fa4f2d62852e3dcda0ae))
 * **ui:** add Icon Storybook story with playground and showcase ([edb2fa9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/edb2fa931b159bfc936ea6c1a039393442dfc577))
+* **ui:** add LatestSpending molecule + Divider className prop + stories ([8f414e6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8f414e63b89047d8a446b9fab51b155e060aed6b))
+* **ui:** add LatestSpending molecule + Divider className prop + stories ([9dd358e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9dd358e3a0dad3df62d1c0a731a81435d5e76ae5))
 * **ui:** add Modal organism + shared modal service (Jotai) ([7898692](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7898692e4578a326ec0cca92323ef324ed36b87a))
 * **ui:** add NavItem atom + Navigation organism + Colors story ([e5aacd2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e5aacd246c6cfc3e91d3f52b84fd88ad2b23aa33))
 * **ui:** add Pagination molecule + refactor Button for composability ([f3b844b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/f3b844b271295b4e0e487606b6735f411817a869))
+* **ui:** add ProgressBar atom with thick/thin variants + stories ([e515450](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e515450b14339082021534117ccaaab3809acecf))
 * **ui:** add TransactionsDataTable stories + table sub-components + a11y fixes ([2e3c04b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2e3c04b1a9c799c9eea09abe9d4dd6a5ce8e613f))
 * **ui:** add Typography component with 9 Figma-mapped variants ([a3b6f29](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a3b6f2973bd4559c87dcdd8d67d2fa5b91420567))
 * **ui:** add Wave 1 auth components (TextInput, PasswordInput, LinkText, AuthCard, AuthLayout) ([93d6ee2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/93d6ee268fc52406f412041b13976a24c83ed04d))
