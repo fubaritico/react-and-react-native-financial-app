@@ -9,7 +9,7 @@
     "build": "tsc",
     "type-check": "tsc --noEmit",
     "lint": "eslint src/",
-    "generate:spec": "tsx src/lib/generate-spec.ts"
+    "generate:spec": "tsx --env-file=.env src/lib/generate-spec.ts"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.3.0",

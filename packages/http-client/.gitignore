@@ -1,0 +1,5 @@
+# Generated build output
+dist/
+
+# Generated client (regenerated from OpenAPI spec)
+src/client/
