@@ -3,13 +3,15 @@ import {
   getBudgetsOptions,
   getTransactionsOptions,
 } from '@financial-app/http-client'
-import { buildBudgetPageData } from '@financial-app/shared'
-import { Alert, Button, Skeleton, Typography } from '@financial-app/ui'
+import { buildBudgetPageData, getErrorMessage } from '@financial-app/shared'
+import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { queryClient } from '../lib/query-client'
+
+import type { Route } from './+types/budgets'
 
 /** Current budget month — matches seed data. */
 const BUDGET_MONTH = '2024-08'
@@ -21,11 +23,11 @@ const budgetsOpts = getBudgetsOptions({ query: { month: BUDGET_MONTH } })
 const txnOpts = getTransactionsOptions({ query: { limit: 1000 } })
 
 export async function clientLoader() {
-  await Promise.all([
-    queryClient.ensureQueryData(budgetsOpts),
-    queryClient.ensureQueryData(txnOpts),
+  const [budgets, txn] = await Promise.all([
+    queryClient.ensureQueryData(budgetsOpts).catch(() => undefined),
+    queryClient.ensureQueryData(txnOpts).catch(() => undefined),
   ])
-  return null
+  return { budgets, txn }
 }
 
 export function HydrateFallback() {
@@ -46,16 +48,34 @@ export function HydrateFallback() {
   )
 }
 
-export default function Budgets() {
+export default function Budgets({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation()
 
-  const { data: budgets, error: budgetsError } = useQuery(budgetsOpts)
-  const { data: txnResult, error: txnError } = useQuery(txnOpts)
+  const {
+    data: budgets,
+    error: budgetsError,
+    isLoading: budgetsLoading,
+  } = useQuery({
+    ...budgetsOpts,
+    initialData: loaderData.budgets,
+  })
+  const { data: txnResult, error: txnError } = useQuery({
+    ...txnOpts,
+    initialData: loaderData.txn,
+  })
 
   const { budgetItems, categoryCards } = useMemo(
     () => buildBudgetPageData(budgets ?? [], txnResult?.data ?? []),
     [budgets, txnResult]
   )
+
+  if (budgetsLoading) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+        <Spinner />
+      </div>
+    )
+  }
 
   const error = budgetsError ?? txnError
   if (error) {
@@ -64,7 +84,11 @@ export default function Budgets() {
         <Typography variant="page-title" as="h1" className="mb-4">
           {t('budgets.title')}
         </Typography>
-        <Alert severity="error" message={t('common.errorLoading')} />
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
+        />
       </div>
     )
   }

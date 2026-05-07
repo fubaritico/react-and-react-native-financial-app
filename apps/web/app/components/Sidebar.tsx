@@ -5,12 +5,17 @@ import { useLocation, useNavigate } from 'react-router'
 
 import type { INavItemConfig } from '@financial-app/ui'
 
+import { authClient } from '../lib/supabase'
+
+const SIGN_OUT_HREF = '/sign-out'
+
 const NAV_ITEMS: readonly INavItemConfig[] = [
   { icon: 'navOverview', label: '', href: '/' },
   { icon: 'navTransactions', label: '', href: '/transactions' },
   { icon: 'navBudgets', label: '', href: '/budgets' },
   { icon: 'navPots', label: '', href: '/pots' },
   { icon: 'navRecurringBills', label: '', href: '/recurring' },
+  { icon: 'logout', label: '', href: SIGN_OUT_HREF },
 ] as const
 
 const NAV_LABEL_KEYS = [
@@ -19,11 +24,13 @@ const NAV_LABEL_KEYS = [
   'navigation.budgets',
   'navigation.pots',
   'navigation.recurringBills',
+  'auth.signOut',
 ] as const
 
 /**
  * App-level navigation wrapper — bridges @financial-app/ui Navigation
  * with React Router navigation and i18n labels.
+ * Sign-out is rendered as a nav item with intercepted click.
  */
 export function Sidebar() {
   const { t } = useTranslation()
@@ -36,24 +43,25 @@ export function Sidebar() {
     label: t(NAV_LABEL_KEYS[i]),
   }))
 
-  /**
-   * Toggles the collapsed state of a component or section.
-   *
-   * This function updates the state by switching the `collapsed` value
-   * between `true` and `false`. It is typically used to handle UI behavior
-   * where a section or component expands or collapses.
-   */
-  const handleOnToggleCollapse = () => {
-    setCollapsed((prev) => !prev)
+  const handleNavigate = (href: string) => {
+    if (href === SIGN_OUT_HREF) {
+      void authClient.signOut().then(() => {
+        void navigate('/login', { replace: true })
+      })
+      return
+    }
+    void navigate(href)
   }
 
   return (
     <Navigation
       items={items}
       activeHref={location.pathname}
-      onNavigate={(href) => void navigate(href)}
+      onNavigate={handleNavigate}
       collapsed={collapsed}
-      onToggleCollapse={handleOnToggleCollapse}
+      onToggleCollapse={() => {
+        setCollapsed((prev) => !prev)
+      }}
       minimizeLabel={t('navigation.minimizeMenu')}
     />
   )

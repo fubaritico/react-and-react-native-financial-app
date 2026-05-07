@@ -5,6 +5,7 @@ import { View, useWindowDimensions } from 'react-native'
 
 import type { IconName } from '@financial-app/icons'
 
+import { authClient } from '../../src/lib/supabase'
 import tw from '../../src/lib/tw'
 
 /** Tab config per screen name */
@@ -21,6 +22,10 @@ const TAB_CONFIG: Partial<
   recurring: {
     icon: 'navRecurringBills',
     labelKey: 'navigation.recurringBills',
+  },
+  'sign-out': {
+    icon: 'logout',
+    labelKey: 'auth.signOut',
   },
 }
 
@@ -87,6 +92,16 @@ export default function TabLayout() {
       <Tabs.Screen
         name="recurring"
         options={{ title: t('navigation.recurringBills') }}
+      />
+      <Tabs.Screen
+        name="sign-out"
+        options={{ title: t('auth.signOut') }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault()
+            void authClient.signOut()
+          },
+        }}
       />
     </Tabs>
   )

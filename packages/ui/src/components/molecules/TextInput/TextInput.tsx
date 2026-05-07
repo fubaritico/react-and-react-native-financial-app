@@ -28,6 +28,10 @@ export interface ITextInputProps extends VariantProps<
   secureTextEntry?: boolean
   /** Maximum number of characters allowed. */
   maxLength?: number
+  /** Controls auto-capitalization behavior (native: autoCapitalize, web: ignored). */
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters'
+  /** Keyboard type hint (native: keyboardType, web: inputMode). */
+  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad'
   /** Accessible label when no visible label is present (native: accessibilityLabel, web: aria-label). */
   accessibilityLabel?: string
 }

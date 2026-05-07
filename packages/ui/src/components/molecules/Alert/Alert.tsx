@@ -8,4 +8,6 @@ export interface IAlertProps extends AlertVariants {
   severity: AlertSeverity
   /** Message to display */
   message: string
+  /** Optional secondary message displayed below the main message (e.g. technical details in dev) */
+  description?: string
 }

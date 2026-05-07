@@ -6,6 +6,12 @@ export { createNativeClient } from './auth/client.native'
 export { signInWithGoogle } from './auth/oauth'
 export { requireAuth } from './auth/guard'
 export { useAuthListener } from './auth/hooks'
+export {
+  loginSchema,
+  parseValidationErrors,
+  signupSchema,
+} from './auth/validation'
+export type { LoginFormData, SignupFormData } from './auth/validation'
 export type {
   IAuthClient,
   IAuthError,
@@ -24,6 +30,7 @@ export type { IAuthResult } from './auth/guard'
 export {
   userAtom,
   isAuthenticatedAtom,
+  isAuthLoadingAtom,
   isLoadingAtom,
   modalConfigAtom,
 } from './atoms'
@@ -48,6 +55,7 @@ export {
   buildBudgetPageData,
   buildRecurringBillsPageData,
 } from './utils'
+export { getErrorMessage } from './utils/getErrorMessage'
 export type {
   SupportedCurrency,
   CurrencySign,

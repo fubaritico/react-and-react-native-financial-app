@@ -20,6 +20,8 @@ export const TextInput = ({
   prefix,
   secureTextEntry,
   maxLength,
+  autoCapitalize,
+  keyboardType,
   accessibilityLabel,
   className,
 }: Readonly<ITextInputProps & { className?: string }>) => {
@@ -44,13 +46,21 @@ export const TextInput = ({
           </Typography>
         ) : null}
         <input
-          type={secureTextEntry ? 'password' : 'text'}
+          type={
+            secureTextEntry
+              ? 'password'
+              : keyboardType === 'email-address'
+                ? 'email'
+                : 'text'
+          }
           value={value}
           onChange={(e) => {
             onChangeText(e.target.value)
           }}
           placeholder={placeholder}
           maxLength={maxLength}
+          autoComplete={keyboardType === 'email-address' ? 'email' : undefined}
+          autoCapitalize={autoCapitalize}
           aria-label={accessibilityLabel ?? label}
           className={cn(
             'flex-1 bg-transparent text-sm text-foreground',

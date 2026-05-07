@@ -22,6 +22,8 @@ export const TextInput = ({
   prefix,
   secureTextEntry,
   maxLength,
+  autoCapitalize,
+  keyboardType,
   accessibilityLabel,
   style,
 }: Readonly<ITextInputProps & { style?: string }>) => {
@@ -47,6 +49,8 @@ export const TextInput = ({
           placeholderTextColor={tw.color('beige-500')}
           secureTextEntry={secureTextEntry}
           maxLength={maxLength}
+          autoCapitalize={autoCapitalize}
+          keyboardType={keyboardType}
           accessibilityLabel={accessibilityLabel ?? label}
           style={tw`flex-1 text-sm text-foreground p-0`}
         />

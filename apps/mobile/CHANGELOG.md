@@ -1,4 +1,4 @@
-## 0.0.1 (2026-05-06)
+## 0.0.1 (2026-05-07)
 
 
 ### Bug Fixes
@@ -47,6 +47,7 @@
 * **mobile:** set ejected expo project ([aa156fc](https://github.com/fubaritico/react-and-react-native-financial-app/commit/aa156fc87b8658222436e709bb2b18fb6b6a107e))
 * **mobile:** set project with expo ([dae87e9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dae87e9708fe26bfac0f9fc223c00951bbd6088e))
 * **monorepo:** add changelog generation and type-check scripts ([0d4e8e4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d4e8e4152898ac353d95b283d2390d1f9b84f18))
+* **pages:** replace mock data with TanStack Query + Alert/Skeleton/Spinner UX ([597560e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/597560efc41bef70f3e8cbaef50d975c8adea46d)), closes [#Alias](https://github.com/fubaritico/react-and-react-native-financial-app/issues/Alias)
 * **pages:** wire Budget route across all 3 apps with shared data util ([ff168a2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ff168a229e0ff81f21a75c09e1b435226d72929c))
 * **pages:** wire Pots route + PotCard component + i18n + UI fixes ([bc3242b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bc3242b38f139c0292767a2c2cb984cee4549369))
 * **pages:** wire Recurring Bills route + BillsSummary + fixes ([0776593](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0776593711bf409af2ea1d909b916261e13af1cd))

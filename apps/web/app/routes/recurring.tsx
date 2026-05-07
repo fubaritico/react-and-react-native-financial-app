@@ -1,7 +1,16 @@
 import { BillsSummary, RecurringBillsDataTable } from '@financial-app/features'
 import { getRecurringBillsOptions } from '@financial-app/http-client'
-import { buildRecurringBillsPageData } from '@financial-app/shared'
-import { Alert, BalanceCard, Skeleton, Typography } from '@financial-app/ui'
+import {
+  buildRecurringBillsPageData,
+  getErrorMessage,
+} from '@financial-app/shared'
+import {
+  Alert,
+  BalanceCard,
+  Skeleton,
+  Spinner,
+  Typography,
+} from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,11 +19,12 @@ import type { IBillsSummaryRow } from '@financial-app/features'
 
 import { queryClient } from '../lib/query-client'
 
+import type { Route } from './+types/recurring'
+
 const recurringOpts = getRecurringBillsOptions()
 
 export async function clientLoader() {
-  await queryClient.ensureQueryData(recurringOpts)
-  return null
+  return queryClient.ensureQueryData(recurringOpts).catch(() => undefined)
 }
 
 export function HydrateFallback() {
@@ -32,15 +42,32 @@ export function HydrateFallback() {
   )
 }
 
-export default function RecurringBills() {
+export default function RecurringBills({
+  loaderData: initialData,
+}: Route.ComponentProps) {
   const { t, i18n } = useTranslation()
 
-  const { data: recurringBills, error } = useQuery(recurringOpts)
+  const {
+    data: recurringBills,
+    error,
+    isLoading,
+  } = useQuery({
+    ...recurringOpts,
+    initialData,
+  })
 
   const pageData = useMemo(
     () => (recurringBills ? buildRecurringBillsPageData(recurringBills) : null),
     [recurringBills]
   )
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+        <Spinner />
+      </div>
+    )
+  }
 
   if (error) {
     return (
@@ -48,7 +75,11 @@ export default function RecurringBills() {
         <Typography variant="page-title" as="h1" className="mb-4">
           {t('recurring.title')}
         </Typography>
-        <Alert severity="error" message={t('common.errorLoading')} />
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
+        />
       </div>
     )
   }

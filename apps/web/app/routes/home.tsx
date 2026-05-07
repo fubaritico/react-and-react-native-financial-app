@@ -15,14 +15,23 @@ import {
   buildRecurringBillsPageData,
   formatCurrency,
   formatDate,
+  getErrorMessage,
 } from '@financial-app/shared'
-import { Alert, BalanceCard, Skeleton, Typography } from '@financial-app/ui'
+import {
+  Alert,
+  BalanceCard,
+  Skeleton,
+  Spinner,
+  Typography,
+} from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import { queryClient } from '../lib/query-client'
+
+import type { Route } from './+types/home'
 
 /** Current budget month — matches seed data. */
 const BUDGET_MONTH = '2024-08'
@@ -36,14 +45,14 @@ const budgetsOpts = getBudgetsOptions({ query: { month: BUDGET_MONTH } })
 const recurringOpts = getRecurringBillsOptions()
 
 export async function clientLoader() {
-  await Promise.all([
-    queryClient.ensureQueryData(balanceOpts),
-    queryClient.ensureQueryData(txnOpts),
-    queryClient.ensureQueryData(potsOpts),
-    queryClient.ensureQueryData(budgetsOpts),
-    queryClient.ensureQueryData(recurringOpts),
+  const [balance, txn, pots, budgets, recurring] = await Promise.all([
+    queryClient.ensureQueryData(balanceOpts).catch(() => undefined),
+    queryClient.ensureQueryData(txnOpts).catch(() => undefined),
+    queryClient.ensureQueryData(potsOpts).catch(() => undefined),
+    queryClient.ensureQueryData(budgetsOpts).catch(() => undefined),
+    queryClient.ensureQueryData(recurringOpts).catch(() => undefined),
   ])
-  return null
+  return { balance, txn, pots, budgets, recurring }
 }
 
 export function HydrateFallback() {
@@ -69,16 +78,34 @@ export function HydrateFallback() {
   )
 }
 
-export default function Home() {
+export default function Home({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
-  const { data: balance, error: balanceError } = useQuery(balanceOpts)
-  const { data: transactions, error: txnError } = useQuery(txnOpts)
-  const { data: pots, error: potsError } = useQuery(potsOpts)
-  const { data: budgets, error: budgetsError } = useQuery(budgetsOpts)
-  const { data: recurringBills, error: recurringError } =
-    useQuery(recurringOpts)
+  const {
+    data: balance,
+    error: balanceError,
+    isLoading: balanceLoading,
+  } = useQuery({
+    ...balanceOpts,
+    initialData: loaderData.balance,
+  })
+  const { data: transactions, error: txnError } = useQuery({
+    ...txnOpts,
+    initialData: loaderData.txn,
+  })
+  const { data: pots, error: potsError } = useQuery({
+    ...potsOpts,
+    initialData: loaderData.pots,
+  })
+  const { data: budgets, error: budgetsError } = useQuery({
+    ...budgetsOpts,
+    initialData: loaderData.budgets,
+  })
+  const { data: recurringBills, error: recurringError } = useQuery({
+    ...recurringOpts,
+    initialData: loaderData.recurring,
+  })
 
   const latestTransactions = useMemo(
     () =>
@@ -122,6 +149,16 @@ export default function Home() {
     [recurringBills]
   )
 
+  const isLoading = balanceLoading
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+        <Spinner />
+      </div>
+    )
+  }
+
   const error =
     balanceError ?? txnError ?? potsError ?? budgetsError ?? recurringError
 
@@ -131,7 +168,11 @@ export default function Home() {
         <Typography variant="page-title" as="h1" className="mb-4">
           {t('overview.title')}
         </Typography>
-        <Alert severity="error" message={t('common.errorLoading')} />
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
+        />
       </div>
     )
   }

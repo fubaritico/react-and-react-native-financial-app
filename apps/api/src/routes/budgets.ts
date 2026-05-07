@@ -96,7 +96,7 @@ const BudgetQuerySchema = z.object({
 })
 
 budgetsRouter.get('/', validateQuery(BudgetQuerySchema), async (req, res) => {
-  const month = req.query.month as string
+  const { month } = res.locals.query as { month: string }
 
   const { data, error } = await supabase.rpc('get_budgets_with_spent', {
     p_user_id: res.locals.userId,
@@ -104,7 +104,7 @@ budgetsRouter.get('/', validateQuery(BudgetQuerySchema), async (req, res) => {
   })
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 
@@ -122,7 +122,7 @@ budgetsRouter.post('/', validateBody(CreateBudgetSchema), async (req, res) => {
     .single()
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 
@@ -142,7 +142,7 @@ budgetsRouter.put(
       .single()
 
     if (error) {
-      res.status(500).json({ error: error.message })
+      res.status(500).json({ error: `[DATABASE] ${error.message}` })
       return
     }
 
@@ -158,7 +158,7 @@ budgetsRouter.delete('/:id', async (req, res) => {
     .eq('user_id', res.locals.userId)
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 

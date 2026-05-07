@@ -35,7 +35,7 @@ recurringBillsRouter.get('/', async (_req, res) => {
   })
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 

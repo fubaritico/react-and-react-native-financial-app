@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-06)
+# 1.0.0 (2026-05-07)
 
 
 ### Bug Fixes
@@ -47,6 +47,7 @@
 * **mobile:** set ejected expo project ([aa156fc](https://github.com/fubaritico/react-and-react-native-financial-app/commit/aa156fc87b8658222436e709bb2b18fb6b6a107e))
 * **mobile:** set project with expo ([dae87e9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dae87e9708fe26bfac0f9fc223c00951bbd6088e))
 * **monorepo:** add changelog generation and type-check scripts ([0d4e8e4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d4e8e4152898ac353d95b283d2390d1f9b84f18))
+* **pages:** replace mock data with TanStack Query + Alert/Skeleton/Spinner UX ([597560e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/597560efc41bef70f3e8cbaef50d975c8adea46d)), closes [#Alias](https://github.com/fubaritico/react-and-react-native-financial-app/issues/Alias)
 * **pages:** wire Budget route across all 3 apps with shared data util ([ff168a2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ff168a229e0ff81f21a75c09e1b435226d72929c))
 * **pages:** wire Pots route + PotCard component + i18n + UI fixes ([bc3242b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bc3242b38f139c0292767a2c2cb984cee4549369))
 * **pages:** wire Recurring Bills route + BillsSummary + fixes ([0776593](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0776593711bf409af2ea1d909b916261e13af1cd))
@@ -59,6 +60,7 @@
 * styles based on nativewind and used by apps and ds ([d95e9f2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d95e9f2966e13816f1cb7ef78b9fc786e1c4ec47))
 * **tailwind-config:** create @financial-app/tailwind-config (Phase 2) ([257f51d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/257f51de7d099f73d2c9754855d1b797c04a2f21))
 * **tokens:** create @financial-app/tokens package (Phase 0) ([76b2857](https://github.com/fubaritico/react-and-react-native-financial-app/commit/76b2857cda2768fa3ac35888dd90244aff5736f0))
+* **ui:** add Alert molecule + Skeleton/Spinner atoms + CSS pipeline ([97740f8](https://github.com/fubaritico/react-and-react-native-financial-app/commit/97740f80f93a90ea18fe057fc8b84058267ca8c3))
 * **ui:** add DataTable cell factories (steps 1-3) ([98801b1](https://github.com/fubaritico/react-and-react-native-financial-app/commit/98801b17fb13af04e86da6c72601f65f99547780))
 * **ui:** add DataTable shell, SortableHeader, ActionBar, Pagination (steps 4-11) ([57c849f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/57c849fc1e8baf9681abf47dd245ac217985dd26))
 * **ui:** add DataTable sub-components + reorganize into components/ (steps 12) ([9a10c01](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9a10c01b328dbce4f3f32096eae8310c4bfe4252))

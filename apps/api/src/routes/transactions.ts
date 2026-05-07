@@ -44,11 +44,19 @@ transactionsRouter.get(
   '/',
   validateQuery(TransactionQuerySchema),
   async (req, res) => {
-    const page = Number(req.query.page)
-    const limit = Number(req.query.limit)
-    const category = req.query.category as string | undefined
-    const search = req.query.search as string | undefined
-    const sort = (req.query.sort as string) || 'latest'
+    const {
+      page,
+      limit,
+      category,
+      search,
+      sort = 'latest',
+    } = res.locals.query as {
+      page: number
+      limit: number
+      category?: string
+      search?: string
+      sort?: string
+    }
 
     const from = (page - 1) * limit
     const to = from + limit - 1
@@ -75,7 +83,7 @@ transactionsRouter.get(
     const { data, count, error } = await query
 
     if (error) {
-      res.status(500).json({ error: error.message })
+      res.status(500).json({ error: `[DATABASE] ${error.message}` })
       return
     }
 

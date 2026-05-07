@@ -17,6 +17,7 @@ Full modus operandi: `docs/modus-operandi/reset.md`
 | `Cannot find native module 'ExpoLinking'` | JS bundle updated but native binary is stale (missing new native modules) | `npx expo prebuild --clean && npx expo run:ios` |
 | `Could not find org.asyncstorage.shared_storage:storage-android:1.0.0` | AsyncStorage v3 local Maven repo not configured | Add `allprojects { repositories { maven { url = uri(project(":react-native-async-storage_async-storage").file("local_repo")) } } }` to `android/build.gradle` |
 | `__fbBatchedBridgeConfig is not set` (Jest) | pnpm created 2+ copies of react-native (different peer dep contexts) — preset mocks only apply to one | `moduleNameMapper` to force singleton — see "Jest + pnpm Monorepo" section below |
+| Android emulator: API requests silently fail (no error, pages stay loading) | Node.js `app.listen(PORT)` may bind to IPv6 `::1` only — emulator's `10.0.2.2` can't reach it | Bind explicitly: `app.listen(PORT, '0.0.0.0', ...)`. Also ensure `"usesCleartextTraffic": true` in `app.json` under `android`. Fallback: `adb reverse tcp:3001 tcp:3001` |
 
 ### Expo Managed (apps/mobile-expo) — Dependency Alignment
 

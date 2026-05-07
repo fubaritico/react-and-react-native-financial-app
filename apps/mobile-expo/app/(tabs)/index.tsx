@@ -15,6 +15,7 @@ import {
   buildRecurringBillsPageData,
   formatCurrency,
   formatDate,
+  getErrorMessage,
 } from '@financial-app/shared'
 import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
@@ -124,8 +125,12 @@ export default function OverviewScreen() {
 
   if (hasError) {
     return (
-      <View style={tw`flex-1 bg-beige-100 p-6`}>
-        <Alert severity="error" message={t('common.errorLoading')} />
+      <View style={tw`flex-1 bg-beige-100 px-6 justify-center`}>
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={__DEV__ ? getErrorMessage(hasError) : undefined}
+        />
       </View>
     )
   }

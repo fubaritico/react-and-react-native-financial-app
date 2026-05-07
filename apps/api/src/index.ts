@@ -36,7 +36,7 @@ app.use('/budgets', budgetsRouter)
 app.use('/pots', potsRouter)
 app.use('/recurring-bills', recurringBillsRouter)
 
-app.listen(PORT, () => {
-  console.error(`API server running on http://localhost:${String(PORT)}`)
+app.listen(PORT, '0.0.0.0', () => {
+  console.error(`API server running on http://0.0.0.0:${String(PORT)}`)
   console.error(`Swagger UI: http://localhost:${String(PORT)}/docs`)
 })

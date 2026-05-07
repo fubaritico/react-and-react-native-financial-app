@@ -19,7 +19,11 @@ const SEVERITY_TEXT_COLOR = {
 } as const
 
 /** Native implementation of the Alert component. */
-export function Alert({ severity, message }: Readonly<IAlertProps>) {
+export function Alert({
+  severity,
+  message,
+  description,
+}: Readonly<IAlertProps>) {
   const bgClass = SEVERITY_BG[severity]
   const iconName = SEVERITY_ICON[severity]
   const textColor = SEVERITY_TEXT_COLOR[severity]
@@ -34,9 +38,16 @@ export function Alert({ severity, message }: Readonly<IAlertProps>) {
       {/* Content */}
       <View style={tw`${shared.content} relative`}>
         <Icon name={iconName} iconSize="md" color={iconColor} />
-        <Typography variant="caption" color={textColor}>
-          {message}
-        </Typography>
+        <View style={tw`flex-1`}>
+          <Typography variant="caption" color={textColor}>
+            {message}
+          </Typography>
+          {description ? (
+            <Typography variant="caption" color="muted">
+              {description}
+            </Typography>
+          ) : null}
+        </View>
       </View>
     </View>
   )

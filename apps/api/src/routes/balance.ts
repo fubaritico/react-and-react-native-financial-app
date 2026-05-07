@@ -47,7 +47,7 @@ const BalanceQuerySchema = z.object({
 })
 
 balanceRouter.get('/', validateQuery(BalanceQuerySchema), async (req, res) => {
-  const month = (req.query.month as string) || null
+  const { month = null } = (res.locals.query ?? {}) as { month?: string | null }
 
   const { data, error } = await supabase.rpc('get_balance', {
     p_user_id: res.locals.userId,
@@ -55,7 +55,7 @@ balanceRouter.get('/', validateQuery(BalanceQuerySchema), async (req, res) => {
   })
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 

@@ -19,6 +19,7 @@ export type TabParamList = {
   Budgets: undefined
   Pots: undefined
   Recurring: undefined
+  SignOut: undefined
 }
 
 /**

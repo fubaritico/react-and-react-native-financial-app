@@ -38,7 +38,29 @@
   },
   "auth": {
     "login": "Login",
-    "signup": "Sign Up"
+    "signup": "Sign Up",
+    "email": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Min. 6 characters",
+    "name": "Name",
+    "namePlaceholder": "Your full name",
+    "loginButton": "Login",
+    "signupButton": "Create Account",
+    "needAccount": "Need to create an account?",
+    "needAccountLink": "Sign Up",
+    "alreadyHaveAccount": "Already have an account?",
+    "alreadyHaveAccountLink": "Login",
+    "signingIn": "Signing in\u2026",
+    "creatingAccount": "Creating account\u2026",
+    "signOut": "Sign Out",
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "passwordRequired": "Password is required",
+      "passwordMin": "Minimum 6 characters",
+      "nameRequired": "Name is required"
+    }
   },
   "budgets": {
     "title": "Budgets",

@@ -160,6 +160,25 @@ The API uses three Supabase RPCs defined in `supabase/setup.sql`:
 - **`get_budgets_with_spent(p_user_id, p_month)`** — returns budgets with computed `spent` from transactions
 - **`get_recurring_bills(p_user_id)`** — deduplicates recurring transactions by name, returns latest occurrence
 
+## Troubleshooting
+
+### Android Emulator Cannot Reach the API
+
+The Android emulator uses `10.0.2.2` to reach the host machine's `localhost`. If the emulator can access the internet but not the API server, the most likely cause is that Node.js is listening on the IPv6 loopback (`::1`) instead of all interfaces.
+
+**Fix**: the server binds explicitly to `0.0.0.0` in `src/index.ts`:
+
+```ts
+app.listen(PORT, '0.0.0.0', () => { ... })
+```
+
+If you still can't reach the API from the emulator:
+
+1. Verify the server is running: `curl http://localhost:3001/health`
+2. Check the Expo app remaps `localhost` → `10.0.2.2` for Android (`_layout.tsx`)
+3. Try `adb reverse tcp:3001 tcp:3001` as a fallback — this forwards the emulator's `localhost:3001` to the host
+4. Cold boot the emulator (Android Studio → Device Manager → ⋮ → Cold Boot Now)
+
 ## Design Decisions
 
 - **Service role key**: the API uses Supabase's service role key (bypasses RLS). Access control is enforced at the Express middleware level by filtering on `user_id`.

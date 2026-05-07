@@ -1,6 +1,9 @@
 import { BillsSummary, RecurringBillsDataTable } from '@financial-app/features'
 import { getRecurringBillsOptions } from '@financial-app/http-client'
-import { buildRecurringBillsPageData } from '@financial-app/shared'
+import {
+  buildRecurringBillsPageData,
+  getErrorMessage,
+} from '@financial-app/shared'
 import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -60,8 +63,12 @@ export default function RecurringBillsScreen() {
 
   if (error) {
     return (
-      <View style={tw`flex-1 bg-beige-100 p-6`}>
-        <Alert severity="error" message={t('common.errorLoading')} />
+      <View style={tw`flex-1 bg-beige-100 px-6 justify-center`}>
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={__DEV__ ? getErrorMessage(error) : undefined}
+        />
       </View>
     )
   }

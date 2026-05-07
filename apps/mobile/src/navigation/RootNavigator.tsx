@@ -1,17 +1,20 @@
-// TODO: wire auth gate with isAuthenticatedAtom
-// import { AuthStack } from './AuthStack'
-// const isAuthenticated = useAtomValue(isAuthenticatedAtom)
-// return isAuthenticated ? <TabNavigator /> : <AuthStack />
+import { isAuthLoadingAtom, isAuthenticatedAtom } from '@financial-app/shared'
+import { useAtomValue } from 'jotai'
 
+import { AuthStack } from './AuthStack'
 import { TabNavigator } from './TabNavigator'
 
 /**
  * Root navigator — auth gate.
- *
- * During initial setup, auth is bypassed: the app goes straight to tabs.
- * When Google OAuth is configured, this will read isAuthenticatedAtom
- * from Jotai and conditionally render AuthStack or TabNavigator.
+ * Reads isAuthenticatedAtom from Jotai and conditionally
+ * renders AuthStack (login/signup) or TabNavigator (app).
+ * Waits for first auth callback to avoid redirect flicker on cold start.
  */
 export function RootNavigator() {
-  return <TabNavigator />
+  const isAuthLoading = useAtomValue(isAuthLoadingAtom)
+  const isAuthenticated = useAtomValue(isAuthenticatedAtom)
+
+  if (isAuthLoading) return null
+
+  return isAuthenticated ? <TabNavigator /> : <AuthStack />
 }

@@ -131,7 +131,7 @@ potsRouter.get('/', async (_req, res) => {
     .eq('user_id', res.locals.userId)
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 
@@ -150,7 +150,7 @@ potsRouter.post('/', validateBody(CreatePotSchema), async (req, res) => {
     .single()
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 
@@ -167,7 +167,7 @@ potsRouter.put('/:id', validateBody(UpdatePotSchema), async (req, res) => {
     .single()
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 
@@ -182,7 +182,7 @@ potsRouter.delete('/:id', async (req, res) => {
     .eq('user_id', res.locals.userId)
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 
@@ -205,13 +205,13 @@ async function updatePotTotal(
     .single()
 
   if (fetchError) {
-    res.status(404).json({ error: 'Pot not found' })
+    res.status(404).json({ error: '[NOT_FOUND] Pot not found' })
     return
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- pot can be null at runtime
   if (!pot) {
-    res.status(404).json({ error: 'Pot not found' })
+    res.status(404).json({ error: '[NOT_FOUND] Pot not found' })
     return
   }
 
@@ -224,7 +224,7 @@ async function updatePotTotal(
   }
   const newTotal = potData.total + delta
   if (newTotal < 0) {
-    res.status(400).json({ error: 'Insufficient funds in pot' })
+    res.status(400).json({ error: '[BUSINESS] Insufficient funds in pot' })
     return
   }
 
@@ -237,7 +237,7 @@ async function updatePotTotal(
     .single()
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 

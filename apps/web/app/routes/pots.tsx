@@ -1,10 +1,13 @@
 import { PotCard } from '@financial-app/features'
 import { getPotsOptions } from '@financial-app/http-client'
-import { Alert, Button, Skeleton, Typography } from '@financial-app/ui'
+import { getErrorMessage } from '@financial-app/shared'
+import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 import { queryClient } from '../lib/query-client'
+
+import type { Route } from './+types/pots'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function -- disabled button, wired in CRUD phase
 const noop = () => {}
@@ -12,8 +15,7 @@ const noop = () => {}
 const potsOpts = getPotsOptions()
 
 export async function clientLoader() {
-  await queryClient.ensureQueryData(potsOpts)
-  return null
+  return queryClient.ensureQueryData(potsOpts).catch(() => undefined)
 }
 
 export function HydrateFallback() {
@@ -32,10 +34,27 @@ export function HydrateFallback() {
   )
 }
 
-export default function Pots() {
+export default function Pots({
+  loaderData: initialData,
+}: Route.ComponentProps) {
   const { t } = useTranslation()
 
-  const { data: pots, error } = useQuery(potsOpts)
+  const {
+    data: pots,
+    error,
+    isLoading,
+  } = useQuery({
+    ...potsOpts,
+    initialData,
+  })
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+        <Spinner />
+      </div>
+    )
+  }
 
   if (error) {
     return (
@@ -43,7 +62,11 @@ export default function Pots() {
         <Typography variant="page-title" as="h1" className="mb-4">
           {t('pots.title')}
         </Typography>
-        <Alert severity="error" message={t('common.errorLoading')} />
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
+        />
       </div>
     )
   }

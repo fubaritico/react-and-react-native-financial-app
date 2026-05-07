@@ -1,18 +1,20 @@
 import { TransactionsDataTable } from '@financial-app/features'
 import { getTransactionsOptions } from '@financial-app/http-client'
-import { Alert, Skeleton, Typography } from '@financial-app/ui'
+import { getErrorMessage } from '@financial-app/shared'
+import { Alert, Skeleton, Spinner, Typography } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 import { queryClient } from '../lib/query-client'
+
+import type { Route } from './+types/transactions'
 
 const txnOpts = getTransactionsOptions({
   query: { limit: 1000, sort: 'latest' },
 })
 
 export async function clientLoader() {
-  await queryClient.ensureQueryData(txnOpts)
-  return null
+  return queryClient.ensureQueryData(txnOpts).catch(() => undefined)
 }
 
 export function HydrateFallback() {
@@ -31,10 +33,20 @@ export function HydrateFallback() {
   )
 }
 
-export default function Transactions() {
+export default function Transactions({
+  loaderData: initialData,
+}: Route.ComponentProps) {
   const { t, i18n } = useTranslation()
 
-  const { data, error } = useQuery(txnOpts)
+  const { data, error, isLoading } = useQuery({ ...txnOpts, initialData })
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+        <Spinner />
+      </div>
+    )
+  }
 
   if (error) {
     return (
@@ -42,7 +54,11 @@ export default function Transactions() {
         <Typography variant="page-title" as="h1" className="mb-4">
           {t('transactions.title')}
         </Typography>
-        <Alert severity="error" message={t('common.errorLoading')} />
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
+        />
       </div>
     )
   }

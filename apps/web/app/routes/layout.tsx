@@ -1,17 +1,36 @@
-import { Outlet } from 'react-router'
+import { client } from '@financial-app/http-client/client'
+import { requireAuth } from '@financial-app/shared'
+import { Outlet, redirect } from 'react-router'
 
 import { Sidebar } from '../components/Sidebar'
+import { authClient } from '../lib/supabase'
 
-// TODO (Phase 8): wire requireAuth in a parent loader to protect all child routes
-// import { redirect } from 'react-router'
-// import { createServerClient, requireAuth } from '@financial-app/shared/auth/client.server'
-//
-// export async function loader({ request }: Route.LoaderArgs) {
-//   const { authClient, headers } = createServerClient(request)
-//   const result = await requireAuth(authClient)
-//   if ('message' in result) throw redirect('/login', { headers })
-//   return Response.json({ user: result.user }, { headers })
-// }
+const API_URL =
+  (import.meta.env.VITE_API_URL as string | undefined) ??
+  'http://localhost:3001'
+
+/**
+ * Protects all child routes — redirects to /login if not authenticated.
+ * Also eagerly configures the HTTP client with the current access token
+ * so child clientLoaders can call ensureQueryData immediately.
+ */
+export async function clientLoader() {
+  const result = await requireAuth(authClient)
+  if ('message' in result) {
+    redirect('/login')
+  }
+
+  // Eagerly configure HTTP client before child loaders run
+  client.setConfig({
+    baseUrl: API_URL,
+    auth: async () => {
+      const { session } = await authClient.getSession()
+      return session?.access_token
+    },
+  })
+
+  return null
+}
 
 /**
  * Shell layout for authenticated routes — sidebar + scrollable main content.

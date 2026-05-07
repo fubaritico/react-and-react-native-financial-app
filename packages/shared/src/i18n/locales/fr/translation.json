@@ -38,7 +38,29 @@
   },
   "auth": {
     "login": "Connexion",
-    "signup": "Inscription"
+    "signup": "Inscription",
+    "email": "Adresse e-mail",
+    "emailPlaceholder": "vous@exemple.com",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Min. 6 caractères",
+    "name": "Nom",
+    "namePlaceholder": "Votre nom complet",
+    "loginButton": "Se connecter",
+    "signupButton": "Créer un compte",
+    "needAccount": "Pas encore de compte ?",
+    "needAccountLink": "Inscription",
+    "alreadyHaveAccount": "Déjà un compte ?",
+    "alreadyHaveAccountLink": "Connexion",
+    "signingIn": "Connexion en cours\u2026",
+    "creatingAccount": "Création du compte\u2026",
+    "signOut": "Déconnexion",
+    "validation": {
+      "emailRequired": "L'e-mail est requis",
+      "emailInvalid": "Adresse e-mail invalide",
+      "passwordRequired": "Le mot de passe est requis",
+      "passwordMin": "6 caractères minimum",
+      "nameRequired": "Le nom est requis"
+    }
   },
   "budgets": {
     "title": "Budgets",

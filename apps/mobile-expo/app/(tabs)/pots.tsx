@@ -1,5 +1,6 @@
 import { PotCard } from '@financial-app/features'
 import { getPotsOptions } from '@financial-app/http-client'
+import { getErrorMessage } from '@financial-app/shared'
 import { Alert, Button, Spinner, Typography } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -25,8 +26,12 @@ export default function PotsScreen() {
 
   if (error) {
     return (
-      <View style={tw`flex-1 bg-beige-100 p-6`}>
-        <Alert severity="error" message={t('common.errorLoading')} />
+      <View style={tw`flex-1 bg-beige-100 px-6 justify-center`}>
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={__DEV__ ? getErrorMessage(error) : undefined}
+        />
       </View>
     )
   }
