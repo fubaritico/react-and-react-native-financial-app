@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-07)
+# 1.0.0 (2026-05-08)
 
 
 ### Bug Fixes
@@ -24,6 +24,7 @@
 * alignement de mobile-expo-ejected aveclesmême dépendances ([c3df036](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c3df03680c52be2e98b931e9860a5c1c0ddcc842))
 * **api:** scaffold Express 5 API with Zod schemas, OpenAPI, Swagger UI + review rules ([22f855d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/22f855d93656440ea17931d1639fba4181a8ae6e))
 * **apps:** wire auth clients, Google Sign-In, and env files (Phase 5.8) ([0e2bcbf](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0e2bcbf908951f2d108dc179e814415f0fdce6a5))
+* **auth:** full Supabase auth flow + API error handling + Android emulator fix ([a740df4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a740df46d2d86f372e7b8e1a192bff7ab962232f))
 * **config:** add agent skills — migrate commands + vendor Expo/Callstack skills ([3847dc7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/3847dc73a293dab050ad88f3f8ae7e712f867feb))
 * **config:** add multi-agent review skill with 5 domain experts ([bda46f8](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bda46f858062652f7617d8143337565926ff156b))
 * **config:** add restart-session skill for end → clear → start flow ([4f2f6b6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4f2f6b6a669273d5abc45fea1109a63c7cea70ed))
