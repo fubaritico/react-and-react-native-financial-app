@@ -65,6 +65,7 @@
     "@commitlint/cli": "catalog:",
     "@commitlint/config-conventional": "catalog:",
     "@eslint/js": "catalog:",
+
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-plugin-import": "catalog:",
