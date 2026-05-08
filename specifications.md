@@ -75,11 +75,28 @@ These recurring definitions auto-generate transactions at the start of each mont
 giving the user a pre-filled forecast to work from. The user can then adjust, add
 one-off transactions, and track against their budgets.
 
+**Generation mechanism**: when the user opens the app (or calls the API) in a new month,
+the server checks if recurring transactions have already been generated for that month.
+If not, it creates them automatically from the recurring definitions. This is triggered
+by an API call (e.g. `POST /recurring/generate`) invoked on app launch — not a cron job,
+so it works even if the user skips days. The check is idempotent: calling it twice in
+the same month does nothing.
+
 #### Bank mode — monthly re-import
 
 At the start of each month (or on manual trigger), the app re-imports transactions
 from GoCardless for the new period. Previous months' data stays in the database —
 it's historical. Budgets, pots, and recurring bill identifications carry over automatically.
+
+#### Disconnecting a bank account
+
+When the user disconnects a bank account (from Settings):
+- The `bank_connections` row is marked `status: 'revoked'`
+- All previously imported transactions (`source: 'bank'`) **remain** in the database
+  as historical data — they are NOT deleted
+- No new transactions will be imported from that account
+- The user can still create manual transactions alongside the historical bank data
+- The user can reconnect the same or a different bank account at any time
 
 ### 3.3 Onboarding (New User)
 
@@ -116,6 +133,10 @@ Onboarding screen: "How do you want to get started?"
              v
          -> Overview (with imported transactions)
 ```
+
+**Reference balance after onboarding**: the user must be able to adjust their reference
+balance later from a **Settings** screen. If their real-world balance changes (e.g. external
+transfer not tracked by the app), they need a way to correct it without re-onboarding.
 
 There is no "Import demo data" option in the real app — demo seeding is developer-only
 (via `POST /dev/seed` endpoint, disabled in production).
@@ -210,6 +231,12 @@ transactions serve as the **historical basis** for forecasting. The user can the
 - Imported monthly from GoCardless — stored permanently as historical data
 - The user can **re-categorize** an imported transaction (change its category) but cannot
   change amount, date, or name — those come from the bank
+- **Category override persistence**: when the user re-categorizes a bank transaction,
+  the new category is stored directly on the transaction row. On subsequent imports,
+  the deduplication logic (`external_id` unique index) prevents re-insertion, so the
+  user's category choice is preserved. If the same merchant appears in a future month
+  as a new transaction (different `external_id`), the default MCC mapping applies —
+  a future improvement could learn from past overrides per merchant name.
 - The user cannot delete imported transactions
 - `external_id` stores the GoCardless transaction ID (unique index prevents duplicates)
 - Avatar resolved from merchant name if possible
@@ -283,6 +310,33 @@ this to **all recurring transactions** — both income and expenses.
 - Budgets: donut chart + category list with spent/maximum
 - Recurring bills summary: paid total, upcoming total, due soon total
 - Each section links to its dedicated page ("See Details" / "View All")
+
+### 3.11 Month Navigation
+
+The Frontend Mentor challenge is locked to "August 2024". In production, the app works
+with the **current month** by default, but users need to navigate to past months.
+
+- A **month selector** (e.g. left/right arrows + "May 2026" label) appears on:
+  - Overview (income/expenses/budgets are per-month)
+  - Transactions (filter by month)
+  - Budgets (budgets are per user/month/category)
+  - Recurring (status depends on current month)
+- Pots are **not** month-dependent (savings goals span across months)
+- The selector defaults to the current month on app launch
+- Going to a past month shows historical data (read-only for bank transactions)
+- Going to a future month is not allowed (no data to show)
+
+### 3.12 Settings
+
+A Settings screen accessible from the main navigation (gear icon or menu item):
+
+| Setting | Description |
+|---------|-------------|
+| **Edit Reference Balance** | Adjust the reference balance manually (e.g. after an untracked external transfer) |
+| **Connected Bank Accounts** | List connected accounts, disconnect, reconnect, see consent expiry (Phase 8B) |
+| **Delete My Account** | Permanently delete user account + all data. Requires confirmation. Calls Supabase auth admin delete + cascade. |
+| **Language** | Switch between English and French |
+| **About** | App version, credits, legal |
 
 ---
 
@@ -433,6 +487,10 @@ Unmapped codes default to "General".
 9. **Bank transaction immutability**: `source: 'bank'` transactions cannot be edited or deleted by the user
 10. **External ID uniqueness**: `(user_id, external_id)` unique index prevents duplicate bank imports
 11. **PSD2 consent expiry**: 90 days — app must prompt re-authentication before expiry
+12. **Recurring generation**: idempotent — calling `POST /recurring/generate` multiple times in the same month produces transactions only once
+13. **Bank disconnect**: imported transactions are kept as historical data, never deleted on disconnect
+14. **Category override on bank transactions**: stored directly on the transaction row, preserved across imports (dedup by `external_id`)
+15. **Account deletion**: cascades to all user data (transactions, budgets, pots, bank connections) via `ON DELETE CASCADE` + Supabase auth user deletion
 
 ---
 
@@ -471,7 +529,10 @@ RootNavigator
       Budgets
       Pots
       Recurring Bills
-    Settings / Bank Accounts (Phase 8B)
+    Settings
+      Edit Reference Balance
+      Connected Bank Accounts (Phase 8B)
+      Delete My Account
   Modals
     Add/Edit/Delete Budget
     Add/Edit/Delete Pot
@@ -500,3 +561,20 @@ RootNavigator
 | 9 | CRUD modals | Next |
 | 10 | Tests (API + hooks + components) | Planned |
 | 11 | Polish (animations, error recovery, perf) | Planned |
+
+---
+
+## 12. Open Questions (to revisit)
+
+Items identified as potential gaps. Each will be addressed in its relevant phase.
+
+| # | Topic | Question | Phase |
+|---|-------|----------|-------|
+| 1 | Category learning | When a user re-categorizes a bank transaction, should the app learn the mapping for that merchant name and auto-apply it to future imports? | 8B |
+| 2 | Multi-account | Can a user connect multiple bank accounts? If yes, how are balances aggregated? | 8B |
+| 3 | Currency | The app assumes a single currency (EUR). Should multi-currency be supported? | Future |
+| 4 | Budget rollover | If a budget is underspent one month, does the surplus carry over to the next? | 9 |
+| 5 | Recurring frequency | Currently recurring = monthly. Should we support weekly, biweekly, quarterly? | 9 |
+| 6 | Notifications | Push notifications for due soon bills, budget overspend, pot milestones? | Future |
+| 7 | Data export | Should the user be able to export their data (CSV, PDF)? GDPR data portability. | Future |
+| 8 | Offline mutations | TanStack Query mutation queue — what happens if the user adds money to a pot offline and the balance check fails when back online? | 11 |
