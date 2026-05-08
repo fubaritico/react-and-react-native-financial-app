@@ -128,15 +128,16 @@ packages/
 - `files/docs and context/PERSONAL_FINANCE_ANALYSIS_EN.md` — full product specification
 
 ## Reference Files (load on demand — NOT auto-loaded)
-| File                 | When to load                                                    |
-|----------------------|-----------------------------------------------------------------|
+| File                 | When to load                                                   |
+|----------------------|----------------------------------------------------------------|
 | `new-component.md`   | UI component, design system and other pattern to apply strictly |
-| `design-system.md`   | All the rules to follow about UI package files, folders         |
-| `styling.md`         | All the rules to follow about styling                           |
-| `tokens.md`          | All infrmation about token use and setup                        |
-| `monorepo.md`        | Description of the expected project architecture                |
-| `troubleshooting.md` | Debug, architectural decisions                                  |
+| `design-system.md`   | All the rules to follow about UI package files, folders        |
+| `styling.md`         | All the rules to follow about styling                          |
+| `tokens.md`          | All infrmation about token use and setup                       |
+| `monorepo.md`        | Description of the expected project architecture               |
+| `troubleshooting.md` | Debug, architectural decisions                                 |
 | `api.md`             | API server patterns, routes, Supabase queries, auth, validation |
+| `specifications.md`  | App specifications reminder and extra specifications           |
 
 **Before coding**: ask which reference files are needed — do NOT start coding without the relevant files loaded.
 
@@ -146,58 +147,17 @@ packages/
 
 Read `@completed.md`
 
-- feat(i18n): react-i18next with EN/FR translations across all apps (987131e) — shared config in @financial-app/shared, per-app init (expo-localization, react-native-localize, i18next-browser-languagedetector), UI components refactored to props-based i18n, Storybook stories updated with i18n.t() pattern
-- feat(ui): Pagination molecule + Button refactor (f3b844b) — cross-platform Pagination with enterprise-grade props, sliding window + ellipsis algorithms, responsive web (matchMedia), Button refactored for composability (children, outline variant, nav/sm sizes, ariaCurrent), i18n pagination keys EN/FR, review rules updated (focus-visible, accessibilityState, QUAL-017, ARCH-002)
-- feat(ui): Dropdown molecule + Portal/Drawer/Menu/Listbox foundation (b4d2468) — new foundation molecules (Listbox, Menu with keyboard nav, Drawer bottom sheet, Portal atom), cross-platform Dropdown compound component (desktop: floating Menu with auto-flip + optional Portal; mobile: dark Drawer), Button extended with ariaHaspopup/ariaExpanded/ariaControls/className/ref, Storybook stories for all new components
-- feat(state): wire Jotai Provider in all apps + centralize in catalog (a664939) — Jotai added to pnpm catalog, Provider wrapping all 3 apps (mobile-expo, mobile, web)
-- feat(ui): add Modal organism + shared modal service (7898692) — cross-platform compound component (Modal.Header/Body/Footer), focus trap, Escape-to-close, backdrop click, scroll lock, 44x44 touch targets, return-focus-on-close, Jotai-based useModal hook in shared, web+native Storybook stories
-- feat(ui): add DataTable cell factories — steps 1-3 (98801b1) — @tanstack/react-table added to catalog + ui deps, 6 cross-platform cell factories (SimpleCell, DateCell, AmountCell, AvatarNameCell, BillTitleCell, StatusCell) with HOF pattern, inlined Intl formatters (currency, date, ordinal), all in subdirectories with barrel files
-- feat(ui): add DataTable shell, SortableHeader, ActionBar, Pagination — steps 4-11 (57c849f) — SortableHeader (caretDown icon, rotation for asc, hidden when unsorted), cells barrels, DataTablePagination adapter (bridges TanStack Table to Pagination molecule), ActionBar sub-component (rightActions + TextInput search), DataTable types/constants/variants/styles, DataTable.web.tsx (semantic table + compact renderCompactRow + ResizeObserver), DataTable.native.tsx (FlatList dual mode + useWindowDimensions), 3-state rendering (loading/data/empty), registered in both public API barrels
-- feat(ui): add DataTable sub-components + reorganize into components/ — step 12 (9a10c01) — NoResults, TableFooter (rows-per-page + pagination), DropdownFilter (toggle pattern), TruncatedContent (truncate + tooltip), filters/ (assertNumberFilter, doesNotContainString), sorting/ (sortNumbers). Sub-components moved into DataTable/components/. A11Y-007 fixed (focus-visible on interactive rows).
-- feat(ui): add TransactionsDataTable stories + table sub-components + a11y fixes (2e3c04b) — TransactionsDataTable web+native stories (wrapper component pattern), responsive column visibility (matchMedia columnVisibility), responsive action bar (desktop labels+dropdowns, mobile icon triggers+drawers), table sub-components (Table, TableHeader, TableBody, TableRow, TableHead, TableCell), a11y fixes (focus-visible/role/tabIndex on clickable web rows, accessibilityState on native Pressable), pagination fix (removed hardcoded state.pagination), cross-platform violation fix (StatusCell.native importing TableCell.web), storybook tsconfig fix (vite/client types for import.meta.env)
-- chore(ui): uniformize props (Readonly), add JSDoc, migrate to #Alias imports (9b96828) — Readonly<> on all DS component params, JSDoc on variants/styles/constants/types, #Lib/#Atoms/#Molecules/#Organisms/#Templates aliases replacing ../../../ relative paths, intermediate barrel files per atomic level, tsconfig paths in ui + all 5 apps, vite-tsconfig-paths in storybook + web, Metro resolveRequest in all 3 mobile apps, features-package plan (docs/plans/features-package.md)
-- chore: remove all external project references from codebase (936783f) — scrubbed all external attribution from source, docs, plans, session state, and memory
-- refactor(ui): standardize .styles.ts pattern with shared/web named exports (8e3abd4) — migrated all component .styles.ts to shared/web named exports (Card, Modal, DataTable, AuthCard, PotsOverview, TransactionsOverview, RecurringBillsOverview, ActionBar, Pagination, Divider, TextInput, TransactionRow), created new .styles.ts for Button, LinkText, SectionLink, PasswordInput, Drawer, Header. Updated new-component skill (mandatory step 2), review skill (QUAL-018), design-system.md, styling.md. Card shadow-md moved from CVA to web.root.
-- docs: updated features-package.md — Overview organisms move to features, ui keeps atomic DS (c0e02a6)
-- feat(ui): add NavItem atom + Navigation organism + Colors story (e5aacd2) — NavItem cross-platform atom (CVA: active/orientation/collapsed), Navigation web-only organism (sidebar expanded/collapsed + bottom bar), responsive phone/tablet (useWindowDimensions, collapsed on phone), tabBarBackground for rounded corners, Icon.native fixes (color prop on Svg, pointerEvents="none"), Typography nav-text/nav-active color variants, Colors story (full token palette), i18n minimizeMenu key, web Sidebar refactored to use Navigation
-- docs: add Expo modes guide + troubleshooting updates (aa1f7a9) — new docs/modus-operandi/expo-modes.md
-- feat: add @financial-app/features package, migrate Overview organisms from ui (b89673f) — new packages/features with dual-platform exports, moved PotsOverview/TransactionsOverview/RecurringBillsOverview from ui organisms to features/overview, own tw/cn instances, explicit subpath imports (@financial-app/ui/native for .native.tsx), updated all 3 apps + storybook imports, README updated with project structure + features package
-- feat(storybook): add NavItem + Navigation stories (93f2509) — web + native NavItem stories (Playground, SidebarItems, BottomBarItems, Collapsed), web Navigation stories (Playground, Interactive, Expanded, Collapsed), dark background support in Storybook
-- feat(features): extract TransactionsDataTable + locale support (a227c46) — TransactionsDataTable restructured into directory (constants/utils split, CompactTransactionRow in components/), sort state sync (useMemo derived from sorting), locale param added to DateCell/AmountCell factories (ui), locale prop threaded through TransactionsDataTable → columns → CompactTransactionRow, Storybook stories simplified to consume from @financial-app/features
-- refactor(ui): rename Drawer → BottomSheet + Portal system + Avatar fix + review fixes (8bd731c) — Drawer→BottomSheet rename across codebase, Portal rewritten (key-based useId + Map-based PortalProvider), BottomSheet.native tw-only (no StyleSheet.create), Avatar.native Fresco 1x1 detection (onLoad dimensions), black token added, combineColumnFilters mutation fix, .styles.ts 3 exports pattern (shared/web/native), TextInput maxLength prop, rules/skills updated (no StyleSheet+tw mixing, QUAL-018 expanded)
-- feat(ui): add DonutChart atom + enforce constants/utils/types separation (4016897) — cross-platform SVG donut chart (annular sector arc math, highlight ring overlay with semi-transparent white circle), strict file responsibility separation enforced (constants=values, utils=functions, types=all interfaces), new QUAL-019 review rule, new-component skill + design-system.md updated, web+native Storybook stories (8 web, 5 native)
-- feat(features): add BudgetOverview + Currency + ColorBarItem + Card refactor (76d6e32) — BudgetOverview cross-platform organism (responsive tablet horizontal layout: chart left + legend right via two-level wrapper pattern mirroring web), Currency atom (formatCurrency display component), ColorBarItem molecule (colored bar + label + amount), Card refactored (responsive padding, shared.titleSpacing extracted from inline), formatCurrency + color utilities in @financial-app/shared, features/src/lib/ deleted (cn/tw now imported from @financial-app/ui), Storybook stories for BudgetOverview + ColorBarItem (web + native)
-- feat(ui): add ProgressBar atom with thick/thin variants + stories (e515450) — cross-platform progress bar (thick: h-8 p-1 rounded-md track + rounded-sm fill; thin: h-2 rounded-lg), CSS variable bridge for web color, twrnc interpolation for native, optional metaLeft/metaRight ReactNode slots, stories wrapped in Card with token-referenced colors, review score 94/100
-- feat(ui): add LatestSpending molecule + Divider className prop + stories (9dd358e) — cross-platform LatestSpending molecule (beige sub-card, header with SectionLink, divider-separated rows with avatar/name/amount/date), Divider extended with optional className prop for custom colors, first divider skipped (index > 0), itemRight uses flex-col for vertical alignment, stories with LongLabels variant for truncation testing, review score 97/100
-- feat(features): add BudgetCategoryCard organism + Dropdown destructive/divider support (bff58d2) — BudgetCategoryCard cross-platform organism (ProgressBar + LatestSpending + Card with ColorDot, Dropdown menu for edit/delete), Dropdown enhanced with dividerBefore + destructive option support through Listbox → Menu → Dropdown chain, ListboxVariantProps extends pattern, i18n translation keys for all budget card labels (EN/FR), rules updated to enforce translation keys for default prop values, Menu stories fixed for CVA null variant type
-- feat(pages): wire Budget route across all 3 apps with shared data util (ff168a2) — buildBudgetPageData() shared function in @financial-app/shared, web loader + mobile-expo/mobile useMemo, BudgetOverview + BudgetCategoryCard rendered with mock data
-- fix: move container-queries plugin from shared config to web-only (499da13) — @tailwindcss/container-queries moved from @financial-app/tailwind-config to apps/web (twrnc crashes on theme() calls)
-- fix(ui): review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code (1017710) — import type in DataTable.types.ts, showActionBar guard inversion fixed in native, shrink/overflow-clip moved to web-only styles, accessibilityLabel prop added to TextInput, dead DataTable.tsx deleted, native export added to styles files, ActionBar refactored (single IActionBarProps, rightActions, positive showActionBar)
-- feat(pages): wire Pots route + PotCard component + i18n + UI fixes (bc3242b) — PotCard cross-platform organism (features/pots) with Card+ColorDot+ProgressBar thin+Dropdown ellipsis+two action buttons, wired into all 3 apps with mock data + @container grid on web, i18n keys EN/FR, label props made required (PotCard + BudgetCategoryCard), Button CVA text-preset-4-bold (font-sans text-sm font-bold leading-normal), story wrappers maxWidth→width 600, Dropdown Menu shape rounded, TransactionsDataTable showActionBar native + globalFilter web, budget/index.web.ts barrel fix
-- feat(pages): wire Recurring Bills route + BillsSummary + fixes (0776593) — BillsSummary component in features/recurring-bills (web+native), CompactBillRow for phone layout (renderCompactRow pattern), Status atom extracted from StatusCell + icon color fix (tw.color() for native SVG fill), CategoryIconCell factory (icon+name+status on mobile), RecurringBillsDataTable wired in all 3 apps, buildRecurringBillsPageData in @financial-app/shared, i18n recurring.summary key, new category icons (10 SVGs), review score 97/100
-- feat(db): add Supabase schema, seed data, and setup guide (1aade95) — 4 tables (balances, transactions, budgets, pots) with RLS policies, indexes, updated_at triggers, 2 RPC functions (get_balance, get_budgets_with_spent), seed.sql with all mock data, supabase-setup.md step-by-step guide, all .env/.env.example updated for new Supabase project (wfovogtulmjynujtfiml)
-- feat(api): scaffold Express 5 API with Zod schemas, OpenAPI, Swagger UI + review rules (22f855d) — apps/api with Express 5, Supabase service role auth middleware, 5 route files (balance/transactions/budgets/pots/recurring-bills), centralized Zod OpenAPI schemas, Swagger UI at /docs, CORS origin restriction, validateBody/validateQuery middleware, Node --env-file (no dotenv), api.md rules, review rules (SEC-013..016, ARCH-013..016, QUAL-020..023), API README, seed.sql re-UUIDed for new test user
-- docs: add Documentation section to root README (aa14282) — links to guides, plans, and app READMEs
-- feat(http-client): scaffold @financial-app/http-client with HeyAPI (94ab0bb) — adapted TMDB reference package, HeyAPI v0.92 with 4 plugins (typescript, sdk, client-fetch, react-query), 13 SDK functions (balance, transactions, budgets CRUD, pots CRUD + add/withdraw, recurring-bills), TanStack Query options + mutations, IApiError type, build pipeline (generate → ts-nocheck → tsc to dist/), src/client/ gitignored, fix api generate:spec --env-file=.env, root api:generate-client script
-- feat(shared): wire http-client into all apps — auth bootstrap + QueryClientProvider (641e7ce) — useConfigureHttpClient hook (duck-typed IHttpClient, eager reconfigure on userAtom change), createAppQueryClient factory (5min stale, retry policies), AuthBootstrap component pattern in all 3 mobile apps, client singleton re-exported from http-client barrel, env vars (EXPO_PUBLIC_API_URL, API_URL, VITE_API_URL), build script console.log→console.warn
-- feat(ui): add Alert molecule + Skeleton/Spinner atoms + CSS pipeline (97740f8) — Alert cross-platform (4 severities, white+colored opacity backdrop), Skeleton (web shimmer CSS pseudo-element, native Animated pulse), Spinner (web CSS spin keyframe, native Animated rotation with easing), CSS pipeline (packages/ui/src/styles/components.css exported via "./styles"), Tailwind content globs extended with *.constants.ts, Typography warning/blue colors, Storybook stories web+native for all 3 components
-- feat(pages): replace mock data with TanStack Query + Alert/Skeleton/Spinner UX (597560e) — web ensureQueryData + useQuery + Skeleton HydrateFallback + Alert error states for all 5 routes, mobile (expo + bare RN) useQuery + Spinner loading + Alert error for all 10 screens, web query-client singleton, i18n errorLoading key EN/FR, bare RN test infra (http-client mock, renderWithProviders), design-system.md #Alias resolution + import order rule
+### Next
 
-### Next — Auth + Remaining Phase 8A
-
-**Current task**: Implement Supabase auth (login/signup) so pages can fetch data
-- All 15 routes wired to API but return 401 without auth token
-- Plan: `docs/plans/phase-8-api-and-http-client.md`
-
-**Phase 8A remaining**:
-- Auth UI (login/signup screens) + token management
-- `POST /dev/seed` endpoint
-- Tests — API + hooks
-
-**Then**:
-- CRUD modals (Add/Edit/Delete Budget, Add/Edit/Delete Pot, Add/Withdraw Money)
-- Phase 8B: Plaid integration (separate)
-- Navigation web: graphic design refinement (user doing manual pass)
+1. CRUD modals (Budget, Pot, Transaction manual, Recurring definitions — Add/Edit/Delete)
+2. Onboarding (création de compte → mode manuel par défaut, mode banque en Phase 8B)
+3. Empty states (all screens + Overview sections)
+4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
+5. **Centralized auth** — session validation on app focus (AppState → getSession())
+6. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
+7. Tests — API + hooks
+8. Phase 8B: GoCardless bank connection (mode banque)
+9. Navigation web: graphic design refinement (user doing manual pass)
 
 **Pending tests**:
 - iPad: verify BottomSheet overlay, 2-tap switching, text truncation
@@ -208,6 +168,11 @@ Read `@completed.md`
 - Review ARCH-003b: factories read env vars directly instead of accepting params — trades testability for DX. Revisit if unit testing becomes painful.
 - Review SEC-002: bare RN uses plain AsyncStorage for tokens (unencrypted) — acceptable for learning reference, not published
 - Google client IDs empty in .env files — need Google Cloud Console setup before testing OAuth
+
+- iOS TextInput: email field auto-capitalizes first letter — need `autoCapitalize="none"` on email TextInput inputs across all native apps
+- iOS auth flow: app may stay blocked after login submit — investigate if Expo rebuild needed or navigation/state issue
+- iOS AuthCard: login card appears too small — needs Figma reference comparison (user will provide PNG)
+- iOS unknown black element at top of screen — needs screenshot to diagnose
 
 - twrnc `rounded-t-lg` doesn't apply border radius on native — must use explicit RN style `{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }`
 - twrnc `flex-1` in CVA column variant may not propagate to Pressable — added explicit `{ flex: 1 }` style in NavItem.native.tsx
@@ -230,4 +195,8 @@ Read `@completed.md`
 - RN `pointerEvents="box-none"` only passes touches to children, NOT to sibling Views in the tree.
 - Android Fresco: returns onLoad with 1x1 transparent base64 PNG instead of onError when image URL 404s — Avatar detects via dimension check (MIN_VALID_SIZE = 2)
 - Supabase project credentials stored in `files/critical` (gitignored) — never commit. Test user: `s_cottereau@yahoo.fr` / UUID `d8e4f26e-dc4f-41a7-8e66-1b1805a00b41`
+- React Router loaders are navigation-driven, not state-driven — atom changes alone don't trigger redirects. Web sign-out needs explicit `navigate('/login', { replace: true })` after `authClient.signOut()`
+- Icon pipeline only supports fill-based SVGs — stroke-based paths won't render (generate-icon-data.js extracts `d` attributes, Icon component renders with fill)
+- Cross-device session sync: each device (web/mobile) has its own Supabase session (localStorage vs AsyncStorage). Signing out on web does NOT sign out mobile — they are independent. TODO: add session validation on app focus (AppState change → `getSession()`) for finance-grade security, and consider shorter JWT expiry (15min) in Supabase dashboard.
+- ListboxList.native.tsx uses `accessibilityRole="menu"` instead of `"listbox"` — pre-existing, should be aligned with web for consistency
 
