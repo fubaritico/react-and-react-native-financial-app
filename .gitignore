@@ -73,4 +73,10 @@ review-results/
 
 # work files
 files
+/docs/plans/
+/docs/research/
 
+# Claude
+/.claude/completed.md
+/.claude/settings.local.json
+/.mcp.json
