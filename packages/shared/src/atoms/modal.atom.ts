@@ -31,6 +31,8 @@ export interface IModalConfig {
   body?: ReactNode
   /** Action buttons rendered in the footer (above the cancel button) */
   actions: IModalAction[]
+  /** Custom cancel button label (i18n — defaults to "Cancel") */
+  cancelLabel?: string
 }
 
 /** Modal state atom — null means closed, IModalConfig means open */

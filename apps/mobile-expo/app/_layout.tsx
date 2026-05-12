@@ -1,6 +1,6 @@
 import '../src/i18n'
 
-import { ModalProvider } from '@financial-app/features'
+import { ModalRenderer } from '@financial-app/features/shared'
 import { client } from '@financial-app/http-client/client'
 import {
   createAppQueryClient,
@@ -74,11 +74,11 @@ export default function RootLayout() {
         <PortalProvider>
           <AuthBootstrap>
             <AuthGate>
-              <ModalProvider>
+              <ModalRenderer>
                 <StatusBar style="dark" />
                 <DevBadge />
                 <Slot />
-              </ModalProvider>
+              </ModalRenderer>
             </AuthGate>
           </AuthBootstrap>
         </PortalProvider>

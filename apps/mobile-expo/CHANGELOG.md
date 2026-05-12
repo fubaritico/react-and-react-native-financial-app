@@ -34,6 +34,7 @@
 * **expo:** add expo-dev-client and native build scripts ([eef51ca](https://github.com/fubaritico/react-and-react-native-financial-app/commit/eef51ca348d281119d7aa34f561d63adef49a176))
 * **features:** add BudgetCategoryCard organism + Dropdown destructive/divider support ([1456f1e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1456f1eff8ac904b60f3bae85437c83f3b02c804))
 * **features:** add BudgetOverview + Currency + ColorBarItem + Card refactor ([5961544](https://github.com/fubaritico/react-and-react-native-financial-app/commit/59615449bae58ad53b1a080543625420fc74913c))
+* **features:** add ModalProvider — global modal renderer driven by Jotai atom ([d578557](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d57855782ed0c48cee0c43fe50f77aac5c629e5a))
 * **features:** extract TransactionsDataTable into directory structure + locale support ([554c0f7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/554c0f7faf197281c5c180005374ff8fdb5a8599))
 * **http-client:** scaffold @financial-app/http-client with HeyAPI ([bdbab40](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bdbab40934bf2e99136f174f98df870fcdaa474e))
 * **i18n:** add react-i18next with EN/FR translations across all apps ([9797ce4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9797ce4836749dad17bb707aa6a0c4932c74772c))

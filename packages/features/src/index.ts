@@ -1,6 +1,3 @@
-export { ModalProvider } from './modal'
-export type { IModalProviderProps } from './modal'
-
 export {
   PotsOverview,
   TransactionsOverview,
@@ -22,6 +19,24 @@ export type { ITransactionsDataTableProps } from './transactions'
 
 export { BudgetCategoryCard } from './budget'
 export type { IBudgetCategoryCardProps } from './budget'
+
+export { BudgetFormContent } from './budget'
+export type {
+  IBudgetFormContentProps,
+  IBudgetFormRef,
+  IBudgetFormValues,
+} from './budget'
+
+export {
+  createAddBudgetModalConfig,
+  createEditBudgetModalConfig,
+  createDeleteBudgetModalConfig,
+} from './budget'
+export type {
+  IAddBudgetModalLabels,
+  IEditBudgetModalLabels,
+  IDeleteBudgetModalLabels,
+} from './budget'
 
 export { PotCard } from './pots'
 export type { IPotCardProps } from './pots'

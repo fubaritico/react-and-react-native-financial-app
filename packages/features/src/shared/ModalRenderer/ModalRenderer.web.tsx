@@ -1,14 +1,14 @@
 import { modalConfigAtom, useModal } from '@financial-app/shared'
-import { Modal, Typography } from '@financial-app/ui/native'
+import { Modal, Typography } from '@financial-app/ui'
 import { useAtomValue } from 'jotai'
 
-import type { IModalProviderProps } from './AppModal'
+import type { IModalRendererProps } from './ModalRenderer'
 
 /**
- * ModalProvider — wraps app content and renders the global Modal when modalConfigAtom is non-null.
+ * ModalRenderer — wraps app content and renders the global Modal when modalConfigAtom is non-null.
  * Mount once in the root layout, inside JotaiProvider.
  */
-export function ModalProvider({ children }: Readonly<IModalProviderProps>) {
+export function ModalRenderer({ children }: Readonly<IModalRendererProps>) {
   const config = useAtomValue(modalConfigAtom)
   const { close } = useModal()
 
@@ -26,7 +26,10 @@ export function ModalProvider({ children }: Readonly<IModalProviderProps>) {
             ) : null}
             {config.body}
           </Modal.Body>
-          <Modal.Footer actions={config.actions} />
+          <Modal.Footer
+            actions={config.actions}
+            cancelLabel={config.cancelLabel}
+          />
         </Modal>
       ) : null}
     </>

@@ -74,7 +74,29 @@
     "editBudget": "Edit Budget",
     "deleteBudget": "Delete Budget",
     "addNewBudget": "+ Add New Budget",
-    "spendingSummary": "Spending Summary"
+    "spendingSummary": "Spending Summary",
+    "form": {
+      "categoryLabel": "Budget Category",
+      "maximumLabel": "Maximum Spend",
+      "themeLabel": "Theme",
+      "maximumPlaceholder": "e.g. 2000"
+    },
+    "addModal": {
+      "title": "Add New Budget",
+      "description": "Choose a category to set a spending budget. These categories can help you monitor spending.",
+      "submitLabel": "Add Budget"
+    },
+    "editModal": {
+      "title": "Edit Budget",
+      "description": "As your budgets change, feel free to update your spending limits.",
+      "submitLabel": "Save Changes"
+    },
+    "deleteModal": {
+      "title": "Delete '{{name}}'?",
+      "description": "Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever.",
+      "confirmLabel": "Yes, Confirm Deletion",
+      "cancelLabel": "No, Go Back"
+    }
   },
   "pots": {
     "title": "Pots",

@@ -1,6 +1,6 @@
 import './i18n'
 
-import { ModalProvider } from '@financial-app/features'
+import { ModalRenderer } from '@financial-app/features/shared'
 import { client } from '@financial-app/http-client/client'
 import { useAuthListener, useConfigureHttpClient } from '@financial-app/shared'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -58,9 +58,9 @@ export default function App() {
     <JotaiProvider>
       <QueryClientProvider client={queryClient}>
         <AuthBootstrap>
-          <ModalProvider>
+          <ModalRenderer>
             <Outlet />
-          </ModalProvider>
+          </ModalRenderer>
         </AuthBootstrap>
       </QueryClientProvider>
     </JotaiProvider>

@@ -74,7 +74,29 @@
     "editBudget": "Modifier le budget",
     "deleteBudget": "Supprimer le budget",
     "addNewBudget": "+ Nouveau budget",
-    "spendingSummary": "Résumé des dépenses"
+    "spendingSummary": "Résumé des dépenses",
+    "form": {
+      "categoryLabel": "Catégorie de budget",
+      "maximumLabel": "Dépense maximum",
+      "themeLabel": "Thème",
+      "maximumPlaceholder": "ex. 2000"
+    },
+    "addModal": {
+      "title": "Nouveau budget",
+      "description": "Choisissez une catégorie pour définir un budget de dépenses. Ces catégories vous aident à suivre vos dépenses.",
+      "submitLabel": "Ajouter le budget"
+    },
+    "editModal": {
+      "title": "Modifier le budget",
+      "description": "Vos budgets évoluent, n'hésitez pas à ajuster vos limites de dépenses.",
+      "submitLabel": "Enregistrer"
+    },
+    "deleteModal": {
+      "title": "Supprimer « {{name}} » ?",
+      "description": "Êtes-vous sûr de vouloir supprimer ce budget ? Cette action est irréversible et toutes les données seront supprimées définitivement.",
+      "confirmLabel": "Oui, confirmer la suppression",
+      "cancelLabel": "Non, revenir"
+    }
   },
   "pots": {
     "title": "Cagnottes",
