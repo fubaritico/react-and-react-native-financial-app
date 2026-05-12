@@ -1,3 +1,6 @@
+export { ModalProvider } from './modal/index.web'
+export type { IModalProviderProps } from './modal/index.web'
+
 export {
   PotsOverview,
   TransactionsOverview,

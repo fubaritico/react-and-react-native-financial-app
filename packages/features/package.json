@@ -8,6 +8,12 @@
       "react-native": "./src/index.ts",
       "default": "./src/index.web.ts"
     },
+    "./modal": {
+      "react-native": "./src/modal/index.ts",
+      "default": "./src/modal/index.web.ts"
+    },
+    "./modal/web": "./src/modal/index.web.ts",
+    "./modal/native": "./src/modal/index.ts",
     "./overview": {
       "react-native": "./src/overview/index.ts",
       "default": "./src/overview/index.web.ts"
@@ -55,6 +61,7 @@
     "@tanstack/react-table": "catalog:",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "jotai": "catalog:",
     "tailwind-merge": "^3.5.0",
     "twrnc": "catalog:"
   },
