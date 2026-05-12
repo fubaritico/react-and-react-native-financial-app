@@ -1,31 +1,43 @@
-import { BudgetCategoryCard, BudgetOverview } from '@financial-app/features'
+import {
+  BudgetCategoryCard,
+  BudgetFormContent,
+  BudgetOverview,
+  createAddBudgetModalConfig,
+} from '@financial-app/features'
 import {
   getBudgetsOptions,
   getTransactionsOptions,
+  postBudgetsMutation,
 } from '@financial-app/http-client'
-import { buildBudgetPageData, getErrorMessage } from '@financial-app/shared'
+import {
+  BUDGET_MONTH,
+  buildBudgetPageData,
+  getErrorMessage,
+  useModal,
+} from '@financial-app/shared'
 import { Alert, Button, Spinner, Typography } from '@financial-app/ui'
-import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
+import type { IBudgetFormRef } from '@financial-app/features'
+
 import tw from '../../src/lib/tw'
-
-/** Current budget month — matches seed data. */
-const BUDGET_MONTH = '2024-08'
-
-// eslint-disable-next-line @typescript-eslint/no-empty-function -- disabled button, wired in CRUD phase
-const noop = () => {}
 
 export default function BudgetsScreen() {
   const { t } = useTranslation()
+  const modal = useModal()
+  const qc = useQueryClient()
+  const formRef = useRef<IBudgetFormRef>(null)
+
+  const budgetsOpts = getBudgetsOptions({ query: { month: BUDGET_MONTH } })
 
   const {
     data: budgets,
     isLoading: budgetsLoading,
     error: budgetsError,
-  } = useQuery(getBudgetsOptions({ query: { month: BUDGET_MONTH } }))
+  } = useQuery(budgetsOpts)
   const {
     data: txnResult,
     isLoading: txnLoading,
@@ -36,6 +48,59 @@ export default function BudgetsScreen() {
     () => buildBudgetPageData(budgets ?? [], txnResult?.data ?? []),
     [budgets, txnResult]
   )
+
+  const existingCategories = useMemo(
+    () => (budgets ?? []).map((b) => b.category),
+    [budgets]
+  )
+  const existingThemes = useMemo(
+    () => (budgets ?? []).map((b) => b.theme),
+    [budgets]
+  )
+
+  const { mutate: createBudget } = useMutation({
+    ...postBudgetsMutation(),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: budgetsOpts.queryKey })
+      modal.close()
+    },
+  })
+
+  const handleSubmitBudget = useCallback(() => {
+    const values = formRef.current?.getValues()
+    if (!values) return
+    const parsed = Number(values.maximum)
+    if (!Number.isFinite(parsed) || parsed <= 0) return
+    createBudget({
+      body: {
+        category: values.category,
+        maximum: parsed,
+        theme: values.theme,
+        month: BUDGET_MONTH,
+      },
+    })
+  }, [createBudget])
+
+  const handleAddBudget = useCallback(() => {
+    const config = createAddBudgetModalConfig(
+      <BudgetFormContent
+        ref={formRef}
+        existingCategories={existingCategories}
+        existingThemes={existingThemes}
+        categoryLabel={t('budgets.form.categoryLabel')}
+        maximumLabel={t('budgets.form.maximumLabel')}
+        themeLabel={t('budgets.form.themeLabel')}
+        maximumPlaceholder={t('budgets.form.maximumPlaceholder')}
+      />,
+      handleSubmitBudget,
+      {
+        title: t('budgets.addModal.title'),
+        description: t('budgets.addModal.description'),
+        submitLabel: t('budgets.addModal.submitLabel'),
+      }
+    )
+    modal.open(config)
+  }, [existingCategories, existingThemes, t, modal, handleSubmitBudget])
 
   if (budgetsLoading || txnLoading) {
     return (
@@ -68,9 +133,8 @@ export default function BudgetsScreen() {
         <Typography variant="page-title">{t('budgets.title')}</Typography>
         <Button
           title={t('budgets.addNewBudget')}
-          onPress={noop}
+          onPress={handleAddBudget}
           variant="primary"
-          disabled
         />
       </View>
 

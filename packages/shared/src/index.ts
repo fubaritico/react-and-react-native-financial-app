@@ -48,6 +48,7 @@ export type { IBalance, ITransaction, IBudget, IPot } from './types'
 
 // Utils
 export {
+  BUDGET_MONTH,
   formatCurrency,
   convertCurrency,
   formatDate,

@@ -3,6 +3,9 @@ import { formatDate } from './date'
 
 import type { IBudget, ITransaction } from '../types'
 
+/** Current budget month — matches seed data. Will be dynamic when month picker is added. */
+export const BUDGET_MONTH = '2024-08'
+
 const LATEST_SPENDING_COUNT = 3
 
 export interface IBudgetItem {

@@ -6,7 +6,7 @@ export type {
 } from './currency'
 export { formatDate } from './date'
 export { resolveTokenColor } from './color'
-export { buildBudgetPageData } from './budget'
+export { BUDGET_MONTH, buildBudgetPageData } from './budget'
 export type {
   IBudgetItem,
   IBudgetSpendingItem,

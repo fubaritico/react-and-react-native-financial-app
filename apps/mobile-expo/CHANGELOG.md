@@ -4,11 +4,13 @@
 ### Bug Fixes
 
 * **android:** resolve AsyncStorage Maven issue, add rebuild-android script ([8df93c4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8df93c494809a8d4355f7a69cf588ab17a828131))
+* **features:** icon-only dropdown buttons use tertiary 40x40 centered ([e532555](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e5325553bd177bda981ae6ec5b4c7c6f216ef48f))
 * **mobile:** enable wireless iPhone deployment and fix sandbox violation ([0bf9ca9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0bf9ca93efce40d837c8fcc67a28120fc74c06a9))
 * **monorepo:** align React versions and fix cache issues ([d67c956](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d67c956998a0ce4d5b368f3b814393e8d1c02b58))
 * move container-queries plugin from shared config to web-only ([9fb3a67](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9fb3a678825258942dc6655846e16a07bed1825b))
 * **tokens:** align alias names with Figma variable naming ([a48464b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a48464ba974357082ae577f26a5223c72f714108))
 * **ui:** extract Icon runtime constants, add Button iconPosition prop ([605f29e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/605f29ea80576f6f51e2b1a476674148677df3c8))
+* **ui:** modal a11y + replace arbitrary max-w with token ([c25b5f3](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c25b5f35b1f4dd0fb2bba30324ba7a0faab23a2e))
 * **ui:** move header row inside white card in overview sections ([9cd0f15](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9cd0f15c1dcee7f6ccda1aa4b008f65f9dfab501))
 * **ui:** replace default Tailwind colors with token aliases ([9b7b247](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9b7b24781dc5e82a18ecea230c3bb57b017e5b65))
 * **ui:** review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code ([0d43fae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d43faecf012669f2f97c8d4504f8f5ffd93c543))
@@ -35,6 +37,7 @@
 * **features:** add BudgetCategoryCard organism + Dropdown destructive/divider support ([1456f1e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1456f1eff8ac904b60f3bae85437c83f3b02c804))
 * **features:** add BudgetOverview + Currency + ColorBarItem + Card refactor ([5961544](https://github.com/fubaritico/react-and-react-native-financial-app/commit/59615449bae58ad53b1a080543625420fc74913c))
 * **features:** add ModalProvider — global modal renderer driven by Jotai atom ([d578557](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d57855782ed0c48cee0c43fe50f77aac5c629e5a))
+* **features:** add ModalRenderer, BudgetFormContent, and budget modal configs ([10eb1a3](https://github.com/fubaritico/react-and-react-native-financial-app/commit/10eb1a3fd86444b5255ad4b0402199b856aa0697))
 * **features:** extract TransactionsDataTable into directory structure + locale support ([554c0f7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/554c0f7faf197281c5c180005374ff8fdb5a8599))
 * **http-client:** scaffold @financial-app/http-client with HeyAPI ([bdbab40](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bdbab40934bf2e99136f174f98df870fcdaa474e))
 * **i18n:** add react-i18next with EN/FR translations across all apps ([9797ce4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9797ce4836749dad17bb707aa6a0c4932c74772c))
