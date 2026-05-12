@@ -28,6 +28,11 @@ export function Dropdown({
   bottomSheetTitle,
   bottomSheetCloseLabel = 'Close',
   trigger,
+  buttonVariant = 'outline',
+  buttonSize,
+  buttonClassName,
+  buttonFullWidth,
+  buttonCentered,
 }: Readonly<IDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -65,36 +70,32 @@ export function Dropdown({
       ) : null}
 
       {/* Trigger */}
-      {trigger ? (
-        <Button
-          variant="tertiary"
-          size="sm"
-          onPress={handleToggle}
-          ariaExpanded={isOpen}
-          accessibilityLabel={accessibilityLabel}
-          className="border-0 p-0"
-        >
-          {trigger({ isOpen, selectedLabel })}
-        </Button>
-      ) : (
-        <Button
-          variant="outline"
-          onPress={handleToggle}
-          ariaExpanded={isOpen}
-          accessibilityLabel={
-            accessibilityLabel ?? `${label ?? 'Select'}: ${selectedLabel}`
-          }
-          className={`gap-4 ${isOpen ? 'border-foreground' : ''}`}
-        >
-          <Typography variant="body-bold">{selectedLabel}</Typography>
-          <Icon
-            name="caretDown"
-            iconSize="xs"
-            color={tw.color('foreground') ?? '#201F24'}
-            style={isOpen ? tw`rotate-180` : undefined}
-          />
-        </Button>
-      )}
+      <Button
+        variant={buttonVariant}
+        size={buttonSize}
+        centered={buttonCentered}
+        onPress={handleToggle}
+        ariaExpanded={isOpen}
+        accessibilityLabel={
+          accessibilityLabel ?? `${label ?? 'Select'}: ${selectedLabel}`
+        }
+        fullWidth={buttonFullWidth ?? !trigger}
+        className={`gap-4 ${buttonClassName ?? ''} ${isOpen ? 'border-foreground' : ''}`}
+      >
+        {trigger ? (
+          trigger({ isOpen, selectedLabel })
+        ) : (
+          <>
+            <Typography variant="body-bold">{selectedLabel}</Typography>
+            <Icon
+              name="caretDown"
+              iconSize="xs"
+              color={tw.color('foreground') ?? '#201F24'}
+              style={isOpen ? tw`rotate-180` : undefined}
+            />
+          </>
+        )}
+      </Button>
 
       {/* BottomSheet (always dark on native) */}
       <BottomSheet

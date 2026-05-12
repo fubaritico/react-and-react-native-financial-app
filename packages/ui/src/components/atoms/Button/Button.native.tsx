@@ -24,6 +24,7 @@ const VARIANT_TEXT_COLOR: Record<string, TypographyVariants['color']> = {
 export const Button = ({
   title,
   children,
+  centered,
   onPress,
   variant = 'primary',
   size = 'md',
@@ -36,7 +37,13 @@ export const Button = ({
   className,
   style,
 }: Readonly<IButtonProps>) => {
-  const variantClasses = buttonVariants({ variant, size, fullWidth, disabled })
+  const variantClasses = buttonVariants({
+    variant,
+    size,
+    fullWidth,
+    disabled,
+    centered,
+  })
   const textColor =
     VARIANT_TEXT_COLOR[variant ?? 'primary'] ?? 'primary-foreground'
 

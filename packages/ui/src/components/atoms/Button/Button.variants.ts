@@ -4,7 +4,7 @@ import type { VariantProps } from 'class-variance-authority'
 
 /** CVA variants for the Button component — controls visual style (variant), size, full-width layout, and disabled state */
 export const buttonVariants = cva(
-  'items-center justify-center rounded-md font-sans text-sm font-bold leading-normal',
+  'items-center justify-between rounded-md font-sans text-sm font-bold leading-normal',
   {
     variants: {
       variant: {
@@ -16,11 +16,14 @@ export const buttonVariants = cva(
       },
       size: {
         md: 'py-3 px-5',
-        sm: 'h-10 w-10',
+        sm: 'h-10 w-10 px-4',
         nav: 'h-10 px-4',
       },
       fullWidth: {
         true: 'w-full',
+      },
+      centered: {
+        true: 'justify-center',
       },
       disabled: {
         true: 'opacity-50',

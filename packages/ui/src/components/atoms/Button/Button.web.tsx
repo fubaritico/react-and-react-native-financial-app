@@ -13,6 +13,7 @@ export const Button = ({
   title,
   children,
   onPress,
+  centered,
   variant = 'primary',
   size = 'md',
   fullWidth,
@@ -37,7 +38,7 @@ export const Button = ({
     aria-expanded={ariaExpanded}
     aria-controls={ariaControls}
     className={cn(
-      buttonVariants({ variant, size, fullWidth, disabled }),
+      buttonVariants({ variant, size, fullWidth, disabled, centered }),
       web.root,
       web.focusRing,
       iconPosition === 'left' && 'flex-row-reverse',

@@ -48,6 +48,11 @@ export function Dropdown({
   bottomSheetCloseLabel = 'Close',
   withPortal,
   trigger,
+  buttonVariant = 'outline',
+  buttonSize,
+  buttonClassName,
+  buttonFullWidth,
+  buttonCentered,
 }: Readonly<IDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
@@ -213,49 +218,42 @@ export function Dropdown({
           {label}
         </Typography>
       )}
-      <div className="relative">
+      <div className="relative w-full">
         {/* Trigger */}
-        {trigger ? (
-          <Button
-            ref={triggerRef}
-            variant="tertiary"
-            size="sm"
-            onPress={handleToggle}
-            ariaHaspopup="listbox"
-            ariaExpanded={isOpen}
-            ariaControls={isOpen ? menuId : undefined}
-            accessibilityLabel={accessibilityLabel}
-            className="border-none p-0"
-          >
-            {trigger({ isOpen, selectedLabel })}
-          </Button>
-        ) : (
-          <Button
-            ref={triggerRef}
-            variant="outline"
-            onPress={handleToggle}
-            ariaHaspopup="listbox"
-            ariaExpanded={isOpen}
-            ariaControls={isOpen ? menuId : undefined}
-            accessibilityLabel={
-              accessibilityLabel ?? `${label ?? 'Select'}: ${selectedLabel}`
-            }
-            className={cn(
-              'gap-4 transition-colors border-beige-500 text-beige-500',
-              isOpen && 'border-beige-500'
-            )}
-          >
-            <Typography variant="body" as="span">
-              {selectedLabel}
-            </Typography>
-            <Icon
-              name="caretDown"
-              iconSize="xs"
-              color="currentColor"
-              className={cn('transition-transform', isOpen && 'rotate-180')}
-            />
-          </Button>
-        )}
+        <Button
+          ref={triggerRef}
+          variant={buttonVariant}
+          size={buttonSize}
+          centered={buttonCentered}
+          onPress={handleToggle}
+          ariaHaspopup="listbox"
+          ariaExpanded={isOpen}
+          ariaControls={isOpen ? menuId : undefined}
+          accessibilityLabel={
+            accessibilityLabel ?? `${label ?? 'Select'}: ${selectedLabel}`
+          }
+          fullWidth={buttonFullWidth ?? !trigger}
+          className={cn('gap-4 transition-colors', buttonClassName)}
+        >
+          {trigger ? (
+            trigger({ isOpen, selectedLabel })
+          ) : (
+            <>
+              <Typography variant="body" as="span">
+                {selectedLabel}
+              </Typography>
+              <Icon
+                name="caretDown"
+                iconSize="xs"
+                color="currentColor"
+                className={cn(
+                  'motion-safe:transition-transform',
+                  isOpen && 'rotate-180'
+                )}
+              />
+            </>
+          )}
+        </Button>
 
         {/* Desktop: floating Menu (inline) */}
         {isOpen && isDesktop && !withPortal && floatingMenu}

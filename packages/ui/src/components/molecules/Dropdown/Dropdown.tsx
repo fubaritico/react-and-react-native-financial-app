@@ -14,6 +14,17 @@ export interface IDropdownOption {
   destructive?: boolean
 }
 
+/** Button variant for the dropdown trigger */
+export type DropdownButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'destroy'
+  | 'outline'
+
+/** Button size for the dropdown trigger */
+export type DropdownButtonSize = 'md' | 'sm' | 'nav'
+
 /** Props for the Dropdown component */
 export interface IDropdownProps {
   /** Label displayed before the trigger button (e.g. "Sort by", "Category") */
@@ -34,6 +45,16 @@ export interface IDropdownProps {
   bottomSheetCloseLabel?: string
   /** Render the floating menu inside a Portal (web desktop only). Useful when the dropdown is inside an overflow-hidden container. */
   withPortal?: boolean
-  /** Custom trigger content — overrides default button rendering */
+  /** Custom trigger content — replaces default label + caret inside the button */
   trigger?: (props: { isOpen: boolean; selectedLabel: string }) => ReactNode
+  /** Button variant for the trigger (default: 'outline') */
+  buttonVariant?: DropdownButtonVariant
+  /** Button size for the trigger (default: 'md') */
+  buttonSize?: DropdownButtonSize
+  /** Additional className for the trigger button */
+  buttonClassName?: string
+  /** Whether the trigger button takes full width (default: true when no trigger) */
+  buttonFullWidth?: boolean
+  /** Whether the trigger button centers its content */
+  buttonCentered?: boolean
 }
