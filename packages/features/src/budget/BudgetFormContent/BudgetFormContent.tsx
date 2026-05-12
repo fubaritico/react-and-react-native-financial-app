@@ -1,4 +1,4 @@
-import type { ForwardedRef } from 'react'
+import type { Ref } from 'react'
 
 /** Form values for budget create/edit */
 export interface IBudgetFormValues {
@@ -25,7 +25,7 @@ export interface IBudgetFormContentProps {
   /** Theme colors already used by existing budgets (shown as "already used") */
   existingThemes?: readonly string[]
   /** Ref to access form values from the parent */
-  ref?: ForwardedRef<IBudgetFormRef>
+  ref?: Ref<IBudgetFormRef>
   /** Label for the category field */
   categoryLabel?: string
   /** Label for the maximum spend field */

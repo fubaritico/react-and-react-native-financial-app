@@ -7,13 +7,7 @@ import {
   Typography,
   tw,
 } from '@financial-app/ui/native'
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react'
+import { useCallback, useImperativeHandle, useMemo, useState } from 'react'
 import { View } from 'react-native'
 
 import {
@@ -22,30 +16,22 @@ import {
   THEME_COLORS,
 } from './BudgetFormContent.constants'
 
-import type {
-  IBudgetFormContentProps,
-  IBudgetFormRef,
-} from './BudgetFormContent'
+import type { IBudgetFormContentProps } from './BudgetFormContent'
 
 /**
  * BudgetFormContent — form body for Add/Edit budget modals (native).
  * Manages its own local state and exposes values via ref.
  */
-export const BudgetFormContent = forwardRef<
-  IBudgetFormRef,
-  IBudgetFormContentProps
->(function BudgetFormContent(
-  {
-    initialValues,
-    existingCategories = [],
-    existingThemes = [],
-    categoryLabel = 'Budget Category',
-    maximumLabel = 'Maximum Spend',
-    themeLabel = 'Theme',
-    maximumPlaceholder = 'e.g. 2000',
-  },
-  ref
-) {
+export function BudgetFormContent({
+  initialValues,
+  existingCategories = [],
+  existingThemes = [],
+  categoryLabel = 'Budget Category',
+  maximumLabel = 'Maximum Spend',
+  themeLabel = 'Theme',
+  maximumPlaceholder = 'e.g. 2000',
+  ref,
+}: Readonly<IBudgetFormContentProps>) {
   const [category, setCategory] = useState(
     initialValues?.category ?? DEFAULT_BUDGET_FORM.category
   )
@@ -147,4 +133,4 @@ export const BudgetFormContent = forwardRef<
       </View>
     </View>
   )
-})
+}

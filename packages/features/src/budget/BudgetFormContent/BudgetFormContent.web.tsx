@@ -6,13 +6,7 @@ import {
   TextInput,
   Typography,
 } from '@financial-app/ui'
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react'
+import { useCallback, useImperativeHandle, useMemo, useState } from 'react'
 
 import {
   BUDGET_CATEGORIES,
@@ -20,30 +14,22 @@ import {
   THEME_COLORS,
 } from './BudgetFormContent.constants'
 
-import type {
-  IBudgetFormContentProps,
-  IBudgetFormRef,
-} from './BudgetFormContent'
+import type { IBudgetFormContentProps } from './BudgetFormContent'
 
 /**
  * BudgetFormContent — form body for Add/Edit budget modals (web).
  * Manages its own local state and exposes values via ref.
  */
-export const BudgetFormContent = forwardRef<
-  IBudgetFormRef,
-  IBudgetFormContentProps
->(function BudgetFormContent(
-  {
-    initialValues,
-    existingCategories = [],
-    existingThemes = [],
-    categoryLabel = 'Budget Category',
-    maximumLabel = 'Maximum Spend',
-    themeLabel = 'Theme',
-    maximumPlaceholder = 'e.g. 2000',
-  },
-  ref
-) {
+export function BudgetFormContent({
+  initialValues,
+  existingCategories = [],
+  existingThemes = [],
+  categoryLabel = 'Budget Category',
+  maximumLabel = 'Maximum Spend',
+  themeLabel = 'Theme',
+  maximumPlaceholder = 'e.g. 2000',
+  ref,
+}: Readonly<IBudgetFormContentProps>) {
   const [category, setCategory] = useState(
     initialValues?.category ?? DEFAULT_BUDGET_FORM.category
   )
@@ -100,7 +86,7 @@ export const BudgetFormContent = forwardRef<
     <div className="flex flex-col gap-4">
       {/* Category */}
       <div className="flex flex-col gap-1">
-        <Typography variant="body-bold" color="foreground">
+        <Typography variant="label" color="muted">
           {categoryLabel}
         </Typography>
         <Dropdown
@@ -141,4 +127,4 @@ export const BudgetFormContent = forwardRef<
       </div>
     </div>
   )
-})
+}
