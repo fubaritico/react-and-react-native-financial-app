@@ -79,6 +79,10 @@ export function TransactionsDataTable({
         onSelect={handleSortChange}
         accessibilityLabel="Sort transactions"
         trigger={() => <Icon name="sortMobile" iconSize="md" />}
+        buttonVariant="tertiary"
+        buttonSize="sm"
+        buttonClassName="p-0"
+        buttonCentered
       />
       <Dropdown
         bottomSheetTitle="Category"
@@ -87,6 +91,10 @@ export function TransactionsDataTable({
         onSelect={handleCategoryChange}
         accessibilityLabel="Filter by category"
         trigger={() => <Icon name="filterMobile" iconSize="md" />}
+        buttonVariant="tertiary"
+        buttonSize="sm"
+        buttonClassName="p-0"
+        buttonCentered
       />
     </>
   )

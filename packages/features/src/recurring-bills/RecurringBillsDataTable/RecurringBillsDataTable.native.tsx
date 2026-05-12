@@ -77,6 +77,10 @@ export function RecurringBillsDataTable({
       onSelect={handleSortChange}
       accessibilityLabel="Sort bills"
       trigger={() => <Icon name="sortMobile" iconSize="md" />}
+      buttonVariant="tertiary"
+      buttonSize="sm"
+      buttonClassName="p-0"
+      buttonCentered
     />
   )
 

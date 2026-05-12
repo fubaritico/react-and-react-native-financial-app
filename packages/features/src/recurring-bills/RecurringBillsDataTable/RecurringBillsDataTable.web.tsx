@@ -91,6 +91,12 @@ export function RecurringBillsDataTable({
         trigger={
           isMobile ? () => <Icon name="sortMobile" iconSize="md" /> : undefined
         }
+        {...(isMobile && {
+          buttonVariant: 'tertiary' as const,
+          buttonSize: 'sm' as const,
+          buttonClassName: 'p-0',
+          buttonCentered: true,
+        })}
       />
     </>
   )

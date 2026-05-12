@@ -106,6 +106,12 @@ export function TransactionsDataTable({
         trigger={
           isMobile ? () => <Icon name="sortMobile" iconSize="md" /> : undefined
         }
+        {...(isMobile && {
+          buttonVariant: 'tertiary' as const,
+          buttonSize: 'sm' as const,
+          buttonClassName: 'p-0',
+          buttonCentered: true,
+        })}
       />
       {!isMobile && (
         <Typography variant="body" color="muted" as="span">
@@ -124,6 +130,12 @@ export function TransactionsDataTable({
             ? () => <Icon name="filterMobile" iconSize="md" />
             : undefined
         }
+        {...(isMobile && {
+          buttonVariant: 'tertiary' as const,
+          buttonSize: 'sm' as const,
+          buttonClassName: 'p-0',
+          buttonCentered: true,
+        })}
       />
     </>
   )
