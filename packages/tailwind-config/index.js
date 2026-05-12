@@ -33,6 +33,12 @@ module.exports = {
       tight: tokens.font['lineHeight-tight'],
       normal: tokens.font['lineHeight-normal'],
     },
+    extend: {
+      maxWidth: {
+        /** Modal panel width — 560px (Figma spec) */
+        modal: '35rem',
+      },
+    },
     keyframes: {
       'slide-up': {
         from: { transform: 'translateY(100%)' },

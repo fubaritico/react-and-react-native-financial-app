@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority'
 
 /** Modal panel — the white card that contains header, body, footer (560px matches Figma modal width) */
 export const modalPanelVariants = cva(
-  'bg-white rounded-xl p-5 w-full max-w-[560px]',
+  'bg-white rounded-xl p-6 md:p-8 w-full max-w-modal',
   {
     variants: {},
     defaultVariants: {},

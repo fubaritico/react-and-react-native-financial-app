@@ -5,8 +5,7 @@ import tw from '#Lib/tw'
 
 import { shared } from './Modal.styles'
 import { modalOverlayVariants, modalPanelVariants } from './Modal.variants'
-import { ModalContext } from './ModalContext'
-import { useModalContext } from './ModalContext'
+import { ModalContext, useModalContext } from './ModalContext'
 
 import type {
   IModalBodyProps,
@@ -63,6 +62,7 @@ function ModalFooter({
           onPress={action.onPress}
           disabled={action.disabled}
           fullWidth
+          centered
         />
       ))}
       <Button
@@ -70,6 +70,7 @@ function ModalFooter({
         variant="secondary"
         onPress={onClose}
         fullWidth
+        centered
       />
     </View>
   )
@@ -112,6 +113,7 @@ function Modal({
             onPress={onClose}
             accessibilityRole="button"
             accessibilityLabel={accessibilityLabel ?? 'Close'}
+            accessibilityState={{ disabled: false }}
           />
           {/* Modal panel */}
           <View style={tw`${modalPanelVariants({})}`}>{children}</View>

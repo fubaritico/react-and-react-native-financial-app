@@ -63,6 +63,7 @@ function ModalFooter({
           onPress={action.onPress}
           disabled={action.disabled}
           fullWidth
+          centered
         />
       ))}
       <Button
@@ -70,6 +71,7 @@ function ModalFooter({
         variant="secondary"
         onPress={onClose}
         fullWidth
+        centered
       />
     </div>
   )
