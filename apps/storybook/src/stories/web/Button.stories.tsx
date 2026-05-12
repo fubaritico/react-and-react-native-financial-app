@@ -22,6 +22,7 @@ const meta = {
       control: 'select',
       options: [undefined, ...iconNames],
     },
+    centered: { control: 'boolean' },
     fullWidth: { control: 'boolean' },
     disabled: { control: 'boolean' },
     title: { control: 'text' },
