@@ -7,6 +7,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useWindowDimensions } from 'react-native'
 
 import type { IRecurringBill } from '@financial-app/shared'
@@ -28,6 +29,7 @@ export function RecurringBillsDataTable({
   loading,
   locale,
 }: Readonly<IRecurringBillsDataTableProps>) {
+  const { t } = useTranslation()
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'date', desc: true },
   ])
@@ -71,11 +73,11 @@ export function RecurringBillsDataTable({
 
   const actionBar = (
     <Dropdown
-      bottomSheetTitle="Sort by"
+      bottomSheetTitle={t('recurring.sortBy')}
       options={SORT_OPTIONS}
       selectedValue={sortOption}
       onSelect={handleSortChange}
-      accessibilityLabel="Sort bills"
+      accessibilityLabel={t('recurring.sortBills')}
       trigger={() => <Icon name="sortMobile" iconSize="md" />}
       buttonVariant="tertiary"
       buttonSize="sm"
@@ -91,8 +93,8 @@ export function RecurringBillsDataTable({
       globalFilterValue={globalFilter}
       onGlobalFilterChange={setGlobalFilter}
       pagination
-      paginationPrevLabel="Prev"
-      paginationNextLabel="Next"
+      paginationPrevLabel={t('pagination.prev')}
+      paginationNextLabel={t('pagination.next')}
       rightActions={actionBar}
       renderCompactRow={({ row }: { row: Row<IRecurringBill> }) => (
         <CompactBillRow row={row} locale={locale} />

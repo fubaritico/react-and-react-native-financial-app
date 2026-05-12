@@ -116,10 +116,19 @@
     "totalUpcoming": "Total à venir",
     "dueSoon": "Échéance proche",
     "sortBy": "Trier par",
-    "sortBills": "Trier les factures"
+    "sortBills": "Trier les factures",
+    "sortOptions": "Options de tri",
+    "searchPlaceholder": "Rechercher des factures"
   },
   "transactions": {
-    "title": "Transactions"
+    "title": "Transactions",
+    "sortBy": "Trier par",
+    "sortTransactions": "Trier les transactions",
+    "sortOptions": "Options de tri",
+    "category": "Catégorie",
+    "filterByCategory": "Filtrer par catégorie",
+    "categoryOptions": "Options de catégorie",
+    "searchPlaceholder": "Rechercher des transactions"
   },
   "pagination": {
     "prev": "Préc",

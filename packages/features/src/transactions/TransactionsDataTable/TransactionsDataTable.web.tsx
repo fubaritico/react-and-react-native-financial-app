@@ -7,6 +7,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useTransactionsColumns } from './columns.web'
 import { ALL_CATEGORIES, CATEGORY_OPTIONS, SORT_OPTIONS } from './constants'
@@ -25,6 +26,7 @@ export function TransactionsDataTable({
   loading,
   locale,
 }: Readonly<ITransactionsDataTableProps>) {
+  const { t } = useTranslation()
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'date', desc: true },
   ])
@@ -93,16 +95,16 @@ export function TransactionsDataTable({
     <>
       {!isMobile && (
         <Typography variant="body" color="muted" as="span">
-          Sort by
+          {t('transactions.sortBy')}
         </Typography>
       )}
       <Dropdown
         options={SORT_OPTIONS}
         selectedValue={sortOption}
         onSelect={handleSortChange}
-        accessibilityLabel="Sort transactions"
-        menuAccessibilityLabel="Sort options"
-        bottomSheetTitle="Sort by"
+        accessibilityLabel={t('transactions.sortTransactions')}
+        menuAccessibilityLabel={t('transactions.sortOptions')}
+        bottomSheetTitle={t('transactions.sortBy')}
         trigger={
           isMobile ? () => <Icon name="sortMobile" iconSize="md" /> : undefined
         }
@@ -115,16 +117,16 @@ export function TransactionsDataTable({
       />
       {!isMobile && (
         <Typography variant="body" color="muted" as="span">
-          Category
+          {t('transactions.category')}
         </Typography>
       )}
       <Dropdown
         options={CATEGORY_OPTIONS}
         selectedValue={categoryOption}
         onSelect={handleCategoryChange}
-        accessibilityLabel="Filter by category"
-        menuAccessibilityLabel="Category options"
-        bottomSheetTitle="Category"
+        accessibilityLabel={t('transactions.filterByCategory')}
+        menuAccessibilityLabel={t('transactions.categoryOptions')}
+        bottomSheetTitle={t('transactions.category')}
         trigger={
           isMobile
             ? () => <Icon name="filterMobile" iconSize="md" />

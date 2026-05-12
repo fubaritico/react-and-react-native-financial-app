@@ -116,10 +116,19 @@
     "totalUpcoming": "Total Upcoming",
     "dueSoon": "Due Soon",
     "sortBy": "Sort by",
-    "sortBills": "Sort bills"
+    "sortBills": "Sort bills",
+    "sortOptions": "Sort options",
+    "searchPlaceholder": "Search bills"
   },
   "transactions": {
-    "title": "Transactions"
+    "title": "Transactions",
+    "sortBy": "Sort by",
+    "sortTransactions": "Sort transactions",
+    "sortOptions": "Sort options",
+    "category": "Category",
+    "filterByCategory": "Filter by category",
+    "categoryOptions": "Category options",
+    "searchPlaceholder": "Search transactions"
   },
   "pagination": {
     "prev": "Prev",

@@ -7,6 +7,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import type { ITransaction } from '@financial-app/shared'
 
@@ -28,6 +29,7 @@ export function TransactionsDataTable({
   loading,
   locale,
 }: Readonly<ITransactionsDataTableProps>) {
+  const { t } = useTranslation()
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'date', desc: true },
   ])
@@ -73,11 +75,11 @@ export function TransactionsDataTable({
   const actionBar = (
     <>
       <Dropdown
-        bottomSheetTitle="Sort by"
+        bottomSheetTitle={t('transactions.sortBy')}
         options={SORT_OPTIONS}
         selectedValue={sortOption}
         onSelect={handleSortChange}
-        accessibilityLabel="Sort transactions"
+        accessibilityLabel={t('transactions.sortTransactions')}
         trigger={() => <Icon name="sortMobile" iconSize="md" />}
         buttonVariant="tertiary"
         buttonSize="sm"
@@ -85,11 +87,11 @@ export function TransactionsDataTable({
         buttonCentered
       />
       <Dropdown
-        bottomSheetTitle="Category"
+        bottomSheetTitle={t('transactions.category')}
         options={CATEGORY_OPTIONS}
         selectedValue={categoryOption}
         onSelect={handleCategoryChange}
-        accessibilityLabel="Filter by category"
+        accessibilityLabel={t('transactions.filterByCategory')}
         trigger={() => <Icon name="filterMobile" iconSize="md" />}
         buttonVariant="tertiary"
         buttonSize="sm"
@@ -106,8 +108,8 @@ export function TransactionsDataTable({
       globalFilterValue={globalFilter}
       onGlobalFilterChange={setGlobalFilter}
       pagination
-      paginationPrevLabel="Prev"
-      paginationNextLabel="Next"
+      paginationPrevLabel={t('pagination.prev')}
+      paginationNextLabel={t('pagination.next')}
       rightActions={actionBar}
       renderCompactRow={({ row }: { row: Row<ITransaction> }) => (
         <CompactTransactionRow row={row} locale={locale} />

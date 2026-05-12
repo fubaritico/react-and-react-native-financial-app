@@ -7,6 +7,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { useRecurringBillsColumns } from './columns.web'
 import { SORT_OPTIONS } from './constants'
@@ -21,6 +22,7 @@ export function RecurringBillsDataTable({
   loading,
   locale,
 }: Readonly<IRecurringBillsDataTableProps>) {
+  const { t } = useTranslation()
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'date', desc: true },
   ])
@@ -78,16 +80,16 @@ export function RecurringBillsDataTable({
     <>
       {!isMobile && (
         <Typography variant="body" color="muted" as="span">
-          Sort by
+          {t('recurring.sortBy')}
         </Typography>
       )}
       <Dropdown
         options={SORT_OPTIONS}
         selectedValue={sortOption}
         onSelect={handleSortChange}
-        accessibilityLabel="Sort bills"
-        menuAccessibilityLabel="Sort options"
-        bottomSheetTitle="Sort by"
+        accessibilityLabel={t('recurring.sortBills')}
+        menuAccessibilityLabel={t('recurring.sortOptions')}
+        bottomSheetTitle={t('recurring.sortBy')}
         trigger={
           isMobile ? () => <Icon name="sortMobile" iconSize="md" /> : undefined
         }
