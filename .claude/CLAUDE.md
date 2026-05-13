@@ -151,15 +151,15 @@ Read `@completed.md`
 
 ### Next
 
-1. Wire budget edit/delete modals into budget page (web + mobile-expo)
-3. Onboarding (création de compte → mode manuel par défaut, mode banque en Phase 8B)
-4. Empty states (all screens + Overview sections)
-5. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
-6. **Centralized auth** — session validation on app focus (AppState → getSession())
-7. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
-8. Tests — API + hooks
-9. Phase 8B: GoCardless bank connection (mode banque)
-10. Navigation web: graphic design refinement (user doing manual pass)
+1. Wire pot edit/delete modals into pot page (web + mobile-expo) — same pattern as budget
+2. Onboarding (création de compte → mode manuel par défaut, mode banque en Phase 8B)
+3. Empty states (all screens + Overview sections)
+4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
+5. **Centralized auth** — session validation on app focus (AppState → getSession())
+6. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
+7. Tests — API + hooks
+8. Phase 8B: GoCardless bank connection (mode banque)
+9. Navigation web: graphic design refinement (user doing manual pass)
 
 **Pending tests**:
 - iPad: verify BottomSheet overlay, 2-tap switching, text truncation
@@ -202,4 +202,6 @@ Read `@completed.md`
 - iOS 18.4 simulator: Apple bug broke `NSURLSession` fetch — RESOLVED by updating to Xcode 26 + iOS 26.5 runtime
 - ListboxList.native.tsx uses `accessibilityRole="menu"` instead of `"listbox"` — pre-existing, should be aligned with web for consistency
 - iOS ATS blocks cleartext HTTP to localhost — `app.json` needs `NSAllowsLocalNetworking: true` in infoPlist + native rebuild (`npx expo prebuild --clean && npx expo run:ios`). See `memory/auth-401-redirect-wip.md`
+- QUAL-009: Budget pages (web + mobile) exceed 200 lines (~240/230) — extract `useBudgetModals` hook in future refactor
+- `IModalConfig.description` removed — all modal body content uses `body: ReactNode` exclusively
 
