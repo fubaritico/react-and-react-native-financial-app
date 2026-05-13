@@ -116,7 +116,31 @@
     "withdraw": "Retirer",
     "editPot": "Modifier la cagnotte",
     "deletePot": "Supprimer la cagnotte",
-    "addNewPot": "+ Nouvelle cagnotte"
+    "addNewPot": "+ Nouvelle cagnotte",
+    "form": {
+      "nameLabel": "Nom de la cagnotte",
+      "namePlaceholder": "ex. Jours de pluie",
+      "targetLabel": "Objectif",
+      "targetPlaceholder": "ex. 2000",
+      "themeLabel": "Thème",
+      "charactersLeft": "{{count}} caractères restants"
+    },
+    "addModal": {
+      "title": "Nouvelle cagnotte",
+      "description": "Créez une cagnotte pour définir des objectifs d'épargne. Elles vous aident à rester sur la bonne voie pour vos achats spéciaux.",
+      "submitLabel": "Ajouter la cagnotte"
+    },
+    "editModal": {
+      "title": "Modifier la cagnotte",
+      "description": "Si vos objectifs d'épargne changent, n'hésitez pas à mettre à jour vos cagnottes.",
+      "submitLabel": "Enregistrer"
+    },
+    "deleteModal": {
+      "title": "Supprimer « {{name}} » ?",
+      "description": "Êtes-vous sûr de vouloir supprimer cette cagnotte ? Cette action est irréversible et toutes les données seront supprimées définitivement.",
+      "confirmLabel": "Oui, confirmer la suppression",
+      "cancelLabel": "Non, revenir"
+    }
   },
   "recurring": {
     "title": "Factures récurrentes",

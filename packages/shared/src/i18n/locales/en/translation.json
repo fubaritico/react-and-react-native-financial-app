@@ -116,7 +116,31 @@
     "withdraw": "Withdraw",
     "editPot": "Edit Pot",
     "deletePot": "Delete Pot",
-    "addNewPot": "+ Add New Pot"
+    "addNewPot": "+ Add New Pot",
+    "form": {
+      "nameLabel": "Pot Name",
+      "namePlaceholder": "e.g. Rainy Days",
+      "targetLabel": "Target",
+      "targetPlaceholder": "e.g. 2000",
+      "themeLabel": "Theme",
+      "charactersLeft": "{{count}} characters left"
+    },
+    "addModal": {
+      "title": "Add New Pot",
+      "description": "Create a pot to set savings targets. These can help keep you on track as you save for special purchases.",
+      "submitLabel": "Add Pot"
+    },
+    "editModal": {
+      "title": "Edit Pot",
+      "description": "If your saving targets change, feel free to update your pots.",
+      "submitLabel": "Save Changes"
+    },
+    "deleteModal": {
+      "title": "Delete '{{name}}'?",
+      "description": "Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever.",
+      "confirmLabel": "Yes, Confirm Deletion",
+      "cancelLabel": "No, Go Back"
+    }
   },
   "recurring": {
     "title": "Recurring Bills",

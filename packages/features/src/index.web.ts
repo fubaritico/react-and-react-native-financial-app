@@ -41,6 +41,24 @@ export type {
 export { PotCard } from './pots/index.web'
 export type { IPotCardProps } from './pots/index.web'
 
+export { PotFormContent } from './pots/index.web'
+export type {
+  IPotFormContentProps,
+  IPotFormRef,
+  IPotFormValues,
+} from './pots/index.web'
+
+export {
+  createAddPotModalConfig,
+  createEditPotModalConfig,
+  createDeletePotModalConfig,
+} from './pots/index.web'
+export type {
+  IAddPotModalLabels,
+  IEditPotModalLabels,
+  IDeletePotModalLabels,
+} from './pots/index.web'
+
 export { RecurringBillsDataTable } from './recurring-bills/index.web'
 export type { IRecurringBillsDataTableProps } from './recurring-bills/index.web'
 

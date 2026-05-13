@@ -1,20 +1,219 @@
-import { PotCard } from '@financial-app/features'
-import { getPotsOptions } from '@financial-app/http-client'
-import { getErrorMessage } from '@financial-app/shared'
+import {
+  PotCard,
+  PotFormContent,
+  createAddPotModalConfig,
+  createDeletePotModalConfig,
+  createEditPotModalConfig,
+} from '@financial-app/features'
+import {
+  deletePotsByIdMutation,
+  getPotsOptions,
+  postPotsMutation,
+  putPotsByIdMutation,
+} from '@financial-app/http-client'
+import { getErrorMessage, useModal } from '@financial-app/shared'
 import { Alert, Button, Spinner, Typography } from '@financial-app/ui'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
+import type { IPotFormRef } from '@financial-app/features'
+import type { Pot } from '@financial-app/http-client'
+
 import tw from '../../src/lib/tw'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function -- disabled button, wired in CRUD phase
-const noop = () => {}
+/** Props for the PotCardItem wrapper */
+interface IPotCardItemProps {
+  /** Pot data */
+  pot: Pot
+  /** Callback receiving the pot to edit */
+  onEdit: (pot: Pot) => void
+  /** Callback receiving the pot to delete */
+  onDelete: (pot: Pot) => void
+  /** Label translations */
+  totalSavedLabel: string
+  targetOfLabel: string
+  addMoneyLabel: string
+  withdrawLabel: string
+  editLabel: string
+  deleteLabel: string
+}
+
+/** Wrapper that memoizes the onEdit/onDelete callbacks per pot (avoids inline arrow in map) */
+function PotCardItem({
+  pot,
+  onEdit,
+  onDelete,
+  ...labels
+}: Readonly<IPotCardItemProps>) {
+  const handleEdit = useCallback(() => {
+    onEdit(pot)
+  }, [pot, onEdit])
+
+  const handleDelete = useCallback(() => {
+    onDelete(pot)
+  }, [pot, onDelete])
+
+  return (
+    <PotCard
+      name={pot.name}
+      total={pot.total}
+      target={pot.target}
+      color={pot.theme}
+      onEdit={handleEdit}
+      onDelete={handleDelete}
+      {...labels}
+    />
+  )
+}
+
+const potsOpts = getPotsOptions()
 
 export default function PotsScreen() {
   const { t } = useTranslation()
+  const modal = useModal()
+  const qc = useQueryClient()
+  const formRef = useRef<IPotFormRef>(null)
 
-  const { data: pots, isLoading, error } = useQuery(getPotsOptions())
+  const { data: pots, isLoading, error } = useQuery(potsOpts)
+
+  /** ID of the pot currently being edited (stable ref to avoid stale closures) */
+  const editingPotIdRef = useRef<string | null>(null)
+
+  const { mutate: createPot } = useMutation({
+    ...postPotsMutation(),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
+      modal.close()
+    },
+  })
+
+  const { mutate: updatePot } = useMutation({
+    ...putPotsByIdMutation(),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
+      modal.close()
+    },
+  })
+
+  const { mutate: deletePot } = useMutation({
+    ...deletePotsByIdMutation(),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
+      modal.close()
+    },
+  })
+
+  const handleSubmitPot = useCallback(() => {
+    const values = formRef.current?.getValues()
+    if (!values) return
+    const parsed = Number(values.target)
+    if (!Number.isFinite(parsed) || parsed <= 0) return
+    if (!values.name.trim()) return
+    createPot({
+      body: {
+        name: values.name.trim(),
+        target: parsed,
+        theme: values.theme,
+      },
+    })
+  }, [createPot])
+
+  const handleSubmitEditPot = useCallback(() => {
+    const values = formRef.current?.getValues()
+    const potId = editingPotIdRef.current
+    if (!values || !potId) return
+    const parsed = Number(values.target)
+    if (!Number.isFinite(parsed) || parsed <= 0) return
+    if (!values.name.trim()) return
+    updatePot({
+      path: { id: potId },
+      body: {
+        name: values.name.trim(),
+        target: parsed,
+        theme: values.theme,
+      },
+    })
+  }, [updatePot])
+
+  const handleAddPot = useCallback(() => {
+    const config = createAddPotModalConfig(
+      <PotFormContent
+        ref={formRef}
+        nameLabel={t('pots.form.nameLabel')}
+        namePlaceholder={t('pots.form.namePlaceholder')}
+        targetLabel={t('pots.form.targetLabel')}
+        targetPlaceholder={t('pots.form.targetPlaceholder')}
+        themeLabel={t('pots.form.themeLabel')}
+        charactersLeftLabel={(count) =>
+          t('pots.form.charactersLeft', { count })
+        }
+        description={t('pots.addModal.description')}
+      />,
+      handleSubmitPot,
+      {
+        title: t('pots.addModal.title'),
+        submitLabel: t('pots.addModal.submitLabel'),
+      }
+    )
+    modal.open(config)
+  }, [t, modal, handleSubmitPot])
+
+  /** Opens the Edit Pot modal for the given pot */
+  const handleEditPot = useCallback(
+    (pot: Pot) => {
+      editingPotIdRef.current = pot.id
+      const config = createEditPotModalConfig(
+        <PotFormContent
+          ref={formRef}
+          initialValues={{
+            name: pot.name,
+            target: String(pot.target),
+            theme: pot.theme,
+          }}
+          nameLabel={t('pots.form.nameLabel')}
+          namePlaceholder={t('pots.form.namePlaceholder')}
+          targetLabel={t('pots.form.targetLabel')}
+          targetPlaceholder={t('pots.form.targetPlaceholder')}
+          themeLabel={t('pots.form.themeLabel')}
+          charactersLeftLabel={(count) =>
+            t('pots.form.charactersLeft', { count })
+          }
+          description={t('pots.editModal.description')}
+        />,
+        handleSubmitEditPot,
+        {
+          title: t('pots.editModal.title'),
+          submitLabel: t('pots.editModal.submitLabel'),
+        }
+      )
+      modal.open(config)
+    },
+    [t, modal, handleSubmitEditPot]
+  )
+
+  /** Opens the Delete Pot confirmation modal for the given pot */
+  const handleDeletePot = useCallback(
+    (pot: Pot) => {
+      const config = createDeletePotModalConfig(
+        pot.name,
+        <Typography variant="body" color="muted">
+          {t('pots.deleteModal.description')}
+        </Typography>,
+        () => {
+          deletePot({ path: { id: pot.id } })
+        },
+        {
+          title: (name) => t('pots.deleteModal.title', { name }),
+          confirmLabel: t('pots.deleteModal.confirmLabel'),
+          cancelLabel: t('pots.deleteModal.cancelLabel'),
+        }
+      )
+      modal.open(config)
+    },
+    [t, modal, deletePot]
+  )
 
   if (isLoading) {
     return (
@@ -46,20 +245,18 @@ export default function PotsScreen() {
         <Typography variant="page-title">{t('pots.title')}</Typography>
         <Button
           title={t('pots.addNewPot')}
-          onPress={noop}
+          onPress={handleAddPot}
           variant="primary"
-          disabled
         />
       </View>
 
       {/* Pot Cards */}
       {(pots ?? []).map((pot) => (
         <View key={pot.id} style={tw`mt-4`}>
-          <PotCard
-            name={pot.name}
-            total={pot.total}
-            target={pot.target}
-            color={pot.theme}
+          <PotCardItem
+            pot={pot}
+            onEdit={handleEditPot}
+            onDelete={handleDeletePot}
             totalSavedLabel={t('pots.totalSaved')}
             targetOfLabel={t('pots.targetOf')}
             addMoneyLabel={t('pots.addMoney')}
