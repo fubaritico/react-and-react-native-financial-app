@@ -12,6 +12,10 @@ export interface IProgressBarProps extends VariantProps<
   max?: number
   /** Token color name for the filled portion (e.g. "green", "cyan"). */
   color: string
+  /** Buffer value stacked after the primary fill (same unit as value, not %). */
+  buffer?: number
+  /** Color intent for the buffer segment. */
+  bufferColor?: 'success' | 'destructive'
   /** Content rendered below the bar on the left side. */
   metaLeft?: ReactNode
   /** Content rendered below the bar on the right side. */

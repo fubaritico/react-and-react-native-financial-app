@@ -6,12 +6,24 @@ export const shared = {
   fillThick: 'h-full rounded-sm',
   /** Fill bar for thin size variant */
   fillThin: 'h-full rounded-lg',
+  /** Flex row container for primary + buffer fills */
+  fillRow: 'flex-row items-center h-full w-full',
+  /** Primary fill when buffer is present — no right rounding (thick) */
+  fillThickPrimaryWithBuffer: 'h-full rounded-l-sm',
+  /** Primary fill when buffer is present — no right rounding (thin) */
+  fillThinPrimaryWithBuffer: 'h-full rounded-l-lg',
+  /** Buffer fill — no left rounding (thick) */
+  fillThickBuffer: 'h-full rounded-r-sm ml-px',
+  /** Buffer fill — no left rounding (thin) */
+  fillThinBuffer: 'h-full rounded-r-lg ml-px',
 } as const
 
 /** Web-only classes for ProgressBar */
 export const web = {
   /** Display flex for meta row container */
   metaRow: 'flex',
+  /** Display flex for fill row container (web needs explicit display:flex) */
+  fillRow: 'flex',
 } as const
 
 /** Native-only classes for ProgressBar */

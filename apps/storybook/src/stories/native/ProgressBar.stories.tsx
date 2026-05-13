@@ -25,6 +25,8 @@ const meta = {
     },
     value: { control: { type: 'range', min: 0, max: 1000, step: 10 } },
     max: { control: { type: 'range', min: 0, max: 1000, step: 10 } },
+    buffer: { control: { type: 'range', min: 0, max: 1000, step: 10 } },
+    bufferColor: { control: 'select', options: ['success', 'destructive'] },
   },
   args: {
     value: 15,
@@ -152,4 +154,86 @@ export const Overspent: Story = {
     color: 'yellow',
     size: 'thick',
   },
+}
+
+/** Add money to pot — buffer in success color, simulating $400 added to $159 saved (target $2000). */
+export const AddMoneyBuffer: Story = {
+  args: {
+    value: 159,
+    max: 2000,
+    color: 'grey-900',
+    size: 'thin',
+    buffer: 400,
+    bufferColor: 'success',
+    metaLeft: (
+      <Typography variant="caption" color="success">
+        27.95%
+      </Typography>
+    ),
+    metaRight: (
+      <Typography variant="caption" color="muted">
+        Target of $2,000
+      </Typography>
+    ),
+  },
+  render: (args) => (
+    <Card>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="caption" color="muted">
+          New Amount
+        </Typography>
+        <Typography variant="heading-lg">$559.00</Typography>
+      </View>
+      <View style={{ marginTop: 16 }}>
+        <ProgressBar {...args} />
+      </View>
+    </Card>
+  ),
+}
+
+/** Withdraw from pot — buffer in destructive color, simulating $20 withdrawn from $159 saved (target $2000). */
+export const WithdrawBuffer: Story = {
+  args: {
+    value: 139,
+    max: 2000,
+    color: 'grey-900',
+    size: 'thin',
+    buffer: 20,
+    bufferColor: 'destructive',
+    metaLeft: (
+      <Typography variant="caption" color="destructive">
+        5.95%
+      </Typography>
+    ),
+    metaRight: (
+      <Typography variant="caption" color="muted">
+        Target of $2,000
+      </Typography>
+    ),
+  },
+  render: (args) => (
+    <Card>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="caption" color="muted">
+          New Amount
+        </Typography>
+        <Typography variant="heading-lg">$139.00</Typography>
+      </View>
+      <View style={{ marginTop: 16 }}>
+        <ProgressBar {...args} />
+      </View>
+    </Card>
+  ),
 }
