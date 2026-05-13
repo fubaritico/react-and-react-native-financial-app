@@ -1,14 +1,17 @@
-# 1.0.0 (2026-05-12)
+# 1.0.0 (2026-05-13)
 
 
 ### Bug Fixes
 
 * **android:** resolve AsyncStorage Maven issue, add rebuild-android script ([8df93c4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8df93c494809a8d4355f7a69cf588ab17a828131))
+* **features:** icon-only dropdown buttons use tertiary 40x40 centered ([e532555](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e5325553bd177bda981ae6ec5b4c7c6f216ef48f))
+* **i18n:** replace hardcoded English strings in DataTable components (QUAL-017) ([0ab9d54](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0ab9d5489d1e5fa57cf51f34bf5fce53cb551bb8))
 * **mobile:** enable wireless iPhone deployment and fix sandbox violation ([0bf9ca9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0bf9ca93efce40d837c8fcc67a28120fc74c06a9))
 * **monorepo:** align React versions and fix cache issues ([d67c956](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d67c956998a0ce4d5b368f3b814393e8d1c02b58))
 * move container-queries plugin from shared config to web-only ([9fb3a67](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9fb3a678825258942dc6655846e16a07bed1825b))
 * **tokens:** align alias names with Figma variable naming ([a48464b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a48464ba974357082ae577f26a5223c72f714108))
 * **ui:** extract Icon runtime constants, add Button iconPosition prop ([605f29e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/605f29ea80576f6f51e2b1a476674148677df3c8))
+* **ui:** modal a11y + replace arbitrary max-w with token ([c25b5f3](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c25b5f35b1f4dd0fb2bba30324ba7a0faab23a2e))
 * **ui:** move header row inside white card in overview sections ([9cd0f15](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9cd0f15c1dcee7f6ccda1aa4b008f65f9dfab501))
 * **ui:** replace default Tailwind colors with token aliases ([9b7b247](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9b7b24781dc5e82a18ecea230c3bb57b017e5b65))
 * **ui:** review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code ([0d43fae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d43faecf012669f2f97c8d4504f8f5ffd93c543))
@@ -23,6 +26,7 @@
 * added shared design system ([69b2530](https://github.com/fubaritico/react-and-react-native-financial-app/commit/69b25309bb897f486afe8585eb3c7d3776ad9b5a))
 * alignement de mobile-expo-ejected aveclesmême dépendances ([c3df036](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c3df03680c52be2e98b931e9860a5c1c0ddcc842))
 * **api:** scaffold Express 5 API with Zod schemas, OpenAPI, Swagger UI + review rules ([82a3d6d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/82a3d6dc67f1eafb907f54f35cf0d9d4eab3f8ca))
+* **apps:** wire add budget modal with validation ([647288a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/647288a4a8aaa3efcb0cd53d59c33aa7e09117c2))
 * **apps:** wire auth clients, Google Sign-In, and env files (Phase 5.8) ([7c83f86](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7c83f860b10749f23733dafeb66e2996af5ba77d))
 * **auth:** full Supabase auth flow + API error handling + Android emulator fix ([4f59d93](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4f59d93d34b30882fb6a5f9763603f77fafe8d77))
 * **config:** add agent skills — migrate commands + vendor Expo/Callstack skills ([633d4e2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/633d4e24f4ba27a5d188815dddfb0bca18206fc1))

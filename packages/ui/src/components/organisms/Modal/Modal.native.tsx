@@ -14,7 +14,7 @@ import type {
   IModalProps,
 } from './Modal'
 
-import { Button, Icon, Typography } from '#Atoms'
+import { Button, Icon, PortalProvider, Typography } from '#Atoms'
 
 /** Modal.Header — title + close (X) button */
 function ModalHeader({
@@ -35,7 +35,7 @@ function ModalHeader({
         accessibilityState={{ disabled: false }}
         hitSlop={8}
       >
-        <Icon name="closeModal" iconSize="lg" color={tw.color('foreground')} />
+        <Icon name="closeModal" iconSize="3xl" color={tw.color('grey-500')} />
       </Pressable>
     </View>
   )
@@ -100,25 +100,27 @@ function Modal({
       onRequestClose={onClose}
       statusBarTranslucent
     >
-      <ModalContext.Provider value={ctx}>
-        <View
-          style={tw`flex-1 items-center justify-center px-5`}
-          accessibilityViewIsModal
-          accessibilityLabel={accessibilityLabel}
-          accessibilityRole="none"
-        >
-          {/* Backdrop overlay */}
-          <Pressable
-            style={tw`${modalOverlayVariants({})}`}
-            onPress={onClose}
-            accessibilityRole="button"
-            accessibilityLabel={accessibilityLabel ?? 'Close'}
-            accessibilityState={{ disabled: false }}
-          />
-          {/* Modal panel */}
-          <View style={tw`${modalPanelVariants({})}`}>{children}</View>
-        </View>
-      </ModalContext.Provider>
+      <PortalProvider>
+        <ModalContext.Provider value={ctx}>
+          <View
+            style={tw`flex-1 items-center justify-center px-5`}
+            accessibilityViewIsModal
+            accessibilityLabel={accessibilityLabel}
+            accessibilityRole="none"
+          >
+            {/* Backdrop overlay */}
+            <Pressable
+              style={tw`${modalOverlayVariants({})}`}
+              onPress={onClose}
+              accessibilityRole="button"
+              accessibilityLabel={accessibilityLabel ?? 'Close'}
+              accessibilityState={{ disabled: false }}
+            />
+            {/* Modal panel */}
+            <View style={tw`${modalPanelVariants({})}`}>{children}</View>
+          </View>
+        </ModalContext.Provider>
+      </PortalProvider>
     </RNModal>
   )
 }

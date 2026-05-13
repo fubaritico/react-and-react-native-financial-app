@@ -23,7 +23,7 @@ export type DropdownButtonVariant =
   | 'outline'
 
 /** Button size for the dropdown trigger */
-export type DropdownButtonSize = 'md' | 'sm' | 'nav'
+export type DropdownButtonSize = 'lg' | 'md' | 'sm' | 'nav'
 
 /** Props for the Dropdown component */
 export interface IDropdownProps {
@@ -57,4 +57,9 @@ export interface IDropdownProps {
   buttonFullWidth?: boolean
   /** Whether the trigger button centers its content */
   buttonCentered?: boolean
+  /** Custom renderer for each menu item — replaces the default label text. When provided, items use rawContent (no Typography wrapper). */
+  renderItem?: (
+    option: IDropdownOption,
+    context: { isSelected: boolean }
+  ) => ReactNode
 }

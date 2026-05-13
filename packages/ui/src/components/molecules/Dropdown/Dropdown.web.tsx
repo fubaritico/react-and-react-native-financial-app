@@ -53,6 +53,7 @@ export function Dropdown({
   buttonClassName,
   buttonFullWidth,
   buttonCentered,
+  renderItem,
 }: Readonly<IDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
@@ -125,12 +126,8 @@ export function Dropdown({
   const [flipped, setFlipped] = useState(false)
   const [portalStyle, setPortalStyle] = useState<React.CSSProperties>({})
 
-  /** Measures available space and positions the menu, flipping above if needed */
-  useLayoutEffect(() => {
-    if (!isOpen || !isDesktop) {
-      setFlipped(false)
-      return
-    }
+  /** Computes placement + portal styles based on trigger and menu dimensions */
+  const updatePlacement = useCallback(() => {
     const triggerEl = triggerRef.current
     const wrapper = menuWrapperRef.current
     if (!triggerEl || !wrapper) return
@@ -152,12 +149,33 @@ export function Dropdown({
       setPortalStyle({
         position: 'fixed',
         top,
-        right: window.innerWidth - triggerRect.right,
+        left: triggerRect.left,
         zIndex: 50,
-        minWidth: triggerRect.width,
+        width: triggerRect.width,
       })
     }
-  }, [isOpen, isDesktop, withPortal])
+  }, [withPortal])
+
+  /** Initial placement calculation */
+  useLayoutEffect(() => {
+    if (!isOpen || !isDesktop) {
+      setFlipped(false)
+      return
+    }
+    updatePlacement()
+  }, [isOpen, isDesktop, updatePlacement])
+
+  /** Re-calculate after portal mount (wrapper may not have height on first pass) */
+  useEffect(() => {
+    if (!isOpen || !isDesktop || !withPortal) return
+    // requestAnimationFrame ensures the portal DOM is painted
+    const raf = requestAnimationFrame(() => {
+      updatePlacement()
+    })
+    return () => {
+      cancelAnimationFrame(raf)
+    }
+  }, [isOpen, isDesktop, withPortal, updatePlacement])
 
   const menuItems = options.flatMap((option, index) => {
     const items: ReactNode[] = []
@@ -170,6 +188,7 @@ export function Dropdown({
         />
       )
     }
+    const isSelected = option.value === selectedValue
     items.push(
       <Menu.Item
         key={option.value}
@@ -177,8 +196,9 @@ export function Dropdown({
         index={index}
         disabled={option.disabled}
         destructive={option.destructive}
+        rawContent={!!renderItem}
       >
-        {option.label}
+        {renderItem ? renderItem(option, { isSelected }) : option.label}
       </Menu.Item>
     )
     return items

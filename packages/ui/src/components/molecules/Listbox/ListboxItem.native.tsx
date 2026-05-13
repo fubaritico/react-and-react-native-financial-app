@@ -18,6 +18,7 @@ export function ListboxItem({
   isSelected = false,
   disabled = false,
   destructive = false,
+  rawContent = false,
   children,
   onPress,
 }: Readonly<IListboxItemProps>) {
@@ -42,18 +43,22 @@ export function ListboxItem({
         pressed && !disabled && tw`opacity-70`,
       ]}
     >
-      <Typography
-        variant={isSelected ? 'body-bold' : 'body'}
-        color={
-          destructive
-            ? 'destructive'
-            : variant === 'dark'
-              ? 'on-dark'
-              : 'foreground'
-        }
-      >
-        {children}
-      </Typography>
+      {rawContent ? (
+        children
+      ) : (
+        <Typography
+          variant={isSelected ? 'body-bold' : 'body'}
+          color={
+            destructive
+              ? 'destructive'
+              : variant === 'dark'
+                ? 'on-dark'
+                : 'foreground'
+          }
+        >
+          {children}
+        </Typography>
+      )}
     </Pressable>
   )
 }

@@ -31,4 +31,6 @@ export interface IMenuItemProps {
   children: ReactNode
   /** Additional CSS class (web) */
   className?: string
+  /** When true, children are rendered directly without a Typography wrapper */
+  rawContent?: boolean
 }

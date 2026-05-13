@@ -35,4 +35,6 @@ export interface IListboxItemProps extends ListboxVariantProps {
   onPress?: () => void
   /** Unique DOM id for aria-activedescendant (web) */
   id?: string
+  /** When true, children are rendered directly without a Typography wrapper */
+  rawContent?: boolean
 }

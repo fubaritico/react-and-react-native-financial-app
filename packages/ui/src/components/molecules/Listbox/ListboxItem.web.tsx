@@ -23,6 +23,7 @@ export function ListboxItem({
   isSelected = false,
   disabled = false,
   destructive = false,
+  rawContent = false,
   className,
   children,
   onPress,
@@ -52,19 +53,23 @@ export function ListboxItem({
       )}
       {...rest}
     >
-      <Typography
-        variant={isSelected ? 'body-bold' : 'body'}
-        color={
-          destructive
-            ? 'destructive'
-            : variant === 'dark'
-              ? 'on-dark'
-              : 'foreground'
-        }
-        as="span"
-      >
-        {children}
-      </Typography>
+      {rawContent ? (
+        children
+      ) : (
+        <Typography
+          variant={isSelected ? 'body-bold' : 'body'}
+          color={
+            destructive
+              ? 'destructive'
+              : variant === 'dark'
+                ? 'on-dark'
+                : 'foreground'
+          }
+          as="span"
+        >
+          {children}
+        </Typography>
+      )}
     </li>
   )
 }

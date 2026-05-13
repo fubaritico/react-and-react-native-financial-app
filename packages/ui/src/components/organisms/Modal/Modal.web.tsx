@@ -27,7 +27,7 @@ function ModalHeader({
   const { onClose } = useModalContext()
   return (
     <div className={cn(shared.header, 'flex')}>
-      <Typography variant="heading-md" color="foreground" className="flex-1">
+      <Typography variant="heading-xl" color="foreground" className="flex-1">
         {title}
       </Typography>
       <button
@@ -36,7 +36,7 @@ function ModalHeader({
         className={cn(shared.closeButton, 'flex', web.closeButton)}
         aria-label={closeLabel}
       >
-        <Icon name="closeModal" iconSize="lg" />
+        <Icon name="closeModal" iconSize="3xl" color="var(--color-grey-500)" />
       </button>
     </div>
   )

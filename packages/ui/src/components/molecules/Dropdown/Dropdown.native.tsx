@@ -9,7 +9,7 @@ import { Menu } from '../Menu/Menu.native'
 import type { IDropdownProps } from './Dropdown'
 import type { ReactNode } from 'react'
 
-import { Button, Divider, Icon, Typography } from '#Atoms'
+import { Button, Divider, Icon, Portal, Typography } from '#Atoms'
 
 /**
  * Native Dropdown — always opens a BottomSheet in dark mode.
@@ -17,6 +17,9 @@ import { Button, Divider, Icon, Typography } from '#Atoms'
  * Trigger button shows the selected label + a caret-down icon.
  * On press, a dark-themed BottomSheet slides up from the bottom with
  * Menu items inside.
+ *
+ * When `withPortal` is true, the BottomSheet is rendered via Portal
+ * so it appears above modal overlays.
  */
 export function Dropdown({
   label,
@@ -33,6 +36,8 @@ export function Dropdown({
   buttonClassName,
   buttonFullWidth,
   buttonCentered,
+  renderItem,
+  withPortal,
 }: Readonly<IDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -59,6 +64,57 @@ export function Dropdown({
       handleClose()
     },
     [onSelect, handleClose]
+  )
+
+  const bottomSheet = (
+    <BottomSheet
+      open={isOpen}
+      onClose={handleClose}
+      variant="dark"
+      overlay
+      accessibilityLabel={menuAccessibilityLabel}
+    >
+      <BottomSheet.Header closeLabel={bottomSheetCloseLabel}>
+        {bottomSheetTitle ?? label}
+      </BottomSheet.Header>
+      <BottomSheet.Body>
+        <Menu
+          selectedValue={selectedValue}
+          variant="dark"
+          onSelect={handleSelect}
+          accessibilityLabel={menuAccessibilityLabel}
+          className="border-0 p-0"
+          shape="square"
+        >
+          {options.flatMap((option, index) => {
+            const items: ReactNode[] = []
+            if (option.dividerBefore) {
+              items.push(
+                <Divider
+                  spacing="md"
+                  key={`divider-${option.value}`}
+                  className="bg-grey-500/50"
+                />
+              )
+            }
+            const isSelected = option.value === selectedValue
+            items.push(
+              <Menu.Item
+                key={option.value}
+                value={option.value}
+                index={index}
+                disabled={option.disabled}
+                destructive={option.destructive}
+                rawContent={!!renderItem}
+              >
+                {renderItem ? renderItem(option, { isSelected }) : option.label}
+              </Menu.Item>
+            )
+            return items
+          })}
+        </Menu>
+      </BottomSheet.Body>
+    </BottomSheet>
   )
 
   return (
@@ -97,53 +153,7 @@ export function Dropdown({
         )}
       </Button>
 
-      {/* BottomSheet (always dark on native) */}
-      <BottomSheet
-        open={isOpen}
-        onClose={handleClose}
-        variant="dark"
-        overlay
-        accessibilityLabel={menuAccessibilityLabel}
-      >
-        <BottomSheet.Header closeLabel={bottomSheetCloseLabel}>
-          {bottomSheetTitle ?? label}
-        </BottomSheet.Header>
-        <BottomSheet.Body>
-          <Menu
-            selectedValue={selectedValue}
-            variant="dark"
-            onSelect={handleSelect}
-            accessibilityLabel={menuAccessibilityLabel}
-            className="border-0 p-0"
-            shape="square"
-          >
-            {options.flatMap((option, index) => {
-              const items: ReactNode[] = []
-              if (option.dividerBefore) {
-                items.push(
-                  <Divider
-                    spacing="md"
-                    key={`divider-${option.value}`}
-                    className="bg-grey-500/50"
-                  />
-                )
-              }
-              items.push(
-                <Menu.Item
-                  key={option.value}
-                  value={option.value}
-                  index={index}
-                  disabled={option.disabled}
-                  destructive={option.destructive}
-                >
-                  {option.label}
-                </Menu.Item>
-              )
-              return items
-            })}
-          </Menu>
-        </BottomSheet.Body>
-      </BottomSheet>
+      {withPortal ? <Portal>{bottomSheet}</Portal> : bottomSheet}
     </View>
   )
 }

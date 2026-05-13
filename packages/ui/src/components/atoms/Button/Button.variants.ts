@@ -15,6 +15,7 @@ export const buttonVariants = cva(
         outline: 'border border-border-muted bg-transparent text-beige-500',
       },
       size: {
+        lg: 'h-[53px] px-5',
         md: 'py-3 px-5',
         sm: 'h-10 w-10 px-4',
         nav: 'h-10 px-4',

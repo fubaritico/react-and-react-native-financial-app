@@ -16,6 +16,7 @@ export function MenuItem({
   destructive = false,
   children,
   index,
+  rawContent = false,
 }: Readonly<IMenuItemProps>) {
   const context = useContext(MenuContext)
   if (!context) throw new Error('Menu.Item must be used within Menu')
@@ -38,6 +39,7 @@ export function MenuItem({
       isSelected={isSelected}
       disabled={disabled}
       destructive={destructive}
+      rawContent={rawContent}
       onPress={() => {
         if (!disabled) onSelect(value)
       }}
