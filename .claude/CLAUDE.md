@@ -35,6 +35,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Always create a Storybook story** after every component (`/story`)
 - **Model**: Haiku for questions/research, Sonnet for code/commits — suggest Haiku when appropriate
 - **For React**: instead of using `React.` for react types, import the type from react
+- **React/RN skills**: always apply `composition-patterns`, `react-best-practices`, and `react-native-skills` when writing or reviewing component code
 - **Screenshot**: given screenshot names are always files located in desktop, otherwise the full file path is given
 
 ## Current State vs Target

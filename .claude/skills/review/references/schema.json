@@ -41,7 +41,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "pattern": "^(PLAT|SEC|ARCH|QUAL|A11Y)-\\d{3}$",
+          "pattern": "^(PLAT|SEC|ARCH|QUAL|A11Y|REACT)-\\d{3}$",
           "description": "Unique rule identifier with domain prefix"
         },
         "severity": {
@@ -50,7 +50,7 @@
         },
         "category": {
           "type": "string",
-          "enum": ["platform-safety", "security", "architecture", "quality", "accessibility"]
+          "enum": ["platform-safety", "security", "architecture", "quality", "accessibility", "react-best-practices"]
         },
         "file": {
           "type": "string",
@@ -89,13 +89,14 @@
     },
     "score": {
       "type": "object",
-      "required": ["platform_safety", "security", "architecture", "quality", "accessibility", "overall"],
+      "required": ["platform_safety", "security", "architecture", "quality", "accessibility", "react_best_practices", "overall"],
       "properties": {
         "platform_safety": { "type": "integer", "minimum": 0, "maximum": 100 },
         "security": { "type": "integer", "minimum": 0, "maximum": 100 },
         "architecture": { "type": "integer", "minimum": 0, "maximum": 100 },
         "quality": { "type": "integer", "minimum": 0, "maximum": 100 },
         "accessibility": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "react_best_practices": { "type": "integer", "minimum": 0, "maximum": 100 },
         "overall": { "type": "integer", "minimum": 0, "maximum": 100 }
       }
     }

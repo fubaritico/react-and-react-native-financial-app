@@ -1,6 +1,6 @@
 ---
 name: review
-description: Multi-agent code review for rules compliance, security, accessibility, quality, and architecture. Produces JSON findings and iterates up to 3 times.
+description: Multi-agent code review for rules compliance, security, accessibility, quality, architecture, and React best practices. Produces JSON findings and iterates up to 3 times.
 triggers:
   - review code
   - check compliance
@@ -10,7 +10,7 @@ triggers:
 
 # Review — Multi-Agent Code Reviewer
 
-Orchestrates 5 parallel domain-expert subagents to review changed files against project rules.
+Orchestrates 6 parallel domain-expert subagents to review changed files against project rules.
 Produces a structured JSON report with findings sorted by severity.
 
 ## Prerequisites
@@ -41,12 +41,13 @@ Read all files in scope. For each file, determine which reference guides apply:
 - `apps/api/src/routes/**` → security.md (SEC-013..016), architecture.md (ARCH-013..016), quality.md (QUAL-020..22)
 - `apps/api/src/schemas/**` → architecture.md (ARCH-014), quality.md (QUAL-023)
 - `apps/api/src/middleware/**` → security.md
-- `apps/**` → security.md, quality.md, accessibility.md
+- `apps/**` → security.md, quality.md, accessibility.md, react-best-practices.md
+- All `*.tsx` → react-best-practices.md
 - All files → quality.md
 
-### Step 3 — Dispatch 5 Parallel Subagents
+### Step 3 — Dispatch 6 Parallel Subagents
 
-Launch all 5 agents simultaneously using the Agent tool. Each agent receives:
+Launch all 6 agents simultaneously using the Agent tool. Each agent receives:
 - The list of files in scope (content already read)
 - Its domain-specific reference guide
 - The JSON schema for findings output
@@ -58,6 +59,7 @@ Agents:
 3. **Architecture** — reference: `references/architecture.md`
 4. **Quality** — reference: `references/quality.md`
 5. **Accessibility** — reference: `references/accessibility.md`
+6. **React Best Practices** — reference: `references/react-best-practices.md` + skills: `composition-patterns`, `react-best-practices`, `react-native-skills`
 
 Each agent prompt must include:
 ```
@@ -67,7 +69,7 @@ Return ONLY a valid JSON array of findings. No prose, no markdown fences around 
 If no violations found, return an empty array: []
 Each finding must follow this exact schema: [paste from schema.json]
 Use severity levels: critical, high, medium, low
-Prefix IDs with: PLAT- / SEC- / ARCH- / QUAL- / A11Y-
+Prefix IDs with: PLAT- / SEC- / ARCH- / QUAL- / A11Y- / REACT-
 If a finding depends on library version behavior or API correctness that you are not 100% certain about,
 set "needs_verification": true and provide a "verification_query" string for context7 lookup.
 Only use this for ambiguous cases — do NOT flag project-specific rule violations as needing verification.
@@ -82,11 +84,12 @@ category_score = max(0, 100 - (critical * 25) - (high * 10) - (medium * 3) - (lo
 ```
 
 Weights for overall score:
-- Platform Safety: 25%
-- Security: 25%
-- Architecture: 20%
+- Platform Safety: 20%
+- Security: 20%
+- Architecture: 15%
 - Quality: 15%
 - Accessibility: 15%
+- React Best Practices: 15%
 
 Verdict thresholds:
 - 80-100 + no critical/high remaining → `ready`

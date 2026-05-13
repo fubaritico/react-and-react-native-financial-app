@@ -264,6 +264,28 @@ Every new component must be added to BOTH barrels with:
 
 **Variants and styles are never exported from the package** — consumers use props, not internals.
 
+## Callback Props — Memoization Rule (mandatory)
+
+NEVER pass inline arrow functions as callback props:
+```tsx
+// BAD — new function reference every render, breaks memoization
+<BudgetCategoryCard onEdit={() => handleEdit(budget)} />
+
+// GOOD — stable reference via useCallback
+const handleEditBudget = useCallback(() => {
+  handleEdit(budget)
+}, [budget, handleEdit])
+
+<BudgetCategoryCard onEdit={handleEditBudget} />
+```
+
+Rules:
+- Every handler passed as a prop MUST be declared as a `useCallback` expression
+- This applies to ALL components — UI package, features, screens, pages
+- If the callback needs dynamic data (e.g. a specific item from a list), create the callback
+  inside a child wrapper component or use a memoized factory, never inline in JSX
+- Exception: `onPress={() => modal.close()}` in one-shot modal config builders (not rendered in loops)
+
 ## Checklist for New Component
 
 - [ ] Created ComponentName/ directory
