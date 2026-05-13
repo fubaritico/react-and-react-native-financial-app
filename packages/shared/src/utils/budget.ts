@@ -9,25 +9,38 @@ export const BUDGET_MONTH = '2024-08'
 const LATEST_SPENDING_COUNT = 3
 
 export interface IBudgetItem {
+  /** Budget record ID from the database */
+  id: string
+  /** Budget category name (e.g. "Entertainment", "Bills") */
   category: string
+  /** Maximum spending limit for this budget */
   maximum: number
+  /** Amount already spent in this category */
   spent: number
+  /** Theme color token (e.g. "#277C78") */
   color: string
 }
 
 export interface IBudgetSpendingItem {
+  /** URL or path to the transaction avatar image */
   avatar: string
+  /** Transaction recipient/sender name */
   name: string
+  /** Formatted currency amount (e.g. "-$25.00") */
   amount: string
+  /** Formatted transaction date */
   date: string
 }
 
 export interface IBudgetCategoryCard extends IBudgetItem {
+  /** Latest spending transactions for this category */
   items: IBudgetSpendingItem[]
 }
 
 export interface IBudgetPageData {
+  /** Budget overview items for the donut chart */
   budgetItems: IBudgetItem[]
+  /** Detailed category cards with latest transactions */
   categoryCards: IBudgetCategoryCard[]
 }
 
@@ -57,6 +70,7 @@ export function buildBudgetPageData(
       (txn) => txn.category === budget.category && txn.amount < 0
     )
     return {
+      id: budget.id,
       category: budget.category,
       maximum: budget.maximum,
       spent: getSpent(budget, categoryTxns),
@@ -79,6 +93,7 @@ export function buildBudgetPageData(
       }))
 
     return {
+      id: budget.id,
       category: budget.category,
       maximum: budget.maximum,
       spent: getSpent(budget, categoryTransactions),

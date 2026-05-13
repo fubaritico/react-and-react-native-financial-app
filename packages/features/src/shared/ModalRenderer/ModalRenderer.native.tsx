@@ -1,5 +1,5 @@
 import { modalConfigAtom, useModal } from '@financial-app/shared'
-import { Modal, Typography } from '@financial-app/ui/native'
+import { Modal } from '@financial-app/ui/native'
 import { useAtomValue } from 'jotai'
 
 import type { IModalRendererProps } from './ModalRenderer'
@@ -23,14 +23,7 @@ export function ModalRenderer({ children }: Readonly<IModalRendererProps>) {
           dismissable={config.dismissable}
         >
           <Modal.Header title={config.title} />
-          <Modal.Body>
-            {config.description ? (
-              <Typography variant="body" color="muted">
-                {config.description}
-              </Typography>
-            ) : null}
-            {config.body}
-          </Modal.Body>
+          <Modal.Body>{config.body}</Modal.Body>
           <Modal.Footer
             actions={config.actions}
             cancelLabel={config.cancelLabel}

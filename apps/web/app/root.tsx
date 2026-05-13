@@ -10,6 +10,7 @@ import {
   useModal,
   useSessionExpiredHandler,
 } from '@financial-app/shared'
+import { Typography } from '@financial-app/ui'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 import { Provider as JotaiProvider } from 'jotai'
@@ -51,9 +52,13 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
   const showSessionExpiredModal = useCallback(() => {
     openModal({
       title: t('auth.sessionExpired.title', 'Session expired'),
-      description: t(
-        'auth.sessionExpired.description',
-        'Your session has expired. Please sign in again.'
+      body: (
+        <Typography variant="body" color="muted">
+          {t(
+            'auth.sessionExpired.description',
+            'Your session has expired. Please sign in again.'
+          )}
+        </Typography>
       ),
       dismissable: false,
       actions: [
@@ -73,9 +78,13 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
   const showInactivityModal = useCallback(() => {
     openModal({
       title: t('auth.inactivity.title', 'Signed out due to inactivity'),
-      description: t(
-        'auth.inactivity.description',
-        'You were signed out for security after a period of inactivity.'
+      body: (
+        <Typography variant="body" color="muted">
+          {t(
+            'auth.inactivity.description',
+            'You were signed out for security after a period of inactivity.'
+          )}
+        </Typography>
       ),
       dismissable: false,
       actions: [
@@ -159,7 +168,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     <main className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold text-foreground">{message}</h1>
       <p className="text-foreground-muted mt-2">{details}</p>
-      {stack && (
+      {import.meta.env.DEV && stack && (
         <pre className="mt-4 p-4 bg-grey-100 rounded-md overflow-x-auto text-sm">
           {stack}
         </pre>

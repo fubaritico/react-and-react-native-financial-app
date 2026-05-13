@@ -25,8 +25,6 @@ export interface IModalAction {
 export interface IModalConfig {
   /** Modal title displayed in the header */
   title: string
-  /** Optional description text below the title */
-  description?: string
   /** Dynamic body content — any React component */
   body?: ReactNode
   /** Action buttons rendered in the footer (above the cancel button) */

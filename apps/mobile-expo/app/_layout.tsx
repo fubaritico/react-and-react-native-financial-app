@@ -13,7 +13,7 @@ import {
   useModal,
   useSessionExpiredHandler,
 } from '@financial-app/shared'
-import { PortalProvider } from '@financial-app/ui/native'
+import { PortalProvider, Typography } from '@financial-app/ui/native'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { Redirect, Slot, useSegments } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -48,9 +48,13 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
   const showSessionExpiredModal = useCallback(() => {
     openModal({
       title: t('auth.sessionExpired.title', 'Session expired'),
-      description: t(
-        'auth.sessionExpired.description',
-        'Your session has expired. Please sign in again.'
+      body: (
+        <Typography variant="body" color="muted">
+          {t(
+            'auth.sessionExpired.description',
+            'Your session has expired. Please sign in again.'
+          )}
+        </Typography>
       ),
       dismissable: false,
       actions: [
@@ -69,9 +73,13 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
   const showInactivityModal = useCallback(() => {
     openModal({
       title: t('auth.inactivity.title', 'Signed out due to inactivity'),
-      description: t(
-        'auth.inactivity.description',
-        'You were signed out for security after a period of inactivity.'
+      body: (
+        <Typography variant="body" color="muted">
+          {t(
+            'auth.inactivity.description',
+            'You were signed out for security after a period of inactivity.'
+          )}
+        </Typography>
       ),
       dismissable: false,
       actions: [

@@ -4,6 +4,7 @@
 ### Bug Fixes
 
 * **android:** resolve AsyncStorage Maven issue, add rebuild-android script ([8df93c4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8df93c494809a8d4355f7a69cf588ab17a828131))
+* **auth:** prevent 401 race condition on native login + cleanup debug logs ([e37f3f9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e37f3f9ed998971a66c5062c6d3f0d522b3b7a5d))
 * **features:** center PotCard buttons + style dropdown trigger ([de11146](https://github.com/fubaritico/react-and-react-native-financial-app/commit/de111468227d17cd3b8968c8687235f6c1ab8a82))
 * **features:** icon-only dropdown buttons use tertiary 40x40 centered ([e532555](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e5325553bd177bda981ae6ec5b4c7c6f216ef48f))
 * **i18n:** replace hardcoded English strings in DataTable components (QUAL-017) ([0ab9d54](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0ab9d5489d1e5fa57cf51f34bf5fce53cb551bb8))

@@ -22,8 +22,6 @@ export interface IEditBudgetModalLabels {
 export interface IDeleteBudgetModalLabels {
   /** Title builder — receives category name, e.g. "Delete 'Entertainment'?" */
   title: (categoryName: string) => string
-  /** Warning text explaining the destructive action */
-  description: string
   /** Destructive action button label, e.g. "Yes, Confirm Deletion" */
   confirmLabel: string
   /** Cancel button label, e.g. "No, Go Back" */
@@ -63,12 +61,13 @@ export function createEditBudgetModalConfig(
 /** Creates an IModalConfig for the Delete Budget modal */
 export function createDeleteBudgetModalConfig(
   categoryName: string,
+  body: ReactNode,
   onConfirm: () => void,
   labels: IDeleteBudgetModalLabels
 ): IModalConfig {
   return {
     title: labels.title(categoryName),
-    description: labels.description,
+    body,
     actions: [
       { label: labels.confirmLabel, variant: 'destroy', onPress: onConfirm },
     ],
