@@ -30,6 +30,7 @@
 * **apps:** wire add budget modal with validation ([647288a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/647288a4a8aaa3efcb0cd53d59c33aa7e09117c2))
 * **apps:** wire auth clients, Google Sign-In, and env files (Phase 5.8) ([7c83f86](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7c83f860b10749f23733dafeb66e2996af5ba77d))
 * **auth:** full Supabase auth flow + API error handling + Android emulator fix ([4f59d93](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4f59d93d34b30882fb6a5f9763603f77fafe8d77))
+* **budget:** add edit/delete modal configs + BudgetFormContent refactor ([c40a3b6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c40a3b67fe9b4a217f6f75bf3d44e6382829bb47))
 * **config:** add agent skills — migrate commands + vendor Expo/Callstack skills ([633d4e2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/633d4e24f4ba27a5d188815dddfb0bca18206fc1))
 * **config:** add multi-agent review skill with 5 domain experts ([63922af](https://github.com/fubaritico/react-and-react-native-financial-app/commit/63922af7dfbe141a6edff103e4253edd2aa37537))
 * **config:** add restart-session skill for end → clear → start flow ([1a9f1e2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1a9f1e2bbcf695ef7a991f3f0bf081c71732d4ef))

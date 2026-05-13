@@ -96,6 +96,7 @@ export default function SignupScreen() {
           }}
           fullWidth
           disabled={loading}
+          centered
         />
       </AuthCard>
     </AuthLayout>

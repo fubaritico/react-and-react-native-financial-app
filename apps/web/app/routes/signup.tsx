@@ -116,6 +116,7 @@ export default function Signup() {
           }}
           fullWidth
           disabled={loading}
+          centered
         />
       </AuthCard>
     </AuthLayout>

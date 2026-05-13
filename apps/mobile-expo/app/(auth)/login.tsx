@@ -86,6 +86,7 @@ export default function LoginScreen() {
           }}
           fullWidth
           disabled={loading}
+          centered
         />
       </AuthCard>
     </AuthLayout>
