@@ -11,7 +11,17 @@ export function createAppQueryClient(): QueryClient {
     defaultOptions: {
       queries: {
         staleTime: 5 * 60 * 1000,
-        retry: 1,
+        retry: (failureCount, error) => {
+          // Never retry on 401 — the interceptor handles sign-out
+          if (
+            typeof error === 'object' &&
+            'status' in error &&
+            (error as { status: number }).status === 401
+          ) {
+            return false
+          }
+          return failureCount < 1
+        },
       },
       mutations: {
         retry: 0,

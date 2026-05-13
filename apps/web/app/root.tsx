@@ -2,9 +2,19 @@ import './i18n'
 
 import { ModalRenderer } from '@financial-app/features/shared'
 import { client } from '@financial-app/http-client/client'
-import { useAuthListener, useConfigureHttpClient } from '@financial-app/shared'
+import {
+  isAuthenticatedAtom,
+  useAuthListener,
+  useConfigureHttpClient,
+  useInactivityTimeout,
+  useModal,
+  useSessionExpiredHandler,
+} from '@financial-app/shared'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 import { Provider as JotaiProvider } from 'jotai'
+import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Links,
   Meta,
@@ -12,6 +22,7 @@ import {
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
+  useNavigate,
 } from 'react-router'
 
 import { queryClient } from './lib/query-client'
@@ -26,10 +37,47 @@ const API_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ??
   'http://localhost:3001'
 
-/** Bootstraps auth listener and HTTP client configuration */
+/** Inactivity threshold before auto sign-out (30 seconds) */
+const INACTIVITY_DELAY_MS = 30_000
+
+/** Bootstraps auth listener, HTTP client, inactivity timeout, and session expired modal */
 function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
+  const { t } = useTranslation()
+  const { open: openModal, close: closeModal } = useModal()
+  const handleSignOut = useSessionExpiredHandler(authClient)
+  const isAuthenticated = useAtomValue(isAuthenticatedAtom)
+  const navigate = useNavigate()
+
+  const showSessionExpiredModal = useCallback(() => {
+    openModal({
+      title: t('auth.sessionExpired.title', 'Session expirée'),
+      description: t(
+        'auth.sessionExpired.description',
+        'Votre session a expiré. Veuillez vous reconnecter.'
+      ),
+      dismissable: false,
+      actions: [
+        {
+          label: t('common.ok', 'OK'),
+          variant: 'primary',
+          onPress: () => {
+            closeModal()
+            handleSignOut()
+            void navigate('/login', { replace: true })
+          },
+        },
+      ],
+    })
+  }, [openModal, closeModal, handleSignOut, navigate, t])
+
   useAuthListener(authClient)
-  useConfigureHttpClient(client, authClient, API_URL)
+  useConfigureHttpClient(client, authClient, API_URL, showSessionExpiredModal)
+  useInactivityTimeout(
+    showSessionExpiredModal,
+    INACTIVITY_DELAY_MS,
+    isAuthenticated
+  )
+
   return children
 }
 

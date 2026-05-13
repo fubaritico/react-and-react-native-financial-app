@@ -33,6 +33,8 @@ export interface IModalConfig {
   actions: IModalAction[]
   /** Custom cancel button label (i18n — defaults to "Cancel") */
   cancelLabel?: string
+  /** When false, hides close button, disables backdrop/Escape, hides cancel (default: true) */
+  dismissable?: boolean
 }
 
 /** Modal state atom — null means closed, IModalConfig means open */

@@ -17,7 +17,9 @@ const API_URL =
 export async function clientLoader() {
   const result = await requireAuth(authClient)
   if ('message' in result) {
-    redirect('/login')
+    // React Router loaders use throw redirect() — it throws a Response, not an Error
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
+    throw redirect('/login')
   }
 
   // Eagerly configure HTTP client before child loaders run

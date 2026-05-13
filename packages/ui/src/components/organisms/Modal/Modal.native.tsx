@@ -16,27 +16,29 @@ import type {
 
 import { Button, Icon, PortalProvider, Typography } from '#Atoms'
 
-/** Modal.Header — title + close (X) button */
+/** Modal.Header — title + close (X) button (hidden when dismissable is false) */
 function ModalHeader({
   title,
   closeLabel = 'Close',
 }: Readonly<IModalHeaderProps>) {
-  const { onClose } = useModalContext()
+  const { onClose, dismissable } = useModalContext()
   return (
     <View style={tw`${shared.header}`}>
       <Typography variant="heading-md" color="foreground" style={tw`flex-1`}>
         {title}
       </Typography>
-      <Pressable
-        onPress={onClose}
-        style={tw`${shared.closeButton}`}
-        accessibilityRole="button"
-        accessibilityLabel={closeLabel}
-        accessibilityState={{ disabled: false }}
-        hitSlop={8}
-      >
-        <Icon name="closeModal" iconSize="3xl" color={tw.color('grey-500')} />
-      </Pressable>
+      {dismissable ? (
+        <Pressable
+          onPress={onClose}
+          style={tw`${shared.closeButton}`}
+          accessibilityRole="button"
+          accessibilityLabel={closeLabel}
+          accessibilityState={{ disabled: false }}
+          hitSlop={8}
+        >
+          <Icon name="closeModal" iconSize="3xl" color={tw.color('grey-500')} />
+        </Pressable>
+      ) : null}
     </View>
   )
 }
@@ -46,12 +48,12 @@ function ModalBody({ children }: Readonly<IModalBodyProps>) {
   return <ScrollView style={tw`${shared.body}`}>{children}</ScrollView>
 }
 
-/** Modal.Footer — action buttons + cancel */
+/** Modal.Footer — action buttons + cancel (cancel hidden when dismissable is false) */
 function ModalFooter({
   actions,
   cancelLabel = 'Cancel',
 }: Readonly<IModalFooterProps>) {
-  const { onClose } = useModalContext()
+  const { onClose, dismissable } = useModalContext()
   return (
     <View style={tw`${shared.footer}`}>
       {actions.map((action) => (
@@ -65,13 +67,15 @@ function ModalFooter({
           centered
         />
       ))}
-      <Button
-        title={cancelLabel}
-        variant="secondary"
-        onPress={onClose}
-        fullWidth
-        centered
-      />
+      {dismissable ? (
+        <Button
+          title={cancelLabel}
+          variant="secondary"
+          onPress={onClose}
+          fullWidth
+          centered
+        />
+      ) : null}
     </View>
   )
 }
@@ -87,8 +91,9 @@ function Modal({
   onClose,
   children,
   accessibilityLabel,
+  dismissable = true,
 }: Readonly<IModalProps>) {
-  const ctx = useMemo(() => ({ onClose }), [onClose])
+  const ctx = useMemo(() => ({ onClose, dismissable }), [onClose, dismissable])
 
   if (!isOpen) return null
 
@@ -97,7 +102,7 @@ function Modal({
       transparent
       animationType="fade"
       visible={isOpen}
-      onRequestClose={onClose}
+      onRequestClose={dismissable ? onClose : undefined}
       statusBarTranslucent
     >
       <PortalProvider>
@@ -108,14 +113,18 @@ function Modal({
             accessibilityLabel={accessibilityLabel}
             accessibilityRole="none"
           >
-            {/* Backdrop overlay */}
-            <Pressable
-              style={tw`${modalOverlayVariants({})}`}
-              onPress={onClose}
-              accessibilityRole="button"
-              accessibilityLabel={accessibilityLabel ?? 'Close'}
-              accessibilityState={{ disabled: false }}
-            />
+            {/* Backdrop overlay — not pressable when dismissable is false */}
+            {dismissable ? (
+              <Pressable
+                style={tw`${modalOverlayVariants({})}`}
+                onPress={onClose}
+                accessibilityRole="button"
+                accessibilityLabel={accessibilityLabel ?? 'Close'}
+                accessibilityState={{ disabled: false }}
+              />
+            ) : (
+              <View style={tw`${modalOverlayVariants({})}`} />
+            )}
             {/* Modal panel */}
             <View style={tw`${modalPanelVariants({})}`}>{children}</View>
           </View>

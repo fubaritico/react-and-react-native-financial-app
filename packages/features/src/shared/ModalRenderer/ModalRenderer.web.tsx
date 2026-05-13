@@ -16,7 +16,12 @@ export function ModalRenderer({ children }: Readonly<IModalRendererProps>) {
     <>
       {children}
       {config ? (
-        <Modal isOpen onClose={close} accessibilityLabel={config.title}>
+        <Modal
+          isOpen
+          onClose={close}
+          accessibilityLabel={config.title}
+          dismissable={config.dismissable}
+        >
           <Modal.Header title={config.title} />
           <Modal.Body>
             {config.description ? (

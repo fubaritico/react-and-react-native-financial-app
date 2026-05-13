@@ -4,6 +4,7 @@
 ### Bug Fixes
 
 * **android:** resolve AsyncStorage Maven issue, add rebuild-android script ([8df93c4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8df93c494809a8d4355f7a69cf588ab17a828131))
+* **features:** center PotCard buttons + style dropdown trigger ([de11146](https://github.com/fubaritico/react-and-react-native-financial-app/commit/de111468227d17cd3b8968c8687235f6c1ab8a82))
 * **features:** icon-only dropdown buttons use tertiary 40x40 centered ([e532555](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e5325553bd177bda981ae6ec5b4c7c6f216ef48f))
 * **i18n:** replace hardcoded English strings in DataTable components (QUAL-017) ([0ab9d54](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0ab9d5489d1e5fa57cf51f34bf5fce53cb551bb8))
 * **mobile:** enable wireless iPhone deployment and fix sandbox violation ([0bf9ca9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0bf9ca93efce40d837c8fcc67a28120fc74c06a9))
@@ -30,6 +31,7 @@
 * **apps:** wire add budget modal with validation ([647288a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/647288a4a8aaa3efcb0cd53d59c33aa7e09117c2))
 * **apps:** wire auth clients, Google Sign-In, and env files (Phase 5.8) ([7c83f86](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7c83f860b10749f23733dafeb66e2996af5ba77d))
 * **auth:** full Supabase auth flow + API error handling + Android emulator fix ([4f59d93](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4f59d93d34b30882fb6a5f9763603f77fafe8d77))
+* **budget:** add BudgetThemeDropdown cross-platform component ([919d47f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/919d47ff21e2d3585faf0365115fb6249ba22862))
 * **budget:** add edit/delete modal configs + BudgetFormContent refactor ([c40a3b6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c40a3b67fe9b4a217f6f75bf3d44e6382829bb47))
 * **config:** add agent skills — migrate commands + vendor Expo/Callstack skills ([633d4e2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/633d4e24f4ba27a5d188815dddfb0bca18206fc1))
 * **config:** add multi-agent review skill with 5 domain experts ([63922af](https://github.com/fubaritico/react-and-react-native-financial-app/commit/63922af7dfbe141a6edff103e4253edd2aa37537))

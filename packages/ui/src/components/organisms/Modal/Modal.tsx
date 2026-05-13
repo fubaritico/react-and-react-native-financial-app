@@ -10,6 +10,8 @@ export interface IModalProps {
   children: ReactNode
   /** Accessible label for the modal dialog (falls back to the header title) */
   accessibilityLabel?: string
+  /** When false, hides close button, disables backdrop click/Escape, hides cancel button (default: true) */
+  dismissable?: boolean
 }
 
 /** Props for Modal.Header */

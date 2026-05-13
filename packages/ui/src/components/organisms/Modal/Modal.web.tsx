@@ -19,25 +19,31 @@ import type {
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
-/** Modal.Header — title + close (X) button */
+/** Modal.Header — title + close (X) button (hidden when dismissable is false) */
 function ModalHeader({
   title,
   closeLabel = 'Close',
 }: Readonly<IModalHeaderProps>) {
-  const { onClose } = useModalContext()
+  const { onClose, dismissable } = useModalContext()
   return (
     <div className={cn(shared.header, 'flex')}>
       <Typography variant="heading-xl" color="foreground" className="flex-1">
         {title}
       </Typography>
-      <button
-        type="button"
-        onClick={onClose}
-        className={cn(shared.closeButton, 'flex', web.closeButton)}
-        aria-label={closeLabel}
-      >
-        <Icon name="closeModal" iconSize="3xl" color="var(--color-grey-500)" />
-      </button>
+      {dismissable ? (
+        <button
+          type="button"
+          onClick={onClose}
+          className={cn(shared.closeButton, 'flex', web.closeButton)}
+          aria-label={closeLabel}
+        >
+          <Icon
+            name="closeModal"
+            iconSize="3xl"
+            color="var(--color-grey-500)"
+          />
+        </button>
+      ) : null}
     </div>
   )
 }
@@ -47,12 +53,12 @@ function ModalBody({ children }: Readonly<IModalBodyProps>) {
   return <div className={cn(shared.body, web.body)}>{children}</div>
 }
 
-/** Modal.Footer — action buttons + cancel */
+/** Modal.Footer — action buttons + cancel (cancel hidden when dismissable is false) */
 function ModalFooter({
   actions,
   cancelLabel = 'Cancel',
 }: Readonly<IModalFooterProps>) {
-  const { onClose } = useModalContext()
+  const { onClose, dismissable } = useModalContext()
   return (
     <div className={cn(shared.footer, 'flex flex-col')}>
       {actions.map((action) => (
@@ -66,13 +72,15 @@ function ModalFooter({
           centered
         />
       ))}
-      <Button
-        title={cancelLabel}
-        variant="secondary"
-        onPress={onClose}
-        fullWidth
-        centered
-      />
+      {dismissable ? (
+        <Button
+          title={cancelLabel}
+          variant="secondary"
+          onPress={onClose}
+          fullWidth
+          centered
+        />
+      ) : null}
     </div>
   )
 }
@@ -88,15 +96,16 @@ function Modal({
   onClose,
   children,
   accessibilityLabel,
+  dismissable = true,
 }: Readonly<IModalProps>) {
-  const ctx = useMemo(() => ({ onClose }), [onClose])
+  const ctx = useMemo(() => ({ onClose, dismissable }), [onClose, dismissable])
   const dialogRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<Element | null>(null)
 
-  /** Close on Escape key + trap Tab within dialog */
+  /** Close on Escape key (when dismissable) + trap Tab within dialog */
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' && dismissable) {
         e.preventDefault()
         onClose()
         return
@@ -123,17 +132,17 @@ function Modal({
         }
       }
     },
-    [onClose]
+    [onClose, dismissable]
   )
 
-  /** Close on backdrop click */
+  /** Close on backdrop click (disabled when not dismissable) */
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent) => {
-      if (e.target === e.currentTarget) {
+      if (dismissable && e.target === e.currentTarget) {
         onClose()
       }
     },
-    [onClose]
+    [onClose, dismissable]
   )
 
   useEffect(() => {

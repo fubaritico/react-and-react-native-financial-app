@@ -39,7 +39,7 @@ export function createNativeClient(
   const supabase = createClient(url, key, {
     auth: {
       storage,
-      autoRefreshToken: true,
+      autoRefreshToken: false,
       persistSession: true,
       detectSessionInUrl: false,
     },

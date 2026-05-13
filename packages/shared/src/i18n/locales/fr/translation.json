@@ -3,7 +3,8 @@
     "seeDetails": "Voir les détails",
     "viewAll": "Voir tout",
     "placeholder": "Espace réservé",
-    "errorLoading": "Échec du chargement des données. Veuillez réessayer."
+    "errorLoading": "Échec du chargement des données. Veuillez réessayer.",
+    "ok": "OK"
   },
   "navigation": {
     "overview": "Aperçu",
@@ -60,6 +61,10 @@
       "passwordRequired": "Le mot de passe est requis",
       "passwordMin": "6 caractères minimum",
       "nameRequired": "Le nom est requis"
+    },
+    "sessionExpired": {
+      "title": "Session expirée",
+      "description": "Votre session a expiré. Veuillez vous reconnecter."
     }
   },
   "budgets": {

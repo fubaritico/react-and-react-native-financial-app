@@ -95,7 +95,9 @@ export interface IAuthClient {
     token: string
   ): Promise<{ user: IUser | null; error: IAuthError | null }>
   /** Signs out the current user and clears the session */
-  signOut(): Promise<{ error: IAuthError | null }>
+  signOut(options?: {
+    scope?: 'local' | 'global'
+  }): Promise<{ error: IAuthError | null }>
   /** Subscribes to auth state changes (sign-in, sign-out, token refresh) */
   onAuthStateChange(
     callback: (event: string, session: ISession | null) => void

@@ -15,7 +15,12 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.mobileexpo"
+      "bundleIdentifier": "com.anonymous.mobileexpo",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsLocalNetworking": true
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {

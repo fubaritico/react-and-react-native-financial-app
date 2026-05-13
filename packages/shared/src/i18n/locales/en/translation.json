@@ -3,7 +3,8 @@
     "seeDetails": "See Details",
     "viewAll": "View All",
     "placeholder": "Placeholder",
-    "errorLoading": "Failed to load data. Please try again."
+    "errorLoading": "Failed to load data. Please try again.",
+    "ok": "OK"
   },
   "navigation": {
     "overview": "Overview",
@@ -60,6 +61,10 @@
       "passwordRequired": "Password is required",
       "passwordMin": "Minimum 6 characters",
       "nameRequired": "Name is required"
+    },
+    "sessionExpired": {
+      "title": "Session expired",
+      "description": "Your session has expired. Please sign in again."
     }
   },
   "budgets": {

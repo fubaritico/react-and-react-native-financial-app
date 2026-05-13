@@ -3,6 +3,8 @@ import { createContext, useContext } from 'react'
 interface IModalContext {
   /** Called when the modal should close */
   onClose: () => void
+  /** Whether the modal can be dismissed via close button, backdrop, Escape, or cancel */
+  dismissable: boolean
 }
 
 export const ModalContext = createContext<IModalContext | null>(null)

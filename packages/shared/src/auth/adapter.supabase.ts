@@ -162,9 +162,9 @@ export function createSupabaseAuthAdapter(client: SupabaseClient): IAuthClient {
       }
     },
 
-    async signOut() {
+    async signOut(options) {
       try {
-        const { error } = await client.auth.signOut()
+        const { error } = await client.auth.signOut(options)
         return { error: toAuthError(error) }
       } catch (e) {
         return { error: toNetworkError(e) }

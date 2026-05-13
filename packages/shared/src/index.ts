@@ -38,7 +38,11 @@ export type { IModalAction, IModalConfig, ModalActionVariant } from './atoms'
 
 // Hooks
 export { useModal } from './hooks/useModal'
-export { useConfigureHttpClient } from './hooks/useConfigureHttpClient'
+export {
+  useConfigureHttpClient,
+  useSessionExpiredHandler,
+} from './hooks/useConfigureHttpClient'
+export { useInactivityTimeout } from './hooks/useInactivityTimeout'
 
 // Query
 export { createAppQueryClient } from './query'

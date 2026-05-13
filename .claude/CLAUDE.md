@@ -20,6 +20,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Discuss approach FIRST** — never code without confirming approach
 - **Review → Test → Commit** per change — no accumulation
 - **Never execute commands** — propose only. Exceptions: (1) user says "execute", "run", etc. (2) `pnpm type-check && pnpm lint && pnpm test` from root then `/review` — MUST run all 4 after every code change, never skip
+- **Always use root scripts** — never `cd apps/... && npx expo ...`. Use `pnpm expo:rebuild:ios`, `pnpm expo:start`, etc. from monorepo root. All scripts are in root `package.json`.
 - **Risky actions** (git push, reset --hard, rm -rf) require explicit permission EVERY TIME
 - **Never hallucinate** — if uncertain, read code first
 - **If it works elsewhere, it works here** — when something fails, NEVER conclude "it can't work" or write workaround mocks. Search how other projects do it (GitHub, issues, docs), find the root cause in YOUR setup (resolution paths, singleton issues, config), and fix it. If thousands of devs use Jest+RN successfully, the problem is your config, not the tool.
@@ -149,7 +150,7 @@ Read `@completed.md`
 
 ### Next
 
-1. Pixel-perfect modal alignment (web + mobile-expo)
+1. **401 auth redirect (WIP)** — 6 uncommitted files, see `memory/auth-401-redirect-wip.md`. Stash → rebuild iOS (ATS fix) → test → commit
 2. Wire budget edit/delete modals into budget page (web + mobile-expo)
 3. Onboarding (création de compte → mode manuel par défaut, mode banque en Phase 8B)
 4. Empty states (all screens + Overview sections)
@@ -170,7 +171,6 @@ Read `@completed.md`
 - Review SEC-002: bare RN uses plain AsyncStorage for tokens (unencrypted) — acceptable for learning reference, not published
 - Google client IDs empty in .env files — need Google Cloud Console setup before testing OAuth
 
-- iOS TextInput: email field auto-capitalizes first letter — need `autoCapitalize="none"` on email TextInput inputs across all native apps
 - iOS auth flow: app may stay blocked after login submit — investigate if Expo rebuild needed or navigation/state issue
 - iOS AuthCard: login card appears too small — needs Figma reference comparison (user will provide PNG)
 - iOS unknown black element at top of screen — needs screenshot to diagnose
@@ -200,4 +200,5 @@ Read `@completed.md`
 - Icon pipeline only supports fill-based SVGs — stroke-based paths won't render (generate-icon-data.js extracts `d` attributes, Icon component renders with fill)
 - Cross-device session sync: each device (web/mobile) has its own Supabase session (localStorage vs AsyncStorage). Signing out on web does NOT sign out mobile — they are independent. TODO: add session validation on app focus (AppState change → `getSession()`) for finance-grade security, and consider shorter JWT expiry (15min) in Supabase dashboard.
 - ListboxList.native.tsx uses `accessibilityRole="menu"` instead of `"listbox"` — pre-existing, should be aligned with web for consistency
+- iOS ATS blocks cleartext HTTP to localhost — `app.json` needs `NSAllowsLocalNetworking: true` in infoPlist + native rebuild (`npx expo prebuild --clean && npx expo run:ios`). See `memory/auth-401-redirect-wip.md`
 
