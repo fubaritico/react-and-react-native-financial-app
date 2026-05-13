@@ -102,6 +102,10 @@ export function PotCard({
           onSelect={handleMenuSelect}
           accessibilityLabel={`${name} actions`}
           bottomSheetTitle={name}
+          buttonVariant="tertiary"
+          buttonSize="md"
+          buttonClassName="p-0 text-grey-300"
+          buttonCentered
           trigger={() => (
             <Icon
               name="ellipsis"
@@ -136,12 +140,14 @@ export function PotCard({
           onPress={onAddMoney ?? noop}
           variant="secondary"
           className={shared.button}
+          centered
         />
         <Button
           title={withdrawLabel}
           onPress={onWithdraw ?? noop}
           variant="secondary"
           className={shared.button}
+          centered
         />
       </View>
     </Card>
