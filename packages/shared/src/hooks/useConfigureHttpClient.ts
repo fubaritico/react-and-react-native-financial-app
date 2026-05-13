@@ -1,7 +1,7 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useRef } from 'react'
 
-import { userAtom } from '../atoms/auth.atom'
+import { isHttpClientReadyAtom, userAtom } from '../atoms/auth.atom'
 
 import type { IAuthClient } from '../auth/types'
 
@@ -44,6 +44,7 @@ export function useConfigureHttpClient(
   onSessionExpired?: () => void
 ) {
   const user = useAtomValue(userAtom)
+  const setHttpClientReady = useSetAtom(isHttpClientReadyAtom)
   const signingOutRef = useRef(false)
   const onSessionExpiredRef = useRef(onSessionExpired)
   onSessionExpiredRef.current = onSessionExpired
@@ -58,7 +59,8 @@ export function useConfigureHttpClient(
           }
         : undefined,
     })
-  }, [user, httpClient, authClient, apiUrl])
+    setHttpClientReady(!!user)
+  }, [user, httpClient, authClient, apiUrl, setHttpClientReady])
 
   // Register 401 interceptor — show session expired modal
   useEffect(() => {

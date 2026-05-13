@@ -65,6 +65,10 @@
     "sessionExpired": {
       "title": "Session expired",
       "description": "Your session has expired. Please sign in again."
+    },
+    "inactivity": {
+      "title": "Signed out due to inactivity",
+      "description": "You were signed out for security after a period of inactivity."
     }
   },
   "budgets": {

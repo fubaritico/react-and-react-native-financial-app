@@ -31,6 +31,7 @@
 * **apps:** wire add budget modal with validation ([647288a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/647288a4a8aaa3efcb0cd53d59c33aa7e09117c2))
 * **apps:** wire auth clients, Google Sign-In, and env files (Phase 5.8) ([7c83f86](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7c83f860b10749f23733dafeb66e2996af5ba77d))
 * **auth:** full Supabase auth flow + API error handling + Android emulator fix ([4f59d93](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4f59d93d34b30882fb6a5f9763603f77fafe8d77))
+* **auth:** session expiry modal + inactivity timeout + 401 interceptor ([ce52505](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ce52505eef2c0f6ce4c8be903f2f2b9245751de3))
 * **budget:** add BudgetThemeDropdown cross-platform component ([919d47f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/919d47ff21e2d3585faf0365115fb6249ba22862))
 * **budget:** add edit/delete modal configs + BudgetFormContent refactor ([c40a3b6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c40a3b67fe9b4a217f6f75bf3d44e6382829bb47))
 * **config:** add agent skills — migrate commands + vendor Expo/Callstack skills ([633d4e2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/633d4e24f4ba27a5d188815dddfb0bca18206fc1))

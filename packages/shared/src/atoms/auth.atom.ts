@@ -10,3 +10,6 @@ export const isAuthenticatedAtom = atom((get) => get(userAtom) !== null)
 
 /** True until the first auth state change fires — prevents redirect flicker on cold start */
 export const isAuthLoadingAtom = atom(true)
+
+/** True once useConfigureHttpClient has set the auth callback — prevents queries firing without token */
+export const isHttpClientReadyAtom = atom(false)

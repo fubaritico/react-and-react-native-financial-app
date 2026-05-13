@@ -35,6 +35,7 @@ export default function LoginScreen() {
     }
 
     setLoading(true)
+
     const { error } = await authClient.signInWithPassword({
       email: result.data.email,
       password: result.data.password,

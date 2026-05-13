@@ -50,10 +50,32 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
 
   const showSessionExpiredModal = useCallback(() => {
     openModal({
-      title: t('auth.sessionExpired.title', 'Session expirée'),
+      title: t('auth.sessionExpired.title', 'Session expired'),
       description: t(
         'auth.sessionExpired.description',
-        'Votre session a expiré. Veuillez vous reconnecter.'
+        'Your session has expired. Please sign in again.'
+      ),
+      dismissable: false,
+      actions: [
+        {
+          label: t('common.ok', 'OK'),
+          variant: 'primary',
+          onPress: () => {
+            closeModal()
+            handleSignOut()
+            void navigate('/login', { replace: true })
+          },
+        },
+      ],
+    })
+  }, [openModal, closeModal, handleSignOut, navigate, t])
+
+  const showInactivityModal = useCallback(() => {
+    openModal({
+      title: t('auth.inactivity.title', 'Signed out due to inactivity'),
+      description: t(
+        'auth.inactivity.description',
+        'You were signed out for security after a period of inactivity.'
       ),
       dismissable: false,
       actions: [
@@ -73,7 +95,7 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
   useAuthListener(authClient)
   useConfigureHttpClient(client, authClient, API_URL, showSessionExpiredModal)
   useInactivityTimeout(
-    showSessionExpiredModal,
+    showInactivityModal,
     INACTIVITY_DELAY_MS,
     isAuthenticated
   )

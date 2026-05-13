@@ -65,6 +65,10 @@
     "sessionExpired": {
       "title": "Session expirée",
       "description": "Votre session a expiré. Veuillez vous reconnecter."
+    },
+    "inactivity": {
+      "title": "Déconnexion pour inactivité",
+      "description": "Vous avez été déconnecté par sécurité après une période d'inactivité."
     }
   },
   "budgets": {

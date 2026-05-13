@@ -6,6 +6,7 @@ import {
   createAppQueryClient,
   isAuthLoadingAtom,
   isAuthenticatedAtom,
+  isHttpClientReadyAtom,
   useAuthListener,
   useConfigureHttpClient,
   useInactivityTimeout,
@@ -34,8 +35,6 @@ const API_URL =
     ? RAW_API_URL.replace('localhost', '10.0.2.2')
     : RAW_API_URL
 
-console.warn('[DEBUG] Platform:', Platform.OS, '| API_URL:', API_URL)
-
 /** Inactivity threshold before auto sign-out (30 seconds) */
 const INACTIVITY_DELAY_MS = 30_000
 
@@ -48,10 +47,31 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
 
   const showSessionExpiredModal = useCallback(() => {
     openModal({
-      title: t('auth.sessionExpired.title', 'Session expirée'),
+      title: t('auth.sessionExpired.title', 'Session expired'),
       description: t(
         'auth.sessionExpired.description',
-        'Votre session a expiré. Veuillez vous reconnecter.'
+        'Your session has expired. Please sign in again.'
+      ),
+      dismissable: false,
+      actions: [
+        {
+          label: t('common.ok', 'OK'),
+          variant: 'primary',
+          onPress: () => {
+            closeModal()
+            handleSignOut()
+          },
+        },
+      ],
+    })
+  }, [openModal, closeModal, handleSignOut, t])
+
+  const showInactivityModal = useCallback(() => {
+    openModal({
+      title: t('auth.inactivity.title', 'Signed out due to inactivity'),
+      description: t(
+        'auth.inactivity.description',
+        'You were signed out for security after a period of inactivity.'
       ),
       dismissable: false,
       actions: [
@@ -70,7 +90,7 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
   useAuthListener(authClient)
   useConfigureHttpClient(client, authClient, API_URL, showSessionExpiredModal)
   useInactivityTimeout(
-    showSessionExpiredModal,
+    showInactivityModal,
     INACTIVITY_DELAY_MS,
     isAuthenticated
   )
@@ -82,6 +102,7 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
 function AuthGate({ children }: Readonly<{ children: ReactNode }>) {
   const isAuthLoading = useAtomValue(isAuthLoadingAtom)
   const isAuthenticated = useAtomValue(isAuthenticatedAtom)
+  const isHttpClientReady = useAtomValue(isHttpClientReadyAtom)
   const segments = useSegments()
   const inAuthGroup = segments[0] === '(auth)'
 
@@ -91,6 +112,9 @@ function AuthGate({ children }: Readonly<{ children: ReactNode }>) {
   if (!isAuthenticated && !inAuthGroup) {
     return <Redirect href="/login" />
   }
+
+  // Wait for HTTP client to be configured with auth before navigating to protected routes
+  if (isAuthenticated && !isHttpClientReady) return null
 
   if (isAuthenticated && inAuthGroup) {
     return <Redirect href="/" />
