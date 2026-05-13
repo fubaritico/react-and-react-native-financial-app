@@ -1,10 +1,10 @@
 # React & React Native Financial App
 
-A cross-platform **Personal Finance** application (Frontend Mentor challenge) built on a shared design system targeting React Native (Expo) and React web (React Router), managed with **pnpm workspaces**.
+A fullstack cross-platform **Personal Finance** application ([Frontend Mentor challenge](https://www.frontendmentor.io/challenges/personal-finance-app-JfjtZgyMt1)) with an **Express API** backend (Supabase + OpenAPI), a shared design system, and two frontends — React Native (Expo) and React web (React Router) — managed with **pnpm workspaces** and **Turborepo**.
 
 ### Technologies
 
-React Native · Expo SDK 54 · React · TypeScript · pnpm · Turborepo · twrnc · Tailwind CSS · Style Dictionary · CVA · Supabase · Jotai · TanStack Query · Expo Router · react-hook-form · zod
+React Native · Expo SDK 54 · Expo Router · React · ReactRouter v7 · TypeScript · pnpm · Turborepo · twrnc · Tailwind CSS · Style Dictionary · CVA · Supabase · Jotai · TanStack Table · TanStack Query · HeyAPI · zod · OpenApi · ExpressJS
 
 ---
 
