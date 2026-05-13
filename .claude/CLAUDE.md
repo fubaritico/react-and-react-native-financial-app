@@ -151,7 +151,7 @@ Read `@completed.md`
 
 ### Next
 
-1. Wire pot edit/delete modals into pot page (web + mobile-expo) — same pattern as budget
+1. Pot Add Money / Withdraw modals — check ref `files/proto/screen and readme/Desktop - Pots.png` to see if these are modals or inline in the PotCard
 2. Onboarding (création de compte → mode manuel par défaut, mode banque en Phase 8B)
 3. Empty states (all screens + Overview sections)
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
