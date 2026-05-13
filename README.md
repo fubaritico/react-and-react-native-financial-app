@@ -495,6 +495,9 @@ grep -A 10 "FATAL EXCEPTION" /tmp/crash.log
 
 ## Troubleshooting
 
+For advanced troubleshooting (Jest singleton issues, Expo mode switching, simulator management,
+disk space cleanup, and more), see [.claude/rules/troubleshooting.md](.claude/rules/troubleshooting.md).
+
 ### General (iOS & Android)
 
 #### "Unable to resolve module" error in simulator/emulator

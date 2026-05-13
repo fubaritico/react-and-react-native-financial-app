@@ -150,10 +150,7 @@ Read `@completed.md`
 
 ### Next
 
-1. **iOS simulator network** — ROOT CAUSE: Apple bug in iOS 18.4 simulator (confirmed: github.com/orgs/supabase/discussions/35943). Fix: update macOS 15.7.7 → Xcode 16.4 → iOS 18.5 runtime. Update in progress.
-2. **Android "Session expired" at login** — modal fires immediately after login on Android emulator. Debug logs added in `useConfigureHttpClient.ts`. Hypothesis: 401 interceptor fires before token is ready. Need to rebuild Android and check `[http]` logs. See `memory/auth-401-redirect-wip.md`
-3. **Cleanup before commit** — remove debug logs from login.tsx, adapter.supabase.ts, client.native.ts, useConfigureHttpClient.ts. Remove `global: { fetch }` from client.native.ts (didn't help). Keep inactivity/session differentiation (i18n + split callbacks).
-4. Wire budget edit/delete modals into budget page (web + mobile-expo)
+1. Wire budget edit/delete modals into budget page (web + mobile-expo)
 3. Onboarding (création de compte → mode manuel par défaut, mode banque en Phase 8B)
 4. Empty states (all screens + Overview sections)
 5. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
@@ -201,7 +198,7 @@ Read `@completed.md`
 - React Router loaders are navigation-driven, not state-driven — atom changes alone don't trigger redirects. Web sign-out needs explicit `navigate('/login', { replace: true })` after `authClient.signOut()`
 - Icon pipeline only supports fill-based SVGs — stroke-based paths won't render (generate-icon-data.js extracts `d` attributes, Icon component renders with fill)
 - Cross-device session sync: each device (web/mobile) has its own Supabase session (localStorage vs AsyncStorage). Signing out on web does NOT sign out mobile — they are independent. JWT expiry set to 600s (10 min) in Supabase dashboard. `autoRefreshToken: false` on both platforms. Session expiry modal + inactivity timeout (30s) implemented with separate messages (inactivity vs 401). TODO: add session validation on app focus (AppState change → `getSession()`).
-- iOS 18.4 simulator: Apple bug breaks `NSURLSession` fetch to certain domains (including `*.supabase.co`). Safari works but native fetch fails. Fix: Xcode 16.4 + iOS 18.5 runtime. See github.com/orgs/supabase/discussions/35943
+- iOS 18.4 simulator: Apple bug broke `NSURLSession` fetch — RESOLVED by updating to Xcode 26 + iOS 26.5 runtime
 - ListboxList.native.tsx uses `accessibilityRole="menu"` instead of `"listbox"` — pre-existing, should be aligned with web for consistency
 - iOS ATS blocks cleartext HTTP to localhost — `app.json` needs `NSAllowsLocalNetworking: true` in infoPlist + native rebuild (`npx expo prebuild --clean && npx expo run:ios`). See `memory/auth-401-redirect-wip.md`
 
