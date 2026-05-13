@@ -34,4 +34,8 @@ export interface IBudgetFormContentProps {
   themeLabel?: string
   /** Placeholder for the maximum spend field */
   maximumPlaceholder?: string
+  /** Label for already-used themes (default: "Already used") */
+  alreadyUsedLabel?: string
+  /** Description text displayed above the form fields */
+  description?: string
 }

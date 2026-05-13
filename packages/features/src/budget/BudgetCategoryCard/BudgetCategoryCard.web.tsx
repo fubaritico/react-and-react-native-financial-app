@@ -114,6 +114,10 @@ export function BudgetCategoryCard({
           onSelect={handleMenuSelect}
           accessibilityLabel={`${category} actions`}
           bottomSheetTitle={category}
+          buttonVariant="tertiary"
+          buttonSize="md"
+          buttonClassName="p-0 text-grey-300"
+          buttonCentered
           trigger={() => (
             <Icon name="ellipsis" iconSize="sm" color="currentColor" />
           )}

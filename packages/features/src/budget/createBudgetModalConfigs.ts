@@ -6,8 +6,6 @@ import type { ReactNode } from 'react'
 export interface IAddBudgetModalLabels {
   /** Modal title, e.g. "Add New Budget" */
   title: string
-  /** Descriptive text below the title */
-  description: string
   /** Primary action button label, e.g. "Add Budget" */
   submitLabel: string
 }
@@ -16,8 +14,6 @@ export interface IAddBudgetModalLabels {
 export interface IEditBudgetModalLabels {
   /** Modal title, e.g. "Edit Budget" */
   title: string
-  /** Descriptive text below the title */
-  description: string
   /** Primary action button label, e.g. "Save Changes" */
   submitLabel: string
 }
@@ -42,7 +38,6 @@ export function createAddBudgetModalConfig(
 ): IModalConfig {
   return {
     title: labels.title,
-    description: labels.description,
     body,
     actions: [
       { label: labels.submitLabel, variant: 'primary', onPress: onSubmit },
@@ -58,7 +53,6 @@ export function createEditBudgetModalConfig(
 ): IModalConfig {
   return {
     title: labels.title,
-    description: labels.description,
     body,
     actions: [
       { label: labels.submitLabel, variant: 'primary', onPress: onSubmit },

@@ -79,7 +79,8 @@
       "categoryLabel": "Budget Category",
       "maximumLabel": "Maximum Spend",
       "themeLabel": "Theme",
-      "maximumPlaceholder": "e.g. 2000"
+      "maximumPlaceholder": "e.g. 2000",
+      "alreadyUsed": "Already used"
     },
     "addModal": {
       "title": "Add New Budget",

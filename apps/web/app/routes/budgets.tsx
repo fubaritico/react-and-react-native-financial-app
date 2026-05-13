@@ -121,11 +121,12 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
         maximumLabel={t('budgets.form.maximumLabel')}
         themeLabel={t('budgets.form.themeLabel')}
         maximumPlaceholder={t('budgets.form.maximumPlaceholder')}
+        alreadyUsedLabel={t('budgets.form.alreadyUsed')}
+        description={t('budgets.addModal.description')}
       />,
       handleSubmitBudget,
       {
         title: t('budgets.addModal.title'),
-        description: t('budgets.addModal.description'),
         submitLabel: t('budgets.addModal.submitLabel'),
       }
     )
@@ -166,6 +167,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
         <Button
           title={t('budgets.addNewBudget')}
           onPress={handleAddBudget}
+          size="lg"
           variant="primary"
         />
       </div>

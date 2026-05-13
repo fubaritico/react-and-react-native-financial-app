@@ -91,11 +91,12 @@ export default function BudgetsScreen() {
         maximumLabel={t('budgets.form.maximumLabel')}
         themeLabel={t('budgets.form.themeLabel')}
         maximumPlaceholder={t('budgets.form.maximumPlaceholder')}
+        alreadyUsedLabel={t('budgets.form.alreadyUsed')}
+        description={t('budgets.addModal.description')}
       />,
       handleSubmitBudget,
       {
         title: t('budgets.addModal.title'),
-        description: t('budgets.addModal.description'),
         submitLabel: t('budgets.addModal.submitLabel'),
       }
     )

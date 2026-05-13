@@ -1,14 +1,8 @@
-import { resolveTokenColor } from '@financial-app/shared'
-import {
-  ColorDot,
-  Dropdown,
-  Icon,
-  TextInput,
-  Typography,
-  tw,
-} from '@financial-app/ui/native'
-import { useCallback, useImperativeHandle, useMemo, useState } from 'react'
+import { Dropdown, TextInput, Typography, tw } from '@financial-app/ui/native'
+import { useImperativeHandle, useMemo, useState } from 'react'
 import { View } from 'react-native'
+
+import { BudgetThemeDropdown } from '../BudgetThemeDropdown/BudgetThemeDropdown.native'
 
 import {
   BUDGET_CATEGORIES,
@@ -30,6 +24,8 @@ export function BudgetFormContent({
   maximumLabel = 'Maximum Spend',
   themeLabel = 'Theme',
   maximumPlaceholder = 'e.g. 2000',
+  alreadyUsedLabel = 'Already used',
+  description,
   ref,
 }: Readonly<IBudgetFormContentProps>) {
   const [category, setCategory] = useState(
@@ -70,26 +66,13 @@ export function BudgetFormContent({
     [existingThemes, initialValues?.theme]
   )
 
-  /** Custom trigger for the theme dropdown — ColorDot + label + caret */
-  const renderThemeTrigger = useCallback(
-    ({ selectedLabel }: { isOpen: boolean; selectedLabel: string }) => (
-      <View style={tw`flex-row items-center gap-3 flex-1`}>
-        <ColorDot color={resolveTokenColor(theme)} />
-        <Typography variant="body" style={tw`flex-1`}>
-          {selectedLabel}
-        </Typography>
-        <Icon
-          name="caretDown"
-          iconSize="xs"
-          color={tw.color('foreground') ?? '#201F24'}
-        />
-      </View>
-    ),
-    [theme]
-  )
-
   return (
     <View style={tw`gap-4`}>
+      {description ? (
+        <Typography variant="body" color="muted">
+          {description}
+        </Typography>
+      ) : null}
       {/* Category */}
       <View style={tw`gap-1`}>
         <Typography variant="body-bold" color="foreground">
@@ -101,6 +84,7 @@ export function BudgetFormContent({
           onSelect={setCategory}
           accessibilityLabel={categoryLabel}
           bottomSheetTitle={categoryLabel}
+          withPortal
         />
       </View>
 
@@ -122,13 +106,13 @@ export function BudgetFormContent({
         <Typography variant="body-bold" color="foreground">
           {themeLabel}
         </Typography>
-        <Dropdown
+        <BudgetThemeDropdown
           options={themeOptions}
           selectedValue={theme}
           onSelect={setTheme}
           accessibilityLabel={themeLabel}
           bottomSheetTitle={themeLabel}
-          trigger={renderThemeTrigger}
+          alreadyUsedLabel={alreadyUsedLabel}
         />
       </View>
     </View>

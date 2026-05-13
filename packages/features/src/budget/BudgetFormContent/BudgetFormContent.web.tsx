@@ -1,12 +1,7 @@
-import { resolveTokenColor } from '@financial-app/shared'
-import {
-  ColorDot,
-  Dropdown,
-  Icon,
-  TextInput,
-  Typography,
-} from '@financial-app/ui'
-import { useCallback, useImperativeHandle, useMemo, useState } from 'react'
+import { Dropdown, TextInput, Typography } from '@financial-app/ui'
+import { useImperativeHandle, useMemo, useState } from 'react'
+
+import { BudgetThemeDropdown } from '../BudgetThemeDropdown/BudgetThemeDropdown.web'
 
 import {
   BUDGET_CATEGORIES,
@@ -28,6 +23,8 @@ export function BudgetFormContent({
   maximumLabel = 'Maximum Spend',
   themeLabel = 'Theme',
   maximumPlaceholder = 'e.g. 2000',
+  alreadyUsedLabel = 'Already used',
+  description,
   ref,
 }: Readonly<IBudgetFormContentProps>) {
   const [category, setCategory] = useState(
@@ -68,22 +65,13 @@ export function BudgetFormContent({
     [existingThemes, initialValues?.theme]
   )
 
-  /** Custom trigger for the theme dropdown — ColorDot + label + caret */
-  const renderThemeTrigger = useCallback(
-    ({ selectedLabel }: { isOpen: boolean; selectedLabel: string }) => (
-      <span className="inline-flex items-center gap-3 flex-1">
-        <ColorDot color={resolveTokenColor(theme)} />
-        <Typography variant="body" as="span" className="flex-1">
-          {selectedLabel}
-        </Typography>
-        <Icon name="caretDown" iconSize="xs" color="currentColor" />
-      </span>
-    ),
-    [theme]
-  )
-
   return (
     <div className="flex flex-col gap-4">
+      {description && (
+        <Typography variant="body" color="muted">
+          {description}
+        </Typography>
+      )}
       {/* Category */}
       <div className="flex flex-col gap-1">
         <Typography variant="label" color="muted">
@@ -95,6 +83,7 @@ export function BudgetFormContent({
           onSelect={setCategory}
           accessibilityLabel={categoryLabel}
           bottomSheetTitle={categoryLabel}
+          withPortal
         />
       </div>
 
@@ -113,16 +102,16 @@ export function BudgetFormContent({
 
       {/* Theme */}
       <div className="flex flex-col gap-1">
-        <Typography variant="body-bold" color="foreground">
+        <Typography variant="label" color="muted">
           {themeLabel}
         </Typography>
-        <Dropdown
+        <BudgetThemeDropdown
           options={themeOptions}
           selectedValue={theme}
           onSelect={setTheme}
           accessibilityLabel={themeLabel}
           bottomSheetTitle={themeLabel}
-          trigger={renderThemeTrigger}
+          alreadyUsedLabel={alreadyUsedLabel}
         />
       </div>
     </div>

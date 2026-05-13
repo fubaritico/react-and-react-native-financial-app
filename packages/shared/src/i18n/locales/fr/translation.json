@@ -79,7 +79,8 @@
       "categoryLabel": "Catégorie de budget",
       "maximumLabel": "Dépense maximum",
       "themeLabel": "Thème",
-      "maximumPlaceholder": "ex. 2000"
+      "maximumPlaceholder": "ex. 2000",
+      "alreadyUsed": "Déjà utilisé"
     },
     "addModal": {
       "title": "Nouveau budget",

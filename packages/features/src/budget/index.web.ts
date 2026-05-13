@@ -1,6 +1,9 @@
 export { BudgetCategoryCard } from './BudgetCategoryCard/index.web'
 export type { IBudgetCategoryCardProps } from './BudgetCategoryCard/index.web'
 
+export { BudgetThemeDropdown } from './BudgetThemeDropdown/index.web'
+export type { IBudgetThemeDropdownProps } from './BudgetThemeDropdown/index.web'
+
 export { BudgetFormContent } from './BudgetFormContent/index.web'
 export type {
   IBudgetFormContentProps,
