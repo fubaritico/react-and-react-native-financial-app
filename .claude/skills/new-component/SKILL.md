@@ -267,7 +267,60 @@ Variants and styles are NEVER exported from the package.
 pnpm type-check && pnpm lint && pnpm test
 ```
 
-### 10. Create story
+### 10. Write tests
+
+Create `packages/ui/src/components/{level}/$Name/$Name.test.tsx` — web-only tests using Vitest + @testing-library/react.
+
+**What to test** (at minimum):
+- Renders without crashing (default props)
+- Each visual variant applies correctly (check class names or DOM state)
+- User interactions fire callbacks (click, press, change)
+- Disabled state prevents interaction
+- Accessibility attributes are correct (role, aria-label, aria-state)
+- Conditional rendering (optional props like `label`, `error`)
+
+**Test file template:**
+
+```tsx
+import { cleanup, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+
+import { $Name } from './$Name.web'
+
+afterEach(cleanup)
+
+describe('$Name', () => {
+  it('renders with default props', () => {
+    render(<$Name /* required props */ />)
+    expect(screen.getByRole('...')).toBeInTheDocument()
+  })
+
+  it('calls onChange on interaction', async () => {
+    const onChange = vi.fn()
+    render(<$Name onChange={onChange} /* ... */ />)
+    await userEvent.click(screen.getByRole('...'))
+    expect(onChange).toHaveBeenCalledWith(/* expected value */)
+  })
+
+  it('does not call onChange when disabled', async () => {
+    const onChange = vi.fn()
+    render(<$Name onChange={onChange} disabled /* ... */ />)
+    await userEvent.click(screen.getByRole('...'))
+    expect(onChange).not.toHaveBeenCalled()
+  })
+})
+```
+
+**Rules:**
+- Import the `.web` implementation directly (not from barrel) — avoids RN resolution issues
+- Use `vi.fn()` for callback spies
+- Use `@testing-library/user-event` for realistic interactions (not `fireEvent`)
+- Use `screen.getByRole()` / `screen.getByText()` — prefer accessible queries
+- Test the component's public API (props → rendered output), not internal implementation
+- Native tests (`.native.tsx`) require Jest + react-native-testing-library — not yet set up, skip for now
+
+### 11. Create story
 
 Invoke `/story $Name` after component creation.
 
@@ -294,6 +347,7 @@ Invoke `/story $Name` after component creation.
 - [ ] Variants and styles NOT exported from barrels or public API
 - [ ] Component + type exported from BOTH src/index.ts and src/index.web.ts
 - [ ] JSDocs on props interface properties
+- [ ] Web tests written (`$Name.test.tsx`) with render, interaction, disabled, a11y checks
 - [ ] Story created
 
 ## i18n — No Hardcoded User-Facing Text
@@ -307,6 +361,8 @@ But **every user-facing string** (labels, placeholders, aria-labels, button text
 
 Never hardcode visible text inside a component — even short labels like "OK", "Cancel", "Next".
 This includes default prop values (e.g. `editLabel = 'Edit Budget'`) — the English default is acceptable as a fallback, but a translation key MUST exist for it.
+
+**No default values for label props.** Label props (e.g. `nameLabel`, `categoryLabel`, `recurringLabel`) must be **required** — no `= 'Some Default'` in the function signature. The consumer always passes the label explicitly via `i18n.t('key')`. Default values hide whether the prop is wired or not, making it impossible to spot missing translations at a glance.
 
 ## Gotchas
 

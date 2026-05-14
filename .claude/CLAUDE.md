@@ -105,7 +105,7 @@ packages/
 | Local state    | Jotai                         |
 | Server state   | TanStack Query                |
 | Navigation     | Expo Router (mobile)          |
-| Forms          | react-hook-form + zod         |
+| Forms          | useFormValidation hook + zod   |
 
 ## Canonical Packages
 
@@ -152,14 +152,19 @@ Read `@completed.md`
 
 ### Next
 
-1. Onboarding (création de compte → mode manuel par défaut, mode banque en Phase 8B)
-2. Empty states (all screens + Overview sections)
-3. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
-4. **Centralized auth** — session validation on app focus (AppState → getSession())
-5. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
-6. Tests — API + hooks
-7. Phase 8B: GoCardless bank connection (mode banque)
-8. Navigation web: graphic design refinement (user doing manual pass)
+1. **CRUD Transactions (mode manuel)** — `docs/plans/transactions/transaction-crud-plan.md`
+   - 1.a: API POST/PUT/DELETE + TransactionFormContent + modal Add + useFormValidation
+   - 1.b: Checkbox component (UI atoms) — `docs/plans/transactions/checkbox-plan.md`
+   - 1.c: DatePicker component (UI atoms) — `docs/plans/transactions/datepicker-plan.md`
+   - 2-5: modal Edit, modal Delete, action column ellipsis, bouton Add
+2. Onboarding — `docs/plans/onboarding-plan.md`
+3. Empty states (all screens + Overview sections)
+4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
+5. **Centralized auth** — session validation on app focus (AppState → getSession())
+6. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
+7. Tests — API + hooks
+8. Phase 8B: GoCardless bank connection (mode banque) — `docs/plans/phase-8B-gocardless-bank-connection.md`
+9. Navigation web: graphic design refinement (user doing manual pass)
 
 **Pending tests**:
 - iPad: verify BottomSheet overlay, 2-tap switching, text truncation
@@ -208,4 +213,8 @@ Read `@completed.md`
 - `expo-dev-client` crashes on Android API 36/37 (Baklava) — use API 35 (Android 15). Tracked: expo/expo#35385
 - twrnc does NOT support class overriding like tailwind-merge — `px-0` after `px-5` won't override in a single tw call. Use RN `style` prop (last in array wins) or choose the right CVA size variant instead
 - QUAL-009: Pots pages (web ~407 + mobile ~373 lines) exceed 200 lines — same pattern as budget, extract `usePotsModals` hook later
+- Balance model per month: `current = reference - SUM(pots)` doesn't handle months — needs refactor with `months` table (opening_balance + SUM transactions) when onboarding is implemented
+- 5th nav button becomes hamburger menu with all navigations + extras (language, months, logout, tutorial) — Recurring Bills moves inside this menu
+- App philosophy: supplementary financial management tool / forecasting. NEVER writes to user's bank account. Bank data is copied as working draft. User controls month creation rhythm (not automatic).
+- useFormValidation hook added to shared — budget/pots modals don't use it yet (retrofit planned after CRUD transactions)
 
