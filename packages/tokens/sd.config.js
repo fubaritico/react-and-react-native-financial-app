@@ -51,7 +51,27 @@ export type Tokens = typeof tokens
 })
 
 /**
- * Custom format: Tailwind v3 JS map — flat key-value for theme.extend
+ * Helper: build grouped token map { category: { name: value } }
+ */
+function buildGroupedMap(dictionary) {
+  const grouped = {}
+
+  dictionary.allTokens.forEach((token) => {
+    const category = token.path[0]
+    const name = token.path.slice(1).join('-')
+    const value = token.$value ?? token.value
+
+    if (!grouped[category]) {
+      grouped[category] = {}
+    }
+    grouped[category][name] = value
+  })
+
+  return grouped
+}
+
+/**
+ * Custom format: Tailwind v3 JS map (CJS) — flat key-value for theme.extend
  *
  * Output shape: module.exports = { color: { primary: '#hex', ... }, spacing: { ... } }
  * Grouped by top-level category for easy spreading into tailwind.config.js
@@ -59,26 +79,27 @@ export type Tokens = typeof tokens
 StyleDictionary.registerFormat({
   name: 'javascript/tailwind-map',
   format: ({ dictionary }) => {
-    const grouped = {}
-
-    dictionary.allTokens.forEach((token) => {
-      const category = token.path[0]
-      const name = token.path.slice(1).join('-')
-      const value = token.$value ?? token.value
-
-      if (!grouped[category]) {
-        grouped[category] = {}
-      }
-      grouped[category][name] = value
-    })
-
-    const lines = [
+    const grouped = buildGroupedMap(dictionary)
+    return [
       '/** @type {Record<string, Record<string, string>>} */',
       `module.exports = ${JSON.stringify(grouped, null, 2)}`,
       '',
-    ]
+    ].join('\n')
+  },
+})
 
-    return lines.join('\n')
+/**
+ * Custom format: Tailwind v3 JS map (ESM) — same shape as CJS but with export default
+ */
+StyleDictionary.registerFormat({
+  name: 'javascript/tailwind-map-esm',
+  format: ({ dictionary }) => {
+    const grouped = buildGroupedMap(dictionary)
+    return [
+      '/** @type {Record<string, Record<string, string>>} */',
+      `export default ${JSON.stringify(grouped, null, 2)}`,
+      '',
+    ].join('\n')
   },
 })
 
@@ -109,29 +130,47 @@ StyleDictionary.registerTransform({
 })
 
 /**
- * Custom format: RN-friendly flat JS export (unitless numbers)
+ * Helper: build nested token object from flat token list
+ */
+function buildNestedTokens(dictionary) {
+  const tokens = {}
+
+  dictionary.allTokens.forEach((token) => {
+    let current = tokens
+    const path = token.path
+
+    for (let i = 0; i < path.length - 1; i++) {
+      if (!current[path[i]]) {
+        current[path[i]] = {}
+      }
+      current = current[path[i]]
+    }
+
+    current[path[path.length - 1]] = token.$value ?? token.value
+  })
+
+  return tokens
+}
+
+/**
+ * Custom format: RN-friendly flat JS export — CJS (unitless numbers)
  */
 StyleDictionary.registerFormat({
   name: 'javascript/native',
   format: ({ dictionary }) => {
-    const tokens = {}
+    const tokens = buildNestedTokens(dictionary)
+    return `module.exports = ${JSON.stringify(tokens, null, 2)}\n`
+  },
+})
 
-    dictionary.allTokens.forEach((token) => {
-      let current = tokens
-      const path = token.path
-
-      for (let i = 0; i < path.length - 1; i++) {
-        if (!current[path[i]]) {
-          current[path[i]] = {}
-        }
-        current = current[path[i]]
-      }
-
-      current[path[path.length - 1]] = token.$value ?? token.value
-    })
-
-    return `module.exports = ${JSON.stringify(tokens, null, 2)}
-`
+/**
+ * Custom format: RN-friendly flat JS export — ESM (unitless numbers)
+ */
+StyleDictionary.registerFormat({
+  name: 'javascript/native-esm',
+  format: ({ dictionary }) => {
+    const tokens = buildNestedTokens(dictionary)
+    return `export default ${JSON.stringify(tokens, null, 2)}\n`
   },
 })
 
@@ -156,6 +195,10 @@ export default {
         {
           destination: 'tailwind.tokens.js',
           format: 'javascript/tailwind-map',
+        },
+        {
+          destination: 'tailwind.tokens.mjs',
+          format: 'javascript/tailwind-map-esm',
         },
       ],
     },
@@ -186,6 +229,10 @@ export default {
         {
           destination: 'tokens.native.js',
           format: 'javascript/native',
+        },
+        {
+          destination: 'tokens.native.mjs',
+          format: 'javascript/native-esm',
         },
       ],
     },

@@ -11,8 +11,14 @@
       }
     },
     "./css": "./build/css/variables.css",
-    "./tailwind": "./build/tailwind/tailwind.tokens.js",
-    "./native": "./build/native/tokens.native.js",
+    "./tailwind": {
+      "import": "./build/tailwind/tailwind.tokens.mjs",
+      "require": "./build/tailwind/tailwind.tokens.js"
+    },
+    "./native": {
+      "import": "./build/native/tokens.native.mjs",
+      "require": "./build/native/tokens.native.js"
+    },
     "./map": "./build/ts/tokens.ts"
   },
   "react-native": "./build/native/tokens.native.js",
