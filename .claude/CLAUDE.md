@@ -155,7 +155,10 @@ Read `@completed.md`
 1. **CRUD Transactions (mode manuel)** — `docs/plans/transactions/transaction-crud-plan.md`
    - ~~1.a: API POST/PUT/DELETE + TransactionFormContent + modal Add + useFormValidation~~ ✅
    - ~~1.b: Checkbox component (UI atoms)~~ ✅ — integrated in TransactionFormContent, Vitest setup for features
-   - 1.c: DatePicker component (UI atoms) — `docs/plans/transactions/datepicker-plan.md`
+   - ~~1.c: DatePicker web + icon rect SVG support~~ ✅ — organism (desktop: react-aria segments+popover, mobile: BottomSheet+calendar), 48 tests, stories
+   - ~~1.c.2: DatePicker native implementation~~ ✅ — `@react-native-community/datetimepicker` (iOS inline, Android dialog), 16 native tests, token-based icon color, a11y live region
+   - ~~1.c.3: DatePicker i18n labels~~ ✅ — datePicker.placeholder, datePicker.accessibilityLabel, transactions.form.dateLabel (en + fr)
+   - ~~1.d: DatePicker integration in TransactionFormContent (Phase 8 of datepicker-plan)~~ ✅ — iOS BottomSheet dark calendar (themeVariant+accentColor), Android native dialog, ghost/icon Button variant, Checkbox circular dep fix, Android TextInput padding normalization, 16+8 tests
    - 2-5: modal Edit, modal Delete, action column ellipsis, bouton Add
 2. Onboarding — `docs/plans/onboarding-plan.md`
 3. Empty states (all screens + Overview sections)
@@ -217,4 +220,12 @@ Read `@completed.md`
 - 5th nav button becomes hamburger menu with all navigations + extras (language, months, logout, tutorial) — Recurring Bills moves inside this menu
 - App philosophy: supplementary financial management tool / forecasting. NEVER writes to user's bank account. Bank data is copied as working draft. User controls month creation rhythm (not automatic).
 - useFormValidation hook added to shared — budget/pots modals don't use it yet (retrofit planned after CRUD transactions)
+- Icon pipeline now supports path + circle + rect SVG elements (fill-based only — stroke-based paths won't render)
+- `react-aria-components` are web-only (DOM-based) — NOT compatible with React Native. Native DatePicker uses `@react-native-community/datetimepicker`
+- DatePicker `w-[280px]` arbitrary Tailwind value for calendar popover width — no token exists for this, accepted
+- Android `EditText` (RN TextInput) has larger default padding than iOS — fixed with `includeFontPadding: false` + `textAlignVertical: 'center'` + `paddingVertical: 0` (Platform.OS guard, iOS untouched)
+- Checkbox.native.tsx: barrel import `#Atoms` causes circular dependency at runtime (Metro) — atoms must use direct sibling imports (`../Icon/Icon.native`) instead of barrel when importing siblings
+- DatePicker native iOS: `display="inline"` overflows modal — must use BottomSheet container. `themeVariant="dark"` + `accentColor` (beige-500) for dark calendar styling
+- Button `ghost` variant (no bg/border) + `icon` size (40x40, no padding) — used for icon-only buttons like BottomSheet close. Icon size is controlled by `Icon iconSize` prop, NOT by Button size.
+- Deferred discussion: i18n injection on web side and SSR implications
 
