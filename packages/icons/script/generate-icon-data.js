@@ -14,9 +14,7 @@ const OUTPUT_DIR = path.join(__dirname, '../src/generated')
  * Strips "icon-" prefix. Keeps "logo-" prefix.
  */
 function toIconName(filename) {
-  const base = filename
-    .replace(/\.svg$/, '')
-    .replace(/^icon-/, '')
+  const base = filename.replace(/\.svg$/, '').replace(/^icon-/, '')
 
   return base.replace(/-([a-z])/g, (_, c) => c.toUpperCase())
 }
@@ -32,10 +30,10 @@ function toIconName(filename) {
 function validateSvg(filename, content) {
   const errors = []
 
-  if (/<svg[^>]+\bwidth="/.test(content)) {
+  if (/<svg[^>]+width="/.test(content)) {
     errors.push('has width attribute on <svg> — remove it, use viewBox only')
   }
-  if (/<svg[^>]+\bheight="/.test(content)) {
+  if (/<svg[^>]+height="/.test(content)) {
     errors.push('has height attribute on <svg> — remove it, use viewBox only')
   }
 
@@ -107,6 +105,23 @@ function parseSvg(content) {
     }
   }
 
+  const rectRegex = /<rect\s+([^/]*?)\/?\s*>/g
+  while ((match = rectRegex.exec(content)) !== null) {
+    const attrs = match[1]
+    const x = attrs.match(/x="([^"]+)"/)?.[1]
+    const y = attrs.match(/y="([^"]+)"/)?.[1]
+    const rWidth = attrs.match(/width="([^"]+)"/)?.[1]
+    const rHeight = attrs.match(/height="([^"]+)"/)?.[1]
+    const rx = attrs.match(/rx="([^"]+)"/)?.[1]
+    const ry = attrs.match(/ry="([^"]+)"/)?.[1]
+    if (x && y && rWidth && rHeight) {
+      const rectObj = { type: 'rect', x, y, width: rWidth, height: rHeight }
+      if (rx) rectObj.rx = rx
+      if (ry) rectObj.ry = ry
+      paths.push(rectObj)
+    }
+  }
+
   return { viewBox, width, height, paths }
 }
 
@@ -143,7 +158,17 @@ function generateIconData(icons) {
     '  r: string',
     '}',
     '',
-    'export type IconElement = IconPathData | IconCircleData',
+    'export interface IconRectData {',
+    "  type: 'rect'",
+    '  x: string',
+    '  y: string',
+    '  width: string',
+    '  height: string',
+    '  rx?: string',
+    '  ry?: string',
+    '}',
+    '',
+    'export type IconElement = IconPathData | IconCircleData | IconRectData',
     '',
     'export interface IconDefinition {',
     '  viewBox: string',
@@ -203,14 +228,17 @@ function main() {
 
   // Category icons (src/assets/categories/) — prefixed with "category"
   if (fs.existsSync(CATEGORIES_DIR)) {
-    const catFiles = fs.readdirSync(CATEGORIES_DIR).filter((f) => f.endsWith('.svg'))
+    const catFiles = fs
+      .readdirSync(CATEGORIES_DIR)
+      .filter((f) => f.endsWith('.svg'))
     for (const file of catFiles) {
       const content = fs.readFileSync(path.join(CATEGORIES_DIR, file), 'utf-8')
 
       validateSvg(file, content)
 
       const baseName = toIconName(file)
-      const name = 'category' + baseName.charAt(0).toUpperCase() + baseName.slice(1)
+      const name =
+        'category' + baseName.charAt(0).toUpperCase() + baseName.slice(1)
       const parsed = parseSvg(content)
 
       if (parsed.paths.length === 0) {
@@ -219,7 +247,9 @@ function main() {
       }
 
       icons[name] = parsed
-      console.warn(`  categories/${file} → ${name} (${parsed.paths.length} element(s))`)
+      console.warn(
+        `  categories/${file} → ${name} (${parsed.paths.length} element(s))`
+      )
     }
   }
 

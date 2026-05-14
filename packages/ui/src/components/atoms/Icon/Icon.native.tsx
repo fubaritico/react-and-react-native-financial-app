@@ -1,5 +1,5 @@
 import { iconData } from '@financial-app/icons'
-import Svg, { Circle, Path } from 'react-native-svg'
+import Svg, { Circle, Path, Rect } from 'react-native-svg'
 
 import tw from '#Lib/tw'
 
@@ -60,6 +60,23 @@ export function Icon({
       {icon.elements.map((el, i) => {
         if ('type' in el && el.type === 'circle') {
           return <Circle key={i} cx={el.cx} cy={el.cy} r={el.r} fill={color} />
+        }
+
+        if ('type' in el && el.type === 'rect') {
+          return (
+            <Rect
+              key={i}
+              // eslint-disable-next-line @typescript-eslint/no-deprecated -- SVG x/y attributes, not transform props
+              x={el.x}
+              // eslint-disable-next-line @typescript-eslint/no-deprecated
+              y={el.y}
+              width={el.width}
+              height={el.height}
+              rx={el.rx}
+              ry={el.ry}
+              fill={color}
+            />
+          )
         }
 
         return (

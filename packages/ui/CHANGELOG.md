@@ -79,6 +79,7 @@
 * **transactions:** add CRUD API + TransactionFormContent + Add modal ([53d6b90](https://github.com/fubaritico/react-and-react-native-financial-app/commit/53d6b90e2c14409d6cfdacefb2eba530c5b9157a))
 * **ui:** add Alert molecule + Skeleton/Spinner atoms + CSS pipeline ([75fbd9e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/75fbd9e932bc566bfe1555923cafb057dbcd3b3f))
 * **ui:** add buffer support to ProgressBar component ([1427e01](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1427e0160a8cf648178e5b09ec450fb5da7ea49b))
+* **ui:** add Checkbox atom component with tests and stories ([844fd52](https://github.com/fubaritico/react-and-react-native-financial-app/commit/844fd52089595e0cd339d19ab58402c533ef6d0f))
 * **ui:** add DataTable cell factories (steps 1-3) ([1bff31d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1bff31d13d3eadc5356f57c33f8abb4a97a59ffe))
 * **ui:** add DataTable shell, SortableHeader, ActionBar, Pagination (steps 4-11) ([c89cff0](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c89cff0ecb3e05881f3dbfc89fba3bd14a387f52))
 * **ui:** add DataTable sub-components + reorganize into components/ (steps 12) ([c082aab](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c082aab5c4c6d60fc92c26a5e90ad726957105c9))

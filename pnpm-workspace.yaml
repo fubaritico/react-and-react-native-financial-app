@@ -90,5 +90,8 @@ catalog:
   expo-localization: "~15.0.3"
   react-native-localize: "^3.4.1"
 
+  # Date
+  "@internationalized/date": "^3.12.1"
+
   # Release tools
   conventional-changelog: "7.2.0"

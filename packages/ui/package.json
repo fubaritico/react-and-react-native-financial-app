@@ -43,9 +43,11 @@
     "@financial-app/tailwind-config": "workspace:^",
     "@financial-app/tokens": "workspace:^",
     "@fontsource-variable/public-sans": "^5.2.7",
+    "@internationalized/date": "catalog:",
     "@tanstack/react-table": "catalog:",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "react-aria-components": "^1.17.0",
     "tailwind-merge": "^3.5.0",
     "twrnc": "catalog:"
   },

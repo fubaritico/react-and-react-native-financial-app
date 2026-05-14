@@ -31,6 +31,7 @@
     "@financial-app/shared": "workspace:^",
     "@financial-app/tailwind-config": "workspace:^",
     "@financial-app/ui": "workspace:^",
+    "@react-native-community/datetimepicker": "8.4.4",
     "@react-native-google-signin/google-signin": "^16.1.2",
     "@tanstack/react-query": "catalog:",
     "expo": "catalog:",

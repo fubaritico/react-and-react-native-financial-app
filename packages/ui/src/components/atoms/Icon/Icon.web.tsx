@@ -56,6 +56,21 @@ export function Icon({
           return <circle key={i} cx={el.cx} cy={el.cy} r={el.r} fill={color} />
         }
 
+        if ('type' in el && el.type === 'rect') {
+          return (
+            <rect
+              key={i}
+              x={el.x}
+              y={el.y}
+              width={el.width}
+              height={el.height}
+              rx={el.rx}
+              ry={el.ry}
+              fill={color}
+            />
+          )
+        }
+
         return (
           <path
             key={i}
