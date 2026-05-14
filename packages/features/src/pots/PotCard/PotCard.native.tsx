@@ -104,7 +104,7 @@ export function PotCard({
           bottomSheetTitle={name}
           buttonVariant="tertiary"
           buttonSize="md"
-          buttonClassName="p-0 text-grey-300"
+          buttonClassName="text-grey-300 size-10 -mr-2"
           buttonCentered
           trigger={() => (
             <Icon
@@ -139,6 +139,7 @@ export function PotCard({
           title={addMoneyLabel}
           onPress={onAddMoney ?? noop}
           variant="secondary"
+          size="lg"
           className={shared.button}
           centered
         />
@@ -146,6 +147,7 @@ export function PotCard({
           title={withdrawLabel}
           onPress={onWithdraw ?? noop}
           variant="secondary"
+          size="lg"
           className={shared.button}
           centered
         />

@@ -91,6 +91,7 @@ packages/
 - NEVER commit packages/tokens/build/ — it is always generated
 - NEVER put hover:/focus:/transition-/shadow- classes in shared CVA variants
 - NEVER add renderer imports to packages/variants/, hooks/, or shared/
+- NEVER call TanStack Query option factories (e.g. `getPotsOptions()`) at module top level — always inside the component body. On Android, modules are evaluated before `useConfigureHttpClient` sets the correct `baseUrl` (`10.0.2.2`), so the query fires against `localhost` which the emulator can't reach.
 
 ## Tech Stack
 
@@ -151,7 +152,15 @@ Read `@completed.md`
 
 ### Next
 
-1. Pot Add Money / Withdraw modals — check ref `files/proto/screen and readme/Desktop - Pots.png` to see if these are modals or inline in the PotCard
+1. Pot Add Money / Withdraw modals — full wiring:
+   a. API: verify/create POST /pots/:id/add + POST /pots/:id/withdraw endpoints (atomic mutation)
+   b. HTTP client: regenerate after API endpoints
+   c. PotAmountFormContent (features molecule): "New Amount" row + ProgressBar with buffer + percentage + TextInput ($), reused for add/withdraw
+   d. Modal configs: createAddMoneyModalConfig + createWithdrawModalConfig
+   e. Wire in pages: handleAddMoney(pot) + handleWithdraw(pot) in PotCardItem → PotCard (web + mobile-expo)
+   f. i18n keys (en + fr)
+   g. Story for PotAmountFormContent
+   Note: ProgressBar primary fill in modals = always grey-900 (foreground), NOT pot theme color
 2. Onboarding (création de compte → mode manuel par défaut, mode banque en Phase 8B)
 3. Empty states (all screens + Overview sections)
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
@@ -204,4 +213,5 @@ Read `@completed.md`
 - iOS ATS blocks cleartext HTTP to localhost — `app.json` needs `NSAllowsLocalNetworking: true` in infoPlist + native rebuild (`npx expo prebuild --clean && npx expo run:ios`). See `memory/auth-401-redirect-wip.md`
 - QUAL-009: Budget pages (web + mobile) exceed 200 lines (~240/230) — extract `useBudgetModals` hook in future refactor
 - `IModalConfig.description` removed — all modal body content uses `body: ReactNode` exclusively
+- CSS variable bridge `var(--color-base-${color}-DEFAULT)` fails for colors without DEFAULT suffix (e.g. grey-900). Fixed in ProgressBar with fallback: `var(--color-base-X-DEFAULT, var(--color-base-X))`. Other components using the same pattern may need the same fix.
 

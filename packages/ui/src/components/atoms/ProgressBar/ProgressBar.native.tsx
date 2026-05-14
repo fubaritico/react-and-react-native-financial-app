@@ -53,7 +53,7 @@ export function ProgressBar({
           <View style={tw`${shared.fillRow}`}>
             <View
               style={[
-                tw`${fillClass} bg-${color}`,
+                tw`${fillClass} bg-${color}${primaryPct === 0 ? ' mr-0' : ''}`,
                 { width: `${String(primaryPct)}%` },
               ]}
             />

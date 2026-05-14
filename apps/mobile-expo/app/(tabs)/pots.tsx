@@ -1,13 +1,18 @@
 import {
+  PotAmountFormContent,
   PotCard,
   PotFormContent,
+  createAddMoneyModalConfig,
   createAddPotModalConfig,
   createDeletePotModalConfig,
   createEditPotModalConfig,
+  createWithdrawModalConfig,
 } from '@financial-app/features'
 import {
   deletePotsByIdMutation,
   getPotsOptions,
+  postPotsByIdAddMutation,
+  postPotsByIdWithdrawMutation,
   postPotsMutation,
   putPotsByIdMutation,
 } from '@financial-app/http-client'
@@ -18,7 +23,7 @@ import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
-import type { IPotFormRef } from '@financial-app/features'
+import type { IPotAmountFormRef, IPotFormRef } from '@financial-app/features'
 import type { Pot } from '@financial-app/http-client'
 
 import tw from '../../src/lib/tw'
@@ -31,6 +36,10 @@ interface IPotCardItemProps {
   onEdit: (pot: Pot) => void
   /** Callback receiving the pot to delete */
   onDelete: (pot: Pot) => void
+  /** Callback receiving the pot to add money to */
+  onAddMoney: (pot: Pot) => void
+  /** Callback receiving the pot to withdraw from */
+  onWithdraw: (pot: Pot) => void
   /** Label translations */
   totalSavedLabel: string
   targetOfLabel: string
@@ -40,11 +49,13 @@ interface IPotCardItemProps {
   deleteLabel: string
 }
 
-/** Wrapper that memoizes the onEdit/onDelete callbacks per pot (avoids inline arrow in map) */
+/** Wrapper that memoizes callbacks per pot (avoids inline arrow in map) */
 function PotCardItem({
   pot,
   onEdit,
   onDelete,
+  onAddMoney,
+  onWithdraw,
   ...labels
 }: Readonly<IPotCardItemProps>) {
   const handleEdit = useCallback(() => {
@@ -55,6 +66,14 @@ function PotCardItem({
     onDelete(pot)
   }, [pot, onDelete])
 
+  const handleAddMoney = useCallback(() => {
+    onAddMoney(pot)
+  }, [pot, onAddMoney])
+
+  const handleWithdraw = useCallback(() => {
+    onWithdraw(pot)
+  }, [pot, onWithdraw])
+
   return (
     <PotCard
       name={pot.name}
@@ -63,19 +82,21 @@ function PotCardItem({
       color={pot.theme}
       onEdit={handleEdit}
       onDelete={handleDelete}
+      onAddMoney={handleAddMoney}
+      onWithdraw={handleWithdraw}
       {...labels}
     />
   )
 }
-
-const potsOpts = getPotsOptions()
 
 export default function PotsScreen() {
   const { t } = useTranslation()
   const modal = useModal()
   const qc = useQueryClient()
   const formRef = useRef<IPotFormRef>(null)
+  const amountRef = useRef<IPotAmountFormRef>(null)
 
+  const potsOpts = getPotsOptions()
   const { data: pots, isLoading, error } = useQuery(potsOpts)
 
   /** ID of the pot currently being edited (stable ref to avoid stale closures) */
@@ -99,6 +120,22 @@ export default function PotsScreen() {
 
   const { mutate: deletePot } = useMutation({
     ...deletePotsByIdMutation(),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
+      modal.close()
+    },
+  })
+
+  const { mutate: addMoney } = useMutation({
+    ...postPotsByIdAddMutation(),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
+      modal.close()
+    },
+  })
+
+  const { mutate: withdrawMoney } = useMutation({
+    ...postPotsByIdWithdrawMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
       modal.close()
@@ -215,6 +252,68 @@ export default function PotsScreen() {
     [t, modal, deletePot]
   )
 
+  /** Opens the Add Money modal for the given pot */
+  const handleAddMoney = useCallback(
+    (pot: Pot) => {
+      const handleSubmit = () => {
+        const amount = amountRef.current?.getAmount() ?? 0
+        if (amount <= 0) return
+        addMoney({ path: { id: pot.id }, body: { amount } })
+      }
+      const config = createAddMoneyModalConfig(
+        pot.name,
+        <PotAmountFormContent
+          ref={amountRef}
+          currentTotal={pot.total}
+          target={pot.target}
+          mode="add"
+          newAmountLabel={t('pots.addMoneyModal.newAmountLabel')}
+          targetOfLabel={t('pots.targetOf')}
+          amountLabel={t('pots.addMoneyModal.amountLabel')}
+          amountPlaceholder={t('pots.addMoneyModal.amountPlaceholder')}
+        />,
+        handleSubmit,
+        {
+          title: (name) => t('pots.addMoneyModal.title', { name }),
+          submitLabel: t('pots.addMoneyModal.submitLabel'),
+        }
+      )
+      modal.open(config)
+    },
+    [t, modal, addMoney]
+  )
+
+  /** Opens the Withdraw modal for the given pot */
+  const handleWithdraw = useCallback(
+    (pot: Pot) => {
+      const handleSubmit = () => {
+        const amount = amountRef.current?.getAmount() ?? 0
+        if (amount <= 0) return
+        withdrawMoney({ path: { id: pot.id }, body: { amount } })
+      }
+      const config = createWithdrawModalConfig(
+        pot.name,
+        <PotAmountFormContent
+          ref={amountRef}
+          currentTotal={pot.total}
+          target={pot.target}
+          mode="withdraw"
+          newAmountLabel={t('pots.withdrawModal.newAmountLabel')}
+          targetOfLabel={t('pots.targetOf')}
+          amountLabel={t('pots.withdrawModal.amountLabel')}
+          amountPlaceholder={t('pots.withdrawModal.amountPlaceholder')}
+        />,
+        handleSubmit,
+        {
+          title: (name) => t('pots.withdrawModal.title', { name }),
+          submitLabel: t('pots.withdrawModal.submitLabel'),
+        }
+      )
+      modal.open(config)
+    },
+    [t, modal, withdrawMoney]
+  )
+
   if (isLoading) {
     return (
       <View style={tw`flex-1 bg-beige-100`}>
@@ -257,6 +356,8 @@ export default function PotsScreen() {
             pot={pot}
             onEdit={handleEditPot}
             onDelete={handleDeletePot}
+            onAddMoney={handleAddMoney}
+            onWithdraw={handleWithdraw}
             totalSavedLabel={t('pots.totalSaved')}
             targetOfLabel={t('pots.targetOf')}
             addMoneyLabel={t('pots.addMoney')}

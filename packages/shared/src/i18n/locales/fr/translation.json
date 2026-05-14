@@ -140,6 +140,22 @@
       "description": "Êtes-vous sûr de vouloir supprimer cette cagnotte ? Cette action est irréversible et toutes les données seront supprimées définitivement.",
       "confirmLabel": "Oui, confirmer la suppression",
       "cancelLabel": "Non, revenir"
+    },
+    "addMoneyModal": {
+      "title": "Ajouter à « {{name}} »",
+      "description": "Ajoutez de l'argent à votre cagnotte pour atteindre vos objectifs d'épargne.",
+      "amountLabel": "Montant à ajouter",
+      "amountPlaceholder": "ex. 50",
+      "newAmountLabel": "Nouveau montant",
+      "submitLabel": "Confirmer l'ajout"
+    },
+    "withdrawModal": {
+      "title": "Retirer de « {{name}} »",
+      "description": "Retirez de l'argent de votre cagnotte vers votre solde principal.",
+      "amountLabel": "Montant à retirer",
+      "amountPlaceholder": "ex. 50",
+      "newAmountLabel": "Nouveau montant",
+      "submitLabel": "Confirmer le retrait"
     }
   },
   "recurring": {

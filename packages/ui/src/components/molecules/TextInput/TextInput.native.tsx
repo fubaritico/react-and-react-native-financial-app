@@ -67,7 +67,7 @@ export const TextInput = ({
         <Typography
           variant="caption"
           color={error ? 'destructive' : 'muted'}
-          align="right"
+          align="left"
         >
           {helperText}
         </Typography>

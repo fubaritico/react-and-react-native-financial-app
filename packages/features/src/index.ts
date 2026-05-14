@@ -44,15 +44,22 @@ export type { IPotCardProps } from './pots'
 export { PotFormContent } from './pots'
 export type { IPotFormContentProps, IPotFormRef, IPotFormValues } from './pots'
 
+export { PotAmountFormContent } from './pots'
+export type { IPotAmountFormContentProps, IPotAmountFormRef } from './pots'
+
 export {
   createAddPotModalConfig,
   createEditPotModalConfig,
   createDeletePotModalConfig,
+  createAddMoneyModalConfig,
+  createWithdrawModalConfig,
 } from './pots'
 export type {
   IAddPotModalLabels,
   IEditPotModalLabels,
   IDeletePotModalLabels,
+  IAddMoneyModalLabels,
+  IWithdrawModalLabels,
 } from './pots'
 
 export { RecurringBillsDataTable } from './recurring-bills'

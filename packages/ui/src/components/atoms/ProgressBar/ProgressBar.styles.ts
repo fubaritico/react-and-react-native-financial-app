@@ -9,13 +9,13 @@ export const shared = {
   /** Flex row container for primary + buffer fills */
   fillRow: 'flex-row items-center h-full w-full',
   /** Primary fill when buffer is present — no right rounding (thick) */
-  fillThickPrimaryWithBuffer: 'h-full rounded-l-sm',
+  fillThickPrimaryWithBuffer: 'h-full rounded-l-sm mr-px',
   /** Primary fill when buffer is present — no right rounding (thin) */
-  fillThinPrimaryWithBuffer: 'h-full rounded-l-lg',
+  fillThinPrimaryWithBuffer: 'h-full rounded-l-lg mr-px',
   /** Buffer fill — no left rounding (thick) */
-  fillThickBuffer: 'h-full rounded-r-sm ml-px',
+  fillThickBuffer: 'h-full rounded-r-sm',
   /** Buffer fill — no left rounding (thin) */
-  fillThinBuffer: 'h-full rounded-r-lg ml-px',
+  fillThinBuffer: 'h-full rounded-r-lg',
 } as const
 
 /** Web-only classes for ProgressBar */

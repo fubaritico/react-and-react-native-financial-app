@@ -48,15 +48,25 @@ export type {
   IPotFormValues,
 } from './pots/index.web'
 
+export { PotAmountFormContent } from './pots/index.web'
+export type {
+  IPotAmountFormContentProps,
+  IPotAmountFormRef,
+} from './pots/index.web'
+
 export {
   createAddPotModalConfig,
   createEditPotModalConfig,
   createDeletePotModalConfig,
+  createAddMoneyModalConfig,
+  createWithdrawModalConfig,
 } from './pots/index.web'
 export type {
   IAddPotModalLabels,
   IEditPotModalLabels,
   IDeletePotModalLabels,
+  IAddMoneyModalLabels,
+  IWithdrawModalLabels,
 } from './pots/index.web'
 
 export { RecurringBillsDataTable } from './recurring-bills/index.web'

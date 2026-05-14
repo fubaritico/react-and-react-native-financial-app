@@ -58,6 +58,54 @@ export function createEditPotModalConfig(
   }
 }
 
+/** Labels for the Add Money modal (i18n — pass translated strings) */
+export interface IAddMoneyModalLabels {
+  /** Title builder — receives pot name, e.g. "Add to 'Savings'" */
+  title: (potName: string) => string
+  /** Primary action button label, e.g. "Confirm Addition" */
+  submitLabel: string
+}
+
+/** Labels for the Withdraw modal (i18n — pass translated strings) */
+export interface IWithdrawModalLabels {
+  /** Title builder — receives pot name, e.g. "Withdraw from 'Savings'" */
+  title: (potName: string) => string
+  /** Primary action button label, e.g. "Confirm Withdrawal" */
+  submitLabel: string
+}
+
+/** Creates an IModalConfig for the Add Money modal */
+export function createAddMoneyModalConfig(
+  potName: string,
+  body: ReactNode,
+  onSubmit: () => void,
+  labels: IAddMoneyModalLabels
+): IModalConfig {
+  return {
+    title: labels.title(potName),
+    body,
+    actions: [
+      { label: labels.submitLabel, variant: 'primary', onPress: onSubmit },
+    ],
+  }
+}
+
+/** Creates an IModalConfig for the Withdraw modal */
+export function createWithdrawModalConfig(
+  potName: string,
+  body: ReactNode,
+  onSubmit: () => void,
+  labels: IWithdrawModalLabels
+): IModalConfig {
+  return {
+    title: labels.title(potName),
+    body,
+    actions: [
+      { label: labels.submitLabel, variant: 'primary', onPress: onSubmit },
+    ],
+  }
+}
+
 /** Creates an IModalConfig for the Delete Pot modal */
 export function createDeletePotModalConfig(
   potName: string,

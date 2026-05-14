@@ -58,7 +58,7 @@ export function ProgressBar({
         {hasBuffer ? (
           <div className={cn(web.fillRow, shared.fillRow)}>
             <div
-              className={fillClass}
+              className={cn(fillClass, { 'mr-0': primaryPct === 0 })}
               style={{
                 width: `${String(primaryPct)}%`,
                 backgroundColor: `var(--color-base-${color}-DEFAULT, var(--color-base-${color}))`,

@@ -140,6 +140,22 @@
       "description": "Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever.",
       "confirmLabel": "Yes, Confirm Deletion",
       "cancelLabel": "No, Go Back"
+    },
+    "addMoneyModal": {
+      "title": "Add to '{{name}}'",
+      "description": "Add money to your pot to keep your savings on track.",
+      "amountLabel": "Amount to Add",
+      "amountPlaceholder": "e.g. 50",
+      "newAmountLabel": "New Amount",
+      "submitLabel": "Confirm Addition"
+    },
+    "withdrawModal": {
+      "title": "Withdraw from '{{name}}'",
+      "description": "Withdraw money from your pot back into your main balance.",
+      "amountLabel": "Amount to Withdraw",
+      "amountPlaceholder": "e.g. 50",
+      "newAmountLabel": "New Amount",
+      "submitLabel": "Confirm Withdrawal"
     }
   },
   "recurring": {

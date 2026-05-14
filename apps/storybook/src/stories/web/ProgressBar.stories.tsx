@@ -49,6 +49,28 @@ export const Playground: Story = {}
 
 /** Thick bar with budget-style meta (spent / remaining with colored borders). */
 export const BudgetStyle: Story = {
+  argTypes: {
+    buffer: {
+      table: {
+        disable: true,
+      },
+    },
+    bufferColor: {
+      table: {
+        disable: true,
+      },
+    },
+    metaLeft: {
+      table: {
+        disable: true,
+      },
+    },
+    metaRight: {
+      table: {
+        disable: true,
+      },
+    },
+  },
   args: {
     value: 15,
     max: 50,
@@ -95,6 +117,28 @@ export const BudgetStyle: Story = {
 
 /** Thin bar with pot-style meta (percentage / target). */
 export const PotStyle: Story = {
+  argTypes: {
+    buffer: {
+      table: {
+        disable: true,
+      },
+    },
+    bufferColor: {
+      table: {
+        disable: true,
+      },
+    },
+    metaLeft: {
+      table: {
+        disable: true,
+      },
+    },
+    metaRight: {
+      table: {
+        disable: true,
+      },
+    },
+  },
   args: {
     value: 159,
     max: 2000,
@@ -134,6 +178,28 @@ export const PotStyle: Story = {
 
 /** Bar at 100% (fully filled). */
 export const Full: Story = {
+  argTypes: {
+    buffer: {
+      table: {
+        disable: true,
+      },
+    },
+    bufferColor: {
+      table: {
+        disable: true,
+      },
+    },
+    metaLeft: {
+      table: {
+        disable: true,
+      },
+    },
+    metaRight: {
+      table: {
+        disable: true,
+      },
+    },
+  },
   args: {
     value: 50,
     max: 50,
@@ -144,6 +210,28 @@ export const Full: Story = {
 
 /** Bar at 0% (empty). */
 export const Empty: Story = {
+  argTypes: {
+    buffer: {
+      table: {
+        disable: true,
+      },
+    },
+    bufferColor: {
+      table: {
+        disable: true,
+      },
+    },
+    metaLeft: {
+      table: {
+        disable: true,
+      },
+    },
+    metaRight: {
+      table: {
+        disable: true,
+      },
+    },
+  },
   args: {
     value: 0,
     max: 750,
@@ -154,6 +242,28 @@ export const Empty: Story = {
 
 /** Overspent — value exceeds max (clamped to 100%). */
 export const Overspent: Story = {
+  argTypes: {
+    buffer: {
+      table: {
+        disable: true,
+      },
+    },
+    bufferColor: {
+      table: {
+        disable: true,
+      },
+    },
+    metaLeft: {
+      table: {
+        disable: true,
+      },
+    },
+    metaRight: {
+      table: {
+        disable: true,
+      },
+    },
+  },
   args: {
     value: 133,
     max: 75,
@@ -164,6 +274,28 @@ export const Overspent: Story = {
 
 /** Add money to pot — buffer in success color, simulating $400 added to $159 saved (target $2000). */
 export const AddMoneyBuffer: Story = {
+  argTypes: {
+    color: {
+      table: {
+        disable: true,
+      },
+    },
+    bufferColor: {
+      table: {
+        disable: true,
+      },
+    },
+    metaLeft: {
+      table: {
+        disable: true,
+      },
+    },
+    metaRight: {
+      table: {
+        disable: true,
+      },
+    },
+  },
   args: {
     value: 159,
     max: 2000,
@@ -205,6 +337,28 @@ export const AddMoneyBuffer: Story = {
 
 /** Withdraw from pot — buffer in destructive color, simulating $20 withdrawn from $159 saved (target $2000). */
 export const WithdrawBuffer: Story = {
+  argTypes: {
+    color: {
+      table: {
+        disable: true,
+      },
+    },
+    bufferColor: {
+      table: {
+        disable: true,
+      },
+    },
+    metaLeft: {
+      table: {
+        disable: true,
+      },
+    },
+    metaRight: {
+      table: {
+        disable: true,
+      },
+    },
+  },
   args: {
     value: 139,
     max: 2000,

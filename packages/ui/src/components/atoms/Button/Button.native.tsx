@@ -58,15 +58,20 @@ export const Button = ({
         ...(ariaExpanded != null && { expanded: ariaExpanded }),
       }}
       style={({ pressed }) => [
-        tw`${variantClasses} ${iconPosition === 'left' ? 'flex-row-reverse' : 'flex-row'} items-center ${className ?? ''}`,
-        pressed && tw`opacity-70`,
+        tw`${variantClasses} items-center`,
+        tw.style({
+          'flex-row-reverse': iconPosition === 'left',
+          'flex-row': iconPosition !== 'left',
+          'opacity-70': pressed,
+        }),
+        className ? tw`${className}` : undefined,
         style,
       ]}
     >
       {children ?? (
         <>
           <Typography variant="body-bold" color={textColor}>
-            {title}
+            {title}{' '}
           </Typography>
           {icon ? (
             <Icon

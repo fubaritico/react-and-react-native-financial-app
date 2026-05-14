@@ -6,7 +6,7 @@
     "start": "expo start",
     "start:clean": "expo start --clear",
     "ios": "expo run:ios",
-    "ios:iphone": "expo run:ios --device \"iPhone 16 Pro\"",
+    "ios:iphone": "expo run:ios --device \"iPhone 17 Pro\"",
     "ios:ipad": "expo run:ios --device \"iPad Pro 11-inch (M4)\"",
     "android": "expo run:android",
     "android:phone": "expo run:android --device Small_Phone",

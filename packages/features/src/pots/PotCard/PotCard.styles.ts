@@ -11,7 +11,7 @@ export const shared = {
   /** Action buttons row (min-w-11 ensures 44px touch targets on narrow viewports) */
   buttonsRow: 'flex flex-row gap-4 mt-5',
   /** Individual button wrapper ensuring 44px minimum touch target width */
-  button: 'flex-1 min-w-11',
+  button: 'flex-1 min-w-11 px-0',
 } as const
 
 /** Web-only classes for PotCard (hover, focus, transition, shadow, cursor, animate) */

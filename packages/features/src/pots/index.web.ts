@@ -8,13 +8,23 @@ export type {
   IPotFormValues,
 } from './PotFormContent/index.web'
 
+export { PotAmountFormContent } from './PotAmountFormContent/index.web'
+export type {
+  IPotAmountFormContentProps,
+  IPotAmountFormRef,
+} from './PotAmountFormContent/index.web'
+
 export {
   createAddPotModalConfig,
   createEditPotModalConfig,
   createDeletePotModalConfig,
+  createAddMoneyModalConfig,
+  createWithdrawModalConfig,
 } from './createPotModalConfigs'
 export type {
   IAddPotModalLabels,
   IEditPotModalLabels,
   IDeletePotModalLabels,
+  IAddMoneyModalLabels,
+  IWithdrawModalLabels,
 } from './createPotModalConfigs'
