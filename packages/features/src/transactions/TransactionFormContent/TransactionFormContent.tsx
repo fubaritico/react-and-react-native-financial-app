@@ -29,15 +29,17 @@ export interface ITransactionFormContentProps {
   /** Ref to access form values from the parent */
   ref?: Ref<ITransactionFormRef>
   /** Label for the name field */
-  nameLabel?: string
+  nameLabel: string
   /** Placeholder for the name field */
-  namePlaceholder?: string
+  namePlaceholder: string
   /** Label for the amount field */
-  amountLabel?: string
+  amountLabel: string
   /** Placeholder for the amount field */
-  amountPlaceholder?: string
+  amountPlaceholder: string
   /** Label for the category field */
-  categoryLabel?: string
+  categoryLabel: string
+  /** Label for the recurring checkbox */
+  recurringLabel: string
   /** Description text displayed above the form fields */
   description?: string
 }

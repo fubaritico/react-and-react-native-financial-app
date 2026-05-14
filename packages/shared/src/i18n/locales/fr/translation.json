@@ -201,7 +201,8 @@
       "namePlaceholder": "ex. Urban Sports Club",
       "amountLabel": "Montant",
       "amountPlaceholder": "ex. 45.00",
-      "categoryLabel": "Catégorie"
+      "categoryLabel": "Catégorie",
+      "recurringLabel": "Transaction récurrente"
     }
   },
   "pagination": {

@@ -51,7 +51,7 @@
     "build": "tsc --noEmit",
     "lint": "eslint ./src",
     "type-check": "tsc --noEmit",
-    "test": "echo 'no tests yet'"
+    "test": "vitest run"
   },
   "dependencies": {
     "@financial-app/icons": "workspace:^",
@@ -72,8 +72,15 @@
     "react-native": "catalog:"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
-    "typescript": "catalog:"
+    "@types/react-dom": "catalog:",
+    "jsdom": "catalog:",
+    "react-dom": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

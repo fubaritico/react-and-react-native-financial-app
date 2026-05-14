@@ -66,6 +66,7 @@ export default function TransactionsScreen() {
         amountLabel={t('transactions.form.amountLabel')}
         amountPlaceholder={t('transactions.form.amountPlaceholder')}
         categoryLabel={t('transactions.form.categoryLabel')}
+        recurringLabel={t('transactions.form.recurringLabel')}
         description={t('transactions.addModal.description')}
       />,
       handleSubmitTransaction,

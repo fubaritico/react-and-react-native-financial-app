@@ -1,6 +1,12 @@
 import { useFormValidation } from '@financial-app/shared'
-import { Dropdown, TextInput, Typography, tw } from '@financial-app/ui/native'
-import { useImperativeHandle, useMemo, useState } from 'react'
+import {
+  Checkbox,
+  Dropdown,
+  TextInput,
+  Typography,
+  tw,
+} from '@financial-app/ui/native'
+import { useCallback, useImperativeHandle, useMemo, useState } from 'react'
 import { View } from 'react-native'
 
 import {
@@ -17,11 +23,12 @@ import type { ITransactionFormContentProps } from './TransactionFormContent'
  */
 export function TransactionFormContent({
   initialValues,
-  nameLabel = 'Transaction Name',
-  namePlaceholder = 'e.g. Urban Sports Club',
-  amountLabel = 'Amount',
-  amountPlaceholder = 'e.g. 45.00',
-  categoryLabel = 'Category',
+  nameLabel,
+  namePlaceholder,
+  amountLabel,
+  amountPlaceholder,
+  categoryLabel,
+  recurringLabel,
   description,
   ref,
 }: Readonly<ITransactionFormContentProps>) {
@@ -36,11 +43,16 @@ export function TransactionFormContent({
   const [category, setCategory] = useState(
     initialValues?.category ?? DEFAULT_TRANSACTION_FORM.category
   )
+  const [recurring, setRecurring] = useState(initialValues?.recurring ?? false)
 
   const formData = useMemo(
     () => ({ name, category, amount }),
     [name, category, amount]
   )
+
+  const handleRecurringChange = useCallback((checked: boolean) => {
+    setRecurring(checked)
+  }, [])
 
   const { errors, hasErrors } = useFormValidation(
     transactionFormSchema,
@@ -53,7 +65,7 @@ export function TransactionFormContent({
       category,
       date: initialValues?.date ?? new Date().toISOString(),
       amount: Number(amount),
-      recurring: initialValues?.recurring ?? false,
+      recurring,
     }),
     hasErrors,
   }))
@@ -108,6 +120,13 @@ export function TransactionFormContent({
           withPortal
         />
       </View>
+
+      {/* Recurring */}
+      <Checkbox
+        checked={recurring}
+        onChange={handleRecurringChange}
+        label={recurringLabel}
+      />
     </View>
   )
 }
