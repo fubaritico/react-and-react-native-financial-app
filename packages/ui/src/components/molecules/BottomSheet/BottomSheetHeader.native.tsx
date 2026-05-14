@@ -32,14 +32,14 @@ export function BottomSheetHeader({
         </Typography>
       </View>
       <Button
-        variant="tertiary"
-        size="sm"
+        variant="ghost"
+        size="icon"
         onPress={onClose}
         accessibilityLabel={closeLabel}
       >
         <Icon
           name="closeModal"
-          iconSize="md"
+          iconSize="xxl"
           color={tw.color(isDark ? 'white' : 'foreground') ?? '#201F24'}
         />
       </Button>

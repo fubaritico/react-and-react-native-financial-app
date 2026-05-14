@@ -1,5 +1,11 @@
 import { useFormValidation } from '@financial-app/shared'
-import { Checkbox, Dropdown, TextInput, Typography } from '@financial-app/ui'
+import {
+  Checkbox,
+  DatePicker,
+  Dropdown,
+  TextInput,
+  Typography,
+} from '@financial-app/ui'
 import { useCallback, useImperativeHandle, useMemo, useState } from 'react'
 
 import {
@@ -22,6 +28,8 @@ export function TransactionFormContent({
   amountPlaceholder,
   categoryLabel,
   recurringLabel,
+  dateLabel,
+  datePlaceholder,
   description,
   ref,
 }: Readonly<ITransactionFormContentProps>) {
@@ -35,6 +43,9 @@ export function TransactionFormContent({
   )
   const [category, setCategory] = useState(
     initialValues?.category ?? DEFAULT_TRANSACTION_FORM.category
+  )
+  const [date, setDate] = useState<string | null>(
+    initialValues?.date ?? DEFAULT_TRANSACTION_FORM.date
   )
   const [recurring, setRecurring] = useState(initialValues?.recurring ?? false)
 
@@ -56,7 +67,7 @@ export function TransactionFormContent({
     getValues: () => ({
       name,
       category,
-      date: initialValues?.date ?? new Date().toISOString(),
+      date: date ?? DEFAULT_TRANSACTION_FORM.date,
       amount: Number(amount),
       recurring,
     }),
@@ -113,6 +124,15 @@ export function TransactionFormContent({
           withPortal
         />
       </div>
+
+      {/* Date */}
+      <DatePicker
+        label={dateLabel}
+        placeholder={datePlaceholder}
+        value={date}
+        onChange={setDate}
+        accessibilityLabel={dateLabel}
+      />
 
       {/* Recurring */}
       <Checkbox

@@ -86,6 +86,8 @@ export default function Transactions({
         amountLabel={t('transactions.form.amountLabel')}
         amountPlaceholder={t('transactions.form.amountPlaceholder')}
         categoryLabel={t('transactions.form.categoryLabel')}
+        dateLabel={t('transactions.form.dateLabel')}
+        datePlaceholder={t('datePicker.placeholder')}
         recurringLabel={t('transactions.form.recurringLabel')}
         description={t('transactions.addModal.description')}
       />,

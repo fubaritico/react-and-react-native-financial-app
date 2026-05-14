@@ -11,6 +11,7 @@ export const buttonVariants = cva(
         primary: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
         tertiary: 'bg-transparent text-foreground-muted',
+        ghost: 'bg-transparent',
         destroy: 'bg-destructive text-destructive-foreground',
         outline: 'border border-border-muted bg-transparent text-beige-500',
       },
@@ -18,6 +19,7 @@ export const buttonVariants = cva(
         lg: 'h-[53px] px-5',
         md: 'py-3 px-5',
         sm: 'h-10 w-10 px-4',
+        icon: 'h-10 w-10',
         nav: 'h-10 px-4',
       },
       fullWidth: {

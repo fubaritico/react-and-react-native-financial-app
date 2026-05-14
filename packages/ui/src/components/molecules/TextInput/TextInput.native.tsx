@@ -1,4 +1,4 @@
-import { TextInput as RNTextInput, View } from 'react-native'
+import { Platform, TextInput as RNTextInput, View } from 'react-native'
 
 import tw from '#Lib/tw'
 
@@ -52,7 +52,15 @@ export const TextInput = ({
           autoCapitalize={autoCapitalize}
           keyboardType={keyboardType}
           accessibilityLabel={accessibilityLabel ?? label}
-          style={tw`flex-1 text-sm text-foreground p-0`}
+          style={[
+            tw`flex-1 text-sm text-foreground p-0`,
+            // Android EditText adds extra internal padding — normalize to match iOS
+            Platform.OS === 'android' && {
+              includeFontPadding: false,
+              textAlignVertical: 'center' as const,
+              paddingVertical: 0,
+            },
+          ]}
         />
         {trailingElement ??
           (icon ? (

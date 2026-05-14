@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 import type { IDropdownOption } from '@financial-app/ui'
 
+import { getTodayISO } from './TransactionFormContent.utils'
+
 /** Zod schema for transaction form validation */
 export const transactionFormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -28,4 +30,5 @@ export const DEFAULT_TRANSACTION_FORM = {
   name: '',
   category: TRANSACTION_CATEGORIES[0].value,
   amount: '',
+  date: getTodayISO(),
 } as const

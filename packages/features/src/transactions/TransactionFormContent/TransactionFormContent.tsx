@@ -40,6 +40,10 @@ export interface ITransactionFormContentProps {
   categoryLabel: string
   /** Label for the recurring checkbox */
   recurringLabel: string
+  /** Label for the date field */
+  dateLabel: string
+  /** Placeholder for the date field */
+  datePlaceholder: string
   /** Description text displayed above the form fields */
   description?: string
 }

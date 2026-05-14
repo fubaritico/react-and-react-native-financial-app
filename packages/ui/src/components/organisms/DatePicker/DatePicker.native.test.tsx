@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { DatePicker } from './DatePicker.native'
 
 import type { DateTimePickerEvent } from '@react-native-community/datetimepicker'
+import type { ReactNode } from 'react'
 
 // ---------------------------------------------------------------------------
 // Mock @react-native-community/datetimepicker
@@ -20,6 +21,35 @@ vi.mock('@react-native-community/datetimepicker', () => ({
     capturedOnChange = props.onChange as typeof capturedOnChange
     return <View testID="date-time-picker" />
   },
+}))
+
+// ---------------------------------------------------------------------------
+// Mock BottomSheet — renders children directly when open (no Portal needed)
+// ---------------------------------------------------------------------------
+
+function MockBottomSheetHeader({
+  children,
+}: Readonly<{ children: ReactNode }>) {
+  return <View testID="bottom-sheet-header">{children}</View>
+}
+
+function MockBottomSheetBody({ children }: Readonly<{ children: ReactNode }>) {
+  return <View testID="bottom-sheet-body">{children}</View>
+}
+
+function MockBottomSheet({
+  open,
+  children,
+}: Readonly<{ open: boolean; children: ReactNode }>) {
+  if (!open) return null
+  return <View testID="bottom-sheet">{children}</View>
+}
+
+MockBottomSheet.Header = MockBottomSheetHeader
+MockBottomSheet.Body = MockBottomSheetBody
+
+vi.mock('../../molecules/BottomSheet/BottomSheet.native', () => ({
+  BottomSheet: MockBottomSheet,
 }))
 
 describe('DatePicker (native)', () => {
@@ -74,25 +104,24 @@ describe('DatePicker (native)', () => {
     expect(screen.queryByText('Pick a date')).toBeNull()
   })
 
-  it('opens picker on trigger press', () => {
+  it('opens picker in BottomSheet on trigger press (iOS)', () => {
     render(<DatePicker value={null} onChange={vi.fn()} label="Date" />)
-    expect(screen.queryByTestId('date-time-picker')).toBeNull()
+    expect(screen.queryByTestId('bottom-sheet')).toBeNull()
     fireEvent.press(screen.getByRole('button'))
+    expect(screen.getByTestId('bottom-sheet')).toBeTruthy()
     expect(screen.getByTestId('date-time-picker')).toBeTruthy()
   })
 
-  it('closes picker on second trigger press (toggle)', () => {
+  it('renders BottomSheet header with label', () => {
     render(<DatePicker value={null} onChange={vi.fn()} label="Date" />)
     fireEvent.press(screen.getByRole('button'))
-    expect(screen.getByTestId('date-time-picker')).toBeTruthy()
-    fireEvent.press(screen.getByRole('button'))
-    expect(screen.queryByTestId('date-time-picker')).toBeNull()
+    expect(screen.getByTestId('bottom-sheet-header')).toBeTruthy()
   })
 
   it('does not open picker when disabled', () => {
     render(<DatePicker value={null} onChange={vi.fn()} label="Date" disabled />)
     fireEvent.press(screen.getByRole('button'))
-    expect(screen.queryByTestId('date-time-picker')).toBeNull()
+    expect(screen.queryByTestId('bottom-sheet')).toBeNull()
   })
 
   it('calls onChange with ISO string on date selection', () => {

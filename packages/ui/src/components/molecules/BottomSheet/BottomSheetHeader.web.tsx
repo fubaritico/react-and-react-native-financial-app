@@ -37,12 +37,12 @@ export function BottomSheetHeader({
         </Typography>
       </div>
       <Button
-        variant="tertiary"
-        size="sm"
+        variant="ghost"
+        size="icon"
         onPress={onClose}
         accessibilityLabel={closeLabel}
       >
-        <Icon name="closeModal" iconSize="md" color="currentColor" />
+        <Icon name="closeModal" iconSize="xxl" color="currentColor" />
       </Button>
     </div>
   )

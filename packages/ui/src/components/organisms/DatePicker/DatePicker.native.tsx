@@ -11,6 +11,7 @@ import type { IDatePickerProps } from './DatePicker'
 import type { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 
 import { Icon, Typography } from '#Atoms'
+import { BottomSheet } from '#Molecules'
 
 /** Parse ISO string "2024-07-29" to a JS Date (local midnight) */
 function isoToDate(iso: string): Date {
@@ -61,8 +62,13 @@ export function DatePicker({
   )
 
   const handlePress = useCallback(() => {
-    if (!disabled) setShow((prev) => !prev)
+    if (!disabled) setShow(true)
   }, [disabled])
+
+  /** Close the BottomSheet (iOS) or dismiss (Android handled by picker) */
+  const handleClose = useCallback(() => {
+    setShow(false)
+  }, [])
 
   const handleChange = useCallback(
     (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -78,6 +84,9 @@ export function DatePicker({
     },
     [onChange]
   )
+
+  /** Accent color for iOS inline calendar on dark BottomSheet */
+  const accentColor = useMemo(() => tw.color('beige-500') ?? '#98908B', [])
 
   return (
     <View style={tw`flex-col ${shared.wrapper}`}>
@@ -115,17 +124,48 @@ export function DatePicker({
         </Typography>
       ) : null}
 
-      {show ? (
-        <View accessibilityLiveRegion="polite">
-          <DateTimePicker
-            value={dateValue}
-            mode="date"
-            display={Platform.OS === 'ios' ? 'inline' : 'default'}
-            minimumDate={minDate}
-            maximumDate={maxDate}
-            onChange={handleChange}
-          />
-        </View>
+      {/*
+        iOS: inline calendar inside a dark BottomSheet (display="inline" overflows without container).
+        Android: native Material dialog (display="default") — floats above everything, no BottomSheet needed.
+      */}
+      {Platform.OS === 'ios' ? (
+        <BottomSheet
+          open={show}
+          onClose={handleClose}
+          variant="dark"
+          overlay
+          accessibilityLabel={accessibilityLabel ?? label ?? 'Date picker'}
+        >
+          <BottomSheet.Header closeLabel="Done">
+            {label ?? 'Select date'}
+          </BottomSheet.Header>
+          <BottomSheet.Body>
+            <View
+              accessibilityLiveRegion="polite"
+              style={tw`items-center pb-4`}
+            >
+              <DateTimePicker
+                value={dateValue}
+                mode="date"
+                display="inline"
+                minimumDate={minDate}
+                maximumDate={maxDate}
+                onChange={handleChange}
+                themeVariant="dark"
+                accentColor={accentColor}
+              />
+            </View>
+          </BottomSheet.Body>
+        </BottomSheet>
+      ) : show ? (
+        <DateTimePicker
+          value={dateValue}
+          mode="date"
+          display="default"
+          minimumDate={minDate}
+          maximumDate={maxDate}
+          onChange={handleChange}
+        />
       ) : null}
     </View>
   )

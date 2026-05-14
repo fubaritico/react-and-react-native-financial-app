@@ -3,12 +3,13 @@ import { Pressable, View } from 'react-native'
 
 import tw from '#Lib/tw'
 
+import { Icon } from '../Icon/Icon.native'
+import { Typography } from '../Typography/Typography.native'
+
 import { shared } from './Checkbox.styles'
 import { checkboxVariants } from './Checkbox.variants'
 
 import type { ICheckboxProps } from './Checkbox'
-
-import { Icon, Typography } from '#Atoms'
 
 /** Minimum touch target size in points (WCAG 2.5.5) */
 const MIN_TOUCH_TARGET = 44

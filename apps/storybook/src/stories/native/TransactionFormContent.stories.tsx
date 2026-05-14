@@ -14,6 +14,8 @@ const meta = {
     amountLabel: 'Amount',
     amountPlaceholder: 'e.g. 45.00',
     categoryLabel: 'Category',
+    dateLabel: 'Date',
+    datePlaceholder: 'Select date',
     recurringLabel: 'Recurring transaction',
   },
   decorators: [
@@ -48,6 +50,7 @@ export const EditMode: Story = {
       name: 'Urban Sports Club',
       amount: -45,
       category: 'Lifestyle',
+      date: '2026-04-15',
       recurring: true,
     },
   },
