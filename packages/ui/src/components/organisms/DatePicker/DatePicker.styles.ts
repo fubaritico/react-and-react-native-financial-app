@@ -74,6 +74,10 @@ export const dark = {
 
 /** Native-only classes for DatePicker */
 export const native = {
+  /** Trigger Pressable inner layout (horizontal, centered) */
+  triggerLayout: 'flex-row items-center',
   /** Icon container in trigger */
   iconWrap: 'mr-3',
+  /** Content area flex expansion next to icon */
+  contentWrap: 'flex-1',
 } as const

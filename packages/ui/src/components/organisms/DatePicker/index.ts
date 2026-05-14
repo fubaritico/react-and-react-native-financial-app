@@ -1,2 +1,2 @@
-// Native barrel — DatePicker.native.tsx will be added later
+export { DatePicker } from './DatePicker.native'
 export type { IDatePickerProps } from './DatePicker.tsx'

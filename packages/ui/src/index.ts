@@ -159,6 +159,9 @@ export type {
   IModalFooterAction,
 } from './components/organisms/Modal/Modal.tsx'
 
+export { DatePicker } from './components/organisms/DatePicker'
+export type { IDatePickerProps } from './components/organisms/DatePicker/DatePicker.tsx'
+
 // Utilities
 export { default as tw } from './lib/tw'
 

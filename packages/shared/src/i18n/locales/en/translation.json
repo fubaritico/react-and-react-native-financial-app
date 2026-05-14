@@ -202,8 +202,13 @@
       "amountLabel": "Amount",
       "amountPlaceholder": "e.g. 45.00",
       "categoryLabel": "Category",
-      "recurringLabel": "Recurring transaction"
+      "recurringLabel": "Recurring transaction",
+      "dateLabel": "Date"
     }
+  },
+  "datePicker": {
+    "placeholder": "Select date",
+    "accessibilityLabel": "Date picker"
   },
   "pagination": {
     "prev": "Prev",

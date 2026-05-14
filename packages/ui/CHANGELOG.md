@@ -83,6 +83,7 @@
 * **ui:** add DataTable cell factories (steps 1-3) ([1bff31d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1bff31d13d3eadc5356f57c33f8abb4a97a59ffe))
 * **ui:** add DataTable shell, SortableHeader, ActionBar, Pagination (steps 4-11) ([c89cff0](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c89cff0ecb3e05881f3dbfc89fba3bd14a387f52))
 * **ui:** add DataTable sub-components + reorganize into components/ (steps 12) ([c082aab](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c082aab5c4c6d60fc92c26a5e90ad726957105c9))
+* **ui:** add DatePicker web component + icon rect SVG support ([76e40bc](https://github.com/fubaritico/react-and-react-native-financial-app/commit/76e40bc87ee630e021a71203636ecd71d43de952))
 * **ui:** add DonutChart atom + enforce constants/utils/types separation ([4814f82](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4814f82f4046d37348b7094c6a8bc6725347215b))
 * **ui:** add Dropdown molecule + Portal/Drawer/Menu/Listbox foundation ([298ada9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/298ada92feb3a9c796c2f2ea81af4ba4cb1c5dc5))
 * **ui:** add Icon Storybook story with playground and showcase ([02c8c1f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/02c8c1fc3e537b7417bab91a832e828be144f9ef))
