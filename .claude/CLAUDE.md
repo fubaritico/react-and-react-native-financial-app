@@ -159,7 +159,10 @@ Read `@completed.md`
    - ~~1.c.2: DatePicker native implementation~~ ✅ — `@react-native-community/datetimepicker` (iOS inline, Android dialog), 16 native tests, token-based icon color, a11y live region
    - ~~1.c.3: DatePicker i18n labels~~ ✅ — datePicker.placeholder, datePicker.accessibilityLabel, transactions.form.dateLabel (en + fr)
    - ~~1.d: DatePicker integration in TransactionFormContent (Phase 8 of datepicker-plan)~~ ✅ — iOS BottomSheet dark calendar (themeVariant+accentColor), Android native dialog, ghost/icon Button variant, Checkbox circular dep fix, Android TextInput padding normalization, 16+8 tests
-   - 2-5: modal Edit, modal Delete, action column ellipsis, bouton Add
+   - ~~2: modal Edit~~ ✅ — handleEditTransaction + handleSubmitEditTransaction + putTransactionsByIdMutation wired (web + mobile), eslint-disable for unused until ellipsis column
+   - ~~3: modal Delete~~ ✅ — handleDeleteTransaction + deleteTransactionsByIdMutation wired (web + mobile), same eslint-disable
+   - 4: ActionCell component (empty header cell + ellipsis dropdown cell) + wire onEdit/onDelete to DataTable
+   - 5: bouton "+ Add Transaction" (already wired)
 2. Onboarding — `docs/plans/onboarding-plan.md`
 3. Empty states (all screens + Overview sections)
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
