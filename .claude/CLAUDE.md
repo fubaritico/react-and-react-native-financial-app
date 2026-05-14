@@ -153,8 +153,8 @@ Read `@completed.md`
 ### Next
 
 1. **CRUD Transactions (mode manuel)** — `docs/plans/transactions/transaction-crud-plan.md`
-   - 1.a: API POST/PUT/DELETE + TransactionFormContent + modal Add + useFormValidation
-   - 1.b: Checkbox component (UI atoms) — `docs/plans/transactions/checkbox-plan.md`
+   - ~~1.a: API POST/PUT/DELETE + TransactionFormContent + modal Add + useFormValidation~~ ✅
+   - ~~1.b: Checkbox component (UI atoms)~~ ✅ — integrated in TransactionFormContent, Vitest setup for features
    - 1.c: DatePicker component (UI atoms) — `docs/plans/transactions/datepicker-plan.md`
    - 2-5: modal Edit, modal Delete, action column ellipsis, bouton Add
 2. Onboarding — `docs/plans/onboarding-plan.md`
@@ -189,7 +189,7 @@ Read `@completed.md`
 - `expo-dev-client` not yet tested on mobile-expo-ejected
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
 - Husky pre-commit hook fails when Turbo runs in non-TTY git hook context — all checks pass individually, likely output buffering issue. Used HUSKY=0 as workaround for 481e539. Fixed in 2e3c04b: root causes were StatusCell.native.tsx importing TableCell.web (cross-platform violation pulling DOM types into bare RN) + storybook tsconfig missing vite/client types.
-- RN native component tests (*.native.tsx) require Jest — Vitest cannot mock TurboModuleRegistry. UI package will use single Jest runner with multi-project config (native + web projects) — not yet implemented.
+- RN native component tests (*.native.tsx) now use `vitest-native` plugin (Vitest multi-project: web=jsdom, native=vitest-native). 23 Checkbox tests pass (13 web + 10 native). Features package also has Vitest (jsdom only, 8 tests).
 - Jest pnpm singleton fix DONE: pnpm creates 2 copies of react-native (different @babel/core peer contexts), preset mocks only apply to one → `moduleNameMapper` forces singleton. See `troubleshooting.md` "Jest + pnpm Monorepo" section.
 - @financial-app/shared barrel (index.native.ts) re-exports auth chain — screen tests must mock the barrel to avoid pulling in supabase/babel-runtime. Consider splitting barrel or using subpath imports in screens.
 - Android build: AsyncStorage v3 Maven repo issue FIXED (dc90bd2). `rebuild-android.sh` handles all cache/daemon cleanup.
