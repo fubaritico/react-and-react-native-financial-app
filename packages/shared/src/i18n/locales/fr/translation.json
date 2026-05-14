@@ -172,13 +172,37 @@
   },
   "transactions": {
     "title": "Transactions",
+    "addNewTransaction": "+ Ajouter une transaction",
     "sortBy": "Trier par",
     "sortTransactions": "Trier les transactions",
     "sortOptions": "Options de tri",
     "category": "Catégorie",
     "filterByCategory": "Filtrer par catégorie",
     "categoryOptions": "Options de catégorie",
-    "searchPlaceholder": "Rechercher des transactions"
+    "searchPlaceholder": "Rechercher des transactions",
+    "addModal": {
+      "title": "Ajouter une transaction",
+      "description": "Créer une nouvelle transaction manuelle.",
+      "submitLabel": "Ajouter la transaction"
+    },
+    "editModal": {
+      "title": "Modifier la transaction",
+      "description": "Mettre à jour les détails de cette transaction.",
+      "submitLabel": "Enregistrer"
+    },
+    "deleteModal": {
+      "title": "Supprimer '{{name}}' ?",
+      "description": "Êtes-vous sûr de vouloir supprimer cette transaction ? Cette action est irréversible.",
+      "confirmLabel": "Oui, supprimer",
+      "cancelLabel": "Non, annuler"
+    },
+    "form": {
+      "nameLabel": "Nom de la transaction",
+      "namePlaceholder": "ex. Urban Sports Club",
+      "amountLabel": "Montant",
+      "amountPlaceholder": "ex. 45.00",
+      "categoryLabel": "Catégorie"
+    }
   },
   "pagination": {
     "prev": "Préc",

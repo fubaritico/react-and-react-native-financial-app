@@ -26,6 +26,40 @@ export const TransactionListSchema = z
   })
   .openapi('TransactionList')
 
+export const CreateTransactionSchema = z
+  .object({
+    name: z.string().min(1).openapi({ example: 'Urban Sports Club' }),
+    category: z.string().min(1).openapi({ example: 'Lifestyle' }),
+    date: z.string().datetime().openapi({ example: '2024-07-29T00:00:00Z' }),
+    amount: z.number().openapi({
+      example: -45.0,
+      description: 'Negative = expense, positive = income',
+    }),
+    recurring: z.boolean().openapi({ example: false }),
+  })
+  .openapi('CreateTransaction')
+
+export const UpdateTransactionSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1)
+      .optional()
+      .openapi({ example: 'Urban Sports Club' }),
+    category: z.string().min(1).optional().openapi({ example: 'Lifestyle' }),
+    date: z
+      .string()
+      .datetime()
+      .optional()
+      .openapi({ example: '2024-07-29T00:00:00Z' }),
+    amount: z.number().optional().openapi({
+      example: -45.0,
+      description: 'Negative = expense, positive = income',
+    }),
+    recurring: z.boolean().optional().openapi({ example: false }),
+  })
+  .openapi('UpdateTransaction')
+
 export const TransactionQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).default(10),

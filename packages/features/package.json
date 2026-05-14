@@ -64,7 +64,8 @@
     "jotai": "catalog:",
     "react-i18next": "catalog:",
     "tailwind-merge": "^3.5.0",
-    "twrnc": "catalog:"
+    "twrnc": "catalog:",
+    "zod": "^3.24.4"
   },
   "peerDependencies": {
     "react": "catalog:",

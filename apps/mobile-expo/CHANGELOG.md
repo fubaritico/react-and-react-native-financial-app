@@ -65,6 +65,7 @@
 * **pages:** wire Budget route across all 3 apps with shared data util ([5ad8019](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5ad8019287cf3a6b64e4eb31543f43527b840224))
 * **pages:** wire Pots route + PotCard component + i18n + UI fixes ([5b1b726](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5b1b7267194ed99fdd0af2c033e785e78f1745b0))
 * **pages:** wire Recurring Bills route + BillsSummary + fixes ([ca083f0](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ca083f00be47015d93b320385a63942f155f78c4))
+* **pots:** wire add money/withdraw modals + PotAmountFormContent component ([2f061b1](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2f061b11bafb31e78f5b3f0cd831533126665725))
 * **pots:** wire add/edit/delete modals + PotFormContent component ([8b2fba8](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8b2fba8482b026e444d25af4679002cbd0c52480))
 * **shared,mobile-expo:** add mock data, test utils, wire Overview page ([7f51ce7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7f51ce7800b2e2a9dcea43f9ef3b3b203386847b))
 * **shared:** create @financial-app/shared package (Phase 5.1 + 5.7) ([4bf5dff](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4bf5dff43b21255596e601da1585f2341a44b4d5))

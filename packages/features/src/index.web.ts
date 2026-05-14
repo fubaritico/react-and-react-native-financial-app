@@ -17,6 +17,24 @@ export type {
 export { TransactionsDataTable } from './transactions/index.web'
 export type { ITransactionsDataTableProps } from './transactions/index.web'
 
+export { TransactionFormContent } from './transactions/index.web'
+export type {
+  ITransactionFormContentProps,
+  ITransactionFormRef,
+  ITransactionFormValues,
+} from './transactions/index.web'
+
+export {
+  createAddTransactionModalConfig,
+  createEditTransactionModalConfig,
+  createDeleteTransactionModalConfig,
+} from './transactions/index.web'
+export type {
+  IAddTransactionModalLabels,
+  IEditTransactionModalLabels,
+  IDeleteTransactionModalLabels,
+} from './transactions/index.web'
+
 export { BudgetCategoryCard } from './budget/index.web'
 export type { IBudgetCategoryCardProps } from './budget/index.web'
 

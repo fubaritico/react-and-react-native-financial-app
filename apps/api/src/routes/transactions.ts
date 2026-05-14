@@ -3,10 +3,13 @@ import { Router } from 'express'
 import { registry } from '../lib/openapi.js'
 import { supabase } from '../lib/supabase.js'
 import { requireAuth } from '../middleware/auth.js'
-import { validateQuery } from '../middleware/validate.js'
+import { validateBody, validateQuery } from '../middleware/validate.js'
 import {
+  CreateTransactionSchema,
   TransactionListSchema,
   TransactionQuerySchema,
+  TransactionSchema,
+  UpdateTransactionSchema,
 } from '../schemas/transaction.js'
 
 export const transactionsRouter = Router()
@@ -25,6 +28,62 @@ registry.registerPath({
       description: 'Paginated transaction list',
       content: { 'application/json': { schema: TransactionListSchema } },
     },
+  },
+})
+
+registry.registerPath({
+  method: 'post',
+  path: '/transactions',
+  tags: ['Transactions'],
+  security: [{ BearerAuth: [] }],
+  request: {
+    body: {
+      content: { 'application/json': { schema: CreateTransactionSchema } },
+    },
+  },
+  responses: {
+    201: {
+      description: 'Created transaction',
+      content: { 'application/json': { schema: TransactionSchema } },
+    },
+  },
+})
+
+registry.registerPath({
+  method: 'put',
+  path: '/transactions/{id}',
+  tags: ['Transactions'],
+  security: [{ BearerAuth: [] }],
+  request: {
+    params: registry.register(
+      'TransactionIdParam',
+      TransactionSchema.pick({ id: true })
+    ),
+    body: {
+      content: { 'application/json': { schema: UpdateTransactionSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Updated transaction',
+      content: { 'application/json': { schema: TransactionSchema } },
+    },
+  },
+})
+
+registry.registerPath({
+  method: 'delete',
+  path: '/transactions/{id}',
+  tags: ['Transactions'],
+  security: [{ BearerAuth: [] }],
+  request: {
+    params: registry.register(
+      'TransactionDeleteIdParam',
+      TransactionSchema.pick({ id: true })
+    ),
+  },
+  responses: {
+    204: { description: 'Transaction deleted' },
   },
 })
 
@@ -99,3 +158,80 @@ transactionsRouter.get(
     })
   }
 )
+
+transactionsRouter.post(
+  '/',
+  validateBody(CreateTransactionSchema),
+  async (req, res) => {
+    const { name, category, date, amount, recurring } = req.body as {
+      name: string
+      category: string
+      date: string
+      amount: number
+      recurring: boolean
+    }
+
+    const { data, error } = await supabase
+      .from('transactions')
+      .insert({
+        user_id: res.locals.userId,
+        name,
+        category,
+        date,
+        amount,
+        recurring,
+        avatar: '',
+        source: 'manual',
+      })
+      .select()
+      .single()
+
+    if (error) {
+      res.status(500).json({ error: error.message })
+      return
+    }
+
+    res.status(201).json(data)
+  }
+)
+
+transactionsRouter.put(
+  '/:id',
+  validateBody(UpdateTransactionSchema),
+  async (req, res) => {
+    const { data, error } = await supabase
+      .from('transactions')
+      .update(req.body as Record<string, unknown>)
+      .eq('id', req.params.id)
+      .eq('user_id', res.locals.userId)
+      .select()
+      .single()
+
+    if (error) {
+      res.status(500).json({ error: error.message })
+      return
+    }
+
+    if (!data) {
+      res.status(404).json({ error: 'Transaction not found' })
+      return
+    }
+
+    res.json(data)
+  }
+)
+
+transactionsRouter.delete('/:id', async (req, res) => {
+  const { error } = await supabase
+    .from('transactions')
+    .delete()
+    .eq('id', req.params.id)
+    .eq('user_id', res.locals.userId)
+
+  if (error) {
+    res.status(500).json({ error: error.message })
+    return
+  }
+
+  res.status(204).send()
+})

@@ -1,9 +1,19 @@
-import { TransactionsDataTable } from '@financial-app/features'
-import { getTransactionsOptions } from '@financial-app/http-client'
-import { getErrorMessage } from '@financial-app/shared'
-import { Alert, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import { useQuery } from '@tanstack/react-query'
+import {
+  TransactionFormContent,
+  TransactionsDataTable,
+  createAddTransactionModalConfig,
+} from '@financial-app/features'
+import {
+  getTransactionsOptions,
+  postTransactionsMutation,
+} from '@financial-app/http-client'
+import { getErrorMessage, useModal } from '@financial-app/shared'
+import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import type { ITransactionFormRef } from '@financial-app/features'
 
 import { queryClient } from '../lib/query-client'
 
@@ -37,8 +47,55 @@ export default function Transactions({
   loaderData: initialData,
 }: Route.ComponentProps) {
   const { t, i18n } = useTranslation()
+  const modal = useModal()
+  const qc = useQueryClient()
+  const formRef = useRef<ITransactionFormRef>(null)
 
   const { data, error, isLoading } = useQuery({ ...txnOpts, initialData })
+
+  const { mutate: createTransaction } = useMutation({
+    ...postTransactionsMutation(),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
+      modal.close()
+    },
+  })
+
+  const handleSubmitTransaction = useCallback(() => {
+    const ref = formRef.current
+    if (!ref || ref.hasErrors) return
+    const values = ref.getValues()
+    if (!Number.isFinite(values.amount) || values.amount === 0) return
+    createTransaction({
+      body: {
+        name: values.name,
+        category: values.category,
+        date: values.date,
+        amount: values.amount,
+        recurring: values.recurring,
+      },
+    })
+  }, [createTransaction])
+
+  const handleAddTransaction = useCallback(() => {
+    const config = createAddTransactionModalConfig(
+      <TransactionFormContent
+        ref={formRef}
+        nameLabel={t('transactions.form.nameLabel')}
+        namePlaceholder={t('transactions.form.namePlaceholder')}
+        amountLabel={t('transactions.form.amountLabel')}
+        amountPlaceholder={t('transactions.form.amountPlaceholder')}
+        categoryLabel={t('transactions.form.categoryLabel')}
+        description={t('transactions.addModal.description')}
+      />,
+      handleSubmitTransaction,
+      {
+        title: t('transactions.addModal.title'),
+        submitLabel: t('transactions.addModal.submitLabel'),
+      }
+    )
+    modal.open(config)
+  }, [t, modal, handleSubmitTransaction])
 
   if (isLoading) {
     return (
@@ -65,9 +122,17 @@ export default function Transactions({
 
   return (
     <div className="p-6 lg:p-10">
-      <Typography variant="page-title" as="h1" className="mb-6">
-        {t('transactions.title')}
-      </Typography>
+      <div className="mb-8 flex items-center justify-between">
+        <Typography variant="page-title" as="h1">
+          {t('transactions.title')}
+        </Typography>
+        <Button
+          title={t('transactions.addNewTransaction')}
+          onPress={handleAddTransaction}
+          size="lg"
+          variant="primary"
+        />
+      </div>
       <TransactionsDataTable data={data?.data ?? []} locale={i18n.language} />
     </div>
   )

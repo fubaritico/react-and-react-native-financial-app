@@ -35,6 +35,7 @@ export {
 export type { IModalAction, IModalConfig, ModalActionVariant } from './atoms'
 
 // Hooks
+export { useFormValidation } from './hooks/useFormValidation'
 export { useModal } from './hooks/useModal'
 export {
   useConfigureHttpClient,
