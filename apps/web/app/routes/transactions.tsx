@@ -2,10 +2,14 @@ import {
   TransactionFormContent,
   TransactionsDataTable,
   createAddTransactionModalConfig,
+  createDeleteTransactionModalConfig,
+  createEditTransactionModalConfig,
 } from '@financial-app/features'
 import {
+  deleteTransactionsByIdMutation,
   getTransactionsOptions,
   postTransactionsMutation,
+  putTransactionsByIdMutation,
 } from '@financial-app/http-client'
 import { getErrorMessage, useModal } from '@financial-app/shared'
 import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
@@ -14,6 +18,7 @@ import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { ITransactionFormRef } from '@financial-app/features'
+import type { ITransaction } from '@financial-app/shared'
 
 import { queryClient } from '../lib/query-client'
 
@@ -53,8 +58,27 @@ export default function Transactions({
 
   const { data, error, isLoading } = useQuery({ ...txnOpts, initialData })
 
+  /** ID of the transaction currently being edited (stable ref to avoid stale closures) */
+  const editingTransactionIdRef = useRef<string | null>(null)
+
   const { mutate: createTransaction } = useMutation({
     ...postTransactionsMutation(),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
+      modal.close()
+    },
+  })
+
+  const { mutate: updateTransaction } = useMutation({
+    ...putTransactionsByIdMutation(),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
+      modal.close()
+    },
+  })
+
+  const { mutate: deleteTransaction } = useMutation({
+    ...deleteTransactionsByIdMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
       modal.close()
@@ -76,6 +100,24 @@ export default function Transactions({
       },
     })
   }, [createTransaction])
+
+  const handleSubmitEditTransaction = useCallback(() => {
+    const ref = formRef.current
+    const transactionId = editingTransactionIdRef.current
+    if (!ref || ref.hasErrors || !transactionId) return
+    const values = ref.getValues()
+    if (!Number.isFinite(values.amount) || values.amount === 0) return
+    updateTransaction({
+      path: { id: transactionId },
+      body: {
+        name: values.name,
+        category: values.category,
+        date: values.date,
+        amount: values.amount,
+        recurring: values.recurring,
+      },
+    })
+  }, [updateTransaction])
 
   const handleAddTransaction = useCallback(() => {
     const config = createAddTransactionModalConfig(
@@ -99,6 +141,67 @@ export default function Transactions({
     )
     modal.open(config)
   }, [t, modal, handleSubmitTransaction])
+
+  /** Opens the Edit Transaction modal for the given transaction */
+  // TODO: wire to ellipsis action column (next session)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleEditTransaction = useCallback(
+    (transaction: ITransaction) => {
+      editingTransactionIdRef.current = transaction.id
+      const config = createEditTransactionModalConfig(
+        <TransactionFormContent
+          ref={formRef}
+          initialValues={{
+            name: transaction.name,
+            category: transaction.category,
+            date: transaction.date,
+            amount: transaction.amount,
+            recurring: transaction.recurring,
+          }}
+          nameLabel={t('transactions.form.nameLabel')}
+          namePlaceholder={t('transactions.form.namePlaceholder')}
+          amountLabel={t('transactions.form.amountLabel')}
+          amountPlaceholder={t('transactions.form.amountPlaceholder')}
+          categoryLabel={t('transactions.form.categoryLabel')}
+          dateLabel={t('transactions.form.dateLabel')}
+          datePlaceholder={t('datePicker.placeholder')}
+          recurringLabel={t('transactions.form.recurringLabel')}
+          description={t('transactions.editModal.description')}
+        />,
+        handleSubmitEditTransaction,
+        {
+          title: t('transactions.editModal.title'),
+          submitLabel: t('transactions.editModal.submitLabel'),
+        }
+      )
+      modal.open(config)
+    },
+    [t, modal, handleSubmitEditTransaction]
+  )
+
+  /** Opens the Delete Transaction confirmation modal */
+  // TODO: wire to ellipsis action column (next session)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleDeleteTransaction = useCallback(
+    (transaction: ITransaction) => {
+      const config = createDeleteTransactionModalConfig(
+        transaction.name,
+        <Typography variant="body" color="muted">
+          {t('transactions.deleteModal.description')}
+        </Typography>,
+        () => {
+          deleteTransaction({ path: { id: transaction.id } })
+        },
+        {
+          title: (name) => t('transactions.deleteModal.title', { name }),
+          confirmLabel: t('transactions.deleteModal.confirmLabel'),
+          cancelLabel: t('transactions.deleteModal.cancelLabel'),
+        }
+      )
+      modal.open(config)
+    },
+    [t, modal, deleteTransaction]
+  )
 
   if (isLoading) {
     return (

@@ -77,6 +77,7 @@
 * **tailwind-config:** create @financial-app/tailwind-config (Phase 2) ([3b0156a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/3b0156acb620410fcf71b5c60d82b7875bbeb0f1))
 * **tokens:** create @financial-app/tokens package (Phase 0) ([ed99278](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ed99278308126397ba7eeca26b170239ce690c86))
 * **transactions:** add CRUD API + TransactionFormContent + Add modal ([53d6b90](https://github.com/fubaritico/react-and-react-native-financial-app/commit/53d6b90e2c14409d6cfdacefb2eba530c5b9157a))
+* **ui/features:** integrate DatePicker in TransactionFormContent + BottomSheet native calendar ([dea1fdb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dea1fdb2b40e89109e9e7ba8aa662277764d2c94))
 * **ui:** add Alert molecule + Skeleton/Spinner atoms + CSS pipeline ([75fbd9e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/75fbd9e932bc566bfe1555923cafb057dbcd3b3f))
 * **ui:** add buffer support to ProgressBar component ([1427e01](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1427e0160a8cf648178e5b09ec450fb5da7ea49b))
 * **ui:** add Checkbox atom component with tests and stories ([844fd52](https://github.com/fubaritico/react-and-react-native-financial-app/commit/844fd52089595e0cd339d19ab58402c533ef6d0f))
