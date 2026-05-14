@@ -152,23 +152,14 @@ Read `@completed.md`
 
 ### Next
 
-1. Pot Add Money / Withdraw modals — full wiring:
-   a. API: verify/create POST /pots/:id/add + POST /pots/:id/withdraw endpoints (atomic mutation)
-   b. HTTP client: regenerate after API endpoints
-   c. PotAmountFormContent (features molecule): "New Amount" row + ProgressBar with buffer + percentage + TextInput ($), reused for add/withdraw
-   d. Modal configs: createAddMoneyModalConfig + createWithdrawModalConfig
-   e. Wire in pages: handleAddMoney(pot) + handleWithdraw(pot) in PotCardItem → PotCard (web + mobile-expo)
-   f. i18n keys (en + fr)
-   g. Story for PotAmountFormContent
-   Note: ProgressBar primary fill in modals = always grey-900 (foreground), NOT pot theme color
-2. Onboarding (création de compte → mode manuel par défaut, mode banque en Phase 8B)
-3. Empty states (all screens + Overview sections)
-4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
-5. **Centralized auth** — session validation on app focus (AppState → getSession())
-6. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
-7. Tests — API + hooks
-8. Phase 8B: GoCardless bank connection (mode banque)
-9. Navigation web: graphic design refinement (user doing manual pass)
+1. Onboarding (création de compte → mode manuel par défaut, mode banque en Phase 8B)
+2. Empty states (all screens + Overview sections)
+3. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
+4. **Centralized auth** — session validation on app focus (AppState → getSession())
+5. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
+6. Tests — API + hooks
+7. Phase 8B: GoCardless bank connection (mode banque)
+8. Navigation web: graphic design refinement (user doing manual pass)
 
 **Pending tests**:
 - iPad: verify BottomSheet overlay, 2-tap switching, text truncation
@@ -214,4 +205,7 @@ Read `@completed.md`
 - QUAL-009: Budget pages (web + mobile) exceed 200 lines (~240/230) — extract `useBudgetModals` hook in future refactor
 - `IModalConfig.description` removed — all modal body content uses `body: ReactNode` exclusively
 - CSS variable bridge `var(--color-base-${color}-DEFAULT)` fails for colors without DEFAULT suffix (e.g. grey-900). Fixed in ProgressBar with fallback: `var(--color-base-X-DEFAULT, var(--color-base-X))`. Other components using the same pattern may need the same fix.
+- `expo-dev-client` crashes on Android API 36/37 (Baklava) — use API 35 (Android 15). Tracked: expo/expo#35385
+- twrnc does NOT support class overriding like tailwind-merge — `px-0` after `px-5` won't override in a single tw call. Use RN `style` prop (last in array wins) or choose the right CVA size variant instead
+- QUAL-009: Pots pages (web ~407 + mobile ~373 lines) exceed 200 lines — same pattern as budget, extract `usePotsModals` hook later
 
