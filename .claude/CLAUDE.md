@@ -153,17 +153,17 @@ Read `@completed.md`
 
 ### Next
 
-1. **CRUD Transactions (mode manuel)** — `docs/plans/transactions/transaction-crud-plan.md`
+1. **CRUD Transactions (mode manuel)** — `docs/plans/transactions/transaction-crud-plan.md` ✅ DONE
    - ~~1.a: API POST/PUT/DELETE + TransactionFormContent + modal Add + useFormValidation~~ ✅
-   - ~~1.b: Checkbox component (UI atoms)~~ ✅ — integrated in TransactionFormContent, Vitest setup for features
-   - ~~1.c: DatePicker web + icon rect SVG support~~ ✅ — organism (desktop: react-aria segments+popover, mobile: BottomSheet+calendar), 48 tests, stories
-   - ~~1.c.2: DatePicker native implementation~~ ✅ — `@react-native-community/datetimepicker` (iOS inline, Android dialog), 16 native tests, token-based icon color, a11y live region
-   - ~~1.c.3: DatePicker i18n labels~~ ✅ — datePicker.placeholder, datePicker.accessibilityLabel, transactions.form.dateLabel (en + fr)
-   - ~~1.d: DatePicker integration in TransactionFormContent (Phase 8 of datepicker-plan)~~ ✅ — iOS BottomSheet dark calendar (themeVariant+accentColor), Android native dialog, ghost/icon Button variant, Checkbox circular dep fix, Android TextInput padding normalization, 16+8 tests
-   - ~~2: modal Edit~~ ✅ — handleEditTransaction + handleSubmitEditTransaction + putTransactionsByIdMutation wired (web + mobile), eslint-disable for unused until ellipsis column
-   - ~~3: modal Delete~~ ✅ — handleDeleteTransaction + deleteTransactionsByIdMutation wired (web + mobile), same eslint-disable
-   - 4: ActionCell component (empty header cell + ellipsis dropdown cell) + wire onEdit/onDelete to DataTable
-   - 5: bouton "+ Add Transaction" (already wired)
+   - ~~1.b: Checkbox component (UI atoms)~~ ✅
+   - ~~1.c: DatePicker web + icon rect SVG support~~ ✅
+   - ~~1.c.2: DatePicker native implementation~~ ✅
+   - ~~1.c.3: DatePicker i18n labels~~ ✅
+   - ~~1.d: DatePicker integration in TransactionFormContent~~ ✅
+   - ~~2: modal Edit~~ ✅
+   - ~~3: modal Delete~~ ✅
+   - ~~4: ActionCell + wire onEdit/onDelete to DataTable~~ ✅ — EmptyHeaderCell + ellipsis Dropdown, mutation feedback (success/error modals), Button loading spinner, useModal.setSubmitting, Modal closeLabel/cancelLabel required + ModalRenderer i18n defaults, DatePicker iOS BottomSheet close fix
+   - ~~5: bouton "+ Add Transaction"~~ ✅ — already wired
 2. Onboarding — `docs/plans/onboarding-plan.md`
 3. Empty states (all screens + Overview sections)
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
@@ -232,4 +232,8 @@ Read `@completed.md`
 - DatePicker native iOS: `display="inline"` overflows modal — must use BottomSheet container. `themeVariant="dark"` + `accentColor` (beige-500) for dark calendar styling
 - Button `ghost` variant (no bg/border) + `icon` size (40x40, no padding) — used for icon-only buttons like BottomSheet close. Icon size is controlled by `Icon iconSize` prop, NOT by Button size.
 - Deferred discussion: i18n injection on web side and SSR implications
+- Husky pre-commit hook still times out on Turbo test phase in non-TTY — HUSKY=0 workaround still needed (276eda2)
+- QUAL-009: Transactions pages (web + mobile) exceed 200 lines with mutation feedback — extract `useTransactionModals` hook later (same pattern as budget/pots)
+- Modal.native.tsx:133 `accessibilityLabel ?? 'Close'` — hardcoded English fallback on backdrop Pressable (pre-existing, low priority)
+- ModalRenderer uses `?? t('modal.close')` / `?? t('modal.cancel')` for optional IModalConfig fields — this is the adapter pattern (providing i18n defaults for optional config), NOT an ARCH-017 violation
 
