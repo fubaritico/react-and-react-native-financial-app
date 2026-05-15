@@ -136,12 +136,17 @@ export {
   CategoryIconCell,
   StatusCell,
   SortableHeader,
+  EmptyHeaderCell,
+  ActionCell,
 } from './components/organisms/DataTable/cells/index.web'
 export type {
   StatusCellFn,
   BillStatus,
   HeaderCellFn,
   HeaderAlign,
+  EmptyHeaderCellFn,
+  IActionCellConfig,
+  ActionCellFn,
 } from './components/organisms/DataTable/cells/index.web'
 
 export { DataTablePagination } from './components/molecules/DataTablePagination/index.web'

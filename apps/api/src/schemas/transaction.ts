@@ -1,5 +1,13 @@
 import { z } from '../lib/zod.js'
 
+/** Supabase/Postgres timestamptz format: `YYYY-MM-DD HH:mm:ss+00` */
+const TIMESTAMPTZ_REGEX = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\+00$/
+const TIMESTAMPTZ_EXAMPLE = '2024-08-19 14:23:11+00'
+
+const timestamptz = z
+  .string()
+  .regex(TIMESTAMPTZ_REGEX, 'Expected format: YYYY-MM-DD HH:mm:ss+00')
+
 export const TransactionSchema = z
   .object({
     id: z
@@ -11,7 +19,7 @@ export const TransactionSchema = z
       .openapi({ example: './assets/images/avatars/emma-richardson.jpg' }),
     name: z.string().openapi({ example: 'Emma Richardson' }),
     category: z.string().openapi({ example: 'General' }),
-    date: z.string().datetime().openapi({ example: '2024-08-19T14:23:11Z' }),
+    date: timestamptz.openapi({ example: TIMESTAMPTZ_EXAMPLE }),
     amount: z.number().openapi({ example: 75.5 }),
     recurring: z.boolean().openapi({ example: false }),
   })
@@ -30,7 +38,7 @@ export const CreateTransactionSchema = z
   .object({
     name: z.string().min(1).openapi({ example: 'Urban Sports Club' }),
     category: z.string().min(1).openapi({ example: 'Lifestyle' }),
-    date: z.string().datetime().openapi({ example: '2024-07-29T00:00:00Z' }),
+    date: timestamptz.openapi({ example: TIMESTAMPTZ_EXAMPLE }),
     amount: z.number().openapi({
       example: -45.0,
       description: 'Negative = expense, positive = income',
@@ -47,11 +55,7 @@ export const UpdateTransactionSchema = z
       .optional()
       .openapi({ example: 'Urban Sports Club' }),
     category: z.string().min(1).optional().openapi({ example: 'Lifestyle' }),
-    date: z
-      .string()
-      .datetime()
-      .optional()
-      .openapi({ example: '2024-07-29T00:00:00Z' }),
+    date: timestamptz.optional().openapi({ example: TIMESTAMPTZ_EXAMPLE }),
     amount: z.number().optional().openapi({
       example: -45.0,
       description: 'Negative = expense, positive = income',

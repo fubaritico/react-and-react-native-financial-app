@@ -27,6 +27,8 @@ export interface IButtonProps extends VariantProps<typeof buttonVariants> {
   ariaExpanded?: boolean
   /** DOM id of the controlled popup element (web only). */
   ariaControls?: string
+  /** Shows a spinner and disables interaction while an async operation is in progress. */
+  loading?: boolean
   /** Additional CSS classes for the button container (web: className, native: tw classes). */
   className?: string
   /** Ref to the underlying button element (HTMLButtonElement on web, View on native). */

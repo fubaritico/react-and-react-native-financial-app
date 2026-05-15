@@ -15,7 +15,7 @@ export function BudgetThemeDropdown({
   onSelect,
   accessibilityLabel,
   bottomSheetTitle,
-  alreadyUsedLabel = 'Already used',
+  alreadyUsedLabel,
 }: Readonly<IBudgetThemeDropdownProps>) {
   /** Custom trigger — ColorDot + label + caret */
   const renderTrigger = useCallback(

@@ -28,6 +28,8 @@ export function TransactionsDataTable({
   data,
   loading,
   locale,
+  onEdit,
+  onDelete,
 }: Readonly<ITransactionsDataTableProps>) {
   const { t } = useTranslation()
   const [sorting, setSorting] = useState<SortingState>([
@@ -37,7 +39,13 @@ export function TransactionsDataTable({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [categoryOption, setCategoryOption] = useState(ALL_CATEGORIES)
 
-  const columns = useTransactionsColumns(locale)
+  const columns = useTransactionsColumns(
+    locale,
+    onEdit,
+    onDelete,
+    t('transactions.editTransaction'),
+    t('transactions.deleteTransaction')
+  )
 
   const table = useReactTable({
     columns,
@@ -112,7 +120,14 @@ export function TransactionsDataTable({
       paginationNextLabel={t('pagination.next')}
       rightActions={actionBar}
       renderCompactRow={({ row }: { row: Row<ITransaction> }) => (
-        <CompactTransactionRow row={row} locale={locale} />
+        <CompactTransactionRow
+          row={row}
+          locale={locale}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          editLabel={t('transactions.editTransaction')}
+          deleteLabel={t('transactions.deleteTransaction')}
+        />
       )}
       compactBreakpoint={768}
       showActionBar

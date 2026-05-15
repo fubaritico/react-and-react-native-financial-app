@@ -149,11 +149,74 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
   /** ID of the budget currently being edited (stable ref to avoid stale closures) */
   const editingBudgetIdRef = useRef<string | null>(null)
 
+  /** Opens a brief confirmation modal after a successful mutation */
+  const showSuccessModal = useCallback(
+    (message: string) => {
+      modal.open({
+        body: (
+          <Typography
+            variant="subsection-title"
+            color="foreground"
+            className="text-center"
+          >
+            {message}
+          </Typography>
+        ),
+        actions: [
+          {
+            label: t('common.ok'),
+            variant: 'primary',
+            onPress: () => {
+              modal.close()
+            },
+          },
+        ],
+        dismissable: false,
+      })
+    },
+    [modal, t]
+  )
+
+  /** Opens an error modal after a failed mutation */
+  const showErrorModal = useCallback(
+    (err: unknown) => {
+      modal.open({
+        body: (
+          <Typography
+            variant="subsection-title"
+            color="foreground"
+            className="text-center"
+          >
+            {import.meta.env.DEV
+              ? getErrorMessage(err)
+              : t('common.somethingWentWrong')}
+          </Typography>
+        ),
+        actions: [
+          {
+            label: t('common.ok'),
+            variant: 'destroy',
+            onPress: () => {
+              modal.close()
+            },
+          },
+        ],
+        dismissable: false,
+      })
+    },
+    [modal, t]
+  )
+
   const { mutate: createBudget } = useMutation({
     ...postBudgetsMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: budgetsOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.budgetAdded'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -162,6 +225,11 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: budgetsOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.budgetUpdated'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -170,6 +238,11 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: budgetsOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.budgetDeleted'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -178,6 +251,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
     if (!values) return
     const parsed = Number(values.maximum)
     if (!Number.isFinite(parsed) || parsed <= 0) return
+    modal.setSubmitting(true)
     createBudget({
       body: {
         category: values.category,
@@ -186,7 +260,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
         month: BUDGET_MONTH,
       },
     })
-  }, [createBudget])
+  }, [createBudget, modal])
 
   const handleSubmitEditBudget = useCallback(() => {
     const values = formRef.current?.getValues()
@@ -194,6 +268,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
     if (!values || !budgetId) return
     const parsed = Number(values.maximum)
     if (!Number.isFinite(parsed) || parsed <= 0) return
+    modal.setSubmitting(true)
     updateBudget({
       path: { id: budgetId },
       body: {
@@ -202,7 +277,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
         theme: values.theme,
       },
     })
-  }, [updateBudget])
+  }, [updateBudget, modal])
 
   const handleAddBudget = useCallback(() => {
     const config = createAddBudgetModalConfig(
@@ -267,6 +342,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
           {t('budgets.deleteModal.description')}
         </Typography>,
         () => {
+          modal.setSubmitting(true)
           deleteBudget({ path: { id: card.id } })
         },
         {
@@ -326,10 +402,9 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
           <BudgetOverview
             budgets={budgetItems}
             showSpentAmount
-            spendingSummaryTitle={t(
-              'budgets.spendingSummary',
-              'Spending Summary'
-            )}
+            spendingSummaryTitle={t('budgets.spendingSummary')}
+            ofLabel={t('budgets.of')}
+            limitLabel={t('budgets.limit')}
           />
         </div>
 

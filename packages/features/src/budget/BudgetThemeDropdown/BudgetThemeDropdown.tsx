@@ -13,5 +13,5 @@ export interface IBudgetThemeDropdownProps {
   /** BottomSheet header title */
   bottomSheetTitle?: string
   /** Label shown for already-used themes (default: "Already used") */
-  alreadyUsedLabel?: string
+  alreadyUsedLabel: string
 }

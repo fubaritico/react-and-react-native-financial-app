@@ -57,6 +57,8 @@ export interface IDropdownProps {
   buttonFullWidth?: boolean
   /** Whether the trigger button centers its content */
   buttonCentered?: boolean
+  /** Horizontal alignment of the floating menu relative to the trigger. 'left' aligns the menu's left edge with the trigger's left edge (default). 'right' aligns the menu's right edge with the trigger's right edge. */
+  position?: 'left' | 'right'
   /** Custom renderer for each menu item — replaces the default label text. When provided, items use rawContent (no Typography wrapper). */
   renderItem?: (
     option: IDropdownOption,

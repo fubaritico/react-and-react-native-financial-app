@@ -36,6 +36,8 @@ export const BudgetOverviewHome: Story = {
     seeDetailsLabel: i18n.t('common.seeDetails'),
     onSeeDetails: noop,
     budgets: overviewBudgets,
+    ofLabel: i18n.t('budgets.of'),
+    limitLabel: i18n.t('budgets.limit'),
   },
   render: (args) => <BudgetOverview {...args} />,
 }
@@ -46,6 +48,8 @@ export const BudgetOverviewBudgetPage: Story = {
     budgets: budgetPageBudgets,
     showSpentAmount: true,
     spendingSummaryTitle: 'Spending Summary',
+    ofLabel: 'of',
+    limitLabel: 'limit',
   },
   render: (args) => <BudgetOverview {...args} />,
 }

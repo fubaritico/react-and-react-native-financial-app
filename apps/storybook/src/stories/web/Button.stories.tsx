@@ -25,6 +25,7 @@ const meta = {
     centered: { control: 'boolean' },
     fullWidth: { control: 'boolean' },
     disabled: { control: 'boolean' },
+    loading: { control: 'boolean' },
     title: { control: 'text' },
     onPress: { action: 'pressed' },
   },
@@ -79,6 +80,45 @@ export const Disabled: Story = {
       <Button title="Tertiary" variant="tertiary" disabled onPress={noop} />
       <Button title="Destroy" variant="destroy" disabled onPress={noop} />
       <Button title="Outline" variant="outline" disabled onPress={noop} />
+    </div>
+  ),
+}
+
+/** Loading state — spinner replaces content, button is disabled. */
+export const Loading: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <Button title="Primary" variant="primary" loading onPress={noop} />
+      <Button title="Secondary" variant="secondary" loading onPress={noop} />
+      <Button title="Tertiary" variant="tertiary" loading onPress={noop} />
+      <Button title="Destroy" variant="destroy" loading onPress={noop} />
+      <Button title="Outline" variant="outline" loading onPress={noop} />
+    </div>
+  ),
+}
+
+/** Loading full-width — typical modal submit button. */
+export const LoadingFullWidth: Story = {
+  render: () => (
+    <div
+      style={{ width: 400, display: 'flex', flexDirection: 'column', gap: 12 }}
+    >
+      <Button
+        title="Save Changes"
+        variant="primary"
+        loading
+        fullWidth
+        centered
+        onPress={noop}
+      />
+      <Button
+        title="Yes, Confirm Deletion"
+        variant="destroy"
+        loading
+        fullWidth
+        centered
+        onPress={noop}
+      />
     </div>
   ),
 }

@@ -47,6 +47,7 @@ export function Dropdown({
   bottomSheetTitle,
   bottomSheetCloseLabel = 'Close',
   withPortal,
+  position = 'left',
   trigger,
   buttonVariant = 'outline',
   buttonSize,
@@ -146,15 +147,21 @@ export function Dropdown({
       const top = shouldFlip
         ? triggerRect.top - menuHeight - MENU_GAP
         : triggerRect.bottom + MENU_GAP
+      const horizontal =
+        position === 'right'
+          ? { right: window.innerWidth - triggerRect.right }
+          : { left: triggerRect.left }
       setPortalStyle({
         position: 'fixed',
         top,
-        left: triggerRect.left,
+        ...horizontal,
         zIndex: 50,
-        width: triggerRect.width,
+        ...(position === 'right'
+          ? { minWidth: triggerRect.width }
+          : { width: triggerRect.width }),
       })
     }
-  }, [withPortal])
+  }, [withPortal, position])
 
   /** Initial placement calculation */
   useLayoutEffect(() => {
@@ -165,17 +172,18 @@ export function Dropdown({
     updatePlacement()
   }, [isOpen, isDesktop, updatePlacement])
 
-  /** Re-calculate after portal mount (wrapper may not have height on first pass) */
+  /** Re-calculate after portal mount; close on scroll to avoid stale positioning */
   useEffect(() => {
     if (!isOpen || !isDesktop || !withPortal) return
-    // requestAnimationFrame ensures the portal DOM is painted
     const raf = requestAnimationFrame(() => {
       updatePlacement()
     })
+    window.addEventListener('scroll', handleClose, true)
     return () => {
       cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', handleClose, true)
     }
-  }, [isOpen, isDesktop, withPortal, updatePlacement])
+  }, [isOpen, isDesktop, withPortal, updatePlacement, handleClose])
 
   const menuItems = options.flatMap((option, index) => {
     const items: ReactNode[] = []
@@ -212,7 +220,8 @@ export function Dropdown({
         withPortal
           ? undefined
           : cn(
-              'absolute right-0 z-50 min-w-full',
+              'absolute z-50 min-w-full',
+              position === 'right' ? 'right-0' : 'left-0',
               flipped ? 'bottom-full mb-2' : 'top-full mt-2'
             )
       }

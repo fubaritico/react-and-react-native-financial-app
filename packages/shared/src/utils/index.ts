@@ -4,7 +4,7 @@ export type {
   CurrencySign,
   IFormatCurrencyOptions,
 } from './currency'
-export { formatDate } from './date'
+export { formatDate, toTimestamptz } from './date'
 export { resolveTokenColor } from './color'
 export { BUDGET_MONTH, buildBudgetPageData } from './budget'
 export type {

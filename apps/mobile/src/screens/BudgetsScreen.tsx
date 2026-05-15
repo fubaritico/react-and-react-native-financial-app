@@ -73,7 +73,9 @@ export function BudgetsScreen() {
       <BudgetOverview
         budgets={budgetItems}
         showSpentAmount
-        spendingSummaryTitle={t('budgets.spendingSummary', 'Spending Summary')}
+        ofLabel={t('budgets.of')}
+        limitLabel={t('budgets.limit')}
+        spendingSummaryTitle={t('budgets.spendingSummary')}
       />
 
       {/* Category Cards */}

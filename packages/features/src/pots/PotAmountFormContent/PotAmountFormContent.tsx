@@ -17,13 +17,13 @@ export interface IPotAmountFormContentProps {
   /** Ref to access the entered amount from the parent */
   ref?: Ref<IPotAmountFormRef>
   /** Label for the "New Amount" row (e.g. "New Amount") */
-  newAmountLabel?: string
+  newAmountLabel: string
   /** Label prefix for the target line (e.g. "Target of") */
-  targetOfLabel?: string
+  targetOfLabel: string
   /** Label for the amount input (e.g. "Amount to Add") */
-  amountLabel?: string
+  amountLabel: string
   /** Placeholder for the amount input */
-  amountPlaceholder?: string
+  amountPlaceholder: string
   /** Locale for currency formatting (e.g. "en-US") */
   locale?: string
   /** Currency code for formatting (e.g. "USD") */

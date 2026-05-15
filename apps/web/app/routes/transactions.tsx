@@ -11,7 +11,7 @@ import {
   postTransactionsMutation,
   putTransactionsByIdMutation,
 } from '@financial-app/http-client'
-import { getErrorMessage, useModal } from '@financial-app/shared'
+import { getErrorMessage, toTimestamptz, useModal } from '@financial-app/shared'
 import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useRef } from 'react'
@@ -61,11 +61,74 @@ export default function Transactions({
   /** ID of the transaction currently being edited (stable ref to avoid stale closures) */
   const editingTransactionIdRef = useRef<string | null>(null)
 
+  /** Opens a brief confirmation modal after a successful mutation */
+  const showSuccessModal = useCallback(
+    (message: string) => {
+      modal.open({
+        body: (
+          <Typography
+            variant="subsection-title"
+            color="foreground"
+            className="text-center"
+          >
+            {message}
+          </Typography>
+        ),
+        actions: [
+          {
+            label: t('common.ok'),
+            variant: 'primary',
+            onPress: () => {
+              modal.close()
+            },
+          },
+        ],
+        dismissable: false,
+      })
+    },
+    [modal, t]
+  )
+
+  /** Opens an error modal after a failed mutation */
+  const showErrorModal = useCallback(
+    (err: unknown) => {
+      modal.open({
+        body: (
+          <Typography
+            variant="subsection-title"
+            color="foreground"
+            className="text-center"
+          >
+            {import.meta.env.DEV
+              ? getErrorMessage(err)
+              : t('common.somethingWentWrong')}
+          </Typography>
+        ),
+        actions: [
+          {
+            label: t('common.ok'),
+            variant: 'destroy',
+            onPress: () => {
+              modal.close()
+            },
+          },
+        ],
+        dismissable: false,
+      })
+    },
+    [modal, t]
+  )
+
   const { mutate: createTransaction } = useMutation({
     ...postTransactionsMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.transactionAdded'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -74,6 +137,11 @@ export default function Transactions({
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.transactionUpdated'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -82,6 +150,11 @@ export default function Transactions({
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.transactionDeleted'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -90,16 +163,17 @@ export default function Transactions({
     if (!ref || ref.hasErrors) return
     const values = ref.getValues()
     if (!Number.isFinite(values.amount) || values.amount === 0) return
+    modal.setSubmitting(true)
     createTransaction({
       body: {
         name: values.name,
         category: values.category,
-        date: values.date,
+        date: toTimestamptz(values.date),
         amount: values.amount,
         recurring: values.recurring,
       },
     })
-  }, [createTransaction])
+  }, [createTransaction, modal])
 
   const handleSubmitEditTransaction = useCallback(() => {
     const ref = formRef.current
@@ -107,17 +181,18 @@ export default function Transactions({
     if (!ref || ref.hasErrors || !transactionId) return
     const values = ref.getValues()
     if (!Number.isFinite(values.amount) || values.amount === 0) return
+    modal.setSubmitting(true)
     updateTransaction({
       path: { id: transactionId },
       body: {
         name: values.name,
         category: values.category,
-        date: values.date,
+        date: toTimestamptz(values.date),
         amount: values.amount,
         recurring: values.recurring,
       },
     })
-  }, [updateTransaction])
+  }, [updateTransaction, modal])
 
   const handleAddTransaction = useCallback(() => {
     const config = createAddTransactionModalConfig(
@@ -143,8 +218,6 @@ export default function Transactions({
   }, [t, modal, handleSubmitTransaction])
 
   /** Opens the Edit Transaction modal for the given transaction */
-  // TODO: wire to ellipsis action column (next session)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleEditTransaction = useCallback(
     (transaction: ITransaction) => {
       editingTransactionIdRef.current = transaction.id
@@ -180,8 +253,6 @@ export default function Transactions({
   )
 
   /** Opens the Delete Transaction confirmation modal */
-  // TODO: wire to ellipsis action column (next session)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleDeleteTransaction = useCallback(
     (transaction: ITransaction) => {
       const config = createDeleteTransactionModalConfig(
@@ -190,6 +261,7 @@ export default function Transactions({
           {t('transactions.deleteModal.description')}
         </Typography>,
         () => {
+          modal.setSubmitting(true)
           deleteTransaction({ path: { id: transaction.id } })
         },
         {
@@ -239,7 +311,12 @@ export default function Transactions({
           variant="primary"
         />
       </div>
-      <TransactionsDataTable data={data?.data ?? []} locale={i18n.language} />
+      <TransactionsDataTable
+        data={data?.data ?? []}
+        locale={i18n.language}
+        onEdit={handleEditTransaction}
+        onDelete={handleDeleteTransaction}
+      />
     </div>
   )
 }

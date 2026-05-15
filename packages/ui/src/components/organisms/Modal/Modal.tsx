@@ -16,10 +16,10 @@ export interface IModalProps {
 
 /** Props for Modal.Header */
 export interface IModalHeaderProps {
-  /** Modal title text */
-  title: string
+  /** Modal title text (omit to hide the title — close button still shown if dismissable) */
+  title?: string
   /** Close button accessible label (i18n — pass translated string) */
-  closeLabel?: string
+  closeLabel: string
 }
 
 /** Props for Modal.Body */
@@ -51,6 +51,8 @@ export interface IModalFooterAction {
 export interface IModalFooterProps {
   /** Action buttons rendered above the cancel button */
   actions: IModalFooterAction[]
-  /** Cancel button label (i18n — pass translated string, defaults to "Cancel") */
-  cancelLabel?: string
+  /** Cancel button label (i18n — pass translated string) */
+  cancelLabel: string
+  /** When true, primary/destroy action shows loading spinner and cancel is disabled */
+  isSubmitting?: boolean
 }

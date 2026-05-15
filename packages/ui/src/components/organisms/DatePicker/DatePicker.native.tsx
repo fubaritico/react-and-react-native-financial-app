@@ -80,6 +80,8 @@ export function DatePicker({
         const month = String(selectedDate.getMonth() + 1).padStart(2, '0')
         const day = String(selectedDate.getDate()).padStart(2, '0')
         onChange(`${String(year)}-${month}-${day}`)
+        // iOS inline: close BottomSheet after date selection
+        if (Platform.OS === 'ios') setShow(false)
       }
     },
     [onChange]

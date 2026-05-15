@@ -4,7 +4,20 @@
     "viewAll": "Voir tout",
     "placeholder": "Espace réservé",
     "errorLoading": "Échec du chargement des données. Veuillez réessayer.",
-    "ok": "OK"
+    "ok": "OK",
+    "error": "Erreur",
+    "somethingWentWrong": "Une erreur est survenue. Veuillez réessayer.",
+    "transactionAdded": "Transaction ajoutée avec succès.",
+    "transactionUpdated": "Transaction mise à jour avec succès.",
+    "transactionDeleted": "Transaction supprimée avec succès.",
+    "budgetAdded": "Budget ajouté avec succès.",
+    "budgetUpdated": "Budget mis à jour avec succès.",
+    "budgetDeleted": "Budget supprimé avec succès.",
+    "potAdded": "Cagnotte ajoutée avec succès.",
+    "potUpdated": "Cagnotte mise à jour avec succès.",
+    "potDeleted": "Cagnotte supprimée avec succès.",
+    "moneyAdded": "Argent ajouté avec succès.",
+    "moneyWithdrawn": "Retrait effectué avec succès."
   },
   "navigation": {
     "overview": "Aperçu",
@@ -83,6 +96,8 @@
     "editBudget": "Modifier le budget",
     "deleteBudget": "Supprimer le budget",
     "addNewBudget": "+ Nouveau budget",
+    "of": "de",
+    "limit": "limite",
     "spendingSummary": "Résumé des dépenses",
     "form": {
       "categoryLabel": "Catégorie de budget",
@@ -123,7 +138,8 @@
       "targetLabel": "Objectif",
       "targetPlaceholder": "ex. 2000",
       "themeLabel": "Thème",
-      "charactersLeft": "{{count}} caractères restants"
+      "charactersLeft": "{{count}} caractères restants",
+      "alreadyUsed": "Déjà utilisé"
     },
     "addModal": {
       "title": "Nouvelle cagnotte",
@@ -180,6 +196,8 @@
     "filterByCategory": "Filtrer par catégorie",
     "categoryOptions": "Options de catégorie",
     "searchPlaceholder": "Rechercher des transactions",
+    "editTransaction": "Modifier",
+    "deleteTransaction": "Supprimer",
     "addModal": {
       "title": "Ajouter une transaction",
       "description": "Créer une nouvelle transaction manuelle.",

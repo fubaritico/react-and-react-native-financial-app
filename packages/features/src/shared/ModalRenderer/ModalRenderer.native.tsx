@@ -1,6 +1,7 @@
 import { modalConfigAtom, useModal } from '@financial-app/shared'
 import { Modal } from '@financial-app/ui/native'
 import { useAtomValue } from 'jotai'
+import { useTranslation } from 'react-i18next'
 
 import type { IModalRendererProps } from './ModalRenderer'
 
@@ -11,6 +12,7 @@ import type { IModalRendererProps } from './ModalRenderer'
 export function ModalRenderer({ children }: Readonly<IModalRendererProps>) {
   const config = useAtomValue(modalConfigAtom)
   const { close } = useModal()
+  const { t } = useTranslation()
 
   return (
     <>
@@ -19,14 +21,18 @@ export function ModalRenderer({ children }: Readonly<IModalRendererProps>) {
         <Modal
           isOpen
           onClose={close}
-          accessibilityLabel={config.title}
+          accessibilityLabel={config.title ?? 'Dialog'}
           dismissable={config.dismissable}
         >
-          <Modal.Header title={config.title} />
+          <Modal.Header
+            title={config.title}
+            closeLabel={config.closeLabel ?? t('modal.close')}
+          />
           <Modal.Body>{config.body}</Modal.Body>
           <Modal.Footer
             actions={config.actions}
-            cancelLabel={config.cancelLabel}
+            cancelLabel={config.cancelLabel ?? t('modal.cancel')}
+            isSubmitting={config.isSubmitting}
           />
         </Modal>
       ) : null}

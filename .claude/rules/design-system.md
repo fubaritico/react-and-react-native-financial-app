@@ -20,6 +20,7 @@ Rules:
 - Cross-level imports use `#` aliases: `#Atoms`, `#Molecules`, `#Organisms`, `#Templates`, `#Lib/tw`, `#Lib/cn`
 - Same-component imports use relative paths: `./Alert.styles`, `./Alert.variants`
 - Same-level sibling imports use relative paths: `../TextInput/TextInput.native`
+- **Sub-components within an organism** (e.g. DataTable cells) importing from OTHER atomic levels (atoms, molecules) MUST use relative paths (`../../../../atoms/Icon/Icon.native`), NOT `#` aliases — `#` aliases cause ESLint import/order conflicts in nested organism files
 - Storybook titles follow the pattern: `'Web/Design System/Atoms/Button'`
 
 ## File Structure (mandatory for every component)

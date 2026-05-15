@@ -25,6 +25,8 @@ export function TransactionsDataTable({
   data,
   loading,
   locale,
+  onEdit,
+  onDelete,
 }: Readonly<ITransactionsDataTableProps>) {
   const { t } = useTranslation()
   const [sorting, setSorting] = useState<SortingState>([
@@ -54,7 +56,13 @@ export function TransactionsDataTable({
     }
   }, [])
 
-  const columns = useTransactionsColumns(locale)
+  const columns = useTransactionsColumns(
+    locale,
+    onEdit,
+    onDelete,
+    t('transactions.editTransaction'),
+    t('transactions.deleteTransaction')
+  )
 
   const table = useReactTable({
     columns,

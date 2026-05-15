@@ -23,9 +23,9 @@ export interface IBudgetOverviewProps {
   /** Show spent amount with "of $max" context (Budget page). When false, shows only max (Overview). */
   showSpentAmount?: boolean
   /** Label between spent and max amounts (e.g. "of"). */
-  ofLabel?: string
+  ofLabel: string
   /** Subtext template for the donut center (e.g. "of $975 limit"). */
-  limitLabel?: string
+  limitLabel: string
   /** BCP 47 locale tag (defaults to 'en-US'). */
   locale?: string
   /** ISO 4217 currency code (defaults to 'USD'). */

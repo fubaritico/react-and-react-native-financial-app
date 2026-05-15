@@ -37,6 +37,7 @@ targeting React Native (Expo) and React web (React Router).
 - **For React**: instead of using `React.` for react types, import the type from react
 - **React/RN skills**: always apply `composition-patterns`, `react-best-practices`, and `react-native-skills` when writing or reviewing component code
 - **Screenshot**: given screenshot names are always files located in desktop, otherwise the full file path is given
+- **Never i18n fallbacks** — NEVER pass a second argument to `t()` (e.g. `t('key', 'fallback')`), NEVER use default values for label/placeholder props in destructuring (e.g. `label = 'Edit'`), NEVER use `?? 'fallback'` on translated strings. If a key is missing, add it to both `en/translation.json` and `fr/translation.json`. Labels are always required props (`label: string`, not `label?: string`).
 
 ## Current State vs Target
 

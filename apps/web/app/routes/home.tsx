@@ -242,6 +242,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             title={t('budgets.title')}
             seeDetailsLabel={t('common.seeDetails')}
             budgets={budgetItems}
+            ofLabel={t('budgets.of')}
+            limitLabel={t('budgets.limit')}
             onSeeDetails={() => {
               void navigate('/budgets')
             }}

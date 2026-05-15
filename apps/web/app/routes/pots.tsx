@@ -133,11 +133,74 @@ export default function Pots({
   /** ID of the pot currently being edited (stable ref to avoid stale closures) */
   const editingPotIdRef = useRef<string | null>(null)
 
+  /** Opens a brief confirmation modal after a successful mutation */
+  const showSuccessModal = useCallback(
+    (message: string) => {
+      modal.open({
+        body: (
+          <Typography
+            variant="subsection-title"
+            color="foreground"
+            className="text-center"
+          >
+            {message}
+          </Typography>
+        ),
+        actions: [
+          {
+            label: t('common.ok'),
+            variant: 'primary',
+            onPress: () => {
+              modal.close()
+            },
+          },
+        ],
+        dismissable: false,
+      })
+    },
+    [modal, t]
+  )
+
+  /** Opens an error modal after a failed mutation */
+  const showErrorModal = useCallback(
+    (err: unknown) => {
+      modal.open({
+        body: (
+          <Typography
+            variant="subsection-title"
+            color="foreground"
+            className="text-center"
+          >
+            {import.meta.env.DEV
+              ? getErrorMessage(err)
+              : t('common.somethingWentWrong')}
+          </Typography>
+        ),
+        actions: [
+          {
+            label: t('common.ok'),
+            variant: 'destroy',
+            onPress: () => {
+              modal.close()
+            },
+          },
+        ],
+        dismissable: false,
+      })
+    },
+    [modal, t]
+  )
+
   const { mutate: createPot } = useMutation({
     ...postPotsMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.potAdded'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -146,6 +209,11 @@ export default function Pots({
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.potUpdated'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -154,6 +222,11 @@ export default function Pots({
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.potDeleted'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -162,6 +235,11 @@ export default function Pots({
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.moneyAdded'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -170,6 +248,11 @@ export default function Pots({
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: potsOpts.queryKey })
       modal.close()
+      showSuccessModal(t('common.moneyWithdrawn'))
+    },
+    onError: (err) => {
+      modal.close()
+      showErrorModal(err)
     },
   })
 
@@ -179,6 +262,7 @@ export default function Pots({
     const parsed = Number(values.target)
     if (!Number.isFinite(parsed) || parsed <= 0) return
     if (!values.name.trim()) return
+    modal.setSubmitting(true)
     createPot({
       body: {
         name: values.name.trim(),
@@ -186,7 +270,7 @@ export default function Pots({
         theme: values.theme,
       },
     })
-  }, [createPot])
+  }, [createPot, modal])
 
   const handleSubmitEditPot = useCallback(() => {
     const values = formRef.current?.getValues()
@@ -195,6 +279,7 @@ export default function Pots({
     const parsed = Number(values.target)
     if (!Number.isFinite(parsed) || parsed <= 0) return
     if (!values.name.trim()) return
+    modal.setSubmitting(true)
     updatePot({
       path: { id: potId },
       body: {
@@ -203,7 +288,7 @@ export default function Pots({
         theme: values.theme,
       },
     })
-  }, [updatePot])
+  }, [updatePot, modal])
 
   const handleAddPot = useCallback(() => {
     const config = createAddPotModalConfig(
@@ -217,6 +302,7 @@ export default function Pots({
         charactersLeftLabel={(count) =>
           t('pots.form.charactersLeft', { count })
         }
+        alreadyUsedLabel={t('pots.form.alreadyUsed')}
         description={t('pots.addModal.description')}
       />,
       handleSubmitPot,
@@ -248,6 +334,7 @@ export default function Pots({
           charactersLeftLabel={(count) =>
             t('pots.form.charactersLeft', { count })
           }
+          alreadyUsedLabel={t('pots.form.alreadyUsed')}
           description={t('pots.editModal.description')}
         />,
         handleSubmitEditPot,
@@ -270,6 +357,7 @@ export default function Pots({
           {t('pots.deleteModal.description')}
         </Typography>,
         () => {
+          modal.setSubmitting(true)
           deletePot({ path: { id: pot.id } })
         },
         {
@@ -289,6 +377,7 @@ export default function Pots({
       const handleSubmit = () => {
         const amount = amountRef.current?.getAmount() ?? 0
         if (amount <= 0) return
+        modal.setSubmitting(true)
         addMoney({ path: { id: pot.id }, body: { amount } })
       }
       const config = createAddMoneyModalConfig(
@@ -320,6 +409,7 @@ export default function Pots({
       const handleSubmit = () => {
         const amount = amountRef.current?.getAmount() ?? 0
         if (amount <= 0) return
+        modal.setSubmitting(true)
         withdrawMoney({ path: { id: pot.id }, body: { amount } })
       }
       const config = createWithdrawModalConfig(

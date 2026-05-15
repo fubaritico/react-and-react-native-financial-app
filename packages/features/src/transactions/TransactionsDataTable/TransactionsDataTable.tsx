@@ -8,4 +8,8 @@ export interface ITransactionsDataTableProps {
   loading?: boolean
   /** BCP 47 locale tag for date/currency formatting (defaults to 'en-US'). */
   locale?: string
+  /** Called when the user selects "Edit" from a row's action menu. */
+  onEdit?: (transaction: ITransaction) => void
+  /** Called when the user selects "Delete" from a row's action menu. */
+  onDelete?: (transaction: ITransaction) => void
 }

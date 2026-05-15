@@ -4,7 +4,20 @@
     "viewAll": "View All",
     "placeholder": "Placeholder",
     "errorLoading": "Failed to load data. Please try again.",
-    "ok": "OK"
+    "ok": "OK",
+    "error": "Error",
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "transactionAdded": "Transaction added successfully.",
+    "transactionUpdated": "Transaction updated successfully.",
+    "transactionDeleted": "Transaction deleted successfully.",
+    "budgetAdded": "Budget added successfully.",
+    "budgetUpdated": "Budget updated successfully.",
+    "budgetDeleted": "Budget deleted successfully.",
+    "potAdded": "Pot added successfully.",
+    "potUpdated": "Pot updated successfully.",
+    "potDeleted": "Pot deleted successfully.",
+    "moneyAdded": "Money added successfully.",
+    "moneyWithdrawn": "Money withdrawn successfully."
   },
   "navigation": {
     "overview": "Overview",
@@ -83,6 +96,8 @@
     "editBudget": "Edit Budget",
     "deleteBudget": "Delete Budget",
     "addNewBudget": "+ Add New Budget",
+    "of": "of",
+    "limit": "limit",
     "spendingSummary": "Spending Summary",
     "form": {
       "categoryLabel": "Budget Category",
@@ -123,7 +138,8 @@
       "targetLabel": "Target",
       "targetPlaceholder": "e.g. 2000",
       "themeLabel": "Theme",
-      "charactersLeft": "{{count}} characters left"
+      "charactersLeft": "{{count}} characters left",
+      "alreadyUsed": "Already used"
     },
     "addModal": {
       "title": "Add New Pot",
@@ -180,6 +196,8 @@
     "filterByCategory": "Filter by category",
     "categoryOptions": "Category options",
     "searchPlaceholder": "Search transactions",
+    "editTransaction": "Edit Transaction",
+    "deleteTransaction": "Delete Transaction",
     "addModal": {
       "title": "Add New Transaction",
       "description": "Create a new manual transaction entry.",

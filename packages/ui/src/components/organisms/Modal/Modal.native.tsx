@@ -17,16 +17,20 @@ import type {
 import { Button, Icon, PortalProvider, Typography } from '#Atoms'
 
 /** Modal.Header — title + close (X) button (hidden when dismissable is false) */
-function ModalHeader({
-  title,
-  closeLabel = 'Close',
-}: Readonly<IModalHeaderProps>) {
+function ModalHeader({ title, closeLabel }: Readonly<IModalHeaderProps>) {
   const { onClose, dismissable } = useModalContext()
+
+  if (!title && !dismissable) return null
+
   return (
     <View style={tw`${shared.header}`}>
-      <Typography variant="heading-md" color="foreground" style={tw`flex-1`}>
-        {title}
-      </Typography>
+      {title ? (
+        <Typography variant="heading-md" color="foreground" style={tw`flex-1`}>
+          {title}
+        </Typography>
+      ) : (
+        <View style={tw`flex-1`} />
+      )}
       {dismissable ? (
         <Pressable
           onPress={onClose}
@@ -51,27 +55,34 @@ function ModalBody({ children }: Readonly<IModalBodyProps>) {
 /** Modal.Footer — action buttons + cancel (cancel hidden when dismissable is false) */
 function ModalFooter({
   actions,
-  cancelLabel = 'Cancel',
+  cancelLabel,
+  isSubmitting,
 }: Readonly<IModalFooterProps>) {
   const { onClose, dismissable } = useModalContext()
   return (
     <View style={tw`${shared.footer}`}>
-      {actions.map((action) => (
-        <Button
-          key={action.label}
-          title={action.label}
-          variant={action.variant}
-          onPress={action.onPress}
-          disabled={action.disabled}
-          fullWidth
-          centered
-        />
-      ))}
+      {actions.map((action) => {
+        const isPrimary =
+          action.variant === 'primary' || action.variant === 'destroy'
+        return (
+          <Button
+            key={action.label}
+            title={action.label}
+            variant={action.variant}
+            onPress={action.onPress}
+            disabled={action.disabled ?? (isSubmitting && !isPrimary)}
+            loading={isPrimary && isSubmitting}
+            fullWidth
+            centered
+          />
+        )
+      })}
       {dismissable ? (
         <Button
           title={cancelLabel}
           variant="secondary"
           onPress={onClose}
+          disabled={isSubmitting}
           fullWidth
           centered
         />

@@ -355,14 +355,38 @@ Invoke `/story $Name` after component creation.
 Components are i18n-agnostic — they receive translated strings as props, never call `useTranslation()`.
 But **every user-facing string** (labels, placeholders, aria-labels, button text like "Prev"/"Next") must:
 
-1. Be exposed as a **prop** on the component interface (with a sensible English default if appropriate)
+1. Be exposed as a **required prop** (`label: string`, NOT `label?: string`) on the component interface
 2. Have a corresponding **translation entry** in `packages/shared/src/i18n/locales/{en,fr}/translation.json`
-3. Be passed via `i18n.t('key')` in Storybook stories and app-level consumers
+3. Be passed via `t('key')` in app-level consumers — NEVER with a fallback
 
 Never hardcode visible text inside a component — even short labels like "OK", "Cancel", "Next".
-This includes default prop values (e.g. `editLabel = 'Edit Budget'`) — the English default is acceptable as a fallback, but a translation key MUST exist for it.
 
-**No default values for label props.** Label props (e.g. `nameLabel`, `categoryLabel`, `recurringLabel`) must be **required** — no `= 'Some Default'` in the function signature. The consumer always passes the label explicitly via `i18n.t('key')`. Default values hide whether the prop is wired or not, making it impossible to spot missing translations at a glance.
+### FORBIDDEN i18n patterns (ARCH-017)
+
+- `t('key', 'fallback')` — NEVER pass a second argument to `t()`
+- `label = 'Edit'` — NEVER use default values for label/placeholder props in destructuring
+- `?? 'fallback'` or `|| 'fallback'` — NEVER use fallback operators on translated strings
+- `label?: string` — label props must be **required** (`label: string`), not optional
+
+If a translation key is missing, add it to BOTH `en/translation.json` and `fr/translation.json`. Do not paper over it with a fallback.
+
+## Import Path Rule — Sub-Components Within Organisms
+
+When a component lives **deep inside an organism folder** (e.g. `DataTable/cells/ActionCell/`),
+imports of other atomic levels (atoms, molecules) MUST use **relative paths**, NOT `#` aliases.
+
+```ts
+// GOOD — relative path, no ESLint import/order issues
+import { Icon } from '../../../../atoms/Icon/Icon.native'
+import { Dropdown } from '../../../../molecules/Dropdown/Dropdown.native'
+
+// BAD — bare #Atoms/#Molecules cause ESLint pathGroup mismatches in nested files
+import { Icon } from '#Atoms'
+import { Dropdown } from '#Molecules'
+```
+
+`#` aliases are fine for top-level component files (e.g. `atoms/Button/Button.native.tsx` importing `#Lib/tw`),
+but organism sub-components should use relative paths to avoid import ordering headaches.
 
 ## Gotchas
 

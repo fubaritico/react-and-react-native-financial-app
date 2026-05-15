@@ -221,6 +221,8 @@ export function OverviewScreen() {
           title={t('budgets.title')}
           seeDetailsLabel={t('common.seeDetails')}
           budgets={budgetItems}
+          ofLabel={t('budgets.of')}
+          limitLabel={t('budgets.limit')}
           onSeeDetails={() => {
             navigation.navigate('Budgets')
           }}

@@ -24,5 +24,12 @@ export function useModal() {
     setConfig(null)
   }, [setConfig])
 
-  return { open, close, isOpen: config !== null } as const
+  const setSubmitting = useCallback(
+    (isSubmitting: boolean) => {
+      setConfig((prev) => (prev ? { ...prev, isSubmitting } : prev))
+    },
+    [setConfig]
+  )
+
+  return { open, close, setSubmitting, isOpen: config !== null } as const
 }

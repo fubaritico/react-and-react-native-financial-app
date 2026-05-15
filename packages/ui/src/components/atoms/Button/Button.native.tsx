@@ -1,11 +1,11 @@
-import { Pressable } from 'react-native'
+import { ActivityIndicator, Pressable } from 'react-native'
 
 import tw from '#Lib/tw'
 
 import { Icon } from '../Icon/Icon.native'
 import { Typography } from '../Typography/Typography.native'
 
-import { ICON_COLOR_TOKEN } from './Button.constants'
+import { ICON_COLOR_TOKEN, SPINNER_COLOR_TOKEN } from './Button.constants'
 import { buttonVariants } from './Button.variants'
 
 import type { IButtonProps } from './Button'
@@ -30,6 +30,7 @@ export const Button = ({
   size = 'md',
   fullWidth,
   disabled,
+  loading,
   icon,
   iconPosition = 'right',
   accessibilityLabel,
@@ -37,24 +38,28 @@ export const Button = ({
   className,
   style,
 }: Readonly<IButtonProps>) => {
+  const isDisabled = !!disabled || !!loading
   const variantClasses = buttonVariants({
     variant,
     size,
     fullWidth,
-    disabled,
+    disabled: isDisabled || undefined,
     centered,
   })
   const textColor =
     VARIANT_TEXT_COLOR[variant ?? 'primary'] ?? 'primary-foreground'
+  const spinnerColor =
+    tw.color(SPINNER_COLOR_TOKEN[variant ?? 'primary']) ?? '#FFFFFF'
 
   return (
     <Pressable
       onPress={onPress}
-      disabled={!!disabled}
+      disabled={isDisabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       accessibilityState={{
-        disabled: !!disabled,
+        disabled: isDisabled,
+        busy: !!loading,
         ...(ariaExpanded != null && { expanded: ariaExpanded }),
       }}
       style={({ pressed }) => [
@@ -68,21 +73,25 @@ export const Button = ({
         style,
       ]}
     >
-      {children ?? (
-        <>
-          <Typography variant="body-bold" color={textColor}>
-            {title}{' '}
-          </Typography>
-          {icon ? (
-            <Icon
-              name={icon}
-              iconSize="xs"
-              color={
-                tw.color(ICON_COLOR_TOKEN[variant ?? 'primary']) ?? '#FFFFFF'
-              }
-            />
-          ) : null}
-        </>
+      {loading ? (
+        <ActivityIndicator size="small" color={spinnerColor} />
+      ) : (
+        (children ?? (
+          <>
+            <Typography variant="body-bold" color={textColor}>
+              {title}{' '}
+            </Typography>
+            {icon ? (
+              <Icon
+                name={icon}
+                iconSize="xs"
+                color={
+                  tw.color(ICON_COLOR_TOKEN[variant ?? 'primary']) ?? '#FFFFFF'
+                }
+              />
+            ) : null}
+          </>
+        ))
       )}
     </Pressable>
   )

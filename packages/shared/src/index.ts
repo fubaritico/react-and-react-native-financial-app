@@ -58,6 +58,7 @@ export {
   formatCurrency,
   convertCurrency,
   formatDate,
+  toTimestamptz,
   resolveTokenColor,
   buildBudgetPageData,
   buildRecurringBillsPageData,

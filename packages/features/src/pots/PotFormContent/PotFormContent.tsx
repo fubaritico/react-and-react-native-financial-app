@@ -23,17 +23,19 @@ export interface IPotFormContentProps {
   /** Ref to access form values from the parent */
   ref?: Ref<IPotFormRef>
   /** Label for the pot name field */
-  nameLabel?: string
+  nameLabel: string
   /** Placeholder for the pot name field */
-  namePlaceholder?: string
+  namePlaceholder: string
   /** Label for the target field */
-  targetLabel?: string
+  targetLabel: string
   /** Placeholder for the target field */
-  targetPlaceholder?: string
+  targetPlaceholder: string
   /** Label for the theme field */
-  themeLabel?: string
+  themeLabel: string
   /** Template for the characters-left counter (receives {{count}}) */
-  charactersLeftLabel?: (count: number) => string
+  charactersLeftLabel: (count: number) => string
+  /** Label shown on disabled theme options (already assigned to another pot/budget) */
+  alreadyUsedLabel: string
   /** Description text displayed above the form fields */
   description?: string
 }

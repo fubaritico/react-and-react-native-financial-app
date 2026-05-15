@@ -90,6 +90,12 @@
 - **Check**: Config files use kebab-case or standard names (tsconfig.json, etc.)
 - **Check**: All interfaces MUST use `I` prefix (e.g., `IAuthClient`, `IButtonProps`, `ITransaction`)
 
+### ARCH-012b: `#` aliases in organism sub-components
+- **Files**: `packages/ui/src/components/organisms/**/cells/**`, `packages/ui/src/components/organisms/**/components/**`
+- **Check**: Sub-components nested deep inside an organism (e.g. DataTable cells) must NOT use `#Atoms`, `#Molecules`, `#Organisms` aliases to import from other atomic levels
+- **Must use**: Relative paths (`../../../../atoms/Icon/Icon.native`, `../../../../molecules/Dropdown/Dropdown.web`)
+- **Rationale**: Bare `#Atoms`/`#Molecules` don't match ESLint `pathGroups` patterns (`#Atoms/**`), causing import/order errors. Top-level component files (e.g. `atoms/Button/Button.native.tsx`) can still use `#Lib/tw`, `#Lib/cn`.
+
 ### ARCH-012: Unused exports
 - **Files**: `packages/*/src/index.ts`
 - **Check**: Exported items that are not imported anywhere in the monorepo
@@ -119,3 +125,11 @@
 - **Check**: Complex business logic (multi-step operations, calculations, conditional flows) must be extracted into named helper functions within the same file or a `services/` directory
 - **Example**: `updatePotTotal()` extracts fetch-validate-update logic out of the handler
 - **Threshold**: If a handler does more than one Supabase call, extract the logic
+
+### ARCH-017: i18n fallback strings
+- **Files**: All `*.tsx`, `*.ts` in `apps/` and `packages/features/`
+- **Check**: NEVER pass a second argument to `t()` as a fallback (e.g. `t('key', 'fallback')`)
+- **Check**: NEVER use default values for label/placeholder props in destructuring (e.g. `label = 'Edit'`)
+- **Check**: NEVER use `?? 'fallback'` or `|| 'fallback'` on translated strings
+- **Check**: Label/placeholder props must be `string` (required), NOT `string?` (optional)
+- **Fix**: Add missing keys to both `en/translation.json` and `fr/translation.json`, make props required

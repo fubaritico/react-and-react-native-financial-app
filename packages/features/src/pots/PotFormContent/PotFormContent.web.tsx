@@ -17,12 +17,13 @@ import type { IPotFormContentProps } from './PotFormContent'
  */
 export function PotFormContent({
   initialValues,
-  nameLabel = 'Pot Name',
-  namePlaceholder = 'e.g. Rainy Days',
-  targetLabel = 'Target',
-  targetPlaceholder = 'e.g. 2000',
-  themeLabel = 'Theme',
-  charactersLeftLabel = (count: number) => `${String(count)} characters left`,
+  nameLabel,
+  namePlaceholder,
+  targetLabel,
+  targetPlaceholder,
+  themeLabel,
+  charactersLeftLabel,
+  alreadyUsedLabel,
   description,
   ref,
 }: Readonly<IPotFormContentProps>) {
@@ -92,6 +93,7 @@ export function PotFormContent({
           onSelect={setTheme}
           accessibilityLabel={themeLabel}
           bottomSheetTitle={themeLabel}
+          alreadyUsedLabel={alreadyUsedLabel}
         />
       </div>
     </div>

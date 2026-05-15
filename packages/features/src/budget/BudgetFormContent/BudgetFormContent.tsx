@@ -27,15 +27,15 @@ export interface IBudgetFormContentProps {
   /** Ref to access form values from the parent */
   ref?: Ref<IBudgetFormRef>
   /** Label for the category field */
-  categoryLabel?: string
+  categoryLabel: string
   /** Label for the maximum spend field */
-  maximumLabel?: string
+  maximumLabel: string
   /** Label for the theme field */
-  themeLabel?: string
+  themeLabel: string
   /** Placeholder for the maximum spend field */
-  maximumPlaceholder?: string
+  maximumPlaceholder: string
   /** Label for already-used themes (default: "Already used") */
-  alreadyUsedLabel?: string
+  alreadyUsedLabel: string
   /** Description text displayed above the form fields */
   description?: string
 }

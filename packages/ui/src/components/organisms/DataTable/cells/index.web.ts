@@ -8,6 +8,8 @@ export { BillTitleCell } from './BillTitleCell/index.web'
 export { CategoryIconCell } from './CategoryIconCell/index.web'
 export { StatusCell } from './StatusCell/index.web'
 export { SortableHeader } from './SortableHeader/index.web'
+export { EmptyHeaderCell } from './EmptyHeaderCell/index.web'
+export { ActionCell } from './ActionCell/index.web'
 
 // Types
 export type { StatusCellFn, BillStatus } from './StatusCell/StatusCell.tsx'
@@ -15,3 +17,8 @@ export type {
   HeaderCellFn,
   HeaderAlign,
 } from './SortableHeader/SortableHeader.tsx'
+export type { EmptyHeaderCellFn } from './EmptyHeaderCell/EmptyHeaderCell.tsx'
+export type {
+  IActionCellConfig,
+  ActionCellFn,
+} from './ActionCell/ActionCell.tsx'
