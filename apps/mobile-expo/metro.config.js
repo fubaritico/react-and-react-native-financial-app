@@ -37,6 +37,10 @@ config.resolver.sourceExts = [
   ...config.resolver.sourceExts,
 ];
 
+// --- Asset extensions ---
+// Add .lottie to asset extensions so Metro bundles it as a binary asset.
+config.resolver.assetExts = [...config.resolver.assetExts, 'lottie'];
+
 // --- UI package aliases ---
 // The @financial-app/ui package uses tsconfig path aliases (#Atoms, #Lib, etc.)
 // that tsc understands but Metro doesn't. We resolve them manually here.
