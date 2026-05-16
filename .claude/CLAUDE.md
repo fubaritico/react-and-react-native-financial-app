@@ -164,8 +164,14 @@ Read `@completed.md`
    - ~~3: modal Delete~~ ✅
    - ~~4: ActionCell + wire onEdit/onDelete to DataTable~~ ✅ — EmptyHeaderCell + ellipsis Dropdown, mutation feedback (success/error modals), Button loading spinner, useModal.setSubmitting, Modal closeLabel/cancelLabel required + ModalRenderer i18n defaults, DatePicker iOS BottomSheet close fix
    - ~~5: bouton "+ Add Transaction"~~ ✅ — already wired
-2. Onboarding — `docs/plans/onboarding-plan.md`
-3. Empty states (all screens + Overview sections)
+2. **Onboarding** — `docs/plans/onboarding-plan.md` ← IN PROGRESS
+   - ~~App icons + branding~~ ✅ — Pouch logo (icon.png, adaptive-icon.png, favicon.png, splash-icon.png)
+   - ~~Animated splash screen~~ ✅ — DotLottie (.lottie), 120 frames @ 30fps, plays once on cold start, module-level flag prevents replay
+   - ~~_layout.tsx refactor~~ ✅ — extracted AnimatedSplash, AuthBootstrap, AuthGate into dedicated components
+   - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
+   - Flow: Splash → Login/Mode choice → Signup → Email verification → TOTP (optional) → Initial balance (manual) → Walkthrough → Overview
+   - **Next coding**: DB table `user_preferences` + API endpoints
+3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
 6. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
@@ -236,4 +242,8 @@ Read `@completed.md`
 - QUAL-009: Transactions pages (web + mobile) exceed 200 lines with mutation feedback — extract `useTransactionModals` hook later (same pattern as budget/pots)
 - Modal.native.tsx:133 `accessibilityLabel ?? 'Close'` — hardcoded English fallback on backdrop Pressable (pre-existing, low priority)
 - ModalRenderer uses `?? t('modal.close')` / `?? t('modal.cancel')` for optional IModalConfig fields — this is the adapter pattern (providing i18n defaults for optional config), NOT an ARCH-017 violation
+- `@lottiefiles/dotlottie-react-native` `onComplete` fires early (frame 90/120) — use `setTimeout` matching known animation duration instead. `onFrame` also unreliable without JS thread overhead.
+- DotLottie requires `.lottie` format (ZIP archive with JSON + assets), not raw Lottie `.json` — convert via LottieFiles online converter
+- Android 12+ always shows adaptive icon on native splash screen (system behavior, not configurable) — accepted
+- Occasional crash on hot reload (`r`) with DotLottie — app restart resolves, not a production concern
 

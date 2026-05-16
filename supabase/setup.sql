@@ -91,6 +91,20 @@ create trigger pots_updated_at
   before update on public.pots
   for each row execute function public.update_updated_at();
 
+-- user_preferences: onboarding state per user
+create table public.user_preferences (
+  user_id              uuid primary key references auth.users(id) on delete cascade,
+  mode                 text check (mode in ('manual', 'bank')) default null,
+  has_seen_onboarding  boolean not null default false,
+  initial_balance_set  boolean not null default false,
+  created_at           timestamptz not null default now(),
+  updated_at           timestamptz not null default now()
+);
+
+create trigger user_preferences_updated_at
+  before update on public.user_preferences
+  for each row execute function public.update_updated_at();
+
 -- ---------------------------------------------------------------------------
 -- 3. Indexes
 -- ---------------------------------------------------------------------------
@@ -103,6 +117,7 @@ create index idx_txn_recurring    on public.transactions(user_id) where recurrin
 create unique index idx_txn_external on public.transactions(user_id, external_id) where external_id is not null;
 create index idx_budget_user_month on public.budgets(user_id, month);
 create index idx_pots_user        on public.pots(user_id);
+create index idx_user_prefs_user  on public.user_preferences(user_id);
 
 -- ---------------------------------------------------------------------------
 -- 4. Row Level Security
@@ -112,6 +127,7 @@ alter table public.balances enable row level security;
 alter table public.transactions enable row level security;
 alter table public.budgets enable row level security;
 alter table public.pots enable row level security;
+alter table public.user_preferences enable row level security;
 
 create policy "own_data" on public.balances
   for all to authenticated
@@ -126,6 +142,10 @@ create policy "own_data" on public.budgets
   using ((select auth.uid()) = user_id);
 
 create policy "own_data" on public.pots
+  for all to authenticated
+  using ((select auth.uid()) = user_id);
+
+create policy "own_data" on public.user_preferences
   for all to authenticated
   using ((select auth.uid()) = user_id);
 
