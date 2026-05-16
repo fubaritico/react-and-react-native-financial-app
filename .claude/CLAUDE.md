@@ -168,9 +168,10 @@ Read `@completed.md`
    - ~~App icons + branding~~ ✅ — Pouch logo (icon.png, adaptive-icon.png, favicon.png, splash-icon.png)
    - ~~Animated splash screen~~ ✅ — DotLottie (.lottie), 120 frames @ 30fps, plays once on cold start, module-level flag prevents replay
    - ~~_layout.tsx refactor~~ ✅ — extracted AnimatedSplash, AuthBootstrap, AuthGate into dedicated components
+   - ~~DB table `user_preferences` + API endpoints~~ ✅ — GET/PUT preferences, POST initial-balance, MSW test infra (14 tests)
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
    - Flow: Splash → Login/Mode choice → Signup → Email verification → TOTP (optional) → Initial balance (manual) → Walkthrough → Overview
-   - **Next coding**: DB table `user_preferences` + API endpoints
+   - **Next coding**: Wire preferences into app (TanStack Query hooks + onboarding flow routing)
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
