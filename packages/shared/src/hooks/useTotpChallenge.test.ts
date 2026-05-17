@@ -208,6 +208,76 @@ describe('SEC-002/005: TOTP challenge bypass probing', () => {
     })
   })
 
+  describe('A07-006: lockout after 5 failed attempts', () => {
+    it('locks out after 5 failed verify attempts and shows remaining attempts from 2nd failure', async () => {
+      const client = createMockAuthClient({
+        listFactors: () =>
+          Promise.resolve({
+            factors: [MOCK_FACTOR],
+            error: null,
+          }),
+        challenge: () =>
+          Promise.resolve({
+            challenge: { id: 'challenge-1', factorId: 'factor-abc' },
+            error: null,
+          }),
+        verify: () =>
+          Promise.resolve({
+            error: { message: 'Invalid TOTP code', status: 422 },
+          }),
+      })
+
+      const { result } = renderHook(() => useTotpChallenge(client))
+
+      await waitFor(() => {
+        expect(result.current.loadingFactors).toBe(false)
+      })
+
+      act(() => {
+        result.current.setCode('000000')
+      })
+
+      // 1st failure — no remaining attempts shown yet
+      await act(async () => {
+        await result.current.verify()
+      })
+      expect(result.current.remainingAttempts).toBeNull()
+
+      // 2nd failure — remaining attempts shown (3 left)
+      await act(async () => {
+        await result.current.verify()
+      })
+      expect(result.current.remainingAttempts).toBe(3)
+
+      // 3rd failure — 2 left
+      await act(async () => {
+        await result.current.verify()
+      })
+      expect(result.current.remainingAttempts).toBe(2)
+
+      // 4th failure — 1 left
+      await act(async () => {
+        await result.current.verify()
+      })
+      expect(result.current.remainingAttempts).toBe(1)
+
+      // 5th failure — locked out
+      await act(async () => {
+        await result.current.verify()
+      })
+      expect(result.current.lockedOut).toBe(true)
+      expect(result.current.serverError).toBe('auth.totp.lockedOut')
+      expect(result.current.remainingAttempts).toBe(0)
+
+      // 6th attempt should return false without calling verify
+      let verifyResult = false
+      await act(async () => {
+        verifyResult = await result.current.verify()
+      })
+      expect(verifyResult).toBe(false)
+    })
+  })
+
   describe('listFactors failure — must not expose stale state', () => {
     it('does not set a factorId when listFactors errors', async () => {
       const challenge = vi.fn(() =>

@@ -21,8 +21,15 @@ export function TotpChallengeScreen({
   onVerified,
 }: Readonly<ITotpChallengeScreenProps>) {
   const { t } = useTranslation()
-  const { code, setCode, serverError, loading, verify } =
-    useTotpChallenge(authClient)
+  const {
+    code,
+    setCode,
+    serverError,
+    loading,
+    lockedOut,
+    remainingAttempts,
+    verify,
+  } = useTotpChallenge(authClient)
 
   const handlePress = useCallback(() => {
     void (async () => {
@@ -49,9 +56,14 @@ export function TotpChallengeScreen({
           onChangeText={setCode}
           onComplete={handlePress}
           hasError={!!serverError}
-          disabled={loading}
+          disabled={loading || lockedOut}
           accessibilityLabel={t('auth.totp.codeLabel')}
         />
+        {remainingAttempts !== null ? (
+          <Typography variant="caption" color="destructive">
+            {t('auth.totp.remainingAttempts', { count: remainingAttempts })}
+          </Typography>
+        ) : null}
         <Button
           title={
             loading
@@ -60,7 +72,7 @@ export function TotpChallengeScreen({
           }
           onPress={handlePress}
           fullWidth
-          disabled={loading || code.length !== 6}
+          disabled={loading || lockedOut || code.length !== 6}
           centered
         />
       </AuthCard>

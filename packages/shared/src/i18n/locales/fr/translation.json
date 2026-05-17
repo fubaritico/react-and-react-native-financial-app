@@ -112,7 +112,10 @@
       "invalidCode": "Code invalide. Veuillez réessayer.",
       "challengeFailed": "Échec de la vérification. Veuillez réessayer.",
       "codeHint": "Saisissez le code à 6 chiffres de votre application d'authentification",
-      "qrAccessibilityLabel": "QR code pour configurer l'application d'authentification. Si vous ne pouvez pas scanner, saisissez manuellement le code secret affiché ci-dessous."
+      "qrAccessibilityLabel": "QR code pour configurer l'application d'authentification. Si vous ne pouvez pas scanner, saisissez manuellement le code secret affiché ci-dessous.",
+      "lockedOut": "Trop de tentatives échouées. Veuillez relancer l'application et réessayer.",
+      "remainingAttempts_one": "{{count}} tentative restante",
+      "remainingAttempts_other": "{{count}} tentatives restantes"
     },
     "validation": {
       "emailRequired": "L'e-mail est requis",

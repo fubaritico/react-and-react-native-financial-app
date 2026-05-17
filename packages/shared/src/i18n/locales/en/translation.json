@@ -112,7 +112,10 @@
       "invalidCode": "Invalid code. Please try again.",
       "challengeFailed": "Challenge failed. Please try again.",
       "codeHint": "Enter the 6-digit code from your authenticator app",
-      "qrAccessibilityLabel": "QR code for authenticator app setup. If you cannot scan, enter the secret code shown below manually."
+      "qrAccessibilityLabel": "QR code for authenticator app setup. If you cannot scan, enter the secret code shown below manually.",
+      "lockedOut": "Too many failed attempts. Please restart the app and try again.",
+      "remainingAttempts_one": "{{count}} attempt remaining",
+      "remainingAttempts_other": "{{count}} attempts remaining"
     },
     "validation": {
       "emailRequired": "Email is required",

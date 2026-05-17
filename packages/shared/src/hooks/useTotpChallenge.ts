@@ -2,6 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 
 import type { IAuthClient } from '../auth/types'
 
+/** Maximum failed TOTP attempts before client-side lockout */
+const MAX_ATTEMPTS = 5
+
 /** Return type of useTotpChallenge */
 export interface IUseTotpChallengeReturn {
   /** 6-digit code entered by the user */
@@ -14,6 +17,10 @@ export interface IUseTotpChallengeReturn {
   loading: boolean
   /** Whether factors are still being loaded */
   loadingFactors: boolean
+  /** Whether the user is locked out after too many failed attempts */
+  lockedOut: boolean
+  /** Remaining attempts before lockout (null = no warning yet, shown from 2nd failure) */
+  remainingAttempts: number | null
   /** Verify the entered code — returns true on success */
   verify: () => Promise<boolean>
 }
@@ -32,6 +39,9 @@ export function useTotpChallenge(
   const [loading, setLoading] = useState(false)
   const [loadingFactors, setLoadingFactors] = useState(true)
   const [serverError, setServerError] = useState('')
+  const [attempts, setAttempts] = useState(0)
+  const lockedOut = attempts >= MAX_ATTEMPTS
+  const remainingAttempts = attempts >= 2 ? MAX_ATTEMPTS - attempts : null
 
   // Load enrolled factors on mount
   useEffect(() => {
@@ -46,7 +56,7 @@ export function useTotpChallenge(
   }, [authClient])
 
   const verify = useCallback(async (): Promise<boolean> => {
-    if (!factorId) return false
+    if (!factorId || lockedOut) return false
     setServerError('')
     setLoading(true)
 
@@ -66,12 +76,29 @@ export function useTotpChallenge(
     setLoading(false)
 
     if (verifyError) {
-      setServerError('auth.totp.invalidCode')
+      setAttempts((prev) => {
+        const next = prev + 1
+        if (next >= MAX_ATTEMPTS) {
+          setServerError('auth.totp.lockedOut')
+        } else {
+          setServerError('auth.totp.invalidCode')
+        }
+        return next
+      })
       return false
     }
 
     return true
-  }, [factorId, code, authClient])
+  }, [factorId, code, authClient, lockedOut])
 
-  return { code, setCode, serverError, loading, loadingFactors, verify }
+  return {
+    code,
+    setCode,
+    serverError,
+    loading,
+    loadingFactors,
+    lockedOut,
+    remainingAttempts,
+    verify,
+  }
 }
