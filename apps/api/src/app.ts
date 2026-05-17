@@ -37,20 +37,20 @@ export function createApp() {
   app.use(cors({ origin: allowedOrigins ?? 'http://localhost:5173' }))
   app.use(express.json())
 
-  // Rate limiting — global: 100 req/15min/IP
+  // Rate limiting — global: 200 req/15min/IP
   const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    limit: 100,
+    limit: 200,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     message: { error: 'Too many requests, please try again later.' },
   })
   app.use(globalLimiter)
 
-  // Stricter limiter for financial mutations: 20 req/15min/IP
+  // Stricter limiter for financial mutations: 50 req/15min/IP
   const writeLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    limit: 20,
+    limit: 50,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     message: { error: 'Too many write requests, please try again later.' },
