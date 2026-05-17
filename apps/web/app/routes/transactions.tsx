@@ -7,6 +7,7 @@ import {
 } from '@financial-app/features'
 import {
   deleteTransactionsByIdMutation,
+  getRecurringBillsQueryKey,
   getTransactionsOptions,
   postTransactionsMutation,
   putTransactionsByIdMutation,
@@ -24,9 +25,12 @@ import { queryClient } from '../lib/query-client'
 
 import type { Route } from './+types/transactions'
 
+/** Fetch all transactions for client-side filtering by DataTable */
+const TRANSACTIONS_LIMIT = 1000
+
 export async function clientLoader() {
   const txnOpts = getTransactionsOptions({
-    query: { limit: 1000, sort: 'latest' },
+    query: { limit: TRANSACTIONS_LIMIT, sort: 'latest' },
   })
   return queryClient.ensureQueryData(txnOpts).catch(() => undefined)
 }
@@ -56,7 +60,7 @@ export default function Transactions({
   const formRef = useRef<ITransactionFormRef>(null)
 
   const txnOpts = getTransactionsOptions({
-    query: { limit: 1000, sort: 'latest' },
+    query: { limit: TRANSACTIONS_LIMIT, sort: 'latest' },
   })
 
   const { data, error, isLoading } = useQuery({ ...txnOpts, initialData })
@@ -126,6 +130,7 @@ export default function Transactions({
     ...postTransactionsMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
+      void qc.invalidateQueries({ queryKey: getRecurringBillsQueryKey() })
       modal.close()
       showSuccessModal(t('common.transactionAdded'))
     },
@@ -139,6 +144,7 @@ export default function Transactions({
     ...putTransactionsByIdMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
+      void qc.invalidateQueries({ queryKey: getRecurringBillsQueryKey() })
       modal.close()
       showSuccessModal(t('common.transactionUpdated'))
     },
@@ -152,6 +158,7 @@ export default function Transactions({
     ...deleteTransactionsByIdMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
+      void qc.invalidateQueries({ queryKey: getRecurringBillsQueryKey() })
       modal.close()
       showSuccessModal(t('common.transactionDeleted'))
     },

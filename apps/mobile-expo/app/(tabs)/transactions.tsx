@@ -7,6 +7,7 @@ import {
 } from '@financial-app/features'
 import {
   deleteTransactionsByIdMutation,
+  getRecurringBillsQueryKey,
   getTransactionsOptions,
   postTransactionsMutation,
   putTransactionsByIdMutation,
@@ -23,6 +24,9 @@ import type { ITransaction } from '@financial-app/shared'
 
 import tw from '../../src/lib/tw'
 
+/** Fetch all transactions for client-side filtering by DataTable */
+const TRANSACTIONS_LIMIT = 1000
+
 /**
  * Transactions tab — displays the full transactions list with search, sort, and category filter.
  * Fetches all transactions from the API (high limit for client-side filtering by DataTable).
@@ -35,7 +39,7 @@ export default function TransactionsScreen() {
   const formRef = useRef<ITransactionFormRef>(null)
 
   const txnOpts = getTransactionsOptions({
-    query: { limit: 1000, sort: 'latest' },
+    query: { limit: TRANSACTIONS_LIMIT, sort: 'latest' },
   })
   const { data, isLoading, error } = useQuery(txnOpts)
 
@@ -102,6 +106,7 @@ export default function TransactionsScreen() {
     ...postTransactionsMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
+      void qc.invalidateQueries({ queryKey: getRecurringBillsQueryKey() })
       modal.close()
       showSuccessModal(t('common.transactionAdded'))
     },
@@ -115,6 +120,7 @@ export default function TransactionsScreen() {
     ...putTransactionsByIdMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
+      void qc.invalidateQueries({ queryKey: getRecurringBillsQueryKey() })
       modal.close()
       showSuccessModal(t('common.transactionUpdated'))
     },
@@ -128,6 +134,7 @@ export default function TransactionsScreen() {
     ...deleteTransactionsByIdMutation(),
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
+      void qc.invalidateQueries({ queryKey: getRecurringBillsQueryKey() })
       modal.close()
       showSuccessModal(t('common.transactionDeleted'))
     },

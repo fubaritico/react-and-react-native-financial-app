@@ -1,4 +1,5 @@
 import { z } from '../lib/zod.js'
+
 import { MAX_AMOUNT } from './constants.js'
 
 export const PotSchema = z

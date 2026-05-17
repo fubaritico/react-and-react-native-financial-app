@@ -15,13 +15,17 @@ const API_URL =
 /** Animation duration: 119 frames @ 30fps = ~4000ms + 500ms buffer */
 const SPLASH_DURATION_MS = 4500
 
+/** DotLottie animation canvas size (px) */
+const SPLASH_SIZE = 300
+
 /** Whether the user has requested reduced motion via OS accessibility settings */
 const prefersReducedMotion =
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-/** Module-level flag — splash plays only once per session (survives navigations) */
-let splashShown = false
+/** Module-level flag — splash plays only once per tab session (survives navigations + refresh via sessionStorage) */
+let splashShown =
+  typeof window !== 'undefined' && sessionStorage.getItem('splashShown') === '1'
 
 /**
  * Auth guard middleware — runs sequentially BEFORE child loaders.
@@ -42,6 +46,7 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
           )
         : Promise.resolve()
     splashShown = true
+    sessionStorage.setItem('splashShown', '1')
 
     const result = await requireAuth(authClient)
 
@@ -94,7 +99,7 @@ const DotLottieSplash = lazy(() =>
         src="/splash-animation.lottie"
         autoplay
         loop={false}
-        style={{ width: 300, height: 300 }}
+        style={{ width: SPLASH_SIZE, height: SPLASH_SIZE }}
       />
     ),
   }))
@@ -106,7 +111,9 @@ export function HydrateFallback() {
     <div className="flex min-h-screen items-center justify-center bg-beige-100">
       {prefersReducedMotion ? null : (
         <Suspense>
-          <DotLottieSplash />
+          <div data-splash>
+            <DotLottieSplash />
+          </div>
         </Suspense>
       )}
     </div>

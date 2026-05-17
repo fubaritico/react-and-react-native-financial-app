@@ -237,3 +237,27 @@ as $$
   where t.user_id = p_user_id and t.recurring = true
   order by t.name, t.date desc;
 $$;
+
+-- update_pot_total: atomically add/withdraw money from a pot
+-- Returns the updated row on success; empty result on failure.
+-- Failure cases: pot not found, insufficient funds (total + delta < 0).
+create or replace function public.update_pot_total(
+  p_pot_id  uuid,
+  p_user_id uuid,
+  p_delta   numeric
+)
+returns table (id uuid, name text, target numeric, total numeric, theme text)
+language plpgsql
+security invoker
+set search_path = ''
+as $$
+begin
+  return query
+    update public.pots
+    set total = pots.total + p_delta
+    where pots.id = p_pot_id
+      and pots.user_id = p_user_id
+      and pots.total + p_delta >= 0
+    returning pots.id, pots.name, pots.target, pots.total, pots.theme;
+end;
+$$;

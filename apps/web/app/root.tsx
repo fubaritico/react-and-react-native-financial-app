@@ -142,6 +142,12 @@ export function Layout({ children }: Readonly<{ children: ReactNode }>) {
         <Meta />
         <Links />
         <title>Financial App</title>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              'if(sessionStorage.getItem("splashShown")==="1")document.documentElement.classList.add("splash-seen")',
+          }}
+        />
       </head>
       <body>
         {children}

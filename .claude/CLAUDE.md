@@ -175,6 +175,15 @@ Read `@completed.md`
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
    - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
    - **Next coding**: TanStack Query preferences hooks + ModeChoiceScreen + InitialBalanceScreen + routing glue
+2.5. **OWASP Security Hardening** — `/audit-owasp` findings, fixing one by one
+   - ~~OWASP-A04-007: TOCTOU race on pot balance~~ ✅ — atomic `update_pot_total` RPC + pots.ts refactor
+   - ~~Re-run audit 2026-05-17~~ ✅ — 10-agent parallel scan, 91 raw → 45 unique findings, score 48/100 (FAIL). Full report: `~/Desktop/OWASP-audit-2026-05-17.md`
+   - ~~A09-003: No audit trail~~ ✅ — pino + pino-http structured logging, audit logs on all financial mutations
+   - ~~A01-007: No rate limiting~~ ✅ — express-rate-limit two-tier (global 100/15min, write 20/15min)
+   - ~~A02-001/002: Session expiry~~ ✅ — useSessionExpiry hook, refreshSession() in IAuthClient, warning modal 60s before expiry (Extend/Ignore), autoRefreshToken stays false
+   - ~~A04-002: No Zod bounds~~ ✅ — .min/.max on all financial amounts (±1M), pagination limit (1000 — raised from 100, client-side filtering needs all rows), search length (100), centralized constants, i18n validation keys
+   - ~~Review pass~~ ✅ — SEC-008 (error sanitization), QUAL-021 (error prefix), SEC-010/011 (CORS prod guard), QUAL-004, QUAL-013
+   - **Next fixes**: (5) auth hardening (scope:global, AAL2, TOTP counter), (6) explicit destructuring, (8) Express config, (9) deps alignment + CI
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
@@ -182,6 +191,11 @@ Read `@completed.md`
 7. Tests — API + hooks
 8. Phase 8B: GoCardless bank connection (mode banque) — `docs/plans/phase-8B-gocardless-bank-connection.md`
 9. Navigation web: graphic design refinement (user doing manual pass)
+
+**--- Refactors (à planifier, pas dans la foulée) ---**
+10. **Shared mutation hooks** — `docs/plans/shared-mutation-hooks.md` — extract 11 hooks into `@financial-app/features`, eliminate web/mobile duplication
+11. **i18n label internalization** — audit feature components (TransactionFormContent, BudgetFormContent, etc.) for fixed labels passed as props → internalize `t()` calls (QUAL-024). Evaluate each label: if it never changes between usages, move inside the component.
+12. **Server-side pagination** — replace client-side `limit: 1000` with proper paginated API calls + DataTable server pagination (currently `MAX_PAGE_SIZE = 1000` as workaround)
 
 **Pending tests**:
 - iPad: verify BottomSheet overlay, 2-tap switching, text truncation
@@ -220,7 +234,7 @@ Read `@completed.md`
 - Supabase project credentials stored in `files/critical` (gitignored) — never commit. Test user: `s_cottereau@yahoo.fr` / UUID `d8e4f26e-dc4f-41a7-8e66-1b1805a00b41`
 - React Router loaders are navigation-driven, not state-driven — atom changes alone don't trigger redirects. Web sign-out needs explicit `navigate('/login', { replace: true })` after `authClient.signOut()`
 - Icon pipeline only supports fill-based SVGs — stroke-based paths won't render (generate-icon-data.js extracts `d` attributes, Icon component renders with fill)
-- Cross-device session sync: each device (web/mobile) has its own Supabase session (localStorage vs AsyncStorage). Signing out on web does NOT sign out mobile — they are independent. JWT expiry set to 600s (10 min) in Supabase dashboard. `autoRefreshToken: false` on both platforms. Session expiry modal + inactivity timeout (30s) implemented with separate messages (inactivity vs 401). TODO: add session validation on app focus (AppState change → `getSession()`).
+- Cross-device session sync: each device (web/mobile) has its own Supabase session (localStorage vs AsyncStorage). Signing out on web does NOT sign out mobile — they are independent. JWT expiry currently 600s (10 min) in Supabase dashboard — **TODO: change to 1200s (20 min)** manually in dashboard. `autoRefreshToken: false` on both platforms. Session expiry warning modal (60s before expiry, Extend/Ignore) + inactivity timeout (30s) + 401 session-expired modal — three separate flows. TODO: add session validation on app focus (AppState change → `getSession()`).
 - iOS 18.4 simulator: Apple bug broke `NSURLSession` fetch — RESOLVED by updating to Xcode 26 + iOS 26.5 runtime
 - ListboxList.native.tsx uses `accessibilityRole="menu"` instead of `"listbox"` — pre-existing, should be aligned with web for consistency
 - iOS ATS blocks cleartext HTTP to localhost — `app.json` needs `NSAllowsLocalNetworking: true` in infoPlist + native rebuild (`npx expo prebuild --clean && npx expo run:ios`). See `memory/auth-401-redirect-wip.md`
@@ -246,6 +260,7 @@ Read `@completed.md`
 - Render props (e.g. Dropdown `trigger`) are an accepted exception to REACT-001 — they return JSX, not side effects
 - Husky pre-commit hook still times out on Turbo test phase in non-TTY — HUSKY=0 workaround still needed (276eda2)
 - QUAL-009: Transactions pages (web + mobile) exceed 200 lines with mutation feedback — extract `useTransactionModals` hook later (same pattern as budget/pots)
+- Shared mutation hooks refactor — `docs/plans/shared-mutation-hooks.md` — extract 11 hooks (transactions/budgets/pots) into `@financial-app/features` to eliminate web/mobile duplication
 - Modal.native.tsx:133 `accessibilityLabel ?? 'Close'` — hardcoded English fallback on backdrop Pressable (pre-existing, low priority)
 - ModalRenderer uses `?? t('modal.close')` / `?? t('modal.cancel')` for optional IModalConfig fields — this is the adapter pattern (providing i18n defaults for optional config), NOT an ARCH-017 violation
 - `@lottiefiles/dotlottie-react-native` `onComplete` fires early (frame 90/120) — use `setTimeout` matching known animation duration instead. `onFrame` also unreliable without JS thread overhead.

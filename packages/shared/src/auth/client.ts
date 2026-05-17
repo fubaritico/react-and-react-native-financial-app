@@ -22,7 +22,7 @@ export function createBrowserClient(): IAuthClient {
   }
 
   const supabase = createSupaBrowserClient(url, key, {
-    auth: { autoRefreshToken: false },
+    auth: { autoRefreshToken: true },
   })
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- @supabase/ssr factory returns wider generic than SupabaseClient default
   return createSupabaseAuthAdapter(supabase)

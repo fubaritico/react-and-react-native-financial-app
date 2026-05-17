@@ -370,6 +370,20 @@ Never hardcode visible text inside a component — even short labels like "OK", 
 
 If a translation key is missing, add it to BOTH `en/translation.json` and `fr/translation.json`. Do not paper over it with a fallback.
 
+### i18n label ownership — atoms vs features/pages
+
+**Atom/molecule/organism components** (`packages/ui/`) are i18n-agnostic — they receive translated strings as props.
+
+**Feature components** (`packages/features/`) and **page-level components** (`apps/*/`) that are always used with the same fixed labels should call `useTranslation()` internally and own their labels, instead of pushing a wall of `nameLabel={t('...')}` props to every consumer.
+
+**Rule**: when a feature component always renders the same labels (e.g. `TransactionFormContent` always shows "Name", "Amount", "Category", "Date", "Recurring"), those labels should be internal `t()` calls, not props. Only expose a label as a prop if the consumer legitimately needs to customize it.
+
+**Evaluation checklist** before internalizing labels:
+- Will the label text ever change between usages? → prop
+- Is it always the same across all consumers (web + mobile)? → internal `t()`
+- Does the component live in `packages/ui/` (design system)? → always prop (i18n-agnostic)
+- Does it live in `packages/features/` or `apps/`? → evaluate, prefer internal `t()` for fixed labels
+
 ## Import Path Rule — Sub-Components Within Organisms
 
 When a component lives **deep inside an organism folder** (e.g. `DataTable/cells/ActionCell/`),

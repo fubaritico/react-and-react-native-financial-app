@@ -8,4 +8,4 @@ export const MAX_AMOUNT = 1_000_000
 export const MAX_SEARCH_LENGTH = 100
 
 /** Maximum items per page for paginated endpoints */
-export const MAX_PAGE_SIZE = 100
+export const MAX_PAGE_SIZE = 1000
