@@ -169,9 +169,10 @@ Read `@completed.md`
    - ~~Animated splash screen~~ ✅ — DotLottie (.lottie), 120 frames @ 30fps, plays once on cold start, module-level flag prevents replay
    - ~~_layout.tsx refactor~~ ✅ — extracted AnimatedSplash, AuthBootstrap, AuthGate into dedicated components
    - ~~DB table `user_preferences` + API endpoints~~ ✅ — GET/PUT preferences, POST initial-balance, MSW test infra (14 tests)
+   - ~~Auth flow screens~~ ✅ — OtpInput atom, VerifyEmailScreen, TotpEnrollScreen, TotpChallengeScreen, AccountActivatedScreen, useTotpEnroll/useTotpChallenge hooks, OAuth Google (web+native), AuthGate routing, 5 tests, review pass
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
-   - Flow: Splash → Login/Mode choice → Signup → Email verification → TOTP (optional) → Initial balance (manual) → Walkthrough → Overview
-   - **Next coding**: Wire preferences into app (TanStack Query hooks + onboarding flow routing)
+   - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
+   - **Next coding**: TanStack Query preferences hooks + ModeChoiceScreen + InitialBalanceScreen + routing glue
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
