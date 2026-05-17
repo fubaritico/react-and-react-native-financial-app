@@ -164,6 +164,10 @@ userPreferencesRouter.put(
       return
     }
 
+    logger.info(
+      { event: 'preferences_updated', userId, fields: Object.keys(body) },
+      'User preferences updated'
+    )
     res.json(data)
   }
 )
