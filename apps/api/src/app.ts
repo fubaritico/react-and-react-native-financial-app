@@ -1,5 +1,6 @@
 import cors from 'cors'
 import express from 'express'
+import { rateLimit } from 'express-rate-limit'
 import helmet from 'helmet'
 import { pinoHttp } from 'pino-http'
 import swaggerUi from 'swagger-ui-express'
@@ -37,6 +38,25 @@ export function createApp() {
   )
   app.use(express.json())
 
+  // Rate limiting — global: 100 req/15min/IP
+  const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 100,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+    message: { error: 'Too many requests, please try again later.' },
+  })
+  app.use(globalLimiter)
+
+  // Stricter limiter for financial mutations: 20 req/15min/IP
+  const writeLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 20,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+    message: { error: 'Too many write requests, please try again later.' },
+  })
+
   // Swagger UI — live spec from registry (always in sync)
   const spec = generateDocument()
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(spec))
@@ -45,14 +65,16 @@ export function createApp() {
   // Health check
   app.get('/health', (_req, res) => res.json({ status: 'ok' }))
 
-  // Routes
+  // Routes — read-only (global limiter only)
   app.use('/balance', balanceRouter)
-  app.use('/transactions', transactionsRouter)
-  app.use('/budgets', budgetsRouter)
-  app.use('/pots', potsRouter)
   app.use('/recurring-bills', recurringBillsRouter)
-  app.use('/users/me/preferences', userPreferencesRouter)
-  app.use('/users/me/initial-balance', initialBalanceRouter)
+
+  // Routes — with mutations (global + write limiter)
+  app.use('/transactions', writeLimiter, transactionsRouter)
+  app.use('/budgets', writeLimiter, budgetsRouter)
+  app.use('/pots', writeLimiter, potsRouter)
+  app.use('/users/me/preferences', writeLimiter, userPreferencesRouter)
+  app.use('/users/me/initial-balance', writeLimiter, initialBalanceRouter)
 
   return app
 }
