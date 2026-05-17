@@ -35,7 +35,7 @@ export function createApp() {
     throw new Error('ALLOWED_ORIGINS must be set in production')
   }
   app.use(cors({ origin: allowedOrigins ?? 'http://localhost:5173' }))
-  app.use(express.json())
+  app.use(express.json({ limit: '10kb' }))
 
   // Rate limiting — global: 200 req/15min/IP
   const globalLimiter = rateLimit({
