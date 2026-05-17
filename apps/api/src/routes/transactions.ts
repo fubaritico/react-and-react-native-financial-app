@@ -224,12 +224,11 @@ transactionsRouter.put(
       .single()
 
     if (error) {
+      if (error.code === 'PGRST116') {
+        res.status(404).json({ error: '[DATABASE] Not found' })
+        return
+      }
       res.status(500).json({ error: `[DATABASE] ${error.message}` })
-      return
-    }
-
-    if (!data) {
-      res.status(404).json({ error: 'Transaction not found' })
       return
     }
 
@@ -249,14 +248,19 @@ transactionsRouter.delete(
   '/:id',
   validateParams(IdParamSchema),
   async (req, res) => {
-    const { error } = await supabase
+    const { error, count } = await supabase
       .from('transactions')
-      .delete()
+      .delete({ count: 'exact' })
       .eq('id', req.params.id)
       .eq('user_id', res.locals.userId)
 
     if (error) {
       res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      return
+    }
+
+    if (count === 0) {
+      res.status(404).json({ error: '[DATABASE] Not found' })
       return
     }
 

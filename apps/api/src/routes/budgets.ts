@@ -92,6 +92,7 @@ registry.registerPath({
   },
   responses: {
     204: { description: 'Budget deleted' },
+    404: { description: 'Budget not found' },
   },
 })
 
@@ -157,6 +158,11 @@ budgetsRouter.put(
       .single()
 
     if (error) {
+      // PGRST116 = .single() found 0 rows → resource not found (or wrong user)
+      if (error.code === 'PGRST116') {
+        res.status(404).json({ error: '[DATABASE] Not found' })
+        return
+      }
       res.status(500).json({ error: `[DATABASE] ${error.message}` })
       return
     }
@@ -177,14 +183,19 @@ budgetsRouter.delete(
   '/:id',
   validateParams(IdParamSchema),
   async (req, res) => {
-    const { error } = await supabase
+    const { error, count } = await supabase
       .from('budgets')
-      .delete()
+      .delete({ count: 'exact' })
       .eq('id', req.params.id)
       .eq('user_id', res.locals.userId)
 
     if (error) {
       res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      return
+    }
+
+    if (count === 0) {
+      res.status(404).json({ error: '[DATABASE] Not found' })
       return
     }
 
