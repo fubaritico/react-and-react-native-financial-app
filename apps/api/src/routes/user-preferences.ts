@@ -67,6 +67,7 @@ registry.registerPath({
         },
       },
     },
+    409: { description: 'Initial balance already set' },
   },
 })
 
@@ -183,6 +184,29 @@ initialBalanceRouter.post(
   async (req, res) => {
     const userId = res.locals.userId as string
     const { amount } = req.body as { amount: number }
+
+    // Idempotency guard — prevent overwriting a previously set balance (A04-007)
+    const { error: ensureError } = await ensurePreferencesRow(userId)
+    if (ensureError) {
+      res.status(500).json({ error: `[DATABASE] ${ensureError.message}` })
+      return
+    }
+
+    const { data: prefs, error: prefsError } = await supabase
+      .from('user_preferences')
+      .select('initial_balance_set')
+      .eq('user_id', userId)
+      .single()
+
+    if (prefsError) {
+      res.status(500).json({ error: `[DATABASE] ${prefsError.message}` })
+      return
+    }
+
+    if ((prefs as { initial_balance_set: boolean }).initial_balance_set) {
+      res.status(409).json({ error: 'Initial balance already set' })
+      return
+    }
 
     const { error } = await setInitialBalance(userId, amount)
     if (error) {
