@@ -22,7 +22,7 @@ export const signupSchema = z
     password: z
       .string()
       .min(1, 'auth.validation.passwordRequired')
-      .min(6, 'auth.validation.passwordMin'),
+      .min(8, 'auth.validation.passwordMin'),
     confirmPassword: z
       .string()
       .min(1, 'auth.validation.confirmPasswordRequired'),

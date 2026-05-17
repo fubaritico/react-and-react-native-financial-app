@@ -118,7 +118,7 @@
       "emailRequired": "L'e-mail est requis",
       "emailInvalid": "Adresse e-mail invalide",
       "passwordRequired": "Le mot de passe est requis",
-      "passwordMin": "6 caractères minimum",
+      "passwordMin": "8 caractères minimum",
       "nameRequired": "Le nom est requis",
       "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
       "passwordMismatch": "Les mots de passe ne correspondent pas"
