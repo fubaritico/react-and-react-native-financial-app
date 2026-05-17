@@ -56,10 +56,12 @@ export function createApp() {
     message: { error: 'Too many write requests, please try again later.' },
   })
 
-  // Swagger UI — live spec from registry (always in sync)
-  const spec = generateDocument()
-  app.use('/docs', swaggerUi.serve, swaggerUi.setup(spec))
-  app.get('/openapi.json', (_req, res) => res.json(spec))
+  // Swagger UI — dev only, never exposed in production (A01-005)
+  if (process.env.NODE_ENV !== 'production') {
+    const spec = generateDocument()
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(spec))
+    app.get('/openapi.json', (_req, res) => res.json(spec))
+  }
 
   // Health check
   app.get('/health', (_req, res) => res.json({ status: 'ok' }))
