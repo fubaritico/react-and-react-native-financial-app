@@ -5,7 +5,8 @@ import { registry } from '../lib/openapi.js'
 import { supabase } from '../lib/supabase.js'
 import { z } from '../lib/zod.js'
 import { requireAuth } from '../middleware/auth.js'
-import { validateBody } from '../middleware/validate.js'
+import { validateBody, validateParams } from '../middleware/validate.js'
+import { IdParamSchema } from '../schemas/constants.js'
 import {
   CreatePotSchema,
   PotAmountSchema,
@@ -166,28 +167,33 @@ potsRouter.post('/', validateBody(CreatePotSchema), async (req, res) => {
   res.status(201).json(data)
 })
 
-potsRouter.put('/:id', validateBody(UpdatePotSchema), async (req, res) => {
-  const { data, error } = await supabase
-    .from('pots')
-    .update(req.body as Record<string, unknown>)
-    .eq('id', req.params.id)
-    .eq('user_id', res.locals.userId as string)
-    .select(POT_COLUMNS)
-    .single()
+potsRouter.put(
+  '/:id',
+  validateParams(IdParamSchema),
+  validateBody(UpdatePotSchema),
+  async (req, res) => {
+    const { data, error } = await supabase
+      .from('pots')
+      .update(req.body as Record<string, unknown>)
+      .eq('id', req.params.id)
+      .eq('user_id', res.locals.userId as string)
+      .select(POT_COLUMNS)
+      .single()
 
-  if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
-    return
+    if (error) {
+      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      return
+    }
+
+    logger.info(
+      { event: 'pot_updated', potId: req.params.id, userId: res.locals.userId },
+      'Pot updated'
+    )
+    res.json(data)
   }
+)
 
-  logger.info(
-    { event: 'pot_updated', potId: req.params.id, userId: res.locals.userId },
-    'Pot updated'
-  )
-  res.json(data)
-})
-
-potsRouter.delete('/:id', async (req, res) => {
+potsRouter.delete('/:id', validateParams(IdParamSchema), async (req, res) => {
   const { error } = await supabase
     .from('pots')
     .delete()
@@ -256,15 +262,21 @@ async function updatePotTotal(
   res.json(pot)
 }
 
-potsRouter.post('/:id/add', validateBody(PotAmountSchema), async (req, res) => {
-  const id = req.params.id as string
-  const userId = res.locals.userId as string
-  const { amount } = req.body as { amount: number }
-  await updatePotTotal(id, userId, amount, res)
-})
+potsRouter.post(
+  '/:id/add',
+  validateParams(IdParamSchema),
+  validateBody(PotAmountSchema),
+  async (req, res) => {
+    const id = req.params.id as string
+    const userId = res.locals.userId as string
+    const { amount } = req.body as { amount: number }
+    await updatePotTotal(id, userId, amount, res)
+  }
+)
 
 potsRouter.post(
   '/:id/withdraw',
+  validateParams(IdParamSchema),
   validateBody(PotAmountSchema),
   async (req, res) => {
     const id = req.params.id as string

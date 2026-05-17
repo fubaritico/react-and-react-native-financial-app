@@ -1,3 +1,10 @@
+import { z } from '../lib/zod.js'
+
+/** Zod schema for UUID `:id` path params — shared across all entity routes */
+export const IdParamSchema = z.object({
+  id: z.string().uuid({ message: 'Invalid UUID' }),
+})
+
 /** Minimum allowed financial amount (symmetric bound for transactions/balances) */
 export const MIN_AMOUNT = -1_000_000
 

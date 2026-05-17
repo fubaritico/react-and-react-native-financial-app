@@ -4,7 +4,12 @@ import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
 import { supabase } from '../lib/supabase.js'
 import { requireAuth } from '../middleware/auth.js'
-import { validateBody, validateQuery } from '../middleware/validate.js'
+import {
+  validateBody,
+  validateParams,
+  validateQuery,
+} from '../middleware/validate.js'
+import { IdParamSchema } from '../schemas/constants.js'
 import {
   CreateTransactionSchema,
   TransactionListSchema,
@@ -207,6 +212,7 @@ transactionsRouter.post(
 
 transactionsRouter.put(
   '/:id',
+  validateParams(IdParamSchema),
   validateBody(UpdateTransactionSchema),
   async (req, res) => {
     const { data, error } = await supabase
@@ -239,25 +245,29 @@ transactionsRouter.put(
   }
 )
 
-transactionsRouter.delete('/:id', async (req, res) => {
-  const { error } = await supabase
-    .from('transactions')
-    .delete()
-    .eq('id', req.params.id)
-    .eq('user_id', res.locals.userId)
+transactionsRouter.delete(
+  '/:id',
+  validateParams(IdParamSchema),
+  async (req, res) => {
+    const { error } = await supabase
+      .from('transactions')
+      .delete()
+      .eq('id', req.params.id)
+      .eq('user_id', res.locals.userId)
 
-  if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
-    return
+    if (error) {
+      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      return
+    }
+
+    logger.info(
+      {
+        event: 'transaction_deleted',
+        transactionId: req.params.id,
+        userId: res.locals.userId,
+      },
+      'Transaction deleted'
+    )
+    res.status(204).send()
   }
-
-  logger.info(
-    {
-      event: 'transaction_deleted',
-      transactionId: req.params.id,
-      userId: res.locals.userId,
-    },
-    'Transaction deleted'
-  )
-  res.status(204).send()
-})
+)

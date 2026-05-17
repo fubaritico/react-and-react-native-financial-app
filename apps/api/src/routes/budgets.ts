@@ -5,12 +5,17 @@ import { registry } from '../lib/openapi.js'
 import { supabase } from '../lib/supabase.js'
 import { z } from '../lib/zod.js'
 import { requireAuth } from '../middleware/auth.js'
-import { validateBody, validateQuery } from '../middleware/validate.js'
+import {
+  validateBody,
+  validateParams,
+  validateQuery,
+} from '../middleware/validate.js'
 import {
   BudgetSchema,
   CreateBudgetSchema,
   UpdateBudgetSchema,
 } from '../schemas/budget.js'
+import { IdParamSchema } from '../schemas/constants.js'
 
 export const budgetsRouter = Router()
 budgetsRouter.use(requireAuth)
@@ -140,6 +145,7 @@ budgetsRouter.post('/', validateBody(CreateBudgetSchema), async (req, res) => {
 
 budgetsRouter.put(
   '/:id',
+  validateParams(IdParamSchema),
   validateBody(UpdateBudgetSchema),
   async (req, res) => {
     const { data, error } = await supabase
@@ -167,25 +173,29 @@ budgetsRouter.put(
   }
 )
 
-budgetsRouter.delete('/:id', async (req, res) => {
-  const { error } = await supabase
-    .from('budgets')
-    .delete()
-    .eq('id', req.params.id)
-    .eq('user_id', res.locals.userId)
+budgetsRouter.delete(
+  '/:id',
+  validateParams(IdParamSchema),
+  async (req, res) => {
+    const { error } = await supabase
+      .from('budgets')
+      .delete()
+      .eq('id', req.params.id)
+      .eq('user_id', res.locals.userId)
 
-  if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
-    return
+    if (error) {
+      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      return
+    }
+
+    logger.info(
+      {
+        event: 'budget_deleted',
+        budgetId: req.params.id,
+        userId: res.locals.userId,
+      },
+      'Budget deleted'
+    )
+    res.status(204).send()
   }
-
-  logger.info(
-    {
-      event: 'budget_deleted',
-      budgetId: req.params.id,
-      userId: res.locals.userId,
-    },
-    'Budget deleted'
-  )
-  res.status(204).send()
-})
+)
