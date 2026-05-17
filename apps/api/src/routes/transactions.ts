@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
 import { supabase } from '../lib/supabase.js'
 import { requireAuth } from '../middleware/auth.js'
@@ -191,6 +192,15 @@ transactionsRouter.post(
       return
     }
 
+    logger.info(
+      {
+        event: 'transaction_created',
+        transactionId: (data as { id: string }).id,
+        userId: res.locals.userId,
+        amount,
+      },
+      'Transaction created'
+    )
     res.status(201).json(data)
   }
 )
@@ -217,6 +227,14 @@ transactionsRouter.put(
       return
     }
 
+    logger.info(
+      {
+        event: 'transaction_updated',
+        transactionId: req.params.id,
+        userId: res.locals.userId,
+      },
+      'Transaction updated'
+    )
     res.json(data)
   }
 )
@@ -233,5 +251,13 @@ transactionsRouter.delete('/:id', async (req, res) => {
     return
   }
 
+  logger.info(
+    {
+      event: 'transaction_deleted',
+      transactionId: req.params.id,
+      userId: res.locals.userId,
+    },
+    'Transaction deleted'
+  )
   res.status(204).send()
 })

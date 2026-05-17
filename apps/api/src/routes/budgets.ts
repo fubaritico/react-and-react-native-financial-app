@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
 import { supabase } from '../lib/supabase.js'
 import { z } from '../lib/zod.js'
@@ -126,6 +127,14 @@ budgetsRouter.post('/', validateBody(CreateBudgetSchema), async (req, res) => {
     return
   }
 
+  logger.info(
+    {
+      event: 'budget_created',
+      budgetId: (data as { id: string }).id,
+      userId: res.locals.userId,
+    },
+    'Budget created'
+  )
   res.status(201).json(data)
 })
 
@@ -146,6 +155,14 @@ budgetsRouter.put(
       return
     }
 
+    logger.info(
+      {
+        event: 'budget_updated',
+        budgetId: req.params.id,
+        userId: res.locals.userId,
+      },
+      'Budget updated'
+    )
     res.json(data)
   }
 )
@@ -162,5 +179,13 @@ budgetsRouter.delete('/:id', async (req, res) => {
     return
   }
 
+  logger.info(
+    {
+      event: 'budget_deleted',
+      budgetId: req.params.id,
+      userId: res.locals.userId,
+    },
+    'Budget deleted'
+  )
   res.status(204).send()
 })

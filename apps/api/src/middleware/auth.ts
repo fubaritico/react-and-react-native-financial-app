@@ -1,3 +1,4 @@
+import { logger } from '../lib/logger.js'
 import { supabase } from '../lib/supabase.js'
 
 import type { NextFunction, Request, Response } from 'express'
@@ -15,6 +16,15 @@ export async function requireAuth(
 ) {
   const header = req.headers.authorization
   if (!header?.startsWith('Bearer ')) {
+    logger.warn(
+      {
+        event: 'auth_failure',
+        reason: 'missing_token',
+        ip: req.ip,
+        path: req.path,
+      },
+      'Missing authorization token'
+    )
     res.status(401).json({ error: '[AUTH] Missing authorization token' })
     return
   }
@@ -27,6 +37,15 @@ export async function requireAuth(
   } = await supabase.auth.getUser(token)
 
   if (error || !user) {
+    logger.warn(
+      {
+        event: 'auth_failure',
+        reason: 'invalid_token',
+        ip: req.ip,
+        path: req.path,
+      },
+      'Invalid or expired token'
+    )
     res.status(401).json({ error: '[AUTH] Invalid or expired token' })
     return
   }

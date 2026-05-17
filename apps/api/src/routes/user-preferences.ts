@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
 import { supabase } from '../lib/supabase.js'
 import { requireAuth } from '../middleware/auth.js'
@@ -185,6 +186,10 @@ initialBalanceRouter.post(
       return
     }
 
+    logger.info(
+      { event: 'initial_balance_set', userId, amount },
+      'Initial balance configured'
+    )
     res.json({ reference: amount, initial_balance_set: true })
   }
 )

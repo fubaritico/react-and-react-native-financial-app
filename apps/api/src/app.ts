@@ -1,8 +1,10 @@
 import cors from 'cors'
 import express from 'express'
 import helmet from 'helmet'
+import { pinoHttp } from 'pino-http'
 import swaggerUi from 'swagger-ui-express'
 
+import { logger } from './lib/logger.js'
 import { generateDocument } from './lib/openapi.js'
 import { balanceRouter } from './routes/balance.js'
 import { budgetsRouter } from './routes/budgets.js'
@@ -18,6 +20,14 @@ import {
 export function createApp() {
   const app = express()
 
+  app.use(
+    pinoHttp({
+      logger,
+      autoLogging: {
+        ignore: (req) => (req as express.Request).path === '/health',
+      },
+    })
+  )
   app.use(helmet())
   app.use(
     cors({

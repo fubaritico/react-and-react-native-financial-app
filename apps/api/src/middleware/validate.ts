@@ -1,3 +1,5 @@
+import { logger } from '../lib/logger.js'
+
 import type { NextFunction, Request, Response } from 'express'
 import type { ZodSchema } from 'zod'
 
@@ -6,9 +8,17 @@ export function validateBody(schema: ZodSchema) {
   return (req: Request, res: Response, next: NextFunction) => {
     const parsed = schema.safeParse(req.body)
     if (!parsed.success) {
-      res.status(400).json({
-        error: `[VALIDATION] ${parsed.error.issues.map((i) => i.message).join(', ')}`,
-      })
+      const message = parsed.error.issues.map((i) => i.message).join(', ')
+      logger.warn(
+        {
+          event: 'validation_failure',
+          target: 'body',
+          path: req.path,
+          issues: parsed.error.issues,
+        },
+        message
+      )
+      res.status(400).json({ error: `[VALIDATION] ${message}` })
       return
     }
     req.body = parsed.data
@@ -22,9 +32,17 @@ export function validateQuery(schema: ZodSchema) {
   return (req: Request, res: Response, next: NextFunction) => {
     const parsed = schema.safeParse(req.query)
     if (!parsed.success) {
-      res.status(400).json({
-        error: `[VALIDATION] ${parsed.error.issues.map((i) => i.message).join(', ')}`,
-      })
+      const message = parsed.error.issues.map((i) => i.message).join(', ')
+      logger.warn(
+        {
+          event: 'validation_failure',
+          target: 'query',
+          path: req.path,
+          issues: parsed.error.issues,
+        },
+        message
+      )
+      res.status(400).json({ error: `[VALIDATION] ${message}` })
       return
     }
     res.locals.query = parsed.data

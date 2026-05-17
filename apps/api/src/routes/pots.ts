@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
 import { supabase } from '../lib/supabase.js'
 import { z } from '../lib/zod.js'
@@ -154,6 +155,14 @@ potsRouter.post('/', validateBody(CreatePotSchema), async (req, res) => {
     return
   }
 
+  logger.info(
+    {
+      event: 'pot_created',
+      potId: (data as { id: string }).id,
+      userId: res.locals.userId,
+    },
+    'Pot created'
+  )
   res.status(201).json(data)
 })
 
@@ -171,6 +180,10 @@ potsRouter.put('/:id', validateBody(UpdatePotSchema), async (req, res) => {
     return
   }
 
+  logger.info(
+    { event: 'pot_updated', potId: req.params.id, userId: res.locals.userId },
+    'Pot updated'
+  )
   res.json(data)
 })
 
@@ -186,62 +199,61 @@ potsRouter.delete('/:id', async (req, res) => {
     return
   }
 
+  logger.info(
+    { event: 'pot_deleted', potId: req.params.id, userId: res.locals.userId },
+    'Pot deleted'
+  )
   res.status(204).send()
 })
 
-/** Helper to update pot total by a delta (positive = add, negative = withdraw). */
+/**
+ * Atomically update pot total by a delta (positive = add, negative = withdraw).
+ * Uses a single UPDATE ... WHERE total + delta >= 0 — no TOCTOU race condition.
+ * CWE-362 fix: the check and write happen in one atomic SQL statement.
+ */
 async function updatePotTotal(
   potId: string,
   userId: string,
   delta: number,
   res: import('express').Response
 ) {
-  // Fetch current total
-  const { data: pot, error: fetchError } = await supabase
-    .from('pots')
-    .select(POT_COLUMNS)
-    .eq('id', potId)
-    .eq('user_id', userId)
-    .single()
-
-  if (fetchError) {
-    res.status(404).json({ error: '[NOT_FOUND] Pot not found' })
-    return
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- pot can be null at runtime
-  if (!pot) {
-    res.status(404).json({ error: '[NOT_FOUND] Pot not found' })
-    return
-  }
-
-  const potData = pot as {
-    id: string
-    name: string
-    target: number
-    total: number
-    theme: string
-  }
-  const newTotal = potData.total + delta
-  if (newTotal < 0) {
-    res.status(400).json({ error: '[BUSINESS] Insufficient funds in pot' })
-    return
-  }
-
-  const { data, error } = await supabase
-    .from('pots')
-    .update({ total: newTotal })
-    .eq('id', potId)
-    .eq('user_id', userId)
-    .select(POT_COLUMNS)
-    .single()
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- supabase.rpc returns untyped data
+  const { data, error } = await supabase.rpc('update_pot_total', {
+    p_pot_id: potId,
+    p_user_id: userId,
+    p_delta: delta,
+  })
 
   if (error) {
     res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 
-  res.json(data)
+  const rows = (data ?? []) as {
+    id: string
+    name: string
+    target: number
+    total: number
+    theme: string
+  }[]
+
+  if (rows.length === 0) {
+    logger.warn(
+      { event: 'pot_money_rejected', potId, userId, delta },
+      'Pot not found or insufficient funds'
+    )
+    res
+      .status(400)
+      .json({ error: '[BUSINESS] Pot not found or insufficient funds' })
+    return
+  }
+
+  const pot = rows[0]
+  logger.info(
+    { event: 'pot_money_movement', potId, userId, delta, newTotal: pot.total },
+    'Pot balance updated'
+  )
+  res.json(pot)
 }
 
 potsRouter.post('/:id/add', validateBody(PotAmountSchema), async (req, res) => {
