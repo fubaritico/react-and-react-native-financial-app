@@ -58,7 +58,7 @@ export default function Login() {
     setLoading(false)
 
     if (error) {
-      setServerError(error.message)
+      setServerError(t('auth.loginFailed'))
       return
     }
 

@@ -13,4 +13,9 @@ export const web = {
   transition: 'transition-colors',
   /** Pointer cursor */
   cursor: 'cursor-pointer',
+  /** Focus-visible ring for keyboard navigation */
+  focus:
+    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',
+  /** Label visibility — hidden on small screens, visible on md+ */
+  label: 'text-center hidden md:block',
 } as const

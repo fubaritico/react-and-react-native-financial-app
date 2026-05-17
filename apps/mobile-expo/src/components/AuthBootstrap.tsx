@@ -18,6 +18,11 @@ import { authClient } from '../lib/supabase'
 import type { ReactNode } from 'react'
 
 const RAW_API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001'
+
+if (!__DEV__ && !RAW_API_URL.startsWith('https://')) {
+  throw new Error('EXPO_PUBLIC_API_URL must be an HTTPS URL in production')
+}
+
 /** Android emulator can't reach host's localhost — remap to 10.0.2.2 */
 const API_URL =
   Platform.OS === 'android'
@@ -36,19 +41,16 @@ export function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
 
   const showSessionExpiredModal = useCallback(() => {
     openModal({
-      title: t('auth.sessionExpired.title', 'Session expired'),
+      title: t('auth.sessionExpired.title'),
       body: (
         <Typography variant="body" color="muted">
-          {t(
-            'auth.sessionExpired.description',
-            'Your session has expired. Please sign in again.'
-          )}
+          {t('auth.sessionExpired.description')}
         </Typography>
       ),
       dismissable: false,
       actions: [
         {
-          label: t('common.ok', 'OK'),
+          label: t('common.ok'),
           variant: 'primary',
           onPress: () => {
             closeModal()
@@ -61,19 +63,16 @@ export function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
 
   const showInactivityModal = useCallback(() => {
     openModal({
-      title: t('auth.inactivity.title', 'Signed out due to inactivity'),
+      title: t('auth.inactivity.title'),
       body: (
         <Typography variant="body" color="muted">
-          {t(
-            'auth.inactivity.description',
-            'You were signed out for security after a period of inactivity.'
-          )}
+          {t('auth.inactivity.description')}
         </Typography>
       ),
       dismissable: false,
       actions: [
         {
-          label: t('common.ok', 'OK'),
+          label: t('common.ok'),
           variant: 'primary',
           onPress: () => {
             closeModal()

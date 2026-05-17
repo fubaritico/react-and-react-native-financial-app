@@ -74,6 +74,7 @@
     "continueWithGoogle": "Continue with Google",
     "continueWithApple": "Continue with Apple",
     "orSeparator": "or",
+    "loginFailed": "Invalid email or password. Please try again.",
     "emailAlreadyRegistered": "This email is already registered. Sign in instead.",
     "verification": {
       "title": "Check your inbox",

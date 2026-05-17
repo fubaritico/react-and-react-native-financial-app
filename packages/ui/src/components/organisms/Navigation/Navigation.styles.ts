@@ -17,7 +17,7 @@ export const web = {
   bottomBar:
     'fixed bottom-0 left-0 right-0 z-50 flex lg:hidden bg-nav-bg px-4 pt-2 pb-2 rounded-t-lg',
   /** Logo area spacing */
-  logoWrap: 'mb-10',
+  logoWrap: 'flex items-center mb-10',
   /** Logo collapsed spacing */
   logoWrapCollapsed: 'mb-10',
   /** Minimize button at bottom of sidebar */

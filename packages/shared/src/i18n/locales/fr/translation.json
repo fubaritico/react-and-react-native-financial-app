@@ -74,6 +74,7 @@
     "continueWithGoogle": "Continuer avec Google",
     "continueWithApple": "Continuer avec Apple",
     "orSeparator": "ou",
+    "loginFailed": "E-mail ou mot de passe incorrect. Veuillez réessayer.",
     "emailAlreadyRegistered": "Cet e-mail est déjà enregistré. Connectez-vous.",
     "verification": {
       "title": "Vérifiez votre boîte mail",

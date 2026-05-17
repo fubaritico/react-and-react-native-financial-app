@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { cn } from '#Lib/cn'
 
 import { Icon } from '../../atoms/Icon/Icon.web'
@@ -6,7 +8,47 @@ import { Typography } from '../../atoms/Typography/Typography.web'
 
 import { shared, web } from './Navigation.styles'
 
-import type { INavigationProps } from './Navigation'
+import type { INavItemConfig, INavigationProps } from './Navigation'
+
+/** Single nav link — avoids inline arrows in the parent map. */
+function NavLink({
+  item,
+  active,
+  collapsed,
+  orientation,
+  onNavigate,
+}: Readonly<{
+  item: INavItemConfig
+  active: boolean
+  collapsed?: boolean
+  orientation: 'row' | 'column'
+  onNavigate: (href: string) => void
+}>) {
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault()
+      onNavigate(item.href)
+    },
+    [item.href, onNavigate]
+  )
+
+  return (
+    <a
+      href={item.href}
+      onClick={handleClick}
+      aria-label={item.label}
+      className={orientation === 'row' ? web.navLink : web.bottomBarItem}
+    >
+      <NavItem
+        icon={item.icon}
+        label={item.label}
+        active={active}
+        collapsed={collapsed}
+        orientation={orientation}
+      />
+    </a>
+  )
+}
 
 /** Web implementation of the Navigation component — sidebar (desktop) + bottom bar (mobile/tablet). */
 export function Navigation({
@@ -15,7 +57,7 @@ export function Navigation({
   onNavigate,
   collapsed = false,
   onToggleCollapse,
-  minimizeLabel = 'Minimize Menu',
+  minimizeLabel,
 }: Readonly<INavigationProps>) {
   return (
     <>
@@ -29,42 +71,34 @@ export function Navigation({
         {/* Logo */}
         <div className={collapsed ? web.logoWrapCollapsed : web.logoWrap}>
           <Icon
-            name={collapsed ? 'logoSmall' : 'logoLarge'}
+            name="logoEpouch"
             color="currentColor"
-            className={cn('text-on-dark', { 'ml-8': !collapsed })}
+            iconSize="3xl"
+            className={cn('text-on-dark', { 'ml-8 mr-2': !collapsed })}
           />
+          {!collapsed && (
+            <Typography variant="heading-md" as="h1" color="on-dark">
+              ePouch
+            </Typography>
+          )}
         </div>
 
         {/* Nav items */}
-        <nav
-          className={shared.navList}
-          role="tablist"
-          aria-orientation="vertical"
-        >
+        <nav className={shared.navList} aria-label="Main">
           {items.map((item) => (
-            <a
+            <NavLink
               key={item.href}
-              href={item.href}
-              onClick={(e) => {
-                e.preventDefault()
-                onNavigate(item.href)
-              }}
-              className={web.navLink}
-              tabIndex={-1}
-            >
-              <NavItem
-                icon={item.icon}
-                label={item.label}
-                active={activeHref === item.href}
-                collapsed={collapsed}
-                orientation="row"
-              />
-            </a>
+              item={item}
+              active={activeHref === item.href}
+              collapsed={collapsed}
+              orientation="row"
+              onNavigate={onNavigate}
+            />
           ))}
         </nav>
 
         {/* Minimize toggle */}
-        {onToggleCollapse && (
+        {onToggleCollapse && minimizeLabel && (
           <div className={web.minimizeWrap}>
             <button
               onClick={onToggleCollapse}
@@ -85,29 +119,15 @@ export function Navigation({
       </aside>
 
       {/* Mobile / tablet bottom bar */}
-      <nav
-        className={web.bottomBar}
-        role="tablist"
-        aria-orientation="horizontal"
-      >
+      <nav className={web.bottomBar} aria-label="Main">
         {items.map((item) => (
-          <a
+          <NavLink
             key={item.href}
-            href={item.href}
-            onClick={(e) => {
-              e.preventDefault()
-              onNavigate(item.href)
-            }}
-            className={web.bottomBarItem}
-            tabIndex={-1}
-          >
-            <NavItem
-              icon={item.icon}
-              label={item.label}
-              active={activeHref === item.href}
-              orientation="column"
-            />
-          </a>
+            item={item}
+            active={activeHref === item.href}
+            orientation="column"
+            onNavigate={onNavigate}
+          />
         ))}
       </nav>
     </>

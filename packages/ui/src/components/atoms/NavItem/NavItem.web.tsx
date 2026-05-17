@@ -9,7 +9,11 @@ import { navItemVariants } from './NavItem.variants'
 
 import type { INavItemProps } from './NavItem'
 
-/** Web implementation of the NavItem component. */
+/**
+ * Web implementation of the NavItem component.
+ * When `onPress` is provided, NavItem is standalone interactive (role="button").
+ * When wrapped in `<a>` (Navigation), `onPress` is undefined — purely presentational.
+ */
 export function NavItem({
   icon,
   label,
@@ -18,25 +22,32 @@ export function NavItem({
   orientation = 'row',
   onPress,
 }: Readonly<INavItemProps>) {
-  return (
-    <div
-      role="tab"
-      aria-selected={!!active}
-      aria-label={collapsed ? label : undefined}
-      onClick={onPress}
-      onKeyDown={(e) => {
+  const isInteractive = !!onPress
+
+  const handleKeyDown = isInteractive
+    ? (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
-          onPress?.()
+          onPress()
         }
-      }}
-      tabIndex={0}
+      }
+    : undefined
+
+  return (
+    <div
+      role={isInteractive ? 'button' : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
+      onClick={isInteractive ? onPress : undefined}
+      onKeyDown={handleKeyDown}
+      aria-current={active ? 'page' : undefined}
+      aria-label={collapsed ? label : undefined}
       className={cn(
         navItemVariants({ active, orientation, collapsed }),
         !active && web.hover,
         web.root,
         web.transition,
-        web.cursor
+        web.cursor,
+        isInteractive && web.focus
       )}
     >
       <Icon
@@ -48,7 +59,7 @@ export function NavItem({
         <Typography
           variant={NAV_LABEL_VARIANT[orientation ?? 'row'] ?? 'body-bold'}
           color={active ? 'foreground' : 'inherit'}
-          className="text-center"
+          className={web.label}
         >
           {label}
         </Typography>

@@ -38,6 +38,10 @@ module.exports = {
         /** Modal panel width — 560px (Figma spec) */
         modal: '35rem',
       },
+      width: {
+        /** Auth illustration panel — desktop only (Figma spec) */
+        'auth-panel': '30rem',
+      },
     },
     keyframes: {
       'slide-up': {

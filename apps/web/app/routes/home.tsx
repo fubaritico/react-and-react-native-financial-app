@@ -25,7 +25,7 @@ import {
   Typography,
 } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
@@ -36,15 +36,21 @@ import type { Route } from './+types/home'
 /** Current budget month — matches seed data. */
 const BUDGET_MONTH = '2024-08'
 
-const balanceOpts = getBalanceOptions()
-const txnOpts = getTransactionsOptions({
-  query: { limit: 5, sort: 'latest' },
-})
-const potsOpts = getPotsOptions()
-const budgetsOpts = getBudgetsOptions({ query: { month: BUDGET_MONTH } })
-const recurringOpts = getRecurringBillsOptions()
+function fetchQueryOption() {
+  const balanceOpts = getBalanceOptions()
+  const txnOpts = getTransactionsOptions({
+    query: { limit: 5, sort: 'latest' },
+  })
+  const potsOpts = getPotsOptions()
+  const budgetsOpts = getBudgetsOptions({ query: { month: BUDGET_MONTH } })
+  const recurringOpts = getRecurringBillsOptions()
+
+  return { balanceOpts, txnOpts, potsOpts, budgetsOpts, recurringOpts }
+}
 
 export async function clientLoader() {
+  const { balanceOpts, txnOpts, potsOpts, budgetsOpts, recurringOpts } =
+    fetchQueryOption()
   const [balance, txn, pots, budgets, recurring] = await Promise.all([
     queryClient.ensureQueryData(balanceOpts).catch(() => undefined),
     queryClient.ensureQueryData(txnOpts).catch(() => undefined),
@@ -81,6 +87,8 @@ export function HydrateFallback() {
 export default function Home({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const { balanceOpts, txnOpts, potsOpts, budgetsOpts, recurringOpts } =
+    fetchQueryOption()
 
   const {
     data: balance,
@@ -90,6 +98,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     ...balanceOpts,
     initialData: loaderData.balance,
   })
+
   const { data: transactions, error: txnError } = useQuery({
     ...txnOpts,
     initialData: loaderData.txn,
@@ -148,6 +157,22 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     () => (recurringBills ? buildRecurringBillsPageData(recurringBills) : null),
     [recurringBills]
   )
+
+  const handleNavigatePots = useCallback(() => {
+    void navigate('/pots')
+  }, [navigate])
+
+  const handleNavigateTransactions = useCallback(() => {
+    void navigate('/transactions')
+  }, [navigate])
+
+  const handleNavigateBudgets = useCallback(() => {
+    void navigate('/budgets')
+  }, [navigate])
+
+  const handleNavigateRecurring = useCallback(() => {
+    void navigate('/recurring')
+  }, [navigate])
 
   const isLoading = balanceLoading
 
@@ -221,18 +246,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             savingsIconLabel={t('accessibility.savingsIcon')}
             totalSaved={totalSaved}
             pots={potItems}
-            onSeeDetails={() => {
-              void navigate('/pots')
-            }}
+            onSeeDetails={handleNavigatePots}
           />
 
           <TransactionsOverview
             title={t('transactionsOverview.title')}
             viewAllLabel={t('common.viewAll')}
             transactions={latestTransactions}
-            onViewAll={() => {
-              void navigate('/transactions')
-            }}
+            onViewAll={handleNavigateTransactions}
           />
         </div>
 
@@ -244,9 +265,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             budgets={budgetItems}
             ofLabel={t('budgets.of')}
             limitLabel={t('budgets.limit')}
-            onSeeDetails={() => {
-              void navigate('/budgets')
-            }}
+            onSeeDetails={handleNavigateBudgets}
           />
 
           {recurringData && (
@@ -259,9 +278,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               paid={recurringData.paidTotal}
               upcoming={recurringData.upcomingTotal}
               dueSoon={recurringData.dueSoonTotal}
-              onSeeDetails={() => {
-                void navigate('/recurring')
-              }}
+              onSeeDetails={handleNavigateRecurring}
             />
           )}
         </div>

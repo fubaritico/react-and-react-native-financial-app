@@ -1,5 +1,5 @@
 import { Navigation } from '@financial-app/ui'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router'
 
@@ -38,20 +38,31 @@ export function Sidebar() {
   const location = useLocation()
   const [collapsed, setCollapsed] = useState(false)
 
-  const items: INavItemConfig[] = NAV_ITEMS.map((item, i) => ({
-    ...item,
-    label: t(NAV_LABEL_KEYS[i]),
-  }))
+  const items: INavItemConfig[] = useMemo(
+    () =>
+      NAV_ITEMS.map((item, i) => ({
+        ...item,
+        label: t(NAV_LABEL_KEYS[i]),
+      })),
+    [t]
+  )
 
-  const handleNavigate = (href: string) => {
-    if (href === SIGN_OUT_HREF) {
-      void authClient.signOut().then(() => {
-        void navigate('/login', { replace: true })
-      })
-      return
-    }
-    void navigate(href)
-  }
+  const handleNavigate = useCallback(
+    (href: string) => {
+      if (href === SIGN_OUT_HREF) {
+        void authClient.signOut().then(() => {
+          void navigate('/login', { replace: true })
+        })
+        return
+      }
+      void navigate(href)
+    },
+    [navigate]
+  )
+
+  const handleToggleCollapse = useCallback(() => {
+    setCollapsed((prev) => !prev)
+  }, [])
 
   return (
     <Navigation
@@ -59,9 +70,7 @@ export function Sidebar() {
       activeHref={location.pathname}
       onNavigate={handleNavigate}
       collapsed={collapsed}
-      onToggleCollapse={() => {
-        setCollapsed((prev) => !prev)
-      }}
+      onToggleCollapse={handleToggleCollapse}
       minimizeLabel={t('navigation.minimizeMenu')}
     />
   )

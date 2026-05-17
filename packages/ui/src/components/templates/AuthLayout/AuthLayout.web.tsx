@@ -1,4 +1,4 @@
-import { Typography } from '#Atoms/index.web'
+import { Icon, Typography } from '#Atoms/index.web'
 
 import type { IAuthLayoutProps } from './AuthLayout'
 
@@ -8,17 +8,25 @@ import type { IAuthLayoutProps } from './AuthLayout'
  */
 export function AuthLayout({
   children,
-  appName,
   tagline,
   description,
 }: Readonly<IAuthLayoutProps>) {
   return (
     <div className="min-h-screen bg-beige-100 flex flex-col lg:flex-row">
       {/* Illustration panel — desktop only */}
-      <aside className="hidden lg:flex lg:w-[480px] bg-nav-bg rounded-r-lg flex-col justify-between p-10">
-        <Typography variant="section-title" color="on-dark" as="p">
-          {appName}
-        </Typography>
+      <aside className="hidden lg:flex lg:w-auth-panel bg-nav-bg rounded-r-lg flex-col justify-between p-10">
+        <div className="flex items-center">
+          <Icon
+            name="logoEpouch"
+            color="currentColor"
+            iconSize="3xl"
+            className="text-on-dark mr-2"
+          />
+          <Typography variant="heading-md" as="h1" color="on-dark">
+            ePouch
+          </Typography>
+        </div>
+
         <div className="flex-1 flex items-center justify-center">
           {/* Illustration placeholder — replaced with actual image in app */}
           <div className="w-full h-64 rounded-xl bg-grey-500/20" />
@@ -44,8 +52,8 @@ export function AuthLayout({
 
       {/* Logo banner — tablet/mobile only */}
       <header className="lg:hidden bg-nav-bg py-6 px-10 flex items-center justify-center rounded-b-lg">
-        <Typography variant="section-title" color="on-dark" as="p">
-          {appName}
+        <Typography variant="heading-md" as="span" color="on-dark">
+          ePouch
         </Typography>
       </header>
 
