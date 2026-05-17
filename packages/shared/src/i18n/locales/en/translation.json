@@ -19,6 +19,13 @@
     "moneyAdded": "Money added successfully.",
     "moneyWithdrawn": "Money withdrawn successfully."
   },
+  "validation": {
+    "amount": {
+      "min": "Amount is too low.",
+      "max": "Amount is too high.",
+      "positive": "Amount must be positive."
+    }
+  },
   "navigation": {
     "overview": "Overview",
     "transactions": "Transactions",

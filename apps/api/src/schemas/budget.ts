@@ -1,4 +1,5 @@
 import { z } from '../lib/zod.js'
+import { MAX_AMOUNT } from './constants.js'
 
 export const BudgetSchema = z
   .object({
@@ -20,7 +21,11 @@ export const BudgetSchema = z
 export const CreateBudgetSchema = z
   .object({
     category: z.string().min(1).openapi({ example: 'Dining Out' }),
-    maximum: z.number().positive().openapi({ example: 75.0 }),
+    maximum: z
+      .number()
+      .positive({ message: 'validation.amount.positive' })
+      .max(MAX_AMOUNT, { message: 'validation.amount.max' })
+      .openapi({ example: 75.0 }),
     theme: z.string().min(1).openapi({ example: 'yellow' }),
     month: z
       .string()
@@ -36,7 +41,12 @@ export const UpdateBudgetSchema = z
       .min(1)
       .optional()
       .openapi({ example: 'Entertainment' }),
-    maximum: z.number().positive().optional().openapi({ example: 100.0 }),
+    maximum: z
+      .number()
+      .positive({ message: 'validation.amount.positive' })
+      .max(MAX_AMOUNT, { message: 'validation.amount.max' })
+      .optional()
+      .openapi({ example: 100.0 }),
     theme: z.string().min(1).optional().openapi({ example: 'green' }),
   })
   .openapi('UpdateBudgetRequest')

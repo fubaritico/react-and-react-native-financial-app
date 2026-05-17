@@ -1,4 +1,10 @@
 import { z } from '../lib/zod.js'
+import {
+  MAX_AMOUNT,
+  MAX_PAGE_SIZE,
+  MAX_SEARCH_LENGTH,
+  MIN_AMOUNT,
+} from './constants.js'
 
 /** Supabase/Postgres timestamptz format: `YYYY-MM-DD HH:mm:ss+00` */
 const TIMESTAMPTZ_REGEX = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\+00$/
@@ -39,10 +45,14 @@ export const CreateTransactionSchema = z
     name: z.string().min(1).openapi({ example: 'Urban Sports Club' }),
     category: z.string().min(1).openapi({ example: 'Lifestyle' }),
     date: timestamptz.openapi({ example: TIMESTAMPTZ_EXAMPLE }),
-    amount: z.number().openapi({
-      example: -45.0,
-      description: 'Negative = expense, positive = income',
-    }),
+    amount: z
+      .number()
+      .min(MIN_AMOUNT, { message: `validation.amount.min` })
+      .max(MAX_AMOUNT, { message: `validation.amount.max` })
+      .openapi({
+        example: -45.0,
+        description: 'Negative = expense, positive = income',
+      }),
     recurring: z.boolean().openapi({ example: false }),
   })
   .openapi('CreateTransaction')
@@ -56,19 +66,24 @@ export const UpdateTransactionSchema = z
       .openapi({ example: 'Urban Sports Club' }),
     category: z.string().min(1).optional().openapi({ example: 'Lifestyle' }),
     date: timestamptz.optional().openapi({ example: TIMESTAMPTZ_EXAMPLE }),
-    amount: z.number().optional().openapi({
-      example: -45.0,
-      description: 'Negative = expense, positive = income',
-    }),
+    amount: z
+      .number()
+      .min(MIN_AMOUNT, { message: `validation.amount.min` })
+      .max(MAX_AMOUNT, { message: `validation.amount.max` })
+      .optional()
+      .openapi({
+        example: -45.0,
+        description: 'Negative = expense, positive = income',
+      }),
     recurring: z.boolean().optional().openapi({ example: false }),
   })
   .openapi('UpdateTransaction')
 
 export const TransactionQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).default(10),
+  limit: z.coerce.number().int().min(1).max(MAX_PAGE_SIZE).default(10),
   category: z.string().optional(),
-  search: z.string().optional(),
+  search: z.string().max(MAX_SEARCH_LENGTH).optional(),
   sort: z
     .enum(['latest', 'oldest', 'a-z', 'z-a', 'highest', 'lowest'])
     .default('latest'),

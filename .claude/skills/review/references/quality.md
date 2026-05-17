@@ -118,6 +118,7 @@
 - **Files**: All (except token source files)
 - **Check**: Numeric literals (other than 0, 1, -1) without explanation
 - **Check**: String literals used in multiple places without a constant
+- **Check**: A constant defined in more than one file must be centralized in a shared constants file (e.g. `schemas/constants.ts` for API schemas)
 - **Suggest**: Extract to named constant or token
 
 ### QUAL-014: Inconsistent patterns within same file

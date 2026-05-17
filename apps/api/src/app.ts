@@ -30,12 +30,11 @@ export function createApp() {
     })
   )
   app.use(helmet())
-  app.use(
-    cors({
-      origin:
-        process.env.ALLOWED_ORIGINS?.split(',') ?? 'http://localhost:5173',
-    })
-  )
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',')
+  if (!allowedOrigins && process.env.NODE_ENV === 'production') {
+    throw new Error('ALLOWED_ORIGINS must be set in production')
+  }
+  app.use(cors({ origin: allowedOrigins ?? 'http://localhost:5173' }))
   app.use(express.json())
 
   // Rate limiting — global: 100 req/15min/IP

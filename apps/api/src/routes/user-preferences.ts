@@ -118,7 +118,7 @@ userPreferencesRouter.get('/', async (_req, res) => {
 
   const { error: ensureError } = await ensurePreferencesRow(userId)
   if (ensureError) {
-    res.status(500).json({ error: ensureError.message })
+    res.status(500).json({ error: `[DATABASE] ${ensureError.message}` })
     return
   }
 
@@ -129,7 +129,7 @@ userPreferencesRouter.get('/', async (_req, res) => {
     .single()
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 
@@ -148,7 +148,7 @@ userPreferencesRouter.put(
 
     const { error: ensureError } = await ensurePreferencesRow(userId)
     if (ensureError) {
-      res.status(500).json({ error: ensureError.message })
+      res.status(500).json({ error: `[DATABASE] ${ensureError.message}` })
       return
     }
 
@@ -160,7 +160,7 @@ userPreferencesRouter.put(
       .single()
 
     if (error) {
-      res.status(500).json({ error: error.message })
+      res.status(500).json({ error: `[DATABASE] ${error.message}` })
       return
     }
 
@@ -182,7 +182,7 @@ initialBalanceRouter.post(
 
     const { error } = await setInitialBalance(userId, amount)
     if (error) {
-      res.status(500).json({ error: error.message })
+      res.status(500).json({ error: `[DATABASE] ${error.message}` })
       return
     }
 

@@ -19,6 +19,13 @@
     "moneyAdded": "Argent ajouté avec succès.",
     "moneyWithdrawn": "Retrait effectué avec succès."
   },
+  "validation": {
+    "amount": {
+      "min": "Le montant est trop bas.",
+      "max": "Le montant est trop élevé.",
+      "positive": "Le montant doit être positif."
+    }
+  },
   "navigation": {
     "overview": "Aperçu",
     "transactions": "Transactions",

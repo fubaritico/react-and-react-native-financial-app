@@ -1,4 +1,5 @@
 import { z } from '../lib/zod.js'
+import { MAX_AMOUNT, MIN_AMOUNT } from './constants.js'
 
 export const UserPreferencesSchema = z
   .object({
@@ -29,6 +30,8 @@ export const InitialBalanceSchema = z
   .object({
     amount: z
       .number()
+      .min(MIN_AMOUNT, { message: 'validation.amount.min' })
+      .max(MAX_AMOUNT, { message: 'validation.amount.max' })
       .openapi({ example: 1500.0, description: 'Starting balance amount' }),
   })
   .openapi('InitialBalance')

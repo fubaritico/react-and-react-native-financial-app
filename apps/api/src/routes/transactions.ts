@@ -188,7 +188,7 @@ transactionsRouter.post(
       .single()
 
     if (error) {
-      res.status(500).json({ error: error.message })
+      res.status(500).json({ error: `[DATABASE] ${error.message}` })
       return
     }
 
@@ -218,7 +218,7 @@ transactionsRouter.put(
       .single()
 
     if (error) {
-      res.status(500).json({ error: error.message })
+      res.status(500).json({ error: `[DATABASE] ${error.message}` })
       return
     }
 
@@ -247,7 +247,7 @@ transactionsRouter.delete('/:id', async (req, res) => {
     .eq('user_id', res.locals.userId)
 
   if (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: `[DATABASE] ${error.message}` })
     return
   }
 

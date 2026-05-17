@@ -1,4 +1,5 @@
 import { z } from '../lib/zod.js'
+import { MAX_AMOUNT } from './constants.js'
 
 export const PotSchema = z
   .object({
@@ -16,7 +17,11 @@ export const PotSchema = z
 export const CreatePotSchema = z
   .object({
     name: z.string().min(1).openapi({ example: 'Holiday' }),
-    target: z.number().positive().openapi({ example: 2000.0 }),
+    target: z
+      .number()
+      .positive({ message: 'validation.amount.positive' })
+      .max(MAX_AMOUNT, { message: 'validation.amount.max' })
+      .openapi({ example: 2000.0 }),
     theme: z.string().min(1).openapi({ example: 'green' }),
   })
   .openapi('CreatePotRequest')
@@ -24,13 +29,22 @@ export const CreatePotSchema = z
 export const UpdatePotSchema = z
   .object({
     name: z.string().min(1).optional().openapi({ example: 'New Laptop' }),
-    target: z.number().positive().optional().openapi({ example: 1500.0 }),
+    target: z
+      .number()
+      .positive({ message: 'validation.amount.positive' })
+      .max(MAX_AMOUNT, { message: 'validation.amount.max' })
+      .optional()
+      .openapi({ example: 1500.0 }),
     theme: z.string().min(1).optional().openapi({ example: 'navy' }),
   })
   .openapi('UpdatePotRequest')
 
 export const PotAmountSchema = z
   .object({
-    amount: z.number().positive().openapi({ example: 50.0 }),
+    amount: z
+      .number()
+      .positive({ message: 'validation.amount.positive' })
+      .max(MAX_AMOUNT, { message: 'validation.amount.max' })
+      .openapi({ example: 50.0 }),
   })
   .openapi('PotAmountRequest')
