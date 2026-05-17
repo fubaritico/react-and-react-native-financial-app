@@ -1,5 +1,3 @@
-import './i18n'
-
 import { ModalRenderer } from '@financial-app/features/shared'
 import { client } from '@financial-app/http-client/client'
 import {
@@ -26,6 +24,7 @@ import {
   useNavigate,
 } from 'react-router'
 
+import i18n from './i18n'
 import { queryClient } from './lib/query-client'
 import { authClient } from './lib/supabase'
 
@@ -38,6 +37,10 @@ const API_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ??
   'http://localhost:3001'
 
+if (!import.meta.env.DEV && !API_URL.startsWith('https://')) {
+  throw new Error('VITE_API_URL must be an HTTPS URL in production')
+}
+
 /** Inactivity threshold before auto sign-out (30 seconds) */
 const INACTIVITY_DELAY_MS = 30_000
 
@@ -49,57 +52,40 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
   const isAuthenticated = useAtomValue(isAuthenticatedAtom)
   const navigate = useNavigate()
 
-  const showSessionExpiredModal = useCallback(() => {
-    openModal({
-      title: t('auth.sessionExpired.title', 'Session expired'),
-      body: (
-        <Typography variant="body" color="muted">
-          {t(
-            'auth.sessionExpired.description',
-            'Your session has expired. Please sign in again.'
-          )}
-        </Typography>
-      ),
-      dismissable: false,
-      actions: [
-        {
-          label: t('common.ok', 'OK'),
-          variant: 'primary',
-          onPress: () => {
-            closeModal()
-            handleSignOut()
-            void navigate('/login', { replace: true })
+  /** Opens a sign-out modal with the given i18n namespace (sessionExpired | inactivity) */
+  const showSignOutModal = useCallback(
+    (ns: 'sessionExpired' | 'inactivity') => {
+      openModal({
+        title: t(`auth.${ns}.title`),
+        body: (
+          <Typography variant="body" color="muted">
+            {t(`auth.${ns}.description`)}
+          </Typography>
+        ),
+        dismissable: false,
+        actions: [
+          {
+            label: t('common.ok'),
+            variant: 'primary',
+            onPress: () => {
+              closeModal()
+              handleSignOut()
+              void navigate('/login', { replace: true })
+            },
           },
-        },
-      ],
-    })
-  }, [openModal, closeModal, handleSignOut, navigate, t])
+        ],
+      })
+    },
+    [openModal, closeModal, handleSignOut, navigate, t]
+  )
+
+  const showSessionExpiredModal = useCallback(() => {
+    showSignOutModal('sessionExpired')
+  }, [showSignOutModal])
 
   const showInactivityModal = useCallback(() => {
-    openModal({
-      title: t('auth.inactivity.title', 'Signed out due to inactivity'),
-      body: (
-        <Typography variant="body" color="muted">
-          {t(
-            'auth.inactivity.description',
-            'You were signed out for security after a period of inactivity.'
-          )}
-        </Typography>
-      ),
-      dismissable: false,
-      actions: [
-        {
-          label: t('common.ok', 'OK'),
-          variant: 'primary',
-          onPress: () => {
-            closeModal()
-            handleSignOut()
-            void navigate('/login', { replace: true })
-          },
-        },
-      ],
-    })
-  }, [openModal, closeModal, handleSignOut, navigate, t])
+    showSignOutModal('inactivity')
+  }, [showSignOutModal])
 
   useAuthListener(authClient)
   useConfigureHttpClient(client, authClient, API_URL, showSessionExpiredModal)
@@ -114,7 +100,7 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
 
 export function Layout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang={i18n.language}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

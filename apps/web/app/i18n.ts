@@ -9,7 +9,7 @@ void i18n
   .init({
     ...i18nConfig,
     detection: {
-      order: ['navigator', 'htmlTag'],
+      order: ['htmlTag', 'navigator'],
       caches: [],
     },
   })

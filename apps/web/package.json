@@ -17,6 +17,7 @@
     "@financial-app/tailwind-config": "workspace:^",
     "@financial-app/tokens": "workspace:^",
     "@financial-app/ui": "workspace:^",
+    "@lottiefiles/dotlottie-react": "^0.19.2",
     "@react-router/node": "^7.14.1",
     "@react-router/serve": "^7.14.1",
     "@tailwindcss/container-queries": "^0.1.1",
