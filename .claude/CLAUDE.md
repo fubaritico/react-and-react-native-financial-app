@@ -170,6 +170,8 @@ Read `@completed.md`
    - ~~_layout.tsx refactor~~ ✅ — extracted AnimatedSplash, AuthBootstrap, AuthGate into dedicated components
    - ~~DB table `user_preferences` + API endpoints~~ ✅ — GET/PUT preferences, POST initial-balance, MSW test infra (14 tests)
    - ~~Auth flow screens~~ ✅ — OtpInput atom, VerifyEmailScreen, TotpEnrollScreen, TotpChallengeScreen, AccountActivatedScreen, useTotpEnroll/useTotpChallenge hooks, OAuth Google (web+native), AuthGate routing, 5 tests, review pass
+   - ~~Web auth guard + SSR~~ ✅ — v8_middleware (sequential before child loaders), entry.server.tsx (Accept-Language → i18n sync), HydrateFallback (no sidebar flash), DotLottie splash (React.lazy, prefers-reduced-motion), HTTPS guard, shared splash asset symlink
+   - ~~Debug cleanup + review pass~~ ✅ — removed debug logs from shared auth/hooks, 6-agent review, fixed: SEC-008/010, A11Y-001/004/007/011, ARCH-002/017, REACT-001, QUAL-007/018
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
    - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
    - **Next coding**: TanStack Query preferences hooks + ModeChoiceScreen + InitialBalanceScreen + routing glue
@@ -239,7 +241,9 @@ Read `@completed.md`
 - Checkbox.native.tsx: barrel import `#Atoms` causes circular dependency at runtime (Metro) — atoms must use direct sibling imports (`../Icon/Icon.native`) instead of barrel when importing siblings
 - DatePicker native iOS: `display="inline"` overflows modal — must use BottomSheet container. `themeVariant="dark"` + `accentColor` (beige-500) for dark calendar styling
 - Button `ghost` variant (no bg/border) + `icon` size (40x40, no padding) — used for icon-only buttons like BottomSheet close. Icon size is controlled by `Icon iconSize` prop, NOT by Button size.
-- Deferred discussion: i18n injection on web side and SSR implications
+- i18n SSR solved: entry.server.tsx parses Accept-Language, client uses htmlTag detector → no hydration mismatch
+- NavItem.web.tsx: presentational div (no role/tabIndex) when onPress is undefined, role="button" when standalone. Navigation uses nav landmark (aria-label="Main") instead of tablist/tab.
+- Render props (e.g. Dropdown `trigger`) are an accepted exception to REACT-001 — they return JSX, not side effects
 - Husky pre-commit hook still times out on Turbo test phase in non-TTY — HUSKY=0 workaround still needed (276eda2)
 - QUAL-009: Transactions pages (web + mobile) exceed 200 lines with mutation feedback — extract `useTransactionModals` hook later (same pattern as budget/pots)
 - Modal.native.tsx:133 `accessibilityLabel ?? 'Close'` — hardcoded English fallback on backdrop Pressable (pre-existing, low priority)
