@@ -12,17 +12,25 @@ export const loginSchema = z.object({
 })
 
 /** Zod schema for signup form validation */
-export const signupSchema = z.object({
-  name: z.string().min(1, 'auth.validation.nameRequired'),
-  email: z
-    .string()
-    .min(1, 'auth.validation.emailRequired')
-    .email('auth.validation.emailInvalid'),
-  password: z
-    .string()
-    .min(1, 'auth.validation.passwordRequired')
-    .min(6, 'auth.validation.passwordMin'),
-})
+export const signupSchema = z
+  .object({
+    name: z.string().min(1, 'auth.validation.nameRequired'),
+    email: z
+      .string()
+      .min(1, 'auth.validation.emailRequired')
+      .email('auth.validation.emailInvalid'),
+    password: z
+      .string()
+      .min(1, 'auth.validation.passwordRequired')
+      .min(6, 'auth.validation.passwordMin'),
+    confirmPassword: z
+      .string()
+      .min(1, 'auth.validation.confirmPasswordRequired'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'auth.validation.passwordMismatch',
+    path: ['confirmPassword'],
+  })
 
 /**
  * Extracts per-field error messages from Zod issues, keeping only the first error per field.

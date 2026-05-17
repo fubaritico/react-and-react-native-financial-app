@@ -44,8 +44,26 @@ export default function LoginScreen() {
 
     if (error) {
       setServerError(error.message)
+      return
+    }
+
+    // SEC-005: After successful password login, check if MFA is enrolled.
+    // Without this, AuthGate would redirect to Home at aal1,
+    // bypassing the TOTP challenge entirely. OWASP A07:2021.
+    const { hasMfaEnrolled, currentLevel } =
+      await authClient.getAssuranceLevel()
+    if (hasMfaEnrolled && currentLevel === 'aal1') {
+      router.replace('/totp-challenge')
     }
   }, [email, password, t])
+
+  const handleSubmitPress = useCallback(() => {
+    void handleSubmit()
+  }, [handleSubmit])
+
+  const handleNavigateToSignup = useCallback(() => {
+    router.replace('/signup')
+  }, [])
 
   return (
     <AuthLayout appName={t('app.name')}>
@@ -55,9 +73,7 @@ export default function LoginScreen() {
           <LinkText
             text={t('auth.needAccount')}
             linkLabel={t('auth.needAccountLink')}
-            onLinkPress={() => {
-              router.replace('/signup')
-            }}
+            onLinkPress={handleNavigateToSignup}
           />
         }
       >
@@ -82,9 +98,7 @@ export default function LoginScreen() {
         />
         <Button
           title={loading ? t('auth.signingIn') : t('auth.loginButton')}
-          onPress={() => {
-            void handleSubmit()
-          }}
+          onPress={handleSubmitPress}
           fullWidth
           disabled={loading}
           centered

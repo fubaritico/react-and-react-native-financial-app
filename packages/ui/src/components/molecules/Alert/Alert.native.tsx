@@ -30,7 +30,11 @@ export function Alert({
   const iconColor = tw.color(SEVERITY_TOKEN[severity])
 
   return (
-    <View style={tw`${alertVariants()}`}>
+    <View
+      accessibilityRole="alert"
+      accessibilityLiveRegion="assertive"
+      style={tw`${alertVariants()}`}
+    >
       {/* Lighter background: white base + colored overlay at 15% opacity */}
       <View style={tw`${native.backdropWhite}`} />
       <View style={tw`${native.backdropColor} ${bgClass}`} />

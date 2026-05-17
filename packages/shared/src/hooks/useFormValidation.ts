@@ -36,7 +36,7 @@ export const useFormValidation = <T extends Record<string, unknown>>(
   /**
    * Faire la copie seulement au premier rendu
    */
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- JSON round-trip for deep clone
+
   initialFormData.current ??= JSON.parse(JSON.stringify(currentData))
 
   /**

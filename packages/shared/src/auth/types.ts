@@ -27,7 +27,7 @@ export interface ISignUpPayload {
 }
 
 /** Supported OAuth providers */
-export type OAuthProvider = 'google'
+export type OAuthProvider = 'google' | 'apple'
 
 /** Vendor-agnostic user representation */
 export interface IUser {
@@ -63,6 +63,75 @@ export interface IAuthSubscription {
   unsubscribe: () => void
 }
 
+/** Result of a sign-up attempt — includes identity check for duplicate detection */
+export interface ISignUpResult {
+  /** The created user (may be a "fake" user if email already exists) */
+  user: IUser | null
+  /** Auth error from the provider */
+  error: IAuthError | null
+  /**
+   * Whether the email is already registered.
+   * Supabase returns a user with empty `identities[]` for duplicate emails
+   * (to prevent user enumeration). true = email already taken.
+   */
+  isExistingEmail: boolean
+}
+
+/** Enrolled MFA factor returned by enroll */
+export interface IMfaFactor {
+  /** Unique factor identifier */
+  id: string
+  /** Factor type (currently only 'totp') */
+  type: 'totp'
+  /** TOTP-specific data (only present during enrollment) */
+  totp?: {
+    /** Base64-encoded QR code image */
+    qr_code: string
+    /** otpauth:// URI for manual entry in authenticator apps */
+    uri: string
+    /** Shared secret for manual entry */
+    secret: string
+  }
+}
+
+/** Active MFA challenge awaiting verification */
+export interface IMfaChallenge {
+  /** Unique challenge identifier */
+  id: string
+  /** Factor this challenge belongs to */
+  factorId: string
+}
+
+/** Authenticator Assurance Level — aal1 = password only, aal2 = password + MFA verified */
+export type AuthAssuranceLevel = 'aal1' | 'aal2'
+
+/** MFA operations — grouped under `mfa` on IAuthClient */
+export interface IMfaClient {
+  /** Enrolls a new TOTP factor — returns QR code for authenticator setup */
+  enroll(): Promise<{
+    factor: IMfaFactor | null
+    error: IAuthError | null
+  }>
+  /** Creates a challenge for an enrolled factor */
+  challenge(factorId: string): Promise<{
+    challenge: IMfaChallenge | null
+    error: IAuthError | null
+  }>
+  /** Verifies a 6-digit TOTP code against an active challenge */
+  verify(
+    factorId: string,
+    challengeId: string,
+    code: string
+  ): Promise<{ error: IAuthError | null }>
+  /** Lists all enrolled factors for the current user */
+  listFactors(): Promise<{
+    factors: IMfaFactor[]
+    error: IAuthError | null
+  }>
+  /** Unenrolls (removes) an enrolled factor */
+  unenroll(factorId: string): Promise<{ error: IAuthError | null }>
+}
+
 /**
  * Vendor-agnostic auth client interface.
  * Abstracts the auth provider (Supabase, Firebase, etc.) so the shared
@@ -81,9 +150,7 @@ export interface IAuthClient {
     payload: ISignInPayload
   ): Promise<{ user: IUser | null; error: IAuthError | null }>
   /** Creates a new user account with email and password */
-  signUp(
-    payload: ISignUpPayload
-  ): Promise<{ user: IUser | null; error: IAuthError | null }>
+  signUp(payload: ISignUpPayload): Promise<ISignUpResult>
   /** Initiates OAuth redirect flow (web only) */
   signInWithOAuth(
     provider: OAuthProvider,
@@ -102,4 +169,12 @@ export interface IAuthClient {
   onAuthStateChange(
     callback: (event: string, session: ISession | null) => void
   ): IAuthSubscription
+  /** Returns the current session's assurance level and whether MFA is enrolled */
+  getAssuranceLevel(): Promise<{
+    currentLevel: AuthAssuranceLevel
+    hasMfaEnrolled: boolean
+    error: IAuthError | null
+  }>
+  /** Multi-Factor Authentication operations */
+  mfa: IMfaClient
 }

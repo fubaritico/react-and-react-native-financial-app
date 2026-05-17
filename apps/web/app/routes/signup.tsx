@@ -31,6 +31,7 @@ export default function Signup() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [serverError, setServerError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -45,24 +46,44 @@ export default function Signup() {
     setErrors({})
     setServerError('')
 
-    const result = signupSchema.safeParse({ name, email, password })
+    const result = signupSchema.safeParse({
+      name,
+      email,
+      password,
+      confirmPassword,
+    })
     if (!result.success) {
       setErrors(parseValidationErrors(result.error.issues, t))
       return
     }
 
     setLoading(true)
-    const { error } = await authClient.signUp({
+    const { error, isExistingEmail } = await authClient.signUp({
       name: result.data.name,
       email: result.data.email,
       password: result.data.password,
     })
     setLoading(false)
 
+    if (isExistingEmail) {
+      setServerError(t('auth.emailAlreadyRegistered'))
+      return
+    }
+
     if (error) {
       setServerError(error.message)
+      return
     }
-  }, [name, email, password, t])
+
+    void navigate(
+      `/verify-email?email=${encodeURIComponent(result.data.email)}`,
+      { replace: true }
+    )
+  }, [name, email, password, confirmPassword, t, navigate])
+
+  const handleNavigateToLogin = useCallback(() => {
+    void navigate('/login')
+  }, [navigate])
 
   return (
     <AuthLayout
@@ -76,9 +97,7 @@ export default function Signup() {
           <LinkText
             text={t('auth.alreadyHaveAccount')}
             linkLabel={t('auth.alreadyHaveAccountLink')}
-            onLinkPress={() => {
-              void navigate('/login')
-            }}
+            onLinkPress={handleNavigateToLogin}
           />
         }
       >
@@ -108,6 +127,14 @@ export default function Signup() {
           placeholder={t('auth.passwordPlaceholder')}
           error={!!errors.password}
           helperText={errors.password}
+        />
+        <PasswordInput
+          label={t('auth.confirmPassword')}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholder={t('auth.confirmPasswordPlaceholder')}
+          error={!!errors.confirmPassword}
+          helperText={errors.confirmPassword}
         />
         <Button
           title={loading ? t('auth.creatingAccount') : t('auth.signupButton')}

@@ -3,7 +3,7 @@ export { createBrowserClient } from './auth/client'
 export { createNativeClient } from './auth/client.native'
 // createServerClient is NOT re-exported here — import from '@financial-app/shared/auth/client.server'
 // to avoid pulling @supabase/ssr into non-SSR bundles
-export { signInWithGoogle } from './auth/oauth'
+export { signInWithGoogle, signInWithApple } from './auth/oauth'
 export { requireAuth } from './auth/guard'
 export { useAuthListener } from './auth/hooks'
 export {
@@ -13,13 +13,18 @@ export {
 } from './auth/validation'
 export type { LoginFormData, SignupFormData } from './auth/validation'
 export type {
+  AuthAssuranceLevel,
   IAuthClient,
   IAuthError,
   IAuthStorage,
   IAuthSubscription,
+  IMfaChallenge,
+  IMfaClient,
+  IMfaFactor,
   ISession,
   ISignInPayload,
   ISignUpPayload,
+  ISignUpResult,
   IUser,
   OAuthProvider,
 } from './auth/types'
@@ -45,6 +50,10 @@ export {
   useSessionExpiredHandler,
 } from './hooks/useConfigureHttpClient'
 export { useInactivityTimeout } from './hooks/useInactivityTimeout'
+export { useTotpEnroll } from './hooks/useTotpEnroll'
+export type { IUseTotpEnrollReturn } from './hooks/useTotpEnroll'
+export { useTotpChallenge } from './hooks/useTotpChallenge'
+export type { IUseTotpChallengeReturn } from './hooks/useTotpChallenge'
 
 // Query
 export { createAppQueryClient } from './query'

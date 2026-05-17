@@ -59,8 +59,26 @@ export default function Login() {
 
     if (error) {
       setServerError(error.message)
+      return
     }
-  }, [email, password, t])
+
+    // SEC-005: After successful password login, check if MFA is enrolled.
+    // Without this, the auth state listener would redirect to Home at aal1,
+    // bypassing the TOTP challenge entirely. OWASP A07:2021.
+    const { hasMfaEnrolled, currentLevel } =
+      await authClient.getAssuranceLevel()
+    if (hasMfaEnrolled && currentLevel === 'aal1') {
+      void navigate('/totp-challenge', { replace: true })
+    }
+  }, [email, password, t, navigate])
+
+  const handleSubmitPress = useCallback(() => {
+    void handleSubmit()
+  }, [handleSubmit])
+
+  const handleNavigateToSignup = useCallback(() => {
+    void navigate('/signup')
+  }, [navigate])
 
   return (
     <AuthLayout
@@ -74,9 +92,7 @@ export default function Login() {
           <LinkText
             text={t('auth.needAccount')}
             linkLabel={t('auth.needAccountLink')}
-            onLinkPress={() => {
-              void navigate('/signup')
-            }}
+            onLinkPress={handleNavigateToSignup}
           />
         }
       >
@@ -101,9 +117,7 @@ export default function Login() {
         />
         <Button
           title={loading ? t('auth.signingIn') : t('auth.loginButton')}
-          onPress={() => {
-            void handleSubmit()
-          }}
+          onPress={handleSubmitPress}
           fullWidth
           disabled={loading}
           centered

@@ -52,6 +52,9 @@ export type { ISpinnerProps } from './components/atoms/Spinner/Spinner.tsx'
 export { Checkbox } from './components/atoms/Checkbox'
 export type { ICheckboxProps } from './components/atoms/Checkbox/Checkbox.tsx'
 
+export { OtpInput } from './components/atoms/OtpInput/index'
+export type { IOtpInputProps } from './components/atoms/OtpInput/OtpInput.tsx'
+
 // Molecules
 export { TextInput } from './components/molecules/TextInput'
 export type { ITextInputProps } from './components/molecules/TextInput/TextInput.tsx'

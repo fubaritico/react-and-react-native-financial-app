@@ -11,6 +11,7 @@ const API_URL =
 
 /**
  * Protects all child routes — redirects to /login if not authenticated.
+ * Enforces AAL2 when MFA is enrolled (redirects to /totp-challenge).
  * Also eagerly configures the HTTP client with the current access token
  * so child clientLoaders can call ensureQueryData immediately.
  */
@@ -20,6 +21,16 @@ export async function clientLoader() {
     // React Router loaders use throw redirect() — it throws a Response, not an Error
     // eslint-disable-next-line @typescript-eslint/only-throw-error
     throw redirect('/login')
+  }
+
+  // SEC-002: Enforce AAL2 when MFA is enrolled.
+  // Supabase returns an aal1 session after password login even with TOTP enrolled.
+  // Without this check, a user with MFA could access protected routes at aal1,
+  // defeating the purpose of 2FA. OWASP A07:2021 — Identification and Authentication Failures.
+  const { hasMfaEnrolled, currentLevel } = await authClient.getAssuranceLevel()
+  if (hasMfaEnrolled && currentLevel === 'aal1') {
+    // eslint-disable-next-line @typescript-eslint/only-throw-error
+    throw redirect('/totp-challenge')
   }
 
   // Eagerly configure HTTP client before child loaders run

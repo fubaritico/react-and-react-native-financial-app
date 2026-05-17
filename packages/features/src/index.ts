@@ -85,3 +85,16 @@ export type { IRecurringBillsDataTableProps } from './recurring-bills'
 
 export { BillsSummary } from './recurring-bills'
 export type { IBillsSummaryProps, IBillsSummaryRow } from './recurring-bills'
+
+export {
+  TotpEnrollScreen,
+  TotpChallengeScreen,
+  VerifyEmailScreen,
+  AccountActivatedScreen,
+} from './auth'
+export type {
+  ITotpEnrollScreenProps,
+  ITotpChallengeScreenProps,
+  IVerifyEmailScreenProps,
+  IAccountActivatedScreenProps,
+} from './auth'

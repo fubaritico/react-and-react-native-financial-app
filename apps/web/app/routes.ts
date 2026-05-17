@@ -9,6 +9,10 @@ export default [
   // Public routes (no sidebar)
   route('login', 'routes/login.tsx'),
   route('signup', 'routes/signup.tsx'),
+  route('verify-email', 'routes/verify-email.tsx'),
+  route('account-activated', 'routes/account-activated.tsx'),
+  route('totp-enroll', 'routes/totp-enroll.tsx'),
+  route('totp-challenge', 'routes/totp-challenge.tsx'),
 
   // Protected routes (sidebar layout)
   layout('routes/layout.tsx', [

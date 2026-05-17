@@ -56,7 +56,8 @@
     "changelog": "conventional-changelog -p angular -r 0 --path . > CHANGELOG.md",
     "build": "tsc --noEmit",
     "lint": "eslint ./src",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@financial-app/icons": "workspace:^",
@@ -75,10 +76,12 @@
   "devDependencies": {
     "@testing-library/jest-dom": "catalog:",
     "@testing-library/react": "catalog:",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "conventional-changelog": "catalog:",
     "react-native": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

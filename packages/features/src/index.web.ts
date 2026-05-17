@@ -95,3 +95,16 @@ export type {
   IBillsSummaryProps,
   IBillsSummaryRow,
 } from './recurring-bills/index.web'
+
+export {
+  TotpEnrollScreen,
+  TotpChallengeScreen,
+  VerifyEmailScreen,
+  AccountActivatedScreen,
+} from './auth/index.web'
+export type {
+  ITotpEnrollScreenProps,
+  ITotpChallengeScreenProps,
+  IVerifyEmailScreenProps,
+  IAccountActivatedScreenProps,
+} from './auth/index.web'

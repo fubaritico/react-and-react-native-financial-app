@@ -14,13 +14,14 @@ import { useTranslation } from 'react-i18next'
 
 import { authClient } from '../../src/lib/supabase'
 
-/** Signup screen — name/email/password form with validation. */
+/** Signup screen — name/email/password/confirm form with duplicate email check. */
 export default function SignupScreen() {
   const { t } = useTranslation()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [serverError, setServerError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -29,24 +30,44 @@ export default function SignupScreen() {
     setErrors({})
     setServerError('')
 
-    const result = signupSchema.safeParse({ name, email, password })
+    const result = signupSchema.safeParse({
+      name,
+      email,
+      password,
+      confirmPassword,
+    })
     if (!result.success) {
       setErrors(parseValidationErrors(result.error.issues, t))
       return
     }
 
     setLoading(true)
-    const { error } = await authClient.signUp({
+    const { error, isExistingEmail } = await authClient.signUp({
       name: result.data.name,
       email: result.data.email,
       password: result.data.password,
     })
     setLoading(false)
 
+    if (isExistingEmail) {
+      setServerError(t('auth.emailAlreadyRegistered'))
+      return
+    }
+
     if (error) {
       setServerError(error.message)
+      return
     }
-  }, [name, email, password, t])
+
+    router.replace({
+      pathname: '/verify-email',
+      params: { email: result.data.email },
+    })
+  }, [name, email, password, confirmPassword, t])
+
+  const handleNavigateToLogin = useCallback(() => {
+    router.replace('/login')
+  }, [])
 
   return (
     <AuthLayout appName={t('app.name')}>
@@ -56,9 +77,7 @@ export default function SignupScreen() {
           <LinkText
             text={t('auth.alreadyHaveAccount')}
             linkLabel={t('auth.alreadyHaveAccountLink')}
-            onLinkPress={() => {
-              router.replace('/login')
-            }}
+            onLinkPress={handleNavigateToLogin}
           />
         }
       >
@@ -88,6 +107,14 @@ export default function SignupScreen() {
           placeholder={t('auth.passwordPlaceholder')}
           error={!!errors.password}
           helperText={errors.password}
+        />
+        <PasswordInput
+          label={t('auth.confirmPassword')}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholder={t('auth.confirmPasswordPlaceholder')}
+          error={!!errors.confirmPassword}
+          helperText={errors.confirmPassword}
         />
         <Button
           title={loading ? t('auth.creatingAccount') : t('auth.signupButton')}

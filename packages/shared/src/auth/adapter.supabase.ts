@@ -1,7 +1,11 @@
 import type {
+  AuthAssuranceLevel,
   IAuthClient,
   IAuthError,
   IAuthSubscription,
+  IMfaChallenge,
+  IMfaClient,
+  IMfaFactor,
   ISession,
   ISignInPayload,
   ISignUpPayload,
@@ -133,9 +137,22 @@ export function createSupabaseAuthAdapter(client: SupabaseClient): IAuthClient {
           password: payload.password,
           options: { data: { name: payload.name } },
         })
-        return { user: toUser(data.user), error: toAuthError(error) }
+        // Supabase returns a user with empty identities[] when email is already taken
+        // (prevents user enumeration — no explicit error is thrown)
+        const user = data.user as { identities?: unknown[] } | null
+        const identities = user?.identities
+        const isExistingEmail =
+          !error &&
+          !!data.user &&
+          Array.isArray(identities) &&
+          identities.length === 0
+        return {
+          user: toUser(data.user),
+          error: toAuthError(error),
+          isExistingEmail,
+        }
       } catch (e) {
-        return { user: null, error: toNetworkError(e) }
+        return { user: null, error: toNetworkError(e), isExistingEmail: false }
       }
     },
 
@@ -187,6 +204,131 @@ export function createSupabaseAuthAdapter(client: SupabaseClient): IAuthClient {
         unsubscribe() {
           subscription.unsubscribe()
         },
+      }
+    },
+
+    async getAssuranceLevel() {
+      try {
+        const { data, error } =
+          await client.auth.mfa.getAuthenticatorAssuranceLevel()
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Supabase types claim data is always non-null, but runtime can be null on error
+        if (error || !data) {
+          return {
+            currentLevel: 'aal1' as AuthAssuranceLevel,
+            hasMfaEnrolled: false,
+            error: toAuthError(error),
+          }
+        }
+        const { currentLevel, nextLevel, currentAuthenticationMethods } = data
+        // If nextLevel is 'aal2' and current is 'aal1', MFA is enrolled but not verified
+        const methods = currentAuthenticationMethods as {
+          method: string
+        }[]
+        const hasMfaEnrolled =
+          nextLevel === 'aal2' || methods.some((m) => m.method === 'totp')
+        return {
+          currentLevel: (currentLevel ?? 'aal1') as AuthAssuranceLevel,
+          hasMfaEnrolled,
+          error: null,
+        }
+      } catch (e) {
+        return {
+          currentLevel: 'aal1' as AuthAssuranceLevel,
+          hasMfaEnrolled: false,
+          error: toNetworkError(e),
+        }
+      }
+    },
+
+    mfa: createMfaAdapter(client),
+  }
+}
+
+/**
+ * Creates the MFA sub-adapter mapping Supabase MFA API to IMfaClient.
+ * @param client - Supabase client instance
+ * @returns Vendor-agnostic IMfaClient implementation
+ */
+function createMfaAdapter(client: SupabaseClient): IMfaClient {
+  return {
+    async enroll() {
+      try {
+        const { data, error } = await client.auth.mfa.enroll({
+          factorType: 'totp',
+        })
+        if (error) {
+          return { factor: null, error: toAuthError(error) }
+        }
+        return {
+          factor: {
+            id: data.id,
+            type: 'totp' as const,
+            totp: {
+              qr_code: data.totp.qr_code,
+              uri: data.totp.uri,
+              secret: data.totp.secret,
+            },
+          },
+          error: null,
+        }
+      } catch (e) {
+        return { factor: null, error: toNetworkError(e) }
+      }
+    },
+
+    async challenge(factorId: string) {
+      try {
+        const { data, error } = await client.auth.mfa.challenge({ factorId })
+        if (error) {
+          return { challenge: null, error: toAuthError(error) }
+        }
+        const challenge: IMfaChallenge = {
+          id: data.id,
+          factorId,
+        }
+        return { challenge, error: null }
+      } catch (e) {
+        return { challenge: null, error: toNetworkError(e) }
+      }
+    },
+
+    async verify(factorId: string, challengeId: string, code: string) {
+      try {
+        const { error } = await client.auth.mfa.verify({
+          factorId,
+          challengeId,
+          code,
+        })
+        return { error: toAuthError(error) }
+      } catch (e) {
+        return { error: toNetworkError(e) }
+      }
+    },
+
+    async listFactors() {
+      try {
+        const { data, error } = await client.auth.mfa.listFactors()
+        if (error) {
+          return { factors: [], error: toAuthError(error) }
+        }
+        const factors: IMfaFactor[] = data.totp.map((f) => ({
+          id: f.id,
+          type: 'totp' as const,
+        }))
+        return { factors, error: null }
+      } catch (e) {
+        return { factors: [], error: toNetworkError(e) }
+      }
+    },
+
+    async unenroll(factorId: string) {
+      try {
+        const { error } = await client.auth.mfa.unenroll({
+          factorId,
+        })
+        return { error: toAuthError(error) }
+      } catch (e) {
+        return { error: toNetworkError(e) }
       }
     },
   }

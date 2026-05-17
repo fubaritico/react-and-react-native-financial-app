@@ -1,6 +1,6 @@
 // Auth (native-safe only)
 export { createNativeClient } from './auth/client.native'
-export { signInWithGoogle } from './auth/oauth.native'
+export { signInWithGoogle, signInWithApple } from './auth/oauth.native'
 export { requireAuth } from './auth/guard'
 export { useAuthListener } from './auth/hooks'
 export {
@@ -10,13 +10,18 @@ export {
 } from './auth/validation'
 export type { LoginFormData, SignupFormData } from './auth/validation'
 export type {
+  AuthAssuranceLevel,
   IAuthClient,
   IAuthError,
   IAuthStorage,
   IAuthSubscription,
+  IMfaChallenge,
+  IMfaClient,
+  IMfaFactor,
   ISession,
   ISignInPayload,
   ISignUpPayload,
+  ISignUpResult,
   IUser,
   OAuthProvider,
 } from './auth/types'
@@ -42,6 +47,10 @@ export {
   useSessionExpiredHandler,
 } from './hooks/useConfigureHttpClient'
 export { useInactivityTimeout } from './hooks/useInactivityTimeout.native'
+export { useTotpEnroll } from './hooks/useTotpEnroll'
+export type { IUseTotpEnrollReturn } from './hooks/useTotpEnroll'
+export { useTotpChallenge } from './hooks/useTotpChallenge'
+export type { IUseTotpChallengeReturn } from './hooks/useTotpChallenge'
 
 // Query
 export { createAppQueryClient } from './query'

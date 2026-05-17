@@ -14,3 +14,18 @@ export async function signInWithGoogle(
 ) {
   return authClient.signInWithIdToken('google', idToken)
 }
+
+/**
+ * Signs in with Apple on native platforms.
+ * The caller is responsible for obtaining the idToken via
+ * expo-apple-authentication at the app level.
+ * @param authClient - Native auth client
+ * @param idToken - Apple ID token obtained from the native sign-in flow
+ * @returns Promise resolving to `{ user: IUser | null; error: IAuthError | null }`
+ */
+export async function signInWithApple(
+  authClient: IAuthClient,
+  idToken: string
+) {
+  return authClient.signInWithIdToken('apple', idToken)
+}

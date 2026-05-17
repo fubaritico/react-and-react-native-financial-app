@@ -54,6 +54,9 @@ export type { ISpinnerProps } from './components/atoms/Spinner/Spinner.tsx'
 export { Checkbox } from './components/atoms/Checkbox/index.web'
 export type { ICheckboxProps } from './components/atoms/Checkbox/Checkbox.tsx'
 
+export { OtpInput } from './components/atoms/OtpInput/index.web'
+export type { IOtpInputProps } from './components/atoms/OtpInput/OtpInput.tsx'
+
 export { DatePicker } from './components/organisms/DatePicker/index.web'
 export type { IDatePickerProps } from './components/organisms/DatePicker/DatePicker.tsx'
 
