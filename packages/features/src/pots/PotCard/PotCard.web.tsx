@@ -100,6 +100,7 @@ export function PotCard({
           buttonSize="md"
           buttonClassName="p-0 text-grey-300"
           buttonCentered
+          position="right"
           trigger={() => (
             <Icon name="ellipsis" iconSize="sm" color="currentColor" />
           )}

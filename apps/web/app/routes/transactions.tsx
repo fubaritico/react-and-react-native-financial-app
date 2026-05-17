@@ -24,11 +24,10 @@ import { queryClient } from '../lib/query-client'
 
 import type { Route } from './+types/transactions'
 
-const txnOpts = getTransactionsOptions({
-  query: { limit: 1000, sort: 'latest' },
-})
-
 export async function clientLoader() {
+  const txnOpts = getTransactionsOptions({
+    query: { limit: 1000, sort: 'latest' },
+  })
   return queryClient.ensureQueryData(txnOpts).catch(() => undefined)
 }
 
@@ -55,6 +54,10 @@ export default function Transactions({
   const modal = useModal()
   const qc = useQueryClient()
   const formRef = useRef<ITransactionFormRef>(null)
+
+  const txnOpts = getTransactionsOptions({
+    query: { limit: 1000, sort: 'latest' },
+  })
 
   const { data, error, isLoading } = useQuery({ ...txnOpts, initialData })
 
