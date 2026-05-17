@@ -30,6 +30,8 @@ interface ISupabaseSession {
   access_token: string
   /** Token used to refresh an expired access token */
   refresh_token: string
+  /** Unix timestamp (seconds) when the access token expires */
+  expires_at?: number
   /** User associated with this session */
   user: ISupabaseUser
 }
@@ -90,6 +92,7 @@ function toSession(session: ISupabaseSession | null): ISession | null {
   return {
     access_token: session.access_token,
     refresh_token: session.refresh_token,
+    expires_at: session.expires_at,
     user,
   }
 }
@@ -115,6 +118,15 @@ export function createSupabaseAuthAdapter(client: SupabaseClient): IAuthClient {
     async getSession() {
       try {
         const { data, error } = await client.auth.getSession()
+        return { session: toSession(data.session), error: toAuthError(error) }
+      } catch (e) {
+        return { session: null, error: toNetworkError(e) }
+      }
+    },
+
+    async refreshSession() {
+      try {
+        const { data, error } = await client.auth.refreshSession()
         return { session: toSession(data.session), error: toAuthError(error) }
       } catch (e) {
         return { session: null, error: toNetworkError(e) }

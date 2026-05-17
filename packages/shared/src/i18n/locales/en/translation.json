@@ -120,6 +120,12 @@
       "title": "Session expired",
       "description": "Your session has expired. Please sign in again."
     },
+    "sessionWarning": {
+      "title": "Session expiring soon",
+      "description": "Your session will expire in less than a minute.",
+      "extend": "Extend",
+      "ignore": "Ignore"
+    },
     "inactivity": {
       "title": "Signed out due to inactivity",
       "description": "You were signed out for security after a period of inactivity."

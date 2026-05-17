@@ -1,8 +1,9 @@
-# 1.0.0 (2026-05-15)
+# 1.0.0 (2026-05-17)
 
 
 ### Bug Fixes
 
+* address review findings — security, a11y, react best practices ([e2ade9a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e2ade9a079c2abf04e5fa0b90ba06e8eda03859a))
 * **android:** resolve AsyncStorage Maven issue, add rebuild-android script ([8df93c4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8df93c494809a8d4355f7a69cf588ab17a828131))
 * **auth:** prevent 401 race condition on native login + cleanup debug logs ([e37f3f9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e37f3f9ed998971a66c5062c6d3f0d522b3b7a5d))
 * **features:** center PotCard buttons + style dropdown trigger ([de11146](https://github.com/fubaritico/react-and-react-native-financial-app/commit/de111468227d17cd3b8968c8687235f6c1ab8a82))
@@ -28,10 +29,14 @@
 * added env for BDD credentials ([c08b401](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c08b4019e8528439de6b969fc9cec13b2595601a))
 * added shared design system ([69b2530](https://github.com/fubaritico/react-and-react-native-financial-app/commit/69b25309bb897f486afe8585eb3c7d3776ad9b5a))
 * alignement de mobile-expo-ejected aveclesmême dépendances ([c3df036](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c3df03680c52be2e98b931e9860a5c1c0ddcc842))
+* **api:** add rate limiting (express-rate-limit) ([a45e368](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a45e368cd6e69717685daefd65971bb6a948a6c4))
+* **api:** add structured logging + audit trail (pino) ([ad9a8d4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ad9a8d40eb3321833e2b60cd29c515f51c47b00c))
 * **api:** scaffold Express 5 API with Zod schemas, OpenAPI, Swagger UI + review rules ([82a3d6d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/82a3d6dc67f1eafb907f54f35cf0d9d4eab3f8ca))
+* **api:** user_preferences endpoints + test infrastructure (MSW + Vitest) ([c429f0d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c429f0d5da14914a9f9f0694f8addc2744567efe))
 * **apps:** wire add budget modal with validation ([647288a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/647288a4a8aaa3efcb0cd53d59c33aa7e09117c2))
 * **apps:** wire auth clients, Google Sign-In, and env files (Phase 5.8) ([7c83f86](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7c83f860b10749f23733dafeb66e2996af5ba77d))
 * **apps:** wire Edit + Delete transaction modals (web + mobile) ([0ef019a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0ef019a323b9dfa11e638a85b02bbcfb7a7a3660))
+* **auth:** complete signup → verify → TOTP → activated flow + OtpInput component ([1121526](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1121526546010276ea2bb7fe9cc7a5d8a07dab8e))
 * **auth:** full Supabase auth flow + API error handling + Android emulator fix ([4f59d93](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4f59d93d34b30882fb6a5f9763603f77fafe8d77))
 * **auth:** session expiry modal + inactivity timeout + 401 interceptor ([ce52505](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ce52505eef2c0f6ce4c8be903f2f2b9245751de3))
 * **budget:** add BudgetThemeDropdown cross-platform component ([919d47f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/919d47ff21e2d3585faf0365115fb6249ba22862))
@@ -54,6 +59,7 @@
 * **icons:** add @financial-app/icons package with cross-platform Icon component ([1c1be72](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1c1be727339b093097d1ff682027f5c1771b78c7))
 * **icons:** add Fb app icon to all mobile apps ([8631298](https://github.com/fubaritico/react-and-react-native-financial-app/commit/863129834c804d42ccea4e5e05b1b5bf9a185a18))
 * **mobile-expo:** add Expo Router with tabs + auth routes ([60f42d9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/60f42d9fbc62b657ba70409207618dc479713b8f))
+* **mobile-expo:** animated Lottie splash + app icons + layout refactor ([428bbf0](https://github.com/fubaritico/react-and-react-native-financial-app/commit/428bbf0d6343bf82b65d9ea44fb66a8635a385ae))
 * **mobile:** add React Navigation with 5 tabs + auth stack (on standby) ([dc67010](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dc670102e7c9b50e20c39b071fd7d3e9d0912abc))
 * **mobile:** react native package basic setup ([ab09677](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ab09677a32fae9ba09ffdfa89bdcf3a46a13186f))
 * **mobile:** reinstall deps with pnpm ([0edc846](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0edc8468983485f24b175ccd43f1cc33a1f575dc))
@@ -78,6 +84,7 @@
 * **tailwind-config:** create @financial-app/tailwind-config (Phase 2) ([3b0156a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/3b0156acb620410fcf71b5c60d82b7875bbeb0f1))
 * **tokens:** create @financial-app/tokens package (Phase 0) ([ed99278](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ed99278308126397ba7eeca26b170239ce690c86))
 * **transactions:** add CRUD API + TransactionFormContent + Add modal ([53d6b90](https://github.com/fubaritico/react-and-react-native-financial-app/commit/53d6b90e2c14409d6cfdacefb2eba530c5b9157a))
+* **ui/features/apps:** ActionCell + mutation feedback + review fixes ([276eda2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/276eda2fc5861a9177fe1a2c9bc33a6f53dbc001))
 * **ui/features:** integrate DatePicker in TransactionFormContent + BottomSheet native calendar ([dea1fdb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dea1fdb2b40e89109e9e7ba8aa662277764d2c94))
 * **ui:** add Alert molecule + Skeleton/Spinner atoms + CSS pipeline ([75fbd9e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/75fbd9e932bc566bfe1555923cafb057dbcd3b3f))
 * **ui:** add buffer support to ProgressBar component ([1427e01](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1427e0160a8cf648178e5b09ec450fb5da7ea49b))
@@ -105,4 +112,5 @@
 * **ui:** refactor Button to 4 Figma variants (primary/secondary/tertiary/destroy) ([8492f9a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8492f9a2d83ad5f2a215f26942eafb6c52e239ae))
 * **ui:** use IconName from @financial-app/icons in Button and TextInput ([e913935](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e913935fa58a992d7c5c50fe61e01754960e60d9))
 * **web,expo:** add web routes, responsive layout, device simulator scripts ([20bba55](https://github.com/fubaritico/react-and-react-native-financial-app/commit/20bba555c6be3b94d3136efd8fcf2cc882280131))
+* **web:** auth guard middleware + SSR i18n sync + DotLottie splash ([4f47d43](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4f47d432a4ffd60ed1b6f52d5d13a1fe124d0cab))
 * **web:** create apps/web with React Router v7 SSR (Phase 4) ([d232dbc](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d232dbc46683b52e365ee8c6c52da2ac4f8e4323))

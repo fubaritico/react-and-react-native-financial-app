@@ -7,6 +7,7 @@ import {
   useInactivityTimeout,
   useModal,
   useSessionExpiredHandler,
+  useSessionExpiry,
 } from '@financial-app/shared'
 import { Typography } from '@financial-app/ui'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -87,8 +88,41 @@ function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
     showSignOutModal('inactivity')
   }, [showSignOutModal])
 
+  const showSessionWarningModal = useCallback(
+    (extend: () => void) => {
+      openModal({
+        title: t('auth.sessionWarning.title'),
+        body: (
+          <Typography variant="body" color="muted">
+            {t('auth.sessionWarning.description')}
+          </Typography>
+        ),
+        dismissable: false,
+        actions: [
+          {
+            label: t('auth.sessionWarning.ignore'),
+            variant: 'secondary',
+            onPress: () => {
+              closeModal()
+            },
+          },
+          {
+            label: t('auth.sessionWarning.extend'),
+            variant: 'primary',
+            onPress: () => {
+              closeModal()
+              extend()
+            },
+          },
+        ],
+      })
+    },
+    [openModal, closeModal, t]
+  )
+
   useAuthListener(authClient)
   useConfigureHttpClient(client, authClient, API_URL, showSessionExpiredModal)
+  useSessionExpiry(authClient, showSessionWarningModal, isAuthenticated)
   useInactivityTimeout(
     showInactivityModal,
     INACTIVITY_DELAY_MS,

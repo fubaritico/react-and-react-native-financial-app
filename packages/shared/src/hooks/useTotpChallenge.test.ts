@@ -23,6 +23,7 @@ function createMockAuthClient(
   return {
     getUser: () => Promise.resolve({ user: null, error: null }),
     getSession: () => Promise.resolve({ session: null, error: null }),
+    refreshSession: () => Promise.resolve({ session: null, error: null }),
     signInWithPassword: () => Promise.resolve({ user: null, error: null }),
     signUp: () =>
       Promise.resolve({ user: null, error: null, isExistingEmail: false }),

@@ -33,6 +33,7 @@ function createMockAuthClient(overrides: {
       overrides.getSession ??
       (() => Promise.resolve({ session: null, error: null })),
     // Unused methods — should never be called by requireAuth
+    refreshSession: () => Promise.resolve({ session: null, error: null }),
     signInWithPassword: () => Promise.resolve({ user: null, error: null }),
     signUp: () =>
       Promise.resolve({ user: null, error: null, isExistingEmail: false }),

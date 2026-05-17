@@ -45,6 +45,8 @@ export interface ISession {
   access_token: string
   /** Token used to obtain a new access token after expiration */
   refresh_token: string
+  /** Unix timestamp (seconds) when the access token expires */
+  expires_at?: number
   /** Authenticated user associated with this session */
   user: IUser
 }
@@ -161,6 +163,11 @@ export interface IAuthClient {
     provider: OAuthProvider,
     token: string
   ): Promise<{ user: IUser | null; error: IAuthError | null }>
+  /** Refreshes the current session — returns a new access token + updated expires_at */
+  refreshSession(): Promise<{
+    session: ISession | null
+    error: IAuthError | null
+  }>
   /** Signs out the current user and clears the session */
   signOut(options?: {
     scope?: 'local' | 'global'

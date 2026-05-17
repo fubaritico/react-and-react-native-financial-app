@@ -120,6 +120,12 @@
       "title": "Session expirée",
       "description": "Votre session a expiré. Veuillez vous reconnecter."
     },
+    "sessionWarning": {
+      "title": "Session bientôt expirée",
+      "description": "Votre session expire dans moins d'une minute.",
+      "extend": "Prolonger",
+      "ignore": "Ignorer"
+    },
     "inactivity": {
       "title": "Déconnexion pour inactivité",
       "description": "Vous avez été déconnecté par sécurité après une période d'inactivité."

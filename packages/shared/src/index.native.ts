@@ -47,6 +47,7 @@ export {
   useSessionExpiredHandler,
 } from './hooks/useConfigureHttpClient'
 export { useInactivityTimeout } from './hooks/useInactivityTimeout.native'
+export { useSessionExpiry } from './hooks/useSessionExpiry'
 export { useTotpEnroll } from './hooks/useTotpEnroll'
 export type { IUseTotpEnrollReturn } from './hooks/useTotpEnroll'
 export { useTotpChallenge } from './hooks/useTotpChallenge'
