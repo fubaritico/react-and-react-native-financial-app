@@ -47,7 +47,12 @@ export function createServerClient(request: Request): {
         cookiesToSet.forEach(({ name, value, options }) => {
           headers.append(
             'Set-Cookie',
-            serializeCookieHeader(name, value, options)
+            serializeCookieHeader(name, value, {
+              ...options,
+              httpOnly: true,
+              secure: true,
+              sameSite: 'lax',
+            })
           )
         })
       },
