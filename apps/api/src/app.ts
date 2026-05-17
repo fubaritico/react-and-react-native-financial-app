@@ -21,6 +21,11 @@ import {
 export function createApp() {
   const app = express()
 
+  // Trust first proxy hop (Netlify/Render) so req.ip reflects X-Forwarded-For (A05-005)
+  if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1)
+  }
+
   app.use(
     pinoHttp({
       logger,
