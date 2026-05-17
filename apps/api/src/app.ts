@@ -29,7 +29,20 @@ export function createApp() {
       },
     })
   )
-  app.use(helmet())
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'none'"],
+        },
+      },
+      strictTransportSecurity: {
+        maxAge: 63072000, // 2 years
+        includeSubDomains: true,
+        preload: true,
+      },
+    })
+  )
   const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',')
   if (!allowedOrigins && process.env.NODE_ENV === 'production') {
     throw new Error('ALLOWED_ORIGINS must be set in production')
