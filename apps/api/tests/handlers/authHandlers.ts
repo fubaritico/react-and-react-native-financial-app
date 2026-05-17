@@ -24,4 +24,27 @@ export const authHandlers = {
       { status: 401 }
     )
   }),
+
+  /** No MFA factors enrolled → AAL check passes. */
+  noMfaFactors: http.get(
+    `${SUPABASE_URL}/auth/v1/admin/users/${TEST_USER_ID}/factors`,
+    () => {
+      return HttpResponse.json([])
+    }
+  ),
+
+  /** Verified TOTP factor enrolled → AAL2 enforcement triggers on aal1 tokens. */
+  mfaEnrolled: http.get(
+    `${SUPABASE_URL}/auth/v1/admin/users/${TEST_USER_ID}/factors`,
+    () => {
+      return HttpResponse.json([
+        {
+          id: 'factor-001',
+          factor_type: 'totp',
+          friendly_name: 'Authenticator',
+          status: 'verified',
+        },
+      ])
+    }
+  ),
 }

@@ -7,6 +7,7 @@ import { userPreferencesHandlers } from './handlers/userPreferencesHandlers.js'
 /** MSW server with default handlers (happy path). */
 export const server = setupServer(
   authHandlers.authenticated,
+  authHandlers.noMfaFactors,
   userPreferencesHandlers.selectOne,
   userPreferencesHandlers.upsert,
   userPreferencesHandlers.update,
