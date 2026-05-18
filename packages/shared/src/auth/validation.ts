@@ -8,7 +8,10 @@ export const loginSchema = z.object({
     .string()
     .min(1, 'auth.validation.emailRequired')
     .email('auth.validation.emailInvalid'),
-  password: z.string().min(1, 'auth.validation.passwordRequired'),
+  password: z
+    .string()
+    .min(1, 'auth.validation.passwordRequired')
+    .min(8, 'auth.validation.passwordMin'),
 })
 
 /** Zod schema for signup form validation */
