@@ -31,8 +31,7 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.mobileexpo",
-      "usesCleartextTraffic": true
+      "package": "com.anonymous.mobileexpo"
     },
     "web": {
       "favicon": "./assets/favicon.png"
