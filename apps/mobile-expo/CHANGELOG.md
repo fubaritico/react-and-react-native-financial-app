@@ -37,6 +37,7 @@
 * **mobile:** restrict cleartext traffic to dev builds only (A05-007) ([c61fe39](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c61fe3962463f197deb458d78c73012d75e3ce5a))
 * **monorepo:** align @supabase/supabase-js via pnpm catalog (A06-004) ([effd515](https://github.com/fubaritico/react-and-react-native-financial-app/commit/effd5150b5d52010826be66a8157c2ea74d025d3))
 * **monorepo:** align React versions and fix cache issues ([d67c956](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d67c956998a0ce4d5b368f3b814393e8d1c02b58))
+* **monorepo:** pin react-dom 19.1.0 across all workspaces ([5bee582](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5bee5826e42931e5117de7b4a983b1e4e0090e95))
 * **monorepo:** pin tailwindcss to ~3.4.19 instead of bare "3" (A06-005) ([f496576](https://github.com/fubaritico/react-and-react-native-financial-app/commit/f4965763b89229f61440079bfb9a9e7cccbe5b6a))
 * **monorepo:** replace wildcard chmod with explicit script paths (A08-015) ([7ad66a8](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7ad66a8df097f44f6b33c10240e5fd2394abd3e9))
 * **monorepo:** use caret range for conventional-changelog (A06-012) ([8f41b60](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8f41b60a0b592d512a2c08bb566c7d26fc6393d1))

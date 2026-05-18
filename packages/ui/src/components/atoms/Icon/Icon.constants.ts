@@ -10,6 +10,7 @@ export type IIconSize =
   | '3xl'
   | '4xl'
   | '5xl'
+  | '6xl'
 
 /** Pixel values for each named size */
 export const iconSizeMap: Record<IIconSize, number> = {
@@ -23,4 +24,5 @@ export const iconSizeMap: Record<IIconSize, number> = {
   '3xl': 28,
   '4xl': 32,
   '5xl': 36,
+  '6xl': 48,
 }

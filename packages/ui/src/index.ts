@@ -93,6 +93,9 @@ export type {
   ILatestSpendingItem,
 } from './components/molecules/LatestSpending/LatestSpending.tsx'
 
+export { ModeCard } from './components/molecules/ModeCard'
+export type { IModeCardProps } from './components/molecules/ModeCard/ModeCard.tsx'
+
 export { BillSummaryRow } from './components/molecules/BillSummaryRow'
 export type { IBillSummaryRowProps } from './components/molecules/BillSummaryRow/BillSummaryRow.tsx'
 

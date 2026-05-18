@@ -92,6 +92,7 @@ export {
   VerifyEmailScreen,
   AccountActivatedScreen,
   SignupForm,
+  ModeChoiceScreen,
 } from './auth'
 export type {
   ITotpEnrollScreenProps,
@@ -99,4 +100,5 @@ export type {
   IVerifyEmailScreenProps,
   IAccountActivatedScreenProps,
   ISignupFormProps,
+  IModeChoiceScreenProps,
 } from './auth'

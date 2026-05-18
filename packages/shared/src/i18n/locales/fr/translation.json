@@ -317,6 +317,16 @@
     "tagline": "Suivez votre argent\net épargnez pour l'avenir",
     "description": "L'application de finances personnelles vous donne le contrôle de vos dépenses. Suivez vos transactions, définissez des budgets et alimentez facilement vos cagnottes."
   },
+  "onboarding": {
+    "modeChoice": {
+      "title": "Mode d'utilisation",
+      "manualTitle": "Mode Manuel",
+      "manualDescription": "Gérez vos finances vous-même. Saisissez vos transactions, budgets et objectifs d'épargne pour anticiper vos dépenses.",
+      "bankTitle": "Mode Banque",
+      "bankDescription": "Connectez votre compte bancaire. Vos transactions sont importées automatiquement comme base de travail pour vos prévisions.",
+      "comingSoon": "Bientôt disponible"
+    }
+  },
   "errors": {
     "oops": "Oups !",
     "unexpected": "Une erreur inattendue s'est produite.",

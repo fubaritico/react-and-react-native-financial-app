@@ -317,6 +317,16 @@
     "tagline": "Keep track of your money\nand save for your future",
     "description": "Personal finance app puts you in control of your spending. Track transactions, set budgets, and add to savings pots easily."
   },
+  "onboarding": {
+    "modeChoice": {
+      "title": "Usage Mode",
+      "manualTitle": "Manual Mode",
+      "manualDescription": "Manage your finances yourself. Enter your transactions, budgets and savings goals to forecast your expenses.",
+      "bankTitle": "Bank Mode",
+      "bankDescription": "Connect your bank account. Your transactions are automatically imported as a working base for your forecasts.",
+      "comingSoon": "Coming soon"
+    }
+  },
   "errors": {
     "oops": "Oops!",
     "unexpected": "An unexpected error occurred.",

@@ -12,3 +12,6 @@ export type { IAccountActivatedScreenProps } from './AccountActivatedScreen/Acco
 
 export { SignupForm } from './SignupForm/SignupForm.web'
 export type { ISignupFormProps } from './SignupForm/SignupForm'
+
+export { ModeChoiceScreen } from './ModeChoiceScreen/ModeChoiceScreen.web'
+export type { IModeChoiceScreenProps } from './ModeChoiceScreen/ModeChoiceScreen'
