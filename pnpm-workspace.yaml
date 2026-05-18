@@ -97,4 +97,4 @@ catalog:
   "@internationalized/date": "^3.12.1"
 
   # Release tools
-  conventional-changelog: "7.2.0"
+  conventional-changelog: "^7.2.0"
