@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
 import { supabase } from '../lib/supabase.js'
 import { z } from '../lib/zod.js'
@@ -55,7 +56,8 @@ balanceRouter.get('/', validateQuery(BalanceQuerySchema), async (req, res) => {
   })
 
   if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
+    logger.error({ err: error, path: req.path }, 'Database error')
+    res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 

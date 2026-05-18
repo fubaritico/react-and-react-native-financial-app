@@ -114,12 +114,13 @@ async function setInitialBalance(userId: string, amount: number) {
 
 // --- Express handlers ---
 
-userPreferencesRouter.get('/', async (_req, res) => {
+userPreferencesRouter.get('/', async (req, res) => {
   const userId = res.locals.userId as string
 
   const { error: ensureError } = await ensurePreferencesRow(userId)
   if (ensureError) {
-    res.status(500).json({ error: `[DATABASE] ${ensureError.message}` })
+    logger.error({ err: ensureError }, 'Database error')
+    res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
@@ -130,7 +131,8 @@ userPreferencesRouter.get('/', async (_req, res) => {
     .single()
 
   if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
+    logger.error({ err: error, path: req.path }, 'Database error')
+    res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
@@ -149,7 +151,8 @@ userPreferencesRouter.put(
 
     const { error: ensureError } = await ensurePreferencesRow(userId)
     if (ensureError) {
-      res.status(500).json({ error: `[DATABASE] ${ensureError.message}` })
+      logger.error({ err: ensureError }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
@@ -161,7 +164,8 @@ userPreferencesRouter.put(
       .single()
 
     if (error) {
-      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      logger.error({ err: error, path: req.path }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
@@ -188,7 +192,8 @@ initialBalanceRouter.post(
     // Idempotency guard — prevent overwriting a previously set balance (A04-007)
     const { error: ensureError } = await ensurePreferencesRow(userId)
     if (ensureError) {
-      res.status(500).json({ error: `[DATABASE] ${ensureError.message}` })
+      logger.error({ err: ensureError }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
@@ -199,7 +204,8 @@ initialBalanceRouter.post(
       .single()
 
     if (prefsError) {
-      res.status(500).json({ error: `[DATABASE] ${prefsError.message}` })
+      logger.error({ err: prefsError }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
@@ -210,7 +216,8 @@ initialBalanceRouter.post(
 
     const { error } = await setInitialBalance(userId, amount)
     if (error) {
-      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      logger.error({ err: error, path: req.path }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 

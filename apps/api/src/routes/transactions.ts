@@ -148,7 +148,8 @@ transactionsRouter.get(
     const { data, count, error } = await query
 
     if (error) {
-      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      logger.error({ err: error, path: req.path }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
@@ -193,7 +194,8 @@ transactionsRouter.post(
       .single()
 
     if (error) {
-      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      logger.error({ err: error, path: req.path }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
@@ -215,9 +217,23 @@ transactionsRouter.put(
   validateParams(IdParamSchema),
   validateBody(UpdateTransactionSchema),
   async (req, res) => {
+    const { name, category, date, amount, recurring } = req.body as {
+      name?: string
+      category?: string
+      date?: string
+      amount?: number
+      recurring?: boolean
+    }
+
     const { data, error } = await supabase
       .from('transactions')
-      .update(req.body as Record<string, unknown>)
+      .update({
+        ...(name !== undefined && { name }),
+        ...(category !== undefined && { category }),
+        ...(date !== undefined && { date }),
+        ...(amount !== undefined && { amount }),
+        ...(recurring !== undefined && { recurring }),
+      })
       .eq('id', req.params.id)
       .eq('user_id', res.locals.userId)
       .select()
@@ -228,7 +244,8 @@ transactionsRouter.put(
         res.status(404).json({ error: '[DATABASE] Not found' })
         return
       }
-      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      logger.error({ err: error, path: req.path }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
@@ -255,7 +272,8 @@ transactionsRouter.delete(
       .eq('user_id', res.locals.userId)
 
     if (error) {
-      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      logger.error({ err: error, path: req.path }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 

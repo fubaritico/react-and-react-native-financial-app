@@ -1,5 +1,6 @@
 import { Router } from 'express'
 
+import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
 import { supabase } from '../lib/supabase.js'
 import { z } from '../lib/zod.js'
@@ -29,13 +30,14 @@ registry.registerPath({
 
 // --- Express handler ---
 
-recurringBillsRouter.get('/', async (_req, res) => {
+recurringBillsRouter.get('/', async (req, res) => {
   const { data, error } = await supabase.rpc('get_recurring_bills', {
     p_user_id: res.locals.userId,
   })
 
   if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
+    logger.error({ err: error, path: req.path }, 'Database error')
+    res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 

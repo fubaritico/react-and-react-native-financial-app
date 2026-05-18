@@ -111,7 +111,8 @@ budgetsRouter.get('/', validateQuery(BudgetQuerySchema), async (req, res) => {
   })
 
   if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
+    logger.error({ err: error, path: req.path }, 'Database error')
+    res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
@@ -129,7 +130,8 @@ budgetsRouter.post('/', validateBody(CreateBudgetSchema), async (req, res) => {
     .single()
 
   if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
+    logger.error({ err: error, path: req.path }, 'Database error')
+    res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
@@ -163,7 +165,8 @@ budgetsRouter.put(
         res.status(404).json({ error: '[DATABASE] Not found' })
         return
       }
-      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      logger.error({ err: error, path: req.path }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
@@ -190,7 +193,8 @@ budgetsRouter.delete(
       .eq('user_id', res.locals.userId)
 
     if (error) {
-      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      logger.error({ err: error, path: req.path }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 

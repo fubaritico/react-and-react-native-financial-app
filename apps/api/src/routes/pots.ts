@@ -126,14 +126,15 @@ registry.registerPath({
 
 // --- Express handlers ---
 
-potsRouter.get('/', async (_req, res) => {
+potsRouter.get('/', async (req, res) => {
   const { data, error } = await supabase
     .from('pots')
     .select(POT_COLUMNS)
     .eq('user_id', res.locals.userId)
 
   if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
+    logger.error({ err: error, path: req.path }, 'Database error')
+    res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
@@ -152,7 +153,8 @@ potsRouter.post('/', validateBody(CreatePotSchema), async (req, res) => {
     .single()
 
   if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
+    logger.error({ err: error, path: req.path }, 'Database error')
+    res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
@@ -185,7 +187,8 @@ potsRouter.put(
         res.status(404).json({ error: '[DATABASE] Not found' })
         return
       }
-      res.status(500).json({ error: `[DATABASE] ${error.message}` })
+      logger.error({ err: error, path: req.path }, 'Database error')
+      res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
@@ -205,7 +208,8 @@ potsRouter.delete('/:id', validateParams(IdParamSchema), async (req, res) => {
     .eq('user_id', res.locals.userId)
 
   if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
+    logger.error({ err: error, path: req.path }, 'Database error')
+    res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
@@ -240,7 +244,8 @@ async function updatePotTotal(
   })
 
   if (error) {
-    res.status(500).json({ error: `[DATABASE] ${error.message}` })
+    logger.error({ err: error, potId, userId }, 'Database error')
+    res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
