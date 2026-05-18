@@ -138,7 +138,8 @@ transactionsRouter.get(
     }
 
     if (search) {
-      query = query.ilike('name', `%${search}%`)
+      const escaped = search.replace(/[%_\\]/g, '\\$&')
+      query = query.ilike('name', `%${escaped}%`)
     }
 
     const sortConfig = SORT_MAP[sort] ?? SORT_MAP.latest
