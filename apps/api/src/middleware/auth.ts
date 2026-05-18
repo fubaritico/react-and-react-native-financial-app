@@ -43,7 +43,7 @@ export async function requireAuth(
       },
       'Missing authorization token'
     )
-    res.status(401).json({ error: '[AUTH] Missing authorization token' })
+    res.status(401).json({ error: 'Missing authorization token' })
     return
   }
 
@@ -64,7 +64,7 @@ export async function requireAuth(
       },
       'Invalid or expired token'
     )
-    res.status(401).json({ error: '[AUTH] Invalid or expired token' })
+    res.status(401).json({ error: 'Invalid or expired token' })
     return
   }
 
@@ -94,7 +94,7 @@ export async function requireAuth(
         },
         'MFA enrolled but session is aal1 — TOTP challenge required'
       )
-      res.status(403).json({ error: '[AUTH] MFA verification required' })
+      res.status(403).json({ error: 'MFA verification required' })
       return
     }
   }
