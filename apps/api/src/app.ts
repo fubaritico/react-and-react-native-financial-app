@@ -29,6 +29,11 @@ export function createApp() {
   app.use(
     pinoHttp({
       logger,
+      genReqId: (req) => {
+        const incoming = req.headers['x-request-id']
+        if (typeof incoming === 'string') return incoming
+        return crypto.randomUUID()
+      },
       autoLogging: {
         ignore: (req) => (req as express.Request).path === '/health',
       },
