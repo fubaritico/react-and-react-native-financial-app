@@ -56,7 +56,7 @@ The typical flow or a feature would be:
 - The agent can commit and push.
 - `end-session` the close the session keeping a short mention of each thing that has been done.
 
-Because security is a fundamental issue, an IA agent can perform security audits and address any issue; this audit is based on an OWASP project.
+Because security is a fundamental issue, an IA agent can perform security audits and address any issue; this audit is based on the [OWASP project](https://owasp.org/www-project-top-ten/).
 
 Despite its limitations, this project can be a good fit for middle-size enterprise projects.
 
