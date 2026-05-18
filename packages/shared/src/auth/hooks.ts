@@ -30,7 +30,8 @@ export function useAuthListener(authClient: IAuthClient) {
       }
     }
 
-    const subscription = authClient.onAuthStateChange((_event, session) => {
+    const subscription = authClient.onAuthStateChange((event, session) => {
+      console.warn('[auth] State change:', event, session?.user?.id ?? 'no user')
       setUser(session?.user ?? null)
       markReady()
     })
