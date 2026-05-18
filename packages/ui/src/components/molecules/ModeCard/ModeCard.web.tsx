@@ -24,12 +24,13 @@ export function ModeCard({
   return (
     <button
       type="button"
-      onClick={onPress}
-      disabled={!!disabled}
+      onClick={disabled ? undefined : onPress}
+      aria-disabled={disabled ?? undefined}
       className={cn(
         modeCardVariants({ disabled: disabled ?? undefined }),
-        'relative mt-7 w-full',
-        disabled ? web.rootDisabled : web.root
+        shared.root,
+        web.root,
+        disabled && web.rootDisabled
       )}
     >
       {/* Medallion */}

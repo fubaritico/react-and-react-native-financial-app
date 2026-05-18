@@ -31,7 +31,7 @@ export function ModeCard({
       accessibilityLabel={title}
       accessibilityState={{ disabled: !!disabled }}
       style={({ pressed }) => [
-        tw`${modeCardVariants({ disabled: disabled ?? undefined })} mt-7`,
+        tw`${modeCardVariants({ disabled: disabled ?? undefined })} ${shared.root}`,
         pressed && !disabled && tw`opacity-80`,
       ]}
     >

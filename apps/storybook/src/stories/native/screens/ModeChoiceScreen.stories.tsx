@@ -8,6 +8,11 @@ import type { ReactNode } from 'react'
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
 
+/** Token: color.black (#000000) — device bezel simulation */
+const DEVICE_FRAME_BG = '#000000'
+/** Token: color.beige-100 (#f8f4f0) — app background simulation */
+const DEVICE_SCREEN_BG = '#f8f4f0'
+
 /** iPhone 16 Pro screen dimensions */
 const IPHONE_WIDTH = 393
 const IPHONE_HEIGHT = 852
@@ -35,7 +40,7 @@ const DeviceFrame = ({
 }) => (
   <View
     style={{
-      backgroundColor: '#000',
+      backgroundColor: DEVICE_FRAME_BG,
       padding: 16,
       alignItems: 'center',
       justifyContent: 'center',
@@ -45,7 +50,7 @@ const DeviceFrame = ({
       style={{
         width,
         height,
-        backgroundColor: '#F8F4F0',
+        backgroundColor: DEVICE_SCREEN_BG,
         borderRadius: 20,
         paddingHorizontal: 20,
         justifyContent: 'center',

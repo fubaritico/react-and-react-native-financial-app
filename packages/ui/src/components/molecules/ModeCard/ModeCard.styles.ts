@@ -1,5 +1,7 @@
 /** Shared layout classes for ModeCard (safe for both native and web) */
 export const shared = {
+  /** Root card — top margin to clear the medallion overhang */
+  root: 'mt-7',
   /** Card body — extra top padding to clear the medallion overlap */
   body: 'pt-10 pb-5 px-5 items-center',
   /** Medallion circle — centered, round, light background */
@@ -12,10 +14,10 @@ export const shared = {
 
 /** Web-only classes for ModeCard (hover, focus, transition, shadow, cursor) */
 export const web = {
-  /** Interactive card — hover shadow + keyboard focus ring */
-  root: 'cursor-pointer transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',
-  /** Disabled card — blocked interaction */
-  rootDisabled: 'cursor-not-allowed',
+  /** Root layout — relative positioning + full width */
+  root: 'relative w-full cursor-pointer transition-shadow hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',
+  /** Disabled card — blocked interaction + muted hover */
+  rootDisabled: 'cursor-not-allowed hover:shadow-none',
 } as const
 
 /** Native-only classes for ModeCard */

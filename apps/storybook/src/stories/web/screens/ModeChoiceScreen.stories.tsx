@@ -6,6 +6,9 @@ import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
 
+/** Token: color.beige-100 (#f8f4f0) — app background simulation */
+const SCREEN_BG = '#f8f4f0'
+
 /**
  * Mode choice cards as displayed in the onboarding flow (web).
  * @returns Title + Manual card + Bank card (disabled) with responsive layout
@@ -14,7 +17,7 @@ const ModeChoiceContent = () => (
   <div
     style={{
       minHeight: '100vh',
-      backgroundColor: '#F8F4F0',
+      backgroundColor: SCREEN_BG,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
