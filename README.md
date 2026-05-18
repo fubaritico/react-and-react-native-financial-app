@@ -1,17 +1,17 @@
 # React & React Native Financial App
 
-A fullstack cross-platform **Personal Forecast Finance** application with an **Express API** backend (Supabase + OpenAPI), a shared design system, and two frontends — React Native (Expo) and React web (React Router) — managed with **pnpm workspaces** and **Turborepo**.
+A fullstack cross-platform **Personal Forecast Finance** application with an **Express 5 API** backend (Supabase + OpenAPI + pino logging), a shared design system, and two frontends — React Native (Expo SDK 54) and React web (React Router v7 SSR) — managed with **pnpm workspaces** and **Turborepo**. Internationalized (EN/FR), Supabase auth (email + TOTP 2FA + Google OAuth), and OWASP-hardened.
 
 ### Technologies
 
-React Native · Expo SDK 54 · Expo Router · React · ReactRouter v7 · TypeScript · pnpm · Turborepo · twrnc · Tailwind CSS · Style Dictionary · CVA · Supabase · Jotai · TanStack Table · TanStack Query · HeyAPI · zod · OpenApi · ExpressJS
+React Native · Expo SDK 54 · Expo Router · React · React Router v7 · TypeScript · pnpm · Turborepo · twrnc · Tailwind CSS · Style Dictionary · CVA · Supabase · Jotai · TanStack Table · TanStack Query · HeyAPI · Zod · OpenAPI · Express 5 · Prisma · i18next · pino · Vitest · MSW · Storybook
 
 ---
 
 ## Table of Contents
 
-- [About this project](#project-structure)
-- [Project Structure](#about-this-project)
+- [About this project](#about-this-project)
+- [Project Structure](#project-structure)
 - [Packages](#packages)
 - [Prerequisites](#prerequisites)
 - [Environment Setup (macOS)](#environment-setup-macos)
@@ -29,9 +29,11 @@ This project started from the perspective of a React developer asking: **"How do
 
 The answer is a shared design system (`@financial-app/ui`) where styles are shared between web and native component implementations via a file extension split (`.web.tsx` / `.native.tsx`). Styling uses Tailwind CSS on web and `twrnc` on native, with shared variant logic through CVA (class-variance-authority). This keeps both platforms visually aligned while respecting each renderer's idioms. A migration to NativeWind (Tailwind v4 + unified `className`) is planned once it reaches stable release.
 
-Three mobile apps coexist for comparison: `mobile` (bare React Native CLI), `mobile-expo` (Expo managed — the canonical app), and `mobile-expo-ejected` (ejected Expo). A `web` app uses React Router v7 in framework mode. An API server built on Express delivers the backend.
+Three mobile apps coexist for comparison: `mobile` (bare React Native CLI), `mobile-expo` (Expo managed — the canonical app), and `mobile-expo-ejected` (ejected Expo). A `web` app uses React Router v7 in framework mode (SSR). An Express 5 API server provides the backend with Supabase as the database and auth provider, OpenAPI documentation, structured logging (pino), and two-tier rate limiting.
 
-Business logic shared across all apps (auth, state, types, utils) lives in the `shared` package. Screen-specific compositions of design system primitives — configured DataTables, modal content, overview sections — live in the `features` package, keeping both the design system and the apps focused on their own concerns.
+Business logic shared across all apps (auth, state, types, utils, i18n) lives in the `shared` package. Screen-specific compositions of design system primitives — configured DataTables, modal content, overview sections — live in the `features` package, keeping both the design system and the apps focused on their own concerns.
+
+The app supports full internationalization (English/French) via i18next, Supabase authentication (email/password, TOTP 2FA, Google OAuth), and has been hardened against the OWASP Top 10 via automated multi-agent security audits.
 
 ### Real life example
 
@@ -75,6 +77,7 @@ react-and-react-native-financial-app/
 ├── apps/
 │   ├── mobile-expo/        # Expo SDK 54 (canonical mobile app)
 │   ├── web/                # React Router v7 + Vite (SSR)
+│   ├── api/                # Express 5 REST API (Supabase + OpenAPI)
 │   ├── storybook/          # Storybook — component browser (web + native)
 │   ├── mobile/             # Bare React Native CLI (learning reference)
 │   └── mobile-expo-ejected/ # Ejected Expo (learning reference)
@@ -84,7 +87,9 @@ react-and-react-native-financial-app/
 │   ├── icons/              # @financial-app/icons — cross-platform SVG icon library
 │   ├── ui/                 # @financial-app/ui — cross-platform design system
 │   ├── features/           # @financial-app/features — screen-specific composed blocks
-│   └── shared/             # @financial-app/shared — auth, types, utils, atoms
+│   ├── shared/             # @financial-app/shared — auth, types, utils, atoms, i18n
+│   ├── http-client/        # @financial-app/http-client — HeyAPI SDK + TanStack Query
+│   └── prisma/             # @financial-app/prisma — Prisma types (type generation only)
 └── scripts/                # Utility scripts (reset, rebuild, changelogs)
 ```
 
@@ -114,19 +119,23 @@ react-and-react-native-financial-app/
 | `@financial-app/icons` | `packages/icons/` | Active | Cross-platform SVG icon library — type-safe `<Icon name="..." />` component |
 | `@financial-app/ui` | `packages/ui/` | Active | Cross-platform design system (file extension split: `.native.tsx` / `.web.tsx`) |
 | `@financial-app/features` | `packages/features/` | Active | Screen-specific composed blocks (overview, transactions, budgets, pots) |
-| `@financial-app/shared` | `packages/shared/` | Active | Auth (Supabase), Jotai atoms, domain types, utils |
-| `@financial-app/http-client` | `packages/http-client/` | Planned | HeyAPI client consuming the Express REST API |
+| `@financial-app/shared` | `packages/shared/` | Active | Auth (Supabase), Jotai atoms, domain types, utils, i18n |
+| `@financial-app/http-client` | `packages/http-client/` | Active | HeyAPI SDK + TanStack Query options/mutations from OpenAPI spec |
+| `@financial-app/prisma` | `packages/prisma/` | Active | Prisma-generated TypeScript types (type generation only, no ORM runtime) |
 
 ### Dependency Graph
 
 ```
 @financial-app/tokens           -> depends on nothing
 @financial-app/icons            -> depends on nothing (react-native-svg is a peer dep)
+@financial-app/prisma           -> depends on nothing (Prisma types only)
 @financial-app/tailwind-config  -> @financial-app/tokens
 @financial-app/ui               -> @financial-app/tokens, @financial-app/tailwind-config, @financial-app/icons
-@financial-app/features         -> @financial-app/ui, @financial-app/tailwind-config
 @financial-app/shared           -> depends on nothing (pure TS, no renderer)
-apps/*  (mobile, web)           -> @financial-app/features, @financial-app/ui, @financial-app/shared, @financial-app/icons
+@financial-app/features         -> @financial-app/ui, @financial-app/shared, @financial-app/tailwind-config
+@financial-app/http-client      -> @financial-app/prisma (types)
+apps/api                        -> @financial-app/prisma (types)
+apps/* (mobile, web)            -> @financial-app/features, @financial-app/ui, @financial-app/shared, @financial-app/http-client, @financial-app/icons
 ```
 
 [Back to top](#table-of-contents)
@@ -251,7 +260,7 @@ All orchestrated commands use **Turborepo** for caching and correct dependency o
 
 ```bash
 pnpm install       # Install all dependencies
-pnpm build         # Build all packages (tokens → tailwind-config → ui → apps)
+pnpm build         # Build all packages (tokens → tailwind-config → icons → ui → features → apps)
 pnpm tokens        # Rebuild token outputs only
 pnpm icons         # Regenerate icon data from SVGs
 ```
@@ -261,7 +270,7 @@ pnpm icons         # Regenerate icon data from SVGs
 ```bash
 pnpm type-check    # TypeScript --noEmit across all packages
 pnpm lint          # ESLint across all packages
-pnpm test          # Jest tests across all packages
+pnpm test          # Tests across all packages (Vitest for API, Jest for apps)
 ```
 
 ### Daily development
@@ -295,6 +304,10 @@ pnpm storybook                 # Component browser (web + native stories)
 # API
 pnpm api:dev                   # Express dev server (http://localhost:3001)
                                # Swagger UI at http://localhost:3001/docs
+pnpm api:generate-client       # Regenerate HeyAPI SDK from OpenAPI spec
+
+# Production
+pnpm prod:server               # Build + start production API
 ```
 
 These commands assume a native binary is already installed on the simulator/emulator.
@@ -379,7 +392,7 @@ packages:
 Turborepo ensures tasks run in the correct dependency order with caching:
 
 ```
-pnpm build → tokens → tailwind-config → ui → shared → web (parallel where possible)
+pnpm build → tokens → tailwind-config → icons → ui → features → shared → apps (parallel where possible)
 ```
 
 Cached tasks replay instantly — a full `pnpm type-check` with warm cache runs in ~30ms.
@@ -405,8 +418,10 @@ pnpm add -w -D <package-name>
 UI components use a **file extension split** pattern — shared types + CVA variants with platform-specific implementations:
 
 ```
-packages/ui/src/components/Button/
+packages/ui/src/components/atoms/Button/
   Button.tsx           # Types + props interface only (no JSX)
+  Button.variants.ts   # CVA variant object (cross-platform safe classes)
+  Button.styles.ts     # shared + web + native class strings
   Button.native.tsx    # React Native implementation (twrnc)
   Button.web.tsx       # DOM/HTML implementation (Tailwind CSS + cn())
   index.ts             # Native barrel (Metro picks this)
@@ -695,24 +710,27 @@ Step-by-step operational guides for common workflows.
 
 Phased plans for the full project build. See [docs/plans/README.md](docs/plans/README.md) for the index.
 
-| Phase | Plan | Goal |
-|-------|------|------|
-| 0 | [Cleanup](docs/plans/phase-0-cleanup.md) | Canonical app decision, restructure to apps/ |
-| 1 | [Tokens](docs/plans/phase-1-tokens.md) | Style Dictionary token pipeline |
-| 2 | [Tailwind Config](docs/plans/phase-2-tailwind-config.md) | Shared Tailwind config package |
-| 3 | [Design System](docs/plans/phase-3-design-system.md) | Cross-platform file extension split + CVA |
-| 4 | [Web App](docs/plans/phase-4-web-app.md) | React Router + Vite web app scaffold |
-| 5 | [Shared](docs/plans/phase-5-shared.md) | Supabase, Jotai, TanStack Query shared package |
-| 7 | [Home Page](docs/plans/phase-7-home-page.md) | Turborepo + routing + mock data + Home page |
-| 8 | [API + HTTP Client](docs/plans/phase-8-api-and-http-client.md) | Express API (OpenAPI) + HeyAPI HTTP client |
+| Phase | Plan | Status | Goal |
+|-------|------|--------|------|
+| 0 | [Cleanup](docs/plans/phase-0-cleanup.md) | Done | Canonical app decision, restructure to apps/ |
+| 1 | [Tokens](docs/plans/phase-1-tokens.md) | Done | Style Dictionary token pipeline |
+| 2 | [Tailwind Config](docs/plans/phase-2-tailwind-config.md) | Done | Shared Tailwind config package |
+| 3 | [Design System](docs/plans/phase-3-design-system.md) | Done | Cross-platform file extension split + CVA |
+| 4 | [Web App](docs/plans/phase-4-web-app.md) | Done | React Router + Vite web app scaffold |
+| 5 | [Shared](docs/plans/phase-5-shared.md) | Done | Supabase, Jotai, TanStack Query shared package |
+| 6 | [Turborepo](docs/plans/phase-6-turborepo.md) | Done | Task pipeline, caching, dependency ordering |
+| 7 | [Home Page](docs/plans/phase-7-home-page.md) | Done | Routing + mock data + Home page + all screens |
+| 8A | [API + HTTP Client](docs/plans/phase-8A-api-and-http-client.md) | Done | Express 5 API (OpenAPI + Swagger) + HeyAPI HTTP client |
+| 8B | [GoCardless](docs/plans/phase-8B-gocardless-bank-connection.md) | Planned | Bank connection via GoCardless Bank Account Data API |
+| — | [Onboarding](docs/plans/onboarding-plan.md) | In progress | Auth flow, splash, walkthrough, initial balance |
 
 ### Additional Plans
 
-| Plan | Description |
-|------|-------------|
-| [Features Package](docs/plans/features-package.md) | Overview organisms move to features, ui keeps atomic DS |
-| [DataTable Implementation](docs/plans/datatable-implementation.md) | Full DataTable component build (cells, shell, pagination) |
-| [UI Components Track B](docs/plans/ui-components-track-b.md) | Auth + overview component pipeline |
+| Plan | Status | Description |
+|------|--------|-------------|
+| [Features Package](docs/plans/features-package.md) | Done | Overview organisms moved to features, ui keeps atomic DS |
+| [UI Components Track B](docs/plans/ui-components-track-b.md) | Done | Auth + overview component pipeline |
+| [Shared Mutation Hooks](docs/plans/shared-mutation-hooks.md) | Planned | Extract 11 hooks into @financial-app/features, eliminate duplication |
 
 ### App READMEs
 
