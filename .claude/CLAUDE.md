@@ -200,7 +200,31 @@ Read `@completed.md`
    - ~~A05-003: Missing security headers~~ ✅ — explicit helmet CSP + HSTS 2yr
    - ~~A05-005: No trust proxy~~ ✅ — trust proxy in production
    - ~~A05-006: Raw error.message leak~~ ✅ — logger.error() + generic responses, 18 occurrences across 6 routes, transactions PUT explicit destructuring
-   - **Next fixes**: remaining OWASP findings from audit report (deps alignment, CI, etc.)
+   - ~~A05-007: Android usesCleartextTraffic in prod~~ ✅ — app.config.ts conditional on APP_ENV
+   - ~~A06-004: Supabase JS version skew~~ ✅ — pnpm catalog alignment
+   - ~~A06-005: Tailwind bare "3" range~~ ✅ — pinned to ~3.4.19
+   - ~~A06-007: expo-secure-store version mismatch~~ ✅ — aligned to ~15.0.8
+   - ~~A06-008: No CI pipeline~~ ✅ — basic GitHub Actions (audit + type-check + lint + test)
+   - ~~A08-008: Zero-amount transactions~~ ✅ — .refine(v => v !== 0) on Create/Update schemas
+   - ~~A09-009: No request correlation ID~~ ✅ — pino-http genReqId (X-Request-Id or crypto.randomUUID)
+   - ~~A09-011: Auth error logging gated behind __DEV__~~ ✅ — removed gate
+   - ~~A03-001: Unbounded ILIKE search~~ ✅ — escape %, _, \ metacharacters
+   - ~~A02-006: ALLOWED_ORIGINS no prod guidance~~ ✅ — documented in .env.example
+   - ~~A03-007: No max length on string fields~~ ✅ — name:100, category:50, theme:30
+   - ~~A03-009: Unvalidated href in Navigation~~ ✅ — sanitize to path-relative only
+   - ~~A05-010: Auth error [AUTH] prefix~~ ✅ — removed internal prefix tags
+   - ~~A06-011: @testing-library/react-hooks deprecated~~ ✅ — removed (unused)
+   - ~~A06-012: conventional-changelog exact pin~~ ✅ — caret range
+   - ~~A07-009: Web inactivity timeout tab-hide only~~ ✅ — added idle input detection
+   - ~~A07-010: Login password no min length~~ ✅ — .min(8) on login schema
+   - ~~A08-010: No DB CHECK on amount != 0~~ ✅ — CHECK constraint added
+   - ~~A08-012: No DB CHECK on reference >= 0~~ ✅ — CHECK constraint added
+   - ~~A08-014: JSON.parse roundtrip drops Date~~ ✅ — structuredClone
+   - ~~A08-015: postinstall wildcard chmod~~ ✅ — explicit script paths
+   - ~~A08-016: commitlint via npx~~ ✅ — pnpm exec
+   - ~~A09-012: Auth state changes not logged~~ ✅ — console.warn in useAuthListener
+   - **Accepted/deferred**: A02-007 (getSession client-only), A04-012/A08-013 (RPC p_user_id — service role), A06-006 (Vite skew — Storybook v6 vs web v8), A05-008 (bundle ID — pre-deploy), A06-002/SEC-002 (bare RN AsyncStorage), A06-009 (babel caret ok), A06-010 (dotlottie pre-1.0), A09-007/A09-008 (pino already in place), A01-004 (PGRST116 already handled), A09-013/A09-014 (infra — alerting, log retention)
+   - **OWASP hardening complete** — all actionable findings resolved
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
@@ -224,6 +248,8 @@ Read `@completed.md`
 - Review ARCH-003b: factories read env vars directly instead of accepting params — trades testability for DX. Revisit if unit testing becomes painful.
 - Review SEC-002: bare RN uses plain AsyncStorage for tokens (unencrypted) — acceptable for learning reference, not published
 - Google client IDs empty in .env files — need Google Cloud Console setup before testing OAuth
+- A02-007: `getSession()` reads JWT locally without server revalidation — accepted. Client uses it for routing/UI only; all server-side auth uses `getUser()` (network call) in `requireAuth` middleware. Adding a round-trip to every `getSession()` would degrade UX for no security gain.
+- A04-012/A08-013: RPCs accept arbitrary `p_user_id` without `auth.uid()` check — accepted. API uses service role key (no `auth.uid()` context), identity enforced by `requireAuth` middleware passing `res.locals.userId`. RPCs are never called directly by clients.
 
 - iOS AuthCard: login card appears too small — needs Figma reference comparison (user will provide PNG)
 - iOS unknown black element at top of screen — needs screenshot to diagnose
