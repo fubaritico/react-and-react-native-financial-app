@@ -58,7 +58,7 @@
     "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules",
     "clean:build": "rm -rf packages/*/build packages/*/dist apps/*/dist",
     "reset": "./scripts/reset-project.sh",
-    "postinstall": "chmod +x scripts/*.sh",
+    "postinstall": "chmod +x scripts/rebuild-android.sh scripts/reset-project.sh scripts/update-changelogs.sh",
     "prepare": "husky"
   },
   "devDependencies": {
