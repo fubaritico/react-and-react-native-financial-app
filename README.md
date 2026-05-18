@@ -39,16 +39,22 @@ Let's say that you have an architecture combining a web app and a mobile aap sha
 
 New React developers with a moderate level in React Native could catch up and be proficient on basic tasks with no time. It's possible because except the typical React Native components necessary for mobile, the dev logic and patterns are the same as for React.
 
-Moreover, junior profiles could be onboarded thanks to the adapted skills for claude or any AI agent because they follow the standards describe in this site [here](https://agentskills.io/home). A dev can use them for any important step in their dev on an every bay basis: `new component`, `new package`, etc... 
+Moreover, junior profiles could be onboarded thanks to the adapted skills for claude or any AI agent because they follow the standards describe in this site [here](https://agentskills.io/home). A dev can use them for any important step in their dev on an every bay basis: `new component`, `new package`, etc...
+
+One other option for developers onboarding woud be to combine classic docs with generated RAG as a source of knowledge to ask IA agent anything about hte project , ex: [vite-mf-monorepo-rag
+](https://github.com/fubaritico/vite-mf-monorepo-rag)
+
+Note that such a RAG can be also used when coding.
+
 The typical flow or a feature would be:
-- `start-session` the agent recalls any old session start where it was at, 
-- the agent loads any necessary skills or on demand, 
-- coding, 
-- the agent automatically adds tests
-- the agent runs quality scripts (type-check, lint, tests)
-- the reviews its dev based on rules that the team can refine in time
-- the agent can commit and push
-- `end-session` the close the session keeping a short mention of each thing that has been done 
+- `start-session` the agent recalls any old session start where it was at.
+- The agent loads any necessary skills or on demand.
+- Coding is shared by the developer and the IA agent. Understanding and knowledge base would be lost otherwise. 
+- The agent automatically adds tests, the developer should challenge the IA agent on relevancy and edge cases.
+- The agent runs quality scripts (type-check, lint, tests).
+- The agent reviews the code based on rules that the team can refine in time.
+- The agent can commit and push.
+- `end-session` the close the session keeping a short mention of each thing that has been done.
 
 Because security is a fundamental issue, an IA agent can perform security audits and address any issue; this audit is based on an OWASP project.
 
