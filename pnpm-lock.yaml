@@ -24,6 +24,9 @@ catalogs:
     '@storybook/react-native-web-vite':
       specifier: ^10.3.5
       version: 10.3.5
+    '@supabase/supabase-js':
+      specifier: ^2.49.8
+      version: 2.104.0
     '@tanstack/react-query':
       specifier: ^5.80.7
       version: 5.99.2
@@ -243,7 +246,7 @@ importers:
         specifier: ^7.3.0
         version: 7.3.4(zod@3.25.76)
       '@supabase/supabase-js':
-        specifier: ^2.49.8
+        specifier: 'catalog:'
         version: 2.104.0
       cors:
         specifier: ^2.8.6
@@ -869,7 +872,7 @@ importers:
         specifier: ^0.6.1
         version: 0.6.1(@supabase/supabase-js@2.104.0)
       '@supabase/supabase-js':
-        specifier: ^2.49.4
+        specifier: 'catalog:'
         version: 2.104.0
       '@tanstack/react-query':
         specifier: 'catalog:'

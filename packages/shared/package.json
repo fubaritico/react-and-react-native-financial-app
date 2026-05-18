@@ -64,7 +64,7 @@
     "@financial-app/tokens": "workspace:^",
     "@internationalized/date": "catalog:",
     "@supabase/ssr": "^0.6.1",
-    "@supabase/supabase-js": "^2.49.4",
+    "@supabase/supabase-js": "catalog:",
     "@tanstack/react-query": "catalog:",
     "i18next": "catalog:",
     "jotai": "catalog:",
