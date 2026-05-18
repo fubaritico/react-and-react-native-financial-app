@@ -151,7 +151,7 @@ catalogs:
       specifier: ^10.3.5
       version: 10.3.5
     tailwindcss:
-      specifier: '3'
+      specifier: ~3.4.19
       version: 3.4.19
     turbo:
       specifier: ^2.9.6
