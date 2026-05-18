@@ -50,6 +50,7 @@ export const CreateTransactionSchema = z
       .number()
       .min(MIN_AMOUNT, { message: `validation.amount.min` })
       .max(MAX_AMOUNT, { message: `validation.amount.max` })
+      .refine((v) => v !== 0, { message: 'validation.amount.nonZero' })
       .openapi({
         example: -45.0,
         description: 'Negative = expense, positive = income',
@@ -71,6 +72,7 @@ export const UpdateTransactionSchema = z
       .number()
       .min(MIN_AMOUNT, { message: `validation.amount.min` })
       .max(MAX_AMOUNT, { message: `validation.amount.max` })
+      .refine((v) => v !== 0, { message: 'validation.amount.nonZero' })
       .optional()
       .openapi({
         example: -45.0,
