@@ -2,6 +2,8 @@ import { z } from '../lib/zod.js'
 
 import {
   MAX_AMOUNT,
+  MAX_CATEGORY_LENGTH,
+  MAX_NAME_LENGTH,
   MAX_PAGE_SIZE,
   MAX_SEARCH_LENGTH,
   MIN_AMOUNT,
@@ -43,8 +45,8 @@ export const TransactionListSchema = z
 
 export const CreateTransactionSchema = z
   .object({
-    name: z.string().min(1).openapi({ example: 'Urban Sports Club' }),
-    category: z.string().min(1).openapi({ example: 'Lifestyle' }),
+    name: z.string().min(1).max(MAX_NAME_LENGTH).openapi({ example: 'Urban Sports Club' }),
+    category: z.string().min(1).max(MAX_CATEGORY_LENGTH).openapi({ example: 'Lifestyle' }),
     date: timestamptz.openapi({ example: TIMESTAMPTZ_EXAMPLE }),
     amount: z
       .number()
@@ -64,9 +66,10 @@ export const UpdateTransactionSchema = z
     name: z
       .string()
       .min(1)
+      .max(MAX_NAME_LENGTH)
       .optional()
       .openapi({ example: 'Urban Sports Club' }),
-    category: z.string().min(1).optional().openapi({ example: 'Lifestyle' }),
+    category: z.string().min(1).max(MAX_CATEGORY_LENGTH).optional().openapi({ example: 'Lifestyle' }),
     date: timestamptz.optional().openapi({ example: TIMESTAMPTZ_EXAMPLE }),
     amount: z
       .number()
