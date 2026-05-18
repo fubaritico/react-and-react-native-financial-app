@@ -24,7 +24,11 @@ export function generateDocument() {
       description: 'REST API for the Personal Finance application',
     },
     servers: [
-      { url: 'http://localhost:3001', description: 'Local development' },
+      {
+        url: process.env.API_BASE_URL ?? 'http://localhost:3001',
+        description:
+          process.env.API_BASE_URL ? 'Configured server' : 'Local development',
+      },
     ],
   })
 }
