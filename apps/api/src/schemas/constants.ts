@@ -2,7 +2,10 @@ import { z } from '../lib/zod.js'
 
 /** Zod schema for UUID `:id` path params — shared across all entity routes */
 export const IdParamSchema = z.object({
-  id: z.string().uuid({ message: 'Invalid UUID' }),
+  id: z
+    .string()
+    .uuid({ message: 'Invalid UUID' })
+    .openapi({ example: '3fa85f64-5717-4562-b3fc-2c963f66afa6' }),
 })
 
 /** Minimum allowed financial amount (symmetric bound for transactions/balances) */
@@ -25,3 +28,6 @@ export const MAX_CATEGORY_LENGTH = 50
 
 /** Maximum characters for theme fields */
 export const MAX_THEME_LENGTH = 30
+
+/** PostgREST error code for `.single()` returning no rows */
+export const PGRST_NOT_FOUND = 'PGRST116'

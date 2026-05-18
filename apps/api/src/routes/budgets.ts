@@ -2,7 +2,6 @@ import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
-import { supabase } from '../lib/supabase.js'
 import { z } from '../lib/zod.js'
 import { requireAuth } from '../middleware/auth.js'
 import {
@@ -15,7 +14,13 @@ import {
   CreateBudgetSchema,
   UpdateBudgetSchema,
 } from '../schemas/budget.js'
-import { IdParamSchema } from '../schemas/constants.js'
+import { IdParamSchema, PGRST_NOT_FOUND } from '../schemas/constants.js'
+import {
+  createBudget,
+  deleteBudget,
+  getBudgetsWithSpent,
+  updateBudget,
+} from '../supabase/index.js'
 
 export const budgetsRouter = Router()
 budgetsRouter.use(requireAuth)
@@ -105,32 +110,29 @@ const BudgetQuerySchema = z.object({
 budgetsRouter.get('/', validateQuery(BudgetQuerySchema), async (req, res) => {
   const { month } = res.locals.query as { month: string }
 
-  const { data, error } = await supabase.rpc('get_budgets_with_spent', {
-    p_user_id: res.locals.userId,
-    p_month: month,
-  })
+  const result = await getBudgetsWithSpent(res.locals.userId as string, month)
 
-  if (error) {
-    logger.error({ err: error, path: req.path }, 'Database error')
+  if (result.error) {
+    logger.error({ err: result.error, path: req.path }, 'Database error')
     res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
-  res.json(data ?? [])
+  res.json(result.data)
 })
 
 budgetsRouter.post('/', validateBody(CreateBudgetSchema), async (req, res) => {
-  const { data, error } = await supabase
-    .from('budgets')
-    .insert({
-      ...(req.body as Record<string, unknown>),
-      user_id: res.locals.userId as string,
-    })
-    .select()
-    .single()
+  const body = req.body as {
+    category: string
+    maximum: number
+    theme: string
+    month: string
+  }
 
-  if (error) {
-    logger.error({ err: error, path: req.path }, 'Database error')
+  const result = await createBudget(res.locals.userId as string, body)
+
+  if (result.error) {
+    logger.error({ err: result.error, path: req.path }, 'Database error')
     res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
@@ -138,12 +140,12 @@ budgetsRouter.post('/', validateBody(CreateBudgetSchema), async (req, res) => {
   logger.info(
     {
       event: 'budget_created',
-      budgetId: (data as { id: string }).id,
+      budgetId: result.data.id,
       userId: res.locals.userId,
     },
     'Budget created'
   )
-  res.status(201).json(data)
+  res.status(201).json(result.data)
 })
 
 budgetsRouter.put(
@@ -151,21 +153,24 @@ budgetsRouter.put(
   validateParams(IdParamSchema),
   validateBody(UpdateBudgetSchema),
   async (req, res) => {
-    const { data, error } = await supabase
-      .from('budgets')
-      .update(req.body as Record<string, unknown>)
-      .eq('id', req.params.id)
-      .eq('user_id', res.locals.userId as string)
-      .select()
-      .single()
+    const body = req.body as {
+      category?: string
+      maximum?: number
+      theme?: string
+    }
 
-    if (error) {
-      // PGRST116 = .single() found 0 rows → resource not found (or wrong user)
-      if (error.code === 'PGRST116') {
+    const result = await updateBudget(
+      req.params.id as string,
+      res.locals.userId as string,
+      body
+    )
+
+    if (result.error) {
+      if (result.error.code === PGRST_NOT_FOUND) {
         res.status(404).json({ error: '[DATABASE] Not found' })
         return
       }
-      logger.error({ err: error, path: req.path }, 'Database error')
+      logger.error({ err: result.error, path: req.path }, 'Database error')
       res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
@@ -178,7 +183,7 @@ budgetsRouter.put(
       },
       'Budget updated'
     )
-    res.json(data)
+    res.json(result.data)
   }
 )
 
@@ -186,19 +191,18 @@ budgetsRouter.delete(
   '/:id',
   validateParams(IdParamSchema),
   async (req, res) => {
-    const { error, count } = await supabase
-      .from('budgets')
-      .delete({ count: 'exact' })
-      .eq('id', req.params.id)
-      .eq('user_id', res.locals.userId)
+    const result = await deleteBudget(
+      req.params.id as string,
+      res.locals.userId as string
+    )
 
-    if (error) {
-      logger.error({ err: error, path: req.path }, 'Database error')
+    if (result.error) {
+      logger.error({ err: result.error, path: req.path }, 'Database error')
       res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
-    if (count === 0) {
+    if (result.count === 0) {
       res.status(404).json({ error: '[DATABASE] Not found' })
       return
     }

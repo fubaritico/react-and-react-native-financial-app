@@ -2,22 +2,26 @@ import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
-import { supabase } from '../lib/supabase.js'
 import { z } from '../lib/zod.js'
 import { requireAuth } from '../middleware/auth.js'
 import { validateBody, validateParams } from '../middleware/validate.js'
-import { IdParamSchema } from '../schemas/constants.js'
+import { IdParamSchema, PGRST_NOT_FOUND } from '../schemas/constants.js'
 import {
   CreatePotSchema,
   PotAmountSchema,
   PotSchema,
   UpdatePotSchema,
 } from '../schemas/pot.js'
+import {
+  createPot,
+  deletePot,
+  getPots,
+  rpcUpdatePotTotal,
+  updatePot,
+} from '../supabase/index.js'
 
 export const potsRouter = Router()
 potsRouter.use(requireAuth)
-
-const POT_COLUMNS = 'id, name, target, total, theme'
 
 // --- OpenAPI registration ---
 
@@ -127,33 +131,24 @@ registry.registerPath({
 // --- Express handlers ---
 
 potsRouter.get('/', async (req, res) => {
-  const { data, error } = await supabase
-    .from('pots')
-    .select(POT_COLUMNS)
-    .eq('user_id', res.locals.userId)
+  const result = await getPots(res.locals.userId as string)
 
-  if (error) {
-    logger.error({ err: error, path: req.path }, 'Database error')
+  if (result.error) {
+    logger.error({ err: result.error, path: req.path }, 'Database error')
     res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- data can be null at runtime
-  res.json(data ?? [])
+  res.json(result.data)
 })
 
 potsRouter.post('/', validateBody(CreatePotSchema), async (req, res) => {
-  const { data, error } = await supabase
-    .from('pots')
-    .insert({
-      ...(req.body as Record<string, unknown>),
-      user_id: res.locals.userId as string,
-    })
-    .select(POT_COLUMNS)
-    .single()
+  const body = req.body as { name: string; target: number; theme: string }
 
-  if (error) {
-    logger.error({ err: error, path: req.path }, 'Database error')
+  const result = await createPot(res.locals.userId as string, body)
+
+  if (result.error) {
+    logger.error({ err: result.error, path: req.path }, 'Database error')
     res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
@@ -161,12 +156,12 @@ potsRouter.post('/', validateBody(CreatePotSchema), async (req, res) => {
   logger.info(
     {
       event: 'pot_created',
-      potId: (data as { id: string }).id,
+      potId: result.data.id,
       userId: res.locals.userId,
     },
     'Pot created'
   )
-  res.status(201).json(data)
+  res.status(201).json(result.data)
 })
 
 potsRouter.put(
@@ -174,20 +169,24 @@ potsRouter.put(
   validateParams(IdParamSchema),
   validateBody(UpdatePotSchema),
   async (req, res) => {
-    const { data, error } = await supabase
-      .from('pots')
-      .update(req.body as Record<string, unknown>)
-      .eq('id', req.params.id)
-      .eq('user_id', res.locals.userId as string)
-      .select(POT_COLUMNS)
-      .single()
+    const body = req.body as {
+      name?: string
+      target?: number
+      theme?: string
+    }
 
-    if (error) {
-      if (error.code === 'PGRST116') {
+    const result = await updatePot(
+      req.params.id as string,
+      res.locals.userId as string,
+      body
+    )
+
+    if (result.error) {
+      if (result.error.code === PGRST_NOT_FOUND) {
         res.status(404).json({ error: '[DATABASE] Not found' })
         return
       }
-      logger.error({ err: error, path: req.path }, 'Database error')
+      logger.error({ err: result.error, path: req.path }, 'Database error')
       res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
@@ -196,24 +195,23 @@ potsRouter.put(
       { event: 'pot_updated', potId: req.params.id, userId: res.locals.userId },
       'Pot updated'
     )
-    res.json(data)
+    res.json(result.data)
   }
 )
 
 potsRouter.delete('/:id', validateParams(IdParamSchema), async (req, res) => {
-  const { error, count } = await supabase
-    .from('pots')
-    .delete({ count: 'exact' })
-    .eq('id', req.params.id)
-    .eq('user_id', res.locals.userId)
+  const result = await deletePot(
+    req.params.id as string,
+    res.locals.userId as string
+  )
 
-  if (error) {
-    logger.error({ err: error, path: req.path }, 'Database error')
+  if (result.error) {
+    logger.error({ err: result.error, path: req.path }, 'Database error')
     res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
-  if (count === 0) {
+  if (result.count === 0) {
     res.status(404).json({ error: '[DATABASE] Not found' })
     return
   }
@@ -229,37 +227,29 @@ potsRouter.delete('/:id', validateParams(IdParamSchema), async (req, res) => {
  * Atomically update pot total by a delta (positive = add, negative = withdraw).
  * Uses a single UPDATE ... WHERE total + delta >= 0 — no TOCTOU race condition.
  * CWE-362 fix: the check and write happen in one atomic SQL statement.
+ * @param potId - Pot UUID
+ * @param userId - Authenticated user UUID
+ * @param delta - Amount to add (positive) or withdraw (negative)
+ * @param res - Express Response object used to send the HTTP response
+ * @returns Sends HTTP response directly — no return value
  */
-async function updatePotTotal(
+async function handlePotTotal(
   potId: string,
   userId: string,
   delta: number,
   res: import('express').Response
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- supabase.rpc returns untyped data
-  const { data, error } = await supabase.rpc('update_pot_total', {
-    p_pot_id: potId,
-    p_user_id: userId,
-    p_delta: delta,
-  })
+  const result = await rpcUpdatePotTotal(potId, userId, delta)
 
-  if (error) {
-    logger.error({ err: error, potId, userId }, 'Database error')
+  if (result.error) {
+    logger.error({ err: result.error, potId, userId }, 'Database error')
     res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
-  const rows = (data ?? []) as {
-    id: string
-    name: string
-    target: number
-    total: number
-    theme: string
-  }[]
-
-  if (rows.length === 0) {
+  if (result.data.length === 0) {
     logger.warn(
-      { event: 'pot_money_rejected', potId, userId, delta },
+      { event: 'pot_money_rejected', potId, userId },
       'Pot not found or insufficient funds'
     )
     res
@@ -268,9 +258,9 @@ async function updatePotTotal(
     return
   }
 
-  const pot = rows[0]
+  const pot = result.data[0]
   logger.info(
-    { event: 'pot_money_movement', potId, userId, delta, newTotal: pot.total },
+    { event: 'pot_money_movement', potId, userId },
     'Pot balance updated'
   )
   res.json(pot)
@@ -284,7 +274,7 @@ potsRouter.post(
     const id = req.params.id as string
     const userId = res.locals.userId as string
     const { amount } = req.body as { amount: number }
-    await updatePotTotal(id, userId, amount, res)
+    await handlePotTotal(id, userId, amount, res)
   }
 )
 
@@ -296,6 +286,6 @@ potsRouter.post(
     const id = req.params.id as string
     const userId = res.locals.userId as string
     const { amount } = req.body as { amount: number }
-    await updatePotTotal(id, userId, -amount, res)
+    await handlePotTotal(id, userId, -amount, res)
   }
 )

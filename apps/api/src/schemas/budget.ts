@@ -25,13 +25,21 @@ export const BudgetSchema = z
 
 export const CreateBudgetSchema = z
   .object({
-    category: z.string().min(1).max(MAX_CATEGORY_LENGTH).openapi({ example: 'Dining Out' }),
+    category: z
+      .string()
+      .min(1)
+      .max(MAX_CATEGORY_LENGTH)
+      .openapi({ example: 'Dining Out' }),
     maximum: z
       .number()
       .positive({ message: 'validation.amount.positive' })
       .max(MAX_AMOUNT, { message: 'validation.amount.max' })
       .openapi({ example: 75.0 }),
-    theme: z.string().min(1).max(MAX_THEME_LENGTH).openapi({ example: 'yellow' }),
+    theme: z
+      .string()
+      .min(1)
+      .max(MAX_THEME_LENGTH)
+      .openapi({ example: 'yellow' }),
     month: z
       .string()
       .regex(/^\d{4}-\d{2}$/, 'Must be YYYY-MM format')
@@ -53,6 +61,11 @@ export const UpdateBudgetSchema = z
       .max(MAX_AMOUNT, { message: 'validation.amount.max' })
       .optional()
       .openapi({ example: 100.0 }),
-    theme: z.string().min(1).max(MAX_THEME_LENGTH).optional().openapi({ example: 'green' }),
+    theme: z
+      .string()
+      .min(1)
+      .max(MAX_THEME_LENGTH)
+      .optional()
+      .openapi({ example: 'green' }),
   })
   .openapi('UpdateBudgetRequest')

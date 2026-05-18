@@ -2,11 +2,10 @@ import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
-import { supabase } from '../lib/supabase.js'
-import { z } from '../lib/zod.js'
 import { requireAuth } from '../middleware/auth.js'
 import { validateQuery } from '../middleware/validate.js'
-import { BalanceSchema } from '../schemas/balance.js'
+import { BalanceQuerySchema, BalanceSchema } from '../schemas/balance.js'
+import { getBalance } from '../supabase/index.js'
 
 export const balanceRouter = Router()
 balanceRouter.use(requireAuth)
@@ -19,16 +18,7 @@ registry.registerPath({
   tags: ['Balance'],
   security: [{ BearerAuth: [] }],
   request: {
-    query: z.object({
-      month: z
-        .string()
-        .regex(/^\d{4}-\d{2}$/)
-        .optional()
-        .openapi({
-          example: '2025-08',
-          description: 'Filter by month (YYYY-MM). Omit for all-time.',
-        }),
-    }),
+    query: BalanceQuerySchema,
   },
   responses: {
     200: {
@@ -40,36 +30,16 @@ registry.registerPath({
 
 // --- Express handler ---
 
-const BalanceQuerySchema = z.object({
-  month: z
-    .string()
-    .regex(/^\d{4}-\d{2}$/)
-    .optional(),
-})
-
 balanceRouter.get('/', validateQuery(BalanceQuerySchema), async (req, res) => {
   const { month = null } = (res.locals.query ?? {}) as { month?: string | null }
 
-  const { data, error } = await supabase.rpc('get_balance', {
-    p_user_id: res.locals.userId,
-    p_month: month,
-  })
+  const result = await getBalance(res.locals.userId as string, month ?? null)
 
-  if (error) {
-    logger.error({ err: error, path: req.path }, 'Database error')
+  if (result.error) {
+    logger.error({ err: result.error, path: req.path }, 'Database error')
     res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
-  const rows = (data ?? []) as {
-    current: number
-    income: number
-    expenses: number
-  }[]
-  if (rows.length === 0) {
-    res.json({ current: 0, income: 0, expenses: 0 })
-    return
-  }
-
-  res.json(rows[0])
+  res.json(result.data)
 })

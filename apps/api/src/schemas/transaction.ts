@@ -9,10 +9,13 @@ import {
   MIN_AMOUNT,
 } from './constants.js'
 
-/** Supabase/Postgres timestamptz format: `YYYY-MM-DD HH:mm:ss+00` */
+/** Regex matching the Supabase/Postgres timestamptz format: `YYYY-MM-DD HH:mm:ss+00` */
 const TIMESTAMPTZ_REGEX = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\+00$/
+
+/** Example timestamptz string used in OpenAPI schema examples. */
 const TIMESTAMPTZ_EXAMPLE = '2024-08-19 14:23:11+00'
 
+/** Reusable Zod schema that validates a Supabase/Postgres timestamptz string. */
 const timestamptz = z
   .string()
   .regex(TIMESTAMPTZ_REGEX, 'Expected format: YYYY-MM-DD HH:mm:ss+00')
@@ -45,8 +48,16 @@ export const TransactionListSchema = z
 
 export const CreateTransactionSchema = z
   .object({
-    name: z.string().min(1).max(MAX_NAME_LENGTH).openapi({ example: 'Urban Sports Club' }),
-    category: z.string().min(1).max(MAX_CATEGORY_LENGTH).openapi({ example: 'Lifestyle' }),
+    name: z
+      .string()
+      .min(1)
+      .max(MAX_NAME_LENGTH)
+      .openapi({ example: 'Urban Sports Club' }),
+    category: z
+      .string()
+      .min(1)
+      .max(MAX_CATEGORY_LENGTH)
+      .openapi({ example: 'Lifestyle' }),
     date: timestamptz.openapi({ example: TIMESTAMPTZ_EXAMPLE }),
     amount: z
       .number()
@@ -69,7 +80,12 @@ export const UpdateTransactionSchema = z
       .max(MAX_NAME_LENGTH)
       .optional()
       .openapi({ example: 'Urban Sports Club' }),
-    category: z.string().min(1).max(MAX_CATEGORY_LENGTH).optional().openapi({ example: 'Lifestyle' }),
+    category: z
+      .string()
+      .min(1)
+      .max(MAX_CATEGORY_LENGTH)
+      .optional()
+      .openapi({ example: 'Lifestyle' }),
     date: timestamptz.optional().openapi({ example: TIMESTAMPTZ_EXAMPLE }),
     amount: z
       .number()
@@ -86,11 +102,31 @@ export const UpdateTransactionSchema = z
   .openapi('UpdateTransaction')
 
 export const TransactionQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(MAX_PAGE_SIZE).default(10),
-  category: z.string().optional(),
-  search: z.string().max(MAX_SEARCH_LENGTH).optional(),
+  page: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .default(1)
+    .openapi({ example: 1, description: 'Page number (1-based)' }),
+  limit: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(MAX_PAGE_SIZE)
+    .default(10)
+    .openapi({ example: 10, description: 'Items per page' }),
+  category: z
+    .string()
+    .max(MAX_CATEGORY_LENGTH)
+    .optional()
+    .openapi({ example: 'General', description: 'Filter by category' }),
+  search: z
+    .string()
+    .max(MAX_SEARCH_LENGTH)
+    .optional()
+    .openapi({ example: 'Emma', description: 'Search by name (ILIKE)' }),
   sort: z
     .enum(['latest', 'oldest', 'a-z', 'z-a', 'highest', 'lowest'])
-    .default('latest'),
+    .default('latest')
+    .openapi({ example: 'latest', description: 'Sort order' }),
 })

@@ -12,7 +12,10 @@ registry.registerComponent('securitySchemes', 'BearerAuth', {
   description: 'Supabase JWT access token',
 })
 
-/** Generates a complete OpenAPI 3.1 document from the registry. */
+/**
+ * Generates a complete OpenAPI 3.1 document from the registry.
+ * @returns The full OpenAPI 3.1 specification object ready for Swagger UI
+ */
 export function generateDocument() {
   const generator = new OpenApiGeneratorV31(registry.definitions)
 
@@ -26,8 +29,9 @@ export function generateDocument() {
     servers: [
       {
         url: process.env.API_BASE_URL ?? 'http://localhost:3001',
-        description:
-          process.env.API_BASE_URL ? 'Configured server' : 'Local development',
+        description: process.env.API_BASE_URL
+          ? 'Configured server'
+          : 'Local development',
       },
     ],
   })

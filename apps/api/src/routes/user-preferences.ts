@@ -2,15 +2,13 @@ import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
-import { supabase } from '../lib/supabase.js'
 import { requireAuth } from '../middleware/auth.js'
 import { validateBody } from '../middleware/validate.js'
 import {
-  InitialBalanceSchema,
-  SetInitialBalanceResponseSchema,
   UpdateUserPreferencesSchema,
   UserPreferencesSchema,
 } from '../schemas/user-preferences.js'
+import { getOrCreatePreferences, upsertPreferences } from '../supabase/index.js'
 
 export const userPreferencesRouter = Router()
 userPreferencesRouter.use(requireAuth)
@@ -48,95 +46,18 @@ registry.registerPath({
   },
 })
 
-registry.registerPath({
-  method: 'post',
-  path: '/users/me/initial-balance',
-  tags: ['User Preferences'],
-  security: [{ BearerAuth: [] }],
-  request: {
-    body: {
-      content: { 'application/json': { schema: InitialBalanceSchema } },
-    },
-  },
-  responses: {
-    200: {
-      description: 'Balance set and initial_balance_set flipped to true',
-      content: {
-        'application/json': {
-          schema: SetInitialBalanceResponseSchema,
-        },
-      },
-    },
-    409: { description: 'Initial balance already set' },
-  },
-})
-
-// --- Helpers ---
-
-/**
- * Ensures a user_preferences row exists (creates with defaults if missing).
- * Note: upsert uses { user_id } in payload + onConflict constraint — explicit .eq()
- * is unnecessary because the upsert target IS the user_id column itself.
- */
-async function ensurePreferencesRow(userId: string) {
-  const { error } = await supabase
-    .from('user_preferences')
-    .upsert(
-      { user_id: userId },
-      { onConflict: 'user_id', ignoreDuplicates: true }
-    )
-  return { error }
-}
-
-/**
- * Sets the initial balance reference and flips `initial_balance_set` in preferences.
- * @param userId - Authenticated user ID
- * @param amount - Starting balance amount
- */
-async function setInitialBalance(userId: string, amount: number) {
-  const { error: balanceError } = await supabase
-    .from('balances')
-    .upsert({ user_id: userId, reference: amount }, { onConflict: 'user_id' })
-
-  if (balanceError) return { error: balanceError }
-
-  const { error: ensureError } = await ensurePreferencesRow(userId)
-  if (ensureError) return { error: ensureError }
-
-  const { error: prefError } = await supabase
-    .from('user_preferences')
-    .update({ initial_balance_set: true })
-    .eq('user_id', userId)
-
-  if (prefError) return { error: prefError }
-  return { error: null }
-}
-
 // --- Express handlers ---
 
 userPreferencesRouter.get('/', async (req, res) => {
-  const userId = res.locals.userId as string
+  const result = await getOrCreatePreferences(res.locals.userId as string)
 
-  const { error: ensureError } = await ensurePreferencesRow(userId)
-  if (ensureError) {
-    logger.error({ err: ensureError }, 'Database error')
+  if (result.error) {
+    logger.error({ err: result.error, path: req.path }, 'Database error')
     res.status(500).json({ error: '[DATABASE] Internal server error' })
     return
   }
 
-  const { data, error } = await supabase
-    .from('user_preferences')
-    .select()
-    .eq('user_id', userId)
-    .single()
-
-  if (error) {
-    logger.error({ err: error, path: req.path }, 'Database error')
-    res.status(500).json({ error: '[DATABASE] Internal server error' })
-    return
-  }
-
-  res.json(data)
+  res.json(result.data)
 })
 
 userPreferencesRouter.put(
@@ -149,22 +70,10 @@ userPreferencesRouter.put(
       has_seen_onboarding?: boolean
     }
 
-    const { error: ensureError } = await ensurePreferencesRow(userId)
-    if (ensureError) {
-      logger.error({ err: ensureError }, 'Database error')
-      res.status(500).json({ error: '[DATABASE] Internal server error' })
-      return
-    }
+    const result = await upsertPreferences(userId, body)
 
-    const { data, error } = await supabase
-      .from('user_preferences')
-      .update(body)
-      .eq('user_id', userId)
-      .select()
-      .single()
-
-    if (error) {
-      logger.error({ err: error, path: req.path }, 'Database error')
+    if (result.error) {
+      logger.error({ err: result.error, path: req.path }, 'Database error')
       res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
@@ -173,58 +82,6 @@ userPreferencesRouter.put(
       { event: 'preferences_updated', userId, fields: Object.keys(body) },
       'User preferences updated'
     )
-    res.json(data)
-  }
-)
-
-// --- Initial balance (mounted separately at /users/me/initial-balance) ---
-
-export const initialBalanceRouter = Router()
-initialBalanceRouter.use(requireAuth)
-
-initialBalanceRouter.post(
-  '/',
-  validateBody(InitialBalanceSchema),
-  async (req, res) => {
-    const userId = res.locals.userId as string
-    const { amount } = req.body as { amount: number }
-
-    // Idempotency guard — prevent overwriting a previously set balance (A04-007)
-    const { error: ensureError } = await ensurePreferencesRow(userId)
-    if (ensureError) {
-      logger.error({ err: ensureError }, 'Database error')
-      res.status(500).json({ error: '[DATABASE] Internal server error' })
-      return
-    }
-
-    const { data: prefs, error: prefsError } = await supabase
-      .from('user_preferences')
-      .select('initial_balance_set')
-      .eq('user_id', userId)
-      .single()
-
-    if (prefsError) {
-      logger.error({ err: prefsError }, 'Database error')
-      res.status(500).json({ error: '[DATABASE] Internal server error' })
-      return
-    }
-
-    if ((prefs as { initial_balance_set: boolean }).initial_balance_set) {
-      res.status(409).json({ error: 'Initial balance already set' })
-      return
-    }
-
-    const { error } = await setInitialBalance(userId, amount)
-    if (error) {
-      logger.error({ err: error, path: req.path }, 'Database error')
-      res.status(500).json({ error: '[DATABASE] Internal server error' })
-      return
-    }
-
-    logger.info(
-      { event: 'initial_balance_set', userId, amount },
-      'Initial balance configured'
-    )
-    res.json({ reference: amount, initial_balance_set: true })
+    res.json(result.data)
   }
 )

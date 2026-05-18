@@ -9,13 +9,11 @@ import { logger } from './lib/logger.js'
 import { generateDocument } from './lib/openapi.js'
 import { balanceRouter } from './routes/balance.js'
 import { budgetsRouter } from './routes/budgets.js'
+import { initialBalanceRouter } from './routes/initial-balance.js'
 import { potsRouter } from './routes/pots.js'
 import { recurringBillsRouter } from './routes/recurring-bills.js'
 import { transactionsRouter } from './routes/transactions.js'
-import {
-  initialBalanceRouter,
-  userPreferencesRouter,
-} from './routes/user-preferences.js'
+import { userPreferencesRouter } from './routes/user-preferences.js'
 
 /** Creates and configures the Express app (without listening). */
 export function createApp() {

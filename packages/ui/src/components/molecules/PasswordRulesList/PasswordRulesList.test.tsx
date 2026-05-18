@@ -23,12 +23,8 @@ describe('PasswordRulesList', () => {
   it('renders all rule labels', () => {
     render(<PasswordRulesList rules={PRISTINE_RULES} />)
     expect(screen.getByText('At least 16 characters')).toBeTruthy()
-    expect(
-      screen.getByText('At least one uppercase letter')
-    ).toBeTruthy()
-    expect(
-      screen.getByText('At least one lowercase letter')
-    ).toBeTruthy()
+    expect(screen.getByText('At least one uppercase letter')).toBeTruthy()
+    expect(screen.getByText('At least one lowercase letter')).toBeTruthy()
   })
 
   it('renders no icons for pristine rules', () => {

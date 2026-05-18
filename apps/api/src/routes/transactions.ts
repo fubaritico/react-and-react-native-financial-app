@@ -2,14 +2,13 @@ import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'
 import { registry } from '../lib/openapi.js'
-import { supabase } from '../lib/supabase.js'
 import { requireAuth } from '../middleware/auth.js'
 import {
   validateBody,
   validateParams,
   validateQuery,
 } from '../middleware/validate.js'
-import { IdParamSchema } from '../schemas/constants.js'
+import { IdParamSchema, PGRST_NOT_FOUND } from '../schemas/constants.js'
 import {
   CreateTransactionSchema,
   TransactionListSchema,
@@ -17,6 +16,12 @@ import {
   TransactionSchema,
   UpdateTransactionSchema,
 } from '../schemas/transaction.js'
+import {
+  createTransaction,
+  deleteTransaction,
+  listTransactions,
+  updateTransaction,
+} from '../supabase/index.js'
 
 export const transactionsRouter = Router()
 transactionsRouter.use(requireAuth)
@@ -93,17 +98,7 @@ registry.registerPath({
   },
 })
 
-// --- Express handler ---
-
-/** Sort column + direction mapping from query param. */
-const SORT_MAP: Record<string, { column: string; ascending: boolean }> = {
-  latest: { column: 'date', ascending: false },
-  oldest: { column: 'date', ascending: true },
-  'a-z': { column: 'name', ascending: true },
-  'z-a': { column: 'name', ascending: false },
-  highest: { column: 'amount', ascending: false },
-  lowest: { column: 'amount', ascending: true },
-}
+// --- Express handlers ---
 
 transactionsRouter.get(
   '/',
@@ -123,46 +118,25 @@ transactionsRouter.get(
       sort?: string
     }
 
-    const from = (page - 1) * limit
-    const to = from + limit - 1
+    const result = await listTransactions(res.locals.userId as string, {
+      page,
+      limit,
+      category,
+      search,
+      sort,
+    })
 
-    let query = supabase
-      .from('transactions')
-      .select('id, avatar, name, category, date, amount, recurring', {
-        count: 'exact',
-      })
-      .eq('user_id', res.locals.userId)
-
-    if (category) {
-      query = query.eq('category', category)
-    }
-
-    if (search) {
-      const escaped = search.replace(/[%_\\]/g, '\\$&')
-      query = query.ilike('name', `%${escaped}%`)
-    }
-
-    const sortConfig = SORT_MAP[sort] ?? SORT_MAP.latest
-    query = query.order(sortConfig.column, { ascending: sortConfig.ascending })
-    query = query.range(from, to)
-
-    const { data, count, error } = await query
-
-    if (error) {
-      logger.error({ err: error, path: req.path }, 'Database error')
+    if (result.error) {
+      logger.error({ err: result.error, path: req.path }, 'Database error')
       res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
-    const total = count ?? 0
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- data can be null at runtime
-    const rows = data ?? []
-
     res.json({
-      data: rows,
+      data: result.data,
       page,
-      totalPages: Math.ceil(total / limit),
-      total,
+      totalPages: Math.ceil(result.count / limit),
+      total: result.count,
     })
   }
 )
@@ -171,7 +145,7 @@ transactionsRouter.post(
   '/',
   validateBody(CreateTransactionSchema),
   async (req, res) => {
-    const { name, category, date, amount, recurring } = req.body as {
+    const body = req.body as {
       name: string
       category: string
       date: string
@@ -179,23 +153,10 @@ transactionsRouter.post(
       recurring: boolean
     }
 
-    const { data, error } = await supabase
-      .from('transactions')
-      .insert({
-        user_id: res.locals.userId,
-        name,
-        category,
-        date,
-        amount,
-        recurring,
-        avatar: '',
-        source: 'manual',
-      })
-      .select()
-      .single()
+    const result = await createTransaction(res.locals.userId as string, body)
 
-    if (error) {
-      logger.error({ err: error, path: req.path }, 'Database error')
+    if (result.error) {
+      logger.error({ err: result.error, path: req.path }, 'Database error')
       res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
@@ -203,13 +164,12 @@ transactionsRouter.post(
     logger.info(
       {
         event: 'transaction_created',
-        transactionId: (data as { id: string }).id,
+        transactionId: result.data.id,
         userId: res.locals.userId,
-        amount,
       },
       'Transaction created'
     )
-    res.status(201).json(data)
+    res.status(201).json(result.data)
   }
 )
 
@@ -218,7 +178,7 @@ transactionsRouter.put(
   validateParams(IdParamSchema),
   validateBody(UpdateTransactionSchema),
   async (req, res) => {
-    const { name, category, date, amount, recurring } = req.body as {
+    const body = req.body as {
       name?: string
       category?: string
       date?: string
@@ -226,26 +186,18 @@ transactionsRouter.put(
       recurring?: boolean
     }
 
-    const { data, error } = await supabase
-      .from('transactions')
-      .update({
-        ...(name !== undefined && { name }),
-        ...(category !== undefined && { category }),
-        ...(date !== undefined && { date }),
-        ...(amount !== undefined && { amount }),
-        ...(recurring !== undefined && { recurring }),
-      })
-      .eq('id', req.params.id)
-      .eq('user_id', res.locals.userId)
-      .select()
-      .single()
+    const result = await updateTransaction(
+      req.params.id as string,
+      res.locals.userId as string,
+      body
+    )
 
-    if (error) {
-      if (error.code === 'PGRST116') {
+    if (result.error) {
+      if (result.error.code === PGRST_NOT_FOUND) {
         res.status(404).json({ error: '[DATABASE] Not found' })
         return
       }
-      logger.error({ err: error, path: req.path }, 'Database error')
+      logger.error({ err: result.error, path: req.path }, 'Database error')
       res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
@@ -258,7 +210,7 @@ transactionsRouter.put(
       },
       'Transaction updated'
     )
-    res.json(data)
+    res.json(result.data)
   }
 )
 
@@ -266,19 +218,18 @@ transactionsRouter.delete(
   '/:id',
   validateParams(IdParamSchema),
   async (req, res) => {
-    const { error, count } = await supabase
-      .from('transactions')
-      .delete({ count: 'exact' })
-      .eq('id', req.params.id)
-      .eq('user_id', res.locals.userId)
+    const result = await deleteTransaction(
+      req.params.id as string,
+      res.locals.userId as string
+    )
 
-    if (error) {
-      logger.error({ err: error, path: req.path }, 'Database error')
+    if (result.error) {
+      logger.error({ err: result.error, path: req.path }, 'Database error')
       res.status(500).json({ error: '[DATABASE] Internal server error' })
       return
     }
 
-    if (count === 0) {
+    if (result.count === 0) {
       res.status(404).json({ error: '[DATABASE] Not found' })
       return
     }
