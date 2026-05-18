@@ -52,6 +52,11 @@ export { useTotpEnroll } from './hooks/useTotpEnroll'
 export type { IUseTotpEnrollReturn } from './hooks/useTotpEnroll'
 export { useTotpChallenge } from './hooks/useTotpChallenge'
 export type { IUseTotpChallengeReturn } from './hooks/useTotpChallenge'
+export { usePasswordRules } from './hooks/usePasswordRules'
+export type {
+  IPasswordRuleResult,
+  PasswordRuleState,
+} from './hooks/usePasswordRules'
 
 // Query
 export { createAppQueryClient } from './query'

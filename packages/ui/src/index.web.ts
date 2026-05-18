@@ -67,6 +67,13 @@ export type { ITextInputProps } from './components/molecules/TextInput/TextInput
 export { PasswordInput } from './components/molecules/PasswordInput/index.web'
 export type { IPasswordInputProps } from './components/molecules/PasswordInput/PasswordInput.tsx'
 
+export { PasswordRulesList } from './components/molecules/PasswordRulesList/index.web'
+export type {
+  IPasswordRulesListProps,
+  IPasswordRule,
+  PasswordRuleState,
+} from './components/molecules/PasswordRulesList/PasswordRulesList.tsx'
+
 export { SectionLink } from './components/molecules/SectionLink/index.web'
 export type { ISectionLinkProps } from './components/molecules/SectionLink/SectionLink.tsx'
 

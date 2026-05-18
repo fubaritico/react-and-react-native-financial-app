@@ -91,10 +91,12 @@ export {
   TotpChallengeScreen,
   VerifyEmailScreen,
   AccountActivatedScreen,
+  SignupForm,
 } from './auth'
 export type {
   ITotpEnrollScreenProps,
   ITotpChallengeScreenProps,
   IVerifyEmailScreenProps,
   IAccountActivatedScreenProps,
+  ISignupFormProps,
 } from './auth'

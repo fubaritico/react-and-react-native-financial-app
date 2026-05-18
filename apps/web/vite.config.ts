@@ -27,6 +27,12 @@ export default defineConfig({
     ],
   },
 
+  server: {
+    watch: {
+      ignored: ['!**/node_modules/@financial-app/**'],
+    },
+  },
+
   resolve: {
     /**
      * `.web.*` before `.*` — the web equivalent of Metro's `.native.*` resolution.

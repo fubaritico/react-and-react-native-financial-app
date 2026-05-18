@@ -63,7 +63,7 @@
     "email": "Adresse e-mail",
     "emailPlaceholder": "vous@exemple.com",
     "password": "Mot de passe",
-    "passwordPlaceholder": "Min. 6 caractères",
+    "passwordPlaceholder": "Min. 16 caractères",
     "name": "Nom",
     "namePlaceholder": "Votre nom complet",
     "loginButton": "Se connecter",
@@ -121,10 +121,18 @@
       "emailRequired": "L'e-mail est requis",
       "emailInvalid": "Adresse e-mail invalide",
       "passwordRequired": "Le mot de passe est requis",
-      "passwordMin": "8 caractères minimum",
+      "passwordMin": "16 caractères minimum",
       "nameRequired": "Le nom est requis",
       "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
       "passwordMismatch": "Les mots de passe ne correspondent pas"
+    },
+    "passwordRules": {
+      "minLength": "Au moins 16 caractères",
+      "uppercase": "Au moins une lettre majuscule",
+      "lowercase": "Au moins une lettre minuscule",
+      "digit": "Au moins un chiffre",
+      "special": "Au moins un caractère spécial ($@&+?!/-)",
+      "match": "Les mots de passe doivent correspondre"
     },
     "sessionExpired": {
       "title": "Session expirée",

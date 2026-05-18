@@ -6,5 +6,5 @@ export const web = {
   focusRing:
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',
   /** Cursor override for disabled state */
-  disabled: 'cursor-not-allowed',
+  disabled: 'cursor-not-allowed hover:opacity-50',
 } as const

@@ -9,3 +9,6 @@ export type { IVerifyEmailScreenProps } from './VerifyEmailScreen/VerifyEmailScr
 
 export { AccountActivatedScreen } from './AccountActivatedScreen/AccountActivatedScreen.native'
 export type { IAccountActivatedScreenProps } from './AccountActivatedScreen/AccountActivatedScreen'
+
+export { SignupForm } from './SignupForm/SignupForm.native'
+export type { ISignupFormProps } from './SignupForm/SignupForm'

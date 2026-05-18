@@ -63,7 +63,7 @@
     "email": "Email Address",
     "emailPlaceholder": "you@example.com",
     "password": "Password",
-    "passwordPlaceholder": "Min. 6 characters",
+    "passwordPlaceholder": "Min. 16 characters",
     "name": "Name",
     "namePlaceholder": "Your full name",
     "loginButton": "Login",
@@ -121,10 +121,18 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email address",
       "passwordRequired": "Password is required",
-      "passwordMin": "Minimum 8 characters",
+      "passwordMin": "Minimum 16 characters",
       "nameRequired": "Name is required",
       "confirmPasswordRequired": "Please confirm your password",
       "passwordMismatch": "Passwords do not match"
+    },
+    "passwordRules": {
+      "minLength": "At least 16 characters",
+      "uppercase": "At least one uppercase letter",
+      "lowercase": "At least one lowercase letter",
+      "digit": "At least one digit",
+      "special": "At least one special character ($@&+?!/-)",
+      "match": "Passwords must match"
     },
     "sessionExpired": {
       "title": "Session expired",

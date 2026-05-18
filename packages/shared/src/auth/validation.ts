@@ -11,7 +11,7 @@ export const loginSchema = z.object({
   password: z
     .string()
     .min(1, 'auth.validation.passwordRequired')
-    .min(8, 'auth.validation.passwordMin'),
+    .min(16, 'auth.validation.passwordMin'),
 })
 
 /** Zod schema for signup form validation */
@@ -22,10 +22,7 @@ export const signupSchema = z
       .string()
       .min(1, 'auth.validation.emailRequired')
       .email('auth.validation.emailInvalid'),
-    password: z
-      .string()
-      .min(1, 'auth.validation.passwordRequired')
-      .min(8, 'auth.validation.passwordMin'),
+    password: z.string().min(1, 'auth.validation.passwordRequired'),
     confirmPassword: z
       .string()
       .min(1, 'auth.validation.confirmPasswordRequired'),
