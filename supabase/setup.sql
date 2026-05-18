@@ -46,7 +46,7 @@ create table public.transactions (
   name        text not null,
   category    text not null,
   date        timestamptz not null default now(),
-  amount      numeric(12,2) not null,
+  amount      numeric(12,2) not null check (amount != 0),
   recurring   boolean not null default false,
   source      text not null default 'manual',
   external_id text,
