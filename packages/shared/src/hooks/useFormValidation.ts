@@ -37,7 +37,7 @@ export const useFormValidation = <T extends Record<string, unknown>>(
    * Faire la copie seulement au premier rendu
    */
 
-  initialFormData.current ??= JSON.parse(JSON.stringify(currentData))
+  initialFormData.current ??= structuredClone(currentData)
 
   /**
    * Calcul automatique si le formulaire a changé
