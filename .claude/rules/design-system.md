@@ -298,6 +298,6 @@ Rules:
 - [ ] ComponentName.web.tsx — uses cn(), imports `shared` + `web` from .styles.ts, no RN imports, no inline web-only classes
 - [ ] index.ts — re-exports component + types only (no variants, no styles)
 - [ ] index.web.ts — re-exports component + types only (no variants, no styles)
-- [ ] JSDocs for properties, functions, state variables, and every .styles.ts key
+- [ ] JSDoc on EVERY interface property, EVERY function (with `@param` + `@returns`), EVERY hook, EVERY type with properties, EVERY `.styles.ts` key, EVERY `.constants.ts` value — no exception (QUAL-003/004/005 — global rules)
 - [ ] src/index.ts — component + type exported (native barrel)
 - [ ] src/index.web.ts — component + type exported (web barrel)

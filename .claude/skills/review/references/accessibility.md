@@ -1,5 +1,11 @@
 # Accessibility — Review Rules
 
+> **ALL rules in this file are GLOBAL** — they apply to every file in the entire codebase
+> (`apps/`, `packages/`, scripts, configs) without exception. When a rule specifies a file
+> pattern, it means ALL files matching that pattern everywhere, not just in one package.
+> JSDoc requirements from QUAL-003/004/005 apply here too — every interface, function,
+> type, hook, param, and return value must be documented with JSDoc everywhere.
+
 ## WCAG 2.1 AA Mapping
 
 Each rule maps to one or more WCAG 2.1 Level AA success criteria.
@@ -59,7 +65,7 @@ Each rule maps to one or more WCAG 2.1 Level AA success criteria.
 - **Web**: `<input>` must have associated `<label>` (via `htmlFor`) or `aria-label`
 
 ### A11Y-005b: Color contrast below WCAG AA threshold
-- **Files**: `packages/tokens/src/semantic/**`, component files using color tokens
+- **Files**: `packages/tokens/src/semantic/**` and all files consuming color tokens across `apps/` and `packages/`
 - **Standard**: WCAG 2.1 SC 1.4.3 (Contrast Minimum)
 - **Requirements**:
   - Normal text (< 18pt / < 14pt bold): ratio >= 4.5:1

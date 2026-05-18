@@ -1,5 +1,12 @@
 # Quality — Review Rules
 
+> **ALL rules in this file are GLOBAL** — they apply to every file in the entire codebase
+> (`apps/`, `packages/`, scripts, configs) without exception. When a rule specifies a file
+> pattern (e.g. `*.ts`), it means ALL files matching that pattern everywhere, not just in
+> one package. JSDoc documentation (QUAL-003/004/005) is mandatory on EVERY interface,
+> EVERY type with properties, EVERY function (exported or private), EVERY hook, EVERY
+> `@param`, EVERY `@returns` — no path exception, no "it's just an internal helper" excuse.
+
 ## Critical Violations (QUAL-0xx)
 
 ### QUAL-001: console.log usage
@@ -26,10 +33,11 @@
 
 ## High Violations
 
-### QUAL-003: Missing JSDoc on interface properties
-- **Files**: All `*.ts`, `*.tsx` in `packages/**`
-- **Check**: Every property in every interface must have a JSDoc comment
-- **Applies to**: Props interfaces, domain types, abstractions, internal interfaces
+### QUAL-003: Missing JSDoc on interface/type properties
+- **Files**: All `*.ts`, `*.tsx` — global, no path exception
+- **Scope**: EVERY interface and EVERY type alias with properties, everywhere in the codebase
+- **Applies to**: Props interfaces, domain types, payload types, row types, return types, discriminated unions, internal interfaces, Supabase layer types, API schemas, shared types — no exception
+- **Check**: Every property in every interface/type must have a JSDoc comment
 - **Format**:
   ```ts
   export interface IButtonProps {
@@ -43,9 +51,11 @@
   ```
 
 ### QUAL-004: Missing JSDoc on functions
-- **Files**: All functions in `packages/**` (exported AND private)
+- **Files**: All `*.ts`, `*.tsx` — global, no path exception
+- **Scope**: EVERY function everywhere in the codebase — exported, private, helpers, hooks, handlers, Supabase queries, API route handlers, utility functions, build scripts — no exception
 - **Check**: Every function must have JSDoc with description
-- **Check**: `@param` for each parameter, `@returns` for non-void functions
+- **Check**: `@param` for each parameter with description
+- **Check**: `@returns` for every non-void function with description of the return value
 - **Note**: Private helpers included — they are internal documentation for maintainers
 - **Format**:
   ```ts
@@ -58,8 +68,10 @@
   ```
 
 ### QUAL-005: Missing JSDoc on custom hooks
-- **Files**: `packages/ui/src/hooks/**`, `packages/shared/src/hooks/**`
+- **Files**: All `*.ts`, `*.tsx` — global, no path exception
+- **Scope**: EVERY custom hook (use* functions) everywhere in the codebase — UI package, shared package, features, apps — no exception
 - **Check**: Hook must have JSDoc with description
+- **Check**: `@param` for each parameter with description
 - **Check**: `@returns` documenting the return value/tuple
 - **Check**: Key state variables in the hook should have inline comments if non-obvious
 
@@ -128,7 +140,7 @@
 - **Check**: Inconsistent error handling approaches within same scope
 
 ### QUAL-017: Hardcoded user-facing text in components
-- **Files**: `packages/ui/src/components/**/*.native.tsx`, `packages/ui/src/components/**/*.web.tsx`
+- **Files**: All `*.native.tsx`, `*.web.tsx`
 - **Check**: No hardcoded user-visible strings (labels, button text, placeholders, aria-labels) inside component implementations
 - **Check**: Default prop values containing user-facing text (e.g. `editLabel = 'Edit Budget'`) must have a corresponding translation key
 - **Must**: Expose text as a prop on the component interface (with an English default if appropriate)
@@ -138,7 +150,7 @@
 - **Rationale**: UI components are i18n-agnostic — they receive translated strings as props. Default values are fallbacks, not a substitute for translation keys.
 
 ### QUAL-018: Platform-specific classes not extracted to `.styles.ts`
-- **Files**: `packages/ui/src/components/**/*.native.tsx`, `packages/ui/src/components/**/*.web.tsx`
+- **Files**: All `*.native.tsx`, `*.web.tsx`
 - **Check 1 — Duplicated layout classes**: Tailwind class strings that appear identically in both `.native.tsx` and `.web.tsx` but are NOT in `.variants.ts` or `.styles.ts` (e.g. `flex-row items-center gap-3` copy-pasted in both files)
 - **Check 2 — Inline web-only classes**: Web-only classes (`hover:*`, `focus:*`, `focus-visible:*`, `focus-within:*`, `active:*`, `transition-*`, `cursor-*`, `shadow-*`, `ring-*`, `outline-*`, `animate-*`, `motion-safe:*`, `inline-block`, `fixed`, `sticky`) hardcoded inline in `.web.tsx` instead of extracted to the `web` export in `.styles.ts`
 - **Check 3 — Inline native-only classes**: Native-only classes (explicit `flex-row` on View containers, RN-specific absolute positioning patterns) hardcoded inline in `.native.tsx` instead of extracted to the `native` export in `.styles.ts`
@@ -155,7 +167,7 @@
 - **Rationale**: Centralizes class strings, prevents silent native breakage from web-only classes, makes platform-specific styling auditable
 
 ### QUAL-019: File responsibility violations (constants / utils / types)
-- **Files**: `packages/ui/src/components/**/*.constants.ts`, `packages/ui/src/components/**/*.utils.ts`, `packages/ui/src/components/**/*.tsx` (types file)
+- **Files**: All `*.constants.ts`, `*.utils.ts`, and `*.tsx` types files across all cross-platform component directories
 - **Check 1 — Functions in constants**: `.constants.ts` files must contain ONLY constants (numeric values, string maps, enums, config objects). Functions belong in `.utils.ts`.
 - **Check 2 — Types in constants**: Interfaces and type aliases must NOT be defined in `.constants.ts`. All types/interfaces belong in the `.tsx` types file.
 - **Check 3 — Types in utils**: `.utils.ts` must NOT define interfaces or type aliases. It should import them from the `.tsx` types file.
@@ -177,30 +189,30 @@
 ## API-Specific Violations
 
 ### QUAL-020: Route handler exceeds 30 lines
-- **Files**: `apps/api/src/routes/*.ts`
+- **Files**: All API route files (`*.ts` in `routes/`)
 - **Check**: Individual route handler functions must stay under 30 lines of logic
 - **Suggestion**: Extract Supabase query logic into a helper function (like `updatePotTotal`)
 - **Rationale**: Keeps handlers readable — validation, query, error check, response
 
 ### QUAL-021: Inconsistent error response shape
-- **Files**: `apps/api/src/routes/*.ts`
+- **Files**: All API route files (`*.ts` in `routes/`)
 - **Check**: All error responses must use `{ error: string }` — no other shape
 - **Forbidden**: `{ message: '...' }`, `{ errors: [...] }`, bare string responses
 - **Check**: Status codes must match semantics: 400 (validation), 401 (auth), 404 (not found), 500 (internal)
 
 ### QUAL-022: Supabase error not handled
-- **Files**: `apps/api/src/routes/*.ts`
+- **Files**: All API route files (`*.ts` in `routes/`)
 - **Check**: Every `await supabase.*` call must be followed by an `if (error)` check
 - **Forbidden**: Destructuring only `data` without `error`: `const { data } = await supabase...`
 - **Rationale**: Supabase never throws — errors are returned in the response object
 
 ### QUAL-023: Missing OpenAPI example metadata
-- **Files**: `apps/api/src/schemas/*.ts`
+- **Files**: All API schema files (`*.ts` in `schemas/`)
 - **Check**: Every Zod schema field should have `.openapi({ example: '...' })` metadata
 - **Rationale**: Examples appear in Swagger UI, making the API self-documenting
 
 ### QUAL-024: Feature component with prop-forwarded fixed labels
-- **Files**: `packages/features/src/**/*.tsx`, `apps/*/app/**/*.tsx`
+- **Files**: All `*.tsx` in `apps/` and `packages/` (except `packages/ui/` design system atoms/molecules/organisms)
 - **Check**: Feature components or page-level components that always render the same labels (e.g. `nameLabel={t('transactions.form.nameLabel')}`) should call `useTranslation()` internally instead of receiving those labels as props from every consumer
 - **Exception**: `packages/ui/` components (design system atoms/molecules/organisms) remain i18n-agnostic — they always receive labels as props
 - **Exception**: Labels that legitimately vary between usages remain props

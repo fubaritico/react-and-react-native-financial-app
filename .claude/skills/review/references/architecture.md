@@ -1,5 +1,11 @@
 # Architecture — Review Rules
 
+> **ALL rules in this file are GLOBAL** — they apply to every file in the entire codebase
+> (`apps/`, `packages/`, scripts, configs) without exception. When a rule specifies a file
+> pattern, it means ALL files matching that pattern everywhere, not just in one package.
+> JSDoc requirements from QUAL-003/004/005 apply here too — every interface, function,
+> type, hook, param, and return value must be documented with JSDoc everywhere.
+
 ## Critical Violations (ARCH-0xx)
 
 ### ARCH-001: Circular dependencies
@@ -40,7 +46,7 @@
 ## High Violations
 
 ### ARCH-004: Missing component files (4-file pattern)
-- **Files**: `packages/ui/src/components/*/`
+- **Files**: All cross-platform component directories
 - **Check**: Every component directory must contain:
   - `ComponentName.tsx` — types/props only
   - `ComponentName.native.tsx` — RN implementation
@@ -49,12 +55,12 @@
 - **Check**: A corresponding variant file should exist in `src/variants/`
 
 ### ARCH-005: Component not exported from public API
-- **Files**: `packages/ui/src/index.ts`
-- **Check**: Every component in `src/components/*/` must be exported from `src/index.ts`
+- **Files**: All package public API barrel files (`src/index.ts`, `src/index.web.ts`)
+- **Check**: Every component in `src/components/*/` must be exported from both barrel files
 - **Must export**: Component, Props type, and variant object
 
 ### ARCH-006: Missing variant file
-- **Files**: `packages/ui/src/variants/`
+- **Files**: All `*.variants.ts` files
 - **Check**: Every component should have a `[name].variants.ts` file
 - **Check**: Variant file must export a CVA object and its VariantProps type
 
@@ -91,7 +97,7 @@
 - **Check**: All interfaces MUST use `I` prefix (e.g., `IAuthClient`, `IButtonProps`, `ITransaction`)
 
 ### ARCH-012b: `#` aliases in organism sub-components
-- **Files**: `packages/ui/src/components/organisms/**/cells/**`, `packages/ui/src/components/organisms/**/components/**`
+- **Files**: All nested sub-component files within organisms (e.g. `cells/`, `components/` subdirs inside any organism)
 - **Check**: Sub-components nested deep inside an organism (e.g. DataTable cells) must NOT use `#Atoms`, `#Molecules`, `#Organisms` aliases to import from other atomic levels
 - **Must use**: Relative paths (`../../../../atoms/Icon/Icon.native`, `../../../../molecules/Dropdown/Dropdown.web`)
 - **Rationale**: Bare `#Atoms`/`#Molecules` don't match ESLint `pathGroups` patterns (`#Atoms/**`), causing import/order errors. Top-level component files (e.g. `atoms/Button/Button.native.tsx`) can still use `#Lib/tw`, `#Lib/cn`.
@@ -104,30 +110,30 @@
 ## API-Specific Violations
 
 ### ARCH-013: Route without OpenAPI registration
-- **Files**: `apps/api/src/routes/*.ts`
+- **Files**: All API route files (`*.ts` in `routes/`)
 - **Check**: Every Express handler (`router.get`, `router.post`, etc.) must have a corresponding `registry.registerPath()` call above it
 - **Rationale**: Routes without OpenAPI registration don't appear in Swagger UI and won't generate HTTP client methods
 
 ### ARCH-014: Zod schema without .openapi() metadata
-- **Files**: `apps/api/src/schemas/*.ts`
+- **Files**: All API schema files (`*.ts` in `schemas/`)
 - **Check**: Every schema must be registered via `registry.register('Name', z.object(...))`
 - **Check**: Every field should have `.openapi({ example: '...' })` for Swagger UI documentation
 - **Exception**: Nested sub-schemas reused across multiple entities may skip `.openapi()` on individual fields
 
 ### ARCH-015: Route not mounted in index.ts
-- **Files**: `apps/api/src/index.ts`, `apps/api/src/routes/*.ts`
+- **Files**: All API entry files (`index.ts`) and all API route files (`*.ts` in `routes/`)
 - **Check**: Every exported router in `routes/` must have a corresponding `app.use('/path', router)` in `index.ts`
 - **Check**: Route path must match entity name (e.g. `budgetsRouter` → `/budgets`)
 
 ### ARCH-016: Business logic in route handler
-- **Files**: `apps/api/src/routes/*.ts`
+- **Files**: All API route files (`*.ts` in `routes/`)
 - **Check**: Route handlers should follow the pattern: validate → query → error check → response
 - **Check**: Complex business logic (multi-step operations, calculations, conditional flows) must be extracted into named helper functions within the same file or a `services/` directory
 - **Example**: `updatePotTotal()` extracts fetch-validate-update logic out of the handler
 - **Threshold**: If a handler does more than one Supabase call, extract the logic
 
 ### ARCH-017: i18n fallback strings
-- **Files**: All `*.tsx`, `*.ts` in `apps/` and `packages/features/`
+- **Files**: All `*.tsx`, `*.ts` in `apps/` and `packages/`
 - **Check**: NEVER pass a second argument to `t()` as a fallback (e.g. `t('key', 'fallback')`)
 - **Check**: NEVER use default values for label/placeholder props in destructuring (e.g. `label = 'Edit'`)
 - **Check**: NEVER use `?? 'fallback'` or `|| 'fallback'` on translated strings

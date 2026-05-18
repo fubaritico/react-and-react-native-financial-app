@@ -29,6 +29,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Always use pnpm** — never npm or yarn, including for registry lookups (`pnpm view` not `npm view`)
 - **Never `console.log`** — use `console.warn` / `console.error`
 - **Never explicit `any`** — strict TypeScript
+- **JSDoc everywhere** — EVERY interface property, EVERY function (`@param` + `@returns`), EVERY hook, EVERY type with properties, EVERY constant — no path exception, no "internal helper" excuse (QUAL-003/004/005)
 - **Always run** `pnpm type-check && pnpm lint && pnpm test` then `/review` after every set of modifications — ALL 4 MANDATORY, NEVER SKIP ANY
 - **Always ask** user to run pnpm dev, pnpm prod:server and pnpm storybook after having modified a component
 - **Always use** the design system when coding components, NEVER code simple tags, asks user if components exist, if not create them

@@ -1,5 +1,11 @@
 # Security — Review Rules
 
+> **ALL rules in this file are GLOBAL** — they apply to every file in the entire codebase
+> (`apps/`, `packages/`, scripts, configs) without exception. When a rule specifies a file
+> pattern, it means ALL files matching that pattern everywhere, not just in one package.
+> JSDoc requirements from QUAL-003/004/005 apply here too — every interface, function,
+> type, hook, param, and return value must be documented with JSDoc everywhere.
+
 ## Critical Violations (SEC-0xx)
 
 ### SEC-001: Hardcoded secrets or credentials
