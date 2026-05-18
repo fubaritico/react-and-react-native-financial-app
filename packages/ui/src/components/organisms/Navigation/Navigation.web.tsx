@@ -24,17 +24,19 @@ function NavLink({
   orientation: 'row' | 'column'
   onNavigate: (href: string) => void
 }>) {
+  const safeHref = item.href.startsWith('/') ? item.href : '#'
+
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault()
-      onNavigate(item.href)
+      if (item.href.startsWith('/')) onNavigate(item.href)
     },
     [item.href, onNavigate]
   )
 
   return (
     <a
-      href={item.href}
+      href={safeHref}
       onClick={handleClick}
       aria-label={item.label}
       className={orientation === 'row' ? web.navLink : web.bottomBarItem}
