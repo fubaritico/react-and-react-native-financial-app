@@ -48,4 +48,4 @@ type(scope): subject
 - Never skip pre-commit hook (runs typecheck + lint + test automatically)
 - One feature per commit — do not accumulate unrelated changes
 - Stage specific files by name, never `git add .` or `git add -A`
-- Co-author line: `Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>`
+- Check `.claude/settings.local.json` → `attribution.commit`: if non-empty, append it as a trailer; if empty, do NOT add any Co-Authored-By line

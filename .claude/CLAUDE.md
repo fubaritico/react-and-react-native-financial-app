@@ -179,11 +179,28 @@ Read `@completed.md`
    - ~~OWASP-A04-007: TOCTOU race on pot balance~~ ✅ — atomic `update_pot_total` RPC + pots.ts refactor
    - ~~Re-run audit 2026-05-17~~ ✅ — 10-agent parallel scan, 91 raw → 45 unique findings, score 48/100 (FAIL). Full report: `~/Desktop/OWASP-audit-2026-05-17.md`
    - ~~A09-003: No audit trail~~ ✅ — pino + pino-http structured logging, audit logs on all financial mutations
-   - ~~A01-007: No rate limiting~~ ✅ — express-rate-limit two-tier (global 100/15min, write 20/15min)
+   - ~~A01-007: No rate limiting~~ ✅ — express-rate-limit two-tier (global 200/15min, write 50/15min)
    - ~~A02-001/002: Session expiry~~ ✅ — useSessionExpiry hook, refreshSession() in IAuthClient, warning modal 60s before expiry (Extend/Ignore), autoRefreshToken stays false
    - ~~A04-002: No Zod bounds~~ ✅ — .min/.max on all financial amounts (±1M), pagination limit (1000 — raised from 100, client-side filtering needs all rows), search length (100), centralized constants, i18n validation keys
    - ~~Review pass~~ ✅ — SEC-008 (error sanitization), QUAL-021 (error prefix), SEC-010/011 (CORS prod guard), QUAL-004, QUAL-013
-   - **Next fixes**: (5) auth hardening (scope:global, AAL2, TOTP counter), (6) explicit destructuring, (8) Express config, (9) deps alignment + CI
+   - ~~A04-003: No bounds on initial balance~~ ✅ — min 0 instead of -1M
+   - ~~A01-005: Swagger UI exposed in production~~ ✅ — NODE_ENV guard
+   - ~~A02-003: Weak password min length~~ ✅ — raised to 8 chars
+   - ~~A09-005: No audit trail for preferences update~~ ✅ — pino audit log
+   - ~~A06-001: Express/cors outdated deps~~ ✅ — express 5.2.1, cors 2.8.6
+   - ~~A05-002: CORS localhost fallback~~ ✅ — already fixed (prod guard)
+   - ~~A08-006: No UUID validation on :id params~~ ✅ — validateParams + IdParamSchema
+   - ~~A07-004: Sign-out scope:local~~ ✅ — already fixed
+   - ~~A02-005: Cookie flags not enforced~~ ✅ — httpOnly, secure, sameSite in SSR
+   - ~~A07-006: No TOTP attempt limiting~~ ✅ — 5-attempt lockout + remaining attempts UX (countdown from 2nd failure)
+   - ~~iOS splash stuck bug~~ ✅ — 5s safety timeout in useAuthListener
+   - ~~A07-007: No AAL2 enforcement~~ ✅ — server-side MFA check via decodeJwtPayload + admin.mfa.listFactors
+   - ~~A04-006: DELETE returns 200~~ ✅ — already fixed (204 + count check)
+   - ~~A04-008: No body size limit~~ ✅ — express.json({ limit: '10kb' })
+   - ~~A05-003: Missing security headers~~ ✅ — explicit helmet CSP + HSTS 2yr
+   - ~~A05-005: No trust proxy~~ ✅ — trust proxy in production
+   - ~~A05-006: Raw error.message leak~~ ✅ — logger.error() + generic responses, 18 occurrences across 6 routes, transactions PUT explicit destructuring
+   - **Next fixes**: remaining OWASP findings from audit report (deps alignment, CI, etc.)
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
@@ -196,6 +213,7 @@ Read `@completed.md`
 10. **Shared mutation hooks** — `docs/plans/shared-mutation-hooks.md` — extract 11 hooks into `@financial-app/features`, eliminate web/mobile duplication
 11. **i18n label internalization** — audit feature components (TransactionFormContent, BudgetFormContent, etc.) for fixed labels passed as props → internalize `t()` calls (QUAL-024). Evaluate each label: if it never changes between usages, move inside the component.
 12. **Server-side pagination** — replace client-side `limit: 1000` with proper paginated API calls + DataTable server pagination (currently `MAX_PAGE_SIZE = 1000` as workaround)
+13. **Password strength rules** — live validation on password input (signup) with 5 regex rules: `/.{16,}/`, `/[A-Z]/`, `/[a-z]/`, `/[0-9]/`, `/[$@&+?!/-]/`. Each rule shows pass/fail indicator refreshing on keystroke. Update Zod `.min(8)` to `.min(16)` accordingly.
 
 **Pending tests**:
 - iPad: verify BottomSheet overlay, 2-tap switching, text truncation
@@ -207,7 +225,6 @@ Read `@completed.md`
 - Review SEC-002: bare RN uses plain AsyncStorage for tokens (unencrypted) — acceptable for learning reference, not published
 - Google client IDs empty in .env files — need Google Cloud Console setup before testing OAuth
 
-- iOS auth flow: app may stay blocked after login submit — investigate if Expo rebuild needed or navigation/state issue
 - iOS AuthCard: login card appears too small — needs Figma reference comparison (user will provide PNG)
 - iOS unknown black element at top of screen — needs screenshot to diagnose
 
