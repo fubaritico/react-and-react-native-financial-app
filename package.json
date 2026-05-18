@@ -83,16 +83,9 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "esbuild"
-    ],
-    "overrides": {
-      "react-native": "0.81.5",
-      "@react-native/babel-plugin-codegen": "0.81.5",
-      "@react-native/babel-preset": "0.81.5",
-      "@react-native/codegen": "0.81.5",
-      "@react-native/js-polyfills": "0.81.5",
-      "@react-native/metro-babel-transformer": "0.81.5",
-      "@react-native/metro-config": "0.81.5"
-    }
+      "esbuild",
+      "@prisma/engines",
+      "prisma"
+    ]
   }
 }

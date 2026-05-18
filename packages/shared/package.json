@@ -78,6 +78,7 @@
     "@testing-library/react": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
+    "react-dom": "catalog:",
     "conventional-changelog": "catalog:",
     "react-native": "catalog:",
     "typescript": "catalog:",
