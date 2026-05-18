@@ -24,7 +24,7 @@
     "@tanstack/react-query": "catalog:",
     "expo": "catalog:",
     "expo-dev-client": "catalog:",
-    "expo-secure-store": "^55.0.13",
+    "expo-secure-store": "~15.0.8",
     "expo-status-bar": "catalog:",
     "jotai": "catalog:",
     "react": "catalog:",
