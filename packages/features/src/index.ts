@@ -93,6 +93,7 @@ export {
   AccountActivatedScreen,
   SignupForm,
   ModeChoiceScreen,
+  InitialBalanceScreen,
 } from './auth'
 export type {
   ITotpEnrollScreenProps,
@@ -101,4 +102,5 @@ export type {
   IAccountActivatedScreenProps,
   ISignupFormProps,
   IModeChoiceScreenProps,
+  IInitialBalanceScreenProps,
 } from './auth'

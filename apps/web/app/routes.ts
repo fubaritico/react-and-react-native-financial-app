@@ -14,6 +14,7 @@ export default [
   route('totp-enroll', 'routes/totp-enroll.tsx'),
   route('totp-challenge', 'routes/totp-challenge.tsx'),
   route('mode-choice', 'routes/mode-choice.tsx'),
+  route('initial-balance', 'routes/initial-balance.tsx'),
 
   // Protected routes (sidebar layout)
   layout('routes/layout.tsx', [

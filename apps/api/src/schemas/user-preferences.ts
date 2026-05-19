@@ -8,7 +8,11 @@ export const UserPreferencesSchema = z
       .string()
       .uuid()
       .openapi({ example: 'd8e4f26e-dc4f-41a7-8e66-1b1805a00b41' }),
-    mode: z.enum(['manual', 'bank']).nullable().openapi({ example: 'manual' }),
+    mode: z.union([z.literal('manual'), z.literal('bank'), z.null()]).openapi({
+      type: ['string', 'null'],
+      enum: ['manual', 'bank', null],
+      example: 'manual',
+    }),
     has_seen_onboarding: z.boolean().openapi({ example: false }),
     initial_balance_set: z.boolean().openapi({ example: false }),
     created_at: z.string().openapi({ example: '2026-05-17T10:00:00.000Z' }),
@@ -19,10 +23,14 @@ export const UserPreferencesSchema = z
 export const UpdateUserPreferencesSchema = z
   .object({
     mode: z
-      .enum(['manual', 'bank'])
-      .nullable()
+      .union([z.literal('manual'), z.literal('bank'), z.null()])
       .optional()
-      .openapi({ example: 'manual' }),
+      .openapi({
+        type: ['string', 'null'],
+        enum: ['manual', 'bank', null],
+        example: 'manual',
+      }),
+
     has_seen_onboarding: z.boolean().optional().openapi({ example: true }),
   })
   .openapi('UpdateUserPreferences')

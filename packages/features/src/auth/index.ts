@@ -15,3 +15,6 @@ export type { ISignupFormProps } from './SignupForm/SignupForm'
 
 export { ModeChoiceScreen } from './ModeChoiceScreen/ModeChoiceScreen.native'
 export type { IModeChoiceScreenProps } from './ModeChoiceScreen/ModeChoiceScreen'
+
+export { InitialBalanceScreen } from './InitialBalanceScreen/InitialBalanceScreen.native'
+export type { IInitialBalanceScreenProps } from './InitialBalanceScreen/InitialBalanceScreen'

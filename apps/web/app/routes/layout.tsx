@@ -1,3 +1,4 @@
+import { getUsersMePreferences } from '@financial-app/http-client'
 import { client } from '@financial-app/http-client/client'
 import { requireAuth } from '@financial-app/shared'
 import { Suspense, lazy } from 'react'
@@ -78,6 +79,17 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
       },
     })
 
+    // Check onboarding state — redirect if mode not chosen or initial balance not set
+    const { data: prefs } = await getUsersMePreferences({ throwOnError: true })
+    if (prefs.mode == null) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      throw redirect('/mode-choice')
+    }
+    if (prefs.mode === 'manual' && !prefs.initial_balance_set) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      throw redirect('/initial-balance')
+    }
+
     await next()
   },
 ]
@@ -111,7 +123,7 @@ export function HydrateFallback() {
     <div className="flex min-h-screen items-center justify-center bg-beige-100">
       {prefersReducedMotion ? null : (
         <Suspense>
-          <div data-splash>
+          <div data-splash aria-hidden="true">
             <DotLottieSplash />
           </div>
         </Suspense>

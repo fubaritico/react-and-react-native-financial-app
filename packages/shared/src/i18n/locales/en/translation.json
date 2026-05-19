@@ -325,6 +325,17 @@
       "bankTitle": "Bank Mode",
       "bankDescription": "Connect your bank account. Your transactions are automatically imported as a working base for your forecasts.",
       "comingSoon": "Coming soon"
+    },
+    "initialBalance": {
+      "title": "Enter a start balance",
+      "description": "To initiate your personal forecast, budgets and pots, you need to define a start balance.",
+      "label": "Amount",
+      "placeholder": "0.00",
+      "submit": "OK",
+      "submitting": "Saving...",
+      "backToChoice": "Back to choice",
+      "validationError": "Please enter a valid amount.",
+      "alreadySet": "Initial balance has already been set."
     }
   },
   "errors": {

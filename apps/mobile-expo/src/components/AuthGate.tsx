@@ -1,8 +1,10 @@
+import { getUsersMePreferencesOptions } from '@financial-app/http-client'
 import {
   isAuthLoadingAtom,
   isAuthenticatedAtom,
   isHttpClientReadyAtom,
 } from '@financial-app/shared'
+import { useQuery } from '@tanstack/react-query'
 import { Redirect, useSegments } from 'expo-router'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
@@ -29,6 +31,7 @@ export function AuthGate({ children }: Readonly<{ children: ReactNode }>) {
       setNeedsMfaChallenge(false)
       return
     }
+    /** Checks the Supabase MFA assurance level and updates component state. */
     async function checkMfa() {
       const { hasMfaEnrolled, currentLevel } =
         await authClient.getAssuranceLevel()
@@ -37,6 +40,23 @@ export function AuthGate({ children }: Readonly<{ children: ReactNode }>) {
     }
     void checkMfa()
   }, [isAuthenticated])
+
+  // Fetch preferences once HTTP client is ready — staleTime: Infinity (invalidated on mutation)
+  const {
+    data: preferences,
+    isLoading: preferencesLoading,
+    isError: preferencesError,
+  } = useQuery({
+    ...getUsersMePreferencesOptions(),
+    enabled: isAuthenticated && isHttpClientReady,
+    staleTime: Infinity,
+  })
+
+  // Derive onboarding state from preferences
+  const needsModeChoice = preferences?.mode == null
+  const needsInitialBalance =
+    preferences?.mode === 'manual' && !preferences.initial_balance_set
+  const onboardingComplete = !needsModeChoice && !needsInitialBalance
 
   // Wait for the first auth state callback before deciding where to redirect
   if (isAuthLoading) return null
@@ -57,7 +77,29 @@ export function AuthGate({ children }: Readonly<{ children: ReactNode }>) {
   // Wait for HTTP client to be configured with auth before navigating to protected routes
   if (isAuthenticated && !isHttpClientReady && !inAuthGroup) return null
 
-  if (isAuthenticated && inAuthGroup && !needsMfaChallenge) {
+  // Wait for preferences to load before making onboarding decisions
+  if (isAuthenticated && !inAuthGroup && preferencesLoading) return null
+
+  // On preferences fetch error, let user through to avoid being stuck
+  if (isAuthenticated && !inAuthGroup && preferencesError) {
+    return children
+  }
+
+  // Redirect to onboarding screens if needed
+  if (isAuthenticated && needsModeChoice && !inAuthGroup) {
+    return <Redirect href="/mode-choice" />
+  }
+  if (isAuthenticated && needsInitialBalance && !inAuthGroup) {
+    return <Redirect href="/initial-balance" />
+  }
+
+  // Authenticated user on auth screen with onboarding complete → go to home
+  if (
+    isAuthenticated &&
+    inAuthGroup &&
+    !needsMfaChallenge &&
+    onboardingComplete
+  ) {
     return <Redirect href="/" />
   }
 

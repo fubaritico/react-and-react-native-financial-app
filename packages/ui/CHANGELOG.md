@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-18)
+# 1.0.0 (2026-05-19)
 
 
 ### Bug Fixes
@@ -59,6 +59,7 @@
 * **ui:** move header row inside white card in overview sections ([9cd0f15](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9cd0f15c1dcee7f6ccda1aa4b008f65f9dfab501))
 * **ui:** replace default Tailwind colors with token aliases ([9b7b247](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9b7b24781dc5e82a18ecea230c3bb57b017e5b65))
 * **ui:** review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code ([0d43fae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d43faecf012669f2f97c8d4504f8f5ffd93c543))
+* **ui:** review fixes — token refs, aria-disabled, extract styles ([b396fb6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b396fb68c354bd75e8e16ea02ccb4f674121edaa))
 * **ui:** sanitize href in Navigation to prevent javascript: URI (A03-009) ([a116581](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a116581a929a2841d90e6dc6df2c246c5a98f790))
 
 
@@ -100,6 +101,7 @@
 * **i18n:** add react-i18next with EN/FR translations across all apps ([9797ce4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9797ce4836749dad17bb707aa6a0c4932c74772c))
 * **icons:** add @financial-app/icons package with cross-platform Icon component ([1c1be72](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1c1be727339b093097d1ff682027f5c1771b78c7))
 * **icons:** add Fb app icon to all mobile apps ([8631298](https://github.com/fubaritico/react-and-react-native-financial-app/commit/863129834c804d42ccea4e5e05b1b5bf9a185a18))
+* **memory:** add Basic Memory knowledge base + MCP integration ([26fafda](https://github.com/fubaritico/react-and-react-native-financial-app/commit/26fafdafcec785f60586b4be9a4a411a5ed27514))
 * **mobile-expo:** add Expo Router with tabs + auth routes ([60f42d9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/60f42d9fbc62b657ba70409207618dc479713b8f))
 * **mobile-expo:** animated Lottie splash + app icons + layout refactor ([428bbf0](https://github.com/fubaritico/react-and-react-native-financial-app/commit/428bbf0d6343bf82b65d9ea44fb66a8635a385ae))
 * **mobile:** add React Navigation with 5 tabs + auth stack (on standby) ([dc67010](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dc670102e7c9b50e20c39b071fd7d3e9d0912abc))

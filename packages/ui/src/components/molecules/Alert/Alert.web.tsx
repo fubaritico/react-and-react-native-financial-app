@@ -29,7 +29,7 @@ export function Alert({
   const iconTextClass = `text-${SEVERITY_TOKEN[severity]}`
 
   return (
-    <div role="alert" aria-live="polite" className={cn(alertVariants())}>
+    <div role="alert" className={cn(alertVariants())}>
       {/* Lighter background: white base + colored overlay at 15% opacity */}
       <div className={web.backdropWhite} />
       <div className={cn(web.backdropColor, bgClass)} />

@@ -325,6 +325,17 @@
       "bankTitle": "Mode Banque",
       "bankDescription": "Connectez votre compte bancaire. Vos transactions sont importées automatiquement comme base de travail pour vos prévisions.",
       "comingSoon": "Bientôt disponible"
+    },
+    "initialBalance": {
+      "title": "Saisir un solde de départ",
+      "description": "Pour démarrer vos prévisions, budgets et cagnottes, vous devez définir un solde de départ.",
+      "label": "Montant",
+      "placeholder": "0.00",
+      "submit": "OK",
+      "submitting": "Enregistrement...",
+      "backToChoice": "Retour au choix",
+      "validationError": "Veuillez saisir un montant valide.",
+      "alreadySet": "Le solde initial a déjà été défini."
     }
   },
   "errors": {
