@@ -25,6 +25,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Never hallucinate** — if uncertain, read code first
 - **If it works elsewhere, it works here** — when something fails, NEVER conclude "it can't work" or write workaround mocks. Search how other projects do it (GitHub, issues, docs), find the root cause in YOUR setup (resolution paths, singleton issues, config), and fix it. If thousands of devs use Jest+RN successfully, the problem is your config, not the tool.
 - **Always use context7** for any question about an API, library, or package
+- **Always query Basic Memory** before coding — search `mcp__basic-memory__search_notes` for notes related to the current task (architecture decisions, past fixes, gotchas). The knowledge base (`memory/` directory) holds lessons that prevent repeated mistakes and wasted time.
 - **Secrets** — live in `.env*` files — never in rules, memory, or code
 - **Always use pnpm** — never npm or yarn, including for registry lookups (`pnpm view` not `npm view`)
 - **Never `console.log`** — use `console.warn` / `console.error`
@@ -164,9 +165,10 @@ Read `@completed.md`
    - ~~Web auth guard + SSR~~ ✅ — v8_middleware (sequential before child loaders), entry.server.tsx (Accept-Language → i18n sync), HydrateFallback (no sidebar flash), DotLottie splash (React.lazy, prefers-reduced-motion), HTTPS guard, shared splash asset symlink
    - ~~Debug cleanup + review pass~~ ✅ — removed debug logs from shared auth/hooks, 6-agent review, fixed: SEC-008/010, A11Y-001/004/007/011, ARCH-002/017, REACT-001, QUAL-007/018
    - ~~SignupForm feature component~~ ✅ — shared SignupForm (native+web), PasswordRulesList molecule, usePasswordRules hook (3-state: pristine/valid/invalid, 6 rules), Storybook stories, 27 tests, wired into mobile-expo + web
+   - ~~ModeChoiceScreen~~ ✅ — ModeCard molecule (cross-platform, CVA, medallion icon), ModeChoiceScreen feature (native+web), SVG icons (bank+manual), Icon 6xl size, Storybook stories (component+screen device frames), routes (mobile-expo auth group + web clientLoader guard), i18n keys (en+fr), review fixes (aria-disabled, token refs, styles extraction)
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
    - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
-   - **Next coding**: TanStack Query preferences hooks + ModeChoiceScreen + InitialBalanceScreen + routing glue
+   - **Next coding**: TanStack Query preferences hooks + InitialBalanceScreen + routing glue (AuthGate preferences check)
 2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, re-audit later
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
@@ -181,10 +183,11 @@ Read `@completed.md`
 11. **i18n label internalization** — audit feature components (TransactionFormContent, BudgetFormContent, etc.) for fixed labels passed as props → internalize `t()` calls (QUAL-024). Evaluate each label: if it never changes between usages, move inside the component.
 12. **Server-side pagination** — replace client-side `limit: 1000` with proper paginated API calls + DataTable server pagination (currently `MAX_PAGE_SIZE = 1000` as workaround)
 13. ~~**Password strength rules**~~ ✅ — usePasswordRules hook (6 rules incl. match) + PasswordRulesList molecule + SignupForm integration. signupSchema uses .min(1) (visual rules handle UX), loginSchema keeps .min(16).
+14. **Basic Memory knowledge base** — `memory/` directory at project root, 50 interconnected notes covering decisions, architecture, fixes, and lessons. MCP server configured (`claude mcp add basic-memory`). Restart Claude Code to activate MCP tools. Notes are git-tracked (sharable).
 
 **Pending tests**:
 - iPad: verify BottomSheet overlay, 2-tap switching, text truncation
 
 ### Known Issues
 
-Read `@completed.md`
+Read `@known-issues.md`

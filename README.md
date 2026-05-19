@@ -43,10 +43,19 @@ New React developers with a moderate level in React Native could catch up and be
 
 Moreover, junior profiles could be onboarded thanks to the adapted skills for claude or any AI agent because they follow the standards describe in this site [here](https://agentskills.io/home). A dev can use them for any important step in their dev on an every bay basis: `new component`, `new package`, etc...
 
-One other option for developers onboarding woud be to combine classic docs with generated RAG as a source of knowledge to ask IA agent anything about hte project , ex: [vite-mf-monorepo-rag
-](https://github.com/fubaritico/vite-mf-monorepo-rag)
+### Knowledge base
 
-Note that such a RAG can be also used when coding.
+Another option for developer onboarding would be to combine classic docs with a generated RAG as a knowledge source, allowing an AI agent to answer any question about the project (see [vite-mf-monorepo-rag](https://github.com/fubaritico/vite-mf-monorepo-rag) for an example).
+
+As a lighter alternative to a full RAG pipeline, this project uses [Basic Memory](https://github.com/basicmachines-co/basic-memory) — a structured knowledge base living in the repository (`memory/` directory) as plain Markdown files, versioned in git and editable by anyone.
+
+In practice, this means a new developer joining the team doesn't need to chase down a senior colleague to understand past decisions. They can ask their AI agent "why did we pick twrnc over NativeWind?" and get the reasoning, the trade-offs that were weighed, and when to revisit the decision. A junior developer stuck on a failing test can ask "how do we handle react-native singleton issues in Jest?" and get the exact fix that the team already discovered weeks ago — instead of losing half a day on the same problem. When a developer picks up a ticket involving the token pipeline or the API layer, they can ask "what are the conventions for adding a new entity?" and get a step-by-step answer that reflects how the team actually works, not a generic tutorial.
+
+The key benefit is knowledge retention: every hard-won lesson, every architectural choice, every debugging session that would normally vanish when a conversation ends is captured and available to the whole team. It turns individual experience into collective memory.
+
+Note that both approaches — RAG and structured memory — can also be used during everyday coding, not just onboarding.
+
+### The everyday experience for a developer
 
 The typical flow or a feature would be:
 - `start-session` the agent recalls any old session start where it was at.
@@ -62,6 +71,28 @@ Because security is a fundamental issue, an IA agent can perform security audits
 
 Despite its limitations, this project can be a good fit for middle-size enterprise projects.
 
+### Getting the expected experience while coding
+
+To get the full AI-assisted development experience described above, a new developer needs to configure [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with the right permissions. The project ships a `.claude/settings.local.json` file that pre-authorizes all tools, skills, and MCP servers so the agent can operate without constant permission prompts.
+
+**Prerequisites:**
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed
+- [uvx](https://docs.astral.sh/uv/) available (for the Basic Memory MCP server)
+- Node.js 20+ and pnpm installed
+
+**Steps:**
+
+1. **Configure permissions** — both `.claude/settings.local.json` and `.mcp.json` are gitignored (per-developer config). Copy them from the committed examples:
+   ```bash
+   cp .claude/settings.local.json.example .claude/settings.local.json
+   cp .mcp.json.example .mcp.json
+   ```
+   - `settings.local.json` grants permissions for all core tools, project skills, and MCP server tools so the agent can operate without constant prompts
+   - `.mcp.json` declares the two MCP servers (context7 for live library docs, basic-memory for the project knowledge base)
+
+2. **Start a session** — open Claude Code in the project root and type `/start-session`. The agent loads context from `CLAUDE.md`, relevant rule files, and the Basic Memory knowledge base, then picks up where the last session left off.
+
+This setup means a developer joining the project can immediately ask the agent things like "why do we use twrnc instead of NativeWind?", "how do I add a new API entity?", or "what was the fix for the Jest singleton crash?" — and get precise, project-specific answers drawn from the team's accumulated experience, not generic documentation.
 
 [Back to top](#table-of-contents)
 
@@ -304,10 +335,6 @@ pnpm storybook                 # Component browser (web + native stories)
 # API
 pnpm api:dev                   # Express dev server (http://localhost:3001)
                                # Swagger UI at http://localhost:3001/docs
-pnpm api:generate-client       # Regenerate HeyAPI SDK from OpenAPI spec
-
-# Production
-pnpm prod:server               # Build + start production API
 ```
 
 These commands assume a native binary is already installed on the simulator/emulator.
@@ -418,10 +445,8 @@ pnpm add -w -D <package-name>
 UI components use a **file extension split** pattern — shared types + CVA variants with platform-specific implementations:
 
 ```
-packages/ui/src/components/atoms/Button/
+packages/ui/src/components/Button/
   Button.tsx           # Types + props interface only (no JSX)
-  Button.variants.ts   # CVA variant object (cross-platform safe classes)
-  Button.styles.ts     # shared + web + native class strings
   Button.native.tsx    # React Native implementation (twrnc)
   Button.web.tsx       # DOM/HTML implementation (Tailwind CSS + cn())
   index.ts             # Native barrel (Metro picks this)

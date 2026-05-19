@@ -1,7 +1,7 @@
 ---
 name: end-session
 description: Update the Session State in CLAUDE.md to reflect work done before closing a session. Use at the end of a conversation or when wrapping up work.
-allowed-tools: Read Edit
+allowed-tools: Read Edit mcp__basic-memory__write_note mcp__basic-memory__edit_note mcp__basic-memory__search_notes
 metadata:
   author: financial-app
   version: "1.0"
@@ -22,5 +22,11 @@ Update the Session State in CLAUDE.md to reflect the current state of work befor
    - Append newly completed items to `### Completed` (keep existing entries, add new ones)
    - Replace `### Next` with the single most actionable next step
    - Update `### Known Issues` — add new ones, remove resolved ones
-4. If a new architectural decision or stable pattern was established this session, update the relevant memory file
-5. Propose all changes to the user before writing — do not write without confirmation
+4. **Save session knowledge to Basic Memory** — review the conversation for:
+   - Architectural decisions made → create or update a note
+   - Non-obvious fixes found → create a `fix-*` note
+   - New gotchas or pitfalls discovered → add to existing notes or create new ones
+   - Patterns confirmed across multiple interactions → note them
+   Use `mcp__basic-memory__search_notes` first to avoid duplicates, then `write_note` or `edit_note`.
+5. If new known issues surfaced, update `.claude/known-issues.md`
+6. Propose all changes to the user before writing — do not write without confirmation
