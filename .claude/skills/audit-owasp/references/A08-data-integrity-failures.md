@@ -1,6 +1,6 @@
-# A08 — Software and Data Integrity Failures
+# A08:2025 — Software and Data Integrity Failures
 
-OWASP Top 10 #8. Code and infrastructure that does not protect against integrity violations.
+OWASP Top 10 #8 (same position as 2021). Code and infrastructure that does not protect against integrity violations.
 
 ## Checklist
 
@@ -9,7 +9,7 @@ OWASP Top 10 #8. Code and infrastructure that does not protect against integrity
 #### OWASP-A08-001: Untrusted deserialization
 - **Where**: API request handling, any JSON.parse of external data
 - **Check**: No `JSON.parse()` of user input without try/catch and schema validation
-- **Check**: No `eval()` or `Function()` to process data (also covered in A03)
+- **Check**: No `eval()` or `Function()` to process data (also covered in A05)
 - **Check**: Zod validation on ALL request bodies before processing
 
 #### OWASP-A08-002: Missing integrity checks on critical data

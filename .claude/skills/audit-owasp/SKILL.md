@@ -1,16 +1,31 @@
 ---
 name: audit-owasp
-description: Full-codebase OWASP Top 10 security audit using 10 parallel subagents (one per category). Produces structured JSON findings with severity scoring. Use when auditing security, checking OWASP compliance, running a security scan, or hardening the app.
+description: Full-codebase OWASP Top 10 (2025) security audit using 10 parallel subagents (one per category). Produces structured JSON findings with severity scoring. Use when auditing security, checking OWASP compliance, running a security scan, or hardening the app.
 allowed-tools: Agent Read Glob Grep Bash(ls:*)
 metadata:
   author: financial-app
-  version: "1.0"
+  version: "2.0"
 ---
 
 # Audit OWASP — Full-Codebase Security Audit
 
-Orchestrates 10 parallel domain-expert subagents — one per OWASP Top 10 (2021) category — to audit
+Orchestrates 10 parallel domain-expert subagents — one per OWASP Top 10 (2025) category — to audit
 the entire codebase (API + web + mobile + shared packages) for security vulnerabilities.
+
+## OWASP Top 10:2025 Categories
+
+| # | Category | Key Change from 2021 |
+|---|----------|---------------------|
+| A01 | Broken Access Control | Now includes SSRF (was A10:2021) |
+| A02 | Security Misconfiguration | Was A05:2021 |
+| A03 | Software Supply Chain Failures | Expands A06:2021 (Vulnerable Components) |
+| A04 | Cryptographic Failures | Was A02:2021 |
+| A05 | Injection | Was A03:2021 |
+| A06 | Insecure Design | Was A04:2021 |
+| A07 | Authentication Failures | Renamed from "Identification and Authentication Failures" |
+| A08 | Software & Data Integrity Failures | Same position |
+| A09 | Security Logging & Alerting Failures | Renamed from "Logging and Monitoring" |
+| A10 | Mishandling Exceptional Conditions | NEW — replaces SSRF (merged into A01) |
 
 ## Prerequisites
 
@@ -51,7 +66,7 @@ Launch all 10 agents simultaneously using the Agent tool. Each agent receives:
 
 Each agent prompt:
 ```
-You are a security auditor specialized in OWASP Top 10 category [CATEGORY].
+You are a security auditor specialized in OWASP Top 10:2025 category [CATEGORY].
 Audit the following codebase files against the checklist in the reference guide.
 Return ONLY a valid JSON array of findings. No prose, no markdown fences around the JSON.
 If no violations found, return an empty array: []
@@ -85,16 +100,16 @@ Agents and their scope:
 
 | # | Agent | Prefix | Layers to audit |
 |---|-------|--------|-----------------|
-| 1 | Broken Access Control | OWASP-A01 | API, Web (loaders), Mobile (navigation) |
-| 2 | Cryptographic Failures | OWASP-A02 | All layers |
-| 3 | Injection | OWASP-A03 | API, Web (.web.tsx), UI (.web.tsx) |
-| 4 | Insecure Design | OWASP-A04 | All layers |
-| 5 | Security Misconfiguration | OWASP-A05 | Config, API, Web |
-| 6 | Vulnerable Components | OWASP-A06 | All package.json files |
-| 7 | Auth Failures | OWASP-A07 | API (auth middleware), Shared (auth), Web/Mobile (auth flows) |
-| 8 | Data Integrity Failures | OWASP-A08 | All layers |
-| 9 | Logging & Monitoring | OWASP-A09 | API, Shared |
-| 10 | SSRF | OWASP-A10 | API, Shared (HTTP clients), Web (loaders) |
+| 1 | Broken Access Control (incl. SSRF) | OWASP-A01 | API, Web (loaders), Mobile (navigation), Shared (HTTP clients) |
+| 2 | Security Misconfiguration | OWASP-A02 | Config, API, Web |
+| 3 | Software Supply Chain Failures | OWASP-A03 | All package.json files, lockfile, CI/CD configs |
+| 4 | Cryptographic Failures | OWASP-A04 | All layers |
+| 5 | Injection | OWASP-A05 | API, Web (.web.tsx), UI (.web.tsx) |
+| 6 | Insecure Design | OWASP-A06 | All layers |
+| 7 | Authentication Failures | OWASP-A07 | API (auth middleware), Shared (auth), Web/Mobile (auth flows) |
+| 8 | Software & Data Integrity Failures | OWASP-A08 | All layers |
+| 9 | Security Logging & Alerting Failures | OWASP-A09 | API, Shared |
+| 10 | Mishandling Exceptional Conditions | OWASP-A10 | API (error handlers, middleware), Web/Mobile (error boundaries), Shared (hooks) |
 
 ### Step 4 — Aggregate & Score
 
@@ -106,15 +121,15 @@ category_score = max(0, 100 - (critical * 25) - (high * 15) - (medium * 5) - (lo
 
 Weights for overall score:
 - A01 Broken Access Control: 15%
-- A02 Cryptographic Failures: 12%
-- A03 Injection: 15%
-- A04 Insecure Design: 8%
-- A05 Security Misconfiguration: 10%
-- A06 Vulnerable Components: 8%
-- A07 Auth Failures: 12%
-- A08 Data Integrity Failures: 8%
-- A09 Logging & Monitoring: 5%
-- A10 SSRF: 7%
+- A02 Security Misconfiguration: 10%
+- A03 Software Supply Chain Failures: 8%
+- A04 Cryptographic Failures: 12%
+- A05 Injection: 15%
+- A06 Insecure Design: 8%
+- A07 Authentication Failures: 12%
+- A08 Software & Data Integrity Failures: 8%
+- A09 Security Logging & Alerting Failures: 5%
+- A10 Mishandling Exceptional Conditions: 7%
 
 Verdict thresholds:
 - 80-100 + no critical → `pass`
@@ -153,6 +168,7 @@ Do NOT auto-fix. Present recommendations and let the user decide.
 ```json
 {
   "audit_date": "ISO-8601",
+  "owasp_version": "2025",
   "scope": { "files_scanned": 0, "layers": [] },
   "findings": [ /* array of finding objects */ ],
   "scores": {

@@ -183,7 +183,8 @@ Read `@completed.md`
 11. **i18n label internalization** — audit feature components (TransactionFormContent, BudgetFormContent, etc.) for fixed labels passed as props → internalize `t()` calls (QUAL-024). Evaluate each label: if it never changes between usages, move inside the component.
 12. **Server-side pagination** — replace client-side `limit: 1000` with proper paginated API calls + DataTable server pagination (currently `MAX_PAGE_SIZE = 1000` as workaround)
 13. ~~**Password strength rules**~~ ✅ — usePasswordRules hook (6 rules incl. match) + PasswordRulesList molecule + SignupForm integration. signupSchema uses .min(1) (visual rules handle UX), loginSchema keeps .min(16).
-14. **Basic Memory knowledge base** — `memory/` directory at project root, 50 interconnected notes covering decisions, architecture, fixes, and lessons. MCP server configured (`claude mcp add basic-memory`). Restart Claude Code to activate MCP tools. Notes are git-tracked (sharable).
+14. ~~**Basic Memory knowledge base**~~ ✅ — 51 notes in `memory/`, MCP server in `.mcp.json`, `/note` skill, 10 vendor skills (defrag, reflect, tasks...), wired into start/end-session, CLAUDE.md rule added, MEMORY.md defragged (355→68 lines), known-issues.md deduped, README updated with setup guide + `.example` files.
+15. ~~**CI/CD plan**~~ ✅ — `docs/plans/ci-plan.md` (GitHub Actions: validate, Playwright, Appium, SonarQube, Claude PR review, deploys). README cleaned (plans section removed — private/gitignored).
 
 **Pending tests**:
 - iPad: verify BottomSheet overlay, 2-tap switching, text truncation

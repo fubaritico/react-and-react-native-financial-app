@@ -1,6 +1,7 @@
-# A07 — Identification and Authentication Failures
+# A07:2025 — Authentication Failures
 
-OWASP Top 10 #7. Weaknesses in authentication mechanisms.
+OWASP Top 10 #7 (renamed from "Identification and Authentication Failures" in 2021).
+Weaknesses in authentication mechanisms.
 
 ## Checklist
 

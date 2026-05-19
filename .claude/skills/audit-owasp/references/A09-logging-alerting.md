@@ -1,6 +1,7 @@
-# A09 — Security Logging and Monitoring Failures
+# A09:2025 — Security Logging and Alerting Failures
 
-OWASP Top 10 #9. Insufficient logging, detection, and active response.
+OWASP Top 10 #9 (renamed from "Security Logging and Monitoring Failures" in 2021).
+Insufficient logging, detection, and active response.
 
 ## Checklist
 
@@ -50,7 +51,7 @@ OWASP Top 10 #9. Insufficient logging, detection, and active response.
 #### OWASP-A09-007: Missing request correlation
 - **Where**: API middleware
 - **Check**: Request ID generated and propagated through the request lifecycle
-- **Check**: Logs correlatable across middleware → handler → response
+- **Check**: Logs correlatable across middleware -> handler -> response
 - **Note**: Informational for this project stage
 
 #### OWASP-A09-008: No alerting on anomalies
