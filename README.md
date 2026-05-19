@@ -577,24 +577,6 @@ Step-by-step operational guides for common workflows.
 | [iPhone Wireless Deploy](docs/modus-operandi/iphone-wireless-deploy.md) | Physical device deployment via Wi-Fi (bare RN CLI) |
 | [Full Reset](docs/modus-operandi/reset.md) | Nuclear clean + reinstall procedure |
 
-### Implementation Plans
-
-Phased plans for the full project build. See [docs/plans/README.md](docs/plans/README.md) for the index.
-
-| Phase | Plan | Status | Goal |
-|-------|------|--------|------|
-| 0 | [Cleanup](docs/plans/phase-0-cleanup.md) | Done | Canonical app decision, restructure to apps/ |
-| 1 | [Tokens](docs/plans/phase-1-tokens.md) | Done | Style Dictionary token pipeline |
-| 2 | [Tailwind Config](docs/plans/phase-2-tailwind-config.md) | Done | Shared Tailwind config package |
-| 3 | [Design System](docs/plans/phase-3-design-system.md) | Done | Cross-platform file extension split + CVA |
-| 4 | [Web App](docs/plans/phase-4-web-app.md) | Done | React Router + Vite web app scaffold |
-| 5 | [Shared](docs/plans/phase-5-shared.md) | Done | Supabase, Jotai, TanStack Query shared package |
-| 6 | [Turborepo](docs/plans/phase-6-turborepo.md) | Done | Task pipeline, caching, dependency ordering |
-| 7 | [Home Page](docs/plans/phase-7-home-page.md) | Done | Routing + mock data + Home page + all screens |
-| 8A | [API + HTTP Client](docs/plans/phase-8A-api-and-http-client.md) | Done | Express 5 API (OpenAPI + Swagger) + HeyAPI HTTP client |
-| 8B | [GoCardless](docs/plans/phase-8B-gocardless-bank-connection.md) | Planned | Bank connection via GoCardless Bank Account Data API |
-| — | [Onboarding](docs/plans/onboarding-plan.md) | In progress | Auth flow, splash, walkthrough, initial balance |
-
 ### App & Package READMEs
 
 | Name | README |
