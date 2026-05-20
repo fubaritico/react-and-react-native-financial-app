@@ -173,10 +173,14 @@ Read `@completed.md`
    - ~~SettingsScreenView styling~~ ✅ — 5-layer styling pattern (.styles.ts with shared/web/native), barrel files, removed cn() single-arg wrappers, accessibilityRole="header", tab layout tw refactor (StyleSheet→tw, useMemo screenListeners)
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
    - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
-   - **Next coding**: Review data.json + RPC `get_balance` formula (`current = reference - pots`, income/expenses calculated but not in current). Decide: reseed data, fix RPC to `current = reference + income - expenses - pots`, add `income` field or not. See `~/Desktop/get_balance_rpc.md` for full RPC analysis.
+   - ~~Balance model fix~~ ✅ — `get_balance` RPC corrected to `current = reference + income - expenses - pots`. Verified: reference=3641.50 → current=4836.00. data.json fixed (expenses=1699.75).
+   - ~~Dev seed endpoint~~ ✅ — `POST /dev/seed` with Zod validation, CASCADE user reset, date-shift to current month. Shell script reads SEED_EMAIL/SEED_PASSWORD from .env. `pnpm seed` from root.
+   - ~~Dynamic budget month~~ ✅ — replaced hardcoded `BUDGET_MONTH='2024-08'` with `getCurrentBudgetMonth()` across all 6 route files. Module-level query options moved inside component (web/budgets). Inline arrows extracted to useCallback (mobile-expo + bare mobile overview).
+   - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
+   - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
+   - **Next coding**: Walkthrough screen (slideshow of 4 real app screens with mock data)
 2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, audit-owasp skill upgraded to OWASP 2025
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
-4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
 6. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
 7. Tests — API + hooks

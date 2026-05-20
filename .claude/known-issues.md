@@ -75,7 +75,7 @@
 - QUAL-009: Budget pages (~240/230 lines), Pots pages (~407/373 lines), Transactions pages exceed 200 lines — extract `useXxxModals` hooks
 - useFormValidation hook added to shared — budget/pots modals don't use it yet (retrofit planned)
 - Shared mutation hooks refactor — `docs/plans/shared-mutation-hooks.md` — extract 11 hooks into `@financial-app/features`
-- Balance model per month: `current = reference - SUM(pots)` doesn't handle months — needs `months` table refactor
+- Balance model: `current = reference + income - expenses - pots` (fixed). No per-month filtering yet — needs `months` table refactor for multi-month support
 
 ## Product
 - 5th nav button becomes hamburger menu with all navigations + extras (language, months, logout, tutorial) — Recurring Bills moves inside this menu
