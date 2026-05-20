@@ -12,11 +12,15 @@ import { budgetsRouter } from './routes/budgets.js'
 import { initialBalanceRouter } from './routes/initial-balance.js'
 import { potsRouter } from './routes/pots.js'
 import { recurringBillsRouter } from './routes/recurring-bills.js'
+import { seedRouter } from './routes/seed.js'
 import { transactionsRouter } from './routes/transactions.js'
 import { userAccountRouter } from './routes/user-account.js'
 import { userPreferencesRouter } from './routes/user-preferences.js'
 
-/** Creates and configures the Express app (without listening). */
+/**
+ * Creates and configures the Express app (without listening).
+ * @returns Configured Express Application instance ready to listen
+ */
 export function createApp() {
   const app = express()
 
@@ -99,6 +103,11 @@ export function createApp() {
   app.use('/users/me', writeLimiter, userAccountRouter)
   app.use('/users/me/preferences', writeLimiter, userPreferencesRouter)
   app.use('/users/me/initial-balance', writeLimiter, initialBalanceRouter)
+
+  // Dev-only routes — seed endpoint (returns 404 in production)
+  if (process.env.NODE_ENV !== 'production') {
+    app.use('/dev/seed', seedRouter)
+  }
 
   return app
 }

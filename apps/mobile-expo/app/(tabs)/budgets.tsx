@@ -14,8 +14,8 @@ import {
   putBudgetsByIdMutation,
 } from '@financial-app/http-client'
 import {
-  BUDGET_MONTH,
   buildBudgetPageData,
+  getCurrentBudgetMonth,
   getErrorMessage,
   useModal,
 } from '@financial-app/shared'
@@ -54,7 +54,11 @@ interface IBudgetCardItemProps {
   deleteLabel: string
 }
 
-/** Wrapper that memoizes the onEdit/onDelete callbacks per card (avoids inline arrow in map) */
+/**
+ * Wrapper that memoizes the onEdit/onDelete callbacks per card (avoids inline arrow in map).
+ * @param props - Budget card data with edit/delete handlers and labels
+ * @returns Memoized BudgetCategoryCard JSX
+ */
 function BudgetCardItem({
   card,
   onEdit,
@@ -83,13 +87,16 @@ function BudgetCardItem({
   )
 }
 
+/** @returns Budgets tab screen with overview chart, category cards, and CRUD modals. */
 export default function BudgetsScreen() {
   const { t } = useTranslation()
   const modal = useModal()
   const qc = useQueryClient()
   const formRef = useRef<IBudgetFormRef>(null)
 
-  const budgetsOpts = getBudgetsOptions({ query: { month: BUDGET_MONTH } })
+  const budgetsOpts = getBudgetsOptions({
+    query: { month: getCurrentBudgetMonth() },
+  })
 
   const {
     data: budgets,
@@ -225,7 +232,7 @@ export default function BudgetsScreen() {
         category: values.category,
         maximum: parsed,
         theme: values.theme,
-        month: BUDGET_MONTH,
+        month: getCurrentBudgetMonth(),
       },
     })
   }, [createBudget, modal])

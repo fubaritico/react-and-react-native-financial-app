@@ -15,23 +15,22 @@ import {
   buildRecurringBillsPageData,
   formatCurrency,
   formatDate,
+  getCurrentBudgetMonth,
   getErrorMessage,
 } from '@financial-app/shared'
 import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
 import tw from '../../src/lib/tw'
 
-/** Current budget month — matches seed data. */
-const BUDGET_MONTH = '2024-08'
-
 /**
  * Overview (home) tab — displays balance, pots, transactions, budgets, and recurring bills.
  * All data fetched via TanStack Query from the API.
+ * @returns Overview screen JSX
  */
 export default function OverviewScreen() {
   const router = useRouter()
@@ -56,7 +55,7 @@ export default function OverviewScreen() {
     data: budgets,
     isLoading: budgetsLoading,
     error: budgetsError,
-  } = useQuery(getBudgetsOptions({ query: { month: BUDGET_MONTH } }))
+  } = useQuery(getBudgetsOptions({ query: { month: getCurrentBudgetMonth() } }))
   const {
     data: recurringBills,
     isLoading: recurringLoading,
@@ -114,6 +113,22 @@ export default function OverviewScreen() {
     () => (recurringBills ? buildRecurringBillsPageData(recurringBills) : null),
     [recurringBills]
   )
+
+  const handleNavigatePots = useCallback(() => {
+    router.push('/(tabs)/pots')
+  }, [router])
+
+  const handleNavigateTransactions = useCallback(() => {
+    router.push('/(tabs)/transactions')
+  }, [router])
+
+  const handleNavigateRecurring = useCallback(() => {
+    router.push('/(tabs)/recurring')
+  }, [router])
+
+  const handleNavigateBudgets = useCallback(() => {
+    router.push('/(tabs)/budgets')
+  }, [router])
 
   if (isLoading) {
     return (
@@ -180,9 +195,7 @@ export default function OverviewScreen() {
           savingsIconLabel={t('accessibility.savingsIcon')}
           totalSaved={totalSaved}
           pots={potItems}
-          onSeeDetails={() => {
-            router.push('/(tabs)/pots')
-          }}
+          onSeeDetails={handleNavigatePots}
         />
       </View>
 
@@ -192,9 +205,7 @@ export default function OverviewScreen() {
           title={t('transactionsOverview.title')}
           viewAllLabel={t('common.viewAll')}
           transactions={latestTransactions}
-          onViewAll={() => {
-            router.push('/(tabs)/transactions')
-          }}
+          onViewAll={handleNavigateTransactions}
         />
       </View>
 
@@ -210,9 +221,7 @@ export default function OverviewScreen() {
             paid={recurringData.paidTotal}
             upcoming={recurringData.upcomingTotal}
             dueSoon={recurringData.dueSoonTotal}
-            onSeeDetails={() => {
-              router.push('/(tabs)/recurring')
-            }}
+            onSeeDetails={handleNavigateRecurring}
           />
         </View>
       )}
@@ -225,9 +234,7 @@ export default function OverviewScreen() {
           budgets={budgetItems}
           ofLabel={t('budgets.of')}
           limitLabel={t('budgets.limit')}
-          onSeeDetails={() => {
-            router.push('/(tabs)/budgets')
-          }}
+          onSeeDetails={handleNavigateBudgets}
         />
       </View>
     </ScrollView>

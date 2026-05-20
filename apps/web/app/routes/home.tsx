@@ -15,6 +15,7 @@ import {
   buildRecurringBillsPageData,
   formatCurrency,
   formatDate,
+  getCurrentBudgetMonth,
   getErrorMessage,
 } from '@financial-app/shared'
 import {
@@ -33,21 +34,22 @@ import { queryClient } from '../lib/query-client'
 
 import type { Route } from './+types/home'
 
-/** Current budget month — matches seed data. */
-const BUDGET_MONTH = '2024-08'
-
+/** @returns TanStack Query options for all overview data (balance, transactions, pots, budgets, recurring). */
 function fetchQueryOption() {
   const balanceOpts = getBalanceOptions()
   const txnOpts = getTransactionsOptions({
     query: { limit: 5, sort: 'latest' },
   })
   const potsOpts = getPotsOptions()
-  const budgetsOpts = getBudgetsOptions({ query: { month: BUDGET_MONTH } })
+  const budgetsOpts = getBudgetsOptions({
+    query: { month: getCurrentBudgetMonth() },
+  })
   const recurringOpts = getRecurringBillsOptions()
 
   return { balanceOpts, txnOpts, potsOpts, budgetsOpts, recurringOpts }
 }
 
+/** @returns Prefetched overview data for hydration. */
 export async function clientLoader() {
   const { balanceOpts, txnOpts, potsOpts, budgetsOpts, recurringOpts } =
     fetchQueryOption()
@@ -61,6 +63,7 @@ export async function clientLoader() {
   return { balance, txn, pots, budgets, recurring }
 }
 
+/** @returns Skeleton fallback rendered while clientLoader is in flight. */
 export function HydrateFallback() {
   return (
     <div className="p-6 lg:p-10">
@@ -84,6 +87,7 @@ export function HydrateFallback() {
   )
 }
 
+/** @returns Overview page with balance cards, pots, transactions, budgets, and recurring bills. */
 export default function Home({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()

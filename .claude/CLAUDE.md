@@ -170,9 +170,10 @@ Read `@completed.md`
    - ~~InitialBalanceScreen + preferences routing~~ ✅ — InitialBalanceScreen feature (native+web), Storybook stories (native+web), routes (mobile-expo auth group + web clientLoader guard), AuthGate preferences check, HeyAPI nullable enum fix (z.union + z.literal for `mode: 'manual' | 'bank' | null`), i18n keys (en+fr), 6-agent review pass
    - ~~AuthGate refactor~~ ✅ — extracted useAuthRedirect hook (MFA check, preferences query, onboarding routing), named constants (AUTH_GROUP_SEGMENT, MFA_ASSURANCE_LEVEL_1), AuthGate reduced to 13-line wrapper. Fixes QUAL-006 + QUAL-013.
    - ~~LanguageDropdown + SVG pipeline~~ ✅ — LanguageDropdown feature component (native+web) with flag SVGs, SVG import pipeline for 3 bundlers (Metro: react-native-svg-transformer, Vite: vite-plugin-svgr, Storybook: custom enforce:'pre' plugin), shared SVG assets via `@financial-app/shared/assets/*`, root `svg.d.ts` type declarations, bottom sheet text color fix (`text-inherit` CSS inheritance), removed Storybook controls from all screen stories (Settings, ModeChoice, InitialBalance)
+   - ~~SettingsScreenView styling~~ ✅ — 5-layer styling pattern (.styles.ts with shared/web/native), barrel files, removed cn() single-arg wrappers, accessibilityRole="header", tab layout tw refactor (StyleSheet→tw, useMemo screenListeners)
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
    - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
-   - **Next coding**: Debug LanguageDropdown (user reported issues to investigate), then WalkthroughScreen
+   - **Next coding**: Review data.json + RPC `get_balance` formula (`current = reference - pots`, income/expenses calculated but not in current). Decide: reseed data, fix RPC to `current = reference + income - expenses - pots`, add `income` field or not. See `~/Desktop/get_balance_rpc.md` for full RPC analysis.
 2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, audit-owasp skill upgraded to OWASP 2025
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)

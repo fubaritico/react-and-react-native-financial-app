@@ -14,8 +14,8 @@ import {
   putBudgetsByIdMutation,
 } from '@financial-app/http-client'
 import {
-  BUDGET_MONTH,
   buildBudgetPageData,
+  getCurrentBudgetMonth,
   getErrorMessage,
   useModal,
 } from '@financial-app/shared'
@@ -55,7 +55,11 @@ interface IBudgetCardItemProps {
   deleteLabel: string
 }
 
-/** Wrapper that memoizes the onEdit callback per card (avoids inline arrow in map) */
+/**
+ * Wrapper that memoizes the onEdit/onDelete callbacks per card (avoids inline arrow in map).
+ * @param props - Budget card data with edit/delete handlers and labels
+ * @returns Memoized BudgetCategoryCard JSX
+ */
 function BudgetCardItem({
   card,
   onEdit,
@@ -84,10 +88,18 @@ function BudgetCardItem({
   )
 }
 
-const budgetsOpts = getBudgetsOptions({ query: { month: BUDGET_MONTH } })
-const txnOpts = getTransactionsOptions({ query: { limit: 1000 } })
+/** @returns Query options for budgets and transactions used by this route. */
+function fetchQueryOptions() {
+  const budgetsOpts = getBudgetsOptions({
+    query: { month: getCurrentBudgetMonth() },
+  })
+  const txnOpts = getTransactionsOptions({ query: { limit: 1000 } })
+  return { budgetsOpts, txnOpts }
+}
 
+/** @returns Prefetched budgets and transactions data for hydration. */
 export async function clientLoader() {
+  const { budgetsOpts, txnOpts } = fetchQueryOptions()
   const [budgets, txn] = await Promise.all([
     queryClient.ensureQueryData(budgetsOpts).catch(() => undefined),
     queryClient.ensureQueryData(txnOpts).catch(() => undefined),
@@ -95,6 +107,7 @@ export async function clientLoader() {
   return { budgets, txn }
 }
 
+/** @returns Skeleton fallback rendered while clientLoader is in flight. */
 export function HydrateFallback() {
   return (
     <div className="p-6 lg:p-10">
@@ -113,11 +126,13 @@ export function HydrateFallback() {
   )
 }
 
+/** @returns Budgets page with overview chart, category cards, and CRUD modals. */
 export default function Budgets({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation()
   const modal = useModal()
   const qc = useQueryClient()
   const formRef = useRef<IBudgetFormRef>(null)
+  const { budgetsOpts, txnOpts } = fetchQueryOptions()
 
   const {
     data: budgets,
@@ -257,7 +272,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
         category: values.category,
         maximum: parsed,
         theme: values.theme,
-        month: BUDGET_MONTH,
+        month: getCurrentBudgetMonth(),
       },
     })
   }, [createBudget, modal])

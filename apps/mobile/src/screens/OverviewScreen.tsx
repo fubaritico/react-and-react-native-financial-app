@@ -15,11 +15,12 @@ import {
   buildRecurringBillsPageData,
   formatCurrency,
   formatDate,
+  getCurrentBudgetMonth,
 } from '@financial-app/shared'
 import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
 import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
@@ -28,12 +29,10 @@ import tw from '../lib/tw'
 import type { TabParamList } from '../navigation/types'
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 
-/** Current budget month — matches seed data. */
-const BUDGET_MONTH = '2024-08'
-
 /**
  * Overview (home) tab — displays balance, pots, transactions, budgets, and recurring bills.
  * All data fetched via TanStack Query from the API.
+ * @returns Overview screen JSX
  */
 export function OverviewScreen() {
   const navigation = useNavigation<BottomTabNavigationProp<TabParamList>>()
@@ -58,7 +57,7 @@ export function OverviewScreen() {
     data: budgets,
     isLoading: budgetsLoading,
     error: budgetsError,
-  } = useQuery(getBudgetsOptions({ query: { month: BUDGET_MONTH } }))
+  } = useQuery(getBudgetsOptions({ query: { month: getCurrentBudgetMonth() } }))
   const {
     data: recurringBills,
     isLoading: recurringLoading,
@@ -116,6 +115,22 @@ export function OverviewScreen() {
 
   const hasError =
     balanceError ?? txnError ?? potsError ?? budgetsError ?? recurringError
+
+  const handleNavigatePots = useCallback(() => {
+    navigation.navigate('Pots')
+  }, [navigation])
+
+  const handleNavigateTransactions = useCallback(() => {
+    navigation.navigate('Transactions')
+  }, [navigation])
+
+  const handleNavigateRecurring = useCallback(() => {
+    navigation.navigate('Recurring')
+  }, [navigation])
+
+  const handleNavigateBudgets = useCallback(() => {
+    navigation.navigate('Budgets')
+  }, [navigation])
 
   if (isLoading) {
     return (
@@ -178,9 +193,7 @@ export function OverviewScreen() {
           savingsIconLabel={t('accessibility.savingsIcon')}
           totalSaved={totalSaved}
           pots={potItems}
-          onSeeDetails={() => {
-            navigation.navigate('Pots')
-          }}
+          onSeeDetails={handleNavigatePots}
         />
       </View>
 
@@ -190,9 +203,7 @@ export function OverviewScreen() {
           title={t('transactionsOverview.title')}
           viewAllLabel={t('common.viewAll')}
           transactions={latestTransactions}
-          onViewAll={() => {
-            navigation.navigate('Transactions')
-          }}
+          onViewAll={handleNavigateTransactions}
         />
       </View>
 
@@ -208,9 +219,7 @@ export function OverviewScreen() {
             paid={recurringData.paidTotal}
             upcoming={recurringData.upcomingTotal}
             dueSoon={recurringData.dueSoonTotal}
-            onSeeDetails={() => {
-              navigation.navigate('Recurring')
-            }}
+            onSeeDetails={handleNavigateRecurring}
           />
         </View>
       )}
@@ -223,9 +232,7 @@ export function OverviewScreen() {
           budgets={budgetItems}
           ofLabel={t('budgets.of')}
           limitLabel={t('budgets.limit')}
-          onSeeDetails={() => {
-            navigation.navigate('Budgets')
-          }}
+          onSeeDetails={handleNavigateBudgets}
         />
       </View>
     </ScrollView>

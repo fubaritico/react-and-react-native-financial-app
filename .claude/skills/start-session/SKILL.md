@@ -23,6 +23,5 @@ Gather all necessary written context from the previous session.
    ```
    mcp__basic-memory__search_notes(query: "<topic from Next>", project: "financial-app")
    ```
-4. Ask the user which rule files are needed for this session, based on what's in `### Next`
-5. Read the relevant rule files and memorize their patterns
-6. Remind the user of the next step from `### Next` in CLAUDE.md
+4. **Determine which rule files to load autonomously** — based on the task (user-specified or default from `### Next`), decide which `.claude/rules/*.md` files are relevant and load them. Never ask the user — rules and skills are tools at your disposal, you decide what you need.
+5. Remind the user of the next step from `### Next` in CLAUDE.md

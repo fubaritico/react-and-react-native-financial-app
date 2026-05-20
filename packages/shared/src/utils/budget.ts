@@ -3,9 +3,19 @@ import { formatDate } from './date'
 
 import type { IBudget, ITransaction } from '../types'
 
-/** Current budget month — matches seed data. Will be dynamic when month picker is added. */
-export const BUDGET_MONTH = '2024-08'
+/**
+ * Returns the current month as YYYY-MM string.
+ * Will be replaced by a month picker when that feature is added.
+ * @returns ISO month string (e.g. "2026-05")
+ */
+export function getCurrentBudgetMonth(): string {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  return `${String(year)}-${month}`
+}
 
+/** Maximum number of latest spending transactions shown per budget category card. */
 const LATEST_SPENDING_COUNT = 3
 
 export interface IBudgetItem {
@@ -48,6 +58,9 @@ export interface IBudgetPageData {
  * Computes spent amount for a budget category.
  * Uses pre-computed `budget.spent` from the API when available,
  * falls back to summing negative transactions for the category.
+ * @param budget - Budget record with optional pre-computed spent
+ * @param categoryTransactions - Filtered negative transactions for this category
+ * @returns Spent amount as a positive number
  */
 function getSpent(
   budget: IBudget,
@@ -60,7 +73,12 @@ function getSpent(
   )
 }
 
-/** Derives budget overview items and category cards from raw budgets + transactions. */
+/**
+ * Derives budget overview items and category cards from raw budgets + transactions.
+ * @param budgets - Array of budget records from the API
+ * @param transactions - Array of all transactions to compute spending from
+ * @returns Object containing budgetItems for the donut chart and categoryCards with latest transactions
+ */
 export function buildBudgetPageData(
   budgets: readonly IBudget[],
   transactions: readonly ITransaction[]

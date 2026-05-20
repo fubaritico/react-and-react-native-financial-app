@@ -6,7 +6,7 @@ export type {
 } from './currency'
 export { formatDate, toTimestamptz } from './date'
 export { resolveTokenColor } from './color'
-export { BUDGET_MONTH, buildBudgetPageData } from './budget'
+export { getCurrentBudgetMonth, buildBudgetPageData } from './budget'
 export type {
   IBudgetItem,
   IBudgetSpendingItem,

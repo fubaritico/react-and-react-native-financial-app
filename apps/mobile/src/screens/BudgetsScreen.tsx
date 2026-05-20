@@ -3,7 +3,10 @@ import {
   getBudgetsOptions,
   getTransactionsOptions,
 } from '@financial-app/http-client'
-import { buildBudgetPageData } from '@financial-app/shared'
+import {
+  buildBudgetPageData,
+  getCurrentBudgetMonth,
+} from '@financial-app/shared'
 import { Alert, Button, Spinner, Typography } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -12,12 +15,10 @@ import { ScrollView, View } from 'react-native'
 
 import tw from '../lib/tw'
 
-/** Current budget month — matches seed data. */
-const BUDGET_MONTH = '2024-08'
-
 // eslint-disable-next-line @typescript-eslint/no-empty-function -- disabled button, wired in CRUD phase
 const noop = () => {}
 
+/** @returns Budgets screen with overview chart and category cards. */
 export function BudgetsScreen() {
   const { t } = useTranslation()
 
@@ -25,7 +26,7 @@ export function BudgetsScreen() {
     data: budgets,
     isLoading: budgetsLoading,
     error: budgetsError,
-  } = useQuery(getBudgetsOptions({ query: { month: BUDGET_MONTH } }))
+  } = useQuery(getBudgetsOptions({ query: { month: getCurrentBudgetMonth() } }))
   const {
     data: txnResult,
     isLoading: txnLoading,

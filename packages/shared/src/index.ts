@@ -69,7 +69,7 @@ export type { IBalance, ITransaction, IBudget, IPot } from './types'
 
 // Utils
 export {
-  BUDGET_MONTH,
+  getCurrentBudgetMonth,
   formatCurrency,
   convertCurrency,
   formatDate,

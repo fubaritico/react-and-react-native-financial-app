@@ -54,11 +54,13 @@
     "storybook": "pnpm --filter storybook-financial-app storybook",
     "tokens": "pnpm --filter @financial-app/tokens build",
     "icons": "pnpm --filter @financial-app/icons generate",
+    "------------ DATA ---------------------": "",
+    "seed": "./scripts/seed-dev.sh",
     "------------ MAINTENANCE --------------": "",
     "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules",
     "clean:build": "rm -rf packages/*/build packages/*/dist apps/*/dist",
     "reset": "./scripts/reset-project.sh",
-    "postinstall": "chmod +x scripts/rebuild-android.sh scripts/reset-project.sh scripts/update-changelogs.sh",
+    "postinstall": "chmod +x scripts/rebuild-android.sh scripts/reset-project.sh scripts/update-changelogs.sh scripts/seed-dev.sh",
     "prepare": "husky"
   },
   "devDependencies": {

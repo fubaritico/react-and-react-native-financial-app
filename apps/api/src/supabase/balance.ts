@@ -4,7 +4,7 @@ import type { SupabaseResult } from './types.js'
 
 /** Computed balance returned by the `get_balance` RPC. */
 export interface IBalanceRow {
-  /** Current balance (reference − pots) */
+  /** Current available balance (reference + income − expenses − pots) */
   current: number
   /** Total income for the period */
   income: number

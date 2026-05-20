@@ -262,7 +262,37 @@ adb --version   # Should display Android Debug Bridge
 pnpm install
 ```
 
-### 6. Install iOS Pods
+### 6. Environment variables
+
+Copy the `.env.example` files and fill in your Supabase credentials:
+
+```bash
+# API server
+cp apps/api/.env.example apps/api/.env
+
+# Prisma (direct Postgres connection for type generation)
+cp packages/prisma/.env.example packages/prisma/.env
+
+# Mobile Expo
+cp apps/mobile-expo/.env.example apps/mobile-expo/.env
+
+# Web
+cp apps/web/.env.example apps/web/.env
+```
+
+See [Supabase Setup](docs/modus-operandi/supabase-setup.md) for the full database setup (schema, RPC functions, RLS policies).
+
+### 7. Seed the database
+
+Seed creates a test user and populates it with mock data (transactions, budgets, pots, balance):
+
+```bash
+pnpm seed
+```
+
+This starts the API server (if not running), creates the user `test@dev.com`, inserts all seed data, then stops the server. Re-running resets and re-seeds the same user.
+
+### 9. Install iOS Pods
 
 ```bash
 # In apps/mobile
@@ -271,7 +301,7 @@ bundle install
 bundle exec pod install --project-directory=ios
 ```
 
-### 7. Run the app
+### 10. Run the app
 
 ```bash
 # Start Metro (in a dedicated terminal)
@@ -297,6 +327,12 @@ pnpm install       # Install all dependencies
 pnpm build         # Build all packages (tokens → tailwind-config → icons → ui → features → apps)
 pnpm tokens        # Rebuild token outputs only
 pnpm icons         # Regenerate icon data from SVGs
+```
+
+### Data
+
+```bash
+pnpm seed          # Create/reset test user (test@dev.com) + seed mock data
 ```
 
 ### Quality checks
