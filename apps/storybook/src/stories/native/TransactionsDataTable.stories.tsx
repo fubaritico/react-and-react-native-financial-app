@@ -1,4 +1,4 @@
-import { TransactionsDataTable } from '@financial-app/features'
+import { TransactionsDataTable } from '@financial-app/features/native'
 import { mockTransactions } from '@financial-app/shared/mocks'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'

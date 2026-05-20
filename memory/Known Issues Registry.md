@@ -49,6 +49,8 @@ Accepted code review findings that were intentionally deferred:
 - Checkbox barrel import causes circular dependency — use direct sibling imports
 
 ## Build / Tooling
+- HeyAPI codegen drops `| null` on nullable enums — generated `UserPreferences.mode` is `'manual' | 'bank'` but API returns `null` for new users. Zod schema has `.nullable()`, OpenAPI YAML has `type: [string, "null"]`, but HeyAPI outputs the enum without null. Workaround: patch the type or cast at consumption in `usePreferences`.
+
 - `@financial-app/tokens` missing `.d.ts` in build output — workaround: use `/map` subpath
 - Husky pre-commit hook times out in non-TTY — HUSKY=0 workaround
 - Jest pnpm singleton — FIXED with `moduleNameMapper`

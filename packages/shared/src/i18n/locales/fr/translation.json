@@ -32,7 +32,8 @@
     "budgets": "Budgets",
     "pots": "Cagnottes",
     "recurringBills": "Factures récurrentes",
-    "minimizeMenu": "Réduire le menu"
+    "minimizeMenu": "Réduire le menu",
+    "settings": "Paramètres"
   },
   "overview": {
     "title": "Aperçu",
@@ -344,5 +345,22 @@
     "notFound": "404",
     "notFoundMessage": "La page demandée est introuvable.",
     "error": "Erreur"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "referenceBalance": "Solde de référence",
+    "language": "Langue",
+    "languageEn": "Anglais",
+    "languageFr": "Français",
+    "deleteAccount": "Supprimer mon compte",
+    "deleteAccountConfirmTitle": "Supprimer le compte",
+    "deleteAccountConfirmMessage": "Êtes-vous sûr de vouloir supprimer votre compte ? Toutes les informations seront perdues.",
+    "deleteAccountConfirm": "Supprimer",
+    "deleteAccountCancel": "Annuler",
+    "deleteAccountDeleting": "Suppression\u2026",
+    "disconnect": "Déconnexion",
+    "cancel": "Annuler",
+    "saveChanges": "Modifier les paramètres",
+    "saving": "Enregistrement\u2026"
   }
 }

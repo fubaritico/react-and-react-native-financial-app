@@ -1,4 +1,8 @@
-export { getBalance } from './balance.js'
+export {
+  getBalance,
+  getReferenceBalance,
+  updateReferenceBalance,
+} from './balance.js'
 export {
   createBudget,
   deleteBudget,
@@ -21,6 +25,7 @@ export {
 } from './transactions.js'
 export {
   checkInitialBalanceNotSet,
+  deleteUserAccount,
   ensurePreferencesRow,
   getInitialBalanceSet,
   getOrCreatePreferences,
@@ -36,9 +41,9 @@ export type {
   SupabaseListResult,
   SupabaseResult,
 } from './types.js'
-export type { IBalanceRow } from './balance.js'
+export type { IBalanceRow, IReferenceBalanceRow } from './balance.js'
 export type { BudgetRow } from './budgets.js'
 export type { PotRow } from './pots.js'
 export type { IRecurringBillRow } from './recurring-bills.js'
 export type { TransactionRow } from './transactions.js'
-export type { UserPreferencesRow } from './user-preferences.js'
+export type { IAuthErrorOnly, UserPreferencesRow } from './user-preferences.js'

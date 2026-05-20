@@ -37,6 +37,17 @@ config.resolver.sourceExts = [
   ...config.resolver.sourceExts,
 ];
 
+// --- SVG transformer ---
+// Route .svg files through react-native-svg-transformer so they can be
+// imported as React Native components (using react-native-svg under the hood).
+config.transformer.babelTransformerPath = require.resolve(
+  'react-native-svg-transformer/expo'
+);
+config.resolver.assetExts = config.resolver.assetExts.filter(
+  (ext) => ext !== 'svg'
+);
+config.resolver.sourceExts = [...config.resolver.sourceExts, 'svg'];
+
 // --- Asset extensions ---
 // Add .lottie to asset extensions so Metro bundles it as a binary asset.
 config.resolver.assetExts = [...config.resolver.assetExts, 'lottie'];

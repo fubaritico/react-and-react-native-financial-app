@@ -59,6 +59,7 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "conventional-changelog": "catalog:",
+    "react-native-svg-transformer": "^1.5.3",
     "typescript": "catalog:"
   },
   "private": true

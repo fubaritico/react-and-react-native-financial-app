@@ -15,6 +15,6 @@
       "#Templates/*": ["../../packages/ui/src/components/templates/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "../../svg.d.ts"],
   "exclude": ["**/node_modules", "**/Pods"]
 }

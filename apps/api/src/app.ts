@@ -13,6 +13,7 @@ import { initialBalanceRouter } from './routes/initial-balance.js'
 import { potsRouter } from './routes/pots.js'
 import { recurringBillsRouter } from './routes/recurring-bills.js'
 import { transactionsRouter } from './routes/transactions.js'
+import { userAccountRouter } from './routes/user-account.js'
 import { userPreferencesRouter } from './routes/user-preferences.js'
 
 /** Creates and configures the Express app (without listening). */
@@ -95,6 +96,7 @@ export function createApp() {
   app.use('/transactions', writeLimiter, transactionsRouter)
   app.use('/budgets', writeLimiter, budgetsRouter)
   app.use('/pots', writeLimiter, potsRouter)
+  app.use('/users/me', writeLimiter, userAccountRouter)
   app.use('/users/me/preferences', writeLimiter, userPreferencesRouter)
   app.use('/users/me/initial-balance', writeLimiter, initialBalanceRouter)
 

@@ -23,6 +23,6 @@
       "#Templates/*": ["../../packages/ui/src/components/templates/*"]
     }
   },
-  "include": ["src/**/*", ".storybook/**/*"],
+  "include": ["src/**/*", ".storybook/**/*", "../../svg.d.ts"],
   "exclude": ["node_modules"]
 }

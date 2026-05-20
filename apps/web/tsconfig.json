@@ -2,7 +2,8 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    ".react-router/types/**/*"
+    ".react-router/types/**/*",
+    "../../svg.d.ts"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],

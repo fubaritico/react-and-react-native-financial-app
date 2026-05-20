@@ -1,4 +1,4 @@
-import { SignupForm } from '@financial-app/features'
+import { SignupForm } from '@financial-app/features/native'
 
 import type { IAuthClient } from '@financial-app/shared'
 

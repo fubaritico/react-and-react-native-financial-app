@@ -3,6 +3,13 @@ import type { user_preferencesModel } from '@financial-app/prisma'
 import { supabase } from '../lib/supabase.js'
 
 import type { ISupabaseErrorOnly, SupabaseResult } from './types.js'
+import type { AuthError } from '@supabase/supabase-js'
+
+/** Result type for auth admin operations (deleteUser returns AuthError, not PostgrestError). */
+export interface IAuthErrorOnly {
+  /** Auth error if the operation failed, null on success */
+  error: AuthError | null
+}
 
 /** Full user preferences row as returned by Supabase (mirrors Prisma model). */
 export type UserPreferencesRow = user_preferencesModel
@@ -169,4 +176,18 @@ export async function setInitialBalance(
 
   if (prefError) return { error: prefError }
   return { error: null }
+}
+
+/**
+ * Permanently deletes a user account via Supabase Auth Admin.
+ * All related data (transactions, budgets, pots, preferences, balances) is removed
+ * automatically by `ON DELETE CASCADE` foreign keys in the database.
+ * @param userId - Authenticated user UUID to delete
+ * @returns Auth error if the operation failed, null on success
+ */
+export async function deleteUserAccount(
+  userId: string
+): Promise<IAuthErrorOnly> {
+  const { error } = await supabase.auth.admin.deleteUser(userId)
+  return { error }
 }

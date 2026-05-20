@@ -32,7 +32,8 @@
     "budgets": "Budgets",
     "pots": "Pots",
     "recurringBills": "Recurring Bills",
-    "minimizeMenu": "Minimize Menu"
+    "minimizeMenu": "Minimize Menu",
+    "settings": "Settings"
   },
   "overview": {
     "title": "Overview",
@@ -344,5 +345,22 @@
     "notFound": "404",
     "notFoundMessage": "The requested page could not be found.",
     "error": "Error"
+  },
+  "settings": {
+    "title": "Settings",
+    "referenceBalance": "Reference balance",
+    "language": "Language",
+    "languageEn": "English",
+    "languageFr": "French",
+    "deleteAccount": "Delete My Account",
+    "deleteAccountConfirmTitle": "Delete account",
+    "deleteAccountConfirmMessage": "Are you sure you want to delete your account? All informations will be lost.",
+    "deleteAccountConfirm": "Delete",
+    "deleteAccountCancel": "Cancel",
+    "deleteAccountDeleting": "Deleting\u2026",
+    "disconnect": "Deconnect",
+    "cancel": "Cancel",
+    "saveChanges": "Change settings",
+    "saving": "Saving\u2026"
   }
 }

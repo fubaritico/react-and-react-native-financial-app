@@ -5,17 +5,13 @@ import { useLocation, useNavigate } from 'react-router'
 
 import type { INavItemConfig } from '@financial-app/ui'
 
-import { authClient } from '../lib/supabase'
-
-const SIGN_OUT_HREF = '/sign-out'
-
 const NAV_ITEMS: readonly INavItemConfig[] = [
   { icon: 'navOverview', label: '', href: '/' },
   { icon: 'navTransactions', label: '', href: '/transactions' },
   { icon: 'navBudgets', label: '', href: '/budgets' },
   { icon: 'navPots', label: '', href: '/pots' },
   { icon: 'navRecurringBills', label: '', href: '/recurring' },
-  { icon: 'logout', label: '', href: SIGN_OUT_HREF },
+  { icon: 'settings', label: '', href: '/settings' },
 ] as const
 
 const NAV_LABEL_KEYS = [
@@ -24,7 +20,7 @@ const NAV_LABEL_KEYS = [
   'navigation.budgets',
   'navigation.pots',
   'navigation.recurringBills',
-  'auth.signOut',
+  'navigation.settings',
 ] as const
 
 /**
@@ -49,12 +45,6 @@ export function Sidebar() {
 
   const handleNavigate = useCallback(
     (href: string) => {
-      if (href === SIGN_OUT_HREF) {
-        void authClient.signOut().then(() => {
-          void navigate('/login', { replace: true })
-        })
-        return
-      }
       void navigate(href)
     },
     [navigate]

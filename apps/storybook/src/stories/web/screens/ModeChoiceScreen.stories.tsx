@@ -67,16 +67,10 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
-  args: {
-    icon: 'manual',
-    title: '',
-    description: '',
-    onPress: noop,
-  },
-} satisfies Meta<typeof ModeCard>
+} satisfies Meta
 
 export default meta
-type Story = StoryObj<typeof meta>
+type Story = StoryObj
 
 /** Desktop — cards side by side. */
 export const Desktop: Story = {

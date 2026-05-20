@@ -1,14 +1,47 @@
+import { readFileSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 import type { StorybookConfig } from '@storybook/react-native-web-vite'
+import type { Plugin } from 'vite'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const workspaceRoot = path.resolve(__dirname, '../../..')
 const uiPkgDir = path.join(workspaceRoot, 'packages/ui')
 const featuresPkgDir = path.join(workspaceRoot, 'packages/features')
+
+/**
+ * Custom Vite plugin — transforms .svg file imports into React components.
+ * Runs with enforce: 'pre' to beat the framework's asset handler which
+ * would otherwise convert SVGs to data-URI strings.
+ */
+function svgComponentPlugin(): Plugin {
+  return {
+    name: 'svg-react-component',
+    enforce: 'pre',
+    load(id) {
+      // Handle both bare .svg and .svg?react imports
+      const cleanId = id.replace(/\?.*$/, '')
+      if (!cleanId.endsWith('.svg')) return null
+
+      const svg = readFileSync(cleanId, 'utf-8')
+      return `
+import { createElement, forwardRef } from 'react';
+const SvgComponent = forwardRef(function SvgComponent(props, ref) {
+  return createElement('span', {
+    ref,
+    ...props,
+    style: { display: 'inline-flex', ...props.style },
+    dangerouslySetInnerHTML: { __html: ${JSON.stringify(svg)} }
+  });
+});
+export default SvgComponent;
+`
+    },
+  }
+}
 
 const config: StorybookConfig = {
   framework: '@storybook/react-native-web-vite',
@@ -82,13 +115,20 @@ const config: StorybookConfig = {
           ),
         },
         {
+          find: /^@financial-app\/features\/native$/,
+          replacement: path.join(featuresPkgDir, 'src/index.ts'),
+        },
+        {
           find: /^@financial-app\/features$/,
           replacement: path.join(featuresPkgDir, 'src/index.web.ts'),
         },
       ],
     }
 
+    // svgComponentPlugin with enforce:'pre' MUST come first — beats the
+    // framework's asset handler that converts SVGs to data-URI strings.
     config.plugins = [
+      svgComponentPlugin(),
       ...(config.plugins ?? []),
       tsconfigPaths({
         projects: [

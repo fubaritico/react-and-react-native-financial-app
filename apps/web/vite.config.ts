@@ -3,12 +3,14 @@ import { fileURLToPath } from 'url'
 
 import { reactRouter } from '@react-router/dev/vite'
 import { defineConfig } from 'vite'
+import svgr from 'vite-plugin-svgr'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   plugins: [
+    svgr(),
     reactRouter(),
     tsconfigPaths({ projects: [path.resolve(__dirname, '../../packages/ui/tsconfig.json')] }),
   ],

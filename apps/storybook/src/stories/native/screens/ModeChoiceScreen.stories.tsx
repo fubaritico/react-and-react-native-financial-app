@@ -97,16 +97,10 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
-  args: {
-    icon: 'manual',
-    title: '',
-    description: '',
-    onPress: noop,
-  },
-} satisfies Meta<typeof ModeCard>
+} satisfies Meta
 
 export default meta
-type Story = StoryObj<typeof meta>
+type Story = StoryObj
 
 /** iPhone 16 Pro — mode choice screen. */
 export const IPhone: Story = {

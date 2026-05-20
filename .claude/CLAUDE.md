@@ -143,6 +143,7 @@ packages/
 | `monorepo.md`        | Description of the expected project architecture               |
 | `troubleshooting.md` | Debug, architectural decisions                                 |
 | `api.md`             | API server patterns, routes, Supabase queries, auth, validation |
+| `features.md`        | Screen/View split, feature package architecture                |
 | `specifications.md`  | App specifications reminder and extra specifications           |
 
 **Before coding**: ask which reference files are needed — do NOT start coding without the relevant files loaded.
@@ -166,10 +167,13 @@ Read `@completed.md`
    - ~~Debug cleanup + review pass~~ ✅ — removed debug logs from shared auth/hooks, 6-agent review, fixed: SEC-008/010, A11Y-001/004/007/011, ARCH-002/017, REACT-001, QUAL-007/018
    - ~~SignupForm feature component~~ ✅ — shared SignupForm (native+web), PasswordRulesList molecule, usePasswordRules hook (3-state: pristine/valid/invalid, 6 rules), Storybook stories, 27 tests, wired into mobile-expo + web
    - ~~ModeChoiceScreen~~ ✅ — ModeCard molecule (cross-platform, CVA, medallion icon), ModeChoiceScreen feature (native+web), SVG icons (bank+manual), Icon 6xl size, Storybook stories (component+screen device frames), routes (mobile-expo auth group + web clientLoader guard), i18n keys (en+fr), review fixes (aria-disabled, token refs, styles extraction)
+   - ~~InitialBalanceScreen + preferences routing~~ ✅ — InitialBalanceScreen feature (native+web), Storybook stories (native+web), routes (mobile-expo auth group + web clientLoader guard), AuthGate preferences check, HeyAPI nullable enum fix (z.union + z.literal for `mode: 'manual' | 'bank' | null`), i18n keys (en+fr), 6-agent review pass
+   - ~~AuthGate refactor~~ ✅ — extracted useAuthRedirect hook (MFA check, preferences query, onboarding routing), named constants (AUTH_GROUP_SEGMENT, MFA_ASSURANCE_LEVEL_1), AuthGate reduced to 13-line wrapper. Fixes QUAL-006 + QUAL-013.
+   - ~~LanguageDropdown + SVG pipeline~~ ✅ — LanguageDropdown feature component (native+web) with flag SVGs, SVG import pipeline for 3 bundlers (Metro: react-native-svg-transformer, Vite: vite-plugin-svgr, Storybook: custom enforce:'pre' plugin), shared SVG assets via `@financial-app/shared/assets/*`, root `svg.d.ts` type declarations, bottom sheet text color fix (`text-inherit` CSS inheritance), removed Storybook controls from all screen stories (Settings, ModeChoice, InitialBalance)
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
    - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
-   - **Next coding**: TanStack Query preferences hooks + InitialBalanceScreen + routing glue (AuthGate preferences check)
-2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, re-audit later
+   - **Next coding**: Debug LanguageDropdown (user reported issues to investigate), then WalkthroughScreen
+2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, audit-owasp skill upgraded to OWASP 2025
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 4. `POST /dev/seed` endpoint (dev-only, fills DB with data.json for testing)
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
@@ -181,7 +185,16 @@ Read `@completed.md`
 **--- Refactors (à planifier, pas dans la foulée) ---**
 10. **Shared mutation hooks** — `docs/plans/shared-mutation-hooks.md` — extract 11 hooks into `@financial-app/features`, eliminate web/mobile duplication
 11. **i18n label internalization** — audit feature components (TransactionFormContent, BudgetFormContent, etc.) for fixed labels passed as props → internalize `t()` calls (QUAL-024). Evaluate each label: if it never changes between usages, move inside the component.
-12. **Server-side pagination** — replace client-side `limit: 1000` with proper paginated API calls + DataTable server pagination (currently `MAX_PAGE_SIZE = 1000` as workaround)
+12. **Screen/View extraction** — extract all monolithic/hybrid route files into `XxxScreenView` feature components (see `.claude/rules/features.md`). Goal: every screen renderable in Storybook. Screens to refactor:
+    - `login` (web + mobile) — **Monolithic** (109-129 lines, full form inline, no feature component)
+    - `home` / `index` (web + mobile) — **Hybrid** (235-288 lines, Overview sub-components exist but layout + queries inline)
+    - `transactions` (web + mobile) — **Hybrid** (308-332 lines, DataTable + FormContent exist but header/layout + 3 mutations inline)
+    - `budgets` (web + mobile) — **Hybrid** (391-432 lines, BudgetCategoryCard + FormContent exist but grid + 3 mutations + local wrapper inline)
+    - `pots` (web + mobile) — **Hybrid** (460-497 lines, PotCard + FormContent exist but grid + 5 mutations + local wrapper inline)
+    - `recurring` (web + mobile) — **Hybrid** (104-139 lines, DataTable + BillsSummary exist but page layout inline)
+    - Auth screens (already properly split, need `*Screen` → `*ScreenView` rename): signup, verify-email, account-activated, totp-enroll, totp-challenge, mode-choice, initial-balance
+    - `SettingsScreenView` ✅ — already uses new naming convention
+13. **Server-side pagination** — replace client-side `limit: 1000` with proper paginated API calls + DataTable server pagination (currently `MAX_PAGE_SIZE = 1000` as workaround)
 13. ~~**Password strength rules**~~ ✅ — usePasswordRules hook (6 rules incl. match) + PasswordRulesList molecule + SignupForm integration. signupSchema uses .min(1) (visual rules handle UX), loginSchema keeps .min(16).
 14. ~~**Basic Memory knowledge base**~~ ✅ — 51 notes in `memory/`, MCP server in `.mcp.json`, `/note` skill, 10 vendor skills (defrag, reflect, tasks...), wired into start/end-session, CLAUDE.md rule added, MEMORY.md defragged (355→68 lines), known-issues.md deduped, README updated with setup guide + `.example` files.
 15. ~~**CI/CD plan**~~ ✅ — `docs/plans/ci-plan.md` (GitHub Actions: validate, Playwright, Appium, SonarQube, Claude PR review, deploys). README cleaned (plans section removed — private/gitignored).

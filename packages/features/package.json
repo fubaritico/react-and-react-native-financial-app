@@ -8,6 +8,7 @@
       "react-native": "./src/index.ts",
       "default": "./src/index.web.ts"
     },
+    "./native": "./src/index.ts",
     "./shared": {
       "react-native": "./src/shared/ModalRenderer/index.ts",
       "default": "./src/shared/ModalRenderer/index.web.ts"
@@ -80,6 +81,7 @@
     "@types/react-dom": "catalog:",
     "jsdom": "catalog:",
     "react-dom": "catalog:",
+    "react-native-svg": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

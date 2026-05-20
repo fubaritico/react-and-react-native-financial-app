@@ -104,3 +104,6 @@ export type {
   IModeChoiceScreenProps,
   IInitialBalanceScreenProps,
 } from './auth'
+
+export { SettingsScreenView } from './settings'
+export type { ISettingsFormValues, ISettingsScreenViewProps } from './settings'

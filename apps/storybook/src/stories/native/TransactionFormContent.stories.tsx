@@ -1,4 +1,4 @@
-import { TransactionFormContent } from '@financial-app/features'
+import { TransactionFormContent } from '@financial-app/features/native'
 import { Card } from '@financial-app/ui'
 import { View } from 'react-native'
 

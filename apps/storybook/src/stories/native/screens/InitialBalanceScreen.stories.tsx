@@ -1,4 +1,4 @@
-import { InitialBalanceScreen } from '@financial-app/features'
+import { InitialBalanceScreen } from '@financial-app/features/native'
 import { View } from 'react-native'
 
 import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
@@ -59,29 +59,30 @@ const DeviceFrame = ({
   </View>
 )
 
+const defaultProps = {
+  onSubmit: noop,
+  onBack: noop,
+  isSubmitting: false,
+  error: '',
+}
+
 const meta = {
   title: 'Native/Screens/InitialBalanceScreen',
   component: InitialBalanceScreen,
   parameters: {
     layout: 'fullscreen',
   },
-  args: {
-    onSubmit: noop,
-    onBack: noop,
-    isSubmitting: false,
-    error: '',
-  },
-} satisfies Meta<typeof InitialBalanceScreen>
+} satisfies Meta
 
 export default meta
-type Story = StoryObj<typeof meta>
+type Story = StoryObj
 
 /** iPhone 16 Pro — initial balance screen (idle). */
 export const IPhone: Story = {
   parameters: { backgrounds: 'dark' },
-  render: (args) => (
+  render: () => (
     <DeviceFrame width={IPHONE_WIDTH} height={IPHONE_HEIGHT}>
-      <InitialBalanceScreen {...args} />
+      <InitialBalanceScreen {...defaultProps} />
     </DeviceFrame>
   ),
 }
@@ -89,31 +90,32 @@ export const IPhone: Story = {
 /** Pixel 9 — initial balance screen (idle). */
 export const Android: Story = {
   parameters: { backgrounds: 'dark' },
-  render: (args) => (
+  render: () => (
     <DeviceFrame width={ANDROID_WIDTH} height={ANDROID_HEIGHT}>
-      <InitialBalanceScreen {...args} />
+      <InitialBalanceScreen {...defaultProps} />
     </DeviceFrame>
   ),
 }
 
 /** iPhone 16 Pro — submitting state (button disabled + loading text). */
 export const Submitting: Story = {
-  args: { isSubmitting: true },
   parameters: { backgrounds: 'dark' },
-  render: (args) => (
+  render: () => (
     <DeviceFrame width={IPHONE_WIDTH} height={IPHONE_HEIGHT}>
-      <InitialBalanceScreen {...args} />
+      <InitialBalanceScreen {...defaultProps} isSubmitting />
     </DeviceFrame>
   ),
 }
 
 /** iPhone 16 Pro — server error displayed. */
 export const WithError: Story = {
-  args: { error: 'Initial balance has already been set' },
   parameters: { backgrounds: 'dark' },
-  render: (args) => (
+  render: () => (
     <DeviceFrame width={IPHONE_WIDTH} height={IPHONE_HEIGHT}>
-      <InitialBalanceScreen {...args} />
+      <InitialBalanceScreen
+        {...defaultProps}
+        error="Initial balance has already been set"
+      />
     </DeviceFrame>
   ),
 }
