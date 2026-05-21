@@ -178,10 +178,21 @@ export function Dropdown({
     const raf = requestAnimationFrame(() => {
       updatePlacement()
     })
-    window.addEventListener('scroll', handleClose, true)
+    /** Closes the dropdown on external scroll — ignores scroll inside the menu itself */
+    const handleScroll = (e: Event) => {
+      if (
+        menuWrapperRef.current &&
+        e.target instanceof Node &&
+        menuWrapperRef.current.contains(e.target)
+      ) {
+        return
+      }
+      handleClose()
+    }
+    window.addEventListener('scroll', handleScroll, true)
     return () => {
       cancelAnimationFrame(raf)
-      window.removeEventListener('scroll', handleClose, true)
+      window.removeEventListener('scroll', handleScroll, true)
     }
   }, [isOpen, isDesktop, withPortal, updatePlacement, handleClose])
 
