@@ -57,6 +57,7 @@
 * **ui:** modal a11y + replace arbitrary max-w with token ([c25b5f3](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c25b5f35b1f4dd0fb2bba30324ba7a0faab23a2e))
 * **ui:** modal portal nesting + dropdown/listbox/menu improvements ([e34bb69](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e34bb694e866e42a3d62d021c474e384d4cfe6f6))
 * **ui:** move header row inside white card in overview sections ([9cd0f15](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9cd0f15c1dcee7f6ccda1aa4b008f65f9dfab501))
+* **ui:** prevent dropdown menu scroll from closing the menu ([a0fb9f5](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a0fb9f5a9c51b0d9b84b0eedbb685763dd1202e3))
 * **ui:** replace default Tailwind colors with token aliases ([9b7b247](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9b7b24781dc5e82a18ecea230c3bb57b017e5b65))
 * **ui:** review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code ([0d43fae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d43faecf012669f2f97c8d4504f8f5ffd93c543))
 * **ui:** review fixes — token refs, aria-disabled, extract styles ([b396fb6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b396fb68c354bd75e8e16ea02ccb4f674121edaa))

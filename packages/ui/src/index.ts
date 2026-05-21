@@ -55,6 +55,13 @@ export type { ICheckboxProps } from './components/atoms/Checkbox/Checkbox.tsx'
 export { OtpInput } from './components/atoms/OtpInput/index'
 export type { IOtpInputProps } from './components/atoms/OtpInput/OtpInput.tsx'
 
+export { Tooltip } from './components/atoms/Tooltip'
+export type {
+  ITooltipProps,
+  TooltipPlacement,
+  ITooltipManualPosition,
+} from './components/atoms/Tooltip/Tooltip.tsx'
+
 // Molecules
 export { TextInput } from './components/molecules/TextInput'
 export type { ITextInputProps } from './components/molecules/TextInput/TextInput.tsx'
