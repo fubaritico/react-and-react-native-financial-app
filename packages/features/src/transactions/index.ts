@@ -5,7 +5,7 @@ export { TransactionFormContent } from './TransactionFormContent'
 export type {
   ITransactionFormContentProps,
   ITransactionFormRef,
-  ITransactionFormValues,
+  TransactionFormData,
 } from './TransactionFormContent'
 
 export {
@@ -18,3 +18,9 @@ export type {
   IEditTransactionModalLabels,
   IDeleteTransactionModalLabels,
 } from './createTransactionModalConfigs'
+
+export { useTransactionCrud } from './hooks/useTransactionCrud'
+export type {
+  ITransactionFormBridge,
+  IUseTransactionCrudParams,
+} from './hooks/useTransactionCrud'

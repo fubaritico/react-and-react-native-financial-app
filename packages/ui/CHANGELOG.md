@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-19)
+# 1.0.0 (2026-05-21)
 
 
 ### Bug Fixes
@@ -112,6 +112,7 @@
 * **mobile:** set ejected expo project ([aa156fc](https://github.com/fubaritico/react-and-react-native-financial-app/commit/aa156fc87b8658222436e709bb2b18fb6b6a107e))
 * **mobile:** set project with expo ([dae87e9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/dae87e9708fe26bfac0f9fc223c00951bbd6088e))
 * **monorepo:** add changelog generation and type-check scripts ([f63021a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/f63021aa0544eabc96b51c599c1299f82b32b750))
+* **onboarding:** add InitialBalanceScreen + preferences routing glue ([6052020](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6052020c064ab6fd07ced05dd7efc793852a8227))
 * **onboarding:** add ModeChoiceScreen + ModeCard component ([d5766d0](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d5766d018bf9a27d633b54e9e31f718d04c6bbc9))
 * **pages:** replace mock data with TanStack Query + Alert/Skeleton/Spinner UX ([687c938](https://github.com/fubaritico/react-and-react-native-financial-app/commit/687c93812227b9e3a72895f96bcf2827b2f55320)), closes [#Alias](https://github.com/fubaritico/react-and-react-native-financial-app/issues/Alias)
 * **pages:** wire Budget route across all 3 apps with shared data util ([5ad8019](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5ad8019287cf3a6b64e4eb31543f43527b840224))
@@ -119,6 +120,7 @@
 * **pages:** wire Recurring Bills route + BillsSummary + fixes ([ca083f0](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ca083f00be47015d93b320385a63942f155f78c4))
 * **pots:** wire add money/withdraw modals + PotAmountFormContent component ([2f061b1](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2f061b11bafb31e78f5b3f0cd831533126665725))
 * **pots:** wire add/edit/delete modals + PotFormContent component ([8b2fba8](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8b2fba8482b026e444d25af4679002cbd0c52480))
+* **seed:** add POST /dev/seed endpoint + shell script + dynamic budget month ([be12ec6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/be12ec678f0582ac754ffe01d6c7a478d88485c5))
 * **shared,mobile-expo:** add mock data, test utils, wire Overview page ([7f51ce7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7f51ce7800b2e2a9dcea43f9ef3b3b203386847b))
 * **shared:** create @financial-app/shared package (Phase 5.1 + 5.7) ([4bf5dff](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4bf5dff43b21255596e601da1585f2341a44b4d5))
 * **shared:** session expiry warning modal + refreshSession ([89050e6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/89050e6c82fa66abee9690e7783a68c3983f0985))

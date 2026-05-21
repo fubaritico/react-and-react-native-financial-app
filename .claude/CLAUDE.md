@@ -176,9 +176,11 @@ Read `@completed.md`
    - ~~Balance model fix~~ ✅ — `get_balance` RPC corrected to `current = reference + income - expenses - pots`. Verified: reference=3641.50 → current=4836.00. data.json fixed (expenses=1699.75).
    - ~~Dev seed endpoint~~ ✅ — `POST /dev/seed` with Zod validation, CASCADE user reset, date-shift to current month. Shell script reads SEED_EMAIL/SEED_PASSWORD from .env. `pnpm seed` from root.
    - ~~Dynamic budget month~~ ✅ — replaced hardcoded `BUDGET_MONTH='2024-08'` with `getCurrentBudgetMonth()` across all 6 route files. Module-level query options moved inside component (web/budgets). Inline arrows extracted to useCallback (mobile-expo + bare mobile overview).
+   - ~~Web form refactor (dataset pattern)~~ ✅ — useFormValidation owns form state, web forms expose data via `<form>` dataset (`data-error`, `data-form-data`). 6 web modals migrated (transaction add/edit, budget add/edit, pot add/edit). Zod schema factories with i18n (`createXxxFormSchema(t)`). Transaction amount changed to string type (text input + character filter). Rate limiter fix (writeLimiter skips GET). Review pass: removed dead DataTest interface, fixed JSDoc, extracted getCharsLeftLabel useCallback, cleaned commented-out debug logs.
+   - ~~Native form fix + shared CRUD hooks + tests~~ ✅ — Fixed 3 native form components (platform-agnostic ref types, amount: string). Extracted useTransactionCrud, useBudgetCrud, usePotCrud into @financial-app/features. Zod schema refine() guard (empty string bypass). useFormValidation tests (16), CRUD hook tests (3×10), form component tests (3×7). Rate limiter fix (skip GET). 6-agent review pass (97/100).
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
    - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
-   - **Next coding**: Walkthrough screen (slideshow of 4 real app screens with mock data)
+   - **Next coding**: Onboarding walkthrough screens
 2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, audit-owasp skill upgraded to OWASP 2025
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
@@ -188,7 +190,7 @@ Read `@completed.md`
 9. Navigation web: graphic design refinement (user doing manual pass)
 
 **--- Refactors (à planifier, pas dans la foulée) ---**
-10. **Shared mutation hooks** — `docs/plans/shared-mutation-hooks.md` — extract 11 hooks into `@financial-app/features`, eliminate web/mobile duplication
+10. **Shared mutation hooks** — `docs/plans/shared-mutation-hooks.md` — 3 done (useTransactionCrud, useBudgetCrud, usePotCrud), remaining: extract showSuccess/showError/formBridge duplication from web routes into shared helpers
 11. **i18n label internalization** — audit feature components (TransactionFormContent, BudgetFormContent, etc.) for fixed labels passed as props → internalize `t()` calls (QUAL-024). Evaluate each label: if it never changes between usages, move inside the component.
 12. **Screen/View extraction** — extract all monolithic/hybrid route files into `XxxScreenView` feature components (see `.claude/rules/features.md`). Goal: every screen renderable in Storybook. Screens to refactor:
     - `login` (web + mobile) — **Monolithic** (109-129 lines, full form inline, no feature component)

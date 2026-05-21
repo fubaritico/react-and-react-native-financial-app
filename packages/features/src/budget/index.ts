@@ -6,9 +6,9 @@ export type { IBudgetThemeDropdownProps } from './BudgetThemeDropdown'
 
 export { BudgetFormContent } from './BudgetFormContent'
 export type {
+  BudgetFormValues,
   IBudgetFormContentProps,
   IBudgetFormRef,
-  IBudgetFormValues,
 } from './BudgetFormContent'
 
 export {
@@ -21,3 +21,9 @@ export type {
   IEditBudgetModalLabels,
   IDeleteBudgetModalLabels,
 } from './createBudgetModalConfigs'
+
+export { useBudgetCrud } from './hooks/useBudgetCrud'
+export type {
+  IBudgetFormBridge,
+  IUseBudgetCrudParams,
+} from './hooks/useBudgetCrud'

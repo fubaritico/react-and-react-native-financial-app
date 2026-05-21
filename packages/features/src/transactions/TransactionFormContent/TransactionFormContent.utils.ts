@@ -1,4 +1,7 @@
-/** Returns today's date as an ISO string (YYYY-MM-DD) */
+/**
+ * Returns today's date as an ISO string (YYYY-MM-DD).
+ * @returns ISO date string in YYYY-MM-DD format
+ */
 export function getTodayISO(): string {
   const now = new Date()
   const year = now.getFullYear()

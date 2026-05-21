@@ -1,33 +1,34 @@
-import type { Ref } from 'react'
+/** Ref handle exposed by TransactionFormContent (native) */
+export interface ITransactionFormRef {
+  /** Returns the current form values */
+  getValues: () => TransactionFormData
+  /** Whether the form currently has validation errors */
+  hasErrors: boolean
+  /** Triggers full form validation — shows all field errors */
+  validate: () => boolean
+}
 
-/** Form values returned by TransactionFormContent */
-export interface ITransactionFormValues {
+/** Form values — all strings (parsed to number on submit) */
+export interface TransactionFormData {
   /** Transaction counterparty name */
   name: string
   /** Transaction category */
   category: string
   /** ISO datetime string */
   date: string
-  /** Amount — negative = expense, positive = income */
-  amount: number
+  /** Amount as string — parsed to number on submit */
+  amount: string
   /** Whether the transaction recurs */
   recurring: boolean
 }
 
-/** Ref handle exposed by TransactionFormContent */
-export interface ITransactionFormRef {
-  /** Returns the current form values */
-  getValues: () => ITransactionFormValues
-  /** Whether the form currently has validation errors */
-  hasErrors: boolean
-}
-
-/** Props for the TransactionFormContent component */
+/**
+ * Shared props for TransactionFormContent (no ref — each platform adds its own).
+ * Native adds `ref?: Ref<ITransactionFormRef>`, web adds `ref?: Ref<HTMLFormElement>`.
+ */
 export interface ITransactionFormContentProps {
   /** Initial form values (for edit mode) */
-  initialValues?: Partial<ITransactionFormValues>
-  /** Ref to access form values from the parent */
-  ref?: Ref<ITransactionFormRef>
+  initialValues?: TransactionFormData
   /** Label for the name field */
   nameLabel: string
   /** Placeholder for the name field */

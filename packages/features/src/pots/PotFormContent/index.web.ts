@@ -1,6 +1,2 @@
 export { PotFormContent } from './PotFormContent.web'
-export type {
-  IPotFormContentProps,
-  IPotFormRef,
-  IPotFormValues,
-} from './PotFormContent'
+export type { PotFormValues, IPotFormContentProps } from './PotFormContent'

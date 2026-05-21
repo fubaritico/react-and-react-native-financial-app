@@ -38,7 +38,11 @@ export function createAddTransactionModalConfig(
     title: labels.title,
     body,
     actions: [
-      { label: labels.submitLabel, variant: 'primary', onPress: onSubmit },
+      {
+        label: labels.submitLabel,
+        variant: 'primary',
+        onPress: onSubmit,
+      },
     ],
   }
 }

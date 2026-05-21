@@ -2,16 +2,11 @@ import {
   BudgetCategoryCard,
   BudgetFormContent,
   BudgetOverview,
-  createAddBudgetModalConfig,
-  createDeleteBudgetModalConfig,
-  createEditBudgetModalConfig,
+  useBudgetCrud,
 } from '@financial-app/features'
 import {
-  deleteBudgetsByIdMutation,
   getBudgetsOptions,
   getTransactionsOptions,
-  postBudgetsMutation,
-  putBudgetsByIdMutation,
 } from '@financial-app/http-client'
 import {
   buildBudgetPageData,
@@ -20,11 +15,14 @@ import {
   useModal,
 } from '@financial-app/shared'
 import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { IBudgetFormRef } from '@financial-app/features'
+import type {
+  BudgetFormValues,
+  IBudgetFormBridge,
+} from '@financial-app/features'
 import type { IBudgetCategoryCard } from '@financial-app/shared'
 
 import { queryClient } from '../lib/query-client'
@@ -130,8 +128,7 @@ export function HydrateFallback() {
 export default function Budgets({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation()
   const modal = useModal()
-  const qc = useQueryClient()
-  const formRef = useRef<IBudgetFormRef>(null)
+  const formRef = useRef<HTMLFormElement>(null)
   const { budgetsOpts, txnOpts } = fetchQueryOptions()
 
   const {
@@ -161,11 +158,35 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
     [budgets]
   )
 
-  /** ID of the budget currently being edited (stable ref to avoid stale closures) */
-  const editingBudgetIdRef = useRef<string | null>(null)
+  /** Reads form data from the dataset on the form element */
+  const getFormData = useCallback((): BudgetFormValues | null => {
+    const ref = formRef.current
+    if (!ref?.dataset.formData) return null
+    const data = structuredClone(
+      JSON.parse(ref.dataset.formData) as BudgetFormValues
+    )
+    delete ref.dataset.formData
+    return data
+  }, [])
+
+  /** Whether the form has validation errors (dataset-based) */
+  const hasFormErrors = useCallback(
+    () => formRef.current?.dataset.error === 'true',
+    []
+  )
+
+  /** Triggers native form validation to show field errors */
+  const triggerValidation = useCallback(() => {
+    formRef.current?.requestSubmit()
+  }, [])
+
+  const formBridge: IBudgetFormBridge = useMemo(
+    () => ({ getFormData, hasErrors: hasFormErrors, triggerValidation }),
+    [getFormData, hasFormErrors, triggerValidation]
+  )
 
   /** Opens a brief confirmation modal after a successful mutation */
-  const showSuccessModal = useCallback(
+  const showSuccess = useCallback(
     (message: string) => {
       modal.open({
         body: (
@@ -193,7 +214,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
   )
 
   /** Opens an error modal after a failed mutation */
-  const showErrorModal = useCallback(
+  const showError = useCallback(
     (err: unknown) => {
       modal.open({
         body: (
@@ -222,82 +243,12 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
     [modal, t]
   )
 
-  const { mutate: createBudget } = useMutation({
-    ...postBudgetsMutation(),
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: budgetsOpts.queryKey })
-      modal.close()
-      showSuccessModal(t('common.budgetAdded'))
-    },
-    onError: (err) => {
-      modal.close()
-      showErrorModal(err)
-    },
-  })
-
-  const { mutate: updateBudget } = useMutation({
-    ...putBudgetsByIdMutation(),
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: budgetsOpts.queryKey })
-      modal.close()
-      showSuccessModal(t('common.budgetUpdated'))
-    },
-    onError: (err) => {
-      modal.close()
-      showErrorModal(err)
-    },
-  })
-
-  const { mutate: deleteBudget } = useMutation({
-    ...deleteBudgetsByIdMutation(),
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: budgetsOpts.queryKey })
-      modal.close()
-      showSuccessModal(t('common.budgetDeleted'))
-    },
-    onError: (err) => {
-      modal.close()
-      showErrorModal(err)
-    },
-  })
-
-  const handleSubmitBudget = useCallback(() => {
-    const values = formRef.current?.getValues()
-    if (!values) return
-    const parsed = Number(values.maximum)
-    if (!Number.isFinite(parsed) || parsed <= 0) return
-    modal.setSubmitting(true)
-    createBudget({
-      body: {
-        category: values.category,
-        maximum: parsed,
-        theme: values.theme,
-        month: getCurrentBudgetMonth(),
-      },
-    })
-  }, [createBudget, modal])
-
-  const handleSubmitEditBudget = useCallback(() => {
-    const values = formRef.current?.getValues()
-    const budgetId = editingBudgetIdRef.current
-    if (!values || !budgetId) return
-    const parsed = Number(values.maximum)
-    if (!Number.isFinite(parsed) || parsed <= 0) return
-    modal.setSubmitting(true)
-    updateBudget({
-      path: { id: budgetId },
-      body: {
-        category: values.category,
-        maximum: parsed,
-        theme: values.theme,
-      },
-    })
-  }, [updateBudget, modal])
-
-  const handleAddBudget = useCallback(() => {
-    const config = createAddBudgetModalConfig(
+  /** Renders the budget form with platform-specific ref and current existing lists */
+  const renderForm = useCallback(
+    (props?: { initialValues?: BudgetFormValues; description?: string }) => (
       <BudgetFormContent
         ref={formRef}
+        initialValues={props?.initialValues}
         existingCategories={existingCategories}
         existingThemes={existingThemes}
         categoryLabel={t('budgets.form.categoryLabel')}
@@ -305,71 +256,30 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
         themeLabel={t('budgets.form.themeLabel')}
         maximumPlaceholder={t('budgets.form.maximumPlaceholder')}
         alreadyUsedLabel={t('budgets.form.alreadyUsed')}
-        description={t('budgets.addModal.description')}
-      />,
-      handleSubmitBudget,
-      {
-        title: t('budgets.addModal.title'),
-        submitLabel: t('budgets.addModal.submitLabel'),
-      }
-    )
-    modal.open(config)
-  }, [existingCategories, existingThemes, t, modal, handleSubmitBudget])
-
-  /** Opens the Edit Budget modal for the given card */
-  const handleEditBudget = useCallback(
-    (card: IBudgetCategoryCard) => {
-      editingBudgetIdRef.current = card.id
-      const config = createEditBudgetModalConfig(
-        <BudgetFormContent
-          ref={formRef}
-          initialValues={{
-            category: card.category,
-            maximum: String(card.maximum),
-            theme: card.color,
-          }}
-          existingCategories={existingCategories}
-          existingThemes={existingThemes}
-          categoryLabel={t('budgets.form.categoryLabel')}
-          maximumLabel={t('budgets.form.maximumLabel')}
-          themeLabel={t('budgets.form.themeLabel')}
-          maximumPlaceholder={t('budgets.form.maximumPlaceholder')}
-          alreadyUsedLabel={t('budgets.form.alreadyUsed')}
-          description={t('budgets.editModal.description')}
-        />,
-        handleSubmitEditBudget,
-        {
-          title: t('budgets.editModal.title'),
-          submitLabel: t('budgets.editModal.submitLabel'),
-        }
-      )
-      modal.open(config)
-    },
-    [existingCategories, existingThemes, t, modal, handleSubmitEditBudget]
+        description={props?.description}
+      />
+    ),
+    [existingCategories, existingThemes, t]
   )
 
-  /** Opens the Delete Budget confirmation modal for the given card */
-  const handleDeleteBudget = useCallback(
-    (card: IBudgetCategoryCard) => {
-      const config = createDeleteBudgetModalConfig(
-        card.category,
-        <Typography variant="body" color="muted">
-          {t('budgets.deleteModal.description')}
-        </Typography>,
-        () => {
-          modal.setSubmitting(true)
-          deleteBudget({ path: { id: card.id } })
-        },
-        {
-          title: (name) => t('budgets.deleteModal.title', { name }),
-          confirmLabel: t('budgets.deleteModal.confirmLabel'),
-          cancelLabel: t('budgets.deleteModal.cancelLabel'),
-        }
-      )
-      modal.open(config)
-    },
-    [t, modal, deleteBudget]
+  /** Renders the delete modal body */
+  const renderDeleteBody = useCallback(
+    (description: string) => (
+      <Typography variant="body" color="muted">
+        {description}
+      </Typography>
+    ),
+    []
   )
+
+  const { handleAdd, handleEdit, handleDelete } = useBudgetCrud({
+    modal,
+    formBridge,
+    showSuccess,
+    showError,
+    renderForm,
+    renderDeleteBody,
+  })
 
   if (budgetsLoading) {
     return (
@@ -404,7 +314,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
         </Typography>
         <Button
           title={t('budgets.addNewBudget')}
-          onPress={handleAddBudget}
+          onPress={handleAdd}
           size="lg"
           variant="primary"
         />
@@ -429,8 +339,8 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
             <BudgetCardItem
               key={card.category}
               card={card}
-              onEdit={handleEditBudget}
-              onDelete={handleDeleteBudget}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
               maximumOfLabel={t('budgets.maximumOf')}
               spentLabel={t('budgets.spent')}
               remainingLabel={t('budgets.remaining')}

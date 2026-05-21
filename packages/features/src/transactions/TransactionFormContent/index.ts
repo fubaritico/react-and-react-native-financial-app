@@ -2,5 +2,5 @@ export { TransactionFormContent } from './TransactionFormContent.native'
 export type {
   ITransactionFormContentProps,
   ITransactionFormRef,
-  ITransactionFormValues,
+  TransactionFormData,
 } from './TransactionFormContent'

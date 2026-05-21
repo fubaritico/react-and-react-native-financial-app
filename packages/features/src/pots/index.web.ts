@@ -3,9 +3,8 @@ export type { IPotCardProps } from './PotCard/index.web'
 
 export { PotFormContent } from './PotFormContent/index.web'
 export type {
+  PotFormValues,
   IPotFormContentProps,
-  IPotFormRef,
-  IPotFormValues,
 } from './PotFormContent/index.web'
 
 export { PotAmountFormContent } from './PotAmountFormContent/index.web'
@@ -28,3 +27,6 @@ export type {
   IAddMoneyModalLabels,
   IWithdrawModalLabels,
 } from './createPotModalConfigs'
+
+export { usePotCrud } from './hooks/usePotCrud'
+export type { IPotFormBridge, IUsePotCrudParams } from './hooks/usePotCrud'

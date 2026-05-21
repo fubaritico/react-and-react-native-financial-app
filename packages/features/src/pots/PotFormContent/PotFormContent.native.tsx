@@ -1,5 +1,7 @@
+import { useFormValidation } from '@financial-app/shared'
 import { TextInput, Typography, tw } from '@financial-app/ui/native'
-import { useImperativeHandle, useState } from 'react'
+import { useCallback, useImperativeHandle, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
 import { THEME_COLORS } from '../../budget/BudgetFormContent/BudgetFormContent.constants'
@@ -8,13 +10,28 @@ import { BudgetThemeDropdown } from '../../budget/BudgetThemeDropdown/BudgetThem
 import {
   DEFAULT_POT_FORM,
   POT_NAME_MAX_LENGTH,
+  createPotFormSchema,
 } from './PotFormContent.constants'
 
-import type { IPotFormContentProps } from './PotFormContent'
+import type {
+  IPotFormContentProps,
+  IPotFormRef,
+  PotFormValues,
+} from './PotFormContent'
+import type { Ref } from 'react'
+
+/** Native-specific props — adds imperative ref handle */
+interface IPotFormNativeProps extends IPotFormContentProps {
+  /** Ref exposing getValues() and hasErrors for the route submit handler */
+  ref?: Ref<IPotFormRef>
+}
 
 /**
  * PotFormContent — form body for Add/Edit pot modals (native).
- * Manages its own local state and exposes values via ref.
+ * Uses useFormValidation for state + Zod validation, exposes values via ref.
+ *
+ * @param props - Form props including labels, initial values, and ref
+ * @returns Form body JSX for the modal
  */
 export function PotFormContent({
   initialValues,
@@ -27,23 +44,49 @@ export function PotFormContent({
   alreadyUsedLabel,
   description,
   ref,
-}: Readonly<IPotFormContentProps>) {
-  const [name, setName] = useState(initialValues?.name ?? DEFAULT_POT_FORM.name)
-  const [target, setTarget] = useState(
-    initialValues?.target ?? DEFAULT_POT_FORM.target
-  )
-  const [theme, setTheme] = useState(
-    initialValues?.theme ?? DEFAULT_POT_FORM.theme
+}: Readonly<IPotFormNativeProps>) {
+  const { t } = useTranslation()
+
+  /** Zod schema with translated error messages */
+  const schema = useMemo(() => createPotFormSchema(t), [t])
+
+  /** Responsible for form state and validation */
+  const { formData, errors, validateField, validateForm, hasErrors } =
+    useFormValidation<PotFormValues>(schema, initialValues ?? DEFAULT_POT_FORM)
+
+  /** @param value - New name value */
+  const onNameChange = useCallback(
+    (value: string) => {
+      validateField('name', value)
+    },
+    [validateField]
   )
 
-  useImperativeHandle(
-    ref,
-    () => ({ getValues: () => ({ name, target, theme }) }),
-    [name, target, theme]
+  /** @param value - New target value as string */
+  const onTargetChange = useCallback(
+    (value: string) => {
+      const sanitized = value.replace(/[^0-9.]/g, '')
+      validateField('target', sanitized)
+    },
+    [validateField]
   )
+
+  /** @param value - New theme value */
+  const onThemeChange = useCallback(
+    (value: string) => {
+      validateField('theme', value)
+    },
+    [validateField]
+  )
+
+  useImperativeHandle(ref, () => ({
+    getValues: () => formData,
+    hasErrors,
+    validate: () => validateForm(formData),
+  }))
 
   /** Characters remaining for pot name */
-  const charsLeft = POT_NAME_MAX_LENGTH - name.length
+  const charsLeft = POT_NAME_MAX_LENGTH - formData.name.length
 
   /** Theme options (no filtering — pots can share themes) */
   const themeOptions = THEME_COLORS
@@ -59,11 +102,13 @@ export function PotFormContent({
       <View style={tw`gap-1`}>
         <TextInput
           label={nameLabel}
-          value={name}
-          onChangeText={setName}
+          value={formData.name}
+          onChangeText={onNameChange}
           placeholder={namePlaceholder}
           maxLength={POT_NAME_MAX_LENGTH}
           accessibilityLabel={nameLabel}
+          error={!!errors.name}
+          helperText={errors.name}
         />
         <Typography variant="caption" color="muted" style={tw`text-right`}>
           {charactersLeftLabel(charsLeft)}
@@ -74,12 +119,14 @@ export function PotFormContent({
       <View style={tw`gap-1`}>
         <TextInput
           label={targetLabel}
-          value={target}
-          onChangeText={setTarget}
+          value={formData.target}
+          onChangeText={onTargetChange}
           prefix="$"
           placeholder={targetPlaceholder}
           keyboardType="numeric"
           accessibilityLabel={targetLabel}
+          error={!!errors.target}
+          helperText={errors.target}
         />
       </View>
 
@@ -90,8 +137,8 @@ export function PotFormContent({
         </Typography>
         <BudgetThemeDropdown
           options={themeOptions}
-          selectedValue={theme}
-          onSelect={setTheme}
+          selectedValue={formData.theme}
+          onSelect={onThemeChange}
           accessibilityLabel={themeLabel}
           bottomSheetTitle={themeLabel}
           alreadyUsedLabel={alreadyUsedLabel}

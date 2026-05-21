@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-20)
+# 1.0.0 (2026-05-21)
 
 
 ### Bug Fixes
@@ -120,6 +120,7 @@
 * **pages:** wire Recurring Bills route + BillsSummary + fixes ([ca083f0](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ca083f00be47015d93b320385a63942f155f78c4))
 * **pots:** wire add money/withdraw modals + PotAmountFormContent component ([2f061b1](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2f061b11bafb31e78f5b3f0cd831533126665725))
 * **pots:** wire add/edit/delete modals + PotFormContent component ([8b2fba8](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8b2fba8482b026e444d25af4679002cbd0c52480))
+* **seed:** add POST /dev/seed endpoint + shell script + dynamic budget month ([be12ec6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/be12ec678f0582ac754ffe01d6c7a478d88485c5))
 * **shared,mobile-expo:** add mock data, test utils, wire Overview page ([7f51ce7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7f51ce7800b2e2a9dcea43f9ef3b3b203386847b))
 * **shared:** create @financial-app/shared package (Phase 5.1 + 5.7) ([4bf5dff](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4bf5dff43b21255596e601da1585f2341a44b4d5))
 * **shared:** session expiry warning modal + refreshSession ([89050e6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/89050e6c82fa66abee9690e7783a68c3983f0985))

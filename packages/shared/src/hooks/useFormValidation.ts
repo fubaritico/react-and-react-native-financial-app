@@ -2,90 +2,89 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { z } from 'zod'
 
 /**
- * Type pour les erreurs de validation - clé = nom du champ, valeur = message d'erreur
+ * Validation errors — key = field name, value = error message
  */
 type ValidationErrors = Record<string, string>
 
 /**
- * Hook personnalisé pour la validation de formulaires avec Zod
- * Fournit une validation progressive (champ par champ), une validation complète,
- * et la surveillance automatique des changements du formulaire
+ * Custom form validation hook powered by Zod.
+ * Provides progressive validation (field by field), full validation,
+ * and automatic form change tracking.
  *
- * @template T - Type des données du formulaire
+ * @template T - Form data type
  *
- * @param schema - Schéma Zod pour la validation
- * @param currentData - Données actuelles du formulaire
+ * @param schema - Zod schema for validation
+ * @param initialValues - Initial form data
  *
- * @returns Objet contenant les fonctions et états de validation
+ * @returns Object containing validation functions and state
  */
-export const useFormValidation = <T extends Record<string, unknown>>(
+export const useFormValidation = <T extends object>(
   schema: z.ZodSchema<T>,
-  currentData: T
+  initialValues: T
 ) => {
-  // Etat du formulaire
+  // Form state
   const [errors, setErrors] = useState<ValidationErrors>({})
   const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set())
   const [hasErrors, setHasErrors] = useState(false)
+  const [formData, setFormData] = useState<T>(initialValues)
 
   /**
-   * Copie figée des données initiales (première valeur de currentData, ne change jamais)
+   * Frozen copy of initial data (first value of formData, never changes)
    */
   const initialFormData = useRef<T | null>(null)
   const hasValidatedOnMount = useRef(false)
 
   /**
-   * Faire la copie seulement au premier rendu
+   * Copy only on first render
    */
 
-  initialFormData.current ??= structuredClone(currentData)
+  initialFormData.current ??= structuredClone(formData)
 
   /**
-   * Calcul automatique si le formulaire a changé
+   * Automatically compute whether the form has changed
    */
   const hasFormChanged = useMemo(
-    () =>
-      JSON.stringify(currentData) !== JSON.stringify(initialFormData.current),
-    [currentData]
+    () => JSON.stringify(formData) !== JSON.stringify(initialFormData.current),
+    [formData]
   )
 
   /**
-   * Validation silencieuse au montage pour set hasErrors seulement
+   * Silent validation on mount to set hasErrors only
    */
   useEffect(() => {
     if (!hasValidatedOnMount.current) {
       try {
-        schema.parse(currentData)
+        schema.parse(formData)
         setHasErrors(false)
       } catch {
         setHasErrors(true)
       }
       hasValidatedOnMount.current = true
     }
-  }, [schema, currentData, setHasErrors])
+  }, [schema, formData, setHasErrors])
 
   /**
-   * Valide un champ spécifique du formulaire
-   * N'affiche les erreurs que pour les champs déjà "touchés" par l'utilisateur
+   * Validates a specific form field.
+   * Only displays errors for fields already "touched" by the user.
    *
-   * @param fieldName - Nom du champ à valider
-   * @param value - Nouvelle valeur du champ
-   * @param formData - Données complètes du formulaire avec la nouvelle valeur
+   * @param fieldName - Name of the field to validate
+   * @param value - New value of the field
    *
-   * @returns true si le champ est valide, false sinon
+   * @returns true if the field is valid, false otherwise
    */
   const validateField = useCallback(
-    (fieldName: keyof T, value: unknown, formData: T) => {
-      // Marquer le champ comme "touché"
+    (fieldName: keyof T, value: unknown) => {
+      // Mark the field as "touched"
       setTouchedFields((prev) => new Set(prev).add(fieldName as string))
+      // Create a copy of the data with the new value
+      const updatedData = { ...formData, [fieldName]: value }
+      // Update form data
+      setFormData(updatedData)
 
       try {
-        // Créer une copie des données avec la nouvelle valeur
-        const updatedData = { ...formData, [fieldName]: value }
-
-        // Valider tout le formulaire pour avoir le contexte complet
+        // Validate the entire form for full context
         schema.parse(updatedData)
-
-        // Si valide, supprimer l'erreur pour ce champ
+        // If valid, remove the error for this field
         setErrors((prev) => {
           const { [fieldName as string]: _, ...rest } = prev
           setHasErrors(Object.keys(rest).length > 0)
@@ -95,11 +94,10 @@ export const useFormValidation = <T extends Record<string, unknown>>(
         return true
       } catch (error) {
         if (error instanceof z.ZodError) {
-          // Ne traiter que les erreurs des champs déjà touchés
+          // Only process errors for already-touched fields
           setErrors((prev) => {
             const { [fieldName as string]: _, ...newErrors } = prev
-
-            // Ajouter les nouvelles erreurs seulement pour les champs touchés
+            // Add new errors only for touched fields
             error.errors.forEach((err) => {
               const errorFieldName = err.path[0] as string
 
@@ -111,13 +109,13 @@ export const useFormValidation = <T extends Record<string, unknown>>(
               }
             })
 
-            // Mettre à jour hasErrors après modification des erreurs
+            // Update hasErrors after modifying errors
             setHasErrors(true)
 
             return newErrors
           })
 
-          // Retourner true si ce champ spécifique n'a pas d'erreur
+          // Return true if this specific field has no error
           const fieldError = error.errors.find(
             (err) => err.path[0] === fieldName
           )
@@ -128,16 +126,16 @@ export const useFormValidation = <T extends Record<string, unknown>>(
 
       return false
     },
-    [schema, touchedFields]
+    [formData, schema, touchedFields]
   )
 
   /**
-   * Valide le formulaire de manière silencieuse (sans afficher les erreurs)
-   * Utilisé pour vérifier la validité sans impacter l'interface utilisateur
+   * Validates the form silently (without displaying errors).
+   * Used to check validity without impacting the UI.
    *
-   * @param formData - Données complètes du formulaire à valider
+   * @param formData - Complete form data to validate
    *
-   * @returns true si le formulaire est valide, false sinon
+   * @returns true if the form is valid, false otherwise
    */
   const validateFormSilently = useCallback(
     (formData: T) => {
@@ -157,12 +155,12 @@ export const useFormValidation = <T extends Record<string, unknown>>(
   )
 
   /**
-   * Valide tout le formulaire et affiche toutes les erreurs
-   * Utilisé lors de la soumission ou validation complète
+   * Validates the entire form and displays all errors.
+   * Used on submission or full validation.
    *
-   * @param formData - Données complètes du formulaire à valider
+   * @param formData - Complete form data to validate
    *
-   * @returns true si le formulaire est valide, false sinon
+   * @returns true if the form is valid, false otherwise
    */
   const validateForm = useCallback(
     (formData: T) => {
@@ -194,7 +192,7 @@ export const useFormValidation = <T extends Record<string, unknown>>(
   )
 
   /**
-   * Efface toutes les erreurs de validation
+   * Clears all validation errors
    */
   const clearErrors = useCallback(() => {
     setErrors({})
@@ -202,36 +200,31 @@ export const useFormValidation = <T extends Record<string, unknown>>(
   }, [])
 
   /**
-   * Remet à zéro la liste des champs touchés
-   * Utile lors de la réinitialisation du formulaire
+   * Resets the list of touched fields.
+   * Useful when resetting the form.
    */
   const resetTouchedFields = useCallback(() => {
     setTouchedFields(new Set())
   }, [])
 
   return {
-    /** Objet contenant les erreurs actuelles (clé = nom du champ, valeur = message) */
+    /** Current errors object (key = field name, value = message) */
     errors,
-
-    /** Fonction pour valider un champ spécifique (validation progressive) */
+    /** Validates a specific field (progressive validation) */
     validateField,
-
-    /** Fonction pour valider tout le formulaire avec affichage des erreurs */
+    /** Validates the entire form and displays errors */
     validateForm,
-
-    /** Fonction pour valider tout le formulaire sans afficher les erreurs */
+    /** Validates the entire form without displaying errors */
     validateFormSilently,
-
-    /** Fonction pour effacer toutes les erreurs */
+    /** Clears all validation errors */
     clearErrors,
-
-    /** Fonction pour remettre à zéro les champs touchés */
+    /** Resets the list of touched fields */
     resetTouchedFields,
-
-    /** Booléen indiquant s'il y a des erreurs actuellement */
+    /** Whether the form currently has validation errors */
     hasErrors,
-
-    /** Booléen indiquant si le formulaire a changé par rapport aux données initiales */
+    /** Whether the form has changed from its initial values */
     hasFormChanged,
+    /** Current form data state */
+    formData,
   }
 }

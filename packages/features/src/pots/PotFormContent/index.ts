@@ -1,6 +1,6 @@
 export { PotFormContent } from './PotFormContent.native'
 export type {
+  PotFormValues,
   IPotFormContentProps,
   IPotFormRef,
-  IPotFormValues,
 } from './PotFormContent'

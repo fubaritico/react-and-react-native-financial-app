@@ -20,6 +20,15 @@
     "moneyWithdrawn": "Money withdrawn successfully."
   },
   "validation": {
+    "nameRequired": "Name is required.",
+    "categoryRequired": "Category is required.",
+    "themeRequired": "Theme is required.",
+    "amountRequired": "Amount is required.",
+    "amountInvalid": "Invalid amount.",
+    "dateRequired": "Date is required.",
+    "maximumRequired": "Maximum is required.",
+    "targetRequired": "Target is required.",
+    "targetInvalid": "Target must be a positive number.",
     "amount": {
       "min": "Amount is too low.",
       "max": "Amount is too high.",

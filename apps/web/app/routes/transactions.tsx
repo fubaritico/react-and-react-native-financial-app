@@ -1,40 +1,30 @@
 import {
   TransactionFormContent,
   TransactionsDataTable,
-  createAddTransactionModalConfig,
-  createDeleteTransactionModalConfig,
-  createEditTransactionModalConfig,
+  useTransactionCrud,
 } from '@financial-app/features'
-import {
-  deleteTransactionsByIdMutation,
-  getRecurringBillsQueryKey,
-  getTransactionsOptions,
-  postTransactionsMutation,
-  putTransactionsByIdMutation,
-} from '@financial-app/http-client'
-import { getErrorMessage, toTimestamptz, useModal } from '@financial-app/shared'
+import { getTransactionsOptions } from '@financial-app/http-client'
+import { getErrorMessage, useModal } from '@financial-app/shared'
 import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { ITransactionFormRef } from '@financial-app/features'
-import type { ITransaction } from '@financial-app/shared'
+import type { TransactionFormData } from '@financial-app/features'
 
 import { queryClient } from '../lib/query-client'
 
 import type { Route } from './+types/transactions'
 
-/** Fetch all transactions for client-side filtering by DataTable */
-const TRANSACTIONS_LIMIT = 1000
-
+/** @returns Pre-fetched transaction data for instant display */
 export async function clientLoader() {
   const txnOpts = getTransactionsOptions({
-    query: { limit: TRANSACTIONS_LIMIT, sort: 'latest' },
+    query: { limit: 1000, sort: 'latest' },
   })
   return queryClient.ensureQueryData(txnOpts).catch(() => undefined)
 }
 
+/** Skeleton placeholder while the client loader resolves */
 export function HydrateFallback() {
   return (
     <div className="p-6 lg:p-10">
@@ -51,25 +41,42 @@ export function HydrateFallback() {
   )
 }
 
-export default function Transactions({
+export default function TransactionsScreen({
   loaderData: initialData,
 }: Route.ComponentProps) {
   const { t, i18n } = useTranslation()
   const modal = useModal()
-  const qc = useQueryClient()
-  const formRef = useRef<ITransactionFormRef>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  const txnOpts = getTransactionsOptions({
-    query: { limit: TRANSACTIONS_LIMIT, sort: 'latest' },
-  })
+  // ── Form bridge (web dataset pattern) ──────────────────────────
 
-  const { data, error, isLoading } = useQuery({ ...txnOpts, initialData })
+  /** Reads form data from the DOM dataset */
+  const getFormData = useCallback((): TransactionFormData | null => {
+    const ref = formRef.current
+    if (!ref?.dataset.formData) return null
+    const data = structuredClone(
+      JSON.parse(ref.dataset.formData) as TransactionFormData
+    )
+    delete ref.dataset.formData
+    return data
+  }, [])
 
-  /** ID of the transaction currently being edited (stable ref to avoid stale closures) */
-  const editingTransactionIdRef = useRef<string | null>(null)
+  /** Whether the form currently has validation errors */
+  const hasFormErrors = useCallback(
+    () => formRef.current?.dataset.error === 'true',
+    []
+  )
+
+  /** Triggers browser validation display */
+  const triggerValidation = useCallback(
+    () => formRef.current?.requestSubmit(),
+    []
+  )
+
+  // ── Feedback modals ────────────────────────────────────────────
 
   /** Opens a brief confirmation modal after a successful mutation */
-  const showSuccessModal = useCallback(
+  const showSuccess = useCallback(
     (message: string) => {
       modal.open({
         body: (
@@ -97,7 +104,7 @@ export default function Transactions({
   )
 
   /** Opens an error modal after a failed mutation */
-  const showErrorModal = useCallback(
+  const showError = useCallback(
     (err: unknown) => {
       modal.open({
         body: (
@@ -126,86 +133,11 @@ export default function Transactions({
     [modal, t]
   )
 
-  const { mutate: createTransaction } = useMutation({
-    ...postTransactionsMutation(),
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
-      void qc.invalidateQueries({ queryKey: getRecurringBillsQueryKey() })
-      modal.close()
-      showSuccessModal(t('common.transactionAdded'))
-    },
-    onError: (err) => {
-      modal.close()
-      showErrorModal(err)
-    },
-  })
+  // ── Render callbacks ───────────────────────────────────────────
 
-  const { mutate: updateTransaction } = useMutation({
-    ...putTransactionsByIdMutation(),
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
-      void qc.invalidateQueries({ queryKey: getRecurringBillsQueryKey() })
-      modal.close()
-      showSuccessModal(t('common.transactionUpdated'))
-    },
-    onError: (err) => {
-      modal.close()
-      showErrorModal(err)
-    },
-  })
-
-  const { mutate: deleteTransaction } = useMutation({
-    ...deleteTransactionsByIdMutation(),
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: txnOpts.queryKey })
-      void qc.invalidateQueries({ queryKey: getRecurringBillsQueryKey() })
-      modal.close()
-      showSuccessModal(t('common.transactionDeleted'))
-    },
-    onError: (err) => {
-      modal.close()
-      showErrorModal(err)
-    },
-  })
-
-  const handleSubmitTransaction = useCallback(() => {
-    const ref = formRef.current
-    if (!ref || ref.hasErrors) return
-    const values = ref.getValues()
-    if (!Number.isFinite(values.amount) || values.amount === 0) return
-    modal.setSubmitting(true)
-    createTransaction({
-      body: {
-        name: values.name,
-        category: values.category,
-        date: toTimestamptz(values.date),
-        amount: values.amount,
-        recurring: values.recurring,
-      },
-    })
-  }, [createTransaction, modal])
-
-  const handleSubmitEditTransaction = useCallback(() => {
-    const ref = formRef.current
-    const transactionId = editingTransactionIdRef.current
-    if (!ref || ref.hasErrors || !transactionId) return
-    const values = ref.getValues()
-    if (!Number.isFinite(values.amount) || values.amount === 0) return
-    modal.setSubmitting(true)
-    updateTransaction({
-      path: { id: transactionId },
-      body: {
-        name: values.name,
-        category: values.category,
-        date: toTimestamptz(values.date),
-        amount: values.amount,
-        recurring: values.recurring,
-      },
-    })
-  }, [updateTransaction, modal])
-
-  const handleAddTransaction = useCallback(() => {
-    const config = createAddTransactionModalConfig(
+  /** Renders the transaction form inside the modal body */
+  const renderForm = useCallback(
+    (props?: { initialValues?: TransactionFormData; description?: string }) => (
       <TransactionFormContent
         ref={formRef}
         nameLabel={t('transactions.form.nameLabel')}
@@ -216,74 +148,40 @@ export default function Transactions({
         dateLabel={t('transactions.form.dateLabel')}
         datePlaceholder={t('datePicker.placeholder')}
         recurringLabel={t('transactions.form.recurringLabel')}
-        description={t('transactions.addModal.description')}
-      />,
-      handleSubmitTransaction,
-      {
-        title: t('transactions.addModal.title'),
-        submitLabel: t('transactions.addModal.submitLabel'),
-      }
-    )
-    modal.open(config)
-  }, [t, modal, handleSubmitTransaction])
-
-  /** Opens the Edit Transaction modal for the given transaction */
-  const handleEditTransaction = useCallback(
-    (transaction: ITransaction) => {
-      editingTransactionIdRef.current = transaction.id
-      const config = createEditTransactionModalConfig(
-        <TransactionFormContent
-          ref={formRef}
-          initialValues={{
-            name: transaction.name,
-            category: transaction.category,
-            date: transaction.date,
-            amount: transaction.amount,
-            recurring: transaction.recurring,
-          }}
-          nameLabel={t('transactions.form.nameLabel')}
-          namePlaceholder={t('transactions.form.namePlaceholder')}
-          amountLabel={t('transactions.form.amountLabel')}
-          amountPlaceholder={t('transactions.form.amountPlaceholder')}
-          categoryLabel={t('transactions.form.categoryLabel')}
-          dateLabel={t('transactions.form.dateLabel')}
-          datePlaceholder={t('datePicker.placeholder')}
-          recurringLabel={t('transactions.form.recurringLabel')}
-          description={t('transactions.editModal.description')}
-        />,
-        handleSubmitEditTransaction,
-        {
-          title: t('transactions.editModal.title'),
-          submitLabel: t('transactions.editModal.submitLabel'),
-        }
-      )
-      modal.open(config)
-    },
-    [t, modal, handleSubmitEditTransaction]
+        {...props}
+      />
+    ),
+    [t]
   )
 
-  /** Opens the Delete Transaction confirmation modal */
-  const handleDeleteTransaction = useCallback(
-    (transaction: ITransaction) => {
-      const config = createDeleteTransactionModalConfig(
-        transaction.name,
-        <Typography variant="body" color="muted">
-          {t('transactions.deleteModal.description')}
-        </Typography>,
-        () => {
-          modal.setSubmitting(true)
-          deleteTransaction({ path: { id: transaction.id } })
-        },
-        {
-          title: (name) => t('transactions.deleteModal.title', { name }),
-          confirmLabel: t('transactions.deleteModal.confirmLabel'),
-          cancelLabel: t('transactions.deleteModal.cancelLabel'),
-        }
-      )
-      modal.open(config)
-    },
-    [t, modal, deleteTransaction]
+  /** Renders the delete modal body */
+  const renderDeleteBody = useCallback(
+    (description: string) => (
+      <Typography variant="body" color="muted">
+        {description}
+      </Typography>
+    ),
+    []
   )
+
+  // ── Shared CRUD hook ───────────────────────────────────────────
+
+  const { handleAdd, handleEdit, handleDelete } = useTransactionCrud({
+    modal,
+    formBridge: { getFormData, hasErrors: hasFormErrors, triggerValidation },
+    showSuccess,
+    showError,
+    renderForm,
+    renderDeleteBody,
+  })
+
+  // Query options created locally for proper generic inference with initialData
+  const txnOpts = getTransactionsOptions({
+    query: { limit: 1000, sort: 'latest' },
+  })
+  const { data, error, isLoading } = useQuery({ ...txnOpts, initialData })
+
+  // ── Render ─────────────────────────────────────────────────────
 
   if (isLoading) {
     return (
@@ -316,7 +214,7 @@ export default function Transactions({
         </Typography>
         <Button
           title={t('transactions.addNewTransaction')}
-          onPress={handleAddTransaction}
+          onPress={handleAdd}
           size="lg"
           variant="primary"
         />
@@ -324,8 +222,8 @@ export default function Transactions({
       <TransactionsDataTable
         data={data?.data ?? []}
         locale={i18n.language}
-        onEdit={handleEditTransaction}
-        onDelete={handleDeleteTransaction}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
       />
     </div>
   )

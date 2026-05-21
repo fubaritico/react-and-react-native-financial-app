@@ -63,6 +63,7 @@
   "dependencies": {
     "@financial-app/icons": "workspace:^",
     "@financial-app/tokens": "workspace:^",
+    "@financial-app/ui": "workspace:^",
     "@internationalized/date": "catalog:",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "catalog:",

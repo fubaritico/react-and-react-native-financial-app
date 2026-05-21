@@ -47,7 +47,7 @@ export const EditMode: Story = {
     description: 'Update the details of this transaction.',
     initialValues: {
       name: 'Urban Sports Club',
-      amount: -45,
+      amount: '-45',
       category: 'Lifestyle',
       date: '2026-04-15',
       recurring: true,

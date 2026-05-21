@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 import type { IDropdownOption } from '@financial-app/ui'
 
 /** All available budget categories */
@@ -32,6 +34,26 @@ export const THEME_COLORS: IDropdownOption[] = [
   { value: 'gold', label: 'Gold' },
   { value: 'orange', label: 'Orange' },
 ]
+
+/**
+ * Creates a Zod schema for budget form validation with i18n messages.
+ * @param t - Translation function
+ * @returns Zod schema for BudgetFormValues
+ */
+export const createBudgetFormSchema = (t: (key: string) => string) =>
+  z.object({
+    category: z.string().min(1, t('validation.categoryRequired')),
+    maximum: z
+      .string()
+      .min(1, t('validation.maximumRequired'))
+      .refine(
+        (v) =>
+          v.length === 0 ||
+          (v !== '.' && !Number.isNaN(Number(v)) && Number(v) > 0),
+        t('validation.maximumInvalid')
+      ),
+    theme: z.string().min(1, t('validation.themeRequired')),
+  })
 
 /** Default form values for the Add Budget form */
 export const DEFAULT_BUDGET_FORM = {

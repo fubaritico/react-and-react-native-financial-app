@@ -20,6 +20,15 @@
     "moneyWithdrawn": "Retrait effectué avec succès."
   },
   "validation": {
+    "nameRequired": "Le nom est requis.",
+    "categoryRequired": "La catégorie est requise.",
+    "themeRequired": "Le thème est requis.",
+    "amountRequired": "Le montant est requis.",
+    "amountInvalid": "Montant invalide.",
+    "dateRequired": "La date est requise.",
+    "maximumRequired": "Le maximum est requis.",
+    "targetRequired": "L'objectif est requis.",
+    "targetInvalid": "L'objectif doit être un nombre positif.",
     "amount": {
       "min": "Le montant est trop bas.",
       "max": "Le montant est trop élevé.",

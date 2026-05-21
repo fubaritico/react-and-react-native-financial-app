@@ -1,6 +1,5 @@
 export { TransactionFormContent } from './TransactionFormContent.web'
 export type {
   ITransactionFormContentProps,
-  ITransactionFormRef,
-  ITransactionFormValues,
+  TransactionFormData,
 } from './TransactionFormContent'

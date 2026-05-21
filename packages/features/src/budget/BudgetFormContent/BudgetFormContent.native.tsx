@@ -1,5 +1,7 @@
+import { useFormValidation } from '@financial-app/shared'
 import { Dropdown, TextInput, Typography, tw } from '@financial-app/ui/native'
-import { useImperativeHandle, useMemo, useState } from 'react'
+import { useCallback, useImperativeHandle, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
 import { BudgetThemeDropdown } from '../BudgetThemeDropdown/BudgetThemeDropdown.native'
@@ -8,13 +10,28 @@ import {
   BUDGET_CATEGORIES,
   DEFAULT_BUDGET_FORM,
   THEME_COLORS,
+  createBudgetFormSchema,
 } from './BudgetFormContent.constants'
 
-import type { IBudgetFormContentProps } from './BudgetFormContent'
+import type {
+  BudgetFormValues,
+  IBudgetFormContentProps,
+  IBudgetFormRef,
+} from './BudgetFormContent'
+import type { Ref } from 'react'
+
+/** Native-specific props — adds imperative ref handle */
+interface IBudgetFormNativeProps extends IBudgetFormContentProps {
+  /** Ref exposing getValues() and hasErrors for the route submit handler */
+  ref?: Ref<IBudgetFormRef>
+}
 
 /**
  * BudgetFormContent — form body for Add/Edit budget modals (native).
- * Manages its own local state and exposes values via ref.
+ * Uses useFormValidation for state + Zod validation, exposes values via ref.
+ *
+ * @param props - Form props including labels, initial values, and ref
+ * @returns Form body JSX for the modal
  */
 export function BudgetFormContent({
   initialValues,
@@ -27,19 +44,48 @@ export function BudgetFormContent({
   alreadyUsedLabel,
   description,
   ref,
-}: Readonly<IBudgetFormContentProps>) {
-  const [category, setCategory] = useState(
-    initialValues?.category ?? DEFAULT_BUDGET_FORM.category
+}: Readonly<IBudgetFormNativeProps>) {
+  const { t } = useTranslation()
+
+  /** Zod schema with translated error messages */
+  const schema = useMemo(() => createBudgetFormSchema(t), [t])
+
+  /** Responsible for form state and validation */
+  const { formData, errors, validateField, validateForm, hasErrors } =
+    useFormValidation<BudgetFormValues>(
+      schema,
+      initialValues ?? DEFAULT_BUDGET_FORM
+    )
+
+  /** @param value - New category value */
+  const onCategoryChange = useCallback(
+    (value: string) => {
+      validateField('category', value)
+    },
+    [validateField]
   )
-  const [maximum, setMaximum] = useState(
-    initialValues?.maximum ?? DEFAULT_BUDGET_FORM.maximum
+
+  /** @param value - New maximum value as string */
+  const onMaximumChange = useCallback(
+    (value: string) => {
+      const sanitized = value.replace(/[^0-9.]/g, '')
+      validateField('maximum', sanitized)
+    },
+    [validateField]
   )
-  const [theme, setTheme] = useState(
-    initialValues?.theme ?? DEFAULT_BUDGET_FORM.theme
+
+  /** @param value - New theme value */
+  const onThemeChange = useCallback(
+    (value: string) => {
+      validateField('theme', value)
+    },
+    [validateField]
   )
 
   useImperativeHandle(ref, () => ({
-    getValues: () => ({ category, maximum, theme }),
+    getValues: () => formData,
+    hasErrors,
+    validate: () => validateForm(formData),
   }))
 
   /** Filter out categories already in use (except current in edit mode) */
@@ -80,8 +126,8 @@ export function BudgetFormContent({
         </Typography>
         <Dropdown
           options={categoryOptions}
-          selectedValue={category}
-          onSelect={setCategory}
+          selectedValue={formData.category}
+          onSelect={onCategoryChange}
           accessibilityLabel={categoryLabel}
           bottomSheetTitle={categoryLabel}
           withPortal
@@ -92,12 +138,14 @@ export function BudgetFormContent({
       <View style={tw`gap-1`}>
         <TextInput
           label={maximumLabel}
-          value={maximum}
-          onChangeText={setMaximum}
+          value={formData.maximum}
+          onChangeText={onMaximumChange}
           prefix="$"
           placeholder={maximumPlaceholder}
           keyboardType="numeric"
           accessibilityLabel={maximumLabel}
+          error={!!errors.maximum}
+          helperText={errors.maximum}
         />
       </View>
 
@@ -108,8 +156,8 @@ export function BudgetFormContent({
         </Typography>
         <BudgetThemeDropdown
           options={themeOptions}
-          selectedValue={theme}
-          onSelect={setTheme}
+          selectedValue={formData.theme}
+          onSelect={onThemeChange}
           accessibilityLabel={themeLabel}
           bottomSheetTitle={themeLabel}
           alreadyUsedLabel={alreadyUsedLabel}

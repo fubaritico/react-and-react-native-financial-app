@@ -76,6 +76,7 @@
 - useFormValidation hook added to shared — budget/pots modals don't use it yet (retrofit planned)
 - Shared mutation hooks refactor — `docs/plans/shared-mutation-hooks.md` — extract 11 hooks into `@financial-app/features`
 - Balance model: `current = reference + income - expenses - pots` (fixed). No per-month filtering yet — needs `months` table refactor for multi-month support
+- Native form components broken: TransactionFormContent.native.tsx, BudgetFormContent.native.tsx, PotFormContent.native.tsx — TS errors from web form refactor (Ref<HTMLFormElement> in shared types, amount string vs number). Need native migration or type union fix.
 
 ## Product
 - 5th nav button becomes hamburger menu with all navigations + extras (language, months, logout, tutorial) — Recurring Bills moves inside this menu

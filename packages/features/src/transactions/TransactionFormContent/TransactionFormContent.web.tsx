@@ -6,22 +6,36 @@ import {
   TextInput,
   Typography,
 } from '@financial-app/ui'
-import { useCallback, useImperativeHandle, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   DEFAULT_TRANSACTION_FORM,
   TRANSACTION_CATEGORIES,
-  transactionFormSchema,
+  createTransactionFormSchema,
 } from './TransactionFormContent.constants'
 
-import type { ITransactionFormContentProps } from './TransactionFormContent'
+import type {
+  ITransactionFormContentProps,
+  TransactionFormData,
+} from './TransactionFormContent'
+import type { FormEvent, Ref } from 'react'
+
+/** Web-specific props — adds HTML form element ref */
+interface ITransactionFormWebProps extends ITransactionFormContentProps {
+  /** Ref to the underlying form element for dataset access */
+  ref?: Ref<HTMLFormElement>
+}
 
 /**
  * TransactionFormContent — form body for Add/Edit transaction modals (web).
- * Manages its own local state and exposes values via ref.
+ * Uses useFormValidation for state + Zod validation, exposes data via form dataset.
+ *
+ * @param props - Form props including labels, initial values, and ref
+ * @returns Form body JSX for the modal
  */
 export function TransactionFormContent({
-  initialValues,
+  initialValues = DEFAULT_TRANSACTION_FORM,
   nameLabel,
   namePlaceholder,
   amountLabel,
@@ -32,114 +46,139 @@ export function TransactionFormContent({
   datePlaceholder,
   description,
   ref,
-}: Readonly<ITransactionFormContentProps>) {
-  const [name, setName] = useState(
-    initialValues?.name ?? DEFAULT_TRANSACTION_FORM.name
-  )
-  const [amount, setAmount] = useState(
-    initialValues?.amount != null
-      ? String(initialValues.amount)
-      : DEFAULT_TRANSACTION_FORM.amount
-  )
-  const [category, setCategory] = useState(
-    initialValues?.category ?? DEFAULT_TRANSACTION_FORM.category
-  )
-  const [date, setDate] = useState<string | null>(
-    initialValues?.date ?? DEFAULT_TRANSACTION_FORM.date
-  )
-  const [recurring, setRecurring] = useState(initialValues?.recurring ?? false)
+}: Readonly<ITransactionFormWebProps>) {
+  const { t } = useTranslation()
 
-  const formData = useMemo(
-    () => ({ name, category, amount }),
-    [name, category, amount]
+  /** Zod schema with translated error messages */
+  const schema = useMemo(() => createTransactionFormSchema(t), [t])
+
+  /** Responsible for form state and validation */
+  const { formData, errors, validateField, hasErrors, validateForm } =
+    useFormValidation<TransactionFormData>(schema, initialValues)
+
+  /** @param value - New name value */
+  const onNameChange = useCallback(
+    (value: string) => {
+      validateField('name', value)
+    },
+    [validateField]
   )
 
-  const handleRecurringChange = useCallback((checked: boolean) => {
-    setRecurring(checked)
-  }, [])
-
-  const { errors, hasErrors } = useFormValidation(
-    transactionFormSchema,
-    formData
+  /** @param value - New amount value as string */
+  const onAmountChange = useCallback(
+    (value: string) => {
+      const sanitized = value.replace(/[^0-9.-]/g, '')
+      validateField('amount', sanitized)
+    },
+    [validateField]
   )
 
-  useImperativeHandle(ref, () => ({
-    getValues: () => ({
-      name,
-      category,
-      date: date ?? DEFAULT_TRANSACTION_FORM.date,
-      amount: Number(amount),
-      recurring,
-    }),
-    hasErrors,
-  }))
+  /** @param value - New category value */
+  const onCategoryChange = useCallback(
+    (value: string) => {
+      validateField('category', value)
+    },
+    [validateField]
+  )
+
+  /** @param value - New date ISO string */
+  const onDateChange = useCallback(
+    (value: string) => {
+      validateField('date', value)
+    },
+    [validateField]
+  )
+
+  /** @param checked - New checkbox state */
+  const onRecurringChange = useCallback(
+    (checked: boolean) => {
+      validateField('recurring', checked)
+    },
+    [validateField]
+  )
+
+  /** Handles form submission — prevents default and triggers full validation */
+  const onSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault()
+      validateForm(formData)
+    },
+    [validateForm, formData]
+  )
 
   return (
-    <div className="flex flex-col gap-4">
-      {description && (
-        <Typography variant="body" color="muted">
-          {description}
-        </Typography>
-      )}
+    <form
+      id="transaction-form"
+      ref={ref}
+      data-error={hasErrors}
+      data-form-data={JSON.stringify(formData)}
+      onSubmit={onSubmit}
+    >
+      <div className="flex flex-col gap-4">
+        {description && (
+          <Typography variant="body" color="muted">
+            {description}
+          </Typography>
+        )}
 
-      {/* Name */}
-      <div className="flex flex-col gap-1">
-        <TextInput
-          label={nameLabel}
-          value={name}
-          onChangeText={setName}
-          placeholder={namePlaceholder}
-          accessibilityLabel={nameLabel}
-          error={!!errors.name}
-          helperText={errors.name}
+        {/* Name */}
+        <div className="flex flex-col gap-1">
+          <TextInput
+            label={nameLabel}
+            value={formData.name}
+            onChangeText={onNameChange}
+            placeholder={namePlaceholder}
+            accessibilityLabel={nameLabel}
+            error={!!errors.name}
+            helperText={errors.name}
+          />
+        </div>
+
+        {/* Amount */}
+        <div className="flex flex-col gap-1">
+          <TextInput
+            label={amountLabel}
+            value={formData.amount}
+            onChangeText={onAmountChange}
+            prefix="$"
+            placeholder={amountPlaceholder}
+            accessibilityLabel={amountLabel}
+            error={!!errors.amount}
+            helperText={errors.amount}
+          />
+        </div>
+
+        {/* Category */}
+        <div className="flex flex-col gap-1">
+          <Typography variant="label" color="muted">
+            {categoryLabel}
+          </Typography>
+          <Dropdown
+            options={TRANSACTION_CATEGORIES}
+            selectedValue={formData.category}
+            onSelect={onCategoryChange}
+            accessibilityLabel={categoryLabel}
+            bottomSheetTitle={categoryLabel}
+            withPortal
+          />
+        </div>
+
+        {/* Date */}
+        <DatePicker
+          label={dateLabel}
+          placeholder={datePlaceholder}
+          value={formData.date}
+          onChange={onDateChange}
+          accessibilityLabel={dateLabel}
+        />
+
+        {/* Recurring */}
+        <Checkbox
+          checked={formData.recurring}
+          onChange={onRecurringChange}
+          label={recurringLabel}
         />
       </div>
-
-      {/* Amount */}
-      <div className="flex flex-col gap-1">
-        <TextInput
-          label={amountLabel}
-          value={amount}
-          onChangeText={setAmount}
-          prefix="$"
-          placeholder={amountPlaceholder}
-          keyboardType="numeric"
-          accessibilityLabel={amountLabel}
-          error={!!errors.amount}
-          helperText={errors.amount}
-        />
-      </div>
-
-      {/* Category */}
-      <div className="flex flex-col gap-1">
-        <Typography variant="label" color="muted">
-          {categoryLabel}
-        </Typography>
-        <Dropdown
-          options={TRANSACTION_CATEGORIES}
-          selectedValue={category}
-          onSelect={setCategory}
-          accessibilityLabel={categoryLabel}
-          bottomSheetTitle={categoryLabel}
-          withPortal
-        />
-      </div>
-
-      {/* Date */}
-      <DatePicker
-        label={dateLabel}
-        placeholder={datePlaceholder}
-        value={date}
-        onChange={setDate}
-        accessibilityLabel={dateLabel}
-      />
-
-      {/* Recurring */}
-      <Checkbox
-        checked={recurring}
-        onChange={handleRecurringChange}
-        label={recurringLabel}
-      />
-    </div>
+    </form>
   )
 }

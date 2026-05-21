@@ -4,12 +4,27 @@ import type { IDropdownOption } from '@financial-app/ui'
 
 import { getTodayISO } from './TransactionFormContent.utils'
 
-/** Zod schema for transaction form validation */
-export const transactionFormSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  category: z.string().min(1, 'Category is required'),
-  amount: z.string().min(1, 'Amount is required'),
-})
+/**
+ * Creates a Zod schema for transaction form validation with i18n messages.
+ * @param t - Translation function
+ * @returns Zod schema for TransactionFormData
+ */
+export const createTransactionFormSchema = (t: (key: string) => string) =>
+  z.object({
+    name: z.string().min(1, t('validation.nameRequired')),
+    category: z.string().min(1, t('validation.categoryRequired')),
+    amount: z
+      .string()
+      .min(1, t('validation.amountRequired'))
+      .refine(
+        (v) =>
+          v.length === 0 ||
+          (v !== '-' && v !== '.' && !Number.isNaN(Number(v))),
+        t('validation.amountInvalid')
+      ),
+    date: z.string().min(1, t('validation.dateRequired')),
+    recurring: z.boolean(),
+  })
 
 /** All available transaction categories */
 export const TRANSACTION_CATEGORIES: IDropdownOption[] = [
@@ -31,4 +46,5 @@ export const DEFAULT_TRANSACTION_FORM = {
   category: TRANSACTION_CATEGORIES[0].value,
   amount: '',
   date: getTodayISO(),
+  recurring: false,
 } as const

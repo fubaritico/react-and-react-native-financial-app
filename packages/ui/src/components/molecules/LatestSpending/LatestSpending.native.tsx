@@ -25,7 +25,7 @@ export function LatestSpending({
         <SectionLink label={seeAllLabel} onPress={onSeeAll} />
       </View>
       {items.map((item, index) => (
-        <View key={`${item.name}-${item.date}`}>
+        <View key={`${item.name}-${item.date}-${String(index)}`}>
           {index > 0 && <Divider className="bg-grey-500/10" />}
           <View style={tw`${shared.itemRow}`}>
             {showAvatars && (

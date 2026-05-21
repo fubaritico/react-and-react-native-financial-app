@@ -55,10 +55,12 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@financial-app/http-client": "workspace:^",
     "@financial-app/icons": "workspace:^",
     "@financial-app/shared": "workspace:^",
     "@financial-app/tailwind-config": "workspace:^",
     "@financial-app/ui": "workspace:^",
+    "@tanstack/react-query": "catalog:",
     "@tanstack/react-table": "catalog:",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

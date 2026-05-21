@@ -42,8 +42,8 @@ if (!import.meta.env.DEV && !API_URL.startsWith('https://')) {
   throw new Error('VITE_API_URL must be an HTTPS URL in production')
 }
 
-/** Inactivity threshold before auto sign-out (30 seconds) */
-const INACTIVITY_DELAY_MS = 30_000
+/** Inactivity threshold before auto sign-out (2 minutes) */
+const INACTIVITY_DELAY_MS = 120_000
 
 /** Bootstraps auth listener, HTTP client, inactivity timeout, and session expired modal */
 function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {

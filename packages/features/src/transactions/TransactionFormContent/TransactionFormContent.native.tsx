@@ -7,20 +7,35 @@ import {
   Typography,
   tw,
 } from '@financial-app/ui/native'
-import { useCallback, useImperativeHandle, useMemo, useState } from 'react'
+import { useCallback, useImperativeHandle, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
 import {
   DEFAULT_TRANSACTION_FORM,
   TRANSACTION_CATEGORIES,
-  transactionFormSchema,
+  createTransactionFormSchema,
 } from './TransactionFormContent.constants'
 
-import type { ITransactionFormContentProps } from './TransactionFormContent'
+import type {
+  ITransactionFormContentProps,
+  ITransactionFormRef,
+  TransactionFormData,
+} from './TransactionFormContent'
+import type { Ref } from 'react'
+
+/** Native-specific props — adds imperative ref handle */
+interface ITransactionFormNativeProps extends ITransactionFormContentProps {
+  /** Ref exposing getValues() and hasErrors for the route submit handler */
+  ref?: Ref<ITransactionFormRef>
+}
 
 /**
  * TransactionFormContent — form body for Add/Edit transaction modals (native).
- * Manages its own local state and exposes values via ref.
+ * Uses useFormValidation for state + Zod validation, exposes values via ref.
+ *
+ * @param props - Form props including labels, initial values, and ref
+ * @returns Form body JSX for the modal
  */
 export function TransactionFormContent({
   initialValues,
@@ -34,46 +49,64 @@ export function TransactionFormContent({
   datePlaceholder,
   description,
   ref,
-}: Readonly<ITransactionFormContentProps>) {
-  const [name, setName] = useState(
-    initialValues?.name ?? DEFAULT_TRANSACTION_FORM.name
-  )
-  const [amount, setAmount] = useState(
-    initialValues?.amount != null
-      ? String(initialValues.amount)
-      : DEFAULT_TRANSACTION_FORM.amount
-  )
-  const [category, setCategory] = useState(
-    initialValues?.category ?? DEFAULT_TRANSACTION_FORM.category
-  )
-  const [date, setDate] = useState<string | null>(
-    initialValues?.date ?? DEFAULT_TRANSACTION_FORM.date
-  )
-  const [recurring, setRecurring] = useState(initialValues?.recurring ?? false)
+}: Readonly<ITransactionFormNativeProps>) {
+  const { t } = useTranslation()
 
-  const formData = useMemo(
-    () => ({ name, category, amount }),
-    [name, category, amount]
+  /** Zod schema with translated error messages */
+  const schema = useMemo(() => createTransactionFormSchema(t), [t])
+
+  /** Responsible for form state and validation */
+  const { formData, errors, validateField, validateForm, hasErrors } =
+    useFormValidation<TransactionFormData>(
+      schema,
+      initialValues ?? DEFAULT_TRANSACTION_FORM
+    )
+
+  /** @param value - New name value */
+  const onNameChange = useCallback(
+    (value: string) => {
+      validateField('name', value)
+    },
+    [validateField]
   )
 
-  const handleRecurringChange = useCallback((checked: boolean) => {
-    setRecurring(checked)
-  }, [])
+  /** @param value - New amount value as string */
+  const onAmountChange = useCallback(
+    (value: string) => {
+      const sanitized = value.replace(/[^0-9.-]/g, '')
+      validateField('amount', sanitized)
+    },
+    [validateField]
+  )
 
-  const { errors, hasErrors } = useFormValidation(
-    transactionFormSchema,
-    formData
+  /** @param value - New category value */
+  const onCategoryChange = useCallback(
+    (value: string) => {
+      validateField('category', value)
+    },
+    [validateField]
+  )
+
+  /** @param value - New date ISO string or null */
+  const onDateChange = useCallback(
+    (value: string | null) => {
+      validateField('date', value ?? '')
+    },
+    [validateField]
+  )
+
+  /** @param checked - New checkbox state */
+  const onRecurringChange = useCallback(
+    (checked: boolean) => {
+      validateField('recurring', checked)
+    },
+    [validateField]
   )
 
   useImperativeHandle(ref, () => ({
-    getValues: () => ({
-      name,
-      category,
-      date: date ?? DEFAULT_TRANSACTION_FORM.date,
-      amount: Number(amount),
-      recurring,
-    }),
+    getValues: () => formData,
     hasErrors,
+    validate: () => validateForm(formData),
   }))
 
   return (
@@ -88,8 +121,8 @@ export function TransactionFormContent({
       <View style={tw`gap-1`}>
         <TextInput
           label={nameLabel}
-          value={name}
-          onChangeText={setName}
+          value={formData.name}
+          onChangeText={onNameChange}
           placeholder={namePlaceholder}
           accessibilityLabel={nameLabel}
           error={!!errors.name}
@@ -101,8 +134,8 @@ export function TransactionFormContent({
       <View style={tw`gap-1`}>
         <TextInput
           label={amountLabel}
-          value={amount}
-          onChangeText={setAmount}
+          value={formData.amount}
+          onChangeText={onAmountChange}
           prefix="$"
           placeholder={amountPlaceholder}
           keyboardType="numeric"
@@ -119,8 +152,8 @@ export function TransactionFormContent({
         </Typography>
         <Dropdown
           options={TRANSACTION_CATEGORIES}
-          selectedValue={category}
-          onSelect={setCategory}
+          selectedValue={formData.category}
+          onSelect={onCategoryChange}
           accessibilityLabel={categoryLabel}
           bottomSheetTitle={categoryLabel}
           withPortal
@@ -131,15 +164,15 @@ export function TransactionFormContent({
       <DatePicker
         label={dateLabel}
         placeholder={datePlaceholder}
-        value={date}
-        onChange={setDate}
+        value={formData.date}
+        onChange={onDateChange}
         accessibilityLabel={dateLabel}
       />
 
       {/* Recurring */}
       <Checkbox
-        checked={recurring}
-        onChange={handleRecurringChange}
+        checked={formData.recurring}
+        onChange={onRecurringChange}
         label={recurringLabel}
       />
     </View>

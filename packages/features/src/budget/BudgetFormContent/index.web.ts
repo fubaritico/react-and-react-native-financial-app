@@ -1,6 +1,5 @@
 export { BudgetFormContent } from './BudgetFormContent.web'
 export type {
+  BudgetFormValues,
   IBudgetFormContentProps,
-  IBudgetFormRef,
-  IBudgetFormValues,
 } from './BudgetFormContent'

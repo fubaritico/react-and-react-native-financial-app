@@ -20,8 +20,7 @@ export type { ITransactionsDataTableProps } from './transactions/index.web'
 export { TransactionFormContent } from './transactions/index.web'
 export type {
   ITransactionFormContentProps,
-  ITransactionFormRef,
-  ITransactionFormValues,
+  TransactionFormData,
 } from './transactions/index.web'
 
 export {
@@ -35,14 +34,19 @@ export type {
   IDeleteTransactionModalLabels,
 } from './transactions/index.web'
 
+export { useTransactionCrud } from './transactions/index.web'
+export type {
+  ITransactionFormBridge,
+  IUseTransactionCrudParams,
+} from './transactions/index.web'
+
 export { BudgetCategoryCard } from './budget/index.web'
 export type { IBudgetCategoryCardProps } from './budget/index.web'
 
 export { BudgetFormContent } from './budget/index.web'
 export type {
+  BudgetFormValues,
   IBudgetFormContentProps,
-  IBudgetFormRef,
-  IBudgetFormValues,
 } from './budget/index.web'
 
 export {
@@ -56,15 +60,17 @@ export type {
   IDeleteBudgetModalLabels,
 } from './budget/index.web'
 
+export { useBudgetCrud } from './budget/index.web'
+export type {
+  IBudgetFormBridge,
+  IUseBudgetCrudParams,
+} from './budget/index.web'
+
 export { PotCard } from './pots/index.web'
 export type { IPotCardProps } from './pots/index.web'
 
 export { PotFormContent } from './pots/index.web'
-export type {
-  IPotFormContentProps,
-  IPotFormRef,
-  IPotFormValues,
-} from './pots/index.web'
+export type { PotFormValues, IPotFormContentProps } from './pots/index.web'
 
 export { PotAmountFormContent } from './pots/index.web'
 export type {
@@ -86,6 +92,9 @@ export type {
   IAddMoneyModalLabels,
   IWithdrawModalLabels,
 } from './pots/index.web'
+
+export { usePotCrud } from './pots/index.web'
+export type { IPotFormBridge, IUsePotCrudParams } from './pots/index.web'
 
 export { RecurringBillsDataTable } from './recurring-bills/index.web'
 export type { IRecurringBillsDataTableProps } from './recurring-bills/index.web'

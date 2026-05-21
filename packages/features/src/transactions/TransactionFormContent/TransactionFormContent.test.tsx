@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion -- refs are always set after render */
 import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import { TransactionFormContent } from './TransactionFormContent.web'
 
-import type { ITransactionFormRef } from './TransactionFormContent'
+import type { TransactionFormData } from './TransactionFormContent'
 import type { RefObject } from 'react'
 
 const DEFAULT_PROPS = {
@@ -16,6 +17,15 @@ const DEFAULT_PROPS = {
   dateLabel: 'Date',
   datePlaceholder: 'Select date',
   recurringLabel: 'Recurring transaction',
+}
+
+/**
+ * Reads form data from the web form dataset.
+ * @param form - The HTML form element
+ * @returns Parsed TransactionFormData from the dataset
+ */
+function getFormData(form: HTMLFormElement): TransactionFormData {
+  return JSON.parse(form.dataset.formData ?? '{}') as TransactionFormData
 }
 
 afterEach(cleanup)
@@ -92,7 +102,7 @@ describe('TransactionFormContent', () => {
         {...DEFAULT_PROPS}
         initialValues={{
           name: 'Gym',
-          amount: -50,
+          amount: '-50',
           category: 'Lifestyle',
           date: '2026-03-20',
           recurring: true,
@@ -105,8 +115,8 @@ describe('TransactionFormContent', () => {
     expect(screen.getByRole('checkbox')).toBeChecked()
   })
 
-  it('exposes getValues via ref with date', () => {
-    const ref = { current: null } as RefObject<ITransactionFormRef | null>
+  it('exposes form data via dataset with date', () => {
+    const ref = { current: null } as RefObject<HTMLFormElement | null>
 
     render(
       <TransactionFormContent
@@ -114,7 +124,7 @@ describe('TransactionFormContent', () => {
         ref={ref}
         initialValues={{
           name: 'Rent',
-          amount: -1200,
+          amount: '-1200',
           category: 'Bills',
           recurring: true,
           date: '2026-01-15',
@@ -122,11 +132,11 @@ describe('TransactionFormContent', () => {
       />
     )
 
-    const values = ref.current?.getValues()
+    const values = getFormData(ref.current!)
     expect(values).toEqual(
       expect.objectContaining({
         name: 'Rent',
-        amount: -1200,
+        amount: '-1200',
         category: 'Bills',
         recurring: true,
         date: '2026-01-15',
@@ -135,13 +145,12 @@ describe('TransactionFormContent', () => {
   })
 
   it('defaults date to today when no initialValues.date', () => {
-    const ref = { current: null } as RefObject<ITransactionFormRef | null>
+    const ref = { current: null } as RefObject<HTMLFormElement | null>
 
     render(<TransactionFormContent {...DEFAULT_PROPS} ref={ref} />)
 
-    const values = ref.current?.getValues()
-    // Date should be a YYYY-MM-DD string matching today
-    expect(values?.date).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    const values = getFormData(ref.current!)
+    expect(values.date).toMatch(/^\d{4}-\d{2}-\d{2}$/)
   })
 
   it('renders DatePicker label', () => {
@@ -150,8 +159,8 @@ describe('TransactionFormContent', () => {
     expect(screen.getByText('Date')).toBeInTheDocument()
   })
 
-  it('renders DatePicker with pre-filled date from initialValues', () => {
-    const ref = { current: null } as RefObject<ITransactionFormRef | null>
+  it('reads pre-filled date from dataset', () => {
+    const ref = { current: null } as RefObject<HTMLFormElement | null>
 
     render(
       <TransactionFormContent
@@ -161,12 +170,12 @@ describe('TransactionFormContent', () => {
       />
     )
 
-    const values = ref.current?.getValues()
-    expect(values?.date).toBe('2026-07-04')
+    const values = getFormData(ref.current!)
+    expect(values.date).toBe('2026-07-04')
   })
 
-  it('returns updated date in getValues after re-render with new initialValues', () => {
-    const ref = { current: null } as RefObject<ITransactionFormRef | null>
+  it('returns initial date in dataset after re-render with new initialValues', () => {
+    const ref = { current: null } as RefObject<HTMLFormElement | null>
 
     const { rerender } = render(
       <TransactionFormContent
@@ -176,7 +185,7 @@ describe('TransactionFormContent', () => {
       />
     )
 
-    expect(ref.current?.getValues().date).toBe('2026-01-01')
+    expect(getFormData(ref.current!).date).toBe('2026-01-01')
 
     // Re-render with a different date (simulates edit mode switching)
     rerender(
@@ -188,11 +197,11 @@ describe('TransactionFormContent', () => {
     )
 
     // useState initializes once — rerender doesn't reset state
-    expect(ref.current?.getValues().date).toBe('2026-01-01')
+    expect(getFormData(ref.current!).date).toBe('2026-01-01')
   })
 
-  it('includes all fields in getValues including date', () => {
-    const ref = { current: null } as RefObject<ITransactionFormRef | null>
+  it('includes all fields in dataset including date', () => {
+    const ref = { current: null } as RefObject<HTMLFormElement | null>
 
     render(
       <TransactionFormContent
@@ -200,7 +209,7 @@ describe('TransactionFormContent', () => {
         ref={ref}
         initialValues={{
           name: 'Groceries run',
-          amount: -85.5,
+          amount: '-85.5',
           category: 'Groceries',
           date: '2026-05-14',
           recurring: false,
@@ -208,10 +217,10 @@ describe('TransactionFormContent', () => {
       />
     )
 
-    const values = ref.current?.getValues()
+    const values = getFormData(ref.current!)
     expect(values).toEqual({
       name: 'Groceries run',
-      amount: -85.5,
+      amount: '-85.5',
       category: 'Groceries',
       date: '2026-05-14',
       recurring: false,

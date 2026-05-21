@@ -73,12 +73,13 @@ export function createApp() {
   })
   app.use(globalLimiter)
 
-  // Stricter limiter for financial mutations: 50 req/15min/IP
+  // Stricter limiter for financial mutations: 50 req/15min/IP (POST/PUT/PATCH/DELETE only)
   const writeLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 50,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
+    skip: (req) => req.method === 'GET',
     message: { error: 'Too many write requests, please try again later.' },
   })
 
