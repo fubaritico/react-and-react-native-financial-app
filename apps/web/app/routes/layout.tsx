@@ -89,6 +89,10 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
       // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw redirect('/initial-balance')
     }
+    if (!prefs.has_seen_onboarding) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
+      throw redirect('/welcome')
+    }
 
     await next()
   },

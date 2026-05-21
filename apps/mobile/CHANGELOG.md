@@ -1,4 +1,4 @@
-## 0.0.1 (2026-05-20)
+## 0.0.1 (2026-05-21)
 
 
 ### Bug Fixes
@@ -57,6 +57,7 @@
 * **ui:** modal a11y + replace arbitrary max-w with token ([c25b5f3](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c25b5f35b1f4dd0fb2bba30324ba7a0faab23a2e))
 * **ui:** modal portal nesting + dropdown/listbox/menu improvements ([e34bb69](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e34bb694e866e42a3d62d021c474e384d4cfe6f6))
 * **ui:** move header row inside white card in overview sections ([9cd0f15](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9cd0f15c1dcee7f6ccda1aa4b008f65f9dfab501))
+* **ui:** prevent dropdown menu scroll from closing the menu ([a0fb9f5](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a0fb9f5a9c51b0d9b84b0eedbb685763dd1202e3))
 * **ui:** replace default Tailwind colors with token aliases ([9b7b247](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9b7b24781dc5e82a18ecea230c3bb57b017e5b65))
 * **ui:** review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code ([0d43fae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d43faecf012669f2f97c8d4504f8f5ffd93c543))
 * **ui:** review fixes — token refs, aria-disabled, extract styles ([b396fb6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b396fb68c354bd75e8e16ea02ccb4f674121edaa))
@@ -120,6 +121,7 @@
 * **pages:** wire Recurring Bills route + BillsSummary + fixes ([ca083f0](https://github.com/fubaritico/react-and-react-native-financial-app/commit/ca083f00be47015d93b320385a63942f155f78c4))
 * **pots:** wire add money/withdraw modals + PotAmountFormContent component ([2f061b1](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2f061b11bafb31e78f5b3f0cd831533126665725))
 * **pots:** wire add/edit/delete modals + PotFormContent component ([8b2fba8](https://github.com/fubaritico/react-and-react-native-financial-app/commit/8b2fba8482b026e444d25af4679002cbd0c52480))
+* **seed:** add POST /dev/seed endpoint + shell script + dynamic budget month ([be12ec6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/be12ec678f0582ac754ffe01d6c7a478d88485c5))
 * **shared,mobile-expo:** add mock data, test utils, wire Overview page ([7f51ce7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7f51ce7800b2e2a9dcea43f9ef3b3b203386847b))
 * **shared:** create @financial-app/shared package (Phase 5.1 + 5.7) ([4bf5dff](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4bf5dff43b21255596e601da1585f2341a44b4d5))
 * **shared:** session expiry warning modal + refreshSession ([89050e6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/89050e6c82fa66abee9690e7783a68c3983f0985))
@@ -150,6 +152,7 @@
 * **ui:** add NavItem atom + Navigation organism + Colors story ([54505a6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/54505a6a1f14b38f9835d98418b5527d9bb343b6))
 * **ui:** add Pagination molecule + refactor Button for composability ([3442593](https://github.com/fubaritico/react-and-react-native-financial-app/commit/34425930de654505f8783319cf1077cee5dadf26))
 * **ui:** add ProgressBar atom with thick/thin variants + stories ([5cee197](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5cee19774c792fe544e5039ff98649409e3003c3))
+* **ui:** add Tooltip atom with 12 placements + dual positioning modes ([3e57be6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/3e57be6ca6dfcbcc740722a4668eb6e18fcb76ad))
 * **ui:** add TransactionsDataTable stories + table sub-components + a11y fixes ([6cf6a5a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6cf6a5ac906bb9fe214b2173c03ef3d1580eff55))
 * **ui:** add Typography component with 9 Figma-mapped variants ([d2c06ce](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d2c06ce8ab3ad66accf233a3781e0215408f7c7c))
 * **ui:** add Wave 1 auth components (TextInput, PasswordInput, LinkText, AuthCard, AuthLayout) ([3425944](https://github.com/fubaritico/react-and-react-native-financial-app/commit/34259449d79f4b49276054ceda564f0a0319e21b))

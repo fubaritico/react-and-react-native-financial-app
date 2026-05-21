@@ -18,3 +18,6 @@ export type { IModeChoiceScreenProps } from './ModeChoiceScreen/ModeChoiceScreen
 
 export { InitialBalanceScreen } from './InitialBalanceScreen/InitialBalanceScreen.web'
 export type { IInitialBalanceScreenProps } from './InitialBalanceScreen/InitialBalanceScreen'
+
+export { WelcomeScreen } from './WelcomeScreen/WelcomeScreen.web'
+export type { IWelcomeScreenProps } from './WelcomeScreen/WelcomeScreen'

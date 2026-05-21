@@ -82,7 +82,9 @@ export function useAuthRedirect(): AuthRedirectResult {
   const needsModeChoice = preferences?.mode == null
   const needsInitialBalance =
     preferences?.mode === 'manual' && !preferences.initial_balance_set
-  const onboardingComplete = !needsModeChoice && !needsInitialBalance
+  const needsWelcome = !preferences?.has_seen_onboarding
+  const onboardingComplete =
+    !needsModeChoice && !needsInitialBalance && !needsWelcome
 
   // --- Routing decision chain ---
 
@@ -123,6 +125,9 @@ export function useAuthRedirect(): AuthRedirectResult {
   }
   if (isAuthenticated && needsInitialBalance && !inAuthGroup) {
     return { status: 'redirect', href: '/initial-balance' }
+  }
+  if (isAuthenticated && needsWelcome && !inAuthGroup) {
+    return { status: 'redirect', href: '/welcome' }
   }
 
   // Authenticated user on auth screen with onboarding complete → go to home

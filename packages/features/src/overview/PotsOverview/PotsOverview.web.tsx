@@ -7,12 +7,17 @@ import {
   Typography,
   cn,
 } from '@financial-app/ui'
+import { useTranslation } from 'react-i18next'
 
 import { shared, web } from './PotsOverview.styles'
 
 import type { IPotsOverviewProps } from './PotsOverview'
 
-/** Web implementation of the PotsOverview section component. */
+/**
+ * Web implementation of the PotsOverview section component.
+ * @param props - Pots overview data and callbacks
+ * @returns The pots overview card
+ */
 export const PotsOverview = ({
   title,
   seeDetailsLabel,
@@ -25,6 +30,8 @@ export const PotsOverview = ({
   locale = 'en-US',
   currency = 'USD',
 }: Readonly<IPotsOverviewProps>) => {
+  const { t } = useTranslation()
+
   return (
     <Card>
       {/* Header row */}
@@ -36,51 +43,64 @@ export const PotsOverview = ({
       </div>
 
       {/* Content: stacked on mobile, side by side on desktop */}
-      <div className={web.content}>
-        {/* Total Saved box */}
-        <div
-          className={cn('flex', shared.totalSavedBox, web.totalSavedBoxExtra)}
-        >
-          {/* Icon area */}
+      {pots.length ? (
+        <div className={web.content}>
+          {/* Total Saved box */}
           <div
-            className={cn('flex', shared.iconArea, web.iconAreaExtra)}
-            aria-label={savingsIconLabel}
+            className={cn('flex', shared.totalSavedBox, web.totalSavedBoxExtra)}
           >
-            {icon ?? (
-              <Icon name="pot" iconSize="5xl" color="var(--color-green)" />
-            )}
-          </div>
+            {/* Icon area */}
+            <div
+              className={cn('flex', shared.iconArea, web.iconAreaExtra)}
+              aria-label={savingsIconLabel}
+            >
+              {icon ?? (
+                <Icon name="pot" iconSize="5xl" color="var(--color-green)" />
+              )}
+            </div>
 
-          {/* Total saved text */}
-          <div>
-            <Typography variant="body" color="muted" as="p">
-              {totalSavedLabel}
-            </Typography>
-            <Currency
-              amount={totalSaved}
-              locale={locale}
-              currency={currency}
-              digits={0}
-              variant="display-lg"
-            />
-          </div>
-        </div>
-
-        {/* Pots grid — 2 columns */}
-        <div className={web.potsGrid}>
-          {pots.map((pot) => (
-            <div key={pot.name} className="py-2">
-              <ColorBarItem
-                label={pot.name}
-                amount={pot.total}
-                color={pot.color}
+            {/* Total saved text */}
+            <div>
+              <Typography variant="body" color="muted" as="p">
+                {totalSavedLabel}
+              </Typography>
+              <Currency
+                amount={totalSaved}
                 locale={locale}
                 currency={currency}
+                digits={0}
+                variant="display-lg"
               />
             </div>
-          ))}
+          </div>
+
+          {/* Pots grid — 2 columns */}
+          <div className={web.potsGrid}>
+            {pots.map((pot) => (
+              <div key={pot.name} className="py-2">
+                <ColorBarItem
+                  label={pot.name}
+                  amount={pot.total}
+                  color={pot.color}
+                  locale={locale}
+                  currency={currency}
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <button className={shared.noDataButton} onClick={onSeeDetails}>
+          <div className={shared.noData}>
+            <div className="text-foreground-muted">
+              <Icon name="navPots" iconSize="5xl" />
+            </div>
+            <Typography variant="body" color="muted">
+              {t('potsOverview.empty')}
+            </Typography>
+          </div>
+        </button>
+      )}
     </Card>
   )
 }

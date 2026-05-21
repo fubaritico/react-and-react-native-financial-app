@@ -1,7 +1,5 @@
 import type { IconName } from '@financial-app/icons'
 
-import { formatCurrency } from './currency'
-
 import type { ITransaction } from '../types'
 
 /** Bill payment status derived from transaction date. */
@@ -55,20 +53,20 @@ export interface IRecurringBill {
 
 /** Summary data for the recurring bills page. */
 export interface IRecurringBillsPageData {
-  /** Formatted total of all recurring bills. */
-  totalBills: string
+  /** Total of all recurring bills (raw number). */
+  totalBills: number
   /** Number of paid bills. */
   paidCount: number
-  /** Formatted total of paid bills. */
-  paidTotal: string
+  /** Total of paid bills (raw number). */
+  paidTotal: number
   /** Number of upcoming bills. */
   upcomingCount: number
-  /** Formatted total of upcoming bills. */
-  upcomingTotal: string
+  /** Total of upcoming bills (raw number). */
+  upcomingTotal: number
   /** Number of due-soon bills. */
   dueSoonCount: number
-  /** Formatted total of due-soon bills. */
-  dueSoonTotal: string
+  /** Total of due-soon bills (raw number). */
+  dueSoonTotal: number
   /** Bill rows for the DataTable. */
   bills: IRecurringBill[]
 }
@@ -143,13 +141,13 @@ export function buildRecurringBillsPageData(
   const dueSoon = bills.filter((b) => b.status === 'due-soon')
 
   return {
-    totalBills: formatCurrency(totalAmount),
+    totalBills: totalAmount,
     paidCount: paid.length,
-    paidTotal: formatCurrency(sumAbsolute(paid)),
+    paidTotal: sumAbsolute(paid),
     upcomingCount: upcoming.length,
-    upcomingTotal: formatCurrency(sumAbsolute(upcoming)),
+    upcomingTotal: sumAbsolute(upcoming),
     dueSoonCount: dueSoon.length,
-    dueSoonTotal: formatCurrency(sumAbsolute(dueSoon)),
+    dueSoonTotal: sumAbsolute(dueSoon),
     bills,
   }
 }

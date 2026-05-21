@@ -52,16 +52,22 @@
   },
   "potsOverview": {
     "title": "Cagnottes",
-    "totalSaved": "Total épargné"
+    "totalSaved": "Total épargné",
+    "empty": "Aucune cagnotte pour le moment. Créez une cagnotte pour commencer à épargner."
   },
   "transactionsOverview": {
-    "title": "Transactions"
+    "title": "Transactions",
+    "empty": "Aucune transaction pour le moment. Ajoutez votre première transaction pour commencer."
+  },
+  "budgetOverview": {
+    "empty": "Aucun budget pour le moment. Créez un budget pour suivre vos dépenses."
   },
   "recurringBillsOverview": {
     "title": "Factures récurrentes",
     "paidBills": "Factures payées",
     "totalUpcoming": "Total à venir",
-    "dueSoon": "Échéance proche"
+    "dueSoon": "Échéance proche",
+    "empty": "Aucune facture récurrente pour le moment. Ajoutez des transactions marquées comme récurrentes pour les voir ici."
   },
   "passwordInput": {
     "hidePassword": "Masquer le mot de passe",
@@ -346,6 +352,12 @@
       "backToChoice": "Retour au choix",
       "validationError": "Veuillez saisir un montant valide.",
       "alreadySet": "Le solde initial a déjà été défini."
+    },
+    "welcome": {
+      "title": "Bienvenue",
+      "description": "Vous êtes prêt à prendre le contrôle de vos finances. Ajoutez vos transactions manuellement, définissez des budgets par catégorie et faites grandir votre épargne avec les pots. Votre prévision personnelle se met à jour en temps réel.",
+      "getStarted": "C'est parti",
+      "skip": "Passer"
     }
   },
   "errors": {

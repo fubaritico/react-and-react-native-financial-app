@@ -6,6 +6,12 @@ export const shared = {
   totalSavedBox: 'bg-beige-100 rounded-xl p-4 flex-row items-center gap-4',
   /** Icon area sizing */
   iconArea: 'w-12 h-12 rounded-xl items-center justify-center',
+  /** Overview content button if there's no data */
+  noDataButton:
+    'block w-full rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',
+  /** Overview content if there's no data */
+  noData:
+    'flex flex-col justify-center items-center gap-4 bg-beige-100 p-8 rounded-md',
 } as const
 
 /** Web-only classes for PotsOverview (responsive layout) */

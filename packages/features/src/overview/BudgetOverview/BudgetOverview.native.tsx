@@ -4,11 +4,13 @@ import {
   ColorBarItem,
   Divider,
   DonutChart,
+  Icon,
   SectionLink,
   Typography,
   tw,
 } from '@financial-app/ui/native'
-import { View, useWindowDimensions } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { Pressable, View, useWindowDimensions } from 'react-native'
 
 import { CHART_SIZE, TABLET_BREAKPOINT } from './BudgetOverview.constants'
 import { native, shared } from './BudgetOverview.styles'
@@ -20,7 +22,11 @@ import {
 
 import type { IBudgetOverviewProps } from './BudgetOverview'
 
-/** Native implementation of the BudgetOverview component. */
+/**
+ * Native implementation of the BudgetOverview component.
+ * @param props - Budget overview data and callbacks
+ * @returns The budget overview card
+ */
 export function BudgetOverview({
   title,
   seeDetailsLabel,
@@ -33,6 +39,7 @@ export function BudgetOverview({
   currency = 'USD',
   spendingSummaryTitle,
 }: Readonly<IBudgetOverviewProps>) {
+  const { t } = useTranslation()
   const { width } = useWindowDimensions()
   const isHorizontal = width >= TABLET_BREAKPOINT
 
@@ -64,64 +71,87 @@ export function BudgetOverview({
         </View>
       )}
 
-      <View style={isHorizontal ? tw`${native.horizontal}` : undefined}>
-        <View
-          style={
-            isHorizontal
-              ? tw`${native.chartHorizontal}`
-              : tw`${native.chartVertical}`
-          }
-        >
-          <DonutChart
-            segments={segments}
-            centerLabel={centerLabel}
-            centerSubLabel={centerSubLabel}
-            size={CHART_SIZE}
-          />
-        </View>
-
-        <View
-          style={isHorizontal ? tw`${native.budgetListHorizontal}` : undefined}
-        >
-          {showSpentAmount && spendingSummaryTitle && (
-            <Typography variant="subsection-title" accessibilityRole="header">
-              {spendingSummaryTitle}
-            </Typography>
-          )}
-
+      {budgets.length > 1 ? (
+        <View style={isHorizontal ? tw`${native.horizontal}` : undefined}>
           <View
             style={
               isHorizontal
-                ? tw`${native.legendHorizontal}`
-                : showSpentAmount
-                  ? tw`${native.legendList}`
-                  : tw`${native.legendGrid}`
+                ? tw`${native.chartHorizontal}`
+                : tw`${native.chartVertical}`
             }
           >
-            {budgets.map((budget, index) => (
-              <View
-                key={budget.category}
-                style={
-                  showSpentAmount || isHorizontal
-                    ? tw`${native.legendItem}`
-                    : tw`${native.legendGridItem}`
-                }
-              >
-                {showSpentAmount && index > 0 && <Divider />}
-                <ColorBarItem
-                  label={budget.category}
-                  amount={showSpentAmount ? budget.spent : budget.maximum}
-                  color={budget.color}
-                  locale={locale}
-                  currency={currency}
-                  secondaryAmount={showSpentAmount ? budget.maximum : undefined}
-                  secondaryLabel={ofLabel}
-                />
-              </View>
-            ))}
+            <DonutChart
+              segments={segments}
+              centerLabel={centerLabel}
+              centerSubLabel={centerSubLabel}
+              size={CHART_SIZE}
+            />
+          </View>
+
+          <View
+            style={
+              isHorizontal ? tw`${native.budgetListHorizontal}` : undefined
+            }
+          >
+            {showSpentAmount && spendingSummaryTitle && (
+              <Typography variant="subsection-title" accessibilityRole="header">
+                {spendingSummaryTitle}
+              </Typography>
+            )}
+
+            <View
+              style={
+                isHorizontal
+                  ? tw`${native.legendHorizontal}`
+                  : showSpentAmount
+                    ? tw`${native.legendList}`
+                    : tw`${native.legendGrid}`
+              }
+            >
+              {budgets.map((budget, index) => (
+                <View
+                  key={budget.category}
+                  style={
+                    showSpentAmount || isHorizontal
+                      ? tw`${native.legendItem}`
+                      : tw`${native.legendGridItem}`
+                  }
+                >
+                  {showSpentAmount && index > 0 && <Divider />}
+                  <ColorBarItem
+                    label={budget.category}
+                    amount={showSpentAmount ? budget.spent : budget.maximum}
+                    color={budget.color}
+                    locale={locale}
+                    currency={currency}
+                    secondaryAmount={
+                      showSpentAmount ? budget.maximum : undefined
+                    }
+                    secondaryLabel={ofLabel}
+                  />
+                </View>
+              ))}
+            </View>
           </View>
         </View>
-      </View>
+      ) : (
+        <Pressable
+          onPress={onSeeDetails}
+          accessibilityRole="button"
+          accessibilityLabel={seeDetailsLabel}
+        >
+          <View style={tw`${shared.noData}`}>
+            <Icon
+              name="navBudgets"
+              iconSize="5xl"
+              color={tw.color('foreground-muted')}
+            />
+            <Typography variant="body" color="muted" align="center">
+              {t('budgetOverview.empty')}
+            </Typography>
+          </View>
+        </Pressable>
+      )}
     </Card>
   )
 }

@@ -1,6 +1,9 @@
 import { BillsSummary, RecurringBillsDataTable } from '@financial-app/features'
 import { getRecurringBillsOptions } from '@financial-app/http-client'
-import { buildRecurringBillsPageData } from '@financial-app/shared'
+import {
+  buildRecurringBillsPageData,
+  formatCurrency,
+} from '@financial-app/shared'
 import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -32,17 +35,17 @@ export function RecurringScreen() {
             {
               label: t('recurring.paidBills'),
               count: pageData.paidCount,
-              total: pageData.paidTotal,
+              total: formatCurrency(pageData.paidTotal),
             },
             {
               label: t('recurring.totalUpcoming'),
               count: pageData.upcomingCount,
-              total: pageData.upcomingTotal,
+              total: formatCurrency(pageData.upcomingTotal),
             },
             {
               label: t('recurring.dueSoon'),
               count: pageData.dueSoonCount,
-              total: pageData.dueSoonTotal,
+              total: formatCurrency(pageData.dueSoonTotal),
               color: 'destructive' as const,
             },
           ]
@@ -79,7 +82,7 @@ export function RecurringScreen() {
       {/* Total Bills */}
       <BalanceCard
         label={t('recurring.totalBills')}
-        amount={pageData.totalBills}
+        amount={formatCurrency(pageData.totalBills)}
         tone="dark"
       />
 

@@ -12,18 +12,37 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+const defaultArgs = {
+  title: i18n.t('recurringBillsOverview.title'),
+  seeDetailsLabel: i18n.t('common.seeDetails'),
+  paidBillsLabel: i18n.t('recurringBillsOverview.paidBills'),
+  totalUpcomingLabel: i18n.t('recurringBillsOverview.totalUpcoming'),
+  dueSoonLabel: i18n.t('recurringBillsOverview.dueSoon'),
+  onSeeDetails: () => undefined,
+}
+
 /** Recurring Bills section as seen on the Overview page. */
 export const Showcase: Story = {
   args: {
-    title: i18n.t('recurringBillsOverview.title'),
-    seeDetailsLabel: i18n.t('common.seeDetails'),
-    paidBillsLabel: i18n.t('recurringBillsOverview.paidBills'),
-    totalUpcomingLabel: i18n.t('recurringBillsOverview.totalUpcoming'),
-    dueSoonLabel: i18n.t('recurringBillsOverview.dueSoon'),
-    paid: '$190.00',
-    upcoming: '$194.98',
-    dueSoon: '$59.98',
-    onSeeDetails: () => undefined,
+    ...defaultArgs,
+    paid: 190,
+    upcoming: 194.98,
+    dueSoon: 59.98,
+  },
+  render: (args) => (
+    <View style={{ maxWidth: 400 }}>
+      <RecurringBillsOverview {...args} />
+    </View>
+  ),
+}
+
+/** Empty state when no recurring bills exist. */
+export const Empty: Story = {
+  args: {
+    ...defaultArgs,
+    paid: 0,
+    upcoming: 0,
+    dueSoon: 0,
   },
   render: (args) => (
     <View style={{ maxWidth: 400 }}>

@@ -52,16 +52,22 @@
   },
   "potsOverview": {
     "title": "Pots",
-    "totalSaved": "Total Saved"
+    "totalSaved": "Total Saved",
+    "empty": "No pots yet. Create a pot to start saving toward your goals."
   },
   "transactionsOverview": {
-    "title": "Transactions"
+    "title": "Transactions",
+    "empty": "No transactions yet. Add your first transaction to get started."
+  },
+  "budgetOverview": {
+    "empty": "No budgets yet. Create a budget to start tracking your spending."
   },
   "recurringBillsOverview": {
     "title": "Recurring Bills",
     "paidBills": "Paid Bills",
     "totalUpcoming": "Total Upcoming",
-    "dueSoon": "Due Soon"
+    "dueSoon": "Due Soon",
+    "empty": "No recurring bills yet. Add transactions marked as recurring to see them here."
   },
   "passwordInput": {
     "hidePassword": "Hide password",
@@ -346,6 +352,12 @@
       "backToChoice": "Back to choice",
       "validationError": "Please enter a valid amount.",
       "alreadySet": "Initial balance has already been set."
+    },
+    "welcome": {
+      "title": "Welcome",
+      "description": "You're all set to take control of your finances. Add your transactions manually, set budgets for each category, and grow your savings with pots. Your personal forecast updates in real time as you go.",
+      "getStarted": "Get started",
+      "skip": "Skip"
     }
   },
   "errors": {

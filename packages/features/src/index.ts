@@ -106,6 +106,7 @@ export {
   SignupForm,
   ModeChoiceScreen,
   InitialBalanceScreen,
+  WelcomeScreen,
 } from './auth'
 export type {
   ITotpEnrollScreenProps,
@@ -115,6 +116,7 @@ export type {
   ISignupFormProps,
   IModeChoiceScreenProps,
   IInitialBalanceScreenProps,
+  IWelcomeScreenProps,
 } from './auth'
 
 export { SettingsScreenView } from './settings'

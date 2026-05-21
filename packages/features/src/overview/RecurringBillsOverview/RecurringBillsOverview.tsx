@@ -10,12 +10,12 @@ export interface IRecurringBillsOverviewProps {
   totalUpcomingLabel: string
   /** Label for the "Due Soon" row. */
   dueSoonLabel: string
-  /** Amount for paid bills, formatted as currency string. */
-  paid: string
-  /** Amount for total upcoming bills, formatted as currency string. */
-  upcoming: string
-  /** Amount for bills due soon, formatted as currency string. */
-  dueSoon: string
+  /** Amount for paid bills (raw number — formatted in the component). */
+  paid: number
+  /** Amount for total upcoming bills (raw number — formatted in the component). */
+  upcoming: number
+  /** Amount for bills due soon (raw number — formatted in the component). */
+  dueSoon: number
   /** Callback when "See Details" is pressed. */
   onSeeDetails: () => void
 }

@@ -38,7 +38,7 @@ export default function InitialBalance() {
         await queryClient.invalidateQueries({
           queryKey: getUsersMePreferencesQueryKey(),
         })
-        router.replace('/')
+        router.replace('/welcome')
       } catch (err) {
         setError(getErrorMessage(err))
       }

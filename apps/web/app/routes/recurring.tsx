@@ -2,6 +2,7 @@ import { BillsSummary, RecurringBillsDataTable } from '@financial-app/features'
 import { getRecurringBillsOptions } from '@financial-app/http-client'
 import {
   buildRecurringBillsPageData,
+  formatCurrency,
   getErrorMessage,
 } from '@financial-app/shared'
 import {
@@ -98,16 +99,20 @@ export default function RecurringBills({
   } = pageData
 
   const summaryRows: IBillsSummaryRow[] = [
-    { label: t('recurring.paidBills'), count: paidCount, total: paidTotal },
+    {
+      label: t('recurring.paidBills'),
+      count: paidCount,
+      total: formatCurrency(paidTotal),
+    },
     {
       label: t('recurring.totalUpcoming'),
       count: upcomingCount,
-      total: upcomingTotal,
+      total: formatCurrency(upcomingTotal),
     },
     {
       label: t('recurring.dueSoon'),
       count: dueSoonCount,
-      total: dueSoonTotal,
+      total: formatCurrency(dueSoonTotal),
       color: 'destructive' as const,
     },
   ]
@@ -125,7 +130,7 @@ export default function RecurringBills({
         <div className="flex flex-col gap-6 @[1100px]:self-start">
           <BalanceCard
             label={t('recurring.totalBills')}
-            amount={totalBills}
+            amount={formatCurrency(totalBills)}
             tone="dark"
           />
           <BillsSummary title={t('recurring.summary')} rows={summaryRows} />

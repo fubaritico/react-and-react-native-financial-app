@@ -11,6 +11,7 @@ export default function AuthLayout() {
       <Stack.Screen name="totp-challenge" />
       <Stack.Screen name="mode-choice" />
       <Stack.Screen name="initial-balance" />
+      <Stack.Screen name="welcome" />
     </Stack>
   )
 }

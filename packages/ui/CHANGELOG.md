@@ -152,6 +152,7 @@
 * **ui:** add NavItem atom + Navigation organism + Colors story ([54505a6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/54505a6a1f14b38f9835d98418b5527d9bb343b6))
 * **ui:** add Pagination molecule + refactor Button for composability ([3442593](https://github.com/fubaritico/react-and-react-native-financial-app/commit/34425930de654505f8783319cf1077cee5dadf26))
 * **ui:** add ProgressBar atom with thick/thin variants + stories ([5cee197](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5cee19774c792fe544e5039ff98649409e3003c3))
+* **ui:** add Tooltip atom with 12 placements + dual positioning modes ([3e57be6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/3e57be6ca6dfcbcc740722a4668eb6e18fcb76ad))
 * **ui:** add TransactionsDataTable stories + table sub-components + a11y fixes ([6cf6a5a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6cf6a5ac906bb9fe214b2173c03ef3d1580eff55))
 * **ui:** add Typography component with 9 Figma-mapped variants ([d2c06ce](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d2c06ce8ab3ad66accf233a3781e0215408f7c7c))
 * **ui:** add Wave 1 auth components (TextInput, PasswordInput, LinkText, AuthCard, AuthLayout) ([3425944](https://github.com/fubaritico/react-and-react-native-financial-app/commit/34259449d79f4b49276054ceda564f0a0319e21b))

@@ -178,9 +178,11 @@ Read `@completed.md`
    - ~~Dynamic budget month~~ ✅ — replaced hardcoded `BUDGET_MONTH='2024-08'` with `getCurrentBudgetMonth()` across all 6 route files. Module-level query options moved inside component (web/budgets). Inline arrows extracted to useCallback (mobile-expo + bare mobile overview).
    - ~~Web form refactor (dataset pattern)~~ ✅ — useFormValidation owns form state, web forms expose data via `<form>` dataset (`data-error`, `data-form-data`). 6 web modals migrated (transaction add/edit, budget add/edit, pot add/edit). Zod schema factories with i18n (`createXxxFormSchema(t)`). Transaction amount changed to string type (text input + character filter). Rate limiter fix (writeLimiter skips GET). Review pass: removed dead DataTest interface, fixed JSDoc, extracted getCharsLeftLabel useCallback, cleaned commented-out debug logs.
    - ~~Native form fix + shared CRUD hooks + tests~~ ✅ — Fixed 3 native form components (platform-agnostic ref types, amount: string). Extracted useTransactionCrud, useBudgetCrud, usePotCrud into @financial-app/features. Zod schema refine() guard (empty string bypass). useFormValidation tests (16), CRUD hook tests (3×10), form component tests (3×7). Rate limiter fix (skip GET). 6-agent review pass (97/100).
+   - ~~Dropdown scroll bug~~ ✅ — portal dropdown menu was closing on internal `<ul>` scroll because `window.addEventListener('scroll', handleClose, true)` captured ALL scroll events; fixed by checking `e.target` containment in `menuWrapperRef` before closing
+   - ~~Tooltip atom~~ ✅ — cross-platform Tooltip (native+web), 12 placements (top/bottom/left/right + aligned variants), dual mode (target ref + manual coords), Portal rendering, auto-flip, arrow pointing to target center, Storybook stories (5), removed legacy DSTooltip
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
    - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
-   - **Next coding**: Onboarding walkthrough screens
+   - **Next coding**: Onboarding walkthrough — decide navigation pattern and screen sequencing (how steps chain, prev/next controls, overlay + tooltip orchestration)
 2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, audit-owasp skill upgraded to OWASP 2025
 3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
@@ -205,6 +207,7 @@ Read `@completed.md`
 13. ~~**Password strength rules**~~ ✅ — usePasswordRules hook (6 rules incl. match) + PasswordRulesList molecule + SignupForm integration. signupSchema uses .min(1) (visual rules handle UX), loginSchema keeps .min(16).
 14. ~~**Basic Memory knowledge base**~~ ✅ — 51 notes in `memory/`, MCP server in `.mcp.json`, `/note` skill, 10 vendor skills (defrag, reflect, tasks...), wired into start/end-session, CLAUDE.md rule added, MEMORY.md defragged (355→68 lines), known-issues.md deduped, README updated with setup guide + `.example` files.
 15. ~~**CI/CD plan**~~ ✅ — `docs/plans/ci-plan.md` (GitHub Actions: validate, Playwright, Appium, SonarQube, Claude PR review, deploys). README cleaned (plans section removed — private/gitignored).
+16. **Icon color variants** — align Icon `color` prop on Typography's variant system (`"muted"`, `"error"`, `"default"`, etc.) instead of raw string. Currently requires `text-*` parent wrapper (web) or `tw.color()` (native).
 
 **Pending tests**:
 - iPad: verify BottomSheet overlay, 2-tap switching, text truncation

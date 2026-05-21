@@ -55,7 +55,7 @@ export default function InitialBalance() {
         await queryClient.invalidateQueries({
           queryKey: getUsersMePreferencesQueryKey(),
         })
-        void navigate('/', { replace: true })
+        void navigate('/welcome', { replace: true })
       } catch (err) {
         setError(getErrorMessage(err))
       }

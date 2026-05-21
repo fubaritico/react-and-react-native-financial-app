@@ -113,6 +113,7 @@ export {
   SignupForm,
   ModeChoiceScreen,
   InitialBalanceScreen,
+  WelcomeScreen,
 } from './auth/index.web'
 export type {
   ITotpEnrollScreenProps,
@@ -122,6 +123,7 @@ export type {
   ISignupFormProps,
   IModeChoiceScreenProps,
   IInitialBalanceScreenProps,
+  IWelcomeScreenProps,
 } from './auth/index.web'
 
 export { SettingsScreenView } from './settings/index.web'
