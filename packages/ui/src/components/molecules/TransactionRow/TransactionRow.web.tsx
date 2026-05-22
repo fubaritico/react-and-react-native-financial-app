@@ -1,7 +1,6 @@
-import { Avatar, Typography } from '#Atoms/index.web'
+import { Avatar, Currency, Typography } from '#Atoms/index.web'
 import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
 
-import { formatAmount } from './TransactionRow.constants'
 import { shared } from './TransactionRow.styles'
 
 import type { ITransactionRowProps } from './TransactionRow'
@@ -28,7 +27,7 @@ export const TransactionRow = ({
       </Typography>
       <div className="text-right">
         <Typography variant="body-bold" color={amountColor} as="p">
-          {formatAmount(amount)}
+          <Currency sign="always">{amount}</Currency>
         </Typography>
         <Typography variant="caption" color="muted" as="p" className="mt-1">
           {date}

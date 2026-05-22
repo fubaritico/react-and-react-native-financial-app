@@ -28,8 +28,4 @@ export interface IPotsOverviewProps {
   onSeeDetails: () => void
   /** Optional icon for the Total Saved box. */
   icon?: ReactNode
-  /** BCP 47 locale tag for currency formatting (defaults to 'en-US'). */
-  locale?: string
-  /** ISO 4217 currency code (defaults to 'USD'). */
-  currency?: string
 }

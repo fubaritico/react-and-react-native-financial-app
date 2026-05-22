@@ -1,5 +1,6 @@
 import { cn } from '#Lib/cn'
 
+import { Currency } from '#Atoms/Currency/Currency.web'
 import { Typography } from '#Atoms/index.web'
 
 import { billSummaryRowVariants } from './BillSummaryRow.variants'
@@ -28,7 +29,7 @@ export const BillSummaryRow = ({
       {label}
     </Typography>
     <Typography variant="body-bold" as="span">
-      {amount}
+      <Currency>{amount}</Currency>
     </Typography>
   </div>
 )

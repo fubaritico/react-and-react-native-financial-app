@@ -1,4 +1,10 @@
-export { formatCurrency, convertCurrency } from './currency'
+export {
+  formatCurrency,
+  convertCurrency,
+  initRates,
+  refreshRates,
+  getRate,
+} from './currency'
 export type {
   SupportedCurrency,
   CurrencySign,

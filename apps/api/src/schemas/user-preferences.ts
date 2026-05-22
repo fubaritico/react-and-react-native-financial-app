@@ -15,6 +15,9 @@ export const UserPreferencesSchema = z
     }),
     has_seen_onboarding: z.boolean().openapi({ example: false }),
     initial_balance_set: z.boolean().openapi({ example: false }),
+    currency: z
+      .enum(['USD', 'EUR', 'GBP'])
+      .openapi({ example: 'USD', description: 'Preferred display currency' }),
     created_at: z.string().openapi({ example: '2026-05-17T10:00:00.000Z' }),
     updated_at: z.string().openapi({ example: '2026-05-17T10:00:00.000Z' }),
   })
@@ -32,6 +35,10 @@ export const UpdateUserPreferencesSchema = z
       }),
 
     has_seen_onboarding: z.boolean().optional().openapi({ example: true }),
+    currency: z
+      .enum(['USD', 'EUR', 'GBP'])
+      .optional()
+      .openapi({ example: 'EUR', description: 'Preferred display currency' }),
   })
   .openapi('UpdateUserPreferences')
 

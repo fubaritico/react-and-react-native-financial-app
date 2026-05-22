@@ -28,8 +28,4 @@ export interface IPotCardProps {
   onEdit?: () => void
   /** Callback when "Delete Pot" is selected. */
   onDelete?: () => void
-  /** Locale for currency formatting (e.g. "en-US"). */
-  locale?: string
-  /** Currency code for formatting (e.g. "USD"). */
-  currency?: string
 }

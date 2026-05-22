@@ -1,4 +1,3 @@
-import { formatCurrency } from './currency'
 import { formatDate } from './date'
 
 import type { IBudget, ITransaction } from '../types'
@@ -36,8 +35,8 @@ export interface IBudgetSpendingItem {
   avatar: string
   /** Transaction recipient/sender name */
   name: string
-  /** Formatted currency amount (e.g. "-$25.00") */
-  amount: string
+  /** Numeric amount in base currency (negative for expenses) */
+  amount: number
   /** Formatted transaction date */
   date: string
 }
@@ -106,7 +105,7 @@ export function buildBudgetPageData(
       .map((txn) => ({
         avatar: txn.avatar,
         name: txn.name,
-        amount: formatCurrency(txn.amount),
+        amount: txn.amount,
         date: formatDate(txn.date),
       }))
 

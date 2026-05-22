@@ -1,4 +1,4 @@
-import { ModalRenderer } from '@financial-app/features/shared'
+import { CurrencyProvider, ModalRenderer } from '@financial-app/features/shared'
 import { client } from '@financial-app/http-client/client'
 import {
   isAuthenticatedAtom,
@@ -163,9 +163,11 @@ export default function App() {
     <JotaiProvider>
       <QueryClientProvider client={queryClient}>
         <AuthBootstrap>
-          <ModalRenderer>
-            <Outlet />
-          </ModalRenderer>
+          <CurrencyProvider>
+            <ModalRenderer>
+              <Outlet />
+            </ModalRenderer>
+          </CurrencyProvider>
         </AuthBootstrap>
       </QueryClientProvider>
     </JotaiProvider>

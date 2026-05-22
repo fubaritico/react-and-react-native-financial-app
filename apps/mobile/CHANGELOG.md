@@ -1,4 +1,4 @@
-## 0.0.1 (2026-05-21)
+## 0.0.1 (2026-05-22)
 
 
 ### Bug Fixes
@@ -115,6 +115,7 @@
 * **monorepo:** add changelog generation and type-check scripts ([f63021a](https://github.com/fubaritico/react-and-react-native-financial-app/commit/f63021aa0544eabc96b51c599c1299f82b32b750))
 * **onboarding:** add InitialBalanceScreen + preferences routing glue ([6052020](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6052020c064ab6fd07ced05dd7efc793852a8227))
 * **onboarding:** add ModeChoiceScreen + ModeCard component ([d5766d0](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d5766d018bf9a27d633b54e9e31f718d04c6bbc9))
+* **onboarding:** add WelcomeScreen + overview empty states + recurring refactor ([332c353](https://github.com/fubaritico/react-and-react-native-financial-app/commit/332c353f3435d4495dfdaa9d9b3c2bd699ffc9cc))
 * **pages:** replace mock data with TanStack Query + Alert/Skeleton/Spinner UX ([687c938](https://github.com/fubaritico/react-and-react-native-financial-app/commit/687c93812227b9e3a72895f96bcf2827b2f55320)), closes [#Alias](https://github.com/fubaritico/react-and-react-native-financial-app/issues/Alias)
 * **pages:** wire Budget route across all 3 apps with shared data util ([5ad8019](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5ad8019287cf3a6b64e4eb31543f43527b840224))
 * **pages:** wire Pots route + PotCard component + i18n + UI fixes ([5b1b726](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5b1b7267194ed99fdd0af2c033e785e78f1745b0))

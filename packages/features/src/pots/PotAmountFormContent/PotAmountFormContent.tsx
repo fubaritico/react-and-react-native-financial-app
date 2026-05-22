@@ -24,8 +24,4 @@ export interface IPotAmountFormContentProps {
   amountLabel: string
   /** Placeholder for the amount input */
   amountPlaceholder: string
-  /** Locale for currency formatting (e.g. "en-US") */
-  locale?: string
-  /** Currency code for formatting (e.g. "USD") */
-  currency?: string
 }

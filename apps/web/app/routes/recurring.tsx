@@ -2,7 +2,6 @@ import { BillsSummary, RecurringBillsDataTable } from '@financial-app/features'
 import { getRecurringBillsOptions } from '@financial-app/http-client'
 import {
   buildRecurringBillsPageData,
-  formatCurrency,
   getErrorMessage,
 } from '@financial-app/shared'
 import {
@@ -22,10 +21,10 @@ import { queryClient } from '../lib/query-client'
 
 import type { Route } from './+types/recurring'
 
-const recurringOpts = getRecurringBillsOptions()
-
 export async function clientLoader() {
-  return queryClient.ensureQueryData(recurringOpts).catch(() => undefined)
+  return queryClient
+    .ensureQueryData(getRecurringBillsOptions())
+    .catch(() => undefined)
 }
 
 export function HydrateFallback() {
@@ -47,6 +46,8 @@ export default function RecurringBills({
   loaderData: initialData,
 }: Route.ComponentProps) {
   const { t, i18n } = useTranslation()
+
+  const recurringOpts = getRecurringBillsOptions()
 
   const {
     data: recurringBills,
@@ -102,17 +103,17 @@ export default function RecurringBills({
     {
       label: t('recurring.paidBills'),
       count: paidCount,
-      total: formatCurrency(paidTotal),
+      total: paidTotal,
     },
     {
       label: t('recurring.totalUpcoming'),
       count: upcomingCount,
-      total: formatCurrency(upcomingTotal),
+      total: upcomingTotal,
     },
     {
       label: t('recurring.dueSoon'),
       count: dueSoonCount,
-      total: formatCurrency(dueSoonTotal),
+      total: dueSoonTotal,
       color: 'destructive' as const,
     },
   ]
@@ -130,7 +131,7 @@ export default function RecurringBills({
         <div className="flex flex-col gap-6 @[1100px]:self-start">
           <BalanceCard
             label={t('recurring.totalBills')}
-            amount={formatCurrency(totalBills)}
+            amount={totalBills}
             tone="dark"
           />
           <BillsSummary title={t('recurring.summary')} rows={summaryRows} />

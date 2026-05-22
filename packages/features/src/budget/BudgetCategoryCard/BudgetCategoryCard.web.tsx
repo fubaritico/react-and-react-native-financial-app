@@ -1,4 +1,4 @@
-import { formatCurrency } from '@financial-app/shared'
+import { useCurrency } from '@financial-app/shared'
 import {
   Card,
   ColorDot,
@@ -41,14 +41,14 @@ export function BudgetCategoryCard({
   onSeeAll,
   onEdit,
   onDelete,
-  locale = 'en-US',
-  currency = 'USD',
 }: Readonly<IBudgetCategoryCardProps>) {
   const remaining = Math.max(0, maximum - spent)
 
-  const formattedMaximum = formatCurrency(maximum, { locale, currency })
-  const formattedSpent = formatCurrency(spent, { locale, currency })
-  const formattedRemaining = formatCurrency(remaining, { locale, currency })
+  const { format } = useCurrency()
+
+  const formattedMaximum = format(maximum)
+  const formattedSpent = format(spent)
+  const formattedRemaining = format(remaining)
 
   const menuOptions: IDropdownOption[] = useMemo(
     () => [

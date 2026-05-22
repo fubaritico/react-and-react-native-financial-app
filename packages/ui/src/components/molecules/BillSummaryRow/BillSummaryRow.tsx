@@ -7,8 +7,8 @@ export interface IBillSummaryRowProps extends VariantProps<
 > {
   /** Status label (e.g., "Paid Bills", "Total Upcoming", "Due Soon"). */
   label: string
-  /** Amount to display, formatted as currency string. */
-  amount: string
+  /** Numeric amount to display (formatted via Currency atom). */
+  amount: number
   /** Token color name for the left border (e.g., "green", "yellow", "cyan"). */
   color: string
 }

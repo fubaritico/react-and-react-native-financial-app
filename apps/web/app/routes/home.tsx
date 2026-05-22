@@ -13,7 +13,6 @@ import {
 } from '@financial-app/http-client'
 import {
   buildRecurringBillsPageData,
-  formatCurrency,
   formatDate,
   getCurrentBudgetMonth,
   getErrorMessage,
@@ -218,21 +217,21 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           <div className="md:flex-1">
             <BalanceCard
               label={t('overview.currentBalance')}
-              amount={formatCurrency(balance.current)}
+              amount={balance.current}
               tone="dark"
             />
           </div>
           <div className="md:flex-1">
             <BalanceCard
               label={t('overview.income')}
-              amount={formatCurrency(balance.income)}
+              amount={balance.income}
               tone="light"
             />
           </div>
           <div className="md:flex-1">
             <BalanceCard
               label={t('overview.expenses')}
-              amount={formatCurrency(balance.expenses)}
+              amount={balance.expenses}
               tone="light"
             />
           </div>

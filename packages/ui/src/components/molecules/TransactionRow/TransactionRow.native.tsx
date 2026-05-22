@@ -4,12 +4,11 @@ import tw from '#Lib/tw'
 
 import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
 
-import { formatAmount } from './TransactionRow.constants'
 import { shared } from './TransactionRow.styles'
 
 import type { ITransactionRowProps } from './TransactionRow'
 
-import { Avatar, Typography } from '#Atoms'
+import { Avatar, Currency, Typography } from '#Atoms'
 
 /** Native implementation of the TransactionRow component. */
 export const TransactionRow = ({
@@ -32,7 +31,7 @@ export const TransactionRow = ({
       </Typography>
       <View style={tw`items-end`}>
         <Typography variant="body-bold" color={amountColor}>
-          {formatAmount(amount)}
+          <Currency sign="always">{amount}</Currency>
         </Typography>
         <Typography variant="caption" color="muted" style={tw`mt-1`}>
           {date}

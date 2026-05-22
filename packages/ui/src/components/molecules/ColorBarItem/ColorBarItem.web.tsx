@@ -12,8 +12,6 @@ export function ColorBarItem({
   label,
   amount,
   color,
-  locale = 'en-US',
-  currency = 'USD',
   secondaryAmount,
   secondaryLabel = 'of',
   amountVariant = 'body-bold',
@@ -39,22 +37,15 @@ export function ColorBarItem({
             {label}
           </Typography>
           <span className={web.secondaryGroup}>
-            <Currency
-              amount={amount}
-              locale={locale}
-              currency={currency}
-              variant={amountVariant}
-            />
+            <Typography variant={amountVariant} as="span">
+              <Currency>{amount}</Currency>
+            </Typography>
             <Typography variant="caption" color="muted" as="span">
               {secondaryLabel}
             </Typography>
-            <Currency
-              amount={secondaryAmount}
-              locale={locale}
-              currency={currency}
-              variant="caption"
-              color="muted"
-            />
+            <Typography variant="caption" color="muted" as="span">
+              <Currency>{secondaryAmount}</Currency>
+            </Typography>
           </span>
         </>
       ) : (
@@ -62,12 +53,9 @@ export function ColorBarItem({
           <Typography variant="caption" color="muted" as="p">
             {label}
           </Typography>
-          <Currency
-            amount={amount}
-            locale={locale}
-            currency={currency}
-            variant={amountVariant}
-          />
+          <Typography variant={amountVariant} as="p">
+            <Currency>{amount}</Currency>
+          </Typography>
         </>
       )}
     </div>

@@ -14,11 +14,11 @@ export interface IAuthErrorOnly {
 /** Full user preferences row as returned by Supabase (mirrors Prisma model). */
 export type UserPreferencesRow = user_preferencesModel
 
-/** Partial payload for updating user preferences (mode, onboarding, balance flags). */
+/** Partial payload for updating user preferences (mode, onboarding, balance flags, currency). */
 type UpdatePayload = Partial<
   Pick<
     UserPreferencesRow,
-    'mode' | 'has_seen_onboarding' | 'initial_balance_set'
+    'mode' | 'has_seen_onboarding' | 'initial_balance_set' | 'currency'
   >
 >
 

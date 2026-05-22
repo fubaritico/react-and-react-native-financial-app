@@ -26,10 +26,6 @@ export interface IBudgetOverviewProps {
   ofLabel: string
   /** Subtext template for the donut center (e.g. "of $975 limit"). */
   limitLabel: string
-  /** BCP 47 locale tag (defaults to 'en-US'). */
-  locale?: string
-  /** ISO 4217 currency code (defaults to 'USD'). */
-  currency?: string
   /** Heading for the spending summary section (e.g. "Spending Summary"). */
   spendingSummaryTitle?: string
 }

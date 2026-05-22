@@ -1,4 +1,4 @@
-import { formatCurrency } from '@financial-app/shared'
+import { useCurrency } from '@financial-app/shared'
 import {
   Button,
   Card,
@@ -40,17 +40,16 @@ export function PotCard({
   onWithdraw,
   onEdit,
   onDelete,
-  locale = 'en-US',
-  currency = 'USD',
 }: Readonly<IPotCardProps>) {
   /** Progress percentage clamped to 0 when target is 0 */
   const percentage = target > 0 ? (total / target) * 100 : 0
   /** Percentage with 1 decimal (e.g. "7.9%") */
   const formattedPercentage = `${percentage.toFixed(1)}%`
+  const { format } = useCurrency()
   /** Total saved formatted as currency (e.g. "$159.00") */
-  const formattedTotal = formatCurrency(total, { locale, currency })
+  const formattedTotal = format(total)
   /** Target amount formatted as currency (e.g. "$2,000") */
-  const formattedTarget = formatCurrency(target, { locale, currency })
+  const formattedTarget = format(target)
 
   const menuOptions: IDropdownOption[] = useMemo(
     () => [

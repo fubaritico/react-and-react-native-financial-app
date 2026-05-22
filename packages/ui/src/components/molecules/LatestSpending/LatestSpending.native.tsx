@@ -8,7 +8,7 @@ import { shared } from './LatestSpending.styles'
 
 import type { ILatestSpendingProps } from './LatestSpending'
 
-import { Avatar, Divider, Typography } from '#Atoms'
+import { Avatar, Currency, Divider, Typography } from '#Atoms'
 
 /** Native implementation of the LatestSpending component. */
 export function LatestSpending({
@@ -35,7 +35,9 @@ export function LatestSpending({
               {item.name}
             </Typography>
             <View style={tw`${shared.itemRight}`}>
-              <Typography variant="body-bold">{item.amount}</Typography>
+              <Typography variant="body-bold">
+                <Currency sign="auto">{item.amount}</Currency>
+              </Typography>
               <Typography
                 variant="caption"
                 color="muted"

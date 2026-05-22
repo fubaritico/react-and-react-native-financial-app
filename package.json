@@ -55,6 +55,7 @@
     "tokens": "pnpm --filter @financial-app/tokens build",
     "icons": "pnpm --filter @financial-app/icons generate",
     "------------ DATA ---------------------": "",
+    "prisma:sync": "pnpm --filter @financial-app/prisma db:sync",
     "seed": "./scripts/seed-dev.sh",
     "------------ MAINTENANCE --------------": "",
     "clean": "rm -rf node_modules packages/*/node_modules apps/*/node_modules",

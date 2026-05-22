@@ -27,8 +27,6 @@ export const PotsOverview = ({
   pots,
   onSeeDetails,
   icon,
-  locale = 'en-US',
-  currency = 'USD',
 }: Readonly<IPotsOverviewProps>) => {
   const { t } = useTranslation()
 
@@ -64,13 +62,9 @@ export const PotsOverview = ({
               <Typography variant="body" color="muted" as="p">
                 {totalSavedLabel}
               </Typography>
-              <Currency
-                amount={totalSaved}
-                locale={locale}
-                currency={currency}
-                digits={0}
-                variant="display-lg"
-              />
+              <Typography variant="display-lg" as="p">
+                <Currency>{totalSaved}</Currency>
+              </Typography>
             </div>
           </div>
 
@@ -82,15 +76,17 @@ export const PotsOverview = ({
                   label={pot.name}
                   amount={pot.total}
                   color={pot.color}
-                  locale={locale}
-                  currency={currency}
                 />
               </div>
             ))}
           </div>
         </div>
       ) : (
-        <button className={shared.noDataButton} onClick={onSeeDetails}>
+        <button
+          className={shared.noDataButton}
+          onClick={onSeeDetails}
+          aria-label={seeDetailsLabel}
+        >
           <div className={shared.noData}>
             <div className="text-foreground-muted">
               <Icon name="navPots" iconSize="5xl" />

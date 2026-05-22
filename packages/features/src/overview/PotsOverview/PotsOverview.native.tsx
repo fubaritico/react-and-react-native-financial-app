@@ -28,8 +28,6 @@ export const PotsOverview = ({
   pots,
   onSeeDetails,
   icon,
-  locale = 'en-US',
-  currency = 'USD',
 }: Readonly<IPotsOverviewProps>) => {
   const { t } = useTranslation()
 
@@ -50,6 +48,7 @@ export const PotsOverview = ({
           <View style={tw`${shared.totalSavedBox}`}>
             {/* Icon area */}
             <View
+              accessible
               accessibilityLabel={savingsIconLabel}
               style={tw`${shared.iconArea}`}
             >
@@ -63,13 +62,9 @@ export const PotsOverview = ({
               <Typography variant="body" color="muted">
                 {totalSavedLabel}
               </Typography>
-              <Currency
-                amount={totalSaved}
-                locale={locale}
-                currency={currency}
-                digits={0}
-                variant="display-lg"
-              />
+              <Typography variant="display-lg">
+                <Currency>{totalSaved}</Currency>
+              </Typography>
             </View>
           </View>
 
@@ -81,8 +76,6 @@ export const PotsOverview = ({
                   label={pot.name}
                   amount={pot.total}
                   color={pot.color}
-                  locale={locale}
-                  currency={currency}
                 />
               </View>
             ))}
@@ -93,6 +86,7 @@ export const PotsOverview = ({
           onPress={onSeeDetails}
           accessibilityRole="button"
           accessibilityLabel={seeDetailsLabel}
+          accessibilityState={{ disabled: false }}
         >
           <View style={tw`${shared.noData}`}>
             <Icon

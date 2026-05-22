@@ -13,8 +13,6 @@ export function ColorBarItem({
   label,
   amount,
   color,
-  locale = 'en-US',
-  currency = 'USD',
   secondaryAmount,
   secondaryLabel = 'of',
   amountVariant = 'body-bold',
@@ -34,22 +32,15 @@ export function ColorBarItem({
             {label}
           </Typography>
           <View style={tw`${shared.secondaryGroup}`}>
-            <Currency
-              amount={amount}
-              locale={locale}
-              currency={currency}
-              variant={amountVariant}
-            />
+            <Typography variant={amountVariant}>
+              <Currency>{amount}</Currency>
+            </Typography>
             <Typography variant="caption" color="muted">
               {secondaryLabel}
             </Typography>
-            <Currency
-              amount={secondaryAmount}
-              locale={locale}
-              currency={currency}
-              variant="caption"
-              color="muted"
-            />
+            <Typography variant="caption" color="muted">
+              <Currency>{secondaryAmount}</Currency>
+            </Typography>
           </View>
         </>
       ) : (
@@ -57,12 +48,9 @@ export function ColorBarItem({
           <Typography variant="caption" color="muted">
             {label}
           </Typography>
-          <Currency
-            amount={amount}
-            locale={locale}
-            currency={currency}
-            variant={amountVariant}
-          />
+          <Typography variant={amountVariant}>
+            <Currency>{amount}</Currency>
+          </Typography>
         </>
       )}
     </View>

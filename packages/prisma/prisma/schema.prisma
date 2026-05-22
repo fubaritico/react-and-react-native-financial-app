@@ -581,6 +581,7 @@ model user_preferences {
   initial_balance_set Boolean? @default(false)
   created_at          DateTime @default(now()) @db.Timestamptz(6)
   updated_at          DateTime @default(now()) @db.Timestamptz(6)
+  currency            String   @default("USD")
   users               users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([user_id], map: "idx_user_preferences_user")

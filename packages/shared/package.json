@@ -63,11 +63,11 @@
   "dependencies": {
     "@financial-app/icons": "workspace:^",
     "@financial-app/tokens": "workspace:^",
-    "@financial-app/ui": "workspace:^",
     "@internationalized/date": "catalog:",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "catalog:",
     "@tanstack/react-query": "catalog:",
+    "easy-currencies": "^1.8.3",
     "i18next": "catalog:",
     "jotai": "catalog:",
     "zod": "^3.24.4"
@@ -80,8 +80,8 @@
     "@testing-library/react": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
-    "react-dom": "catalog:",
     "conventional-changelog": "catalog:",
+    "react-dom": "catalog:",
     "react-native": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

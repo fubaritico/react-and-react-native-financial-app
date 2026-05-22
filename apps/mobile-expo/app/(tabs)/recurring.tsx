@@ -2,7 +2,6 @@ import { BillsSummary, RecurringBillsDataTable } from '@financial-app/features'
 import { getRecurringBillsOptions } from '@financial-app/http-client'
 import {
   buildRecurringBillsPageData,
-  formatCurrency,
   getErrorMessage,
 } from '@financial-app/shared'
 import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
@@ -36,17 +35,17 @@ export default function RecurringBillsScreen() {
             {
               label: t('recurring.paidBills'),
               count: pageData.paidCount,
-              total: formatCurrency(pageData.paidTotal),
+              total: pageData.paidTotal,
             },
             {
               label: t('recurring.totalUpcoming'),
               count: pageData.upcomingCount,
-              total: formatCurrency(pageData.upcomingTotal),
+              total: pageData.upcomingTotal,
             },
             {
               label: t('recurring.dueSoon'),
               count: pageData.dueSoonCount,
-              total: formatCurrency(pageData.dueSoonTotal),
+              total: pageData.dueSoonTotal,
               color: 'destructive' as const,
             },
           ]
@@ -87,7 +86,7 @@ export default function RecurringBillsScreen() {
       {/* Total Bills */}
       <BalanceCard
         label={t('recurring.totalBills')}
-        amount={formatCurrency(pageData.totalBills)}
+        amount={pageData.totalBills}
         tone="dark"
       />
 

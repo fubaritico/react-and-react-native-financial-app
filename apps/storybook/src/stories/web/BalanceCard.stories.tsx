@@ -8,11 +8,11 @@ const meta = {
   argTypes: {
     tone: { control: 'select', options: ['dark', 'light'] },
     label: { control: 'text' },
-    amount: { control: 'text' },
+    amount: { control: 'number' },
   },
   args: {
     label: 'Current Balance',
-    amount: '$4,836.00',
+    amount: 4836,
     tone: 'dark',
   },
 } satisfies Meta<typeof BalanceCard>
@@ -27,9 +27,9 @@ export const Playground: Story = {}
 export const Showcase: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 16, maxWidth: 800 }}>
-      <BalanceCard label="Current Balance" amount="$4,836.00" tone="dark" />
-      <BalanceCard label="Income" amount="$3,814.25" tone="light" />
-      <BalanceCard label="Expenses" amount="$1,700.50" tone="light" />
+      <BalanceCard label="Current Balance" amount={4836} tone="dark" />
+      <BalanceCard label="Income" amount={3814.25} tone="light" />
+      <BalanceCard label="Expenses" amount={1700.5} tone="light" />
     </div>
   ),
 }

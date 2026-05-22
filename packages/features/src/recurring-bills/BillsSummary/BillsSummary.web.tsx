@@ -1,3 +1,4 @@
+import { useCurrency } from '@financial-app/shared'
 import { Card, Divider, Typography } from '@financial-app/ui'
 import { Fragment } from 'react'
 
@@ -5,6 +6,8 @@ import type { IBillsSummaryProps } from './BillsSummary.tsx'
 
 /** Bills summary card (web). Renders title + divider-separated rows. */
 export function BillsSummary({ title, rows }: Readonly<IBillsSummaryProps>) {
+  const { format } = useCurrency()
+
   return (
     <Card>
       <Typography variant="heading-md" as="h2">
@@ -23,7 +26,7 @@ export function BillsSummary({ title, rows }: Readonly<IBillsSummaryProps>) {
                 {row.label}
               </Typography>
               <Typography variant="caption-bold" color={row.color} as="span">
-                {`${String(row.count)} (${row.total})`}
+                {`${String(row.count)} (${format(row.total)})`}
               </Typography>
             </div>
           </Fragment>

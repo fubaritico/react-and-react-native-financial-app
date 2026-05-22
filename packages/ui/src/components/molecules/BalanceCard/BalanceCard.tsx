@@ -7,6 +7,6 @@ export interface IBalanceCardProps extends VariantProps<
 > {
   /** Label text (e.g., "Current Balance", "Income"). */
   label: string
-  /** Amount to display, formatted as currency string. */
-  amount: string
+  /** Numeric amount to display (formatted via Currency atom). */
+  amount: number
 }

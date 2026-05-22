@@ -1,4 +1,4 @@
-import { Avatar, Divider, Typography } from '#Atoms/index.web'
+import { Avatar, Currency, Divider, Typography } from '#Atoms/index.web'
 import { SectionLink } from '#Molecules/SectionLink/index.web'
 
 import { shared } from './LatestSpending.styles'
@@ -33,7 +33,7 @@ export function LatestSpending({
             </Typography>
             <div className={shared.itemRight}>
               <Typography variant="body-bold" as="p">
-                {item.amount}
+                <Currency sign="auto">{item.amount}</Currency>
               </Typography>
               <Typography
                 variant="caption"

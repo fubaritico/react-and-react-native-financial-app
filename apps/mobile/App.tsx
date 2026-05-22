@@ -1,6 +1,7 @@
 import './src/i18n'
 
 import { API_URL } from '@env'
+import { CurrencyProvider } from '@financial-app/features/shared'
 import { client } from '@financial-app/http-client/client'
 import {
   createAppQueryClient,
@@ -40,11 +41,13 @@ function App() {
         <PortalProvider>
           <SafeAreaProvider>
             <AuthBootstrap>
-              <StatusBar barStyle="light-content" />
-              <DevBadge />
-              <NavigationContainer>
-                <RootNavigator />
-              </NavigationContainer>
+              <CurrencyProvider>
+                <StatusBar barStyle="light-content" />
+                <DevBadge />
+                <NavigationContainer>
+                  <RootNavigator />
+                </NavigationContainer>
+              </CurrencyProvider>
             </AuthBootstrap>
           </SafeAreaProvider>
         </PortalProvider>

@@ -1,5 +1,6 @@
 import { cn } from '#Lib/cn'
 
+import { Currency } from '#Atoms/Currency/Currency.web'
 import { Typography } from '#Atoms/index.web'
 import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
 
@@ -24,7 +25,7 @@ export const BalanceCard = ({
         {label}
       </Typography>
       <Typography variant="heading-xl" color={amountColor} as="p">
-        {amount}
+        <Currency>{amount}</Currency>
       </Typography>
     </div>
   )

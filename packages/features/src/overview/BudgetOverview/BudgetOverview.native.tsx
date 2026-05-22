@@ -1,4 +1,4 @@
-import { formatCurrency } from '@financial-app/shared'
+import { useCurrency } from '@financial-app/shared'
 import {
   Card,
   ColorBarItem,
@@ -35,8 +35,6 @@ export function BudgetOverview({
   showSpentAmount = false,
   ofLabel,
   limitLabel,
-  locale = 'en-US',
-  currency = 'USD',
   spendingSummaryTitle,
 }: Readonly<IBudgetOverviewProps>) {
   const { t } = useTranslation()
@@ -47,16 +45,10 @@ export function BudgetOverview({
   const totalSpent = computeTotalSpent(budgets)
   const totalLimit = computeTotalLimit(budgets)
 
-  const centerLabel = formatCurrency(totalSpent, {
-    locale,
-    currency,
-    digits: 0,
-  })
-  const centerSubLabel = `${ofLabel} ${formatCurrency(totalLimit, {
-    locale,
-    currency,
-    digits: 0,
-  })} ${limitLabel}`
+  const { format } = useCurrency()
+
+  const centerLabel = format(totalSpent)
+  const centerSubLabel = `${ofLabel} ${format(totalLimit)} ${limitLabel}`
 
   const hasHeader = title && seeDetailsLabel && onSeeDetails
 
@@ -122,8 +114,6 @@ export function BudgetOverview({
                     label={budget.category}
                     amount={showSpentAmount ? budget.spent : budget.maximum}
                     color={budget.color}
-                    locale={locale}
-                    currency={currency}
                     secondaryAmount={
                       showSpentAmount ? budget.maximum : undefined
                     }
@@ -139,6 +129,7 @@ export function BudgetOverview({
           onPress={onSeeDetails}
           accessibilityRole="button"
           accessibilityLabel={seeDetailsLabel}
+          accessibilityState={{ disabled: false }}
         >
           <View style={tw`${shared.noData}`}>
             <Icon

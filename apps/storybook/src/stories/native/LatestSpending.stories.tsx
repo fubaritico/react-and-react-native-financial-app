@@ -9,19 +9,19 @@ const sampleItems: readonly ILatestSpendingItem[] = [
   {
     avatar: 'https://i.pravatar.cc/80?u=papa-software',
     name: 'Papa Software',
-    amount: '-$10.00',
+    amount: -10,
     date: '16 Aug 2024',
   },
   {
     avatar: 'https://i.pravatar.cc/80?u=quebec-services',
     name: 'Quebec Services',
-    amount: '-$5.00',
+    amount: -5,
     date: '12 Aug 2024',
   },
   {
     avatar: 'https://i.pravatar.cc/80?u=romeo-cloud',
     name: 'Romeo Cloud Service',
-    amount: '-$10.00',
+    amount: -10,
     date: '5 Aug 2024',
   },
 ]
@@ -96,19 +96,19 @@ const longLabelItems: readonly ILatestSpendingItem[] = [
   {
     avatar: 'https://i.pravatar.cc/80?u=alpha-long',
     name: 'International Cloud Computing Solutions & Services Ltd.',
-    amount: '-$1,250.00',
+    amount: -1250,
     date: '16 Aug 2024',
   },
   {
     avatar: 'https://i.pravatar.cc/80?u=bravo-long',
     name: 'Metropolitan Transportation Authority Subscription',
-    amount: '-$99,999.99',
+    amount: -99999.99,
     date: '12 Aug 2024',
   },
   {
     avatar: 'https://i.pravatar.cc/80?u=charlie-long',
     name: 'Transcontinental Telecommunications Group Holdings Inc.',
-    amount: '-$500.00',
+    amount: -500,
     date: '5 Aug 2024',
   },
 ]

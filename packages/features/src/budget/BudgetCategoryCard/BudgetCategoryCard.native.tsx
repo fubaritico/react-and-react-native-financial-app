@@ -1,4 +1,4 @@
-import { formatCurrency } from '@financial-app/shared'
+import { useCurrency } from '@financial-app/shared'
 import {
   Card,
   ColorDot,
@@ -15,7 +15,7 @@ import { View } from 'react-native'
 import type { IDropdownOption } from '@financial-app/ui'
 
 import { DELETE_ACTION, EDIT_ACTION } from './BudgetCategoryCard.constants'
-import { shared } from './BudgetCategoryCard.styles'
+import { native, shared } from './BudgetCategoryCard.styles'
 
 import type { IBudgetCategoryCardProps } from './BudgetCategoryCard'
 
@@ -41,14 +41,14 @@ export function BudgetCategoryCard({
   onSeeAll,
   onEdit,
   onDelete,
-  locale = 'en-US',
-  currency = 'USD',
 }: Readonly<IBudgetCategoryCardProps>) {
   const remaining = Math.max(0, maximum - spent)
 
-  const formattedMaximum = formatCurrency(maximum, { locale, currency })
-  const formattedSpent = formatCurrency(spent, { locale, currency })
-  const formattedRemaining = formatCurrency(remaining, { locale, currency })
+  const { format } = useCurrency()
+
+  const formattedMaximum = format(maximum)
+  const formattedSpent = format(spent)
+  const formattedRemaining = format(remaining)
 
   const menuOptions: IDropdownOption[] = useMemo(
     () => [
@@ -81,7 +81,7 @@ export function BudgetCategoryCard({
   )
 
   const metaRight = (
-    <View style={tw`${shared.metaColumn} border-l-beige-100`}>
+    <View style={tw`${native.metaColumnRemaining}`}>
       <Typography variant="caption" color="muted">
         {remainingLabel}
       </Typography>
@@ -108,7 +108,7 @@ export function BudgetCategoryCard({
           bottomSheetTitle={category}
           buttonVariant="tertiary"
           buttonSize="md"
-          buttonClassName="p-0 text-grey-300"
+          buttonClassName="text-grey-300 size-10 -mr-2"
           buttonCentered
           trigger={() => (
             <Icon

@@ -6,7 +6,7 @@ import { billSummaryRowVariants } from './BillSummaryRow.variants'
 
 import type { IBillSummaryRowProps } from './BillSummaryRow'
 
-import { Typography } from '#Atoms'
+import { Currency, Typography } from '#Atoms'
 
 /** Native implementation of the BillSummaryRow component. */
 export const BillSummaryRow = ({
@@ -18,6 +18,8 @@ export const BillSummaryRow = ({
     <Typography variant="caption" color="muted">
       {label}
     </Typography>
-    <Typography variant="body-bold">{amount}</Typography>
+    <Typography variant="body-bold">
+      <Currency>{amount}</Currency>
+    </Typography>
   </View>
 )

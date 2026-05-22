@@ -27,8 +27,8 @@ export type DataTableProps<TData> = BaseDataTableProps<TData> & {
   headerClassName?: string
   /* Use along with sticky header to get a fixed height for the table (header and body) */
   maxHeight?: number
-  /* Disable shadow on the wrapper */
-  noShadow?: boolean
+  /* Enables shadow on the wrapper */
+  withShadow?: boolean
   /* When enabled, will keep the table cell header on top of the table when scrolling body */
   stickyHeader?: boolean
   /* Extra CSS classes for the table body */
@@ -45,7 +45,7 @@ export default function DataTable<TData>({
   loading,
   maxHeight,
   showActionBar,
-  noShadow,
+  withShadow,
   showRowsPerPage,
   noPagination,
   onGlobalFilterChange,
@@ -77,7 +77,7 @@ export default function DataTable<TData>({
         shared.root,
         web.overflow,
         web.padding,
-        { [web.shadow]: !noShadow },
+        { [web.shadow]: withShadow },
         className
       )}
       data-test={dataTestId ?? 'root'}

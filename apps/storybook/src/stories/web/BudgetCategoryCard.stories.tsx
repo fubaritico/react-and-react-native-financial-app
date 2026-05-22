@@ -12,19 +12,19 @@ const entertainmentItems: readonly ILatestSpendingItem[] = [
   {
     avatar: 'https://i.pravatar.cc/80?u=james-thompson',
     name: 'James Thompson',
-    amount: '-$5.00',
+    amount: -5,
     date: '11 Aug 2024',
   },
   {
     avatar: 'https://i.pravatar.cc/80?u=pixel-playground',
     name: 'Pixel Playground',
-    amount: '-$9.00',
+    amount: -9,
     date: '11 Aug 2024',
   },
   {
     avatar: 'https://i.pravatar.cc/80?u=rina-sato',
     name: 'Rina Sato',
-    amount: '-$9.00',
+    amount: -9,
     date: '13 Jul 2024',
   },
 ]
@@ -34,19 +34,19 @@ const billsItems: readonly ILatestSpendingItem[] = [
   {
     avatar: 'https://i.pravatar.cc/80?u=spark-electric',
     name: 'Spark Electric Solutions',
-    amount: '-$100.00',
+    amount: -100,
     date: '2 Aug 2024',
   },
   {
     avatar: 'https://i.pravatar.cc/80?u=rina-sato-bills',
     name: 'Rina Sato',
-    amount: '-$50.00',
+    amount: -50,
     date: '2 Aug 2024',
   },
   {
     avatar: 'https://i.pravatar.cc/80?u=aqua-flow',
     name: 'Aqua Flow Utilities',
-    amount: '-$100.00',
+    amount: -100,
     date: '30 Jul 2024',
   },
 ]
@@ -56,19 +56,19 @@ const diningOutItems: readonly ILatestSpendingItem[] = [
   {
     avatar: 'https://i.pravatar.cc/80?u=savory-bites',
     name: 'Savory Bites Bistro',
-    amount: '-$55.50',
+    amount: -55.5,
     date: '19 Aug 2024',
   },
   {
     avatar: 'https://i.pravatar.cc/80?u=ethan-clark',
     name: 'Ethan Clark',
-    amount: '-$32.50',
+    amount: -32.5,
     date: '20 Aug 2024',
   },
   {
     avatar: 'https://i.pravatar.cc/80?u=ella-phillips',
     name: 'Ella Phillips',
-    amount: '-$45.00',
+    amount: -45,
     date: '19 Aug 2024',
   },
 ]

@@ -1,4 +1,3 @@
-import { formatCurrency } from '@financial-app/shared'
 import {
   BillSummaryRow,
   Card,
@@ -46,6 +45,7 @@ export const RecurringBillsOverview = ({
           onPress={onSeeDetails}
           accessibilityRole="button"
           accessibilityLabel={seeDetailsLabel}
+          accessibilityState={{ disabled: false }}
         >
           <View style={tw`${shared.noData}`}>
             <Icon
@@ -60,21 +60,13 @@ export const RecurringBillsOverview = ({
         </Pressable>
       ) : (
         <View style={tw`${shared.list}`}>
-          <BillSummaryRow
-            label={paidBillsLabel}
-            amount={formatCurrency(paid)}
-            color="green"
-          />
+          <BillSummaryRow label={paidBillsLabel} amount={paid} color="green" />
           <BillSummaryRow
             label={totalUpcomingLabel}
-            amount={formatCurrency(upcoming)}
+            amount={upcoming}
             color="yellow"
           />
-          <BillSummaryRow
-            label={dueSoonLabel}
-            amount={formatCurrency(dueSoon)}
-            color="cyan"
-          />
+          <BillSummaryRow label={dueSoonLabel} amount={dueSoon} color="cyan" />
         </View>
       )}
     </Card>

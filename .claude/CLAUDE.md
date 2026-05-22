@@ -40,6 +40,7 @@ targeting React Native (Expo) and React web (React Router).
 - **React/RN skills**: always apply `composition-patterns`, `react-best-practices`, and `react-native-skills` when writing or reviewing component code
 - **Screenshot**: given screenshot names are always files located in desktop, otherwise the full file path is given
 - **Never i18n fallbacks** — NEVER pass a second argument to `t()` (e.g. `t('key', 'fallback')`), NEVER use default values for label/placeholder props in destructuring (e.g. `label = 'Edit'`), NEVER use `?? 'fallback'` on translated strings. If a key is missing, add it to both `en/translation.json` and `fr/translation.json`. Labels are always required props (`label: string`, not `label?: string`).
+- **Never fallback values** — NEVER use hardcoded fallback data (static rates, default configs, mock values) as silent degradation. If a runtime dependency (API, rates, config) fails to load, throw an error. The app must not silently serve stale or incorrect data. Future exception: offline mode with persisted last-known values — but that's an explicit feature, not a silent fallback.
 
 ## Current State vs Target
 
@@ -180,11 +181,15 @@ Read `@completed.md`
    - ~~Native form fix + shared CRUD hooks + tests~~ ✅ — Fixed 3 native form components (platform-agnostic ref types, amount: string). Extracted useTransactionCrud, useBudgetCrud, usePotCrud into @financial-app/features. Zod schema refine() guard (empty string bypass). useFormValidation tests (16), CRUD hook tests (3×10), form component tests (3×7). Rate limiter fix (skip GET). 6-agent review pass (97/100).
    - ~~Dropdown scroll bug~~ ✅ — portal dropdown menu was closing on internal `<ul>` scroll because `window.addEventListener('scroll', handleClose, true)` captured ALL scroll events; fixed by checking `e.target` containment in `menuWrapperRef` before closing
    - ~~Tooltip atom~~ ✅ — cross-platform Tooltip (native+web), 12 placements (top/bottom/left/right + aligned variants), dual mode (target ref + manual coords), Portal rendering, auto-flip, arrow pointing to target center, Storybook stories (5), removed legacy DSTooltip
+   - ~~WelcomeScreen~~ ✅ — WelcomeScreen feature component (native+web), illustration background, semi-transparent card, preferences mutation (has_seen_onboarding), routes (mobile-expo + web), AuthGate/useAuthRedirect wired, .styles.ts extraction, review pass (96/100)
+   - ~~Overview empty states~~ ✅ — All 4 overview components (Pots, Budget, Transactions, RecurringBills) with empty states (native: Pressable+Icon+i18n, web: button+Icon+i18n), a11y fixes (accessibilityRole/Label, focus-visible), i18n keys (en+fr)
+   - ~~RecurringBillsOverview refactor~~ ✅ — Props accept raw numbers instead of formatted strings, formatCurrency called internally, consumers wrap formatCurrency for BalanceCard/BillsSummary, dueSoon > 0 guard, Empty Storybook story
+   - ~~Supabase delete user modus operandi~~ ✅ — docs/modus-operandi/supabase-delete-user.md
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
-   - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Walkthrough → Overview
-   - **Next coding**: Onboarding walkthrough — decide navigation pattern and screen sequencing (how steps chain, prev/next controls, overlay + tooltip orchestration)
+   - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Welcome → Overview
+   - **Next coding**: Currency feature — full plan saved in Basic Memory (`currency-feature-plan`). Steps: (1) DB+API add `currency` column to `user_preferences`, (2) `useCurrency()` hook in shared, (3) replace `formatCurrency()` calls with `<Currency>` atom across ~25 files, (4) currency selector in Settings
 2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, audit-owasp skill upgraded to OWASP 2025
-3. Empty states (all screens + Overview sections) — part of onboarding step 6.3
+3. ~~Empty states (all screens + Overview sections)~~ ✅ — part of onboarding step, done for all 4 overview components
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
 6. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
 7. Tests — API + hooks

@@ -1,4 +1,3 @@
-import { formatCurrency } from '@financial-app/shared'
 import {
   BillSummaryRow,
   Card,
@@ -41,7 +40,11 @@ export const RecurringBillsOverview = ({
         <SectionLink label={seeDetailsLabel} onPress={onSeeDetails} />
       </div>
       {isEmpty ? (
-        <button className={shared.noDataButton} onClick={onSeeDetails}>
+        <button
+          className={shared.noDataButton}
+          onClick={onSeeDetails}
+          aria-label={seeDetailsLabel}
+        >
           <div className={shared.noData}>
             <div className="text-foreground-muted">
               <Icon name="navRecurringBills" iconSize="5xl" />
@@ -56,21 +59,21 @@ export const RecurringBillsOverview = ({
           {paid > 0 && (
             <BillSummaryRow
               label={paidBillsLabel}
-              amount={formatCurrency(paid)}
+              amount={paid}
               color="green"
             />
           )}
           {upcoming > 0 && (
             <BillSummaryRow
               label={totalUpcomingLabel}
-              amount={formatCurrency(upcoming)}
+              amount={upcoming}
               color="yellow"
             />
           )}
           {dueSoon > 0 && (
             <BillSummaryRow
               label={dueSoonLabel}
-              amount={formatCurrency(dueSoon)}
+              amount={dueSoon}
               color="cyan"
             />
           )}

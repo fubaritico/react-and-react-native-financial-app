@@ -4,8 +4,8 @@ export interface ILatestSpendingItem {
   avatar: string
   /** Counterparty name. */
   name: string
-  /** Formatted amount string (e.g. "-$10.00"). */
-  amount: string
+  /** Numeric amount in base currency (e.g. -10). */
+  amount: number
   /** Formatted date string (e.g. "16 Aug 2024"). */
   date: string
 }

@@ -10,11 +10,11 @@
     },
     "./native": "./src/index.ts",
     "./shared": {
-      "react-native": "./src/shared/ModalRenderer/index.ts",
-      "default": "./src/shared/ModalRenderer/index.web.ts"
+      "react-native": "./src/shared/index.ts",
+      "default": "./src/shared/index.web.ts"
     },
-    "./shared/web": "./src/shared/ModalRenderer/index.web.ts",
-    "./shared/native": "./src/shared/ModalRenderer/index.ts",
+    "./shared/web": "./src/shared/index.web.ts",
+    "./shared/native": "./src/shared/index.ts",
     "./overview": {
       "react-native": "./src/overview/index.ts",
       "default": "./src/overview/index.web.ts"

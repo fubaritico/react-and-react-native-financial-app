@@ -32,8 +32,4 @@ export interface IBudgetCategoryCardProps {
   onEdit?: () => void
   /** Callback when "Delete Budget" is selected. */
   onDelete?: () => void
-  /** Locale for currency formatting (e.g. "en-US"). */
-  locale?: string
-  /** Currency code for formatting (e.g. "USD"). */
-  currency?: string
 }

@@ -8,10 +8,6 @@ export interface IColorBarItemProps {
   amount: number
   /** Token color name for the left border (e.g. "green", "cyan"). */
   color: string
-  /** BCP 47 locale tag (defaults to 'en-US'). */
-  locale?: string
-  /** ISO 4217 currency code (defaults to 'USD'). */
-  currency?: string
   /** Secondary amount displayed as "of $X" context (e.g. budget maximum). */
   secondaryAmount?: number
   /** Label between amounts (e.g. "of"). */

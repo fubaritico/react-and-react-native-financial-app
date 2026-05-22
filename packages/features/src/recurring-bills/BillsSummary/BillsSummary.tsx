@@ -4,8 +4,8 @@ export interface IBillsSummaryRow {
   label: string
   /** Number of bills in this category */
   count: number
-  /** Pre-formatted currency total (e.g. "$190.00") */
-  total: string
+  /** Total amount for this category (in base currency USD) */
+  total: number
   /** Typography color for this row */
   color?: 'muted' | 'destructive'
 }

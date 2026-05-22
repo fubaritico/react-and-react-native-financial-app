@@ -8,7 +8,7 @@ import { balanceCardVariants } from './BalanceCard.variants'
 
 import type { IBalanceCardProps } from './BalanceCard'
 
-import { Typography } from '#Atoms'
+import { Currency, Typography } from '#Atoms'
 
 /** Native implementation of the BalanceCard component. */
 export const BalanceCard = ({
@@ -27,7 +27,7 @@ export const BalanceCard = ({
         {label}
       </Typography>
       <Typography variant="heading-xl" color={amountColor}>
-        {amount}
+        <Currency>{amount}</Currency>
       </Typography>
     </View>
   )

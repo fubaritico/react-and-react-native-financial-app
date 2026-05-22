@@ -190,6 +190,10 @@ export type { IDatePickerProps } from './components/organisms/DatePicker/DatePic
 // Utilities
 export { default as tw } from './lib/tw'
 
+// Currency context — apps mount a Provider connecting useCurrency().format to this context
+export { CurrencyContext, useCurrencyFormat } from './lib/CurrencyContext'
+export type { ICurrencyConfig, CurrencySign } from './lib/CurrencyContext'
+
 // Templates
 export { AuthLayout } from './components/templates/AuthLayout'
 export type { IAuthLayoutProps } from './components/templates/AuthLayout/AuthLayout.tsx'

@@ -97,14 +97,12 @@ export const SpendingList: Story = {
   ),
 }
 
-/** EUR locale — currency formatting verification. */
+/** EUR locale — currency formatting via CurrencyContext provider. */
 export const EurLocale: Story = {
   args: {
     label: 'Épargne',
     amount: 1234.5,
     color: 'green',
-    locale: 'fr-FR',
-    currency: 'EUR',
     secondaryAmount: 5000,
     secondaryLabel: 'sur',
   },

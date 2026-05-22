@@ -19,4 +19,7 @@ export const web = {
 } as const
 
 /** Native-only classes for BudgetCategoryCard (RN layout quirks, explicit flex-row, absolute positioning) */
-export const native = {} as const
+export const native = {
+  /** Remaining column left border in neutral beige */
+  metaColumnRemaining: 'border-l-4 pl-4 py-1 border-l-beige-100',
+} as const

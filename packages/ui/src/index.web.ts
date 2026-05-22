@@ -199,6 +199,10 @@ export type {
 // Utilities
 export { cn } from './lib/cn'
 
+// Currency context — apps mount a Provider connecting useCurrency().format to this context
+export { CurrencyContext, useCurrencyFormat } from './lib/CurrencyContext'
+export type { ICurrencyConfig, CurrencySign } from './lib/CurrencyContext'
+
 // Templates
 export { AuthLayout } from './components/templates/AuthLayout/index.web'
 export type { IAuthLayoutProps } from './components/templates/AuthLayout/AuthLayout.tsx'

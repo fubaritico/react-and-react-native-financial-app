@@ -1,6 +1,6 @@
 import '../src/i18n'
 
-import { ModalRenderer } from '@financial-app/features/shared'
+import { CurrencyProvider, ModalRenderer } from '@financial-app/features/shared'
 import { createAppQueryClient } from '@financial-app/shared'
 import { PortalProvider } from '@financial-app/ui/native'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -40,11 +40,13 @@ export default function RootLayout() {
         <PortalProvider>
           <AuthBootstrap>
             <AuthGate>
-              <ModalRenderer>
-                <StatusBar style="dark" />
-                <DevBadge />
-                <Slot />
-              </ModalRenderer>
+              <CurrencyProvider>
+                <ModalRenderer>
+                  <StatusBar style="dark" />
+                  <DevBadge />
+                  <Slot />
+                </ModalRenderer>
+              </CurrencyProvider>
             </AuthGate>
           </AuthBootstrap>
         </PortalProvider>

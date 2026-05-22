@@ -1,4 +1,4 @@
-import { formatCurrency } from '@financial-app/shared'
+import { useCurrency } from '@financial-app/shared'
 import { ProgressBar, TextInput, Typography } from '@financial-app/ui'
 import { useCallback, useImperativeHandle, useState } from 'react'
 
@@ -22,9 +22,8 @@ export function PotAmountFormContent({
   targetOfLabel,
   amountLabel,
   amountPlaceholder,
-  locale = 'en-US',
-  currency = 'USD',
 }: Readonly<IPotAmountFormContentProps>) {
+  const { format } = useCurrency()
   const [amount, setAmount] = useState(DEFAULT_AMOUNT)
 
   /** Maximum amount the user can enter (derived from pot state) */
@@ -92,7 +91,7 @@ export function PotAmountFormContent({
 
   const metaRight = (
     <Typography variant="caption" color="muted" as="p">
-      {`${targetOfLabel} ${formatCurrency(target, { locale, currency })}`}
+      {`${targetOfLabel} ${format(target)}`}
     </Typography>
   )
 
@@ -104,7 +103,7 @@ export function PotAmountFormContent({
           {newAmountLabel}
         </Typography>
         <Typography variant="heading-lg" as="p">
-          {formatCurrency(newTotal, { locale, currency })}
+          {format(newTotal)}
         </Typography>
       </div>
 

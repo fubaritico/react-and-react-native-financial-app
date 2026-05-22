@@ -13,7 +13,6 @@ import {
 } from '@financial-app/http-client'
 import {
   buildRecurringBillsPageData,
-  formatCurrency,
   formatDate,
   getCurrentBudgetMonth,
 } from '@financial-app/shared'
@@ -162,21 +161,21 @@ export function OverviewScreen() {
         <>
           <BalanceCard
             label={t('overview.currentBalance')}
-            amount={formatCurrency(balance.current)}
+            amount={balance.current}
             tone="dark"
           />
           <View style={tw`flex-row gap-3 mt-3`}>
             <View style={tw`flex-1`}>
               <BalanceCard
                 label={t('overview.income')}
-                amount={formatCurrency(balance.income)}
+                amount={balance.income}
                 tone="light"
               />
             </View>
             <View style={tw`flex-1`}>
               <BalanceCard
                 label={t('overview.expenses')}
-                amount={formatCurrency(balance.expenses)}
+                amount={balance.expenses}
                 tone="light"
               />
             </View>

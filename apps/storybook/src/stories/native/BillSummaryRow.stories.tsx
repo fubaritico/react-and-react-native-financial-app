@@ -8,7 +8,7 @@ const meta = {
   component: BillSummaryRow,
   argTypes: {
     label: { control: 'text' },
-    amount: { control: 'text' },
+    amount: { control: 'number' },
     color: {
       control: 'select',
       options: ['green', 'yellow', 'cyan'],
@@ -16,7 +16,7 @@ const meta = {
   },
   args: {
     label: 'Paid Bills',
-    amount: '$190.00',
+    amount: 190,
     color: 'green',
   },
   parameters: {
@@ -34,9 +34,9 @@ export const Playground: Story = {}
 export const Showcase: Story = {
   render: () => (
     <View style={{ gap: 12, maxWidth: 400 }}>
-      <BillSummaryRow label="Paid Bills" amount="$190.00" color="green" />
-      <BillSummaryRow label="Total Upcoming" amount="$194.98" color="yellow" />
-      <BillSummaryRow label="Due Soon" amount="$59.98" color="cyan" />
+      <BillSummaryRow label="Paid Bills" amount={190} color="green" />
+      <BillSummaryRow label="Total Upcoming" amount={194.98} color="yellow" />
+      <BillSummaryRow label="Due Soon" amount={59.98} color="cyan" />
     </View>
   ),
 }
