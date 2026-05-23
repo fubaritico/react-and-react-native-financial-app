@@ -64,6 +64,7 @@ const DeviceFrame = ({
 const defaultProps: ISettingsScreenViewProps = {
   initialBalance: 40000,
   currentLanguage: 'en',
+  currentCurrency: 'USD',
   onSubmit: noop,
   isSubmitting: false,
   onDeleteAccount: noop,

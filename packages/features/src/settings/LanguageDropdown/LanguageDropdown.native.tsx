@@ -98,6 +98,7 @@ export function LanguageDropdown({
       trigger={renderTrigger}
       renderItem={renderItem}
       buttonFullWidth
+      buttonClassName="h-12"
     />
   )
 }

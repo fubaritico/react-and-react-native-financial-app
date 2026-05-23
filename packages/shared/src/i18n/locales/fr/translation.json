@@ -369,11 +369,17 @@
   },
   "settings": {
     "title": "Paramètres",
+    "sectionPreferences": "Préférences",
+    "sectionAccount": "Compte",
     "referenceBalance": "Solde de référence",
     "language": "Langue",
     "languageEn": "Anglais",
     "languageFr": "Français",
-    "deleteAccount": "Supprimer mon compte",
+    "currency": "Devise",
+    "currencyUsd": "USD",
+    "currencyEur": "EUR",
+    "currencyGbp": "GBP",
+    "deleteAccount": "Supprimer",
     "deleteAccountConfirmTitle": "Supprimer le compte",
     "deleteAccountConfirmMessage": "Êtes-vous sûr de vouloir supprimer votre compte ? Toutes les informations seront perdues.",
     "deleteAccountConfirm": "Supprimer",
@@ -381,7 +387,7 @@
     "deleteAccountDeleting": "Suppression\u2026",
     "disconnect": "Déconnexion",
     "cancel": "Annuler",
-    "saveChanges": "Modifier les paramètres",
+    "saveChanges": "Modifier",
     "saving": "Enregistrement\u2026"
   }
 }

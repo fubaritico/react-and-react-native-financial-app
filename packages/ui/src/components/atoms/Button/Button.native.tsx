@@ -2,6 +2,8 @@ import { ActivityIndicator, Pressable } from 'react-native'
 
 import tw from '#Lib/tw'
 
+import { IIconSize } from '#Atoms/Icon'
+
 import { Icon } from '../Icon/Icon.native'
 import { Typography } from '../Typography/Typography.native'
 
@@ -84,7 +86,7 @@ export const Button = ({
             {icon ? (
               <Icon
                 name={icon}
-                iconSize="xs"
+                iconSize={size as IIconSize}
                 color={
                   tw.color(ICON_COLOR_TOKEN[variant ?? 'primary']) ?? '#FFFFFF'
                 }

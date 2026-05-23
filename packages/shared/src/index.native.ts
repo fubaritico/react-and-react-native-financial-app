@@ -73,6 +73,7 @@ export {
   getCurrentBudgetMonth,
   formatCurrency,
   convertCurrency,
+  initRates,
   formatDate,
   toTimestamptz,
   resolveTokenColor,

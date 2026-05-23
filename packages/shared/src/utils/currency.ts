@@ -124,7 +124,7 @@ export function formatCurrency(
 
   const symbol = CURRENCY_SYMBOLS[currency]
   const isFrench = locale.startsWith('fr')
-  const withSymbol = isFrench ? `${number} ${symbol}` : `${symbol}${number}`
+  const withSymbol = isFrench ? `${number}${symbol}` : `${symbol}${number}`
 
   if (sign === 'never') return withSymbol
   if (sign === 'always') {

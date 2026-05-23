@@ -13,6 +13,7 @@ const SCREEN_BG = '#f8f4f0'
 const defaultProps: ISettingsScreenViewProps = {
   initialBalance: 40000,
   currentLanguage: 'en',
+  currentCurrency: 'USD',
   onSubmit: noop,
   isSubmitting: false,
   onDeleteAccount: noop,

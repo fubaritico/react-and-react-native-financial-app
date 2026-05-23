@@ -4,8 +4,11 @@ import {
   getBalanceOptions,
   getBalanceReferenceOptions,
   getBalanceReferenceQueryKey,
+  getUsersMePreferencesQueryKey,
   putBalanceReferenceMutation,
+  putUsersMePreferencesMutation,
 } from '@financial-app/http-client'
+import { useCurrency } from '@financial-app/shared'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import { useCallback } from 'react'
@@ -18,12 +21,13 @@ import { authClient } from '../../src/lib/supabase'
 import { lastContentTab } from './_layout'
 
 /**
- * Settings tab route — language, reference balance, delete account, disconnect.
+ * Settings tab route — language, currency, reference balance, delete account, disconnect.
  * Navigates back to the previous tab after submit or cancel.
  * @returns The settings screen wired to auth and API
  */
 export default function SettingsScreen() {
   const { i18n } = useTranslation()
+  const { currency } = useCurrency()
   const queryClient = useQueryClient()
   const router = useRouter()
 
@@ -31,22 +35,9 @@ export default function SettingsScreen() {
     ...getBalanceReferenceOptions(),
   })
 
-  const updateBalance = useMutation({
-    ...putBalanceReferenceMutation(),
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: getBalanceReferenceQueryKey(),
-        }),
-        queryClient.invalidateQueries({
-          queryKey: getBalanceOptions().queryKey,
-        }),
-      ])
-      const target =
-        lastContentTab === 'index' ? '/(tabs)' : `/(tabs)/${lastContentTab}`
-      router.navigate(target)
-    },
-  })
+  const updateBalance = useMutation(putBalanceReferenceMutation())
+
+  const updatePreferences = useMutation(putUsersMePreferencesMutation())
 
   const deleteAccount = useMutation({
     ...deleteUsersMeMutation(),
@@ -56,14 +47,37 @@ export default function SettingsScreen() {
     },
   })
 
+  /**
+   * Persists language, currency, and reference balance.
+   * Awaits both mutations + cache invalidations before navigating back.
+   * @param values - Form values from SettingsScreenView
+   */
   const handleSubmit = useCallback(
-    (values: ISettingsFormValues) => {
+    async (values: ISettingsFormValues) => {
       void i18n.changeLanguage(values.language)
-      updateBalance.mutate({
-        body: { reference: values.balance },
-      })
+
+      await Promise.all([
+        updateBalance.mutateAsync({ body: { reference: values.balance } }),
+        updatePreferences.mutateAsync({ body: { currency: values.currency } }),
+      ])
+
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: getBalanceReferenceQueryKey(),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: getBalanceOptions().queryKey,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: getUsersMePreferencesQueryKey(),
+        }),
+      ])
+
+      const target =
+        lastContentTab === 'index' ? '/(tabs)' : `/(tabs)/${lastContentTab}`
+      router.navigate(target)
     },
-    [i18n, updateBalance]
+    [i18n, updateBalance, updatePreferences, queryClient, router]
   )
 
   const handleDeleteAccount = useCallback(() => {
@@ -85,8 +99,9 @@ export default function SettingsScreen() {
     <SettingsScreenView
       initialBalance={balanceData?.reference ?? 0}
       currentLanguage={i18n.language}
+      currentCurrency={currency}
       onSubmit={handleSubmit}
-      isSubmitting={updateBalance.isPending}
+      isSubmitting={updateBalance.isPending || updatePreferences.isPending}
       onDeleteAccount={handleDeleteAccount}
       isDeleting={deleteAccount.isPending}
       onDisconnect={handleDisconnect}

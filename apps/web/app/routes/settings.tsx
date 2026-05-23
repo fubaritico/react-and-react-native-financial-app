@@ -4,8 +4,11 @@ import {
   getBalanceOptions,
   getBalanceReferenceOptions,
   getBalanceReferenceQueryKey,
+  getUsersMePreferencesQueryKey,
   putBalanceReferenceMutation,
+  putUsersMePreferencesMutation,
 } from '@financial-app/http-client'
+import { useCurrency } from '@financial-app/shared'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,12 +19,13 @@ import type { ISettingsFormValues } from '@financial-app/features'
 import { authClient } from '../lib/supabase'
 
 /**
- * Settings route — language, reference balance, delete account, disconnect.
+ * Settings route — language, currency, reference balance, delete account, disconnect.
  * Navigates back to the previous route after submit or cancel.
  * @returns The settings screen wired to auth and API
  */
 export default function SettingsScreen() {
   const { i18n } = useTranslation()
+  const { currency } = useCurrency()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -29,20 +33,9 @@ export default function SettingsScreen() {
     ...getBalanceReferenceOptions(),
   })
 
-  const updateBalance = useMutation({
-    ...putBalanceReferenceMutation(),
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: getBalanceReferenceQueryKey(),
-        }),
-        queryClient.invalidateQueries({
-          queryKey: getBalanceOptions().queryKey,
-        }),
-      ])
-      void navigate(-1)
-    },
-  })
+  const updateBalance = useMutation(putBalanceReferenceMutation())
+
+  const updatePreferences = useMutation(putUsersMePreferencesMutation())
 
   const deleteAccount = useMutation({
     ...deleteUsersMeMutation(),
@@ -54,14 +47,35 @@ export default function SettingsScreen() {
     },
   })
 
+  /**
+   * Persists language, currency, and reference balance.
+   * Awaits both mutations + cache invalidations before navigating back.
+   * @param values - Form values from SettingsScreenView
+   */
   const handleSubmit = useCallback(
-    (values: ISettingsFormValues) => {
+    async (values: ISettingsFormValues) => {
       void i18n.changeLanguage(values.language)
-      updateBalance.mutate({
-        body: { reference: values.balance },
-      })
+
+      await Promise.all([
+        updateBalance.mutateAsync({ body: { reference: values.balance } }),
+        updatePreferences.mutateAsync({ body: { currency: values.currency } }),
+      ])
+
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: getBalanceReferenceQueryKey(),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: getBalanceOptions().queryKey,
+        }),
+        queryClient.invalidateQueries({
+          queryKey: getUsersMePreferencesQueryKey(),
+        }),
+      ])
+
+      void navigate(-1)
     },
-    [i18n, updateBalance]
+    [i18n, updateBalance, updatePreferences, queryClient, navigate]
   )
 
   const handleDeleteAccount = useCallback(() => {
@@ -83,8 +97,9 @@ export default function SettingsScreen() {
     <SettingsScreenView
       initialBalance={balanceData?.reference ?? 0}
       currentLanguage={i18n.language}
+      currentCurrency={currency}
       onSubmit={handleSubmit}
-      isSubmitting={updateBalance.isPending}
+      isSubmitting={updateBalance.isPending || updatePreferences.isPending}
       onDeleteAccount={handleDeleteAccount}
       isDeleting={deleteAccount.isPending}
       onDisconnect={handleDisconnect}

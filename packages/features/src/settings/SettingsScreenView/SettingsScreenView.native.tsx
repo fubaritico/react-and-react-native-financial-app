@@ -2,6 +2,7 @@ import { useModal } from '@financial-app/shared'
 import {
   Button,
   Card,
+  Divider,
   TextInput,
   Typography,
   tw,
@@ -10,6 +11,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
+import { CurrencyDropdown } from '../CurrencyDropdown/CurrencyDropdown.native'
 import { LanguageDropdown } from '../LanguageDropdown/LanguageDropdown.native'
 
 import { native } from './SettingsScreenView.styles'
@@ -17,14 +19,15 @@ import { native } from './SettingsScreenView.styles'
 import type { ISettingsScreenViewProps } from './SettingsScreenView'
 
 /**
- * Native implementation of the Settings screen — form with reference balance,
- * language dropdown, delete account, disconnect, cancel and save.
+ * Native implementation of the Settings screen — sectioned form with preferences,
+ * account actions, and form controls arranged in compact rows.
  * @param props - Settings screen props
- * @returns The settings screen as a form
+ * @returns The settings screen as a sectioned form
  */
 export function SettingsScreenView({
   initialBalance,
   currentLanguage,
+  currentCurrency,
   onSubmit,
   isSubmitting,
   onDeleteAccount,
@@ -37,6 +40,7 @@ export function SettingsScreenView({
 
   const [balance, setBalance] = useState(String(initialBalance))
   const [language, setLanguage] = useState(currentLanguage)
+  const [currency, setCurrency] = useState(currentCurrency)
 
   /** Syncs balance state when the prop changes (e.g. after query resolves) */
   useEffect(() => {
@@ -48,6 +52,11 @@ export function SettingsScreenView({
     setLanguage(currentLanguage)
   }, [currentLanguage])
 
+  /** Syncs currency state when the prop changes (e.g. external currency switch) */
+  useEffect(() => {
+    setCurrency(currentCurrency)
+  }, [currentCurrency])
+
   /**
    * Resets form state and navigates back to the previous screen.
    * @returns void
@@ -55,8 +64,9 @@ export function SettingsScreenView({
   const handleCancel = useCallback(() => {
     setBalance(String(initialBalance))
     setLanguage(currentLanguage)
+    setCurrency(currentCurrency)
     onGoBack()
-  }, [initialBalance, currentLanguage, onGoBack])
+  }, [initialBalance, currentLanguage, currentCurrency, onGoBack])
 
   /**
    * Submits the form with validated balance and language.
@@ -65,9 +75,14 @@ export function SettingsScreenView({
    */
   const handleSubmit = useCallback(() => {
     const numericBalance = Number(balance)
-    if (Number.isNaN(numericBalance) || numericBalance < 0) return
-    onSubmit({ balance: numericBalance, language })
-  }, [balance, language, onSubmit])
+    if (
+      Number.isNaN(numericBalance) ||
+      !Number.isFinite(numericBalance) ||
+      numericBalance < 0
+    )
+      return
+    void onSubmit({ balance: numericBalance, language, currency })
+  }, [balance, language, currency, onSubmit])
 
   /**
    * Opens the delete account confirmation modal with destroy action.
@@ -85,9 +100,7 @@ export function SettingsScreenView({
         {
           label: t('settings.deleteAccountConfirm'),
           variant: 'destroy',
-          onPress: () => {
-            onDeleteAccount()
-          },
+          onPress: onDeleteAccount,
         },
       ],
       cancelLabel: t('settings.deleteAccountCancel'),
@@ -103,72 +116,115 @@ export function SettingsScreenView({
             {t('settings.title')}
           </Typography>
 
-          {/* Reference balance */}
-          <TextInput
-            label={t('settings.referenceBalance')}
-            value={balance}
-            onChangeText={setBalance}
-            keyboardType="numeric"
-          />
+          <Typography variant="body-bold" accessibilityRole="header">
+            {t('settings.sectionPreferences')}
+          </Typography>
 
-          {/* Language dropdown */}
-          <View style={tw`${native.languageSection}`}>
-            <Typography variant="label" color="muted">
-              {t('settings.language')}
-            </Typography>
-            <LanguageDropdown
-              selectedValue={language}
-              onSelect={setLanguage}
-              accessibilityLabel={t('settings.language')}
-              bottomSheetTitle={t('settings.language')}
+          {/* Section: Preferences */}
+          <View style={tw`${native.section}`}>
+            <TextInput
+              label={t('settings.referenceBalance')}
+              value={balance}
+              onChangeText={setBalance}
+              keyboardType="numeric"
             />
+
+            <View style={tw`${native.row}`}>
+              <View style={tw`${native.rowItem}`}>
+                <View style={tw`${native.fieldWrapper}`}>
+                  <Typography variant="label" color="muted">
+                    {t('settings.language')}
+                  </Typography>
+                  <LanguageDropdown
+                    selectedValue={language}
+                    onSelect={setLanguage}
+                    accessibilityLabel={t('settings.language')}
+                    bottomSheetTitle={t('settings.language')}
+                  />
+                </View>
+              </View>
+              <View style={tw`${native.rowItem}`}>
+                <View style={tw`${native.fieldWrapper}`}>
+                  <Typography variant="label" color="muted">
+                    {t('settings.currency')}
+                  </Typography>
+                  <CurrencyDropdown
+                    selectedValue={currency}
+                    onSelect={setCurrency}
+                    accessibilityLabel={t('settings.currency')}
+                    bottomSheetTitle={t('settings.currency')}
+                  />
+                </View>
+              </View>
+            </View>
           </View>
 
-          {/* Buttons */}
-          <View style={tw`${native.buttonGroup}`}>
-            {/* Delete account */}
-            <Button
-              variant="destroy"
-              title={
-                isDeleting
-                  ? t('settings.deleteAccountDeleting')
-                  : t('settings.deleteAccount')
-              }
-              onPress={handleDeleteAccount}
-              loading={isDeleting}
-              fullWidth
-              centered
-            />
+          <Divider />
 
-            {/* Disconnect */}
-            <Button
-              variant="secondary"
-              title={t('settings.disconnect')}
-              onPress={onDisconnect}
-              fullWidth
-              centered
-            />
+          {/* Section: Account */}
+          <View style={tw`${native.section}`}>
+            <Typography variant="body-bold" accessibilityRole="header">
+              {t('settings.sectionAccount')}
+            </Typography>
 
-            {/* Cancel */}
-            <Button
-              variant="secondary"
-              title={t('settings.cancel')}
-              onPress={handleCancel}
-              fullWidth
-              centered
-            />
+            <View style={tw`${native.buttonRow}`}>
+              <View style={tw`${native.buttonItem}`}>
+                <Button
+                  variant="destroy"
+                  icon="bin"
+                  iconPosition="left"
+                  title={
+                    isDeleting
+                      ? t('settings.deleteAccountDeleting')
+                      : t('settings.deleteAccount')
+                  }
+                  onPress={handleDeleteAccount}
+                  loading={isDeleting}
+                  fullWidth
+                  centered
+                />
+              </View>
+              <View style={tw`${native.buttonItem}`}>
+                <Button
+                  variant="secondary"
+                  icon="disconnect"
+                  iconPosition="left"
+                  title={t('settings.disconnect')}
+                  onPress={onDisconnect}
+                  fullWidth
+                  centered
+                />
+              </View>
+            </View>
+          </View>
 
-            {/* Submit */}
-            <Button
-              variant="primary"
-              title={
-                isSubmitting ? t('settings.saving') : t('settings.saveChanges')
-              }
-              onPress={handleSubmit}
-              loading={isSubmitting}
-              fullWidth
-              centered
-            />
+          <Divider />
+
+          {/* Form actions */}
+          <View style={tw`${native.buttonRow}`}>
+            <View style={tw`${native.buttonItem}`}>
+              <Button
+                variant="secondary"
+                title={t('settings.cancel')}
+                onPress={handleCancel}
+                fullWidth
+                centered
+              />
+            </View>
+            <View style={tw`${native.buttonItem}`}>
+              <Button
+                variant="primary"
+                title={
+                  isSubmitting
+                    ? t('settings.saving')
+                    : t('settings.saveChanges')
+                }
+                onPress={handleSubmit}
+                loading={isSubmitting}
+                fullWidth
+                centered
+              />
+            </View>
           </View>
         </View>
       </Card>

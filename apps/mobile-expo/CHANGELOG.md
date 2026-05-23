@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-22)
+# 1.0.0 (2026-05-23)
 
 
 ### Bug Fixes
@@ -91,6 +91,7 @@
 * **config:** add restart-session skill for end → clear → start flow ([1a9f1e2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1a9f1e2bbcf695ef7a991f3f0bf081c71732d4ef))
 * **config:** add setup-tokens-package and migrate-to-nativewind-v5 skills ([7a758e7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7a758e7aa597716a5176780dc7c21fb97a90457e))
 * **config:** add setup-ui-package skill with architecture reference ([49cbc9c](https://github.com/fubaritico/react-and-react-native-financial-app/commit/49cbc9c88e0852ed20bf829bd11149b183ed2f30))
+* **currency:** add multi-currency support with Currency atom + CurrencyProvider ([a144d03](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a144d03df92489ee20e0f4ec044e75e24001e987))
 * **db:** add Supabase schema, seed data, and setup guide ([6d9beff](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6d9beff28782cf4401e135c2dcb3c59fd0583f9a))
 * **expo:** add expo-dev-client and native build scripts ([eef51ca](https://github.com/fubaritico/react-and-react-native-financial-app/commit/eef51ca348d281119d7aa34f561d63adef49a176))
 * **features:** add BudgetCategoryCard organism + Dropdown destructive/divider support ([1456f1e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1456f1eff8ac904b60f3bae85437c83f3b02c804))
