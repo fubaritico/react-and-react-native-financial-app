@@ -27,3 +27,7 @@ tags: [feature, onboarding, architecture]
 - chooses [[App Philosophy — Forecasting Not Ledger]]
 - stores_in [[Supabase Database Schema]]
 - uses [[Branding — Pouch Identity]]
+
+- [decision] Walkthrough changed from "slideshow of 4 real screens with isolated QueryClientProvider + mock data" to a Lottie animation presentation with icons, texts, and a PASS/Skip button
+- [decision] User will create the Lottie animation themselves — agent will build the WalkthroughScreen shell (Lottie player + PASS button + preferences mutation) when the asset is ready
+- [flow-updated] Splash -> Login/Signup -> Verify Email -> Account Activated -> Mode Choice -> Initial Balance -> Welcome -> Walkthrough (Lottie) -> Overview

@@ -61,6 +61,8 @@
 - Occasional crash on hot reload (`r`) with DotLottie — app restart resolves, not production concern
 
 ## Architecture / Conventions
+- `CurrencySign` type duplicated between `packages/ui/src/lib/CurrencyContext.ts` and `packages/shared/src/utils/currency.ts` — forced by layer order (ui cannot depend on shared). Both must stay in sync manually. Consider extracting to a shared `@financial-app/types` package if more types accumulate.
+- `ICurrencyConfig` interface name used in both ui (shape: `{ format }`) and shared (shape: `{ currency, language }`) — aliased in CurrencyProvider imports. Consider renaming shared's to `ICurrencyProviderConfig`.
 - #Alias web barrel convention: .web.tsx files must import from `#Atoms/index.web` (not `#Atoms`) because tsc resolves bare alias to native barrel
 - Icon pipeline only supports fill-based SVGs — stroke-based paths won't render
 - Icon pipeline supports path + circle + rect SVG elements

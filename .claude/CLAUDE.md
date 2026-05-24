@@ -187,7 +187,9 @@ Read `@completed.md`
    - ~~Supabase delete user modus operandi~~ ✅ — docs/modus-operandi/supabase-delete-user.md
    - Walkthrough: slideshow of 4 real screens, isolated `QueryClientProvider` with mock data pre-filled via `setQueryData`
    - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Welcome → Overview
-   - **Next coding**: Currency feature — full plan saved in Basic Memory (`currency-feature-plan`). Steps: (1) DB+API add `currency` column to `user_preferences`, (2) `useCurrency()` hook in shared, (3) replace `formatCurrency()` calls with `<Currency>` atom across ~25 files, (4) currency selector in Settings
+   - ~~Currency feature (steps 1-3)~~ ✅ — DB `currency` column + API schema, Currency atom (ui), CurrencyContext (ui+shared), useCurrency hook (shared), CurrencyProvider bridge (features), wired in all 3 apps, ~25 components migrated from string to numeric amounts, formatting rules (language-driven symbol position, short symbols $£€, no .00 on integers), easy-currencies for live rates, review fixes (SEC-004 module-level query, A11Y-008 accessibilityState ×3, A11Y-004 accessible prop, A11Y-001 aria-label ×3)
+   - ~~Currency feature (step 4)~~ ✅ — CurrencyDropdown feature component (native+web, currency symbols $€£), wired into SettingsScreenView (side-by-side with LanguageDropdown), Settings persists currency via mutateAsync + invalidation before navigate, CurrencyProvider initRates() on mount, FR formatting (no space before symbol), sectioned layout, review fixes (A11Y-004 headings, SEC-006 isFinite, QUAL-007 constants extraction, ARCH-005 hex fallback removed)
+   - **Next coding**: Onboarding walkthrough — slideshow of 4 real screens, isolated QueryClientProvider with mock data
 2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, audit-owasp skill upgraded to OWASP 2025
 3. ~~Empty states (all screens + Overview sections)~~ ✅ — part of onboarding step, done for all 4 overview components
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
