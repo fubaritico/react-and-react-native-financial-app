@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-23)
+# 1.0.0 (2026-05-24)
 
 
 ### Bug Fixes
@@ -91,6 +91,7 @@
 * **config:** add restart-session skill for end → clear → start flow ([1a9f1e2](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1a9f1e2bbcf695ef7a991f3f0bf081c71732d4ef))
 * **config:** add setup-tokens-package and migrate-to-nativewind-v5 skills ([7a758e7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/7a758e7aa597716a5176780dc7c21fb97a90457e))
 * **config:** add setup-ui-package skill with architecture reference ([49cbc9c](https://github.com/fubaritico/react-and-react-native-financial-app/commit/49cbc9c88e0852ed20bf829bd11149b183ed2f30))
+* **currency:** add CurrencyDropdown selector in Settings + review fixes ([e2b0256](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e2b0256bf151700729128f7497ff762524558895))
 * **currency:** add multi-currency support with Currency atom + CurrencyProvider ([a144d03](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a144d03df92489ee20e0f4ec044e75e24001e987))
 * **db:** add Supabase schema, seed data, and setup guide ([6d9beff](https://github.com/fubaritico/react-and-react-native-financial-app/commit/6d9beff28782cf4401e135c2dcb3c59fd0583f9a))
 * **expo:** add expo-dev-client and native build scripts ([eef51ca](https://github.com/fubaritico/react-and-react-native-financial-app/commit/eef51ca348d281119d7aa34f561d63adef49a176))
@@ -102,6 +103,7 @@
 * **http-client:** scaffold @financial-app/http-client with HeyAPI ([bdbab40](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bdbab40934bf2e99136f174f98df870fcdaa474e))
 * **i18n:** add react-i18next with EN/FR translations across all apps ([9797ce4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9797ce4836749dad17bb707aa6a0c4932c74772c))
 * **icons:** add @financial-app/icons package with cross-platform Icon component ([1c1be72](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1c1be727339b093097d1ff682027f5c1771b78c7))
+* **icons:** add 25 category SVGs + cleanup all icons + redesign logo ([9d86a21](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9d86a215036538827c864fb00c23fd648bd89f45))
 * **icons:** add Fb app icon to all mobile apps ([8631298](https://github.com/fubaritico/react-and-react-native-financial-app/commit/863129834c804d42ccea4e5e05b1b5bf9a185a18))
 * **memory:** add Basic Memory knowledge base + MCP integration ([26fafda](https://github.com/fubaritico/react-and-react-native-financial-app/commit/26fafdafcec785f60586b4be9a4a411a5ed27514))
 * **mobile-expo:** add Expo Router with tabs + auth routes ([60f42d9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/60f42d9fbc62b657ba70409207618dc479713b8f))

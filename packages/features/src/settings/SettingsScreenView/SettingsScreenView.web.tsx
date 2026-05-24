@@ -165,6 +165,8 @@ export function SettingsScreenView({
                 <div className={web.buttonItem}>
                   <Button
                     variant="destroy"
+                    icon="bin"
+                    iconPosition="left"
                     title={
                       isDeleting
                         ? t('settings.deleteAccountDeleting')
@@ -179,6 +181,8 @@ export function SettingsScreenView({
                 <div className={web.buttonItem}>
                   <Button
                     variant="secondary"
+                    icon="disconnect"
+                    iconPosition="left"
                     title={t('settings.disconnect')}
                     onPress={onDisconnect}
                     fullWidth

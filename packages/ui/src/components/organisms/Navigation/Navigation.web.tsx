@@ -75,7 +75,7 @@ export function Navigation({
           <Icon
             name="logoEpouch"
             color="currentColor"
-            iconSize="3xl"
+            iconSize="4xl"
             className={cn('text-on-dark', { 'ml-8 mr-2': !collapsed })}
           />
           {!collapsed && (

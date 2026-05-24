@@ -19,7 +19,7 @@ export function AuthLayout({
           <Icon
             name="logoEpouch"
             color="currentColor"
-            iconSize="3xl"
+            iconSize="4xl"
             className="text-on-dark mr-2"
           />
           <Typography variant="heading-md" as="h1" color="on-dark">
