@@ -43,9 +43,27 @@ export function useConfigureHttpClient(
   apiUrl: string,
   onSessionExpired?: () => void
 ) {
+  /** Current authenticated user (null when signed out) */
   const user = useAtomValue(userAtom)
   const setHttpClientReady = useSetAtom(isHttpClientReadyAtom)
+
+  /** Guards against firing the expired modal twice during sign-out */
   const signingOutRef = useRef(false)
+
+  /**
+   * Stable ref to the latest `user` value.
+   * The 401 interceptor is registered once (empty deps) but needs to read
+   * the current auth state — a ref avoids re-registering the interceptor
+   * on every user change while still seeing the latest value.
+   */
+  const userRef = useRef(user)
+  userRef.current = user
+
+  /**
+   * Stable ref to the latest `onSessionExpired` callback.
+   * Same pattern: the interceptor captures this ref once, but always
+   * calls the most recent version of the callback.
+   */
   const onSessionExpiredRef = useRef(onSessionExpired)
   onSessionExpiredRef.current = onSessionExpired
 
@@ -60,13 +78,26 @@ export function useConfigureHttpClient(
         : undefined,
     })
     setHttpClientReady(!!user)
+
+    // Reset the sign-out guard when a new user logs in,
+    // so the 401 interceptor can fire again on the next session expiry.
+    if (user) {
+      signingOutRef.current = false
+    }
   }, [user, httpClient, authClient, apiUrl, setHttpClientReady])
 
   // Register 401 interceptor — show session expired modal
   useEffect(() => {
-    /** Intercepts 401 responses and triggers session expiry flow */
+    /** Intercepts 401 responses and triggers session expiry flow.
+     *  Only fires when the user IS authenticated — a 401 without
+     *  an active session is expected (e.g. visiting /login) and must
+     *  not show the "session expired" modal. */
     const handle401 = (response: Response) => {
-      if (response.status === 401 && !signingOutRef.current) {
+      if (
+        response.status === 401 &&
+        !signingOutRef.current &&
+        userRef.current
+      ) {
         signingOutRef.current = true
         onSessionExpiredRef.current?.()
       }
