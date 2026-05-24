@@ -26,8 +26,11 @@ export const MAX_NAME_LENGTH = 100
 /** Maximum characters for category fields */
 export const MAX_CATEGORY_LENGTH = 50
 
-/** Maximum characters for theme fields */
+/** Maximum characters for theme fields (pots) */
 export const MAX_THEME_LENGTH = 30
+
+/** PostgreSQL error code for unique constraint violation (duplicate key) */
+export const PG_UNIQUE_VIOLATION = '23505'
 
 /** PostgREST error code for `.single()` returning no rows */
 export const PGRST_NOT_FOUND = 'PGRST116'

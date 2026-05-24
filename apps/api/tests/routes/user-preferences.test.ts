@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest'
 import { createApp } from '../../src/app.js'
 import { mockUserPreferences, mockUserPreferencesManual } from '../data/index.js'
 import { authHandlers } from '../handlers/authHandlers.js'
-import { balanceHandlers } from '../handlers/balanceHandlers.js'
 import { userPreferencesHandlers } from '../handlers/userPreferencesHandlers.js'
 import { AUTH_HEADER } from '../helpers.js'
 import { server } from '../server.js'
@@ -163,19 +162,7 @@ describe('POST /users/me/initial-balance', () => {
     expect(res.status).toBe(401)
   })
 
-  it('returns 500 when balance upsert fails', async () => {
-    server.use(balanceHandlers.dbError)
-
-    const res = await request(app)
-      .post('/users/me/initial-balance')
-      .set(AUTH_HEADER)
-      .send({ amount: 1500 })
-
-    expect(res.status).toBe(500)
-    expect(res.body).toHaveProperty('error')
-  })
-
-  it('returns 500 when preferences update fails', async () => {
+  it('returns 500 when preferences upsert/update fails', async () => {
     server.use(
       userPreferencesHandlers.dbErrorGet,
       userPreferencesHandlers.dbErrorPost,

@@ -9,6 +9,7 @@ import { logger } from './lib/logger.js'
 import { generateDocument } from './lib/openapi.js'
 import { balanceRouter } from './routes/balance.js'
 import { budgetsRouter } from './routes/budgets.js'
+import { categoriesRouter } from './routes/categories.js'
 import { initialBalanceRouter } from './routes/initial-balance.js'
 import { potsRouter } from './routes/pots.js'
 import { recurringBillsRouter } from './routes/recurring-bills.js'
@@ -98,6 +99,7 @@ export function createApp() {
   app.use('/recurring-bills', recurringBillsRouter)
 
   // Routes — with mutations (global + write limiter)
+  app.use('/categories', writeLimiter, categoriesRouter)
   app.use('/transactions', writeLimiter, transactionsRouter)
   app.use('/budgets', writeLimiter, budgetsRouter)
   app.use('/pots', writeLimiter, potsRouter)

@@ -68,6 +68,8 @@ userPreferencesRouter.put(
     const body = req.body as {
       mode?: string | null
       has_seen_onboarding?: boolean
+      currency?: string
+      reference_balance?: number
     }
 
     const result = await upsertPreferences(userId, body)

@@ -1,10 +1,6 @@
 import { z } from '../lib/zod.js'
 
-import {
-  MAX_AMOUNT,
-  MAX_CATEGORY_LENGTH,
-  MAX_THEME_LENGTH,
-} from './constants.js'
+import { MAX_AMOUNT } from './constants.js'
 
 export const BudgetSchema = z
   .object({
@@ -12,9 +8,14 @@ export const BudgetSchema = z
       .string()
       .uuid()
       .openapi({ example: '3fa85f64-5717-4562-b3fc-2c963f66afa6' }),
-    category: z.string().openapi({ example: 'Dining Out' }),
+    category_id: z
+      .string()
+      .uuid()
+      .openapi({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }),
+    category_name: z.string().openapi({ example: 'Dining Out' }),
+    category_icon: z.string().openapi({ example: 'categoryDiningOut' }),
+    category_color: z.string().openapi({ example: 'brown' }),
     maximum: z.number().openapi({ example: 75.0 }),
-    theme: z.string().openapi({ example: 'yellow' }),
     month: z
       .string()
       .regex(/^\d{4}-\d{2}$/, 'Must be YYYY-MM format')
@@ -25,21 +26,15 @@ export const BudgetSchema = z
 
 export const CreateBudgetSchema = z
   .object({
-    category: z
+    category_id: z
       .string()
-      .min(1)
-      .max(MAX_CATEGORY_LENGTH)
-      .openapi({ example: 'Dining Out' }),
+      .uuid()
+      .openapi({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }),
     maximum: z
       .number()
       .positive({ message: 'validation.amount.positive' })
       .max(MAX_AMOUNT, { message: 'validation.amount.max' })
       .openapi({ example: 75.0 }),
-    theme: z
-      .string()
-      .min(1)
-      .max(MAX_THEME_LENGTH)
-      .openapi({ example: 'yellow' }),
     month: z
       .string()
       .regex(/^\d{4}-\d{2}$/, 'Must be YYYY-MM format')
@@ -49,23 +44,16 @@ export const CreateBudgetSchema = z
 
 export const UpdateBudgetSchema = z
   .object({
-    category: z
+    category_id: z
       .string()
-      .min(1)
-      .max(MAX_CATEGORY_LENGTH)
+      .uuid()
       .optional()
-      .openapi({ example: 'Entertainment' }),
+      .openapi({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }),
     maximum: z
       .number()
       .positive({ message: 'validation.amount.positive' })
       .max(MAX_AMOUNT, { message: 'validation.amount.max' })
       .optional()
       .openapi({ example: 100.0 }),
-    theme: z
-      .string()
-      .min(1)
-      .max(MAX_THEME_LENGTH)
-      .optional()
-      .openapi({ example: 'green' }),
   })
   .openapi('UpdateBudgetRequest')

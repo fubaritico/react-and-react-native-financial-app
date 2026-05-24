@@ -1,5 +1,7 @@
 import { supabase } from '../lib/supabase.js'
 
+import { DEFAULT_CATEGORIES } from './categories.js'
+
 import type { PostgrestError } from '@supabase/supabase-js'
 
 /**
@@ -41,11 +43,9 @@ function shiftToCurrentMonth(originalDate: string): string {
 
 /** Shape of a single transaction from data.json (without mock id). */
 interface ISeedTransaction {
-  /** Avatar image path */
-  avatar: string
   /** Transaction counterpart name */
   name: string
-  /** Transaction category */
+  /** Transaction category name (matched to categories table) */
   category: string
   /** ISO 8601 date string */
   date: string
@@ -57,14 +57,10 @@ interface ISeedTransaction {
 
 /** Shape of a single budget from data.json (without mock id). */
 interface ISeedBudget {
-  /** Budget category name */
+  /** Budget category name (matched to categories table) */
   category: string
   /** Maximum spending limit */
   maximum: number
-  /** Color theme identifier */
-  theme: string
-  /** ISO month string (YYYY-MM) — added by seed, not in data.json */
-  month?: string
 }
 
 /** Shape of a single pot from data.json (without mock id). */
@@ -128,7 +124,7 @@ export async function resetAndCreateUser(
 
   const existing = listData.users.find((u) => u.email === email)
 
-  // Delete existing user — CASCADE removes all related data (transactions, budgets, pots, balances, preferences)
+  // Delete existing user — CASCADE removes all related data
   if (existing) {
     const { error: deleteError } = await supabase.auth.admin.deleteUser(
       existing.id
@@ -153,8 +149,8 @@ export async function resetAndCreateUser(
 }
 
 /**
- * Inserts all seed data for a user (balance, transactions, budgets, pots, preferences).
- * Assumes existing data has already been deleted via `deleteUserData`.
+ * Inserts all seed data for a user (categories, balance, transactions, budgets, pots, preferences).
+ * Assumes existing data has already been deleted via `resetAndCreateUser` CASCADE.
  * @param userId - Authenticated user UUID
  * @param data - Seed data payload from data.json
  * @returns Error-only result (null on success)
@@ -163,22 +159,48 @@ export async function insertSeedData(
   userId: string,
   data: ISeedData
 ): Promise<{ error: PostgrestError | null }> {
-  // 1. Balance
-  const { error: balanceError } = await supabase
-    .from('balances')
-    .upsert(
-      { user_id: userId, reference: data.balance.reference },
-      { onConflict: 'user_id' }
-    )
-  if (balanceError) return { error: balanceError }
+  // 1. Insert default categories and get their IDs
+  const categoryRows = DEFAULT_CATEGORIES.map((c) => ({
+    user_id: userId,
+    ...c,
+    is_system: true,
+  }))
+  const { data: insertedCategories, error: catError } = await supabase
+    .from('categories')
+    .insert(categoryRows)
+    .select('id, name')
 
-  // 2. Transactions — shift all dates to current month
-  const transactions = data.transactions.map(
-    ({ avatar, name, category, date, amount, recurring }) => ({
+  if (catError) return { error: catError }
+
+  // Build name → id lookup
+  const categoryMap = new Map<string, string>()
+  /* eslint-disable @typescript-eslint/no-unnecessary-condition -- data can be null at runtime */
+  for (const cat of insertedCategories ?? []) {
+    const row = cat as { id: string; name: string }
+    categoryMap.set(row.name, row.id)
+  }
+  /* eslint-enable @typescript-eslint/no-unnecessary-condition */
+
+  // 2. User preferences with reference balance
+  const { error: prefError } = await supabase.from('user_preferences').upsert(
+    {
       user_id: userId,
-      avatar,
+      mode: 'manual',
+      has_seen_onboarding: true,
+      initial_balance_set: true,
+      reference_balance: data.balance.reference,
+    },
+    { onConflict: 'user_id' }
+  )
+  if (prefError) return { error: prefError }
+
+  // 3. Transactions — shift dates, resolve category_id
+  const fallbackCategoryId = categoryMap.get('General') ?? ''
+  const transactions = data.transactions.map(
+    ({ name, category, date, amount, recurring }) => ({
+      user_id: userId,
       name,
-      category,
+      category_id: categoryMap.get(category) ?? fallbackCategoryId,
       date: shiftToCurrentMonth(date),
       amount,
       recurring,
@@ -189,19 +211,18 @@ export async function insertSeedData(
     .insert(transactions)
   if (txnError) return { error: txnError }
 
-  // 3. Budgets — assign current month
+  // 4. Budgets — resolve category_id, assign current month
   const currentMonth = getCurrentMonth()
-  const budgets = data.budgets.map(({ category, maximum, theme }) => ({
+  const budgets = data.budgets.map(({ category, maximum }) => ({
     user_id: userId,
-    category,
+    category_id: categoryMap.get(category) ?? fallbackCategoryId,
     maximum,
-    theme,
     month: currentMonth,
   }))
   const { error: budgetError } = await supabase.from('budgets').insert(budgets)
   if (budgetError) return { error: budgetError }
 
-  // 4. Pots
+  // 5. Pots
   const pots = data.pots.map(({ name, target, total, theme }) => ({
     user_id: userId,
     name,
@@ -211,18 +232,6 @@ export async function insertSeedData(
   }))
   const { error: potError } = await supabase.from('pots').insert(pots)
   if (potError) return { error: potError }
-
-  // 5. User preferences — mark onboarding as complete
-  const { error: prefError } = await supabase.from('user_preferences').upsert(
-    {
-      user_id: userId,
-      mode: 'manual',
-      has_seen_onboarding: true,
-      initial_balance_set: true,
-    },
-    { onConflict: 'user_id' }
-  )
-  if (prefError) return { error: prefError }
 
   return { error: null }
 }

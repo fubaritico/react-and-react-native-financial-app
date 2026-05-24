@@ -107,13 +107,13 @@ transactionsRouter.get(
     const {
       page,
       limit,
-      category,
+      category_id,
       search,
       sort = 'latest',
     } = res.locals.query as {
       page: number
       limit: number
-      category?: string
+      category_id?: string
       search?: string
       sort?: string
     }
@@ -121,7 +121,7 @@ transactionsRouter.get(
     const result = await listTransactions(res.locals.userId as string, {
       page,
       limit,
-      category,
+      category_id,
       search,
       sort,
     })
@@ -147,7 +147,7 @@ transactionsRouter.post(
   async (req, res) => {
     const body = req.body as {
       name: string
-      category: string
+      category_id: string
       date: string
       amount: number
       recurring: boolean
@@ -180,7 +180,7 @@ transactionsRouter.put(
   async (req, res) => {
     const body = req.body as {
       name?: string
-      category?: string
+      category_id?: string
       date?: string
       amount?: number
       recurring?: boolean

@@ -11,18 +11,34 @@ import type {
 /** Full transaction row as returned by Supabase (mirrors Prisma model). */
 export type TransactionRow = transactionsModel
 
-/** Projected transaction row for list queries (excludes heavy fields). */
-type TransactionListRow = Pick<
-  TransactionRow,
-  'id' | 'avatar' | 'name' | 'category' | 'date' | 'amount' | 'recurring'
->
+/** Projected transaction row for list queries with joined category fields. */
+export interface ITransactionListRow {
+  /** Transaction UUID */
+  id: string
+  /** Payee / description */
+  name: string
+  /** ISO date string */
+  date: string
+  /** Transaction amount (positive = income, negative = expense) */
+  amount: number
+  /** Whether this transaction repeats monthly */
+  recurring: boolean
+  /** Category UUID */
+  category_id: string
+  /** Category display name (joined) */
+  category_name: string
+  /** Category icon identifier (joined) */
+  category_icon: string
+  /** Category design token color key (joined) */
+  category_color: string
+}
 
 /** Payload for creating a new transaction. */
 interface ICreateTransactionPayload {
   /** Payee / description */
   name: string
-  /** Transaction category */
-  category: string
+  /** Category UUID */
+  category_id: string
   /** ISO date string */
   date: string
   /** Transaction amount (positive = income, negative = expense) */
@@ -35,8 +51,8 @@ interface ICreateTransactionPayload {
 interface IUpdateTransactionPayload {
   /** Payee / description */
   name?: string
-  /** Transaction category */
-  category?: string
+  /** Category UUID */
+  category_id?: string
   /** ISO date string */
   date?: string
   /** Transaction amount */
@@ -61,8 +77,8 @@ interface ITransactionListParams {
   page: number
   /** Number of rows per page */
   limit: number
-  /** Optional category filter */
-  category?: string
+  /** Optional category UUID filter */
+  category_id?: string
   /** Optional search term (ILIKE on name) */
   search?: string
   /** Sort key (latest, oldest, a-z, z-a, highest, lowest) */
@@ -71,21 +87,23 @@ interface ITransactionListParams {
 
 /**
  * Builds the Supabase query for listing transactions with filters, sort, and pagination.
+ * Joins on the categories table to include category name, icon, and color.
  * @param userId - Authenticated user UUID
  * @param params - List query parameters
  * @returns Supabase query builder (not yet awaited)
  */
 function buildListQuery(userId: string, params: ITransactionListParams) {
-  const { page, limit, category, search, sort = 'latest' } = params
+  const { page, limit, category_id, search, sort = 'latest' } = params
 
   let query = supabase
     .from('transactions')
-    .select('id, avatar, name, category, date, amount, recurring', {
-      count: 'exact',
-    })
+    .select(
+      'id, name, date, amount, recurring, category_id, categories(name, icon, color)',
+      { count: 'exact' }
+    )
     .eq('user_id', userId)
 
-  if (category) query = query.eq('category', category)
+  if (category_id) query = query.eq('category_id', category_id)
   if (search) {
     const escaped = search.replace(/[%_\\]/g, '\\$&')
     query = query.ilike('name', `%${escaped}%`)
@@ -99,21 +117,48 @@ function buildListQuery(userId: string, params: ITransactionListParams) {
 }
 
 /**
+ * Flattens a raw Supabase row with nested `categories` join into a flat `ITransactionListRow`.
+ * @param row - Raw row from Supabase with nested categories object
+ * @returns Flat transaction list row
+ */
+function flattenTransactionRow(
+  row: Record<string, unknown>
+): ITransactionListRow {
+  const cat = row.categories as {
+    name: string
+    icon: string
+    color: string
+  } | null
+  return {
+    id: row.id as string,
+    name: row.name as string,
+    date: row.date as string,
+    amount: row.amount as number,
+    recurring: row.recurring as boolean,
+    category_id: row.category_id as string,
+    category_name: cat?.name ?? '',
+    category_icon: cat?.icon ?? '',
+    category_color: cat?.color ?? '',
+  }
+}
+
+/**
  * Lists transactions for a user with filtering, sorting, and pagination.
  * @param userId - Authenticated user UUID
- * @param params - List query parameters (page, limit, category, search, sort)
+ * @param params - List query parameters (page, limit, category_id, search, sort)
  * @returns Paginated list of transaction rows with total count
  */
 export async function listTransactions(
   userId: string,
   params: ITransactionListParams
-): Promise<SupabaseListResult<TransactionListRow>> {
+): Promise<SupabaseListResult<ITransactionListRow>> {
   const result = await buildListQuery(userId, params)
 
   if (result.error) return { data: null, error: result.error }
   /* eslint-disable @typescript-eslint/no-unnecessary-condition -- data/count can be null at runtime */
+  const rows = (result.data ?? []) as Record<string, unknown>[]
   return {
-    data: (result.data ?? []) as TransactionListRow[],
+    data: rows.map(flattenTransactionRow),
     count: result.count ?? 0,
     error: null,
   }
@@ -135,7 +180,6 @@ export async function createTransaction(
     .insert({
       user_id: userId,
       ...body,
-      avatar: '',
       source: 'manual',
     })
     .select()
@@ -159,7 +203,7 @@ export async function updateTransaction(
 ): Promise<SupabaseResult<TransactionRow>> {
   const updates: Record<string, unknown> = {}
   if (body.name !== undefined) updates.name = body.name
-  if (body.category !== undefined) updates.category = body.category
+  if (body.category_id !== undefined) updates.category_id = body.category_id
   if (body.date !== undefined) updates.date = body.date
   if (body.amount !== undefined) updates.amount = body.amount
   if (body.recurring !== undefined) updates.recurring = body.recurring

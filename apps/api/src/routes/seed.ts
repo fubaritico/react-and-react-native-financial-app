@@ -6,9 +6,9 @@ import { Router } from 'express'
 import { logger } from '../lib/logger.js'
 import { validateBody } from '../middleware/validate.js'
 import { SeedBodySchema } from '../schemas/seed.js'
-import { insertSeedData, resetAndCreateUser } from '../supabase/seed.js'
+import { insertSeedData, resetAndCreateUser } from '../supabase/index.js'
 
-import type { ISeedData } from '../supabase/seed.js'
+import type { ISeedData } from '../supabase/index.js'
 
 export const seedRouter = Router()
 

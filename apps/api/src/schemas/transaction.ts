@@ -2,7 +2,6 @@ import { z } from '../lib/zod.js'
 
 import {
   MAX_AMOUNT,
-  MAX_CATEGORY_LENGTH,
   MAX_NAME_LENGTH,
   MAX_PAGE_SIZE,
   MAX_SEARCH_LENGTH,
@@ -26,14 +25,17 @@ export const TransactionSchema = z
       .string()
       .uuid()
       .openapi({ example: '3fa85f64-5717-4562-b3fc-2c963f66afa6' }),
-    avatar: z
-      .string()
-      .openapi({ example: './assets/images/avatars/emma-richardson.jpg' }),
     name: z.string().openapi({ example: 'Emma Richardson' }),
-    category: z.string().openapi({ example: 'General' }),
     date: timestamptz.openapi({ example: TIMESTAMPTZ_EXAMPLE }),
     amount: z.number().openapi({ example: 75.5 }),
     recurring: z.boolean().openapi({ example: false }),
+    category_id: z
+      .string()
+      .uuid()
+      .openapi({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }),
+    category_name: z.string().openapi({ example: 'General' }),
+    category_icon: z.string().openapi({ example: 'categoryGeneral' }),
+    category_color: z.string().openapi({ example: 'blue' }),
   })
   .openapi('Transaction')
 
@@ -53,11 +55,10 @@ export const CreateTransactionSchema = z
       .min(1)
       .max(MAX_NAME_LENGTH)
       .openapi({ example: 'Urban Sports Club' }),
-    category: z
+    category_id: z
       .string()
-      .min(1)
-      .max(MAX_CATEGORY_LENGTH)
-      .openapi({ example: 'Lifestyle' }),
+      .uuid()
+      .openapi({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }),
     date: timestamptz.openapi({ example: TIMESTAMPTZ_EXAMPLE }),
     amount: z
       .number()
@@ -80,12 +81,11 @@ export const UpdateTransactionSchema = z
       .max(MAX_NAME_LENGTH)
       .optional()
       .openapi({ example: 'Urban Sports Club' }),
-    category: z
+    category_id: z
       .string()
-      .min(1)
-      .max(MAX_CATEGORY_LENGTH)
+      .uuid()
       .optional()
-      .openapi({ example: 'Lifestyle' }),
+      .openapi({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' }),
     date: timestamptz.optional().openapi({ example: TIMESTAMPTZ_EXAMPLE }),
     amount: z
       .number()
@@ -115,11 +115,10 @@ export const TransactionQuerySchema = z.object({
     .max(MAX_PAGE_SIZE)
     .default(10)
     .openapi({ example: 10, description: 'Items per page' }),
-  category: z
-    .string()
-    .max(MAX_CATEGORY_LENGTH)
-    .optional()
-    .openapi({ example: 'General', description: 'Filter by category' }),
+  category_id: z.string().uuid().optional().openapi({
+    example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+    description: 'Filter by category UUID',
+  }),
   search: z
     .string()
     .max(MAX_SEARCH_LENGTH)

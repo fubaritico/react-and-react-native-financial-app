@@ -42,7 +42,7 @@ registry.registerPath({
   },
   responses: {
     200: {
-      description: 'Budgets with computed spent amounts',
+      description: 'Budgets with computed spent amounts and category info',
       content: {
         'application/json': { schema: z.array(BudgetSchema) },
       },
@@ -123,9 +123,8 @@ budgetsRouter.get('/', validateQuery(BudgetQuerySchema), async (req, res) => {
 
 budgetsRouter.post('/', validateBody(CreateBudgetSchema), async (req, res) => {
   const body = req.body as {
-    category: string
+    category_id: string
     maximum: number
-    theme: string
     month: string
   }
 
@@ -154,9 +153,8 @@ budgetsRouter.put(
   validateBody(UpdateBudgetSchema),
   async (req, res) => {
     const body = req.body as {
-      category?: string
+      category_id?: string
       maximum?: number
-      theme?: string
     }
 
     const result = await updateBudget(

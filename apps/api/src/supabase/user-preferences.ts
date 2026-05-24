@@ -14,12 +14,15 @@ export interface IAuthErrorOnly {
 /** Full user preferences row as returned by Supabase (mirrors Prisma model). */
 export type UserPreferencesRow = user_preferencesModel
 
-/** Partial payload for updating user preferences (mode, onboarding, balance flags, currency). */
+/** Partial payload for updating user preferences (mode, onboarding, balance, currency). */
 type UpdatePayload = Partial<
   Pick<
     UserPreferencesRow,
     'mode' | 'has_seen_onboarding' | 'initial_balance_set' | 'currency'
-  >
+  > & {
+    /** Reference balance amount (plain number — Supabase REST accepts number, not Prisma Decimal) */
+    reference_balance: number
+  }
 >
 
 /**
@@ -145,12 +148,10 @@ export async function checkInitialBalanceNotSet(
 }
 
 /**
- * Sets the initial balance for a user: upserts the balance row and flips the preference flag.
+ * Sets the initial balance for a user: updates `reference_balance` and flips the flag.
  *
- * **Non-atomic**: three sequential writes (balance upsert → ensure preferences → update flag).
- * A failure after the balance upsert can leave the user with a balance but `initial_balance_set = false`.
+ * Single atomic UPDATE on `user_preferences` (no separate `balances` table).
  * The idempotency guard in the route handler (`checkInitialBalanceNotSet`) allows safe retries.
- * TODO: migrate to a single Postgres RPC (`set_initial_balance`) for atomicity.
  *
  * @param userId - Authenticated user UUID
  * @param amount - Initial balance amount
@@ -160,27 +161,20 @@ export async function setInitialBalance(
   userId: string,
   amount: number
 ): Promise<ISupabaseErrorOnly> {
-  const { error: balanceError } = await supabase
-    .from('balances')
-    .upsert({ user_id: userId, reference: amount }, { onConflict: 'user_id' })
-
-  if (balanceError) return { error: balanceError }
-
   const { error: ensureError } = await ensurePreferencesRow(userId)
   if (ensureError) return { error: ensureError }
 
-  const { error: prefError } = await supabase
+  const { error } = await supabase
     .from('user_preferences')
-    .update({ initial_balance_set: true })
+    .update({ reference_balance: amount, initial_balance_set: true })
     .eq('user_id', userId)
 
-  if (prefError) return { error: prefError }
-  return { error: null }
+  return { error }
 }
 
 /**
  * Permanently deletes a user account via Supabase Auth Admin.
- * All related data (transactions, budgets, pots, preferences, balances) is removed
+ * All related data (transactions, budgets, pots, preferences) is removed
  * automatically by `ON DELETE CASCADE` foreign keys in the database.
  * @param userId - Authenticated user UUID to delete
  * @returns Auth error if the operation failed, null on success

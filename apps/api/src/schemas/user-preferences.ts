@@ -18,6 +18,9 @@ export const UserPreferencesSchema = z
     currency: z
       .enum(['USD', 'EUR', 'GBP'])
       .openapi({ example: 'USD', description: 'Preferred display currency' }),
+    reference_balance: z
+      .number()
+      .openapi({ example: 1500.0, description: 'Reference balance amount' }),
     created_at: z.string().openapi({ example: '2026-05-17T10:00:00.000Z' }),
     updated_at: z.string().openapi({ example: '2026-05-17T10:00:00.000Z' }),
   })
@@ -39,6 +42,15 @@ export const UpdateUserPreferencesSchema = z
       .enum(['USD', 'EUR', 'GBP'])
       .optional()
       .openapi({ example: 'EUR', description: 'Preferred display currency' }),
+    reference_balance: z
+      .number()
+      .min(0, { message: 'validation.amount.minZero' })
+      .max(MAX_AMOUNT, { message: 'validation.amount.max' })
+      .optional()
+      .openapi({
+        example: 1500.0,
+        description: 'Reference balance amount (editable from Settings)',
+      }),
   })
   .openapi('UpdateUserPreferences')
 
