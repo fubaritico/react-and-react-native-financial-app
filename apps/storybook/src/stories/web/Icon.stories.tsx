@@ -235,8 +235,7 @@ export const Showcase: Story = {
               Branding
             </span>
             <div style={{ display: 'flex', gap: 16 }}>
-              <Icon name="logoLarge" iconSize="xxl" />
-              <Icon name="logoSmall" iconSize="xxl" />
+              <Icon name="logoEpouch" iconSize="6xl" />
             </div>
           </div>
         </div>
