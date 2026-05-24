@@ -1,15 +1,19 @@
 import { useCallback, useMemo, useState } from 'react'
 import { View } from 'react-native'
 
+import type { IconName } from '@financial-app/icons'
+
 import tw from '#Lib/tw'
 
 import { BottomSheet } from '../BottomSheet/BottomSheet.native'
 import { Menu } from '../Menu/Menu.native'
 
+import { native } from './Dropdown.styles'
+
 import type { IDropdownProps } from './Dropdown'
 import type { ReactNode } from 'react'
 
-import { Button, Divider, Icon, Portal, Typography } from '#Atoms'
+import { Button, ColorDot, Divider, Icon, Portal, Typography } from '#Atoms'
 
 /**
  * Native Dropdown — always opens a BottomSheet in dark mode.
@@ -41,11 +45,12 @@ export function Dropdown({
 }: Readonly<IDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const selectedLabel = useMemo(
-    () =>
-      options.find((o) => o.value === selectedValue)?.label ?? selectedValue,
+  const selectedOption = useMemo(
+    () => options.find((o) => o.value === selectedValue),
     [options, selectedValue]
   )
+
+  const selectedLabel = selectedOption?.label ?? selectedValue
 
   /** Toggles the dropdown open/closed */
   const handleToggle = useCallback(() => {
@@ -98,6 +103,7 @@ export function Dropdown({
               )
             }
             const isSelected = option.value === selectedValue
+            const hasOptionMeta = !renderItem && (option.color ?? option.icon)
             items.push(
               <Menu.Item
                 key={option.value}
@@ -105,9 +111,32 @@ export function Dropdown({
                 index={index}
                 disabled={option.disabled}
                 destructive={option.destructive}
-                rawContent={!!renderItem}
+                rawContent={!!renderItem || !!hasOptionMeta}
               >
-                {renderItem ? renderItem(option, { isSelected }) : option.label}
+                {renderItem ? (
+                  renderItem(option, { isSelected })
+                ) : hasOptionMeta ? (
+                  <View style={tw`${native.menuItemContent}`}>
+                    {option.color ? (
+                      <ColorDot color={option.color} size={12} />
+                    ) : null}
+                    {option.icon ? (
+                      <Icon
+                        name={option.icon as IconName}
+                        iconSize="xs"
+                        color={tw.color('grey-100')}
+                      />
+                    ) : null}
+                    <Typography
+                      variant="body"
+                      color={option.disabled ? 'muted' : undefined}
+                    >
+                      {option.label}
+                    </Typography>
+                  </View>
+                ) : (
+                  option.label
+                )}
               </Menu.Item>
             )
             return items
@@ -142,11 +171,23 @@ export function Dropdown({
           trigger({ isOpen, selectedLabel })
         ) : (
           <>
-            <Typography variant="body-bold">{selectedLabel}</Typography>
+            <View style={tw`${native.triggerContent}`}>
+              {selectedOption?.color ? (
+                <ColorDot color={selectedOption.color} size={12} />
+              ) : null}
+              {selectedOption?.icon ? (
+                <Icon
+                  name={selectedOption.icon as IconName}
+                  iconSize="xs"
+                  color={tw.color('foreground')}
+                />
+              ) : null}
+              <Typography variant="body-bold">{selectedLabel}</Typography>
+            </View>
             <Icon
               name="caretDown"
               iconSize="xs"
-              color={tw.color('foreground') ?? '#201F24'}
+              color={tw.color('foreground')}
               style={isOpen ? tw`rotate-180` : undefined}
             />
           </>

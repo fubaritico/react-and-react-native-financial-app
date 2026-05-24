@@ -1,13 +1,17 @@
+import type { IconName } from '@financial-app/icons'
+
 /** A single transaction entry in the Latest Spending list. */
 export interface ILatestSpendingItem {
-  /** URL or local path to the counterparty avatar. */
-  avatar: string
   /** Counterparty name. */
   name: string
   /** Numeric amount in base currency (e.g. -10). */
   amount: number
   /** Formatted date string (e.g. "16 Aug 2024"). */
   date: string
+  /** Category icon identifier (e.g. "categoryGeneral"). */
+  categoryIcon: IconName
+  /** Category color token key (e.g. "blue", "army-green"). */
+  categoryColor: string
 }
 
 /** Props for the LatestSpending component. */
@@ -20,6 +24,4 @@ export interface ILatestSpendingProps {
   onSeeAll: () => void
   /** Transaction items to display. */
   items: readonly ILatestSpendingItem[]
-  /** Whether to show avatars next to names. Defaults to true. */
-  showAvatars?: boolean
 }

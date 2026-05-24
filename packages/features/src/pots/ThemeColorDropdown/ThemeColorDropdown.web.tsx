@@ -1,43 +1,35 @@
-import {
-  ColorDot,
-  Dropdown,
-  Icon,
-  Typography,
-  tw,
-} from '@financial-app/ui/native'
+import { ColorDot, Dropdown, Icon, Typography } from '@financial-app/ui'
 import { useCallback } from 'react'
-import { View } from 'react-native'
 
-import type { IDropdownOption } from '@financial-app/ui/native'
+import type { IDropdownOption } from '@financial-app/ui'
 
-import type { IBudgetThemeDropdownProps } from './BudgetThemeDropdown'
+import type { IThemeColorDropdownProps } from './ThemeColorDropdown'
 
 /**
- * BudgetThemeDropdown — theme color picker with ColorDot in trigger and menu items (native).
+ * ThemeColorDropdown — theme color picker with ColorDot in trigger and menu items (web).
  * Disabled items show "Already used" label.
+ *
+ * @param props - Theme color dropdown options and callbacks
+ * @returns Dropdown with color dot indicators
  */
-export function BudgetThemeDropdown({
+export function ThemeColorDropdown({
   options,
   selectedValue,
   onSelect,
   accessibilityLabel,
   bottomSheetTitle,
   alreadyUsedLabel,
-}: Readonly<IBudgetThemeDropdownProps>) {
+}: Readonly<IThemeColorDropdownProps>) {
   /** Custom trigger — ColorDot + label + caret */
   const renderTrigger = useCallback(
     ({ selectedLabel }: { isOpen: boolean; selectedLabel: string }) => (
-      <View style={tw`flex-row items-center gap-3 flex-1`}>
+      <span className="inline-flex items-center gap-3 flex-1">
         <ColorDot color={selectedValue} />
-        <Typography variant="body" style={tw`flex-1`}>
+        <Typography variant="body" as="span" className="flex-1 text-left">
           {selectedLabel}
         </Typography>
-        <Icon
-          name="caretDown"
-          iconSize="xs"
-          color={tw.color('foreground') ?? '#201F24'}
-        />
-      </View>
+        <Icon name="caretDown" iconSize="xs" color="currentColor" />
+      </span>
     ),
     [selectedValue]
   )
@@ -45,21 +37,22 @@ export function BudgetThemeDropdown({
   /** Custom item — ColorDot + label + "Already used" badge */
   const renderItem = useCallback(
     (option: IDropdownOption, { isSelected }: { isSelected: boolean }) => (
-      <View style={tw`flex-row items-center gap-3 flex-1`}>
+      <span className="inline-flex items-center gap-3 w-full">
         <ColorDot color={option.value} size={option.disabled ? 12 : 16} />
         <Typography
           variant={isSelected ? 'body-bold' : 'body'}
-          color={option.disabled ? 'on-dark-muted' : 'on-dark'}
-          style={tw`flex-1`}
+          color={option.disabled ? 'muted' : 'foreground'}
+          as="span"
+          className="flex-1"
         >
           {option.label}
         </Typography>
-        {option.disabled ? (
-          <Typography variant="caption" color="on-dark-muted">
+        {option.disabled && (
+          <Typography variant="caption" color="muted" as="span">
             {alreadyUsedLabel}
           </Typography>
-        ) : null}
-      </View>
+        )}
+      </span>
     ),
     [alreadyUsedLabel]
   )

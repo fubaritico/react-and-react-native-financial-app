@@ -1,9 +1,14 @@
 import {
   TransactionFormContent,
   TransactionsDataTable,
+  useDeleteBodyRenderer,
+  useFeedbackModals,
   useTransactionCrud,
 } from '@financial-app/features'
-import { getTransactionsOptions } from '@financial-app/http-client'
+import {
+  getCategoriesOptions,
+  getTransactionsOptions,
+} from '@financial-app/http-client'
 import { getErrorMessage, useModal } from '@financial-app/shared'
 import {
   Alert,
@@ -13,7 +18,7 @@ import {
   tw,
 } from '@financial-app/ui/native'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
@@ -21,6 +26,7 @@ import type {
   ITransactionFormRef,
   TransactionFormData,
 } from '@financial-app/features'
+import type { ITransaction } from '@financial-app/shared'
 
 /** Fetch all transactions for client-side filtering by DataTable */
 const TRANSACTIONS_LIMIT = 1000
@@ -52,71 +58,30 @@ export default function TransactionsScreen() {
     formRef.current?.validate()
   }, [])
 
-  // ── Feedback modals ────────────────────────────────────────────
+  // ── Categories ───────────────────────────────────────────────
+  const { data: categoriesData } = useQuery(getCategoriesOptions())
 
-  /** Opens a brief confirmation modal after a successful mutation */
-  const showSuccess = useCallback(
-    (message: string) => {
-      modal.open({
-        body: (
-          <Typography
-            variant="subsection-title"
-            color="foreground"
-            style={tw`text-center`}
-          >
-            {message}
-          </Typography>
-        ),
-        actions: [
-          {
-            label: t('common.ok'),
-            variant: 'primary',
-            onPress: () => {
-              modal.close()
-            },
-          },
-        ],
-        dismissable: false,
-      })
-    },
-    [modal, t]
+  /** Maps API categories to dropdown options */
+  const categoryOptions = useMemo(
+    () =>
+      (categoriesData ?? []).map((c) => ({
+        value: c.id,
+        label: c.name,
+        color: c.color,
+        icon: c.icon,
+      })),
+    [categoriesData]
   )
 
-  /** Opens an error modal after a failed mutation */
-  const showError = useCallback(
-    (err: unknown) => {
-      modal.open({
-        body: (
-          <Typography
-            variant="subsection-title"
-            color="foreground"
-            style={tw`text-center`}
-          >
-            {__DEV__ ? getErrorMessage(err) : t('common.somethingWentWrong')}
-          </Typography>
-        ),
-        actions: [
-          {
-            label: t('common.ok'),
-            variant: 'destroy',
-            onPress: () => {
-              modal.close()
-            },
-          },
-        ],
-        dismissable: false,
-      })
-    },
-    [modal, t]
-  )
-
-  // ── Render callbacks ───────────────────────────────────────────
+  const { showSuccess, showError } = useFeedbackModals(modal)
+  const { renderDeleteBody } = useDeleteBodyRenderer()
 
   /** Renders the transaction form inside the modal body */
   const renderForm = useCallback(
     (props?: { initialValues?: TransactionFormData; description?: string }) => (
       <TransactionFormContent
         ref={formRef}
+        categories={categoryOptions}
         nameLabel={t('transactions.form.nameLabel')}
         namePlaceholder={t('transactions.form.namePlaceholder')}
         amountLabel={t('transactions.form.amountLabel')}
@@ -128,20 +93,8 @@ export default function TransactionsScreen() {
         {...props}
       />
     ),
-    [t]
+    [categoryOptions, t]
   )
-
-  /** Renders the delete modal body */
-  const renderDeleteBody = useCallback(
-    (description: string) => (
-      <Typography variant="body" color="muted">
-        {description}
-      </Typography>
-    ),
-    []
-  )
-
-  // ── Shared CRUD hook ───────────────────────────────────────────
 
   const { handleAdd, handleEdit, handleDelete } = useTransactionCrud({
     modal,
@@ -197,7 +150,7 @@ export default function TransactionsScreen() {
       </View>
       <View>
         <TransactionsDataTable
-          data={data?.data ?? []}
+          data={(data?.data ?? []) as ITransaction[]}
           locale={i18n.language}
           onEdit={handleEdit}
           onDelete={handleDelete}

@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
 import type { IBillsSummaryRow } from '@financial-app/features'
+import type { ITransaction } from '@financial-app/shared'
 
 import tw from '../../src/lib/tw'
 
@@ -24,7 +25,10 @@ export default function RecurringBillsScreen() {
   } = useQuery(getRecurringBillsOptions())
 
   const pageData = useMemo(
-    () => (recurringBills ? buildRecurringBillsPageData(recurringBills) : null),
+    () =>
+      recurringBills
+        ? buildRecurringBillsPageData(recurringBills as ITransaction[])
+        : null,
     [recurringBills]
   )
 

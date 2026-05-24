@@ -1,7 +1,7 @@
 import {
   ActionCell,
   AmountCell,
-  AvatarNameCell,
+  CategoryIconCell,
   DateCell,
   EmptyHeaderCell,
   SimpleCell,
@@ -13,13 +13,26 @@ import type { ITransaction } from '@financial-app/shared'
 
 import type { ColumnDef, Row } from '@tanstack/react-table'
 
+/** Labels for the transaction table headers. */
+interface ITransactionHeaderLabels {
+  /** Header for the name/recipient column. */
+  recipientSender: string
+  /** Header for the category column. */
+  category: string
+  /** Header for the date column. */
+  transactionDate: string
+  /** Header for the amount column. */
+  amount: string
+}
+
 /** Column definitions for the native TransactionsDataTable. */
 export function useTransactionsColumns(
   locale: string | undefined,
   onEdit: ((transaction: ITransaction) => void) | undefined,
   onDelete: ((transaction: ITransaction) => void) | undefined,
   editLabel: string,
-  deleteLabel: string
+  deleteLabel: string,
+  headerLabels: ITransactionHeaderLabels
 ): ColumnDef<ITransaction>[] {
   const handleEdit = useCallback(
     (row: Row<unknown>) => {
@@ -39,24 +52,24 @@ export function useTransactionsColumns(
     () => [
       {
         accessorKey: 'name',
-        header: SortableHeader('Recipient / Sender', 'left', 'w-1/2'),
-        cell: AvatarNameCell('avatar', 'name'),
+        header: SortableHeader(headerLabels.recipientSender, 'left', 'w-1/2'),
+        cell: CategoryIconCell('name', 'category_icon', 'category_color'),
         meta: { className: 'w-1/2' },
       },
       {
-        accessorKey: 'category',
-        header: SortableHeader('Category', 'left'),
-        cell: SimpleCell('category', undefined, 'muted'),
+        accessorKey: 'category_name',
+        header: SortableHeader(headerLabels.category, 'left'),
+        cell: SimpleCell('category_name', undefined, 'muted'),
         filterFn: 'equals' as const,
       },
       {
         accessorKey: 'date',
-        header: SortableHeader('Transaction Date', 'left'),
+        header: SortableHeader(headerLabels.transactionDate, 'left'),
         cell: DateCell('date', undefined, locale),
       },
       {
         accessorKey: 'amount',
-        header: SortableHeader('Amount', 'right'),
+        header: SortableHeader(headerLabels.amount, 'right'),
         cell: AmountCell('amount', 'right', undefined, locale),
       },
       ...(onEdit || onDelete
@@ -77,6 +90,15 @@ export function useTransactionsColumns(
           ]
         : []),
     ],
-    [locale, onEdit, onDelete, handleEdit, handleDelete, editLabel, deleteLabel]
+    [
+      locale,
+      onEdit,
+      onDelete,
+      handleEdit,
+      handleDelete,
+      editLabel,
+      deleteLabel,
+      headerLabels,
+    ]
   )
 }

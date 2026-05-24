@@ -8,12 +8,23 @@ import {
   useState,
 } from 'react'
 
+import type { IconName } from '@financial-app/icons'
+
 import { cn } from '#Lib/cn'
 
-import { Button, Divider, Icon, Portal, Typography } from '#Atoms/index.web'
+import {
+  Button,
+  ColorDot,
+  Divider,
+  Icon,
+  Portal,
+  Typography,
+} from '#Atoms/index.web'
 
 import { BottomSheet } from '../BottomSheet/BottomSheet.web'
 import { Menu } from '../Menu/Menu.web'
+
+import { web } from './Dropdown.styles'
 
 import type { IDropdownProps } from './Dropdown'
 import type { ReactNode } from 'react'
@@ -63,11 +74,12 @@ export function Dropdown({
   const menuWrapperRef = useRef<HTMLDivElement>(null)
   const menuId = useId()
 
-  const selectedLabel = useMemo(
-    () =>
-      options.find((o) => o.value === selectedValue)?.label ?? selectedValue,
+  const selectedOption = useMemo(
+    () => options.find((o) => o.value === selectedValue),
     [options, selectedValue]
   )
+
+  const selectedLabel = selectedOption?.label ?? selectedValue
 
   // Responsive breakpoint
   useEffect(() => {
@@ -208,6 +220,7 @@ export function Dropdown({
       )
     }
     const isSelected = option.value === selectedValue
+    const hasOptionMeta = !renderItem && (option.color ?? option.icon)
     items.push(
       <Menu.Item
         key={option.value}
@@ -215,9 +228,31 @@ export function Dropdown({
         index={index}
         disabled={option.disabled}
         destructive={option.destructive}
-        rawContent={!!renderItem}
+        rawContent={!!renderItem || !!hasOptionMeta}
       >
-        {renderItem ? renderItem(option, { isSelected }) : option.label}
+        {renderItem ? (
+          renderItem(option, { isSelected })
+        ) : hasOptionMeta ? (
+          <span className={web.menuItemContent}>
+            {option.color && <ColorDot color={option.color} size={12} />}
+            {option.icon && (
+              <Icon
+                name={option.icon as IconName}
+                iconSize="xs"
+                color="currentColor"
+              />
+            )}
+            <Typography
+              variant="body"
+              as="span"
+              className={option.disabled ? 'opacity-50' : undefined}
+            >
+              {option.label}
+            </Typography>
+          </span>
+        ) : (
+          option.label
+        )}
       </Menu.Item>
     )
     return items
@@ -279,9 +314,21 @@ export function Dropdown({
             trigger({ isOpen, selectedLabel })
           ) : (
             <>
-              <Typography variant="body" as="span">
-                {selectedLabel}
-              </Typography>
+              <span className={web.triggerContent}>
+                {selectedOption?.color && (
+                  <ColorDot color={selectedOption.color} size={12} />
+                )}
+                {selectedOption?.icon && (
+                  <Icon
+                    name={selectedOption.icon as IconName}
+                    iconSize="xs"
+                    color="currentColor"
+                  />
+                )}
+                <Typography variant="body" as="span">
+                  {selectedLabel}
+                </Typography>
+              </span>
               <Icon
                 name="caretDown"
                 iconSize="xs"

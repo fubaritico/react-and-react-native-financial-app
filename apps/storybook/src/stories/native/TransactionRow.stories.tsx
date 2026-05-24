@@ -7,13 +7,15 @@ const meta = {
   title: 'Native/Design System/Molecules/TransactionRow',
   component: TransactionRow,
   argTypes: {
-    avatar: { control: 'text' },
+    categoryIcon: { control: 'text' },
+    categoryColor: { control: 'text' },
     name: { control: 'text' },
     amount: { control: 'number' },
     date: { control: 'text' },
   },
   args: {
-    avatar: 'https://i.pravatar.cc/80?u=emma',
+    categoryIcon: 'categoryGeneral',
+    categoryColor: 'green',
     name: 'Emma Richardson',
     amount: 75.5,
     date: '19 Aug 2024',
@@ -31,31 +33,36 @@ export const Showcase: Story = {
   render: () => (
     <View style={{ maxWidth: 500 }}>
       <TransactionRow
-        avatar="https://i.pravatar.cc/80?u=emma"
+        categoryIcon="categoryGeneral"
+        categoryColor="green"
         name="Emma Richardson"
         amount={75.5}
         date="19 Aug 2024"
       />
       <TransactionRow
-        avatar="https://i.pravatar.cc/80?u=savory"
+        categoryIcon="categoryDiningOut"
+        categoryColor="red"
         name="Savory Bites Bistro"
         amount={-55.5}
         date="19 Aug 2024"
       />
       <TransactionRow
-        avatar="https://i.pravatar.cc/80?u=daniel"
+        categoryIcon="categoryGeneral"
+        categoryColor="blue"
         name="Daniel Carter"
         amount={-42.3}
         date="18 Aug 2024"
       />
       <TransactionRow
-        avatar="https://i.pravatar.cc/80?u=sun"
+        categoryIcon="categoryGeneral"
+        categoryColor="yellow"
         name="Sun Park"
         amount={120.0}
         date="17 Aug 2024"
       />
       <TransactionRow
-        avatar="https://i.pravatar.cc/80?u=urban"
+        categoryIcon="categoryBills"
+        categoryColor="cyan"
         name="Urban Services Hub"
         amount={-65.0}
         date="17 Aug 2024"

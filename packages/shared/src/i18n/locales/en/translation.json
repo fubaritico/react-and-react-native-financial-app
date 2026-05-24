@@ -17,7 +17,8 @@
     "potUpdated": "Pot updated successfully.",
     "potDeleted": "Pot deleted successfully.",
     "moneyAdded": "Money added successfully.",
-    "moneyWithdrawn": "Money withdrawn successfully."
+    "moneyWithdrawn": "Money withdrawn successfully.",
+    "actions": "Actions"
   },
   "validation": {
     "nameRequired": "Name is required.",
@@ -265,7 +266,12 @@
     "sortBy": "Sort by",
     "sortBills": "Sort bills",
     "sortOptions": "Sort options",
-    "searchPlaceholder": "Search bills"
+    "searchPlaceholder": "Search bills",
+    "headers": {
+      "billTitle": "Bill Title",
+      "dueDate": "Due Date",
+      "amount": "Amount"
+    }
   },
   "transactions": {
     "title": "Transactions",
@@ -277,6 +283,12 @@
     "filterByCategory": "Filter by category",
     "categoryOptions": "Category options",
     "searchPlaceholder": "Search transactions",
+    "headers": {
+      "recipientSender": "Recipient / Sender",
+      "category": "Category",
+      "transactionDate": "Transaction Date",
+      "amount": "Amount"
+    },
     "editTransaction": "Edit Transaction",
     "deleteTransaction": "Delete Transaction",
     "addModal": {

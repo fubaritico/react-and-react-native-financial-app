@@ -16,6 +16,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { IBillsSummaryRow } from '@financial-app/features'
+import type { ITransaction } from '@financial-app/shared'
 
 import { queryClient } from '../lib/query-client'
 
@@ -59,7 +60,10 @@ export default function RecurringBills({
   })
 
   const pageData = useMemo(
-    () => (recurringBills ? buildRecurringBillsPageData(recurringBills) : null),
+    () =>
+      recurringBills
+        ? buildRecurringBillsPageData(recurringBills as ITransaction[])
+        : null,
     [recurringBills]
   )
 

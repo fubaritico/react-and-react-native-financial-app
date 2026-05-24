@@ -1,4 +1,6 @@
-import { Avatar, Currency, Divider, Typography } from '#Atoms/index.web'
+import { cn } from '#Lib/cn'
+
+import { Currency, Divider, Icon, Typography } from '#Atoms/index.web'
 import { SectionLink } from '#Molecules/SectionLink/index.web'
 
 import { shared } from './LatestSpending.styles'
@@ -11,7 +13,6 @@ export function LatestSpending({
   seeAllLabel,
   onSeeAll,
   items,
-  showAvatars = true,
 }: Readonly<ILatestSpendingProps>) {
   return (
     <div className={shared.wrapper}>
@@ -25,9 +26,13 @@ export function LatestSpending({
         <div key={`${item.name}-${item.date}-${String(index)}`}>
           {index > 0 && <Divider className="bg-grey-500/10" />}
           <div className={shared.itemRow}>
-            {showAvatars && (
-              <Avatar src={item.avatar} name={item.name} size={32} />
-            )}
+            <div
+              className={cn(shared.iconCircle, `bg-${item.categoryColor}`)}
+              role="img"
+              aria-label={item.name}
+            >
+              <Icon name={item.categoryIcon} iconSize="xs" color="#FFFFFF" />
+            </div>
             <Typography variant="body-bold" as="span" className={shared.name}>
               {item.name}
             </Typography>

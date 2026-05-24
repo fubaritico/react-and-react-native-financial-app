@@ -1,1 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M8 21v-2h2v-2H4q-.825 0-1.412-.587T2 15V5q0-.825.588-1.412T4 3h16q.825 0 1.413.588T22 5v10q0 .825-.587 1.413T20 17h-6v2h2v2zm-4-6h16V5H4zm0 0V5z"/></svg>
+<svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path fill="currentColor" d="M7.2,22.8v-2.4h2.4v-2.4H2.4c-.66,0-1.22-.23-1.69-.7-.47-.47-.7-1.03-.71-1.7V3.6c0-.66.24-1.22.71-1.69.47-.47,1.04-.7,1.69-.71h19.2c.66,0,1.23.24,1.7.71.47.47.71,1.04.7,1.69v12c0,.66-.23,1.23-.7,1.7-.47.47-1.03.71-1.7.7h-7.2v2.4h2.4v2.4H7.2ZM2.4,15.6h19.2V3.6H2.4v12ZM2.4,15.6V3.6v12Z"/>
+</svg>

@@ -1,7 +1,7 @@
 import type { IDropdownOption } from '@financial-app/ui'
 
-/** Props for the BudgetThemeDropdown component */
-export interface IBudgetThemeDropdownProps {
+/** Props for the ThemeColorDropdown component */
+export interface IThemeColorDropdownProps {
   /** Theme color options with labels */
   options: IDropdownOption[]
   /** Currently selected theme value (token name) */

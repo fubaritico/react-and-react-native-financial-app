@@ -4,12 +4,8 @@ import { useCallback, useImperativeHandle, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
-import { BudgetThemeDropdown } from '../BudgetThemeDropdown/BudgetThemeDropdown.native'
-
 import {
-  BUDGET_CATEGORIES,
   DEFAULT_BUDGET_FORM,
-  THEME_COLORS,
   createBudgetFormSchema,
 } from './BudgetFormContent.constants'
 
@@ -35,13 +31,11 @@ interface IBudgetFormNativeProps extends IBudgetFormContentProps {
  */
 export function BudgetFormContent({
   initialValues,
+  categories,
   existingCategories = [],
-  existingThemes = [],
   categoryLabel,
   maximumLabel,
-  themeLabel,
   maximumPlaceholder,
-  alreadyUsedLabel,
   description,
   ref,
 }: Readonly<IBudgetFormNativeProps>) {
@@ -60,7 +54,7 @@ export function BudgetFormContent({
   /** @param value - New category value */
   const onCategoryChange = useCallback(
     (value: string) => {
-      validateField('category', value)
+      validateField('category_id', value)
     },
     [validateField]
   )
@@ -74,42 +68,22 @@ export function BudgetFormContent({
     [validateField]
   )
 
-  /** @param value - New theme value */
-  const onThemeChange = useCallback(
-    (value: string) => {
-      validateField('theme', value)
-    },
-    [validateField]
-  )
-
   useImperativeHandle(ref, () => ({
     getValues: () => formData,
     hasErrors,
     validate: () => validateForm(formData),
   }))
 
-  /** Filter out categories already in use (except current in edit mode) */
+  /** Disable categories already in use (except current in edit mode) */
   const categoryOptions = useMemo(
     () =>
-      BUDGET_CATEGORIES.map((opt) => ({
+      categories.map((opt) => ({
         ...opt,
         disabled:
           existingCategories.includes(opt.value) &&
-          opt.value !== initialValues?.category,
+          opt.value !== initialValues?.category_id,
       })),
-    [existingCategories, initialValues?.category]
-  )
-
-  /** Mark themes already in use (except current in edit mode) */
-  const themeOptions = useMemo(
-    () =>
-      THEME_COLORS.map((opt) => ({
-        ...opt,
-        disabled:
-          existingThemes.includes(opt.value) &&
-          opt.value !== initialValues?.theme,
-      })),
-    [existingThemes, initialValues?.theme]
+    [categories, existingCategories, initialValues?.category_id]
   )
 
   return (
@@ -126,7 +100,7 @@ export function BudgetFormContent({
         </Typography>
         <Dropdown
           options={categoryOptions}
-          selectedValue={formData.category}
+          selectedValue={formData.category_id}
           onSelect={onCategoryChange}
           accessibilityLabel={categoryLabel}
           bottomSheetTitle={categoryLabel}
@@ -146,21 +120,6 @@ export function BudgetFormContent({
           accessibilityLabel={maximumLabel}
           error={!!errors.maximum}
           helperText={errors.maximum}
-        />
-      </View>
-
-      {/* Theme */}
-      <View style={tw`gap-1`}>
-        <Typography variant="body-bold" color="foreground">
-          {themeLabel}
-        </Typography>
-        <BudgetThemeDropdown
-          options={themeOptions}
-          selectedValue={formData.theme}
-          onSelect={onThemeChange}
-          accessibilityLabel={themeLabel}
-          bottomSheetTitle={themeLabel}
-          alreadyUsedLabel={alreadyUsedLabel}
         />
       </View>
     </View>

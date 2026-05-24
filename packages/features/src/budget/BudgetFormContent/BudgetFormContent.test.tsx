@@ -21,12 +21,18 @@ function getFormData(form: HTMLFormElement): BudgetFormValues {
   return JSON.parse(form.dataset.formData ?? '{}') as BudgetFormValues
 }
 
+/** Mock category options for the dropdown */
+const MOCK_CATEGORIES = [
+  { value: 'cat-001', label: 'Entertainment' },
+  { value: 'cat-002', label: 'Bills' },
+  { value: 'cat-003', label: 'Groceries' },
+] as const
+
 const DEFAULT_PROPS = {
+  categories: MOCK_CATEGORIES,
   categoryLabel: 'Category',
   maximumLabel: 'Maximum Spend',
-  themeLabel: 'Theme',
   maximumPlaceholder: 'e.g. 2000',
-  alreadyUsedLabel: 'Already used',
 }
 
 describe('BudgetFormContent (web)', () => {
@@ -36,7 +42,6 @@ describe('BudgetFormContent (web)', () => {
 
       expect(screen.getByText('Category')).toBeInTheDocument()
       expect(screen.getByLabelText('Maximum Spend')).toBeInTheDocument()
-      expect(screen.getByText('Theme')).toBeInTheDocument()
     })
 
     it('renders description when provided', () => {
@@ -64,9 +69,8 @@ describe('BudgetFormContent (web)', () => {
   describe('Pre-fill', () => {
     it('pre-fills maximum from initialValues', () => {
       const initialValues: BudgetFormValues = {
-        category: 'Bills',
+        category_id: 'cat-002',
         maximum: '500',
-        theme: 'blue',
       }
 
       render(
@@ -79,9 +83,8 @@ describe('BudgetFormContent (web)', () => {
     it('exposes initialValues via dataset', () => {
       const ref = { current: null } as RefObject<HTMLFormElement | null>
       const initialValues: BudgetFormValues = {
-        category: 'Bills',
+        category_id: 'cat-002',
         maximum: '500',
-        theme: 'blue',
       }
 
       render(
@@ -93,9 +96,8 @@ describe('BudgetFormContent (web)', () => {
       )
 
       const formData = getFormData(ref.current!)
-      expect(formData.category).toBe('Bills')
+      expect(formData.category_id).toBe('cat-002')
       expect(formData.maximum).toBe('500')
-      expect(formData.theme).toBe('blue')
     })
   })
 
@@ -137,9 +139,8 @@ describe('BudgetFormContent (web)', () => {
       await user.type(input, '300')
 
       const formData = getFormData(ref.current!)
-      expect(formData).toHaveProperty('category')
+      expect(formData).toHaveProperty('category_id')
       expect(formData).toHaveProperty('maximum')
-      expect(formData).toHaveProperty('theme')
       expect(formData.maximum).toBe('300')
     })
 
@@ -161,9 +162,8 @@ describe('BudgetFormContent (web)', () => {
         <BudgetFormContent
           {...DEFAULT_PROPS}
           initialValues={{
-            category: 'Entertainment',
+            category_id: 'cat-001',
             maximum: '',
-            theme: 'green',
           }}
           ref={ref}
         />

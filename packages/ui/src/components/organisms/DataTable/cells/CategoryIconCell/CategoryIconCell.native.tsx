@@ -35,7 +35,7 @@ function CategoryIconCellInner<TData>({
   const original = row.original as Record<string, string>
   const name = row.getValue<string>(nameKey)
   const icon = original[iconKey] as IconName
-  const color = original[colorKey] ?? '#3F82B2'
+  const color = original[colorKey] ?? 'blue'
 
   const { width } = useWindowDimensions()
   const isMobile = width < MOBILE_BREAKPOINT
@@ -49,10 +49,8 @@ function CategoryIconCellInner<TData>({
       <View style={tw`w-full gap-1`}>
         <View style={tw`flex-row items-center gap-3 w-full`}>
           <View
-            style={[
-              tw`items-center justify-center rounded-full`,
-              { width: 40, height: 40, backgroundColor: color },
-            ]}
+            style={tw`items-center justify-center rounded-full w-10 h-10 bg-${color}`}
+            accessible={false}
           >
             <Icon name={icon} color="white" iconSize="sm" />
           </View>
@@ -74,7 +72,7 @@ function CategoryIconCellInner<TData>({
  * When dateKey/statusKey are provided, renders Status below name on phone (<768).
  * @param nameKey - accessor key for the display name
  * @param iconKey - key on row.original for the IconName
- * @param colorKey - key on row.original for the hex background color
+ * @param colorKey - key on row.original for the token color key (e.g. "blue", "army-green")
  * @param dateKey - optional key on row.original for the ISO date string
  * @param statusKey - optional key on row.original for the BillStatus
  */

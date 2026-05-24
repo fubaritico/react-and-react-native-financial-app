@@ -13,6 +13,7 @@
   "dependencies": {
     "@financial-app/features": "workspace:^",
     "@financial-app/http-client": "workspace:^",
+    "@financial-app/icons": "workspace:^",
     "@financial-app/shared": "workspace:^",
     "@financial-app/tailwind-config": "workspace:^",
     "@financial-app/tokens": "workspace:^",

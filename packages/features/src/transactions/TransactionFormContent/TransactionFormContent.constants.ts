@@ -1,7 +1,5 @@
 import { z } from 'zod'
 
-import type { IDropdownOption } from '@financial-app/ui'
-
 import { getTodayISO } from './TransactionFormContent.utils'
 
 /**
@@ -12,7 +10,7 @@ import { getTodayISO } from './TransactionFormContent.utils'
 export const createTransactionFormSchema = (t: (key: string) => string) =>
   z.object({
     name: z.string().min(1, t('validation.nameRequired')),
-    category: z.string().min(1, t('validation.categoryRequired')),
+    category_id: z.string().min(1, t('validation.categoryRequired')),
     amount: z
       .string()
       .min(1, t('validation.amountRequired'))
@@ -26,24 +24,10 @@ export const createTransactionFormSchema = (t: (key: string) => string) =>
     recurring: z.boolean(),
   })
 
-/** All available transaction categories */
-export const TRANSACTION_CATEGORIES: IDropdownOption[] = [
-  { value: 'Entertainment', label: 'Entertainment' },
-  { value: 'Bills', label: 'Bills' },
-  { value: 'Groceries', label: 'Groceries' },
-  { value: 'Dining Out', label: 'Dining Out' },
-  { value: 'Transportation', label: 'Transportation' },
-  { value: 'Personal Care', label: 'Personal Care' },
-  { value: 'Education', label: 'Education' },
-  { value: 'Lifestyle', label: 'Lifestyle' },
-  { value: 'Shopping', label: 'Shopping' },
-  { value: 'General', label: 'General' },
-]
-
 /** Default form values for the Add Transaction form */
 export const DEFAULT_TRANSACTION_FORM = {
   name: '',
-  category: TRANSACTION_CATEGORIES[0].value,
+  category_id: '',
   amount: '',
   date: getTodayISO(),
   recurring: false,

@@ -9,7 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { IBudgetCategoryCard, IModalConfig } from '@financial-app/shared'
+import type { IBudgetCategoryCard } from '@financial-app/shared'
 
 import {
   createAddBudgetModalConfig,
@@ -17,6 +17,7 @@ import {
   createEditBudgetModalConfig,
 } from '../createBudgetModalConfigs'
 
+import type { IModalHandle } from '../../shared/hooks/useFeedbackModals'
 import type { BudgetFormValues } from '../BudgetFormContent/BudgetFormContent'
 import type { ReactNode } from 'react'
 
@@ -28,16 +29,6 @@ export interface IBudgetFormBridge {
   hasErrors: () => boolean
   /** Triggers visible validation (web: requestSubmit, native: no-op) */
   triggerValidation: () => void
-}
-
-/** Modal control interface (subset of useModal return) */
-interface IModalHandle {
-  /** Opens a modal with the given config */
-  open: (config: IModalConfig) => void
-  /** Closes the current modal */
-  close: () => void
-  /** Sets the submitting state on the current modal */
-  setSubmitting: (isSubmitting: boolean) => void
 }
 
 /** Params for useBudgetCrud */
@@ -144,9 +135,8 @@ export function useBudgetCrud({
     modal.setSubmitting(true)
     createBudget({
       body: {
-        category: values.category,
+        category_id: values.category_id,
         maximum,
-        theme: values.theme,
         month: getCurrentBudgetMonth(),
       },
     })
@@ -170,9 +160,8 @@ export function useBudgetCrud({
     updateBudget({
       path: { id: budgetId },
       body: {
-        category: values.category,
+        category_id: values.category_id,
         maximum,
-        theme: values.theme,
       },
     })
   }, [formBridge, modal, updateBudget])
@@ -200,9 +189,8 @@ export function useBudgetCrud({
       const config = createEditBudgetModalConfig(
         renderForm({
           initialValues: {
-            category: card.category,
+            category_id: card.category_id,
             maximum: String(card.maximum),
-            theme: card.color,
           },
           description: t('budgets.editModal.description'),
         }),

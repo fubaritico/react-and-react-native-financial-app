@@ -1,32 +1,41 @@
-import { Avatar, Typography } from '#Atoms/index.web'
+import type { IconName } from '@financial-app/icons'
+
+import { cn } from '#Lib/cn'
+
+import { Icon, Typography } from '#Atoms/index.web'
 
 import { TableCell } from '../../components/TableCell/TableCell.web'
 
 import type { BillTitleCellFn } from './BillTitleCell.tsx'
 import type { Row } from '@tanstack/react-table'
-import type { CSSProperties } from 'react'
 
 /**
  * Bill title cell factory (web).
- * Renders avatar with theme color border + bill name.
- * @param avatarKey - accessor key for the avatar URL on row.original
+ * Renders category icon circle with colored left border + bill name.
  * @param nameKey - accessor key for the bill name
- * @param themeKey - accessor key for the hex color theme on row.original
+ * @param iconKey - key on row.original for the IconName
+ * @param colorKey - key on row.original for the token color key
  */
 export const BillTitleCell =
-  (avatarKey: string, nameKey: string, themeKey: string): BillTitleCellFn =>
+  (nameKey: string, iconKey: string, colorKey: string): BillTitleCellFn =>
   <TData,>({ row }: { row: Row<TData> }) => {
     const original = row.original as Record<string, string>
-    const avatar = original[avatarKey] ?? ''
     const name = row.getValue<string>(nameKey)
-    const theme = original[themeKey] ?? ''
-
-    const borderStyle = { '--bill-theme': theme } as CSSProperties
+    const icon = original[iconKey] as IconName
+    const color = original[colorKey] ?? 'blue'
 
     return (
-      <TableCell className="flex items-center gap-3" style={borderStyle}>
-        <div className="rounded-full border-l-4 border-l-[var(--bill-theme)]">
-          <Avatar src={avatar} name={name} size={40} />
+      <TableCell className="flex items-center gap-3">
+        <div className={cn('rounded-full border-l-4', `border-l-${color}`)}>
+          <div
+            className={cn(
+              'flex items-center justify-center rounded-full w-10 h-10',
+              `bg-${color}`
+            )}
+            aria-hidden="true"
+          >
+            <Icon name={icon} color="white" iconSize="sm" />
+          </div>
         </div>
         <Typography variant="body-bold">{name}</Typography>
       </TableCell>

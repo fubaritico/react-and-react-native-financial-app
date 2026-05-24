@@ -189,7 +189,15 @@ Read `@completed.md`
    - Flow: Splash → Login/Signup → Verify Email → Account Activated → Mode Choice → Initial Balance → Welcome → Overview
    - ~~Currency feature (steps 1-3)~~ ✅ — DB `currency` column + API schema, Currency atom (ui), CurrencyContext (ui+shared), useCurrency hook (shared), CurrencyProvider bridge (features), wired in all 3 apps, ~25 components migrated from string to numeric amounts, formatting rules (language-driven symbol position, short symbols $£€, no .00 on integers), easy-currencies for live rates, review fixes (SEC-004 module-level query, A11Y-008 accessibilityState ×3, A11Y-004 accessible prop, A11Y-001 aria-label ×3)
    - ~~Currency feature (step 4)~~ ✅ — CurrencyDropdown feature component (native+web, currency symbols $€£), wired into SettingsScreenView (side-by-side with LanguageDropdown), Settings persists currency via mutateAsync + invalidation before navigate, CurrencyProvider initRates() on mount, FR formatting (no space before symbol), sectioned layout, review fixes (A11Y-004 headings, SEC-006 isFinite, QUAL-007 constants extraction, ARCH-005 hex fallback removed)
-   - **Next coding**: Onboarding walkthrough — slideshow of 4 real screens, isolated QueryClientProvider with mock data
+   - ~~Walkthrough~~ — changed to Lottie animation (user creates asset) with PASS button. Parked until asset ready.
+   - ~~Icons cleanup~~ ✅ — 25 new category SVGs, all 35 cleaned (width/height, Illustrator cruft), logo redesign, logo-large/small removed, 68 icons total
+   - ~~Settings UI polish~~ ✅ — bin/disconnect icons on buttons, logo iconSize 3xl→4xl
+   - ~~401 interceptor fix~~ ✅ — session expired modal no longer fires when unauthenticated (userRef guard + signingOutRef reset on re-login)
+   - ~~Custom categories session 1 (DB migration)~~ ✅ — categories table (color=token key varchar(20)), 10 default categories seeded, category_id FK on transactions+budgets (avatar/theme/category dropped), RPCs updated (JOIN categories), balances table consolidated into user_preferences.reference_balance, unique constraint, Prisma sync. API partially updated (balance endpoints removed, setInitialBalance simplified) — type-check fails until session 2 completes API refactor.
+   - ~~Custom categories session 2 (API refactor)~~ ✅ — categories CRUD routes, transaction/budget/recurring-bills supabase+schema+route refactor (category_id FK), seed refactor, HeyAPI regen
+   - ~~Custom categories session 3 (frontend adaptation + review)~~ ✅ — All frontend components adapted to category_id FK model (ITransaction/IBudget types, DataTable columns, BudgetCategoryCard, TransactionRow, LatestSpending, CategoryIconCell, BillTitleCell, CompactTransactionRow, CompactBillRow, form components, overview components, Storybook stories). 6-agent review: A11Y-002 (icon a11y labels use name not icon key), SEC-006 (deriveBillStatus dynamic month), ARCH-017 (i18n DataTable headers), QUAL-008 (removed alias vars), QUAL-013 (useCurrencyFormat replaces hardcoded USD). QUAL-007: extracted useFeedbackModals + useDeleteBodyRenderer shared hooks (cross-platform, 6 route files deduplicated). QUAL-006: IModalHandle deduplicated (1 canonical export, 3 CRUD hooks import it). env.d.ts DEV type added.
+   - **Next coding**: Custom categories session 4 — API layer (categories CRUD, seed refactor, settings route migration to use preferences for reference_balance, HeyAPI regen)
+2.6. **Custom categories** — `docs/plans/custom-categories-plan.md` (8 sessions: DB, API, types, UI, CategoryDropdown, management screen, navigation, tests)
 2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, audit-owasp skill upgraded to OWASP 2025
 3. ~~Empty states (all screens + Overview sections)~~ ✅ — part of onboarding step, done for all 4 overview components
 5. **Centralized auth** — session validation on app focus (AppState → getSession())
@@ -199,7 +207,7 @@ Read `@completed.md`
 9. Navigation web: graphic design refinement (user doing manual pass)
 
 **--- Refactors (à planifier, pas dans la foulée) ---**
-10. **Shared mutation hooks** — `docs/plans/shared-mutation-hooks.md` — 3 done (useTransactionCrud, useBudgetCrud, usePotCrud), remaining: extract showSuccess/showError/formBridge duplication from web routes into shared helpers
+10. ~~**Shared mutation hooks**~~ ✅ — 3 CRUD hooks (useTransactionCrud, useBudgetCrud, usePotCrud) + useFeedbackModals + useDeleteBodyRenderer extracted into @financial-app/features. IModalHandle canonical type in shared hooks. All 6 route files (3 web + 3 mobile) deduplicated.
 11. **i18n label internalization** — audit feature components (TransactionFormContent, BudgetFormContent, etc.) for fixed labels passed as props → internalize `t()` calls (QUAL-024). Evaluate each label: if it never changes between usages, move inside the component.
 12. **Screen/View extraction** — extract all monolithic/hybrid route files into `XxxScreenView` feature components (see `.claude/rules/features.md`). Goal: every screen renderable in Storybook. Screens to refactor:
     - `login` (web + mobile) — **Monolithic** (109-129 lines, full form inline, no feature component)

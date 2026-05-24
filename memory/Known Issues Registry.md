@@ -58,7 +58,7 @@ Accepted code review findings that were intentionally deferred:
 
 ## Refactors Needed
 - QUAL-009: Budget/Pots/Transactions pages exceed 200 lines — extract `useXxxModals` hooks
-- Shared mutation hooks — extract 11 hooks into `@financial-app/features`
+- ~~Shared mutation hooks~~ — RESOLVED: 3 CRUD hooks + useFeedbackModals + useDeleteBodyRenderer + IModalHandle all in `@financial-app/features`
 - Balance model per month needs `months` table refactor
 
 ## Canonical File

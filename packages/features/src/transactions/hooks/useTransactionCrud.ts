@@ -10,7 +10,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { IModalConfig, ITransaction } from '@financial-app/shared'
+import type { ITransaction } from '@financial-app/shared'
 
 import {
   createAddTransactionModalConfig,
@@ -18,6 +18,7 @@ import {
   createEditTransactionModalConfig,
 } from '../createTransactionModalConfigs'
 
+import type { IModalHandle } from '../../shared/hooks/useFeedbackModals'
 import type { TransactionFormData } from '../TransactionFormContent/TransactionFormContent'
 import type { ReactNode } from 'react'
 
@@ -32,16 +33,6 @@ export interface ITransactionFormBridge {
   hasErrors: () => boolean
   /** Triggers visible validation (web: requestSubmit, native: no-op) */
   triggerValidation: () => void
-}
-
-/** Modal control interface (subset of useModal return) */
-interface IModalHandle {
-  /** Opens a modal with the given config */
-  open: (config: IModalConfig) => void
-  /** Closes the current modal */
-  close: () => void
-  /** Sets the submitting state on the current modal */
-  setSubmitting: (isSubmitting: boolean) => void
 }
 
 /** Params for useTransactionCrud */
@@ -150,7 +141,7 @@ export function useTransactionCrud({
     createTransaction({
       body: {
         name: values.name,
-        category: values.category,
+        category_id: values.category_id,
         date: toTimestamptz(values.date),
         amount,
         recurring: values.recurring,
@@ -177,7 +168,7 @@ export function useTransactionCrud({
       path: { id: transactionId },
       body: {
         name: values.name,
-        category: values.category,
+        category_id: values.category_id,
         date: toTimestamptz(values.date),
         amount,
         recurring: values.recurring,
@@ -209,7 +200,7 @@ export function useTransactionCrud({
         renderForm({
           initialValues: {
             name: transaction.name,
-            category: transaction.category,
+            category_id: transaction.category_id,
             date: transaction.date,
             amount: String(transaction.amount),
             recurring: transaction.recurring,

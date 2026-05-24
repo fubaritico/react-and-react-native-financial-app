@@ -131,3 +131,10 @@ export type {
   ISettingsFormValues,
   ISettingsScreenViewProps,
 } from './settings/index.web'
+
+export { useFeedbackModals, useDeleteBodyRenderer } from './shared/index.web'
+export type {
+  IModalHandle,
+  IFeedbackModals,
+  IDeleteBodyRenderer,
+} from './shared/index.web'

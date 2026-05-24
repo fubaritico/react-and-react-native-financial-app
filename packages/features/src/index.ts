@@ -121,3 +121,10 @@ export type {
 
 export { SettingsScreenView } from './settings'
 export type { ISettingsFormValues, ISettingsScreenViewProps } from './settings'
+
+export { useFeedbackModals, useDeleteBodyRenderer } from './shared'
+export type {
+  IModalHandle,
+  IFeedbackModals,
+  IDeleteBodyRenderer,
+} from './shared'

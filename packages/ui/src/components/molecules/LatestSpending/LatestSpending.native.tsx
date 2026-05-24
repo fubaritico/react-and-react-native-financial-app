@@ -8,7 +8,7 @@ import { shared } from './LatestSpending.styles'
 
 import type { ILatestSpendingProps } from './LatestSpending'
 
-import { Avatar, Currency, Divider, Typography } from '#Atoms'
+import { Currency, Divider, Icon, Typography } from '#Atoms'
 
 /** Native implementation of the LatestSpending component. */
 export function LatestSpending({
@@ -16,7 +16,6 @@ export function LatestSpending({
   seeAllLabel,
   onSeeAll,
   items,
-  showAvatars = true,
 }: Readonly<ILatestSpendingProps>) {
   return (
     <View style={tw`${shared.wrapper}`}>
@@ -28,9 +27,13 @@ export function LatestSpending({
         <View key={`${item.name}-${item.date}-${String(index)}`}>
           {index > 0 && <Divider className="bg-grey-500/10" />}
           <View style={tw`${shared.itemRow}`}>
-            {showAvatars && (
-              <Avatar src={item.avatar} name={item.name} size={32} />
-            )}
+            <View
+              style={tw`${shared.iconCircle} bg-${item.categoryColor}`}
+              accessibilityRole="image"
+              accessibilityLabel={item.name}
+            >
+              <Icon name={item.categoryIcon} iconSize="xs" color="#FFFFFF" />
+            </View>
             <Typography variant="body-bold" style={tw`${shared.name}`}>
               {item.name}
             </Typography>

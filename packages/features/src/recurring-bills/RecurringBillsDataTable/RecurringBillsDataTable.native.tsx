@@ -46,7 +46,11 @@ export function RecurringBillsDataTable({
     [isMobile]
   )
 
-  const columns = useRecurringBillsColumns(locale)
+  const columns = useRecurringBillsColumns(locale, {
+    billTitle: t('recurring.headers.billTitle'),
+    dueDate: t('recurring.headers.dueDate'),
+    amount: t('recurring.headers.amount'),
+  })
 
   const table = useReactTable({
     columns,

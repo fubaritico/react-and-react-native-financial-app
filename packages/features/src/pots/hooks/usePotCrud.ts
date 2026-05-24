@@ -11,7 +11,6 @@ import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { Pot } from '@financial-app/http-client'
-import type { IModalConfig } from '@financial-app/shared'
 
 import {
   createAddMoneyModalConfig,
@@ -21,6 +20,7 @@ import {
   createWithdrawModalConfig,
 } from '../createPotModalConfigs'
 
+import type { IModalHandle } from '../../shared/hooks/useFeedbackModals'
 import type { PotFormValues } from '../PotFormContent/PotFormContent'
 import type { ReactNode } from 'react'
 
@@ -32,16 +32,6 @@ export interface IPotFormBridge {
   hasErrors: () => boolean
   /** Triggers visible validation (web: requestSubmit, native: no-op) */
   triggerValidation: () => void
-}
-
-/** Modal control interface (subset of useModal return) */
-interface IModalHandle {
-  /** Opens a modal with the given config */
-  open: (config: IModalConfig) => void
-  /** Closes the current modal */
-  close: () => void
-  /** Sets the submitting state on the current modal */
-  setSubmitting: (isSubmitting: boolean) => void
 }
 
 /** Params for usePotCrud */

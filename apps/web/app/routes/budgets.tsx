@@ -3,9 +3,12 @@ import {
   BudgetFormContent,
   BudgetOverview,
   useBudgetCrud,
+  useDeleteBodyRenderer,
+  useFeedbackModals,
 } from '@financial-app/features'
 import {
   getBudgetsOptions,
+  getCategoriesOptions,
   getTransactionsOptions,
 } from '@financial-app/http-client'
 import {
@@ -23,6 +26,7 @@ import type {
   BudgetFormValues,
   IBudgetFormBridge,
 } from '@financial-app/features'
+import type { IBudget, ITransaction } from '@financial-app/shared'
 import type { IBudgetCategoryCard } from '@financial-app/shared'
 
 import { queryClient } from '../lib/query-client'
@@ -145,17 +149,32 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
   })
 
   const { budgetItems, categoryCards } = useMemo(
-    () => buildBudgetPageData(budgets ?? [], txnResult?.data ?? []),
+    () =>
+      buildBudgetPageData(
+        (budgets ?? []) as IBudget[],
+        (txnResult?.data ?? []) as ITransaction[]
+      ),
     [budgets, txnResult]
   )
 
   const existingCategories = useMemo(
-    () => (budgets ?? []).map((b) => b.category),
+    () => (budgets ?? []).map((b) => b.category_id),
     [budgets]
   )
-  const existingThemes = useMemo(
-    () => (budgets ?? []).map((b) => b.theme),
-    [budgets]
+
+  // ── Categories ───────────────────────────────────────────────
+  const { data: categoriesData } = useQuery(getCategoriesOptions())
+
+  /** Maps API categories to dropdown options */
+  const categoryOptions = useMemo(
+    () =>
+      (categoriesData ?? []).map((c) => ({
+        value: c.id,
+        label: c.name,
+        color: c.color,
+        icon: c.icon,
+      })),
+    [categoriesData]
   )
 
   /** Reads form data from the dataset on the form element */
@@ -185,63 +204,8 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
     [getFormData, hasFormErrors, triggerValidation]
   )
 
-  /** Opens a brief confirmation modal after a successful mutation */
-  const showSuccess = useCallback(
-    (message: string) => {
-      modal.open({
-        body: (
-          <Typography
-            variant="subsection-title"
-            color="foreground"
-            className="text-center"
-          >
-            {message}
-          </Typography>
-        ),
-        actions: [
-          {
-            label: t('common.ok'),
-            variant: 'primary',
-            onPress: () => {
-              modal.close()
-            },
-          },
-        ],
-        dismissable: false,
-      })
-    },
-    [modal, t]
-  )
-
-  /** Opens an error modal after a failed mutation */
-  const showError = useCallback(
-    (err: unknown) => {
-      modal.open({
-        body: (
-          <Typography
-            variant="subsection-title"
-            color="foreground"
-            className="text-center"
-          >
-            {import.meta.env.DEV
-              ? getErrorMessage(err)
-              : t('common.somethingWentWrong')}
-          </Typography>
-        ),
-        actions: [
-          {
-            label: t('common.ok'),
-            variant: 'destroy',
-            onPress: () => {
-              modal.close()
-            },
-          },
-        ],
-        dismissable: false,
-      })
-    },
-    [modal, t]
-  )
+  const { showSuccess, showError } = useFeedbackModals(modal)
+  const { renderDeleteBody } = useDeleteBodyRenderer()
 
   /** Renders the budget form with platform-specific ref and current existing lists */
   const renderForm = useCallback(
@@ -249,27 +213,15 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
       <BudgetFormContent
         ref={formRef}
         initialValues={props?.initialValues}
+        categories={categoryOptions}
         existingCategories={existingCategories}
-        existingThemes={existingThemes}
         categoryLabel={t('budgets.form.categoryLabel')}
         maximumLabel={t('budgets.form.maximumLabel')}
-        themeLabel={t('budgets.form.themeLabel')}
         maximumPlaceholder={t('budgets.form.maximumPlaceholder')}
-        alreadyUsedLabel={t('budgets.form.alreadyUsed')}
         description={props?.description}
       />
     ),
-    [existingCategories, existingThemes, t]
-  )
-
-  /** Renders the delete modal body */
-  const renderDeleteBody = useCallback(
-    (description: string) => (
-      <Typography variant="body" color="muted">
-        {description}
-      </Typography>
-    ),
-    []
+    [categoryOptions, existingCategories, t]
   )
 
   const { handleAdd, handleEdit, handleDelete } = useBudgetCrud({
@@ -337,7 +289,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
         <div className="flex flex-col gap-6">
           {categoryCards.map((card) => (
             <BudgetCardItem
-              key={card.category}
+              key={card.id}
               card={card}
               onEdit={handleEdit}
               onDelete={handleDelete}

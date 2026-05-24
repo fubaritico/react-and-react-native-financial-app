@@ -5,6 +5,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
+import type { ITransaction } from '@financial-app/shared'
+
 import tw from '../lib/tw'
 
 /**
@@ -43,7 +45,10 @@ export function TransactionsScreen() {
         {t('transactions.title')}
       </Typography>
       <View>
-        <TransactionsDataTable data={data?.data ?? []} locale={i18n.language} />
+        <TransactionsDataTable
+          data={(data?.data ?? []) as ITransaction[]}
+          locale={i18n.language}
+        />
       </View>
     </ScrollView>
   )

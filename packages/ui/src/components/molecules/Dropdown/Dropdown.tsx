@@ -12,6 +12,10 @@ export interface IDropdownOption {
   dividerBefore?: boolean
   /** Renders in destructive (red) styling */
   destructive?: boolean
+  /** Token color key — renders a colored dot before the label (e.g. "green", "navy") */
+  color?: string
+  /** Icon name — renders a small icon after the color dot (e.g. "entertainment", "groceries") */
+  icon?: string
 }
 
 /** Button variant for the dropdown trigger */
@@ -30,7 +34,7 @@ export interface IDropdownProps {
   /** Label displayed before the trigger button (e.g. "Sort by", "Category") */
   label?: string
   /** List of selectable options */
-  options: IDropdownOption[]
+  options: readonly IDropdownOption[]
   /** Currently selected value */
   selectedValue: string
   /** Called when an option is selected */

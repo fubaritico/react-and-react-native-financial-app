@@ -1,3 +1,5 @@
+import type { IconName } from '@financial-app/icons'
+
 import { formatDate } from './date'
 
 import type { IBudget, ITransaction } from '../types'
@@ -20,25 +22,29 @@ const LATEST_SPENDING_COUNT = 3
 export interface IBudgetItem {
   /** Budget record ID from the database */
   id: string
+  /** Category UUID foreign key */
+  category_id: string
   /** Budget category name (e.g. "Entertainment", "Bills") */
   category: string
   /** Maximum spending limit for this budget */
   maximum: number
   /** Amount already spent in this category */
   spent: number
-  /** Theme color token (e.g. "#277C78") */
+  /** Category color token key (e.g. "army-green", "blue") */
   color: string
 }
 
 export interface IBudgetSpendingItem {
-  /** URL or path to the transaction avatar image */
-  avatar: string
   /** Transaction recipient/sender name */
   name: string
   /** Numeric amount in base currency (negative for expenses) */
   amount: number
   /** Formatted transaction date */
   date: string
+  /** Category icon identifier */
+  categoryIcon: IconName
+  /** Category color token key */
+  categoryColor: string
 }
 
 export interface IBudgetCategoryCard extends IBudgetItem {
@@ -84,37 +90,40 @@ export function buildBudgetPageData(
 ): IBudgetPageData {
   const budgetItems: IBudgetItem[] = budgets.map((budget) => {
     const categoryTxns = transactions.filter(
-      (txn) => txn.category === budget.category && txn.amount < 0
+      (txn) => txn.category_id === budget.category_id && txn.amount < 0
     )
     return {
       id: budget.id,
-      category: budget.category,
+      category_id: budget.category_id,
+      category: budget.category_name,
       maximum: budget.maximum,
       spent: getSpent(budget, categoryTxns),
-      color: budget.theme,
+      color: budget.category_color,
     }
   })
 
   const categoryCards: IBudgetCategoryCard[] = budgets.map((budget) => {
     const categoryTransactions = transactions
-      .filter((txn) => txn.category === budget.category && txn.amount < 0)
+      .filter((txn) => txn.category_id === budget.category_id && txn.amount < 0)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
     const items: IBudgetSpendingItem[] = categoryTransactions
       .slice(0, LATEST_SPENDING_COUNT)
       .map((txn) => ({
-        avatar: txn.avatar,
         name: txn.name,
         amount: txn.amount,
         date: formatDate(txn.date),
+        categoryIcon: txn.category_icon,
+        categoryColor: txn.category_color,
       }))
 
     return {
       id: budget.id,
-      category: budget.category,
+      category_id: budget.category_id,
+      category: budget.category_name,
       maximum: budget.maximum,
       spent: getSpent(budget, categoryTransactions),
-      color: budget.theme,
+      color: budget.category_color,
       items,
     }
   })

@@ -1,9 +1,9 @@
 import {
-  Avatar,
   Dropdown,
   Icon,
   Typography,
   tw,
+  useCurrencyFormat,
 } from '@financial-app/ui/native'
 import { useCallback, useMemo } from 'react'
 import { View } from 'react-native'
@@ -27,6 +27,8 @@ interface ICompactTransactionRowProps {
   readonly editLabel: string
   /** Label for the delete option. */
   readonly deleteLabel: string
+  /** Accessible label for the actions dropdown. */
+  readonly actionsLabel: string
 }
 
 /** Compact row renderer — matches Figma mobile layout. */
@@ -37,15 +39,12 @@ export function CompactTransactionRow({
   onDelete,
   editLabel,
   deleteLabel,
+  actionsLabel,
 }: ICompactTransactionRowProps) {
-  const { name, avatar, category, date, amount } = row.original
-  const isPositive = amount >= 0
-  const formatted = new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-  }).format(Math.abs(amount))
-  const signedAmount = isPositive ? `+${formatted}` : `-${formatted}`
+  const { name, category_name, category_icon, category_color, date, amount } =
+    row.original
+  const { format } = useCurrencyFormat()
+  const signedAmount = format(amount, 'always')
   const displayDate = new Intl.DateTimeFormat(locale, {
     day: 'numeric',
     month: 'short',
@@ -77,17 +76,23 @@ export function CompactTransactionRow({
 
   return (
     <View style={tw`flex-row items-center gap-3 py-3 px-4`}>
-      <Avatar src={avatar} name={name} size={40} />
+      <View
+        style={tw`items-center justify-center rounded-full w-10 h-10 bg-${category_color}`}
+        accessibilityRole="image"
+        accessibilityLabel={category_name}
+      >
+        <Icon name={category_icon} color="white" iconSize="sm" />
+      </View>
       <View style={tw`flex-1 min-w-0`}>
         <Typography variant="body-bold">{name}</Typography>
         <Typography variant="caption" color="muted">
-          {category}
+          {category_name}
         </Typography>
       </View>
       <View style={tw`items-end shrink-0`}>
         <Typography
           variant="body-bold"
-          color={isPositive ? 'transaction-positive' : 'foreground'}
+          color={amount >= 0 ? 'transaction-positive' : 'foreground'}
         >
           {signedAmount}
         </Typography>
@@ -106,7 +111,7 @@ export function CompactTransactionRow({
           buttonClassName="p-0"
           buttonCentered
           buttonFullWidth={false}
-          accessibilityLabel="Actions"
+          accessibilityLabel={actionsLabel}
         />
       )}
     </View>

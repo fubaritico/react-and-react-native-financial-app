@@ -10,19 +10,22 @@ const noop = () => undefined
 /** Entertainment budget — 3 latest transactions from the design. */
 const entertainmentItems: readonly ILatestSpendingItem[] = [
   {
-    avatar: 'https://i.pravatar.cc/80?u=james-thompson',
+    categoryIcon: 'categoryEntertainment',
+    categoryColor: 'green',
     name: 'James Thompson',
     amount: -5,
     date: '11 Aug 2024',
   },
   {
-    avatar: 'https://i.pravatar.cc/80?u=pixel-playground',
+    categoryIcon: 'categoryEntertainment',
+    categoryColor: 'green',
     name: 'Pixel Playground',
     amount: -9,
     date: '11 Aug 2024',
   },
   {
-    avatar: 'https://i.pravatar.cc/80?u=rina-sato',
+    categoryIcon: 'categoryGeneral',
+    categoryColor: 'navy',
     name: 'Rina Sato',
     amount: -9,
     date: '13 Jul 2024',
@@ -32,19 +35,22 @@ const entertainmentItems: readonly ILatestSpendingItem[] = [
 /** Bills budget — 3 latest transactions from the design. */
 const billsItems: readonly ILatestSpendingItem[] = [
   {
-    avatar: 'https://i.pravatar.cc/80?u=spark-electric',
+    categoryIcon: 'categoryBills',
+    categoryColor: 'cyan',
     name: 'Spark Electric Solutions',
     amount: -100,
     date: '2 Aug 2024',
   },
   {
-    avatar: 'https://i.pravatar.cc/80?u=rina-sato-bills',
+    categoryIcon: 'categoryGeneral',
+    categoryColor: 'navy',
     name: 'Rina Sato',
     amount: -50,
     date: '2 Aug 2024',
   },
   {
-    avatar: 'https://i.pravatar.cc/80?u=aqua-flow',
+    categoryIcon: 'categoryBills',
+    categoryColor: 'cyan',
     name: 'Aqua Flow Utilities',
     amount: -100,
     date: '30 Jul 2024',
@@ -54,19 +60,22 @@ const billsItems: readonly ILatestSpendingItem[] = [
 /** Dining Out budget — 3 latest transactions from the design. */
 const diningOutItems: readonly ILatestSpendingItem[] = [
   {
-    avatar: 'https://i.pravatar.cc/80?u=savory-bites',
+    categoryIcon: 'categoryDiningOut',
+    categoryColor: 'red',
     name: 'Savory Bites Bistro',
     amount: -55.5,
     date: '19 Aug 2024',
   },
   {
-    avatar: 'https://i.pravatar.cc/80?u=ethan-clark',
+    categoryIcon: 'categoryGeneral',
+    categoryColor: 'blue',
     name: 'Ethan Clark',
     amount: -32.5,
     date: '20 Aug 2024',
   },
   {
-    avatar: 'https://i.pravatar.cc/80?u=ella-phillips',
+    categoryIcon: 'categoryDiningOut',
+    categoryColor: 'yellow',
     name: 'Ella Phillips',
     amount: -45,
     date: '19 Aug 2024',

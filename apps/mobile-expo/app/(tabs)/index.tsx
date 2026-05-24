@@ -24,6 +24,9 @@ import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
+import type { IconName } from '@financial-app/icons'
+import type { ITransaction } from '@financial-app/shared'
+
 import tw from '../../src/lib/tw'
 
 /**
@@ -74,10 +77,11 @@ export default function OverviewScreen() {
   const latestTransactions = useMemo(
     () =>
       (txnResult?.data ?? []).map((txn) => ({
-        avatar: txn.avatar,
         name: txn.name,
         amount: txn.amount,
         date: formatDate(txn.date),
+        categoryIcon: txn.category_icon as IconName,
+        categoryColor: txn.category_color,
       })),
     [txnResult]
   )
@@ -100,16 +104,19 @@ export default function OverviewScreen() {
   const budgetItems = useMemo(
     () =>
       (budgets ?? []).map((budget) => ({
-        category: budget.category,
+        category: budget.category_name,
         maximum: budget.maximum,
         spent: budget.spent,
-        color: budget.theme,
+        color: budget.category_color,
       })),
     [budgets]
   )
 
   const recurringData = useMemo(
-    () => (recurringBills ? buildRecurringBillsPageData(recurringBills) : null),
+    () =>
+      recurringBills
+        ? buildRecurringBillsPageData(recurringBills as ITransaction[])
+        : null,
     [recurringBills]
   )
 

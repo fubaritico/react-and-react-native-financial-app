@@ -10,15 +10,26 @@ import type { IRecurringBill } from '@financial-app/shared'
 
 import type { ColumnDef } from '@tanstack/react-table'
 
+/** Labels for the recurring bills table headers. */
+interface IRecurringHeaderLabels {
+  /** Header for the bill title column. */
+  billTitle: string
+  /** Header for the due date column. */
+  dueDate: string
+  /** Header for the amount column. */
+  amount: string
+}
+
 /** Column definitions for the web RecurringBillsDataTable. */
 export function useRecurringBillsColumns(
-  locale?: string
+  locale: string | undefined,
+  headerLabels: IRecurringHeaderLabels
 ): ColumnDef<IRecurringBill>[] {
   return useMemo(
     () => [
       {
         accessorKey: 'name',
-        header: SortableHeader('Bill Title', 'left', 'w-1/2'),
+        header: SortableHeader(headerLabels.billTitle, 'left', 'w-1/2'),
         cell: CategoryIconCell(
           'name',
           'categoryIcon',
@@ -33,15 +44,15 @@ export function useRecurringBillsColumns(
       },
       {
         accessorKey: 'date',
-        header: SortableHeader('Due Date', 'left'),
+        header: SortableHeader(headerLabels.dueDate, 'left'),
         cell: StatusCell('date', 'status'),
       },
       {
         accessorKey: 'amount',
-        header: SortableHeader('Amount', 'right', 'w-[150px]'),
+        header: SortableHeader(headerLabels.amount, 'right', 'w-[150px]'),
         cell: AmountCell('amount', 'right', undefined, locale),
       },
     ],
-    [locale]
+    [locale, headerLabels]
   )
 }

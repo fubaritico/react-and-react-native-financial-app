@@ -1,4 +1,6 @@
-import { Avatar, Currency, Typography } from '#Atoms/index.web'
+import { cn } from '#Lib/cn'
+
+import { Currency, Icon, Typography } from '#Atoms/index.web'
 import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
 
 import { shared } from './TransactionRow.styles'
@@ -7,17 +9,24 @@ import type { ITransactionRowProps } from './TransactionRow'
 
 /** Web implementation of the TransactionRow component. */
 export const TransactionRow = ({
-  avatar,
   name,
   amount,
   date,
+  categoryIcon,
+  categoryColor,
 }: Readonly<ITransactionRowProps>) => {
   const amountColor: TypographyVariants['color'] =
     amount >= 0 ? 'transaction-positive' : 'transaction-negative'
 
   return (
     <div className={shared.root}>
-      <Avatar src={avatar} name={name} size={40} />
+      <div
+        className={cn(shared.iconCircle, `bg-${categoryColor}`)}
+        role="img"
+        aria-label={name}
+      >
+        <Icon name={categoryIcon} iconSize="sm" color="#FFFFFF" />
+      </div>
       <Typography
         variant="body-bold"
         as="span"

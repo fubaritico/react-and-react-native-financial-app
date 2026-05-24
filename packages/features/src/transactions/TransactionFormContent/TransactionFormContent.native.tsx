@@ -13,7 +13,6 @@ import { View } from 'react-native'
 
 import {
   DEFAULT_TRANSACTION_FORM,
-  TRANSACTION_CATEGORIES,
   createTransactionFormSchema,
 } from './TransactionFormContent.constants'
 
@@ -39,6 +38,7 @@ interface ITransactionFormNativeProps extends ITransactionFormContentProps {
  */
 export function TransactionFormContent({
   initialValues,
+  categories,
   nameLabel,
   namePlaceholder,
   amountLabel,
@@ -82,7 +82,7 @@ export function TransactionFormContent({
   /** @param value - New category value */
   const onCategoryChange = useCallback(
     (value: string) => {
-      validateField('category', value)
+      validateField('category_id', value)
     },
     [validateField]
   )
@@ -151,8 +151,8 @@ export function TransactionFormContent({
           {categoryLabel}
         </Typography>
         <Dropdown
-          options={TRANSACTION_CATEGORIES}
-          selectedValue={formData.category}
+          options={categories}
+          selectedValue={formData.category_id}
           onSelect={onCategoryChange}
           accessibilityLabel={categoryLabel}
           bottomSheetTitle={categoryLabel}

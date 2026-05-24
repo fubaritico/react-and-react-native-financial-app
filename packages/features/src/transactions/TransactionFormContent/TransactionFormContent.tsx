@@ -1,3 +1,5 @@
+import type { IDropdownOption } from '@financial-app/ui'
+
 /** Ref handle exposed by TransactionFormContent (native) */
 export interface ITransactionFormRef {
   /** Returns the current form values */
@@ -12,8 +14,8 @@ export interface ITransactionFormRef {
 export interface TransactionFormData {
   /** Transaction counterparty name */
   name: string
-  /** Transaction category */
-  category: string
+  /** Selected category UUID */
+  category_id: string
   /** ISO datetime string */
   date: string
   /** Amount as string — parsed to number on submit */
@@ -29,6 +31,8 @@ export interface TransactionFormData {
 export interface ITransactionFormContentProps {
   /** Initial form values (for edit mode) */
   initialValues?: TransactionFormData
+  /** Available category options from the API */
+  categories: readonly IDropdownOption[]
   /** Label for the name field */
   nameLabel: string
   /** Placeholder for the name field */

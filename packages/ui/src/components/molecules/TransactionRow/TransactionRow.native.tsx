@@ -8,25 +8,29 @@ import { shared } from './TransactionRow.styles'
 
 import type { ITransactionRowProps } from './TransactionRow'
 
-import { Avatar, Currency, Typography } from '#Atoms'
+import { Currency, Icon, Typography } from '#Atoms'
 
 /** Native implementation of the TransactionRow component. */
 export const TransactionRow = ({
-  avatar,
   name,
   amount,
   date,
+  categoryIcon,
+  categoryColor,
 }: Readonly<ITransactionRowProps>) => {
   const amountColor: TypographyVariants['color'] =
     amount >= 0 ? 'transaction-positive' : 'transaction-negative'
 
   return (
     <View style={tw`${shared.root}`}>
-      <Avatar src={avatar} name={name} size={40} />
-      <Typography
-        variant="body-bold"
-        style={tw`flex-1 inline-flex items-center`}
+      <View
+        style={tw`${shared.iconCircle} bg-${categoryColor}`}
+        accessibilityRole="image"
+        accessibilityLabel={name}
       >
+        <Icon name={categoryIcon} iconSize="sm" color="#FFFFFF" />
+      </View>
+      <Typography variant="body-bold" style={tw`flex-1 items-center`}>
         {name}
       </Typography>
       <View style={tw`items-end`}>

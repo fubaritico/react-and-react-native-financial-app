@@ -4,12 +4,12 @@ import { useCallback, useImperativeHandle, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
 
-import { THEME_COLORS } from '../../budget/BudgetFormContent/BudgetFormContent.constants'
-import { BudgetThemeDropdown } from '../../budget/BudgetThemeDropdown/BudgetThemeDropdown.native'
+import { ThemeColorDropdown } from '../ThemeColorDropdown/ThemeColorDropdown.native'
 
 import {
   DEFAULT_POT_FORM,
   POT_NAME_MAX_LENGTH,
+  THEME_COLORS,
   createPotFormSchema,
 } from './PotFormContent.constants'
 
@@ -88,8 +88,7 @@ export function PotFormContent({
   /** Characters remaining for pot name */
   const charsLeft = POT_NAME_MAX_LENGTH - formData.name.length
 
-  /** Theme options (no filtering — pots can share themes) */
-  const themeOptions = THEME_COLORS
+  /** Theme colors (no filtering — pots can share themes) */
 
   return (
     <View style={tw`gap-4`}>
@@ -135,8 +134,8 @@ export function PotFormContent({
         <Typography variant="body-bold" color="foreground">
           {themeLabel}
         </Typography>
-        <BudgetThemeDropdown
-          options={themeOptions}
+        <ThemeColorDropdown
+          options={THEME_COLORS}
           selectedValue={formData.theme}
           onSelect={onThemeChange}
           accessibilityLabel={themeLabel}

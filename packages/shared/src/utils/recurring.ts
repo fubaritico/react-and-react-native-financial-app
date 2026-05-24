@@ -5,39 +5,13 @@ import type { ITransaction } from '../types'
 /** Bill payment status derived from transaction date. */
 export type BillStatus = 'paid' | 'upcoming' | 'due-soon'
 
-/** Category visual config — icon name + background hex color. */
-interface ICategoryConfig {
-  icon: IconName
-  color: string
-}
-
-/** Maps transaction category strings to their visual config. */
-const CATEGORY_MAP: Record<string, ICategoryConfig> = {
-  General: { icon: 'categoryGeneral', color: '#3F82B2' },
-  'Dining Out': { icon: 'categoryDiningOut', color: '#93674F' },
-  Groceries: { icon: 'categoryGroceries', color: '#7F9161' },
-  Entertainment: { icon: 'categoryEntertainment', color: '#C94736' },
-  Transportation: { icon: 'categoryTransportation', color: '#97A0AC' },
-  Lifestyle: { icon: 'categoryLifeStyle', color: '#626070' },
-  'Personal Care': { icon: 'categoryPersonalCare', color: '#F2CDAC' },
-  Education: { icon: 'categoryEducation', color: '#82C9D7' },
-  Bills: { icon: 'categoryBills', color: '#3F82B2' },
-  Shopping: { icon: 'categoryShopping', color: '#934F6F' },
-}
-
-/** Fallback config when category is not in the map. */
-const DEFAULT_CATEGORY: ICategoryConfig = {
-  icon: 'categoryGeneral',
-  color: '#3F82B2',
-}
-
 /** A recurring bill row for the DataTable. */
 export interface IRecurringBill {
   /** Unique transaction identifier. */
   id: string
   /** Bill name / payee. */
   name: string
-  /** Transaction category (e.g. "Bills", "Entertainment"). */
+  /** Category display name (from API JOIN). */
   category: string
   /** ISO date string of the bill occurrence. */
   date: string
@@ -45,9 +19,9 @@ export interface IRecurringBill {
   amount: number
   /** Derived payment status. */
   status: BillStatus
-  /** Icon name from the icons package for the category. */
+  /** Category icon identifier (from API JOIN). */
   categoryIcon: IconName
-  /** Hex background color for the category icon circle. */
+  /** Category color token key (from API JOIN). */
   categoryColor: string
 }
 
@@ -72,19 +46,27 @@ export interface IRecurringBillsPageData {
 }
 
 /**
- * Derives bill status from transaction date.
- * - August (month 7) → paid
+ * Derives bill status from transaction date relative to the current month.
+ * - Same month as today → paid
  * - Day of month <= 5 → due-soon
  * - Otherwise → upcoming
+ * @param date - ISO date string of the bill occurrence
+ * @returns Derived bill status
  */
 function deriveBillStatus(date: string): BillStatus {
   const d = new Date(date)
-  if (d.getMonth() === 7) return 'paid'
+  const now = new Date()
+  if (d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear())
+    return 'paid'
   if (d.getDate() <= 5) return 'due-soon'
   return 'upcoming'
 }
 
-/** Deduplicates recurring transactions by name, keeping the latest occurrence. */
+/**
+ * Deduplicates recurring transactions by name, keeping the latest occurrence.
+ * @param transactions - Full list of transactions (may include non-recurring)
+ * @returns Deduplicated recurring transactions
+ */
 function deduplicateRecurring(
   transactions: readonly ITransaction[]
 ): ITransaction[] {
@@ -102,31 +84,40 @@ function deduplicateRecurring(
   return [...byName.values()]
 }
 
-/** Maps unique transactions to bill rows with derived status + category config. */
+/**
+ * Maps unique transactions to bill rows with derived status + category fields from API.
+ * @param transactions - Deduplicated recurring transactions
+ * @returns Bill rows sorted by day of month
+ */
 function toBillRows(transactions: ITransaction[]): IRecurringBill[] {
   return transactions
-    .map((txn) => {
-      const config = CATEGORY_MAP[txn.category] ?? DEFAULT_CATEGORY
-      return {
-        id: txn.id,
-        name: txn.name,
-        category: txn.category,
-        date: txn.date,
-        amount: txn.amount,
-        status: deriveBillStatus(txn.date),
-        categoryIcon: config.icon,
-        categoryColor: config.color,
-      }
-    })
+    .map((txn) => ({
+      id: txn.id,
+      name: txn.name,
+      category: txn.category_name,
+      date: txn.date,
+      amount: txn.amount,
+      status: deriveBillStatus(txn.date),
+      categoryIcon: txn.category_icon,
+      categoryColor: txn.category_color,
+    }))
     .sort((a, b) => new Date(a.date).getDate() - new Date(b.date).getDate())
 }
 
-/** Sums absolute amounts of the given bills. */
+/**
+ * Sums absolute amounts of the given bills.
+ * @param bills - Array of recurring bill rows
+ * @returns Sum of absolute amounts
+ */
 function sumAbsolute(bills: IRecurringBill[]): number {
   return bills.reduce((sum, b) => sum + Math.abs(b.amount), 0)
 }
 
-/** Builds recurring bills page data from raw transactions. */
+/**
+ * Builds recurring bills page data from raw transactions.
+ * @param transactions - Full list of transactions (recurring ones are filtered internally)
+ * @returns Aggregated page data with bills, counts, and totals
+ */
 export function buildRecurringBillsPageData(
   transactions: readonly ITransaction[]
 ): IRecurringBillsPageData {

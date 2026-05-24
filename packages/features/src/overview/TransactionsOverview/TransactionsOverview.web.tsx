@@ -7,7 +7,7 @@ import {
 } from '@financial-app/ui'
 import { useTranslation } from 'react-i18next'
 
-import { shared } from './TransactionsOverview.styles'
+import { shared, web } from './TransactionsOverview.styles'
 
 import type { ITransactionsOverviewProps } from './TransactionsOverview'
 
@@ -37,15 +37,16 @@ export const TransactionsOverview = ({
           {transactions.map((item, index) => (
             <TransactionRow
               key={`${item.name}-${String(index)}`}
-              avatar={item.avatar}
               name={item.name}
               amount={item.amount}
               date={item.date}
+              categoryIcon={item.categoryIcon}
+              categoryColor={item.categoryColor}
             />
           ))}
         </div>
       ) : (
-        <button className={shared.noDataButton} onClick={onViewAll}>
+        <button className={web.noDataButton} onClick={onViewAll}>
           <div className={shared.noData}>
             <div className="text-foreground-muted">
               <Icon name="navTransactions" iconSize="5xl" />

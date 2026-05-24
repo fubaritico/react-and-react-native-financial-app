@@ -2,6 +2,8 @@ import {
   PotAmountFormContent,
   PotCard,
   PotFormContent,
+  useDeleteBodyRenderer,
+  useFeedbackModals,
   usePotCrud,
 } from '@financial-app/features'
 import { getPotsOptions } from '@financial-app/http-client'
@@ -115,61 +117,8 @@ export default function PotsScreen() {
     [getFormData, hasFormErrors, triggerValidation]
   )
 
-  /** Opens a brief confirmation modal after a successful mutation */
-  const showSuccess = useCallback(
-    (message: string) => {
-      modal.open({
-        body: (
-          <Typography
-            variant="subsection-title"
-            color="foreground"
-            style={tw`text-center`}
-          >
-            {message}
-          </Typography>
-        ),
-        actions: [
-          {
-            label: t('common.ok'),
-            variant: 'primary',
-            onPress: () => {
-              modal.close()
-            },
-          },
-        ],
-        dismissable: false,
-      })
-    },
-    [modal, t]
-  )
-
-  /** Opens an error modal after a failed mutation */
-  const showError = useCallback(
-    (err: unknown) => {
-      modal.open({
-        body: (
-          <Typography
-            variant="subsection-title"
-            color="foreground"
-            style={tw`text-center`}
-          >
-            {__DEV__ ? getErrorMessage(err) : t('common.somethingWentWrong')}
-          </Typography>
-        ),
-        actions: [
-          {
-            label: t('common.ok'),
-            variant: 'destroy',
-            onPress: () => {
-              modal.close()
-            },
-          },
-        ],
-        dismissable: false,
-      })
-    },
-    [modal, t]
-  )
+  const { showSuccess, showError } = useFeedbackModals(modal)
+  const { renderDeleteBody } = useDeleteBodyRenderer()
 
   /** @param count - Remaining characters for pot name */
   const getCharsLeftLabel = useCallback(
@@ -194,16 +143,6 @@ export default function PotsScreen() {
       />
     ),
     [t, getCharsLeftLabel]
-  )
-
-  /** Renders the delete modal body */
-  const renderDeleteBody = useCallback(
-    (description: string) => (
-      <Typography variant="body" color="muted">
-        {description}
-      </Typography>
-    ),
-    []
   )
 
   /**

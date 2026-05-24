@@ -6,6 +6,8 @@ export const shared = {
   header: 'flex flex-row items-center justify-between mb-2',
   /** Single transaction item row */
   itemRow: 'flex flex-row items-center py-3 gap-3',
+  /** Category icon circle (32px, rounded, colored background) */
+  iconCircle: 'flex w-8 h-8 rounded-full items-center justify-center',
   /** Name text taking remaining space */
   name: 'flex-1 truncate',
   /** Right-aligned amount + date column */

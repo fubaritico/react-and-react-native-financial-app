@@ -17,6 +17,13 @@ const meta = {
     dateLabel: 'Date',
     datePlaceholder: 'Select date',
     recurringLabel: 'Recurring transaction',
+    categories: [
+      { label: 'General', value: 'cat-001' },
+      { label: 'Dining Out', value: 'cat-002' },
+      { label: 'Entertainment', value: 'cat-003' },
+      { label: 'Bills', value: 'cat-004' },
+      { label: 'Transportation', value: 'cat-005' },
+    ],
   },
   decorators: [
     (Story) => (
@@ -49,7 +56,7 @@ export const EditMode: Story = {
     initialValues: {
       name: 'Urban Sports Club',
       amount: '-45',
-      category: 'Lifestyle',
+      category_id: 'cat-003',
       date: '2026-04-15',
       recurring: true,
     },

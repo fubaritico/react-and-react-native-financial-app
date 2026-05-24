@@ -39,10 +39,11 @@ export const TransactionsOverview = ({
           {transactions.map((item, index) => (
             <TransactionRow
               key={`${item.name}-${String(index)}`}
-              avatar={item.avatar}
               name={item.name}
               amount={item.amount}
               date={item.date}
+              categoryIcon={item.categoryIcon}
+              categoryColor={item.categoryColor}
             />
           ))}
         </View>

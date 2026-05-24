@@ -1,11 +1,11 @@
+import type { IDropdownOption } from '@financial-app/ui'
+
 /** Form values for budget — all strings (parsed to number on submit) */
 export interface BudgetFormValues {
-  /** Selected category */
-  category: string
+  /** Selected category UUID */
+  category_id: string
   /** Maximum spend amount as string — parsed to number on submit */
   maximum: string
-  /** Selected theme color token name */
-  theme: string
 }
 
 /** Ref handle exposed by BudgetFormContent (native) */
@@ -25,20 +25,16 @@ export interface IBudgetFormRef {
 export interface IBudgetFormContentProps {
   /** Initial form values (for edit mode) */
   initialValues?: BudgetFormValues
-  /** Categories already used by existing budgets (filtered out in Add mode) */
+  /** Available category options from the API */
+  categories: readonly IDropdownOption[]
+  /** Categories already used by existing budgets (disabled in Add mode) */
   existingCategories?: readonly string[]
-  /** Theme colors already used by existing budgets (shown as "already used") */
-  existingThemes?: readonly string[]
   /** Label for the category field */
   categoryLabel: string
   /** Label for the maximum spend field */
   maximumLabel: string
-  /** Label for the theme field */
-  themeLabel: string
   /** Placeholder for the maximum spend field */
   maximumPlaceholder: string
-  /** Label for already-used themes (default: "Already used") */
-  alreadyUsedLabel: string
   /** Description text displayed above the form fields */
   description?: string
 }

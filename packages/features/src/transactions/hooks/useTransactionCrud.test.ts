@@ -74,16 +74,18 @@ import { useTransactionCrud } from './useTransactionCrud'
 const VALID_FORM_DATA = {
   name: 'Netflix',
   amount: '-15.99',
-  category: 'Entertainment',
+  category_id: 'cat-001',
   date: '2026-05-21',
   recurring: true,
 }
 
 const TRANSACTION_FIXTURE = {
   id: 'txn-1',
-  avatar: '/a.jpg',
   name: 'Netflix',
-  category: 'Entertainment',
+  category_id: 'cat-001',
+  category_name: 'Entertainment',
+  category_icon: 'categoryEntertainment',
+  category_color: 'green',
   date: '2026-05-21',
   amount: -15.99,
   recurring: true,
@@ -142,7 +144,7 @@ describe('useTransactionCrud', () => {
     expect(mutations[0].mutate).toHaveBeenCalledWith({
       body: {
         name: 'Netflix',
-        category: 'Entertainment',
+        category_id: 'cat-001',
         date: '2026-05-21T00:00:00Z',
         amount: -15.99,
         recurring: true,
@@ -265,7 +267,7 @@ describe('useTransactionCrud', () => {
       path: { id: 'txn-1' },
       body: {
         name: 'Netflix',
-        category: 'Entertainment',
+        category_id: 'cat-001',
         date: '2026-05-21T00:00:00Z',
         amount: -15.99,
         recurring: true,

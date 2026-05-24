@@ -156,6 +156,19 @@ References:
 - RN 0.81 `jest/react-native-env.js` sets `customExportConditions = ['require', 'react-native']`
 - RN 0.85 moves the preset to `@react-native/jest-preset` (dedicated package)
 
+### Android Emulator — Keyboard Layout
+
+Expo managed launches directly into the app — there's no app drawer to reach Settings.
+
+To change the keyboard layout (e.g. QWERTY → AZERTY):
+
+```bash
+# Open keyboard settings directly
+adb shell am start -a android.settings.INPUT_METHOD_SETTINGS
+```
+
+Then: **Gboard → Languages → Add French** (or your preferred layout).
+
 ### Simulator Management
 
 - Close simulator between app switches (Metro port conflict)

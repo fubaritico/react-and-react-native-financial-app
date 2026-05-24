@@ -17,7 +17,8 @@
     "potUpdated": "Cagnotte mise à jour avec succès.",
     "potDeleted": "Cagnotte supprimée avec succès.",
     "moneyAdded": "Argent ajouté avec succès.",
-    "moneyWithdrawn": "Retrait effectué avec succès."
+    "moneyWithdrawn": "Retrait effectué avec succès.",
+    "actions": "Actions"
   },
   "validation": {
     "nameRequired": "Le nom est requis.",
@@ -265,7 +266,12 @@
     "sortBy": "Trier par",
     "sortBills": "Trier les factures",
     "sortOptions": "Options de tri",
-    "searchPlaceholder": "Rechercher des factures"
+    "searchPlaceholder": "Rechercher des factures",
+    "headers": {
+      "billTitle": "Titre de la facture",
+      "dueDate": "Date d'échéance",
+      "amount": "Montant"
+    }
   },
   "transactions": {
     "title": "Transactions",
@@ -277,6 +283,12 @@
     "filterByCategory": "Filtrer par catégorie",
     "categoryOptions": "Options de catégorie",
     "searchPlaceholder": "Rechercher des transactions",
+    "headers": {
+      "recipientSender": "Destinataire / Expéditeur",
+      "category": "Catégorie",
+      "transactionDate": "Date de transaction",
+      "amount": "Montant"
+    },
     "editTransaction": "Modifier",
     "deleteTransaction": "Supprimer",
     "addModal": {

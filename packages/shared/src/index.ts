@@ -69,7 +69,7 @@ export type { ICurrencyConfig } from './contexts/CurrencyContext'
 export { createAppQueryClient } from './query'
 
 // Types
-export type { IBalance, ITransaction, IBudget, IPot } from './types'
+export type { IBalance, ITransaction, IBudget, ICategory, IPot } from './types'
 
 // Utils
 export {

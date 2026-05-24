@@ -2,10 +2,8 @@ import { SettingsScreenView } from '@financial-app/features'
 import {
   deleteUsersMeMutation,
   getBalanceOptions,
-  getBalanceReferenceOptions,
-  getBalanceReferenceQueryKey,
+  getUsersMePreferencesOptions,
   getUsersMePreferencesQueryKey,
-  putBalanceReferenceMutation,
   putUsersMePreferencesMutation,
 } from '@financial-app/http-client'
 import { useCurrency } from '@financial-app/shared'
@@ -31,11 +29,7 @@ export default function SettingsScreen() {
   const queryClient = useQueryClient()
   const router = useRouter()
 
-  const { data: balanceData } = useQuery({
-    ...getBalanceReferenceOptions(),
-  })
-
-  const updateBalance = useMutation(putBalanceReferenceMutation())
+  const { data: preferencesData } = useQuery(getUsersMePreferencesOptions())
 
   const updatePreferences = useMutation(putUsersMePreferencesMutation())
 
@@ -56,20 +50,19 @@ export default function SettingsScreen() {
     async (values: ISettingsFormValues) => {
       void i18n.changeLanguage(values.language)
 
-      await Promise.all([
-        updateBalance.mutateAsync({ body: { reference: values.balance } }),
-        updatePreferences.mutateAsync({ body: { currency: values.currency } }),
-      ])
+      await updatePreferences.mutateAsync({
+        body: {
+          currency: values.currency,
+          reference_balance: values.balance,
+        },
+      })
 
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: getBalanceReferenceQueryKey(),
+          queryKey: getUsersMePreferencesQueryKey(),
         }),
         queryClient.invalidateQueries({
           queryKey: getBalanceOptions().queryKey,
-        }),
-        queryClient.invalidateQueries({
-          queryKey: getUsersMePreferencesQueryKey(),
         }),
       ])
 
@@ -77,7 +70,7 @@ export default function SettingsScreen() {
         lastContentTab === 'index' ? '/(tabs)' : `/(tabs)/${lastContentTab}`
       router.navigate(target)
     },
-    [i18n, updateBalance, updatePreferences, queryClient, router]
+    [i18n, updatePreferences, queryClient, router]
   )
 
   const handleDeleteAccount = useCallback(() => {
@@ -97,11 +90,11 @@ export default function SettingsScreen() {
 
   return (
     <SettingsScreenView
-      initialBalance={balanceData?.reference ?? 0}
+      initialBalance={preferencesData?.reference_balance ?? 0}
       currentLanguage={i18n.language}
       currentCurrency={currency}
       onSubmit={handleSubmit}
-      isSubmitting={updateBalance.isPending || updatePreferences.isPending}
+      isSubmitting={updatePreferences.isPending}
       onDeleteAccount={handleDeleteAccount}
       isDeleting={deleteAccount.isPending}
       onDisconnect={handleDisconnect}

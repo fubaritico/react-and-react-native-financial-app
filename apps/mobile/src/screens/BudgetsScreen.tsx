@@ -13,6 +13,8 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
+import type { IBudget, ITransaction } from '@financial-app/shared'
+
 import tw from '../lib/tw'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function -- disabled button, wired in CRUD phase
@@ -34,7 +36,11 @@ export function BudgetsScreen() {
   } = useQuery(getTransactionsOptions({ query: { limit: 1000 } }))
 
   const { budgetItems, categoryCards } = useMemo(
-    () => buildBudgetPageData(budgets ?? [], txnResult?.data ?? []),
+    () =>
+      buildBudgetPageData(
+        (budgets ?? []) as IBudget[],
+        (txnResult?.data ?? []) as ITransaction[]
+      ),
     [budgets, txnResult]
   )
 
@@ -81,7 +87,7 @@ export function BudgetsScreen() {
 
       {/* Category Cards */}
       {categoryCards.map((card) => (
-        <View key={card.category} style={tw`mt-4`}>
+        <View key={card.id} style={tw`mt-4`}>
           <BudgetCategoryCard
             category={card.category}
             maximum={card.maximum}

@@ -6,19 +6,22 @@ import type { Meta, StoryObj } from '@storybook/react-native-web-vite'
 
 const sampleItems: readonly ILatestSpendingItem[] = [
   {
-    avatar: 'https://i.pravatar.cc/80?u=papa-software',
+    categoryIcon: 'categoryGeneral',
+    categoryColor: 'green',
     name: 'Papa Software',
     amount: -10,
     date: '16 Aug 2024',
   },
   {
-    avatar: 'https://i.pravatar.cc/80?u=quebec-services',
+    categoryIcon: 'categoryBills',
+    categoryColor: 'cyan',
     name: 'Quebec Services',
     amount: -5,
     date: '12 Aug 2024',
   },
   {
-    avatar: 'https://i.pravatar.cc/80?u=romeo-cloud',
+    categoryIcon: 'categoryGeneral',
+    categoryColor: 'navy',
     name: 'Romeo Cloud Service',
     amount: -10,
     date: '5 Aug 2024',
@@ -31,14 +34,12 @@ const meta = {
   argTypes: {
     title: { control: 'text' },
     seeAllLabel: { control: 'text' },
-    showAvatars: { control: 'boolean' },
   },
   args: {
     title: 'Latest Spending',
     seeAllLabel: 'See All',
     onSeeAll: () => undefined,
     items: sampleItems,
-    showAvatars: true,
   },
 } satisfies Meta<typeof LatestSpending>
 
@@ -56,27 +57,10 @@ export const Playground: Story = {
   ),
 }
 
-/** With avatars visible (desktop mode). */
-export const WithAvatars: Story = {
+/** Standard display with category icons. */
+export const WithCategoryIcons: Story = {
   render: () => (
     <div style={{ width: 600 }}>
-      <Card title="Entertainment">
-        <LatestSpending
-          title="Latest Spending"
-          seeAllLabel="See All"
-          onSeeAll={() => undefined}
-          items={sampleItems}
-          showAvatars
-        />
-      </Card>
-    </div>
-  ),
-}
-
-/** Without avatars (mobile mode). */
-export const WithoutAvatars: Story = {
-  render: () => (
-    <div style={{ width: 380 }}>
       <Card title="Entertainment">
         <LatestSpending
           title="Latest Spending"
@@ -91,19 +75,22 @@ export const WithoutAvatars: Story = {
 
 const longLabelItems: readonly ILatestSpendingItem[] = [
   {
-    avatar: 'https://i.pravatar.cc/80?u=alpha-long',
+    categoryIcon: 'categoryGeneral',
+    categoryColor: 'green',
     name: 'International Cloud Computing Solutions & Services Ltd.',
     amount: -1250,
     date: '16 Aug 2024',
   },
   {
-    avatar: 'https://i.pravatar.cc/80?u=bravo-long',
+    categoryIcon: 'categoryTransportation',
+    categoryColor: 'blue',
     name: 'Metropolitan Transportation Authority Subscription',
     amount: -99999.99,
     date: '12 Aug 2024',
   },
   {
-    avatar: 'https://i.pravatar.cc/80?u=charlie-long',
+    categoryIcon: 'categoryBills',
+    categoryColor: 'cyan',
     name: 'Transcontinental Telecommunications Group Holdings Inc.',
     amount: -500,
     date: '5 Aug 2024',
@@ -120,7 +107,6 @@ export const LongLabels: Story = {
           seeAllLabel="See All"
           onSeeAll={() => undefined}
           items={longLabelItems}
-          showAvatars
         />
       </Card>
     </div>

@@ -8,7 +8,15 @@ import { TransactionFormContent } from './TransactionFormContent.web'
 import type { TransactionFormData } from './TransactionFormContent'
 import type { RefObject } from 'react'
 
+/** Mock category options for the dropdown */
+const MOCK_CATEGORIES = [
+  { value: 'cat-001', label: 'General' },
+  { value: 'cat-002', label: 'Dining Out' },
+  { value: 'cat-003', label: 'Groceries' },
+] as const
+
 const DEFAULT_PROPS = {
+  categories: MOCK_CATEGORIES,
   nameLabel: 'Transaction Name',
   namePlaceholder: 'e.g. Urban Sports Club',
   amountLabel: 'Amount',
@@ -103,7 +111,7 @@ describe('TransactionFormContent', () => {
         initialValues={{
           name: 'Gym',
           amount: '-50',
-          category: 'Lifestyle',
+          category_id: 'cat-001',
           date: '2026-03-20',
           recurring: true,
         }}
@@ -125,7 +133,7 @@ describe('TransactionFormContent', () => {
         initialValues={{
           name: 'Rent',
           amount: '-1200',
-          category: 'Bills',
+          category_id: 'cat-002',
           recurring: true,
           date: '2026-01-15',
         }}
@@ -137,7 +145,7 @@ describe('TransactionFormContent', () => {
       expect.objectContaining({
         name: 'Rent',
         amount: '-1200',
-        category: 'Bills',
+        category_id: 'cat-002',
         recurring: true,
         date: '2026-01-15',
       })
@@ -210,7 +218,7 @@ describe('TransactionFormContent', () => {
         initialValues={{
           name: 'Groceries run',
           amount: '-85.5',
-          category: 'Groceries',
+          category_id: 'cat-003',
           date: '2026-05-14',
           recurring: false,
         }}
@@ -221,7 +229,7 @@ describe('TransactionFormContent', () => {
     expect(values).toEqual({
       name: 'Groceries run',
       amount: '-85.5',
-      category: 'Groceries',
+      category_id: 'cat-003',
       date: '2026-05-14',
       recurring: false,
     })

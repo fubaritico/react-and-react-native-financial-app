@@ -61,7 +61,13 @@ export function TransactionsDataTable({
     onEdit,
     onDelete,
     t('transactions.editTransaction'),
-    t('transactions.deleteTransaction')
+    t('transactions.deleteTransaction'),
+    {
+      recipientSender: t('transactions.headers.recipientSender'),
+      category: t('transactions.headers.category'),
+      transactionDate: t('transactions.headers.transactionDate'),
+      amount: t('transactions.headers.amount'),
+    }
   )
 
   const table = useReactTable({

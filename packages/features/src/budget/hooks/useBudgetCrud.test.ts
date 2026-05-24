@@ -71,13 +71,13 @@ vi.mock('../createBudgetModalConfigs', () => ({
 import { useBudgetCrud } from './useBudgetCrud'
 
 const VALID_FORM_DATA = {
-  category: 'Entertainment',
+  category_id: 'cat-001',
   maximum: '500',
-  theme: 'green',
 }
 
 const BUDGET_FIXTURE = {
   id: 'b-1',
+  category_id: 'cat-001',
   category: 'Entertainment',
   maximum: 500,
   spent: 200,
@@ -136,9 +136,8 @@ describe('useBudgetCrud', () => {
 
     expect(mutations[0].mutate).toHaveBeenCalledWith({
       body: {
-        category: 'Entertainment',
+        category_id: 'cat-001',
         maximum: 500,
-        theme: 'green',
         month: '2026-05',
       },
     })
