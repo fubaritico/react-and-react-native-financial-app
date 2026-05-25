@@ -41,6 +41,8 @@ export function DatePicker({
   min,
   max,
   accessibilityLabel,
+  bottomSheetTitle,
+  bottomSheetCloseLabel,
 }: Readonly<IDatePickerProps>) {
   const [show, setShow] = useState(false)
 
@@ -89,7 +91,6 @@ export function DatePicker({
   )
 
   /** Accent color for iOS inline calendar on dark BottomSheet */
-  /** Accent color for iOS inline calendar on dark BottomSheet */
   const accentColor = useMemo(() => resolveColor('beige-500'), [])
 
   return (
@@ -103,20 +104,20 @@ export function DatePicker({
       <Pressable
         onPress={handlePress}
         disabled={!!disabled}
-        accessibilityLabel={accessibilityLabel ?? label}
+        accessibilityLabel={accessibilityLabel ?? label ?? placeholder}
         accessibilityRole="button"
         accessibilityState={{ disabled: !!disabled }}
         style={tw`${datePickerVariants({ error: !!error, disabled: !!disabled })} ${native.triggerLayout}`}
       >
         <View style={tw`${native.iconWrap}`}>
-          <Icon name="calendar" iconSize="xxl" color={tw.color('grey-500')} />
+          <Icon name="calendar" iconSize="xxl" color="grey-500" />
         </View>
         <View style={tw`${native.contentWrap}`}>
           {displayText ? (
             <Typography variant="body">{displayText}</Typography>
           ) : (
             <Typography variant="body" color="beige-500">
-              {placeholder ?? 'Select date'}
+              {placeholder}
             </Typography>
           )}
         </View>
@@ -138,10 +139,10 @@ export function DatePicker({
           onClose={handleClose}
           variant="dark"
           overlay
-          accessibilityLabel={accessibilityLabel ?? label ?? 'Date picker'}
+          accessibilityLabel={accessibilityLabel ?? label ?? placeholder}
         >
-          <BottomSheet.Header closeLabel="Done">
-            {label ?? 'Select date'}
+          <BottomSheet.Header closeLabel={bottomSheetCloseLabel}>
+            {bottomSheetTitle ?? label}
           </BottomSheet.Header>
           <BottomSheet.Body>
             <View

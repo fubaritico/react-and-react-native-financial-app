@@ -19,7 +19,8 @@
     "moneyAdded": "Argent ajouté avec succès.",
     "moneyWithdrawn": "Retrait effectué avec succès.",
     "alreadyUsed": "Déjà utilisé",
-    "actions": "Actions"
+    "actions": "Actions",
+    "back": "Retour"
   },
   "validation": {
     "nameRequired": "Le nom est requis.",
@@ -320,7 +321,9 @@
   },
   "datePicker": {
     "placeholder": "Sélectionner une date",
-    "accessibilityLabel": "Sélecteur de date"
+    "accessibilityLabel": "Sélecteur de date",
+    "title": "Sélectionner une date",
+    "done": "Terminé"
   },
   "pagination": {
     "prev": "Préc",
@@ -401,6 +404,24 @@
     "disconnect": "Déconnexion",
     "cancel": "Annuler",
     "saveChanges": "Modifier",
-    "saving": "Enregistrement\u2026"
+    "saving": "Enregistrement\u2026",
+    "categories": "Catégories"
+  },
+  "categories": {
+    "title": "Catégories",
+    "addCategory": "Ajouter une catégorie",
+    "name": "Nom",
+    "namePlaceholder": "Nom de la catégorie",
+    "color": "Couleur",
+    "icon": "Icône",
+    "add": "Ajouter",
+    "adding": "Ajout\u2026",
+    "cancel": "Annuler",
+    "deleteAriaLabel": "Supprimer {{name}}",
+    "deleteConfirmTitle": "Supprimer la catégorie",
+    "deleteConfirmMessage": "Êtes-vous sûr de vouloir supprimer « {{name}} » ?",
+    "deleteConfirm": "Supprimer",
+    "deleteCancel": "Annuler",
+    "inUseError": "Cette catégorie est utilisée par des transactions ou des budgets. Réaffectez-les d'abord."
   }
 }

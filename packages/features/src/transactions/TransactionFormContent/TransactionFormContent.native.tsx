@@ -168,6 +168,8 @@ export function TransactionFormContent({
         value={formData.date}
         onChange={onDateChange}
         accessibilityLabel={dateLabel}
+        bottomSheetTitle={dateLabel}
+        bottomSheetCloseLabel={t('datePicker.done')}
       />
 
       {/* Recurring */}

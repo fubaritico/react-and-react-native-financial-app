@@ -13,7 +13,7 @@ import type { IBottomSheetHeaderProps } from './BottomSheet'
 export function BottomSheetHeader({
   className,
   children,
-  closeLabel = 'Close',
+  closeLabel,
 }: Readonly<IBottomSheetHeaderProps>) {
   const { variant, onClose } = useBottomSheetContext()
   const isDark = variant === 'dark'

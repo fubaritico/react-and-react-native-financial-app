@@ -56,7 +56,7 @@ export function Dropdown({
   accessibilityLabel,
   menuAccessibilityLabel,
   bottomSheetTitle,
-  bottomSheetCloseLabel = 'Close',
+  bottomSheetCloseLabel,
   withPortal,
   position = 'left',
   trigger,

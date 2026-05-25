@@ -149,8 +149,15 @@ describe('DatePicker — Mobile', () => {
     expect(screen.queryByText('Transaction date')).toBeNull()
   })
 
-  it('shows default placeholder when no value', () => {
-    render(<DatePicker value={null} onChange={vi.fn()} label="Date" />)
+  it('shows placeholder when no value', () => {
+    render(
+      <DatePicker
+        value={null}
+        onChange={vi.fn()}
+        label="Date"
+        placeholder="Select date"
+      />
+    )
     expect(screen.getByText('Select date')).toBeTruthy()
   })
 

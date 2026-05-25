@@ -23,4 +23,8 @@ export interface IDatePickerProps extends VariantProps<
   disabled?: boolean
   /** Accessible label when no visible label is present */
   accessibilityLabel?: string
+  /** Title displayed in the BottomSheet header (mobile). Falls back to `label`. */
+  bottomSheetTitle?: string
+  /** Close button label for BottomSheet (mobile a11y). */
+  bottomSheetCloseLabel?: string
 }

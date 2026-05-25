@@ -135,7 +135,9 @@ const ShowcaseComponent = () => {
         overlay
         accessibilityLabel="Light bottom sheet"
       >
-        <BottomSheet.Header>Light BottomSheet</BottomSheet.Header>
+        <BottomSheet.Header closeLabel="Close">
+          Light BottomSheet
+        </BottomSheet.Header>
         <BottomSheet.Body>
           <Typography variant="body" as="p">
             Light variant with overlay. Press Escape or click close to dismiss.
@@ -152,7 +154,9 @@ const ShowcaseComponent = () => {
         overlay
         accessibilityLabel="Dark bottom sheet"
       >
-        <BottomSheet.Header>Dark BottomSheet</BottomSheet.Header>
+        <BottomSheet.Header closeLabel="Close">
+          Dark BottomSheet
+        </BottomSheet.Header>
         <BottomSheet.Body>
           <Typography variant="body" color="on-dark" as="p">
             Dark variant with grey-900 background and light text.
@@ -169,7 +173,9 @@ const ShowcaseComponent = () => {
         overlay
         accessibilityLabel="Scrollable bottom sheet"
       >
-        <BottomSheet.Header>Scrollable Content</BottomSheet.Header>
+        <BottomSheet.Header closeLabel="Close">
+          Scrollable Content
+        </BottomSheet.Header>
         <BottomSheet.Body>
           {Array.from({ length: 20 }, (_, i) => (
             <div

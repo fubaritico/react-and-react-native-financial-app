@@ -21,7 +21,8 @@ export const SortableHeader =
     label: string,
     align: HeaderAlign = 'left',
     className?: string,
-    dataType?: string
+    dataType?: string,
+    sortByPrefix?: string
   ): HeaderCellFn =>
   <TData,>({ column }: { column: Column<TData> }) => {
     const sorted = column.getIsSorted()
@@ -41,7 +42,7 @@ export const SortableHeader =
           onClick={() => {
             column.toggleSorting(sorted === 'asc')
           }}
-          aria-label={`Sort by ${label}`}
+          aria-label={sortByPrefix ? `${sortByPrefix} ${label}` : label}
           className={cn(
             'inline-flex items-center gap-1 bg-transparent border-none p-0',
             'cursor-pointer',

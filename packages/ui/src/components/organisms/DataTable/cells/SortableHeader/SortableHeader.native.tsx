@@ -15,13 +15,17 @@ import { Icon, Typography } from '#Atoms'
  * Shows a caret icon only when the column is actively sorted.
  * @param label - header text
  * @param align - text alignment ('left' | 'right'), defaults to 'left'
+ * @param className - extra classes from parent
+ * @param dataType - column data type
+ * @param sortByPrefix - translated "Sort by" prefix for accessibility label
  */
 export const SortableHeader =
   (
     label: string,
     align: HeaderAlign = 'left',
     className?: string,
-    dataType?: string
+    dataType?: string,
+    sortByPrefix?: string
   ): HeaderCellFn =>
   <TData,>({ column }: { column: Column<TData> }) => {
     const sorted = column.getIsSorted()
@@ -40,7 +44,7 @@ export const SortableHeader =
             column.toggleSorting(sorted === 'asc')
           }}
           accessibilityRole="button"
-          accessibilityLabel={`Sort by ${label}`}
+          accessibilityLabel={sortByPrefix ? `${sortByPrefix} ${label}` : label}
           accessibilityState={{ selected: !!sorted }}
           style={tw`flex-row items-center gap-1`}
         >
@@ -49,11 +53,7 @@ export const SortableHeader =
           </Typography>
           {sorted ? (
             <View style={isAsc ? tw`rotate-180` : undefined}>
-              <Icon
-                name="caretDown"
-                iconSize="xxs"
-                color={tw.color('foreground-muted')}
-              />
+              <Icon name="caretDown" iconSize="xxs" color="muted" />
             </View>
           ) : null}
         </Pressable>

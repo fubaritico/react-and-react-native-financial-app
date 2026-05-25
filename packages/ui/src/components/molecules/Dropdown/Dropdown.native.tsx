@@ -33,7 +33,7 @@ export function Dropdown({
   accessibilityLabel,
   menuAccessibilityLabel,
   bottomSheetTitle,
-  bottomSheetCloseLabel = 'Close',
+  bottomSheetCloseLabel,
   trigger,
   buttonVariant = 'outline',
   buttonSize,
@@ -124,7 +124,7 @@ export function Dropdown({
                       <Icon
                         name={option.icon as IconName}
                         iconSize="xs"
-                        color={tw.color('grey-100')}
+                        color="on-dark-muted"
                       />
                     ) : null}
                     <Typography
@@ -179,7 +179,7 @@ export function Dropdown({
                 <Icon
                   name={selectedOption.icon as IconName}
                   iconSize="xs"
-                  color={tw.color('foreground')}
+                  color="foreground"
                 />
               ) : null}
               <Typography variant="body-bold">{selectedLabel}</Typography>
@@ -187,7 +187,7 @@ export function Dropdown({
             <Icon
               name="caretDown"
               iconSize="xs"
-              color={tw.color('foreground')}
+              color="foreground"
               style={isOpen ? tw`rotate-180` : undefined}
             />
           </>

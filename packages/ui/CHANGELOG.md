@@ -154,6 +154,7 @@
 * **ui:** add DonutChart atom + enforce constants/utils/types separation ([4814f82](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4814f82f4046d37348b7094c6a8bc6725347215b))
 * **ui:** add Dropdown molecule + Portal/Drawer/Menu/Listbox foundation ([298ada9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/298ada92feb3a9c796c2f2ea81af4ba4cb1c5dc5))
 * **ui:** add Icon Storybook story with playground and showcase ([02c8c1f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/02c8c1fc3e537b7417bab91a832e828be144f9ef))
+* **ui:** add IconButton atom + arrow/cross SVG icons ([cb03d87](https://github.com/fubaritico/react-and-react-native-financial-app/commit/cb03d87b739841ac5a527f65ea999ad6598aba63))
 * **ui:** add icons to Settings buttons + resize logo + update splash ([2f80d4d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2f80d4d0cb672a4827e4cf66f51cf73106d26a9f))
 * **ui:** add LatestSpending molecule + Divider className prop + stories ([44552eb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/44552ebc1c0a9e902f390018429cc4aa10b51310))
 * **ui:** add LatestSpending molecule + Divider className prop + stories ([54aaee7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/54aaee746f324fcec61233155efcaf00dd58b22b))

@@ -54,6 +54,7 @@ export function RecurringBillsDataTable({
     billTitle: t('recurring.headers.billTitle'),
     dueDate: t('recurring.headers.dueDate'),
     amount: t('recurring.headers.amount'),
+    sortBy: t('recurring.sortBy'),
   })
 
   const table = useReactTable({

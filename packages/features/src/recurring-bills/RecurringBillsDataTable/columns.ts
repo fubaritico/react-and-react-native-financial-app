@@ -22,6 +22,8 @@ interface IRecurringHeaderLabels {
   dueDate: string
   /** Header for the amount column. */
   amount: string
+  /** Translated "Sort by" prefix for accessibility labels. */
+  sortBy: string
 }
 
 /** Column definitions for the native RecurringBillsDataTable. */
@@ -39,7 +41,9 @@ export function useRecurringBillsColumns(
         header: SortableHeader(
           headerLabels.billTitle,
           'left',
-          isMobile ? 'w-2/3' : 'w-1/2'
+          isMobile ? 'w-2/3' : 'w-1/2',
+          undefined,
+          headerLabels.sortBy
         ),
         cell: CategoryIconCell(
           'name',
@@ -56,12 +60,24 @@ export function useRecurringBillsColumns(
       },
       {
         accessorKey: 'date',
-        header: SortableHeader(headerLabels.dueDate, 'left'),
+        header: SortableHeader(
+          headerLabels.dueDate,
+          'left',
+          undefined,
+          undefined,
+          headerLabels.sortBy
+        ),
         cell: StatusCell('date', 'status'),
       },
       {
         accessorKey: 'amount',
-        header: SortableHeader(headerLabels.amount, 'right'),
+        header: SortableHeader(
+          headerLabels.amount,
+          'right',
+          undefined,
+          undefined,
+          headerLabels.sortBy
+        ),
         cell: AmountCell('amount', 'right', undefined, locale),
       },
     ],

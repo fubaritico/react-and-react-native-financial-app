@@ -19,7 +19,8 @@
     "moneyAdded": "Money added successfully.",
     "moneyWithdrawn": "Money withdrawn successfully.",
     "actions": "Actions",
-    "alreadyUsed": "Already used"
+    "alreadyUsed": "Already used",
+    "back": "Back"
   },
   "validation": {
     "nameRequired": "Name is required.",
@@ -320,7 +321,9 @@
   },
   "datePicker": {
     "placeholder": "Select date",
-    "accessibilityLabel": "Date picker"
+    "accessibilityLabel": "Date picker",
+    "title": "Select date",
+    "done": "Done"
   },
   "pagination": {
     "prev": "Prev",
@@ -401,6 +404,24 @@
     "disconnect": "Deconnect",
     "cancel": "Cancel",
     "saveChanges": "Change settings",
-    "saving": "Saving\u2026"
+    "saving": "Saving\u2026",
+    "categories": "Categories"
+  },
+  "categories": {
+    "title": "Categories",
+    "addCategory": "Add category",
+    "name": "Name",
+    "namePlaceholder": "Category name",
+    "color": "Color",
+    "icon": "Icon",
+    "add": "Add",
+    "adding": "Adding\u2026",
+    "cancel": "Cancel",
+    "deleteAriaLabel": "Delete {{name}}",
+    "deleteConfirmTitle": "Delete category",
+    "deleteConfirmMessage": "Are you sure you want to delete \"{{name}}\"?",
+    "deleteConfirm": "Delete",
+    "deleteCancel": "Cancel",
+    "inUseError": "This category is used by transactions or budgets. Reassign them first."
   }
 }

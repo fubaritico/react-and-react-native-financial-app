@@ -139,11 +139,11 @@ function InternalCalendar({
     >
       <header className={web.calendarHeader}>
         <AriaButton slot="previous" className={dark.navButton}>
-          <Icon name="caretLeft" iconSize="xs" color="white" />
+          <Icon name="caretLeft" iconSize="xs" color="on-dark" />
         </AriaButton>
         <Heading className={dark.calendarHeading} />
         <AriaButton slot="next" className={dark.navButton}>
-          <Icon name="caretRight" iconSize="xs" color="white" />
+          <Icon name="caretRight" iconSize="xs" color="on-dark" />
         </AriaButton>
       </header>
       <CalendarGrid className={web.grid}>
@@ -237,11 +237,7 @@ function DesktopDatePicker({
           )}
         </DateInput>
         <AriaButton className={web.fieldButton}>
-          <Icon
-            name="calendar"
-            iconSize="xxl"
-            color="var(--color-foreground-muted)"
-          />
+          <Icon name="calendar" iconSize="xxl" color="muted" />
         </AriaButton>
       </Group>
       {helperText ? (
@@ -303,6 +299,8 @@ function MobileDatePicker({
   min,
   max,
   accessibilityLabel,
+  bottomSheetTitle,
+  bottomSheetCloseLabel,
 }: Readonly<IDatePickerProps>) {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -365,15 +363,11 @@ function MobileDatePicker({
             </Typography>
           ) : (
             <Typography variant="body" color="beige-500" as="span">
-              {placeholder ?? 'Select date'}
+              {placeholder}
             </Typography>
           )}
         </span>
-        <Icon
-          name="calendar"
-          iconSize="xxl"
-          color="var(--color-foreground-muted)"
-        />
+        <Icon name="calendar" iconSize="xxl" color="muted" />
       </button>
       {helperText ? (
         <Typography
@@ -390,9 +384,11 @@ function MobileDatePicker({
         onClose={handleClose}
         variant="dark"
         overlay
-        accessibilityLabel={accessibilityLabel ?? label ?? 'Date picker'}
+        accessibilityLabel={accessibilityLabel ?? label ?? placeholder}
       >
-        <BottomSheet.Header>{label ?? 'Select date'}</BottomSheet.Header>
+        <BottomSheet.Header closeLabel={bottomSheetCloseLabel}>
+          {bottomSheetTitle ?? label}
+        </BottomSheet.Header>
         <BottomSheet.Body>
           <InternalCalendar
             value={calendarValue}

@@ -50,6 +50,7 @@ export function TransactionsDataTable({
       category: t('transactions.headers.category'),
       transactionDate: t('transactions.headers.transactionDate'),
       amount: t('transactions.headers.amount'),
+      sortBy: t('transactions.sortBy'),
     }
   )
 
