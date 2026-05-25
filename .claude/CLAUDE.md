@@ -32,6 +32,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Never explicit `any`** — strict TypeScript
 - **JSDoc everywhere** — EVERY interface property, EVERY function (`@param` + `@returns`), EVERY hook, EVERY type with properties, EVERY constant — no path exception, no "internal helper" excuse (QUAL-003/004/005)
 - **Always run** `pnpm type-check && pnpm lint && pnpm test` then `/review` after every set of modifications — ALL 4 MANDATORY, NEVER SKIP ANY
+- **Tests + Commit + End session** — every new feature, component, hook, route, or bug fix MUST ship with tests (5-level policy — see `tests.md`), a `/commit`, and `/end-session`. No code ships without tests. No session ends without committing and updating session state.
 - **Always ask** user to run pnpm dev, pnpm prod:server and pnpm storybook after having modified a component
 - **Always use** the design system when coding components, NEVER code simple tags, asks user if components exist, if not create them
 - **Always create a Storybook story** after every component (`/story`)
@@ -145,6 +146,7 @@ packages/
 | `troubleshooting.md` | Debug, architectural decisions                                 |
 | `api.md`             | API server patterns, routes, Supabase queries, auth, validation |
 | `features.md`        | Screen/View split, feature package architecture                |
+| `tests.md`           | 5-level test policy (happy, variants, managed/unmanaged errors, edges) |
 | `specifications.md`  | App specifications reminder and extra specifications           |
 
 **Before coding**: ask which reference files are needed — do NOT start coding without the relevant files loaded.
@@ -196,7 +198,8 @@ Read `@completed.md`
    - ~~Custom categories session 1 (DB migration)~~ ✅ — categories table (color=token key varchar(20)), 10 default categories seeded, category_id FK on transactions+budgets (avatar/theme/category dropped), RPCs updated (JOIN categories), balances table consolidated into user_preferences.reference_balance, unique constraint, Prisma sync. API partially updated (balance endpoints removed, setInitialBalance simplified) — type-check fails until session 2 completes API refactor.
    - ~~Custom categories session 2 (API refactor)~~ ✅ — categories CRUD routes, transaction/budget/recurring-bills supabase+schema+route refactor (category_id FK), seed refactor, HeyAPI regen
    - ~~Custom categories session 3 (frontend adaptation + review)~~ ✅ — All frontend components adapted to category_id FK model (ITransaction/IBudget types, DataTable columns, BudgetCategoryCard, TransactionRow, LatestSpending, CategoryIconCell, BillTitleCell, CompactTransactionRow, CompactBillRow, form components, overview components, Storybook stories). 6-agent review: A11Y-002 (icon a11y labels use name not icon key), SEC-006 (deriveBillStatus dynamic month), ARCH-017 (i18n DataTable headers), QUAL-008 (removed alias vars), QUAL-013 (useCurrencyFormat replaces hardcoded USD). QUAL-007: extracted useFeedbackModals + useDeleteBodyRenderer shared hooks (cross-platform, 6 route files deduplicated). QUAL-006: IModalHandle deduplicated (1 canonical export, 3 CRUD hooks import it). env.d.ts DEV type added. Dropdown enhanced (color dot + icon in trigger/menu), all 35 category SVGs cleaned, Tailwind safelist added, troubleshooting docs updated (Android keyboard).
-   - **Next coding**: Custom categories session 4 — CategoryDropdown feature component (replaces inline Dropdown usage in forms), category management screen (CRUD UI), navigation wiring
+   - ~~Custom categories session 4 (CategoryDropdown + resolveColor)~~ ✅ — CategoryDropdown feature component (wraps Dropdown atom, ICategory[]→IDropdownOption[] mapping internalized, color dot+icon trigger/items, disabled "Already used" badge). resolveColor(token) utility replaces all 16 `tw.color()??'#hex'` fallbacks (throws on unknown token). Form dropdowns aligned h-12 (TextInput height). Route files simplified (pass ICategory[] directly). i18n key common.alreadyUsed (en+fr). 6-agent review pass (99/100).
+   - **Next coding**: Custom categories session 5 — category management screen (CRUD UI), navigation wiring
 2.6. **Custom categories** — `docs/plans/custom-categories-plan.md` (8 sessions: DB, API, types, UI, CategoryDropdown, management screen, navigation, tests)
 2.5. ~~**OWASP Security Hardening**~~ ✅ — all actionable findings resolved, audit-owasp skill upgraded to OWASP 2025
 3. ~~Empty states (all screens + Overview sections)~~ ✅ — part of onboarding step, done for all 4 overview components

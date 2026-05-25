@@ -376,5 +376,7 @@ Never expose stack traces, internal paths, or Supabase internals beyond `error.m
 4. Create schema in `src/schemas/[entity].ts` — register with `registry.register()`
 5. Create route file in `src/routes/[entity].ts` — imports from `../supabase/index.js`
 6. Mount router in `src/index.ts` — `app.use('/entity', entityRouter)`
-7. Run `pnpm --filter api-financial-app type-check` to verify
-8. Test via Swagger UI at `/docs`
+7. **Write tests** — 5-level policy (see `tests.md`): happy path, variants, managed errors (400/404/409), unmanaged errors (500), edge cases
+8. Run `pnpm type-check && pnpm lint && pnpm test` to verify
+9. Test via Swagger UI at `/docs`
+10. `/commit` then `/end-session` before closing

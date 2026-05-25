@@ -289,6 +289,12 @@ Rules:
 
 ## Checklist for New Component
 
+- [ ] Tests — 5-level policy (see `tests.md`): happy path, variants, managed errors, unmanaged errors, edge cases
+- [ ] `pnpm type-check && pnpm lint && pnpm test` — all pass
+- [ ] `/review` — multi-agent review
+- [ ] `/commit` — conventional commit
+- [ ] `/end-session` — update session state
+
 - [ ] Created ComponentName/ directory
 - [ ] ComponentName.tsx — types only, no JSX, no runtime values
 - [ ] ComponentName.variants.ts — CVA object, colocated in component folder

@@ -101,3 +101,13 @@ export default function SettingsScreen() {
   )
 }
 ```
+
+## Mandatory Completion Sequence
+
+Every new feature component, hook, or screen view MUST be followed by:
+
+1. **Tests** — 5-level policy (see `tests.md`): happy path, variants, managed errors, unmanaged errors, edge cases
+2. **`pnpm type-check && pnpm lint && pnpm test`** — all pass
+3. **`/review`** — multi-agent review
+4. **`/commit`** — conventional commit
+5. **`/end-session`** — update session state before closing

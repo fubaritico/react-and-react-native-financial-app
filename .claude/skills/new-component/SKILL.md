@@ -267,17 +267,29 @@ Variants and styles are NEVER exported from the package.
 pnpm type-check && pnpm lint && pnpm test
 ```
 
-### 10. Write tests
+### 10. Write tests — 5-level policy (see `.claude/rules/tests.md`)
 
 Create `packages/ui/src/components/{level}/$Name/$Name.test.tsx` — web-only tests using Vitest + @testing-library/react.
 
-**What to test** (at minimum):
-- Renders without crashing (default props)
-- Each visual variant applies correctly (check class names or DOM state)
-- User interactions fire callbacks (click, press, change)
-- Disabled state prevents interaction
-- Accessibility attributes are correct (role, aria-label, aria-state)
-- Conditional rendering (optional props like `label`, `error`)
+Every test suite MUST cover these 5 levels:
+
+1. **Happy path** — renders with default props, callbacks fire correctly
+2. **Variant cases** — each variant/size/state prop combination renders correctly
+3. **Managed error cases** — disabled state prevents interaction, validation feedback displays
+4. **Unmanaged error cases** — missing optional props don't crash, unexpected children handled
+5. **Edge cases** — empty strings, extreme values, rapid interactions, a11y attributes correct
+
+```
+describe('$Name', () => {
+  describe('happy path', () => { ... })
+  describe('variants', () => { ... })
+  describe('managed errors', () => { ... })
+  describe('unmanaged errors', () => { ... })
+  describe('edge cases', () => { ... })
+})
+```
+
+If a level genuinely does not apply, document it: `// L4: N/A — no async operations`
 
 **Test file template:**
 
@@ -291,23 +303,37 @@ import { $Name } from './$Name.web'
 afterEach(cleanup)
 
 describe('$Name', () => {
-  it('renders with default props', () => {
-    render(<$Name /* required props */ />)
-    expect(screen.getByRole('...')).toBeInTheDocument()
+  describe('happy path', () => {
+    it('renders with default props', () => {
+      render(<$Name /* required props */ />)
+      expect(screen.getByRole('...')).toBeInTheDocument()
+    })
+
+    it('calls onChange on interaction', async () => {
+      const onChange = vi.fn()
+      render(<$Name onChange={onChange} /* ... */ />)
+      await userEvent.click(screen.getByRole('...'))
+      expect(onChange).toHaveBeenCalledWith(/* expected value */)
+    })
   })
 
-  it('calls onChange on interaction', async () => {
-    const onChange = vi.fn()
-    render(<$Name onChange={onChange} /* ... */ />)
-    await userEvent.click(screen.getByRole('...'))
-    expect(onChange).toHaveBeenCalledWith(/* expected value */)
+  describe('variants', () => {
+    it('applies primary variant classes', () => { ... })
+    it('applies secondary variant classes', () => { ... })
   })
 
-  it('does not call onChange when disabled', async () => {
-    const onChange = vi.fn()
-    render(<$Name onChange={onChange} disabled /* ... */ />)
-    await userEvent.click(screen.getByRole('...'))
-    expect(onChange).not.toHaveBeenCalled()
+  describe('managed errors', () => {
+    it('does not call onChange when disabled', async () => {
+      const onChange = vi.fn()
+      render(<$Name onChange={onChange} disabled /* ... */ />)
+      await userEvent.click(screen.getByRole('...'))
+      expect(onChange).not.toHaveBeenCalled()
+    })
+  })
+
+  // L4: N/A — no async operations
+  describe('edge cases', () => {
+    it('has correct accessibility attributes', () => { ... })
   })
 })
 ```
@@ -323,6 +349,17 @@ describe('$Name', () => {
 ### 11. Create story
 
 Invoke `/story $Name` after component creation.
+
+## Mandatory Completion Sequence
+
+After component + tests + story:
+
+1. **`pnpm type-check && pnpm lint && pnpm test`** — all pass
+2. **`/review`** — multi-agent review
+3. **`/commit`** — conventional commit
+4. **`/end-session`** — update session state before closing
+
+No component is "done" without all 4 steps.
 
 ## Validation Checklist
 
