@@ -53,11 +53,7 @@ export function LanguageDropdown({
               <FlagComponent width={24} height={24} />
             </View>
           ) : null}
-          <Icon
-            name="caretDown"
-            iconSize="xs"
-            color={tw.color('foreground') ?? '#201F24'}
-          />
+          <Icon name="caretDown" iconSize="xs" />
         </View>
       )
     },

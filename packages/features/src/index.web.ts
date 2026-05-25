@@ -132,6 +132,9 @@ export type {
   ISettingsScreenViewProps,
 } from './settings/index.web'
 
+export { CategoryDropdown } from './categories/index.web'
+export type { ICategoryDropdownProps } from './categories/index.web'
+
 export { useFeedbackModals, useDeleteBodyRenderer } from './shared/index.web'
 export type {
   IModalHandle,

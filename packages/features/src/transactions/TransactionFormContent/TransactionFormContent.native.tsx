@@ -2,7 +2,6 @@ import { useFormValidation } from '@financial-app/shared'
 import {
   Checkbox,
   DatePicker,
-  Dropdown,
   TextInput,
   Typography,
   tw,
@@ -10,6 +9,8 @@ import {
 import { useCallback, useImperativeHandle, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { View } from 'react-native'
+
+import { CategoryDropdown } from '../../categories/CategoryDropdown/CategoryDropdown.native'
 
 import {
   DEFAULT_TRANSACTION_FORM,
@@ -150,13 +151,13 @@ export function TransactionFormContent({
         <Typography variant="body-bold" color="foreground">
           {categoryLabel}
         </Typography>
-        <Dropdown
-          options={categories}
-          selectedValue={formData.category_id}
+        <CategoryDropdown
+          categories={categories}
+          selectedCategoryId={formData.category_id}
           onSelect={onCategoryChange}
           accessibilityLabel={categoryLabel}
           bottomSheetTitle={categoryLabel}
-          withPortal
+          alreadyUsedLabel={t('common.alreadyUsed')}
         />
       </View>
 

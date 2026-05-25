@@ -2,6 +2,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { useCallback, useMemo, useState } from 'react'
 import { Platform, Pressable, View } from 'react-native'
 
+import { resolveColor } from '#Lib/resolveColor'
 import tw from '#Lib/tw'
 
 import { native, shared } from './DatePicker.styles'
@@ -88,7 +89,8 @@ export function DatePicker({
   )
 
   /** Accent color for iOS inline calendar on dark BottomSheet */
-  const accentColor = useMemo(() => tw.color('beige-500') ?? '#98908B', [])
+  /** Accent color for iOS inline calendar on dark BottomSheet */
+  const accentColor = useMemo(() => resolveColor('beige-500'), [])
 
   return (
     <View style={tw`flex-col ${shared.wrapper}`}>

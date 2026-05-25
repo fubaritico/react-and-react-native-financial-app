@@ -1,4 +1,4 @@
-import type { IDropdownOption } from '@financial-app/ui'
+import type { ICategory } from '@financial-app/shared'
 
 /** Ref handle exposed by TransactionFormContent (native) */
 export interface ITransactionFormRef {
@@ -31,8 +31,8 @@ export interface TransactionFormData {
 export interface ITransactionFormContentProps {
   /** Initial form values (for edit mode) */
   initialValues?: TransactionFormData
-  /** Available category options from the API */
-  categories: readonly IDropdownOption[]
+  /** Available categories from the API */
+  categories: readonly ICategory[]
   /** Label for the name field */
   nameLabel: string
   /** Placeholder for the name field */

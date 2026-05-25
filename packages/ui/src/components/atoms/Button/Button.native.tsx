@@ -1,5 +1,6 @@
 import { ActivityIndicator, Pressable } from 'react-native'
 
+import { resolveColor } from '#Lib/resolveColor'
 import tw from '#Lib/tw'
 
 import { IIconSize } from '#Atoms/Icon'
@@ -50,8 +51,7 @@ export const Button = ({
   })
   const textColor =
     VARIANT_TEXT_COLOR[variant ?? 'primary'] ?? 'primary-foreground'
-  const spinnerColor =
-    tw.color(SPINNER_COLOR_TOKEN[variant ?? 'primary']) ?? '#FFFFFF'
+  const spinnerColor = resolveColor(SPINNER_COLOR_TOKEN[variant ?? 'primary'])
 
   return (
     <Pressable
@@ -87,9 +87,7 @@ export const Button = ({
               <Icon
                 name={icon}
                 iconSize={size as IIconSize}
-                color={
-                  tw.color(ICON_COLOR_TOKEN[variant ?? 'primary']) ?? '#FFFFFF'
-                }
+                color={resolveColor(ICON_COLOR_TOKEN[variant ?? 'primary'])}
               />
             ) : null}
           </>

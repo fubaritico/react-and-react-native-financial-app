@@ -1,7 +1,9 @@
 import { useFormValidation } from '@financial-app/shared'
-import { Dropdown, TextInput, Typography } from '@financial-app/ui'
+import { TextInput, Typography } from '@financial-app/ui'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { CategoryDropdown } from '../../categories/CategoryDropdown/CategoryDropdown.web'
 
 import {
   DEFAULT_BUDGET_FORM,
@@ -30,7 +32,7 @@ interface IBudgetFormWebProps extends IBudgetFormContentProps {
 export function BudgetFormContent({
   initialValues = DEFAULT_BUDGET_FORM,
   categories,
-  existingCategories = [],
+  existingCategoryIds = [],
   categoryLabel,
   maximumLabel,
   maximumPlaceholder,
@@ -72,18 +74,6 @@ export function BudgetFormContent({
     [validateForm, formData]
   )
 
-  /** Disable categories already in use (except current in edit mode) */
-  const categoryOptions = useMemo(
-    () =>
-      categories.map((opt) => ({
-        ...opt,
-        disabled:
-          existingCategories.includes(opt.value) &&
-          opt.value !== initialValues.category_id,
-      })),
-    [categories, existingCategories, initialValues.category_id]
-  )
-
   return (
     <form
       id="budget-form"
@@ -103,13 +93,14 @@ export function BudgetFormContent({
           <Typography variant="label" color="muted">
             {categoryLabel}
           </Typography>
-          <Dropdown
-            options={categoryOptions}
-            selectedValue={formData.category_id}
+          <CategoryDropdown
+            categories={categories}
+            selectedCategoryId={formData.category_id}
             onSelect={onCategoryChange}
+            existingCategoryIds={existingCategoryIds}
             accessibilityLabel={categoryLabel}
             bottomSheetTitle={categoryLabel}
-            withPortal
+            alreadyUsedLabel={t('common.alreadyUsed')}
           />
         </div>
 

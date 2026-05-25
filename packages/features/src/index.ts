@@ -122,6 +122,9 @@ export type {
 export { SettingsScreenView } from './settings'
 export type { ISettingsFormValues, ISettingsScreenViewProps } from './settings'
 
+export { CategoryDropdown } from './categories'
+export type { ICategoryDropdownProps } from './categories'
+
 export { useFeedbackModals, useDeleteBodyRenderer } from './shared'
 export type {
   IModalHandle,

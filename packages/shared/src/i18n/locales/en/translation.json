@@ -18,7 +18,8 @@
     "potDeleted": "Pot deleted successfully.",
     "moneyAdded": "Money added successfully.",
     "moneyWithdrawn": "Money withdrawn successfully.",
-    "actions": "Actions"
+    "actions": "Actions",
+    "alreadyUsed": "Already used"
   },
   "validation": {
     "nameRequired": "Name is required.",

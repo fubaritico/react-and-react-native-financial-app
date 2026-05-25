@@ -35,11 +35,7 @@ export function ThemeColorDropdown({
         <Typography variant="body" style={tw`flex-1`}>
           {selectedLabel}
         </Typography>
-        <Icon
-          name="caretDown"
-          iconSize="xs"
-          color={tw.color('foreground') ?? '#201F24'}
-        />
+        <Icon name="caretDown" iconSize="xs" />
       </View>
     ),
     [selectedValue]
@@ -76,6 +72,7 @@ export function ThemeColorDropdown({
       bottomSheetTitle={bottomSheetTitle}
       trigger={renderTrigger}
       renderItem={renderItem}
+      buttonClassName="h-12"
       buttonFullWidth
       withPortal
     />

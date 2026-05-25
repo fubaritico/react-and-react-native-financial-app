@@ -1,5 +1,6 @@
 import { View } from 'react-native'
 
+import { resolveColor } from '#Lib/resolveColor'
 import tw from '#Lib/tw'
 
 import { useBottomSheetContext } from './BottomSheetContext'
@@ -40,7 +41,7 @@ export function BottomSheetHeader({
         <Icon
           name="closeModal"
           iconSize="xxl"
-          color={tw.color(isDark ? 'white' : 'foreground') ?? '#201F24'}
+          color={resolveColor(isDark ? 'white' : 'foreground')}
         />
       </Button>
     </View>

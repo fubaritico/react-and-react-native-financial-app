@@ -47,3 +47,10 @@ tags:
 - updates [[Custom Categories Feature Plan]]
 - resolves [[Known Issues Registry]] QUAL-007 and QUAL-006
 - relates to [[Currency Feature Architecture]]
+
+## Icon Enum Codegen — Future Improvement
+
+- [gotcha] HeyAPI generates `icon: string` from OpenAPI spec because API Zod schema uses `z.string()` — frontend `ICategory.icon` expects `IconName` (union of 68 literals)
+- [workaround] Cast `categoriesData as ICategory[]` at route/feature boundary — safe because API only stores valid icon names inserted by our code
+- [future] Script in `@financial-app/icons` to generate `iconNames` array export → API schema uses `z.enum(iconNames)` → OpenAPI produces enum → HeyAPI generates union type → no more casts
+- [deferred] Category icons change rarely (35 icons), low priority

@@ -66,6 +66,7 @@ export function ThemeColorDropdown({
       bottomSheetTitle={bottomSheetTitle}
       trigger={renderTrigger}
       renderItem={renderItem}
+      buttonClassName="h-12"
       buttonFullWidth
       withPortal
     />

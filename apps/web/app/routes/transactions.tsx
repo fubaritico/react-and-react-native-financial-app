@@ -12,11 +12,11 @@ import {
 import { getErrorMessage, useModal } from '@financial-app/shared'
 import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { TransactionFormData } from '@financial-app/features'
-import type { ITransaction } from '@financial-app/shared'
+import type { ICategory, ITransaction } from '@financial-app/shared'
 
 import { queryClient } from '../lib/query-client'
 
@@ -82,18 +82,6 @@ export default function TransactionsScreen({
   // ── Categories ───────────────────────────────────────────────
   const { data: categoriesData } = useQuery(getCategoriesOptions())
 
-  /** Maps API categories to dropdown options */
-  const categoryOptions = useMemo(
-    () =>
-      (categoriesData ?? []).map((c) => ({
-        value: c.id,
-        label: c.name,
-        color: c.color,
-        icon: c.icon,
-      })),
-    [categoriesData]
-  )
-
   const { showSuccess, showError } = useFeedbackModals(modal)
   const { renderDeleteBody } = useDeleteBodyRenderer()
 
@@ -102,7 +90,7 @@ export default function TransactionsScreen({
     (props?: { initialValues?: TransactionFormData; description?: string }) => (
       <TransactionFormContent
         ref={formRef}
-        categories={categoryOptions}
+        categories={(categoriesData ?? []) as ICategory[]}
         nameLabel={t('transactions.form.nameLabel')}
         namePlaceholder={t('transactions.form.namePlaceholder')}
         amountLabel={t('transactions.form.amountLabel')}
@@ -114,7 +102,7 @@ export default function TransactionsScreen({
         {...props}
       />
     ),
-    [categoryOptions, t]
+    [categoriesData, t]
   )
 
   const { handleAdd, handleEdit, handleDelete } = useTransactionCrud({

@@ -1,7 +1,7 @@
 import { iconData } from '@financial-app/icons'
 import Svg, { Circle, Path, Rect } from 'react-native-svg'
 
-import tw from '#Lib/tw'
+import { resolveColor } from '#Lib/resolveColor'
 
 import { iconSizeMap } from './Icon.constants'
 
@@ -11,7 +11,7 @@ import type { SvgProps } from 'react-native-svg'
 /** Native-specific props passed through to the Svg element */
 type IIconNativeProps = IIconProps & Omit<SvgProps, 'width' | 'height'>
 
-const DEFAULT_NATIVE_COLOR = tw.color('foreground') ?? '#201F24'
+const DEFAULT_NATIVE_COLOR = resolveColor('foreground')
 
 /**
  * Compute rendered width and height.

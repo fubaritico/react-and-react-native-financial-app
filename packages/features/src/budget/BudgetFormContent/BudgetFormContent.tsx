@@ -1,4 +1,4 @@
-import type { IDropdownOption } from '@financial-app/ui'
+import type { ICategory } from '@financial-app/shared'
 
 /** Form values for budget — all strings (parsed to number on submit) */
 export interface BudgetFormValues {
@@ -25,10 +25,10 @@ export interface IBudgetFormRef {
 export interface IBudgetFormContentProps {
   /** Initial form values (for edit mode) */
   initialValues?: BudgetFormValues
-  /** Available category options from the API */
-  categories: readonly IDropdownOption[]
-  /** Categories already used by existing budgets (disabled in Add mode) */
-  existingCategories?: readonly string[]
+  /** Available categories from the API */
+  categories: readonly ICategory[]
+  /** Category IDs already used by existing budgets (disabled in Add mode) */
+  existingCategoryIds?: readonly string[]
   /** Label for the category field */
   categoryLabel: string
   /** Label for the maximum spend field */

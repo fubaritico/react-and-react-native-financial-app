@@ -8,12 +8,30 @@ import { TransactionFormContent } from './TransactionFormContent.web'
 import type { TransactionFormData } from './TransactionFormContent'
 import type { RefObject } from 'react'
 
-/** Mock category options for the dropdown */
+/** Mock categories for the dropdown */
 const MOCK_CATEGORIES = [
-  { value: 'cat-001', label: 'General' },
-  { value: 'cat-002', label: 'Dining Out' },
-  { value: 'cat-003', label: 'Groceries' },
-] as const
+  {
+    id: 'cat-001',
+    name: 'General',
+    icon: 'categoryGeneral' as const,
+    color: 'blue',
+    is_system: true,
+  },
+  {
+    id: 'cat-002',
+    name: 'Dining Out',
+    icon: 'categoryDiningOut' as const,
+    color: 'brown',
+    is_system: true,
+  },
+  {
+    id: 'cat-003',
+    name: 'Groceries',
+    icon: 'categoryGroceries' as const,
+    color: 'army-green',
+    is_system: true,
+  },
+]
 
 const DEFAULT_PROPS = {
   categories: MOCK_CATEGORIES,

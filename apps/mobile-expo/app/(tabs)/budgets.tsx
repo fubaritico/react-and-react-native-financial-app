@@ -28,7 +28,7 @@ import type {
   IBudgetFormBridge,
   IBudgetFormRef,
 } from '@financial-app/features'
-import type { IBudget, ITransaction } from '@financial-app/shared'
+import type { IBudget, ICategory, ITransaction } from '@financial-app/shared'
 import type { IBudgetCategoryCard } from '@financial-app/shared'
 
 import tw from '../../src/lib/tw'
@@ -128,18 +128,6 @@ export default function BudgetsScreen() {
   // ── Categories ───────────────────────────────────────────────
   const { data: categoriesData } = useQuery(getCategoriesOptions())
 
-  /** Maps API categories to dropdown options */
-  const categoryOptions = useMemo(
-    () =>
-      (categoriesData ?? []).map((c) => ({
-        value: c.id,
-        label: c.name,
-        color: c.color,
-        icon: c.icon,
-      })),
-    [categoriesData]
-  )
-
   /** Reads form data from the native imperative ref */
   const getFormData = useCallback(
     (): BudgetFormValues | null => formRef.current?.getValues() ?? null,
@@ -171,15 +159,15 @@ export default function BudgetsScreen() {
       <BudgetFormContent
         ref={formRef}
         initialValues={props?.initialValues}
-        categories={categoryOptions}
-        existingCategories={existingCategories}
+        categories={(categoriesData ?? []) as ICategory[]}
+        existingCategoryIds={existingCategories}
         categoryLabel={t('budgets.form.categoryLabel')}
         maximumLabel={t('budgets.form.maximumLabel')}
         maximumPlaceholder={t('budgets.form.maximumPlaceholder')}
         description={props?.description}
       />
     ),
-    [categoryOptions, existingCategories, t]
+    [categoriesData, existingCategories, t]
   )
 
   const { handleAdd, handleEdit, handleDelete } = useBudgetCrud({

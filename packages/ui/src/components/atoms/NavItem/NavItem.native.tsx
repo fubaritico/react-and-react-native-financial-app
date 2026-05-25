@@ -1,5 +1,6 @@
 import { Pressable } from 'react-native'
 
+import { resolveColor } from '#Lib/resolveColor'
 import tw from '#Lib/tw'
 
 import { Icon } from '../Icon/Icon.native'
@@ -22,13 +23,11 @@ export function NavItem({
   const isActive = !!active
   const isRow = orientation === 'row'
   const iconColor = isActive
-    ? (tw.color('nav-accent') ?? '#277C78')
-    : (tw.color('nav-text') ?? '#B3B3B3')
+    ? resolveColor('nav-accent')
+    : resolveColor('nav-text')
 
   /** Border color applied to the accent side (left for sidebar, bottom for bar) */
-  const borderColor = isActive
-    ? (tw.color('nav-accent') ?? '#277C78')
-    : 'transparent'
+  const borderColor = isActive ? resolveColor('nav-accent') : 'transparent'
 
   return (
     <Pressable

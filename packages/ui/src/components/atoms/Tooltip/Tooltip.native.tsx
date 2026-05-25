@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Dimensions, View } from 'react-native'
 
+import { resolveColor } from '#Lib/resolveColor'
 import tw from '#Lib/tw'
 
 import { Portal } from '#Atoms/Portal/Portal.native'
@@ -111,7 +112,7 @@ export function Tooltip({
   if (!visible) return null
 
   const arrowColorToken = getArrowColor(variant, 'native')
-  const resolvedArrowColor = tw.color(arrowColorToken) ?? '#201F24'
+  const resolvedArrowColor = resolveColor(arrowColorToken)
   const primaryAxis = getPrimaryAxis(effectivePlacement)
   const arrowRotation = ARROW_ROTATION[primaryAxis]
 

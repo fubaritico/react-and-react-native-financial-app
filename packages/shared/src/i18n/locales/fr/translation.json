@@ -18,6 +18,7 @@
     "potDeleted": "Cagnotte supprimée avec succès.",
     "moneyAdded": "Argent ajouté avec succès.",
     "moneyWithdrawn": "Retrait effectué avec succès.",
+    "alreadyUsed": "Déjà utilisé",
     "actions": "Actions"
   },
   "validation": {

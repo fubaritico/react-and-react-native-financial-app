@@ -7,6 +7,7 @@ import {
   Icon,
   ProgressBar,
   Typography,
+  resolveColor,
   tw,
 } from '@financial-app/ui/native'
 import { useCallback, useMemo } from 'react'
@@ -18,6 +19,9 @@ import { DELETE_ACTION, EDIT_ACTION } from './PotCard.constants'
 import { shared } from './PotCard.styles'
 
 import type { IPotCardProps } from './PotCard'
+
+/** Resolved grey-300 color for the ellipsis icon */
+const ELLIPSIS_COLOR = resolveColor('grey-300')
 
 /** No-op fallback for optional callbacks */
 const noop = () => {
@@ -106,11 +110,7 @@ export function PotCard({
           buttonClassName="text-grey-300 size-10 -mr-2"
           buttonCentered
           trigger={() => (
-            <Icon
-              name="ellipsis"
-              iconSize="sm"
-              color={tw.color('grey-300') ?? '#696868'}
-            />
+            <Icon name="ellipsis" iconSize="sm" color={ELLIPSIS_COLOR} />
           )}
         />
       </View>

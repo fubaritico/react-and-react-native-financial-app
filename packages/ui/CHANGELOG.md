@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-24)
+# 1.0.0 (2026-05-25)
 
 
 ### Bug Fixes
@@ -102,6 +102,7 @@
 * **features:** add ModalProvider — global modal renderer driven by Jotai atom ([d578557](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d57855782ed0c48cee0c43fe50f77aac5c629e5a))
 * **features:** add ModalRenderer, BudgetFormContent, and budget modal configs ([10eb1a3](https://github.com/fubaritico/react-and-react-native-financial-app/commit/10eb1a3fd86444b5255ad4b0402199b856aa0697))
 * **features:** extract TransactionsDataTable into directory structure + locale support ([554c0f7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/554c0f7faf197281c5c180005374ff8fdb5a8599))
+* **frontend:** adapt all components to category_id FK model ([a083241](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a083241b03f639fe59be1bf72c6b0309122b6b7c))
 * **http-client:** scaffold @financial-app/http-client with HeyAPI ([bdbab40](https://github.com/fubaritico/react-and-react-native-financial-app/commit/bdbab40934bf2e99136f174f98df870fcdaa474e))
 * **i18n:** add react-i18next with EN/FR translations across all apps ([9797ce4](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9797ce4836749dad17bb707aa6a0c4932c74772c))
 * **icons:** add @financial-app/icons package with cross-platform Icon component ([1c1be72](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1c1be727339b093097d1ff682027f5c1771b78c7))

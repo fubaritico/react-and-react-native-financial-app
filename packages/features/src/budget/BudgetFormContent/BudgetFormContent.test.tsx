@@ -21,12 +21,30 @@ function getFormData(form: HTMLFormElement): BudgetFormValues {
   return JSON.parse(form.dataset.formData ?? '{}') as BudgetFormValues
 }
 
-/** Mock category options for the dropdown */
+/** Mock categories for the dropdown */
 const MOCK_CATEGORIES = [
-  { value: 'cat-001', label: 'Entertainment' },
-  { value: 'cat-002', label: 'Bills' },
-  { value: 'cat-003', label: 'Groceries' },
-] as const
+  {
+    id: 'cat-001',
+    name: 'Entertainment',
+    icon: 'categoryEntertainment' as const,
+    color: 'red',
+    is_system: true,
+  },
+  {
+    id: 'cat-002',
+    name: 'Bills',
+    icon: 'categoryBills' as const,
+    color: 'blue',
+    is_system: true,
+  },
+  {
+    id: 'cat-003',
+    name: 'Groceries',
+    icon: 'categoryGroceries' as const,
+    color: 'army-green',
+    is_system: true,
+  },
+]
 
 const DEFAULT_PROPS = {
   categories: MOCK_CATEGORIES,
