@@ -3,7 +3,6 @@ import {
   Dropdown,
   Icon,
   Typography,
-  resolveColor,
   tw,
 } from '@financial-app/ui/native'
 import { useCallback, useMemo } from 'react'
@@ -14,8 +13,8 @@ import type { IDropdownOption } from '@financial-app/ui/native'
 
 import type { ICategoryDropdownProps } from './CategoryDropdown'
 
-/** Resolved on-dark color for icons inside the bottom sheet (dark background) */
-const ON_DARK_COLOR = resolveColor('on-dark')
+/** Semantic color for icons inside the bottom sheet (dark background) */
+const ON_DARK_COLOR = 'on-dark' as const
 
 /**
  * CategoryDropdown — category picker with color dot + icon in trigger and menu items (native).

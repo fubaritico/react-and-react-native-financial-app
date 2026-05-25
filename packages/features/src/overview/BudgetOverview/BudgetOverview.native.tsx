@@ -132,11 +132,7 @@ export function BudgetOverview({
           accessibilityState={{ disabled: false }}
         >
           <View style={tw`${shared.noData}`}>
-            <Icon
-              name="navBudgets"
-              iconSize="5xl"
-              color={tw.color('foreground-muted')}
-            />
+            <Icon name="navBudgets" iconSize="5xl" color="muted" />
             <Typography variant="body" color="muted" align="center">
               {t('budgetOverview.empty')}
             </Typography>

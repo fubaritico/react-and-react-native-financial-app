@@ -40,7 +40,7 @@ function ModalHeader({ title, closeLabel }: Readonly<IModalHeaderProps>) {
           accessibilityState={{ disabled: false }}
           hitSlop={8}
         >
-          <Icon name="closeModal" iconSize="3xl" color={tw.color('grey-500')} />
+          <Icon name="closeModal" iconSize="3xl" color="grey-500" />
         </Pressable>
       ) : null}
     </View>

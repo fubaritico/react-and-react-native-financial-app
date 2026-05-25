@@ -48,7 +48,7 @@ export const CategoryIconCell =
             )}
             aria-hidden="true"
           >
-            <Icon name={icon} color="white" iconSize="sm" />
+            <Icon name={icon} color="on-dark" iconSize="sm" />
           </div>
           <div className="min-w-0">
             <Typography

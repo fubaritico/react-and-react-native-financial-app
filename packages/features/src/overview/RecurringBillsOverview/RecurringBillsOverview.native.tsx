@@ -48,11 +48,7 @@ export const RecurringBillsOverview = ({
           accessibilityState={{ disabled: false }}
         >
           <View style={tw`${shared.noData}`}>
-            <Icon
-              name="navRecurringBills"
-              iconSize="5xl"
-              color={tw.color('foreground-muted')}
-            />
+            <Icon name="navRecurringBills" iconSize="5xl" color="muted" />
             <Typography variant="body" color="muted" align="center">
               {t('recurringBillsOverview.empty')}
             </Typography>

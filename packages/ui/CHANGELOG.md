@@ -99,6 +99,7 @@
 * **expo:** add expo-dev-client and native build scripts ([eef51ca](https://github.com/fubaritico/react-and-react-native-financial-app/commit/eef51ca348d281119d7aa34f561d63adef49a176))
 * **features:** add BudgetCategoryCard organism + Dropdown destructive/divider support ([1456f1e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/1456f1eff8ac904b60f3bae85437c83f3b02c804))
 * **features:** add BudgetOverview + Currency + ColorBarItem + Card refactor ([5961544](https://github.com/fubaritico/react-and-react-native-financial-app/commit/59615449bae58ad53b1a080543625420fc74913c))
+* **features:** add CategoryDropdown component + resolveColor utility ([35b3a35](https://github.com/fubaritico/react-and-react-native-financial-app/commit/35b3a35eb5aba86fa12943c1a0d32f26adf6fe0c))
 * **features:** add ModalProvider — global modal renderer driven by Jotai atom ([d578557](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d57855782ed0c48cee0c43fe50f77aac5c629e5a))
 * **features:** add ModalRenderer, BudgetFormContent, and budget modal configs ([10eb1a3](https://github.com/fubaritico/react-and-react-native-financial-app/commit/10eb1a3fd86444b5255ad4b0402199b856aa0697))
 * **features:** extract TransactionsDataTable into directory structure + locale support ([554c0f7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/554c0f7faf197281c5c180005374ff8fdb5a8599))

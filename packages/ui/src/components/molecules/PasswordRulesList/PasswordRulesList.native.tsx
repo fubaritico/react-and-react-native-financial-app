@@ -22,11 +22,7 @@ export function PasswordRulesList({
               <Icon
                 name={ICON_MAP[rule.state] as 'paid' | 'dueSoon'}
                 iconSize="xxs"
-                color={
-                  rule.state === 'valid'
-                    ? tw.color('success')
-                    : tw.color('destructive')
-                }
+                color={rule.state === 'valid' ? 'success' : 'destructive'}
               />
             </View>
           ) : (

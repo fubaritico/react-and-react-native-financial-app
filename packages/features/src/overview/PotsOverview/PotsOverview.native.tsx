@@ -52,9 +52,7 @@ export const PotsOverview = ({
               accessibilityLabel={savingsIconLabel}
               style={tw`${shared.iconArea}`}
             >
-              {icon ?? (
-                <Icon name="pot" iconSize="5xl" color={tw.color('green')} />
-              )}
+              {icon ?? <Icon name="pot" iconSize="5xl" color="green" />}
             </View>
 
             {/* Total saved text */}
@@ -89,11 +87,7 @@ export const PotsOverview = ({
           accessibilityState={{ disabled: false }}
         >
           <View style={tw`${shared.noData}`}>
-            <Icon
-              name="navPots"
-              iconSize="5xl"
-              color={tw.color('foreground-muted')}
-            />
+            <Icon name="navPots" iconSize="5xl" color="muted" />
             <Typography variant="body" color="muted" align="center">
               {t('potsOverview.empty')}
             </Typography>

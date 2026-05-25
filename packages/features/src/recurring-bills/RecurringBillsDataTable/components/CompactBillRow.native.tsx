@@ -37,7 +37,7 @@ export function CompactBillRow({
           { width: 40, height: 40, backgroundColor: categoryColor },
         ]}
       >
-        <Icon name={categoryIcon} color="white" iconSize="sm" />
+        <Icon name={categoryIcon} color="on-dark" iconSize="sm" />
       </View>
 
       {/* Name + Status */}

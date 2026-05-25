@@ -31,7 +31,7 @@ export function LatestSpending({
               role="img"
               aria-label={item.name}
             >
-              <Icon name={item.categoryIcon} iconSize="xs" color="#FFFFFF" />
+              <Icon name={item.categoryIcon} iconSize="xs" color="on-dark" />
             </div>
             <Typography variant="body-bold" as="span" className={shared.name}>
               {item.name}

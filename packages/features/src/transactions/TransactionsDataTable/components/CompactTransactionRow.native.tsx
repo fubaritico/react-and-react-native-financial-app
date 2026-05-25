@@ -81,7 +81,7 @@ export function CompactTransactionRow({
         accessibilityRole="image"
         accessibilityLabel={category_name}
       >
-        <Icon name={category_icon} color="white" iconSize="sm" />
+        <Icon name={category_icon} color="on-dark" iconSize="sm" />
       </View>
       <View style={tw`flex-1 min-w-0`}>
         <Typography variant="body-bold">{name}</Typography>

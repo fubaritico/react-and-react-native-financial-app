@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { Icon } from '#Atoms/index.web'
 
@@ -22,19 +22,22 @@ export const PasswordInput = ({
 }: Readonly<IPasswordInputProps>) => {
   const [visible, setVisible] = useState(false)
 
+  /** Toggles password visibility */
+  const handleToggleVisibility = useCallback(() => {
+    setVisible((v) => !v)
+  }, [])
+
   const toggle = showToggle ? (
     <button
       type="button"
-      onClick={() => {
-        setVisible((v) => !v)
-      }}
+      onClick={handleToggleVisibility}
       className={web.toggle}
       aria-label={visible ? hidePasswordLabel : showPasswordLabel}
     >
       <Icon
         name={visible ? 'hidePassword' : 'showPassword'}
         iconSize="sm"
-        color="var(--color-foreground-muted)"
+        color="muted"
       />
     </button>
   ) : undefined

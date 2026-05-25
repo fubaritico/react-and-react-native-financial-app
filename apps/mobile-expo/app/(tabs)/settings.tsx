@@ -88,6 +88,11 @@ export default function SettingsScreen() {
     router.navigate(target)
   }, [router])
 
+  /** Navigates to the categories management screen */
+  const handleGoToCategories = useCallback(() => {
+    router.navigate('/(tabs)/categories')
+  }, [router])
+
   return (
     <SettingsScreenView
       initialBalance={preferencesData?.reference_balance ?? 0}
@@ -99,6 +104,7 @@ export default function SettingsScreen() {
       isDeleting={deleteAccount.isPending}
       onDisconnect={handleDisconnect}
       onGoBack={handleGoBack}
+      onGoToCategories={handleGoToCategories}
     />
   )
 }

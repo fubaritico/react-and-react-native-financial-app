@@ -63,13 +63,7 @@ export const TextInput = ({
           ]}
         />
         {trailingElement ??
-          (icon ? (
-            <Icon
-              name={icon}
-              iconSize="sm"
-              color={tw.color('foreground-muted')}
-            />
-          ) : null)}
+          (icon ? <Icon name={icon} iconSize="sm" color="muted" /> : null)}
       </View>
       {helperText ? (
         <Typography

@@ -53,7 +53,7 @@ export function NavItem({
       <Icon
         name={icon}
         iconSize="lg"
-        color={active ? 'var(--color-nav-accent)' : 'currentColor'}
+        color={active ? 'nav-accent' : 'currentColor'}
       />
       {!collapsed && (
         <Typography

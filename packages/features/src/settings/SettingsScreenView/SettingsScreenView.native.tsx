@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   Divider,
+  SectionLink,
   TextInput,
   Typography,
   tw,
@@ -34,6 +35,7 @@ export function SettingsScreenView({
   isDeleting,
   onDisconnect,
   onGoBack,
+  onGoToCategories,
 }: Readonly<ISettingsScreenViewProps>) {
   const { t } = useTranslation()
   const modal = useModal()
@@ -158,6 +160,11 @@ export function SettingsScreenView({
               </View>
             </View>
           </View>
+
+          <SectionLink
+            label={t('settings.categories')}
+            onPress={onGoToCategories}
+          />
 
           <Divider />
 

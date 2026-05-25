@@ -2,6 +2,7 @@ import { iconData } from '@financial-app/icons'
 import Svg, { Circle, Path, Rect } from 'react-native-svg'
 
 import { resolveColor } from '#Lib/resolveColor'
+import { SEMANTIC_COLORS } from '#Lib/semanticColors'
 
 import { iconSizeMap } from './Icon.constants'
 
@@ -9,9 +10,20 @@ import type { IIconProps } from './Icon'
 import type { SvgProps } from 'react-native-svg'
 
 /** Native-specific props passed through to the Svg element */
-type IIconNativeProps = IIconProps & Omit<SvgProps, 'width' | 'height'>
+type IIconNativeProps = IIconProps &
+  Omit<SvgProps, 'width' | 'height' | 'color'>
 
-const DEFAULT_NATIVE_COLOR = resolveColor('foreground')
+/**
+ * Resolves semantic color token to a native hex color.
+ * @param color - Semantic token name or 'currentColor'
+ * @returns Hex color string
+ */
+function resolveNativeColor(color: IIconProps['color']): string {
+  if (!color || color === 'currentColor') return resolveColor('foreground')
+  const token = SEMANTIC_COLORS[color]
+  if (token === 'inherit') return resolveColor('foreground')
+  return resolveColor(token)
+}
 
 /**
  * Compute rendered width and height.
@@ -37,21 +49,22 @@ function computeDimensions(
 export function Icon({
   name,
   iconSize,
-  color = DEFAULT_NATIVE_COLOR,
+  color = 'currentColor',
   accessibilityLabel,
   ...rest
 }: Readonly<IIconNativeProps>) {
   const icon = iconData[name]
   const { width, height } = computeDimensions(iconSize, icon.width, icon.height)
+  const fill = resolveNativeColor(color)
 
   return (
     <Svg
-      key={color}
+      key={fill}
       viewBox={icon.viewBox}
       width={width}
       height={height}
       fill="none"
-      color={color}
+      color={fill}
       pointerEvents="none"
       accessibilityLabel={accessibilityLabel}
       accessibilityRole={accessibilityLabel ? 'image' : undefined}
@@ -59,7 +72,7 @@ export function Icon({
     >
       {icon.elements.map((el, i) => {
         if ('type' in el && el.type === 'circle') {
-          return <Circle key={i} cx={el.cx} cy={el.cy} r={el.r} fill={color} />
+          return <Circle key={i} cx={el.cx} cy={el.cy} r={el.r} fill={fill} />
         }
 
         if ('type' in el && el.type === 'rect') {
@@ -74,7 +87,7 @@ export function Icon({
               height={el.height}
               rx={el.rx}
               ry={el.ry}
-              fill={color}
+              fill={fill}
             />
           )
         }
@@ -83,7 +96,7 @@ export function Icon({
           <Path
             key={i}
             d={el.d}
-            fill={color}
+            fill={fill}
             fillRule={el.fillRule as 'nonzero' | 'evenodd' | undefined}
             clipRule={el.clipRule as 'nonzero' | 'evenodd' | undefined}
             strokeWidth={el.strokeWidth ? Number(el.strokeWidth) : undefined}

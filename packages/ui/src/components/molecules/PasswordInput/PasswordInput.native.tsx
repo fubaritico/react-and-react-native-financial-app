@@ -1,7 +1,5 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Pressable } from 'react-native'
-
-import tw from '#Lib/tw'
 
 import { TextInput } from '../TextInput/TextInput.native'
 
@@ -23,17 +21,22 @@ export const PasswordInput = ({
 }: Readonly<IPasswordInputProps>) => {
   const [visible, setVisible] = useState(false)
 
+  /** Toggles password visibility */
+  const handleToggleVisibility = useCallback(() => {
+    setVisible((v) => !v)
+  }, [])
+
   const toggle = showToggle ? (
     <Pressable
-      onPress={() => {
-        setVisible((v) => !v)
-      }}
+      onPress={handleToggleVisibility}
+      accessibilityRole="switch"
       accessibilityLabel={visible ? hidePasswordLabel : showPasswordLabel}
+      accessibilityState={{ checked: visible }}
     >
       <Icon
         name={visible ? 'hidePassword' : 'showPassword'}
         iconSize="sm"
-        color={tw.color('foreground-muted')}
+        color="muted"
       />
     </Pressable>
   ) : undefined

@@ -113,7 +113,7 @@ export const Showcase: Story = {
         </View>
       </View>
 
-      {/* Color Override */}
+      {/* Semantic Colors */}
       <View>
         <Text
           style={{
@@ -123,14 +123,14 @@ export const Showcase: Story = {
             color: '#696868',
           }}
         >
-          Color Override
+          Semantic Colors
         </Text>
         <View style={{ flexDirection: 'row', gap: 16 }}>
-          <Icon name="navBudgets" iconSize="xxl" color="#277C78" />
-          <Icon name="navBudgets" iconSize="xxl" color="#F2CDAC" />
-          <Icon name="navBudgets" iconSize="xxl" color="#82C9D7" />
-          <Icon name="navBudgets" iconSize="xxl" color="#626070" />
-          <Icon name="navBudgets" iconSize="xxl" color="#C94736" />
+          <Icon name="navBudgets" iconSize="xxl" color="success" />
+          <Icon name="navBudgets" iconSize="xxl" color="warning" />
+          <Icon name="navBudgets" iconSize="xxl" color="blue" />
+          <Icon name="navBudgets" iconSize="xxl" color="muted" />
+          <Icon name="navBudgets" iconSize="xxl" color="destructive" />
         </View>
       </View>
     </View>

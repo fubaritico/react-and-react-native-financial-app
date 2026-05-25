@@ -41,11 +41,7 @@ function ModalHeader({ title, closeLabel }: Readonly<IModalHeaderProps>) {
           className={cn(shared.closeButton, 'flex', web.closeButton)}
           aria-label={closeLabel}
         >
-          <Icon
-            name="closeModal"
-            iconSize="3xl"
-            color="var(--color-grey-500)"
-          />
+          <Icon name="closeModal" iconSize="3xl" color="grey-500" />
         </button>
       ) : null}
     </div>

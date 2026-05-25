@@ -25,7 +25,7 @@ export const TransactionRow = ({
         role="img"
         aria-label={name}
       >
-        <Icon name={categoryIcon} iconSize="sm" color="#FFFFFF" />
+        <Icon name={categoryIcon} iconSize="sm" color="on-dark" />
       </div>
       <Typography
         variant="body-bold"

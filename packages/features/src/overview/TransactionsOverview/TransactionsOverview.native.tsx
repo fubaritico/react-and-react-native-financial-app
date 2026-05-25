@@ -54,11 +54,7 @@ export const TransactionsOverview = ({
           accessibilityLabel={viewAllLabel}
         >
           <View style={tw`${shared.noData}`}>
-            <Icon
-              name="navTransactions"
-              iconSize="5xl"
-              color={tw.color('foreground-muted')}
-            />
+            <Icon name="navTransactions" iconSize="5xl" color="muted" />
             <Typography variant="body" color="muted" align="center">
               {t('transactionsOverview.empty')}
             </Typography>

@@ -52,7 +52,7 @@ function CategoryIconCellInner<TData>({
             style={tw`items-center justify-center rounded-full w-10 h-10 bg-${color}`}
             accessible={false}
           >
-            <Icon name={icon} color="white" iconSize="sm" />
+            <Icon name={icon} color="on-dark" iconSize="sm" />
           </View>
           <View style={tw`flex-1 w-0`}>
             <Typography variant="body-bold" numberOfLines={1}>

@@ -52,9 +52,7 @@ export const PotsOverview = ({
               className={cn('flex', shared.iconArea, web.iconAreaExtra)}
               aria-label={savingsIconLabel}
             >
-              {icon ?? (
-                <Icon name="pot" iconSize="5xl" color="var(--color-green)" />
-              )}
+              {icon ?? <Icon name="pot" iconSize="5xl" color="green" />}
             </div>
 
             {/* Total saved text */}

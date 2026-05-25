@@ -1,6 +1,16 @@
 import { cva } from 'class-variance-authority'
 
+import { SEMANTIC_COLORS } from '#Lib/semanticColors'
+
 import type { VariantProps } from 'class-variance-authority'
+
+/** Build CVA color map from shared semantic tokens: { foreground: 'text-foreground', ... } */
+const colorVariants = Object.fromEntries(
+  Object.entries(SEMANTIC_COLORS).map(([key, token]) => [
+    key,
+    token === 'inherit' ? 'text-inherit' : `text-${token}`,
+  ])
+) as Record<keyof typeof SEMANTIC_COLORS, string>
 
 export const typographyVariants = cva('font-sans', {
   variants: {
@@ -21,23 +31,7 @@ export const typographyVariants = cva('font-sans', {
       'caption-bold': 'text-xs font-bold leading-normal',
     },
     /** Text color — maps to semantic tokens. */
-    color: {
-      foreground: 'text-foreground',
-      muted: 'text-foreground-muted',
-      'on-dark': 'text-on-dark',
-      'on-dark-muted': 'text-on-dark-muted',
-      success: 'text-success',
-      destructive: 'text-destructive',
-      'primary-foreground': 'text-primary-foreground',
-      'transaction-positive': 'text-transaction-positive',
-      'transaction-negative': 'text-transaction-negative',
-      warning: 'text-warning',
-      blue: 'text-blue',
-      'beige-500': 'text-beige-500',
-      'nav-text': 'text-nav-text',
-      'nav-active': 'text-nav-active-text',
-      inherit: 'text-inherit',
-    },
+    color: colorVariants,
     /** Text alignment. */
     align: {
       left: 'text-left',

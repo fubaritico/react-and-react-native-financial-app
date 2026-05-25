@@ -26,6 +26,7 @@ export function SettingsScreenView({
   isDeleting,
   onDisconnect,
   onGoBack,
+  onGoToCategories,
 }: Readonly<ISettingsScreenViewProps>) {
   const { t } = useTranslation()
   const modal = useModal()
@@ -152,6 +153,14 @@ export function SettingsScreenView({
                 </div>
               </div>
             </div>
+
+            <Button
+              variant="secondary"
+              icon="arrowRight"
+              iconPosition="right"
+              title={t('settings.categories')}
+              onPress={onGoToCategories}
+            />
 
             <Divider />
 

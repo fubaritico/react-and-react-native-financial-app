@@ -13,6 +13,9 @@ export type {
 export { Button } from './components/atoms/Button'
 export type { IButtonProps } from './components/atoms/Button/Button.tsx'
 
+export { IconButton } from './components/atoms/IconButton'
+export type { IIconButtonProps } from './components/atoms/IconButton/IconButton.tsx'
+
 export { ColorDot } from './components/atoms/ColorDot'
 export type { IColorDotProps } from './components/atoms/ColorDot/ColorDot.tsx'
 

@@ -7,11 +7,11 @@ import { shared, web } from './PasswordRulesList.styles'
 
 import type { IPasswordRulesListProps } from './PasswordRulesList'
 
-/** CSS color values for web icon fill */
-const ICON_COLOR_MAP: Record<'valid' | 'invalid', string> = {
-  valid: 'var(--color-success)',
-  invalid: 'var(--color-destructive)',
-}
+/** Semantic icon color per rule validation state */
+const ICON_COLOR_MAP = {
+  valid: 'success',
+  invalid: 'destructive',
+} as const
 
 /** Web implementation of the PasswordRulesList component. */
 export function PasswordRulesList({

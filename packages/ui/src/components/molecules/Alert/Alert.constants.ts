@@ -1,5 +1,7 @@
 import type { IconName } from '@financial-app/icons'
 
+import type { SemanticColor } from '#Lib/semanticColors'
+
 import type { AlertSeverity } from './Alert'
 
 /** Severity-to-icon mapping */
@@ -18,8 +20,8 @@ export const SEVERITY_BG: Record<AlertSeverity, string> = {
   info: 'bg-blue',
 } as const
 
-/** Severity-to-token name mapping (for tw.color() on native, text class on web) */
-export const SEVERITY_TOKEN: Record<AlertSeverity, string> = {
+/** Severity-to-semantic color mapping (for Icon color prop) */
+export const SEVERITY_TOKEN: Record<AlertSeverity, SemanticColor> = {
   success: 'success',
   warning: 'warning',
   error: 'destructive',

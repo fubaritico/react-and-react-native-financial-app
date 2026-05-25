@@ -30,4 +30,6 @@ export interface ISettingsScreenViewProps {
   onDisconnect: () => void
   /** Callback to navigate back to the previous screen (referrer) */
   onGoBack: () => void
+  /** Callback to navigate to the categories management screen */
+  onGoToCategories: () => void
 }

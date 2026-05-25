@@ -28,9 +28,9 @@ export function Status({ date, status }: Readonly<IStatusProps>) {
 
   const iconColor =
     status === 'paid'
-      ? tw.color('success')
+      ? ('success' as const)
       : status === 'due-soon'
-        ? tw.color('destructive')
+        ? ('destructive' as const)
         : undefined
 
   return (

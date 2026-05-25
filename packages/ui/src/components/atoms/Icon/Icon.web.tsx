@@ -1,5 +1,7 @@
 import { iconData } from '@financial-app/icons'
 
+import { SEMANTIC_COLORS } from '#Lib/semanticColors'
+
 import { iconSizeMap } from './Icon.constants'
 
 import type { IIconProps } from './Icon'
@@ -7,7 +9,19 @@ import type { SVGProps } from 'react'
 
 /** Web-specific props passed through to the svg element */
 type IIconWebProps = IIconProps &
-  Omit<SVGProps<SVGSVGElement>, 'width' | 'height'>
+  Omit<SVGProps<SVGSVGElement>, 'width' | 'height' | 'color'>
+
+/**
+ * Resolves semantic color token to a CSS value.
+ * @param color - Semantic token name or 'currentColor'
+ * @returns CSS color value
+ */
+function resolveCssColor(color: IIconProps['color']): string {
+  if (!color || color === 'currentColor') return 'currentColor'
+  const token = SEMANTIC_COLORS[color]
+  if (token === 'inherit') return 'currentColor'
+  return `var(--color-${token})`
+}
 
 /**
  * Compute rendered width and height.
@@ -39,6 +53,7 @@ export function Icon({
 }: Readonly<IIconWebProps>) {
   const icon = iconData[name]
   const { width, height } = computeDimensions(iconSize, icon.width, icon.height)
+  const fill = resolveCssColor(color)
 
   return (
     <svg
@@ -53,7 +68,7 @@ export function Icon({
     >
       {icon.elements.map((el, i) => {
         if ('type' in el && el.type === 'circle') {
-          return <circle key={i} cx={el.cx} cy={el.cy} r={el.r} fill={color} />
+          return <circle key={i} cx={el.cx} cy={el.cy} r={el.r} fill={fill} />
         }
 
         if ('type' in el && el.type === 'rect') {
@@ -66,7 +81,7 @@ export function Icon({
               height={el.height}
               rx={el.rx}
               ry={el.ry}
-              fill={color}
+              fill={fill}
             />
           )
         }
@@ -75,7 +90,7 @@ export function Icon({
           <path
             key={i}
             d={el.d}
-            fill={color}
+            fill={fill}
             fillRule={el.fillRule as SVGProps<SVGPathElement>['fillRule']}
             clipRule={el.clipRule as SVGProps<SVGPathElement>['clipRule']}
             strokeWidth={el.strokeWidth}

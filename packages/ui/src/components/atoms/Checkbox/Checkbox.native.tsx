@@ -68,7 +68,7 @@ export function Checkbox({
           style={tw`${checkboxVariants({ size, checked: isVisuallyChecked, hasError: !!error, disabled: !!disabled })}`}
         >
           {iconName ? (
-            <Icon name={iconName} iconSize="xs" color="white" />
+            <Icon name={iconName} iconSize="xs" color="on-dark" />
           ) : null}
         </View>
         {label ? (

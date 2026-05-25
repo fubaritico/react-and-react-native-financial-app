@@ -33,7 +33,7 @@ export const BillTitleCell =
             style={tw`items-center justify-center rounded-full w-10 h-10 bg-${color}`}
             accessible={false}
           >
-            <Icon name={icon} color="white" iconSize="sm" />
+            <Icon name={icon} color="on-dark" iconSize="sm" />
           </View>
         </View>
         <Typography variant="body-bold">{name}</Typography>

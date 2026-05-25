@@ -32,7 +32,7 @@ export function LatestSpending({
               accessibilityRole="image"
               accessibilityLabel={item.name}
             >
-              <Icon name={item.categoryIcon} iconSize="xs" color="#FFFFFF" />
+              <Icon name={item.categoryIcon} iconSize="xs" color="on-dark" />
             </View>
             <Typography variant="body-bold" style={tw`${shared.name}`}>
               {item.name}

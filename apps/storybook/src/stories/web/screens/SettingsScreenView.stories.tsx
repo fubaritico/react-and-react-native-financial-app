@@ -20,6 +20,7 @@ const defaultProps: ISettingsScreenViewProps = {
   isDeleting: false,
   onDisconnect: noop,
   onGoBack: noop,
+  onGoToCategories: noop,
 }
 
 const meta = {

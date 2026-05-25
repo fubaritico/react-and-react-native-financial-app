@@ -22,6 +22,11 @@ const noop = () => {
   /* intentional no-op */
 }
 
+/** Stable trigger render prop for the ellipsis dropdown */
+const renderEllipsisTrigger = () => (
+  <Icon name="ellipsis" iconSize="sm" color="currentColor" />
+)
+
 /** Web implementation of the PotCard component. */
 export function PotCard({
   name,
@@ -100,9 +105,7 @@ export function PotCard({
           buttonClassName="p-0 text-grey-300"
           buttonCentered
           position="right"
-          trigger={() => (
-            <Icon name="ellipsis" iconSize="sm" color="currentColor" />
-          )}
+          trigger={renderEllipsisTrigger}
         />
       </div>
 

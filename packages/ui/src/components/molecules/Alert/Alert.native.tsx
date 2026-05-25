@@ -10,14 +10,6 @@ import type { IAlertProps } from './Alert'
 
 import { Icon, Typography } from '#Atoms'
 
-/** Typography color per severity */
-const SEVERITY_TEXT_COLOR = {
-  success: 'success',
-  warning: 'warning',
-  error: 'destructive',
-  info: 'blue',
-} as const
-
 /** Native implementation of the Alert component. */
 export function Alert({
   severity,
@@ -26,8 +18,8 @@ export function Alert({
 }: Readonly<IAlertProps>) {
   const bgClass = SEVERITY_BG[severity]
   const iconName = SEVERITY_ICON[severity]
-  const textColor = SEVERITY_TEXT_COLOR[severity]
-  const iconColor = tw.color(SEVERITY_TOKEN[severity])
+  const textColor = SEVERITY_TOKEN[severity]
+  const iconColor = SEVERITY_TOKEN[severity]
 
   return (
     <View

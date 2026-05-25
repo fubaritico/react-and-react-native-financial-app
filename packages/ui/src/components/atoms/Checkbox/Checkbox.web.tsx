@@ -85,7 +85,7 @@ export function Checkbox({
           aria-hidden="true"
         >
           {iconName ? (
-            <Icon name={iconName} iconSize="xs" color="white" />
+            <Icon name={iconName} iconSize="xs" color="on-dark" />
           ) : null}
         </span>
         {label ? (

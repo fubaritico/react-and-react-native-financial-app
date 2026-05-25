@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { cn } from '#Lib/cn'
 
 import { Icon, Typography } from '#Atoms/index.web'
@@ -6,6 +8,7 @@ import { shared, web } from './TextInput.styles'
 import { textInputVariants } from './TextInput.variants'
 
 import type { ITextInputProps } from './TextInput'
+import type { ChangeEvent } from 'react'
 
 /** Web implementation of the TextInput component. */
 export const TextInput = ({
@@ -26,6 +29,14 @@ export const TextInput = ({
   className,
 }: Readonly<ITextInputProps & { className?: string }>) => {
   const inputClasses = textInputVariants({ error })
+
+  /** Forwards native input change to onChangeText callback */
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      onChangeText(e.target.value)
+    },
+    [onChangeText]
+  )
 
   return (
     <div className={cn('flex flex-col', shared.wrapper, className)}>
@@ -54,9 +65,7 @@ export const TextInput = ({
                 : 'text'
           }
           value={value}
-          onChange={(e) => {
-            onChangeText(e.target.value)
-          }}
+          onChange={handleChange}
           placeholder={placeholder}
           maxLength={maxLength}
           autoComplete={keyboardType === 'email-address' ? 'email' : undefined}
@@ -68,13 +77,7 @@ export const TextInput = ({
           )}
         />
         {trailingElement ??
-          (icon ? (
-            <Icon
-              name={icon}
-              iconSize="sm"
-              color="var(--color-foreground-muted)"
-            />
-          ) : null)}
+          (icon ? <Icon name={icon} iconSize="sm" color="muted" /> : null)}
       </div>
       {helperText ? (
         <Typography

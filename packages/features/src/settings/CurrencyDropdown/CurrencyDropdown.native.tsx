@@ -52,7 +52,7 @@ export function CurrencyDropdown({
             {selectedLabel}
           </Typography>
           <Typography variant="body-bold">{symbol}</Typography>
-          <Icon name="caretDown" iconSize="xs" color={tw.color('foreground')} />
+          <Icon name="caretDown" iconSize="xs" color="foreground" />
         </View>
       )
     },

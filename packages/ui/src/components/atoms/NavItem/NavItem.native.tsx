@@ -22,9 +22,7 @@ export function NavItem({
 }: Readonly<INavItemProps>) {
   const isActive = !!active
   const isRow = orientation === 'row'
-  const iconColor = isActive
-    ? resolveColor('nav-accent')
-    : resolveColor('nav-text')
+  const iconColor = isActive ? ('nav-accent' as const) : ('nav-text' as const)
 
   /** Border color applied to the accent side (left for sidebar, bottom for bar) */
   const borderColor = isActive ? resolveColor('nav-accent') : 'transparent'

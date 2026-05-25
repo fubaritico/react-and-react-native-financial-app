@@ -28,7 +28,7 @@ export const TransactionRow = ({
         accessibilityRole="image"
         accessibilityLabel={name}
       >
-        <Icon name={categoryIcon} iconSize="sm" color="#FFFFFF" />
+        <Icon name={categoryIcon} iconSize="sm" color="on-dark" />
       </View>
       <Typography variant="body-bold" style={tw`flex-1 items-center`}>
         {name}

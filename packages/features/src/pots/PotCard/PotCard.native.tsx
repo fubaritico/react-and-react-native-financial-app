@@ -7,7 +7,6 @@ import {
   Icon,
   ProgressBar,
   Typography,
-  resolveColor,
   tw,
 } from '@financial-app/ui/native'
 import { useCallback, useMemo } from 'react'
@@ -20,13 +19,18 @@ import { shared } from './PotCard.styles'
 
 import type { IPotCardProps } from './PotCard'
 
-/** Resolved grey-300 color for the ellipsis icon */
-const ELLIPSIS_COLOR = resolveColor('grey-300')
+/** Semantic color for the ellipsis icon */
+const ELLIPSIS_COLOR = 'grey-300' as const
 
 /** No-op fallback for optional callbacks */
 const noop = () => {
   /* intentional no-op */
 }
+
+/** Stable trigger render prop for the ellipsis dropdown */
+const renderEllipsisTrigger = () => (
+  <Icon name="ellipsis" iconSize="sm" color={ELLIPSIS_COLOR} />
+)
 
 /** Native implementation of the PotCard component. */
 export function PotCard({
@@ -109,9 +113,7 @@ export function PotCard({
           buttonSize="md"
           buttonClassName="text-grey-300 size-10 -mr-2"
           buttonCentered
-          trigger={() => (
-            <Icon name="ellipsis" iconSize="sm" color={ELLIPSIS_COLOR} />
-          )}
+          trigger={renderEllipsisTrigger}
         />
       </View>
 

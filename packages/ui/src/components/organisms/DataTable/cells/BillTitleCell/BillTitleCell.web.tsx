@@ -34,7 +34,7 @@ export const BillTitleCell =
             )}
             aria-hidden="true"
           >
-            <Icon name={icon} color="white" iconSize="sm" />
+            <Icon name={icon} color="on-dark" iconSize="sm" />
           </div>
         </div>
         <Typography variant="body-bold">{name}</Typography>
