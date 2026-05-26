@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   Divider,
-  SectionLink,
   TextInput,
   Typography,
   tw,
@@ -161,8 +160,11 @@ export function SettingsScreenView({
             </View>
           </View>
 
-          <SectionLink
-            label={t('settings.categories')}
+          <Button
+            variant="secondary"
+            icon="arrowRight"
+            iconPosition="right"
+            title={t('settings.categories')}
             onPress={onGoToCategories}
           />
 

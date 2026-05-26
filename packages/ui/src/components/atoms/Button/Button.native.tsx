@@ -3,12 +3,14 @@ import { ActivityIndicator, Pressable } from 'react-native'
 import { resolveColor } from '#Lib/resolveColor'
 import tw from '#Lib/tw'
 
-import type { IIconSize } from '#Atoms/Icon'
-
 import { Icon } from '../Icon/Icon.native'
 import { Typography } from '../Typography/Typography.native'
 
-import { ICON_COLOR_TOKEN, SPINNER_COLOR_TOKEN } from './Button.constants'
+import {
+  BUTTON_ICON_SIZE_MAP,
+  ICON_COLOR_TOKEN,
+  SPINNER_COLOR_TOKEN,
+} from './Button.constants'
 import { buttonVariants } from './Button.variants'
 
 import type { IButtonProps } from './Button'
@@ -86,7 +88,7 @@ export const Button = ({
             {icon ? (
               <Icon
                 name={icon}
-                iconSize={size as IIconSize}
+                iconSize={BUTTON_ICON_SIZE_MAP[size ?? 'md']}
                 color={ICON_COLOR_TOKEN[variant ?? 'primary']}
               />
             ) : null}

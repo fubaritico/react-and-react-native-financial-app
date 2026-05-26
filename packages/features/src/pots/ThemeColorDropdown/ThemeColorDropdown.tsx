@@ -14,4 +14,8 @@ export interface IThemeColorDropdownProps {
   bottomSheetTitle?: string
   /** Label shown for already-used themes (default: "Already used") */
   alreadyUsedLabel: string
+  /** Placeholder text shown when no color is selected */
+  placeholder?: string
+  /** Additional className for the trigger button */
+  buttonClassName?: string
 }

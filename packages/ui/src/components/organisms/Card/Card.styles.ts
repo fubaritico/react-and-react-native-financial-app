@@ -14,3 +14,6 @@ export const web = {
 
 /** Native-only classes for Card */
 export const native = {} as const
+
+/** Native boxShadow style — beige-500 (#98908B) at 50% opacity, equivalent to shadow-sm. */
+export const NATIVE_BOX_SHADOW = '0 1px 2px 0 #98908B80'

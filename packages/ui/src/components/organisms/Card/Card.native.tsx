@@ -3,7 +3,7 @@ import { View, useWindowDimensions } from 'react-native'
 import tw from '#Lib/tw'
 
 import { TABLET_BREAKPOINT } from './Card.constants'
-import { shared } from './Card.styles'
+import { NATIVE_BOX_SHADOW, shared } from './Card.styles'
 import { cardVariants } from './Card.variants'
 
 import type { ICardProps } from './Card'
@@ -16,12 +16,18 @@ export const Card = ({
   text,
   children,
   style,
+  shadow,
 }: Readonly<ICardProps>) => {
   const { width } = useWindowDimensions()
   const responsivePadding = width >= TABLET_BREAKPOINT ? 'p-6' : 'p-4'
-
   return (
-    <View style={[tw`${cardVariants()} ${responsivePadding}`, style]}>
+    <View
+      style={[
+        tw`${cardVariants()} ${responsivePadding}`,
+        shadow && { boxShadow: NATIVE_BOX_SHADOW },
+        style,
+      ]}
+    >
       {title && (
         <Typography
           variant="subsection-title"

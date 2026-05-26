@@ -13,4 +13,6 @@ export interface ICardProps extends VariantProps<typeof cardVariants> {
   children?: ReactNode
   /** Optional style override (native only). */
   style?: ViewStyle | object
+  /** If true, will display a shadow */
+  shadow?: boolean
 }

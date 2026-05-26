@@ -54,10 +54,19 @@ export function Sidebar() {
     setCollapsed((prev) => !prev)
   }, [])
 
+  const activeHref = useMemo(() => {
+    const item = items.find(
+      (i) =>
+        i.href === location.pathname ||
+        (i.href !== '/' && location.pathname.startsWith(`${i.href}/`))
+    )
+    return item?.href ?? location.pathname
+  }, [items, location.pathname])
+
   return (
     <Navigation
       items={items}
-      activeHref={location.pathname}
+      activeHref={activeHref}
       onNavigate={handleNavigate}
       collapsed={collapsed}
       onToggleCollapse={handleToggleCollapse}

@@ -413,6 +413,7 @@
     "name": "Nom",
     "namePlaceholder": "Nom de la catégorie",
     "color": "Couleur",
+    "selectColor": "Choisir une couleur",
     "icon": "Icône",
     "add": "Ajouter",
     "adding": "Ajout\u2026",

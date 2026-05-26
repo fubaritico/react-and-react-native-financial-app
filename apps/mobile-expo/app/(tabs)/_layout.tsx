@@ -23,7 +23,7 @@ export let lastContentTab = 'index'
  * @param name - The route name that received focus
  */
 function trackContentTab(name: string): void {
-  if (name !== 'settings') {
+  if (name !== 'settings' && name !== 'categories') {
     lastContentTab = name
   }
 }
@@ -154,6 +154,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{ title: t('navigation.settings') }}
+      />
+      <Tabs.Screen
+        name="categories"
+        options={{
+          title: t('categories.title'),
+          href: null,
+        }}
       />
     </Tabs>
   )

@@ -18,4 +18,6 @@ export interface IIconButtonProps {
   disabled?: boolean
   /** Additional CSS classes for the button container. */
   className?: string
+  /** If true, will display a shadow */
+  shadow?: boolean
 }

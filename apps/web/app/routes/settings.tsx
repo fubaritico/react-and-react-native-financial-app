@@ -86,6 +86,11 @@ export default function SettingsScreen() {
     void navigate(-1)
   }, [navigate])
 
+  /** Navigates to the categories management screen */
+  const handleGoToCategories = useCallback(() => {
+    void navigate('/settings/categories')
+  }, [navigate])
+
   return (
     <SettingsScreenView
       initialBalance={preferencesData?.reference_balance ?? 0}
@@ -97,6 +102,7 @@ export default function SettingsScreen() {
       isDeleting={deleteAccount.isPending}
       onDisconnect={handleDisconnect}
       onGoBack={handleGoBack}
+      onGoToCategories={handleGoToCategories}
     />
   )
 }

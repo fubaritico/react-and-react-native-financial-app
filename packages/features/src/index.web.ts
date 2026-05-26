@@ -135,6 +135,12 @@ export type {
 export { CategoryDropdown } from './categories/index.web'
 export type { ICategoryDropdownProps } from './categories/index.web'
 
+export { CategoriesScreenView } from './categories/index.web'
+export type {
+  ICategoriesScreenViewProps,
+  INewCategoryData,
+} from './categories/index.web'
+
 export { useFeedbackModals, useDeleteBodyRenderer } from './shared/index.web'
 export type {
   IModalHandle,

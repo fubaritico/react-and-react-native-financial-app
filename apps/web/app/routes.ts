@@ -25,5 +25,6 @@ export default [
     route('pots', 'routes/pots.tsx'),
     route('recurring', 'routes/recurring.tsx'),
     route('settings', 'routes/settings.tsx'),
+    route('settings/categories', 'routes/settings.categories.tsx'),
   ]),
 ] satisfies RouteConfig

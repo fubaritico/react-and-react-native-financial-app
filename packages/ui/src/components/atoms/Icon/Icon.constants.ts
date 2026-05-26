@@ -1,5 +1,7 @@
 /** Named icon size presets — applied to the largest dimension */
 export type IIconSize =
+  | '4xs'
+  | '3xs'
   | 'xxs'
   | 'xs'
   | 'sm'
@@ -14,6 +16,8 @@ export type IIconSize =
 
 /** Pixel values for each named size */
 export const iconSizeMap: Record<IIconSize, number> = {
+  '4xs': 8,
+  '3xs': 10,
   xxs: 12,
   xs: 14,
   sm: 16,

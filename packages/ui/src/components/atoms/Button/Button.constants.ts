@@ -1,3 +1,4 @@
+import type { IIconSize } from '../Icon/Icon.constants'
 import type { IconColor } from '../Icon/Icon.tsx'
 
 /** Semantic icon color per button variant. */
@@ -17,4 +18,16 @@ export const SPINNER_COLOR_TOKEN: Record<string, string> = {
   destroy: 'primary-foreground',
   outline: 'foreground',
   ghost: 'foreground',
+}
+
+/**
+ * Maps Button size to Icon iconSize for native.
+ * Button size names don't all match IIconSize — this ensures valid values.
+ */
+export const BUTTON_ICON_SIZE_MAP: Record<string, IIconSize> = {
+  lg: 'sm',
+  md: 'xs',
+  sm: 'xxs',
+  icon: 'xs',
+  nav: 'xs',
 }

@@ -15,6 +15,7 @@ export function IconButton({
   size,
   disabled,
   className,
+  shadow,
 }: Readonly<IIconButtonProps>) {
   return (
     <Button
@@ -26,6 +27,9 @@ export function IconButton({
       centered
       className={cn(
         iconButtonVariants({ variant, size, disabled: disabled ?? undefined }),
+        {
+          'shadow-beige-500/50 shadow-sm': shadow,
+        },
         className
       )}
     />

@@ -26,19 +26,27 @@ export function ThemeColorDropdown({
   accessibilityLabel,
   bottomSheetTitle,
   alreadyUsedLabel,
+  placeholder,
+  buttonClassName,
 }: Readonly<IThemeColorDropdownProps>) {
-  /** Custom trigger — ColorDot + label + caret */
+  const hasSelection = selectedValue !== ''
+
+  /** Custom trigger — ColorDot + label + caret (or placeholder when empty) */
   const renderTrigger = useCallback(
     ({ selectedLabel }: { isOpen: boolean; selectedLabel: string }) => (
       <View style={tw`flex-row items-center gap-3 flex-1`}>
-        <ColorDot color={selectedValue} />
-        <Typography variant="body" style={tw`flex-1`}>
-          {selectedLabel}
+        {hasSelection ? <ColorDot color={selectedValue} /> : null}
+        <Typography
+          variant="body"
+          color={hasSelection ? undefined : 'beige-500'}
+          style={tw`flex-1`}
+        >
+          {hasSelection ? selectedLabel : placeholder}
         </Typography>
         <Icon name="caretDown" iconSize="xs" />
       </View>
     ),
-    [selectedValue]
+    [selectedValue, hasSelection, placeholder]
   )
 
   /** Custom item — ColorDot + label + "Already used" badge */
@@ -72,7 +80,7 @@ export function ThemeColorDropdown({
       bottomSheetTitle={bottomSheetTitle}
       trigger={renderTrigger}
       renderItem={renderItem}
-      buttonClassName="h-12"
+      buttonClassName={`h-12${buttonClassName ? ` ${buttonClassName}` : ''}`}
       buttonFullWidth
       withPortal
     />

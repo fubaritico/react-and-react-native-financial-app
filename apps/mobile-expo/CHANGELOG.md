@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-25)
+# 1.0.0 (2026-05-26)
 
 
 ### Bug Fixes
@@ -59,6 +59,7 @@
 * **ui:** modal portal nesting + dropdown/listbox/menu improvements ([e34bb69](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e34bb694e866e42a3d62d021c474e384d4cfe6f6))
 * **ui:** move header row inside white card in overview sections ([9cd0f15](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9cd0f15c1dcee7f6ccda1aa4b008f65f9dfab501))
 * **ui:** prevent dropdown menu scroll from closing the menu ([a0fb9f5](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a0fb9f5a9c51b0d9b84b0eedbb685763dd1202e3))
+* **ui:** remove hardcoded English fallbacks + extract trigger render props ([3b3fe05](https://github.com/fubaritico/react-and-react-native-financial-app/commit/3b3fe050844af5539e154a069583b2ca3a218fbd))
 * **ui:** replace default Tailwind colors with token aliases ([9b7b247](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9b7b24781dc5e82a18ecea230c3bb57b017e5b65))
 * **ui:** review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code ([0d43fae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d43faecf012669f2f97c8d4504f8f5ffd93c543))
 * **ui:** review fixes — token refs, aria-disabled, extract styles ([b396fb6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b396fb68c354bd75e8e16ea02ccb4f674121edaa))
@@ -154,6 +155,7 @@
 * **ui:** add DonutChart atom + enforce constants/utils/types separation ([4814f82](https://github.com/fubaritico/react-and-react-native-financial-app/commit/4814f82f4046d37348b7094c6a8bc6725347215b))
 * **ui:** add Dropdown molecule + Portal/Drawer/Menu/Listbox foundation ([298ada9](https://github.com/fubaritico/react-and-react-native-financial-app/commit/298ada92feb3a9c796c2f2ea81af4ba4cb1c5dc5))
 * **ui:** add Icon Storybook story with playground and showcase ([02c8c1f](https://github.com/fubaritico/react-and-react-native-financial-app/commit/02c8c1fc3e537b7417bab91a832e828be144f9ef))
+* **ui:** add IconButton atom + arrow/cross SVG icons ([cb03d87](https://github.com/fubaritico/react-and-react-native-financial-app/commit/cb03d87b739841ac5a527f65ea999ad6598aba63))
 * **ui:** add icons to Settings buttons + resize logo + update splash ([2f80d4d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2f80d4d0cb672a4827e4cf66f51cf73106d26a9f))
 * **ui:** add LatestSpending molecule + Divider className prop + stories ([44552eb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/44552ebc1c0a9e902f390018429cc4aa10b51310))
 * **ui:** add LatestSpending molecule + Divider className prop + stories ([54aaee7](https://github.com/fubaritico/react-and-react-native-financial-app/commit/54aaee746f324fcec61233155efcaf00dd58b22b))
