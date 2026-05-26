@@ -50,7 +50,7 @@ export function BudgetOverview({
   const hasHeader = title && seeDetailsLabel && onSeeDetails
 
   return (
-    <Card>
+    <Card shadow>
       {hasHeader && (
         <div className={cn('flex', shared.header)}>
           <Typography variant="subsection-title" as="h3">

@@ -152,12 +152,13 @@ export function TransactionFormContent({
           {categoryLabel}
         </Typography>
         <CategoryDropdown
-          categories={categories}
+          options={categories}
           selectedCategoryId={formData.category_id}
           onSelect={onCategoryChange}
           accessibilityLabel={categoryLabel}
           bottomSheetTitle={categoryLabel}
           alreadyUsedLabel={t('common.alreadyUsed')}
+          placeholder={t('common.selectCategory')}
         />
       </View>
 

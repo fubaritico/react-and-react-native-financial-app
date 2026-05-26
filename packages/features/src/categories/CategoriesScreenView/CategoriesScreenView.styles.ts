@@ -37,7 +37,7 @@ export const ICON_GRID_GAP = 8
 /** Native-only classes for CategoriesScreenView */
 export const native = {
   /** ScrollView content — padded, vertical gap, pt-14 clears status bar (matches overview p-4 + mt-10) */
-  scrollContent: 'flex-grow bg-beige-100 px-5 pt-14 pb-10 gap-6',
+  scrollContent: 'flex-grow bg-beige-200 px-5 pt-14 pb-10 gap-6',
   /** Header row — back button + title */
   header: 'flex-row items-center gap-3',
   /** Category grid container — wrapping row */

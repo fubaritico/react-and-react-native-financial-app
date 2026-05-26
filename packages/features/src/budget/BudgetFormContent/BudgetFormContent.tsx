@@ -25,7 +25,7 @@ export interface IBudgetFormRef {
 export interface IBudgetFormContentProps {
   /** Initial form values (for edit mode) */
   initialValues?: BudgetFormValues
-  /** Available categories from the API */
+  /** Available options from the API */
   categories: readonly ICategory[]
   /** Category IDs already used by existing budgets (disabled in Add mode) */
   existingCategoryIds?: readonly string[]

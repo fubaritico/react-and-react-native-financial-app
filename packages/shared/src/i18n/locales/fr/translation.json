@@ -20,7 +20,8 @@
     "moneyWithdrawn": "Retrait effectué avec succès.",
     "alreadyUsed": "Déjà utilisé",
     "actions": "Actions",
-    "back": "Retour"
+    "back": "Retour",
+    "selectCategory": "Choisir une catégorie"
   },
   "validation": {
     "nameRequired": "Le nom est requis.",

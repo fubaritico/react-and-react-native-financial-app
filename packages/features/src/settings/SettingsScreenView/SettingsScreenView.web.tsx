@@ -104,7 +104,7 @@ export function SettingsScreenView({
   return (
     <div className={web.root}>
       <div className={web.container}>
-        <Card>
+        <Card shadow>
           <div className={web.content}>
             <Typography variant="heading-lg" as="h1">
               {t('settings.title')}

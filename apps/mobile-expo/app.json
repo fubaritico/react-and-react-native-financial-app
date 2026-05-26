@@ -9,10 +9,10 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "backgroundColor": "#F8F4F0"
+      "backgroundColor": "#E0DBD7"
     },
     "androidStatusBar": {
-      "backgroundColor": "#F8F4F0",
+      "backgroundColor": "#E0DBD7",
       "barStyle": "dark-content"
     },
     "ios": {

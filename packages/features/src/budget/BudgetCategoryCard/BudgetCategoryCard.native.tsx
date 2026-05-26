@@ -98,7 +98,7 @@ export function BudgetCategoryCard({
   )
 
   return (
-    <Card>
+    <Card shadow>
       <View style={tw`${shared.header}`}>
         <ColorDot color={color} size={16} />
         <Typography

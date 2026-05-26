@@ -43,6 +43,7 @@ export function NavItem({
       aria-label={collapsed ? label : undefined}
       className={cn(
         navItemVariants({ active, orientation, collapsed }),
+        active && 'bg-white',
         !active && web.hover,
         web.root,
         web.transition,

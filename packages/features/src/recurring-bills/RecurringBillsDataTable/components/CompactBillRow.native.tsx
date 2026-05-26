@@ -32,10 +32,7 @@ export function CompactBillRow({
     <View style={tw`flex-row items-center gap-3 py-3 px-4`}>
       {/* Category icon circle */}
       <View
-        style={[
-          tw`items-center justify-center rounded-full`,
-          { width: 40, height: 40, backgroundColor: categoryColor },
-        ]}
+        style={tw`items-center justify-center rounded-full w-10 h-10 bg-${categoryColor}`}
       >
         <Icon name={categoryIcon} color="on-dark" iconSize="sm" />
       </View>

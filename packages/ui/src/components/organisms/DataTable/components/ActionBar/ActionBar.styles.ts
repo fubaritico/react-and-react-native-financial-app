@@ -15,4 +15,7 @@ export const web = {
 } as const
 
 /** Native-only classes for ActionBar */
-export const native = {} as const
+export const native = {
+  /** Container row layout with gap and padding */
+  container: '-mx-3 -mt-3',
+} as const

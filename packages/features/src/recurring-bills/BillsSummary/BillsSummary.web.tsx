@@ -9,7 +9,7 @@ export function BillsSummary({ title, rows }: Readonly<IBillsSummaryProps>) {
   const { format } = useCurrency()
 
   return (
-    <Card>
+    <Card shadow>
       <Typography variant="heading-md" as="h2">
         {title}
       </Typography>

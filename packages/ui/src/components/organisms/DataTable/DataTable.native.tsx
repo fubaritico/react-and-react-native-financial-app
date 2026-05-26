@@ -4,6 +4,8 @@ import { FlatList, Pressable, View, useWindowDimensions } from 'react-native'
 
 import tw from '#Lib/tw'
 
+import { Card } from '#Organisms/Card'
+
 import { ActionBar } from './components/ActionBar/ActionBar.native'
 import { NoResults } from './components/NoResults/NoResults.native'
 import { TableFooter } from './components/TableFooter/TableFooter.native'
@@ -157,7 +159,7 @@ export function DataTable<TData>({
   const skeletonData = Array.from({ length: MIN_PAGE_SIZE }, (_, i) => i)
 
   return (
-    <View style={[tw`${shared.root}`, tw`${isTablet ? 'p-8' : 'p-0'}`]}>
+    <Card shadow style={[tw`${shared.root}`, tw`${isTablet ? 'p-8' : 'p-0'}`]}>
       {/* ActionBar */}
       {showActionBar && (
         <ActionBar
@@ -232,6 +234,7 @@ export function DataTable<TData>({
           )}
           ListEmptyComponent={isEmpty ? renderEmpty : null}
           scrollEnabled={false}
+          style={tw`-mx-3`}
         />
       )}
 
@@ -247,6 +250,6 @@ export function DataTable<TData>({
           fullWidthPagination={!showRowsPerPage}
         />
       )}
-    </View>
+    </Card>
   )
 }

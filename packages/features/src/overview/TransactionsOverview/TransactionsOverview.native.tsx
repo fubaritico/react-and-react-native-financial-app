@@ -27,7 +27,7 @@ export const TransactionsOverview = ({
   const { t } = useTranslation()
 
   return (
-    <Card>
+    <Card shadow>
       <View style={tw`${shared.header}`}>
         <Typography variant="subsection-title" accessibilityRole="header">
           {title}

@@ -53,7 +53,7 @@ export function BudgetOverview({
   const hasHeader = title && seeDetailsLabel && onSeeDetails
 
   return (
-    <Card>
+    <Card shadow>
       {hasHeader && (
         <View style={tw`${shared.header}`}>
           <Typography variant="subsection-title" accessibilityRole="header">

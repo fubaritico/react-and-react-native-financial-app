@@ -111,7 +111,7 @@ export function SettingsScreenView({
 
   return (
     <ScrollView contentContainerStyle={tw`${native.scrollContent}`}>
-      <Card>
+      <Card shadow>
         <View style={tw`${native.cardContent}`}>
           <Typography variant="heading-lg" accessibilityRole="header">
             {t('settings.title')}

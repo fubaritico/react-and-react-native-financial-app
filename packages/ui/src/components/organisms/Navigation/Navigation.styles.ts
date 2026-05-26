@@ -6,9 +6,9 @@ export const shared = {
 
 /** Web-only classes for Navigation (hover, focus, transition, shadow, cursor, animate, responsive) */
 export const web = {
-  /** Sidebar container — dark bg, rounded right corners, sticky */
+  /** Sidebar container — dark bg, sticky */
   sidebar:
-    'hidden lg:flex flex-col h-screen bg-nav-bg rounded-r-xl py-10 sticky top-0 transition-width duration-300',
+    'hidden lg:flex flex-col h-screen bg-nav-bg py-10 sticky top-0 transition-width duration-300',
   /** Sidebar expanded width */
   sidebarExpanded: 'w-[300px] pr-8',
   /** Sidebar collapsed width */
@@ -24,7 +24,7 @@ export const web = {
   minimizeWrap: 'mt-auto pt-4',
   /** Minimize button interactive styles */
   minimizeButton:
-    'flex items-center gap-4 px-8 py-3 text-nav-text hover:text-on-dark transition-colors cursor-pointer rounded-r-lg w-full',
+    'flex items-center gap-4 px-8 py-3 text-nav-text hover:text-on-dark transition-colors cursor-pointer rounded-r-md w-full',
   /** Focus-visible ring for keyboard navigation */
   focusRing:
     'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',

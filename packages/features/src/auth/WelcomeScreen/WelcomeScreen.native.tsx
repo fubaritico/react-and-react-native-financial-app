@@ -33,7 +33,7 @@ export function WelcomeScreen({ onGetStarted }: Readonly<IWelcomeScreenProps>) {
       style={tw`${native.background}`}
     >
       <View style={tw`${native.cardWrapper}`}>
-        <Card style={tw`${native.card}`}>
+        <Card shadow style={tw`${native.card}`}>
           <Typography variant="heading-lg" align="center">
             {t('onboarding.welcome.title')}
           </Typography>

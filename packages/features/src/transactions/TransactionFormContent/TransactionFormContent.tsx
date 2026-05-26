@@ -31,7 +31,7 @@ export interface TransactionFormData {
 export interface ITransactionFormContentProps {
   /** Initial form values (for edit mode) */
   initialValues?: TransactionFormData
-  /** Available categories from the API */
+  /** Available options from the API */
   categories: readonly ICategory[]
   /** Label for the name field */
   nameLabel: string

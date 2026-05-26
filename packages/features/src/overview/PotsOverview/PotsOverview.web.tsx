@@ -31,7 +31,7 @@ export const PotsOverview = ({
   const { t } = useTranslation()
 
   return (
-    <Card>
+    <Card shadow>
       {/* Header row */}
       <div className={cn('flex', shared.header)}>
         <Typography variant="subsection-title" as="h3">

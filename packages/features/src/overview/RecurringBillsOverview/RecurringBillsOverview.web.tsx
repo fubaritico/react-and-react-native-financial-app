@@ -32,7 +32,7 @@ export const RecurringBillsOverview = ({
   const isEmpty = paid === 0 && upcoming === 0 && dueSoon === 0
 
   return (
-    <Card>
+    <Card shadow>
       <div className={cn('flex', shared.header)}>
         <Typography variant="subsection-title" as="h3">
           {title}

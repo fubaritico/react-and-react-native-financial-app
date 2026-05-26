@@ -41,7 +41,7 @@ export const web = {
 /** Native-only classes for SettingsScreenView (ScrollView content, RN layout) */
 export const native = {
   /** ScrollView content — centered, padded, vertical gap */
-  scrollContent: 'flex-grow justify-center px-5 pt-8 pb-10 gap-6',
+  scrollContent: 'flex-grow bg-beige-200 justify-center px-5 pt-8 pb-10 gap-6',
   /** Card inner container — vertical layout with section spacing */
   cardContent: 'flex-1 gap-3',
   /** Section group — vertical layout with field spacing */

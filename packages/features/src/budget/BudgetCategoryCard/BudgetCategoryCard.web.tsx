@@ -107,7 +107,7 @@ export function BudgetCategoryCard({
   )
 
   return (
-    <Card>
+    <Card shadow>
       <div className={shared.header}>
         <ColorDot color={color} size={16} />
         <Typography variant="heading-lg" as="h3" className={shared.title}>

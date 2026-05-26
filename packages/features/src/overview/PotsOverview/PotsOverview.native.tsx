@@ -32,7 +32,7 @@ export const PotsOverview = ({
   const { t } = useTranslation()
 
   return (
-    <Card>
+    <Card shadow>
       {/* Header row */}
       <View style={tw`${shared.header}`}>
         <Typography variant="subsection-title" accessibilityRole="header">

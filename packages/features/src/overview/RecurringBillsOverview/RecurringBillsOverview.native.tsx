@@ -33,7 +33,7 @@ export const RecurringBillsOverview = ({
   const isEmpty = paid === 0 && upcoming === 0 && dueSoon === 0
 
   return (
-    <Card>
+    <Card shadow>
       <View style={tw`${shared.header}`}>
         <Typography variant="subsection-title" accessibilityRole="header">
           {title}

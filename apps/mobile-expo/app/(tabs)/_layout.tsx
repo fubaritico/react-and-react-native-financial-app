@@ -74,14 +74,7 @@ const TABLET_TAB_BAR_STYLE = {
  * @returns A styled View used as tab bar background
  */
 function TabBarBackground() {
-  return (
-    <View
-      style={[
-        tw`flex-1 bg-nav-bg`,
-        { borderTopLeftRadius: 8, borderTopRightRadius: 8 },
-      ]}
-    />
-  )
+  return <View style={[tw`flex-1 bg-nav-bg`]} />
 }
 
 /**

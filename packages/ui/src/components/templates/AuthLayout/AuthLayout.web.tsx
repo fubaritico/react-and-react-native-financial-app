@@ -12,9 +12,9 @@ export function AuthLayout({
   description,
 }: Readonly<IAuthLayoutProps>) {
   return (
-    <div className="min-h-screen bg-beige-100 flex flex-col lg:flex-row">
+    <div className="min-h-screen bg-gradient-to-tl from-beige-200 to-beige-100 flex flex-col lg:flex-row">
       {/* Illustration panel — desktop only */}
-      <aside className="hidden lg:flex lg:w-auth-panel bg-nav-bg rounded-r-lg flex-col justify-between p-10">
+      <aside className="hidden lg:flex lg:w-auth-panel bg-nav-bg flex-col justify-between p-10">
         <div className="flex items-center">
           <Icon
             name="logoEpouch"
@@ -38,12 +38,7 @@ export function AuthLayout({
             </Typography>
           ) : null}
           {description ? (
-            <Typography
-              variant="body"
-              color="on-dark-muted"
-              as="p"
-              className="mt-3"
-            >
+            <Typography variant="body" color="on-dark" as="p" className="mt-3">
               {description}
             </Typography>
           ) : null}

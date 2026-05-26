@@ -8,7 +8,7 @@ import type { IAuthLayoutProps } from './AuthLayout'
 export function AuthLayout({ children }: Readonly<IAuthLayoutProps>) {
   return (
     <ScrollView
-      style={tw`flex-1 bg-beige-100`}
+      style={tw`flex-1 bg-beige-200`}
       contentContainerStyle={tw`flex-grow`}
     >
       <View style={tw`flex-1 justify-center px-4 py-10`}>{children}</View>

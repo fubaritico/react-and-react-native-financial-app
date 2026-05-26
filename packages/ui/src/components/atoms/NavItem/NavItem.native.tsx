@@ -22,7 +22,7 @@ export function NavItem({
 }: Readonly<INavItemProps>) {
   const isActive = !!active
   const isRow = orientation === 'row'
-  const iconColor = isActive ? ('nav-accent' as const) : ('nav-text' as const)
+  const iconColor = isActive ? ('on-dark' as const) : ('nav-text' as const)
 
   /** Border color applied to the accent side (left for sidebar, bottom for bar) */
   const borderColor = isActive ? resolveColor('nav-accent') : 'transparent'
@@ -35,14 +35,15 @@ export function NavItem({
       accessibilityState={{ selected: isActive }}
       style={({ pressed }) => [
         tw`${navItemVariants({ active: isActive, orientation })}`,
+        isActive && tw`bg-white/20 rounded-md`,
         { flex: 1 },
         isRow
           ? { borderLeftColor: borderColor }
-          : {
-              borderBottomColor: borderColor,
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-            },
+          : isActive
+            ? { borderBottomWidth: 0 }
+            : {
+                borderBottomColor: borderColor,
+              },
         pressed && !isActive && tw`opacity-70`,
       ]}
     >

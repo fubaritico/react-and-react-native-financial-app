@@ -66,10 +66,10 @@ const IconCell = memo(function IconCell({
 })
 
 /**
- * Web implementation of the categories management screen.
- * Displays a grid of existing categories with inline add form.
- * @param props - Screen props with categories data and callbacks
- * @returns The categories management screen
+ * Web implementation of the options management screen.
+ * Displays a grid of existing options with inline add form.
+ * @param props - Screen props with options data and callbacks
+ * @returns The options management screen
  */
 export function CategoriesScreenView({
   categories,

@@ -20,7 +20,8 @@
     "moneyWithdrawn": "Money withdrawn successfully.",
     "actions": "Actions",
     "alreadyUsed": "Already used",
-    "back": "Back"
+    "back": "Back",
+    "selectCategory": "Select a category"
   },
   "validation": {
     "nameRequired": "Name is required.",

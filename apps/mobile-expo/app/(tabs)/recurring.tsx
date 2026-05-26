@@ -59,7 +59,7 @@ export default function RecurringBillsScreen() {
 
   if (isLoading || !pageData) {
     return (
-      <View style={tw`flex-1 bg-beige-100`}>
+      <View style={tw`flex-1 bg-beige-200`}>
         <Spinner />
       </View>
     )
@@ -67,7 +67,7 @@ export default function RecurringBillsScreen() {
 
   if (error) {
     return (
-      <View style={tw`flex-1 bg-beige-100 px-6 justify-center`}>
+      <View style={tw`flex-1 bg-beige-200 px-6 justify-center`}>
         <Alert
           severity="error"
           message={t('common.errorLoading')}
@@ -79,7 +79,7 @@ export default function RecurringBillsScreen() {
 
   return (
     <ScrollView
-      style={tw`flex-1 bg-beige-100`}
+      style={tw`flex-1 bg-beige-200`}
       contentContainerStyle={tw`p-4 pb-8`}
     >
       {/* Header */}

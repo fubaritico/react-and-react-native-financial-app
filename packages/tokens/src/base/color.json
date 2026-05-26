@@ -4,6 +4,7 @@
       "$description": "Raw color palette from Figma design system — not for direct use in components",
       "beige": {
         "500": { "$value": "#98908B", "$type": "color" },
+        "200": { "$value": "#E0DBD7", "$type": "color" },
         "100": { "$value": "#F8F4F0", "$type": "color" }
       },
       "grey": {

@@ -2,7 +2,7 @@ import { View } from 'react-native'
 
 import tw from '#Lib/tw'
 
-import { shared } from './ActionBar.styles'
+import { native, shared } from './ActionBar.styles'
 
 import type { IActionBarProps } from './ActionBar.tsx'
 
@@ -28,7 +28,7 @@ export function ActionBar({
   }
 
   return (
-    <View style={tw`${shared.container}`}>
+    <View style={[tw`${shared.container}`, tw`${native.container}`]}>
       <View style={tw`${rightActions ? 'grow' : 'w-full'}`}>
         <TextInput
           value={globalFilterValue ?? ''}

@@ -25,18 +25,21 @@ const ON_DARK_COLOR = 'on-dark' as const
  * @returns Dropdown with category color dot and icon indicators
  */
 export function CategoryDropdown({
-  categories,
+  options,
   selectedCategoryId,
   onSelect,
   existingCategoryIds = [],
   accessibilityLabel,
   bottomSheetTitle,
   alreadyUsedLabel,
+  placeholder,
 }: Readonly<ICategoryDropdownProps>) {
-  /** Map ICategory[] to IDropdownOption[] with disabled state for existing categories */
-  const options = useMemo(
+  const hasSelection = selectedCategoryId !== ''
+
+  /** Map ICategory[] to IDropdownOption[] with disabled state for existing options */
+  const dropdownOptions = useMemo(
     () =>
-      categories.map((c) => ({
+      options.map((c) => ({
         value: c.id,
         label: c.name,
         color: c.color,
@@ -44,29 +47,33 @@ export function CategoryDropdown({
         disabled:
           existingCategoryIds.includes(c.id) && c.id !== selectedCategoryId,
       })),
-    [categories, existingCategoryIds, selectedCategoryId]
+    [options, existingCategoryIds, selectedCategoryId]
   )
 
-  /** Custom trigger — ColorDot + Icon + label + caret */
+  /** Custom trigger — ColorDot + Icon + label + caret (or placeholder when empty) */
   const renderTrigger = useCallback(
-    ({ selectedLabel }: { selectedLabel: string }) => {
-      const selected = categories.find((c) => c.id === selectedCategoryId)
+    ({ selectedLabel }: { isOpen: boolean; selectedLabel: string }) => {
+      const selected = options.find((c) => c.id === selectedCategoryId)
       return (
         <View style={tw`flex-row items-center gap-3 flex-1`}>
-          {selected ? (
+          {hasSelection && selected ? (
             <>
               <ColorDot color={selected.color} />
               <Icon name={selected.icon} iconSize="sm" />
             </>
           ) : null}
-          <Typography variant="body" style={tw`flex-1`}>
-            {selectedLabel}
+          <Typography
+            variant="body"
+            color={hasSelection ? undefined : 'beige-500'}
+            style={tw`flex-1`}
+          >
+            {hasSelection ? selectedLabel : placeholder}
           </Typography>
           <Icon name="caretDown" iconSize="xs" />
         </View>
       )
     },
-    [categories, selectedCategoryId]
+    [options, selectedCategoryId, hasSelection, placeholder]
   )
 
   /** Custom item — ColorDot + Icon + label + "Already used" badge */
@@ -100,7 +107,7 @@ export function CategoryDropdown({
 
   return (
     <Dropdown
-      options={options}
+      options={dropdownOptions}
       selectedValue={selectedCategoryId}
       onSelect={onSelect}
       accessibilityLabel={accessibilityLabel}

@@ -124,7 +124,7 @@ const DotLottieSplash = lazy(() =>
 /** Shown by the server (and during hydration) while clientMiddleware checks auth. */
 export function HydrateFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-beige-100">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-tl from-beige-200 to-beige-100">
       {prefersReducedMotion ? null : (
         <Suspense>
           <div data-splash aria-hidden="true">
@@ -143,7 +143,7 @@ export function HydrateFallback() {
  */
 export default function AppLayout() {
   return (
-    <div className="flex min-h-screen bg-beige-100">
+    <div className="flex min-h-screen bg-gradient-to-tl from-beige-200 to-beige-100">
       <Sidebar />
       <main className="@container flex-1 overflow-y-auto pb-24 lg:pb-0">
         <Outlet />
