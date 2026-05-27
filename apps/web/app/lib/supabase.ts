@@ -11,4 +11,4 @@ import { createBrowserClient } from '@financial-app/shared'
 export const authClient =
   typeof document !== 'undefined'
     ? createBrowserClient()
-    : (({} as unknown) as ReturnType<typeof createBrowserClient>)
+    : ({} as unknown as ReturnType<typeof createBrowserClient>)

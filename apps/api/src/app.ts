@@ -63,8 +63,10 @@ export function createApp() {
   }
   app.use(
     cors({
-      origin:
-        allowedOrigins ?? ['http://localhost:5173', 'http://localhost:3000'],
+      origin: allowedOrigins ?? [
+        'http://localhost:5173',
+        'http://localhost:3000',
+      ],
     })
   )
   app.use(express.json({ limit: '10kb' }))
