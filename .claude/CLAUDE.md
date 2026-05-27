@@ -159,12 +159,13 @@ Read `@completed.md`
 
 ### Next
 
-1. **Centralized auth** — session validation on app focus (AppState → getSession())
+1. **CI + Netlify deployment** — set up CI pipeline, make API server production-ready, deploy API + web app on Netlify
+2. **Centralized auth** — session validation on app focus (AppState → getSession())
 3. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
 4. Tests — API + hooks
 5. Phase 8B: GoCardless bank connection (mode banque)
 6. **Server-side pagination** — replace client-side `limit: 1000`
-7. **Walkthrough** — onboarding animation: symbolic review of each screen's features and role, write all texts (en + fr). Two versions: manual mode and bank mode
+7. **Walkthrough** — onboarding animation (Lottie text layer injection, content drafted in Basic Memory)
 
 **Pending tests**: none
 
