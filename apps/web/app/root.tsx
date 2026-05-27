@@ -38,7 +38,7 @@ const API_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ??
   'http://localhost:3001'
 
-if (!import.meta.env.DEV && !API_URL.startsWith('https://')) {
+if (import.meta.env.VITE_API_URL && !API_URL.startsWith('https://')) {
   throw new Error('VITE_API_URL must be an HTTPS URL in production')
 }
 

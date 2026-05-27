@@ -11,19 +11,25 @@
  * - Static files are served by Netlify CDN in production — Express.static
  *   is only used for local production testing
  */
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import { createRequestHandler } from '@react-router/express'
 import express from 'express'
 import serverless from 'serverless-http'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const clientDir = path.resolve(__dirname, '../client')
+
 const app = express()
 
 // Static asset serving — fingerprinted assets get long cache
-app.use('/assets', express.static('build/client/assets', { immutable: true, maxAge: '1y' }))
-app.use(express.static('build/client', { maxAge: '1h' }))
+app.use('/assets', express.static(path.join(clientDir, 'assets'), { immutable: true, maxAge: '1y' }))
+app.use(express.static(clientDir, { maxAge: '1h' }))
 
 // React Router SSR handler — catches all routes not matched by static files
 app.all(
-  '*',
+  '{*splat}',
   createRequestHandler({
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     build: () => import('virtual:react-router/server-build'),
