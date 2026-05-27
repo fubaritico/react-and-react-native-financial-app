@@ -1,6 +1,5 @@
-import { z } from 'zod'
-
 import { registry } from '../lib/openapi.js'
+import { z } from '../lib/zod.js'
 
 /** Request body for the POST /dev/seed endpoint. */
 export const SeedBodySchema = registry.register(
