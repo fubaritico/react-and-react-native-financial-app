@@ -18,17 +18,12 @@ export default defineConfig(() => ({
   ],
 
   /**
-   * Workspace packages export raw TypeScript (no pre-compiled JS).
-   * Without `noExternal`, Vite SSR treats them as Node externals and
-   * feeds untransformed TS to the ESM loader, which chokes on type syntax.
+   * Bundle everything for serverless (Netlify Functions).
+   * The Netlify plugin sets `noExternal: /^(?!node:).*$/` but our explicit
+   * array was overriding it, leaving @react-router/node etc. as externals.
    */
   ssr: {
-    noExternal: [
-      '@financial-app/features',
-      '@financial-app/ui',
-      '@financial-app/tailwind-config',
-      '@financial-app/tokens',
-    ],
+    noExternal: /^(?!node:).*$/,
   },
 
   server: {
