@@ -65,12 +65,12 @@ jobs:
 
       - name: Deploy to Netlify (Production)
         if: steps.changed.outputs.result == 'true'
+        working-directory: apps/api
         run: |
           netlify deploy --prod \
             --dir=public \
             --functions=netlify/functions \
             --site=$NETLIFY_SITE_ID_API \
-            --cwd apps/api \
             --message "$DEPLOY_MESSAGE"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

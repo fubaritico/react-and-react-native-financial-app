@@ -99,6 +99,14 @@ rm -rf ~/.gradle/caches 2>/dev/null || true
 echo "  -> Removing token build outputs..."
 rm -rf "$ROOT_DIR/packages/tokens/build" 2>/dev/null || true
 
+echo "  -> Removing generated code (Prisma, http-client, icons, React Router types, OpenAPI spec)..."
+rm -rf "$ROOT_DIR/packages/prisma/src/generated" 2>/dev/null || true
+rm -rf "$ROOT_DIR/packages/http-client/src/client" "$ROOT_DIR/packages/http-client/dist" 2>/dev/null || true
+rm -rf "$ROOT_DIR/packages/icons/src/generated" 2>/dev/null || true
+rm -rf "$ROOT_DIR/apps/web/.react-router" 2>/dev/null || true
+rm -f "$ROOT_DIR/apps/api/openapi.yaml" 2>/dev/null || true
+rm -rf "$ROOT_DIR/apps/api/dist" 2>/dev/null || true
+
 echo "  -> Removing web build outputs..."
 rm -rf "$ROOT_DIR/apps/web/build" "$ROOT_DIR/apps/web/dist" 2>/dev/null || true
 
@@ -124,8 +132,18 @@ echo "=== INSTALL ==="
 echo "  -> Installing dependencies (pnpm install)..."
 pnpm install --frozen-lockfile
 
-echo "  -> Building tokens (required by tailwind-config, ui, apps)..."
-pnpm tokens
+echo "  -> Generating Prisma types..."
+pnpm --filter @financial-app/prisma db:generate
+
+echo "  -> Generating OpenAPI spec (needed by http-client build)..."
+touch apps/api/.env 2>/dev/null || true
+SUPABASE_URL=https://placeholder.supabase.co SUPABASE_SERVICE_ROLE_KEY=placeholder pnpm --filter api-financial-app generate:spec
+
+echo "  -> Building all packages (tokens, icons, http-client, etc.)..."
+pnpm turbo build --filter='./packages/*'
+
+echo "  -> Generating React Router types (web app)..."
+pnpm --filter web-financial-app exec react-router typegen
 
 # ---------- NATIVE REBUILD (pods only) ----------
 
