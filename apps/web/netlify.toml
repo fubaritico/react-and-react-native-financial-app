@@ -1,14 +1,7 @@
-# The build/server/ directory IS the functions directory.
-# It contains the Vite-compiled Express server (index.js) which exports
-# a serverless-http handler. Netlify detects it as a function named "index".
+# @netlify/vite-plugin-react-router handles SSR function generation,
+# static asset publishing, and redirects automatically.
+# Only the build command and publish directory need to be specified.
 
-[functions]
-  directory = "build/server"
-  node_bundler = "nft"
-
-# Static files are served from build/client/ (the publish dir).
-# Non-static requests fall through to the SSR function.
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/index"
-  status = 200
+[build]
+  command = "react-router build"
+  publish = "build/client"

@@ -1,6 +1,7 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import netlifyPlugin from '@netlify/vite-plugin-react-router'
 import { reactRouter } from '@react-router/dev/vite'
 import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
@@ -12,6 +13,7 @@ export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     svgr(),
     reactRouter(),
+    netlifyPlugin(),
     tsconfigPaths({ projects: [path.resolve(__dirname, '../../packages/ui/tsconfig.json')] }),
   ],
 

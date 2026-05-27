@@ -39,7 +39,7 @@
     "ejected:android": "pnpm --filter mobile-expo-ejected-financial-app android:build",
     "------------ WEB ----------------------": "",
     "web:dev": "pnpm --filter web-financial-app dev",
-    "web:prod": "pnpm --filter web-financial-app build && node apps/web/build/server/index.js",
+    "web:prod": "pnpm --filter web-financial-app build && node apps/web/build/server/app.js",
     "------------ API ----------------------": "",
     "api:dev": "pnpm --filter api-financial-app dev",
     "api:prod": "pnpm --filter api-financial-app build && pnpm --filter api-financial-app start",
