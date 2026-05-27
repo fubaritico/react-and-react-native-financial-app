@@ -71,23 +71,25 @@ export function createApp() {
   )
   app.use(express.json({ limit: '10kb' }))
 
-  // Rate limiting — global: 200 req/15min/IP
+  // Rate limiting — skipped in serverless (in-memory store resets per invocation)
+  const isServerless = !!process.env.AWS_LAMBDA_FUNCTION_NAME
+
   const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 200,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
     message: { error: 'Too many requests, please try again later.' },
+    skip: () => isServerless,
   })
   app.use(globalLimiter)
 
-  // Stricter limiter for financial mutations: 50 req/15min/IP (POST/PUT/PATCH/DELETE only)
   const writeLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 50,
     standardHeaders: 'draft-8',
     legacyHeaders: false,
-    skip: (req) => req.method === 'GET',
+    skip: (req) => isServerless || req.method === 'GET',
     message: { error: 'Too many write requests, please try again later.' },
   })
 
