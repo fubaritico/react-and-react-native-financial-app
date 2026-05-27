@@ -159,19 +159,14 @@ Read `@completed.md`
 
 ### Next
 
-1. **Custom options session 5d** — Style pass (web+native alignment), CategoryButton tests+story, IconButton tests+story, CategoriesScreenView tests+stories
-2.6. **Custom options** — `docs/plans/custom-options-plan.md` (remaining: tests, stories, style refinement)
-5. **Centralized auth** — session validation on app focus (AppState → getSession())
-6. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
-7. Tests — API + hooks
-8. Phase 8B: GoCardless bank connection (mode banque) — `docs/plans/phase-8B-gocardless-bank-connection.md`
-9. Navigation web: graphic design refinement (user doing manual pass)
+1. **Centralized auth** — session validation on app focus (AppState → getSession())
+3. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
+4. Tests — API + hooks
+5. Phase 8B: GoCardless bank connection (mode banque)
+6. **Server-side pagination** — replace client-side `limit: 1000`
+7. **Walkthrough** — onboarding animation: symbolic review of each screen's features and role, write all texts (en + fr). Two versions: manual mode and bank mode
 
-**--- Refactors (à planifier, pas dans la foulée) ---**
-13. **Server-side pagination** — replace client-side `limit: 1000` with proper paginated API calls + DataTable server pagination (currently `MAX_PAGE_SIZE = 1000` as workaround)
-
-**Pending tests**:
-- iPad: verify BottomSheet overlay, 2-tap switching, text truncation
+**Pending tests**: none
 
 ### Known Issues
 
