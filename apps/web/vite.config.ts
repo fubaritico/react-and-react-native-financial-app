@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url'
 
 import netlifyPlugin from '@netlify/vite-plugin-react-router'
 import { reactRouter } from '@react-router/dev/vite'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -15,7 +16,18 @@ export default defineConfig(() => ({
     reactRouter(),
     netlifyPlugin(),
     tsconfigPaths({ projects: [path.resolve(__dirname, '../../packages/ui/tsconfig.json')] }),
+    sentryVitePlugin({
+      org: 'fubaratico',
+      project: 'epouch-web',
+      sourcemaps: {
+        filesToDeleteAfterUpload: ['build/**/*.map'],
+      },
+    }),
   ],
+
+  build: {
+    sourcemap: true,
+  },
 
   /**
    * Bundle everything for serverless (Netlify Functions).
