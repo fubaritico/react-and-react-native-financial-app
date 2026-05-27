@@ -9,4 +9,6 @@ export interface IBalanceCardProps extends VariantProps<
   label: string
   /** Numeric amount to display (formatted via Currency atom). */
   amount: number
+  /** If true, will display a shadow. */
+  shadow?: boolean
 }

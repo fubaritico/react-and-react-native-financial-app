@@ -1,4 +1,5 @@
 import { cn } from '#Lib/cn'
+import { WEB_SHADOW } from '#Lib/shadow'
 
 import { Currency } from '#Atoms/Currency/Currency.web'
 import { Typography } from '#Atoms/index.web'
@@ -13,6 +14,7 @@ export const BalanceCard = ({
   label,
   amount,
   tone = 'light',
+  shadow,
 }: Readonly<IBalanceCardProps>) => {
   const labelColor: TypographyVariants['color'] =
     tone === 'dark' ? 'on-dark' : 'muted'
@@ -20,7 +22,9 @@ export const BalanceCard = ({
     tone === 'dark' ? 'on-dark' : 'foreground'
 
   return (
-    <div className={cn(balanceCardVariants({ tone }))}>
+    <div
+      className={cn(balanceCardVariants({ tone }), { [WEB_SHADOW]: shadow })}
+    >
       <Typography variant="body" color={labelColor} as="p">
         {label}
       </Typography>

@@ -1,4 +1,5 @@
 import { cn } from '#Lib/cn'
+import { WEB_SHADOW } from '#Lib/shadow'
 
 import { Typography } from '#Atoms/index.web'
 
@@ -12,9 +13,12 @@ export const StatCard = ({
   label,
   amount,
   color,
+  shadow,
 }: Readonly<IStatCardProps>) => (
   <div
-    className={cn(statCardVariants(), 'border-l-[var(--border-color)]')}
+    className={cn(statCardVariants(), 'border-l-[var(--border-color)]', {
+      [WEB_SHADOW]: shadow,
+    })}
     style={
       {
         '--border-color': `var(--color-base-${color}-DEFAULT)`,

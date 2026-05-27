@@ -1,5 +1,6 @@
 import { View } from 'react-native'
 
+import { NATIVE_BOX_SHADOW } from '#Lib/shadow'
 import tw from '#Lib/tw'
 
 import type { TypographyVariants } from '#Atoms/Typography/Typography.variants'
@@ -15,6 +16,7 @@ export const BalanceCard = ({
   label,
   amount,
   tone = 'light',
+  shadow,
 }: Readonly<IBalanceCardProps>) => {
   const labelColor: TypographyVariants['color'] =
     tone === 'dark' ? 'on-dark' : 'muted'
@@ -22,7 +24,12 @@ export const BalanceCard = ({
     tone === 'dark' ? 'on-dark' : 'foreground'
 
   return (
-    <View style={tw`${balanceCardVariants({ tone })}`}>
+    <View
+      style={[
+        tw`${balanceCardVariants({ tone })}`,
+        shadow && { boxShadow: NATIVE_BOX_SHADOW },
+      ]}
+    >
       <Typography variant="body" color={labelColor}>
         {label}
       </Typography>

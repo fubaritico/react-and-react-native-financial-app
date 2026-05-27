@@ -177,6 +177,7 @@ export function OverviewScreen() {
                 label={t('overview.income')}
                 amount={balance.income}
                 tone="light"
+                shadow
               />
             </View>
             <View style={tw`flex-1`}>
@@ -184,6 +185,7 @@ export function OverviewScreen() {
                 label={t('overview.expenses')}
                 amount={balance.expenses}
                 tone="light"
+                shadow
               />
             </View>
           </View>

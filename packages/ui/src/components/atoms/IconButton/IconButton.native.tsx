@@ -1,10 +1,11 @@
+import { NATIVE_BOX_SHADOW } from '#Lib/shadow'
+
 import { Button } from '../Button/Button.native'
 import { Icon } from '../Icon/Icon.native'
 
 import {
   ICON_BUTTON_TO_BUTTON_VARIANT,
   ICON_SIZE_MAP,
-  NATIVE_BOX_SHADOW,
 } from './IconButton.constants'
 import { iconButtonVariants } from './IconButton.variants'
 

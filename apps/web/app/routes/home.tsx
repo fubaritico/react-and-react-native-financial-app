@@ -233,6 +233,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               label={t('overview.income')}
               amount={balance.income}
               tone="light"
+              shadow
             />
           </div>
           <div className="md:flex-1">
@@ -240,6 +241,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               label={t('overview.expenses')}
               amount={balance.expenses}
               tone="light"
+              shadow
             />
           </div>
         </div>

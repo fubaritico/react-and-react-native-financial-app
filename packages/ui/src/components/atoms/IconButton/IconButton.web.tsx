@@ -1,4 +1,5 @@
 import { cn } from '#Lib/cn'
+import { WEB_SHADOW } from '#Lib/shadow'
 
 import { Button } from '../Button/Button.web'
 
@@ -28,7 +29,7 @@ export function IconButton({
       className={cn(
         iconButtonVariants({ variant, size, disabled: disabled ?? undefined }),
         {
-          'shadow-beige-500/50 shadow-sm': shadow,
+          [WEB_SHADOW]: shadow,
         },
         className
       )}

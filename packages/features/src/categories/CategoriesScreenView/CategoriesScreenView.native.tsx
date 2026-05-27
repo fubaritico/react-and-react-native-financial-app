@@ -196,33 +196,27 @@ export function CategoriesScreenView({
           {t('categories.addCategory')}
         </Typography>
 
-        {/* Name input */}
-        <View style={tw`${native.formRow}`}>
-          <TextInput
-            value={name}
-            onChangeText={setName}
-            placeholder={t('categories.namePlaceholder')}
-            maxLength={MAX_CATEGORY_NAME_LENGTH}
-          />
-        </View>
-
-        {/* Color selector */}
-        <View style={tw`${native.formRow}`}>
-          <ThemeColorDropdown
-            options={PALETTE_COLORS}
-            selectedValue={selectedColor}
-            onSelect={setSelectedColor}
-            accessibilityLabel={t('categories.color')}
-            bottomSheetTitle={t('categories.color')}
-            alreadyUsedLabel=""
-            placeholder={t('categories.selectColor')}
-            buttonClassName="bg-white"
-          />
-        </View>
-
-        {/* Icon selector */}
-        <View style={tw`${native.formRow}`}>
-          <Card shadow>
+        <Card shadow>
+          <View style={tw`${native.formWrapper}`}>
+            {/* Name input */}
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              placeholder={t('categories.namePlaceholder')}
+              maxLength={MAX_CATEGORY_NAME_LENGTH}
+            />
+            {/* Color selector */}
+            <ThemeColorDropdown
+              options={PALETTE_COLORS}
+              selectedValue={selectedColor}
+              onSelect={setSelectedColor}
+              accessibilityLabel={t('categories.color')}
+              bottomSheetTitle={t('categories.color')}
+              alreadyUsedLabel=""
+              placeholder={t('categories.selectColor')}
+              buttonClassName="bg-white"
+            />
+            {/* Icon selector */}
             <View style={[tw`${native.iconGrid}`, { gap: ICON_GRID_GAP }]}>
               {CATEGORY_ICON_NAMES.map((iconName) => (
                 <IconCell
@@ -234,8 +228,8 @@ export function CategoriesScreenView({
                 />
               ))}
             </View>
-          </Card>
-        </View>
+          </View>
+        </Card>
 
         {/* Submit */}
         <Button

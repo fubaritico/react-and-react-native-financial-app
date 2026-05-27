@@ -1,4 +1,5 @@
 import { cn } from '#Lib/cn'
+import { WEB_SHADOW } from '#Lib/shadow'
 
 import { Typography } from '#Atoms/index.web'
 
@@ -16,7 +17,7 @@ export const Card = ({
 }: Readonly<ICardProps>) => (
   <div
     className={cn(cardVariants(), web.root, {
-      'shadow-beige-500/50 shadow-sm': shadow,
+      [WEB_SHADOW]: shadow,
     })}
   >
     {title && (

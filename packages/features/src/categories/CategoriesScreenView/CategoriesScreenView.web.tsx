@@ -160,33 +160,27 @@ export function CategoriesScreenView({
             {t('categories.addCategory')}
           </Typography>
 
-          {/* Name input */}
-          <div className={web.formRow}>
-            <TextInput
-              value={name}
-              onChangeText={setName}
-              placeholder={t('categories.namePlaceholder')}
-              maxLength={MAX_CATEGORY_NAME_LENGTH}
-            />
-          </div>
-
-          {/* Color selector */}
-          <div className={web.formRow}>
-            <ThemeColorDropdown
-              options={PALETTE_COLORS}
-              selectedValue={selectedColor}
-              onSelect={setSelectedColor}
-              accessibilityLabel={t('categories.color')}
-              bottomSheetTitle={t('categories.color')}
-              alreadyUsedLabel=""
-              placeholder={t('categories.selectColor')}
-              buttonClassName="bg-white"
-            />
-          </div>
-
-          {/* Icon selector */}
-          <div className={web.formRow}>
-            <Card shadow>
+          <Card shadow>
+            <div className={web.formWrapper}>
+              {/* Name input */}
+              <TextInput
+                value={name}
+                onChangeText={setName}
+                placeholder={t('categories.namePlaceholder')}
+                maxLength={MAX_CATEGORY_NAME_LENGTH}
+              />
+              {/* Color selector */}
+              <ThemeColorDropdown
+                options={PALETTE_COLORS}
+                selectedValue={selectedColor}
+                onSelect={setSelectedColor}
+                accessibilityLabel={t('categories.color')}
+                bottomSheetTitle={t('categories.color')}
+                alreadyUsedLabel=""
+                placeholder={t('categories.selectColor')}
+                buttonClassName="bg-white"
+              />
+              {/* Icon selector */}
               <div className={web.iconGrid}>
                 {CATEGORY_ICON_NAMES.map((iconName) => (
                   <IconCell
@@ -197,8 +191,8 @@ export function CategoriesScreenView({
                   />
                 ))}
               </div>
-            </Card>
-          </div>
+            </div>
+          </Card>
 
           {/* Submit */}
           <div className={web.submitWrapper}>

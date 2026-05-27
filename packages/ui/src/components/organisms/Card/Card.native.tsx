@@ -1,9 +1,10 @@
 import { View, useWindowDimensions } from 'react-native'
 
+import { NATIVE_BOX_SHADOW } from '#Lib/shadow'
 import tw from '#Lib/tw'
 
 import { TABLET_BREAKPOINT } from './Card.constants'
-import { NATIVE_BOX_SHADOW, shared } from './Card.styles'
+import { shared } from './Card.styles'
 import { cardVariants } from './Card.variants'
 
 import type { ICardProps } from './Card'

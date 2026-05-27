@@ -27,6 +27,3 @@ export const ICON_SIZE_MAP: Record<string, IIconSize> = {
   md: 'sm',
   lg: 'lg',
 }
-
-/** Native boxShadow style — beige-500 (#98908B) at 50% opacity, equivalent to shadow-sm. */
-export const NATIVE_BOX_SHADOW = '0 1px 2px 0 #98908B80'

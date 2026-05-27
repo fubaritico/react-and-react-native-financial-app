@@ -9,4 +9,6 @@ export interface IStatCardProps extends VariantProps<typeof statCardVariants> {
   amount: string
   /** Token color name for the left border (e.g., "green", "navy"). */
   color: string
+  /** If true, will display a shadow. */
+  shadow?: boolean
 }
