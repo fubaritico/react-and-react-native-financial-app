@@ -71,12 +71,7 @@ jobs:
 
       - name: Deploy to Netlify (Production)
         # if: steps.changed.outputs.result == 'true'
-        run: |
-          netlify deploy --prod \
-            --dir=apps/web/build/client \
-            --functions=apps/web/build/server \
-            --site=$NETLIFY_SITE_ID_WEB \
-            --message "$DEPLOY_MESSAGE"
+        run: netlify deploy --prod --dir=apps/web/build/client --functions=apps/web/build/server --site=$NETLIFY_SITE_ID_WEB --no-build --cwd apps/web --message "$DEPLOY_MESSAGE"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID_WEB: ${{ secrets.NETLIFY_SITE_ID_WEB }}
