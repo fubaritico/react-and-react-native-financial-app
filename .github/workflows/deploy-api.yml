@@ -65,11 +65,10 @@ jobs:
 
       - name: Deploy to Netlify (Production)
         # if: steps.changed.outputs.result == 'true'
-        working-directory: apps/api
         run: |
           netlify deploy --prod \
-            --dir=public \
-            --functions=netlify/functions \
+            --dir=apps/api/public \
+            --functions=apps/api/netlify/functions \
             --site=$NETLIFY_SITE_ID_API \
             --message "$DEPLOY_MESSAGE"
         env:
