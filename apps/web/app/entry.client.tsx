@@ -9,12 +9,6 @@ Sentry.init({
   tracesSampleRate: import.meta.env.PROD ? 0.2 : 1.0,
   integrations: [Sentry.reactRouterTracingIntegration()],
 })
-
-// Temporary Sentry test — DELETE after verifying Sentry works
-setTimeout(() => {
-  throw new Error('Sentry test error from Web client')
-}, 5000)
-
 startTransition(() => {
   hydrateRoot(
     document,
