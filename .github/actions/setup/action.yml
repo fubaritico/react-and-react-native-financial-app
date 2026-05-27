@@ -26,6 +26,15 @@ runs:
       env:
         DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
 
+    - name: Generate OpenAPI spec
+      run: |
+        touch apps/api/.env
+        pnpm --filter api-financial-app generate:spec
+      shell: bash
+      env:
+        SUPABASE_URL: https://placeholder.supabase.co
+        SUPABASE_SERVICE_ROLE_KEY: placeholder
+
     - name: Build packages
       run: pnpm turbo build --filter='./packages/*'
       shell: bash
