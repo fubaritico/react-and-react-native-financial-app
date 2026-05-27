@@ -1,0 +1,10 @@
+[functions]
+  node_bundler = "esbuild"
+  # The compiled API (dist/) is imported by the function — include it in the bundle
+  included_files = ["dist/**"]
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true

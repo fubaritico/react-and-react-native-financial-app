@@ -8,12 +8,20 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     svgr(),
     reactRouter(),
     tsconfigPaths({ projects: [path.resolve(__dirname, '../../packages/ui/tsconfig.json')] }),
   ],
+
+  /**
+   * SSR build: compile the custom Express server entry instead of the default.
+   * The virtual:react-router/server-build import is resolved by the reactRouter() plugin.
+   */
+  build: {
+    rollupOptions: isSsrBuild ? { input: './server/app.ts' } : undefined,
+  },
 
   /**
    * Workspace packages export raw TypeScript (no pre-compiled JS).
@@ -51,4 +59,4 @@ export default defineConfig({
       '.js',
     ],
   },
-})
+}))

@@ -1,0 +1,31 @@
+name: Setup Node & pnpm
+description: Common setup for all jobs (Node, pnpm, cache, install)
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v6
+
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 10.7.1
+
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 22
+
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      shell: bash
+
+    - name: Generate Prisma types
+      run: pnpm --filter @financial-app/prisma db:generate
+      shell: bash
+      env:
+        DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+
+    - name: Build packages
+      run: pnpm turbo build --filter='./packages/*'
+      shell: bash

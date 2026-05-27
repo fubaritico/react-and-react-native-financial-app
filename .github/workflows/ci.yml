@@ -7,25 +7,24 @@ on:
     branches: [main]
 
 jobs:
-  check:
+  validate:
+    uses: ./.github/workflows/validate.yml
+
+  sonarqube:
+    needs: [validate]
+    uses: ./.github/workflows/sonarqube.yml
+    secrets: inherit
+
+  quality-gate:
     runs-on: ubuntu-latest
+    needs: [validate, sonarqube]
+    if: always()
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm audit --audit-level=high
-        continue-on-error: true
-
-      - run: pnpm type-check
-
-      - run: pnpm lint
-
-      - run: pnpm test
+      - name: Check all checks passed
+        run: |
+          if [ "${{ needs.validate.result }}" != "success" ] || \
+             [ "${{ needs.sonarqube.result }}" != "success" ]; then
+            echo "Quality gate failed"
+            exit 1
+          fi
+          echo "All checks passed"
