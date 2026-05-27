@@ -11,10 +11,12 @@
  *   has its own memory, so rate limits are NOT shared across invocations.
  *   Consider Redis-backed rate limiting for production if abuse is a concern.
  */
+import { wrapHandler } from '@sentry/aws-serverless'
 import serverless from 'serverless-http'
 
 import { createApp } from '../../dist/app.js'
 
 const app = createApp()
 
-export const handler = serverless(app)
+/** Wraps with Sentry's Lambda handler — auto-captures errors and flushes before freeze. */
+export const handler = wrapHandler(serverless(app))
