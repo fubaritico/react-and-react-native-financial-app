@@ -55,10 +55,10 @@ jobs:
           fi
 
       - uses: ./.github/actions/setup
-        if: steps.changed.outputs.result == 'true'
+        # if: steps.changed.outputs.result == 'true'
 
       - name: Build Web
-        if: steps.changed.outputs.result == 'true'
+        # if: steps.changed.outputs.result == 'true'
         run: pnpm --filter web-financial-app build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
@@ -66,11 +66,11 @@ jobs:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Install Netlify CLI
-        if: steps.changed.outputs.result == 'true'
+        # if: steps.changed.outputs.result == 'true'
         run: pnpm install -g netlify-cli
 
       - name: Deploy to Netlify (Production)
-        if: steps.changed.outputs.result == 'true'
+        # if: steps.changed.outputs.result == 'true'
         working-directory: apps/web
         run: |
           netlify deploy --prod \

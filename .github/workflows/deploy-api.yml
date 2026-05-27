@@ -53,18 +53,18 @@ jobs:
           fi
 
       - uses: ./.github/actions/setup
-        if: steps.changed.outputs.result == 'true'
+        # if: steps.changed.outputs.result == 'true'
 
       - name: Build API
-        if: steps.changed.outputs.result == 'true'
+        # if: steps.changed.outputs.result == 'true'
         run: pnpm --filter api-financial-app build
 
       - name: Install Netlify CLI
-        if: steps.changed.outputs.result == 'true'
+        # if: steps.changed.outputs.result == 'true'
         run: pnpm install -g netlify-cli
 
       - name: Deploy to Netlify (Production)
-        if: steps.changed.outputs.result == 'true'
+        # if: steps.changed.outputs.result == 'true'
         working-directory: apps/api
         run: |
           netlify deploy --prod \
