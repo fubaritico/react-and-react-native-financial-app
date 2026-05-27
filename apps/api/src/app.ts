@@ -113,6 +113,11 @@ export function createApp() {
   // Health check
   app.get('/health', (_req, res) => res.json({ status: 'ok' }))
 
+  // Temporary Sentry test — DELETE after verifying Sentry works
+  app.get('/debug-sentry', () => {
+    throw new Error('Sentry test error from API')
+  })
+
   // Routes — read-only (global limiter only)
   app.use('/balance', balanceRouter)
   app.use('/recurring-bills', recurringBillsRouter)
