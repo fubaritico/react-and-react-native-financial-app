@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node'
 import cors from 'cors'
 import express from 'express'
 import { rateLimit } from 'express-rate-limit'
@@ -23,6 +24,15 @@ import { userPreferencesRouter } from './routes/user-preferences.js'
  * @returns Configured Express Application instance ready to listen
  */
 export function createApp() {
+  // Initialize Sentry before anything else
+  if (process.env.SENTRY_DSN) {
+    Sentry.init({
+      dsn: process.env.SENTRY_DSN,
+      environment: process.env.NODE_ENV ?? 'development',
+      tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.2 : 1.0,
+    })
+  }
+
   const app = express()
 
   // Trust first proxy hop (Netlify/Render) so req.ip reflects X-Forwarded-For (A05-005)
@@ -120,6 +130,9 @@ export function createApp() {
   if (process.env.NODE_ENV !== 'production') {
     app.use('/dev/seed', seedRouter)
   }
+
+  // Sentry error handler — must be after all routes, before other error handlers
+  Sentry.setupExpressErrorHandler(app)
 
   return app
 }

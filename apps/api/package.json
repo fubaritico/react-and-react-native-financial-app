@@ -15,6 +15,7 @@
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.3.0",
     "@financial-app/prisma": "workspace:^",
+    "@sentry/node": "^10.54.0",
     "@supabase/supabase-js": "catalog:",
     "cors": "^2.8.6",
     "express": "^5.2.1",
@@ -22,9 +23,9 @@
     "helmet": "^8.1.0",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",
+    "serverless-http": "^3.2.0",
     "swagger-ui-express": "^5.0.1",
     "yaml": "^2.7.1",
-    "serverless-http": "^3.2.0",
     "zod": "^3.25.67"
   },
   "devDependencies": {
