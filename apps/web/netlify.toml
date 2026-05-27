@@ -1,7 +1,15 @@
-# @netlify/vite-plugin-react-router handles SSR function generation,
-# static asset publishing, and redirects automatically.
-# Only the build command and publish directory need to be specified.
+# @netlify/vite-plugin-react-router generates build/server/server.js
+# as the SSR function handler during `react-router build`.
 
 [build]
   command = "react-router build"
   publish = "build/client"
+
+[functions]
+  directory = "build/server"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
