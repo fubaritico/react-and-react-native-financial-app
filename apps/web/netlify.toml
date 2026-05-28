@@ -8,6 +8,7 @@
 [functions]
   directory = "build/server"
   node_bundler = "esbuild"
+  region = "eu-central-1"
 
 [[redirects]]
   from = "/*"

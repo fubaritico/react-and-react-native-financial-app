@@ -14,6 +14,10 @@
     "./client": {
       "import": "./dist/client/index.js",
       "types": "./dist/client/index.d.ts"
+    },
+    "./client/factory": {
+      "import": "./dist/client/client/index.js",
+      "types": "./dist/client/client/index.d.ts"
     }
   },
   "files": [

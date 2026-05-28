@@ -7,30 +7,46 @@ import {
 } from '@financial-app/features'
 import {
   getCategoriesOptions,
+  getTransactions,
   getTransactionsOptions,
 } from '@financial-app/http-client'
 import { getErrorMessage, useModal } from '@financial-app/shared'
 import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import { useQuery } from '@tanstack/react-query'
+import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
 import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { TransactionFormData } from '@financial-app/features'
 import type { ICategory, ITransaction } from '@financial-app/shared'
 
-import { queryClient } from '../lib/query-client'
+import { createServerHttpClient } from '../lib/http-client.server'
+import { createServerQueryClient } from '../lib/query-client.server'
+import { accessTokenContext } from '../lib/route-context'
 
 import type { Route } from './+types/transactions'
 
-/** @returns Pre-fetched transaction data for instant display */
-export async function clientLoader() {
-  const txnOpts = getTransactionsOptions({
-    query: { limit: 1000, sort: 'latest' },
+/** @returns Pre-fetched transaction data via server-side dehydration. */
+export async function loader({ context }: Route.LoaderArgs) {
+  const accessToken = context.get(accessTokenContext)
+  const httpClient = createServerHttpClient(accessToken)
+  const queryClient = createServerQueryClient()
+
+  await queryClient.prefetchQuery({
+    ...getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } }),
+    queryFn: async () => {
+      const { data } = await getTransactions({
+        client: httpClient,
+        query: { limit: 1000, sort: 'latest' },
+        throwOnError: true,
+      })
+      return data
+    },
   })
-  return queryClient.ensureQueryData(txnOpts).catch(() => undefined)
+
+  return { dehydratedState: dehydrate(queryClient) }
 }
 
-/** Skeleton placeholder while the client loader resolves */
+/** Skeleton placeholder while the loader resolves */
 export function HydrateFallback() {
   return (
     <div className="p-6 lg:p-10">
@@ -48,7 +64,7 @@ export function HydrateFallback() {
 }
 
 export default function TransactionsScreen({
-  loaderData: initialData,
+  loaderData,
 }: Route.ComponentProps) {
   const { t, i18n } = useTranslation()
   const modal = useModal()
@@ -114,56 +130,63 @@ export default function TransactionsScreen({
     renderDeleteBody,
   })
 
-  // Query options created locally for proper generic inference with initialData
   const txnOpts = getTransactionsOptions({
     query: { limit: 1000, sort: 'latest' },
   })
-  const { data, error, isLoading } = useQuery({ ...txnOpts, initialData })
+  const { data, error, isLoading } = useQuery(txnOpts)
 
   // ── Render ─────────────────────────────────────────────────────
 
   if (isLoading) {
     return (
-      <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
-        <Spinner />
-      </div>
+      <HydrationBoundary state={loaderData.dehydratedState}>
+        <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+          <Spinner />
+        </div>
+      </HydrationBoundary>
     )
   }
 
   if (error) {
     return (
-      <div className="p-6 lg:p-10">
-        <Typography variant="page-title" as="h1" className="mb-4">
-          {t('transactions.title')}
-        </Typography>
-        <Alert
-          severity="error"
-          message={t('common.errorLoading')}
-          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
-        />
-      </div>
+      <HydrationBoundary state={loaderData.dehydratedState}>
+        <div className="p-6 lg:p-10">
+          <Typography variant="page-title" as="h1" className="mb-4">
+            {t('transactions.title')}
+          </Typography>
+          <Alert
+            severity="error"
+            message={t('common.errorLoading')}
+            description={
+              import.meta.env.DEV ? getErrorMessage(error) : undefined
+            }
+          />
+        </div>
+      </HydrationBoundary>
     )
   }
 
   return (
-    <div className="p-6 lg:p-10">
-      <div className="mb-8 flex items-center justify-between">
-        <Typography variant="page-title" as="h1">
-          {t('transactions.title')}
-        </Typography>
-        <Button
-          title={t('transactions.addNewTransaction')}
-          onPress={handleAdd}
-          size="lg"
-          variant="primary"
+    <HydrationBoundary state={loaderData.dehydratedState}>
+      <div className="p-6 lg:p-10">
+        <div className="mb-8 flex items-center justify-between">
+          <Typography variant="page-title" as="h1">
+            {t('transactions.title')}
+          </Typography>
+          <Button
+            title={t('transactions.addNewTransaction')}
+            onPress={handleAdd}
+            size="lg"
+            variant="primary"
+          />
+        </div>
+        <TransactionsDataTable
+          data={(data?.data ?? []) as ITransaction[]}
+          locale={i18n.language}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
         />
       </div>
-      <TransactionsDataTable
-        data={(data?.data ?? []) as ITransaction[]}
-        locale={i18n.language}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-    </div>
+    </HydrationBoundary>
   )
 }

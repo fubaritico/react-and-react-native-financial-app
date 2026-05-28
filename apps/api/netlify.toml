@@ -1,5 +1,6 @@
 [functions]
   node_bundler = "esbuild"
+  region = "eu-central-1"
   # The compiled API (dist/) is imported by the function — include it in the bundle
   included_files = ["dist/**"]
 

@@ -1,14 +1,20 @@
 import { getUsersMePreferences } from '@financial-app/http-client'
 import { client } from '@financial-app/http-client/client'
-import { requireAuth } from '@financial-app/shared'
+import { createServerClient } from '@financial-app/shared/auth/client.server'
 import { Suspense, lazy } from 'react'
-import { Outlet, redirect } from 'react-router'
+import { Outlet, data, redirect } from 'react-router'
 
 import { Sidebar } from '../components/Sidebar'
+import { createServerHttpClient } from '../lib/http-client.server'
+import {
+  accessTokenContext,
+  responseHeadersContext,
+} from '../lib/route-context'
 import { authClient } from '../lib/supabase'
 
 import type { Route } from './+types/layout'
 
+/** API base URL resolved from Vite env variable (inlined at build time) */
 const API_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ??
   'http://localhost:3001'
@@ -28,18 +34,99 @@ const prefersReducedMotion =
 let splashShown =
   typeof window !== 'undefined' && sessionStorage.getItem('splashShown') === '1'
 
+// ── Server middleware ─────────────────────────────────────────────────
+// Runs on EVERY request (SSR + client navigations via fetch).
+// Validates auth, enforces MFA, checks onboarding state.
+
 /**
- * Auth guard middleware — runs sequentially BEFORE child loaders.
- * On first load, waits for splash animation to finish before proceeding.
- * Redirects to /login if not authenticated.
- * Enforces AAL2 when MFA is enrolled (redirects to /totp-challenge).
- * Configures the HTTP client with the current access token so child
- * clientLoaders can call ensureQueryData with valid credentials.
+ * Server-side auth guard middleware.
+ * Creates a per-request Supabase client from cookies, validates JWT via getUser(),
+ * enforces AAL2 when MFA enrolled, checks onboarding state.
+ * Forwards Set-Cookie headers for token refresh.
+ */
+export const middleware: Route.MiddlewareFunction[] = [
+  async ({ request, context }, next) => {
+    const { authClient: serverAuth, headers } = createServerClient(request)
+
+    // Validate JWT server-side (network call to Supabase Auth)
+    const { user, error } = await serverAuth.getUser()
+    if (error || !user) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+      throw redirect('/login', { headers })
+    }
+
+    // SEC-002: Enforce AAL2 when MFA is enrolled
+    const { hasMfaEnrolled, currentLevel } =
+      await serverAuth.getAssuranceLevel()
+    if (hasMfaEnrolled && currentLevel === 'aal1') {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+      throw redirect('/totp-challenge', { headers })
+    }
+
+    // Get access token for API calls in child loaders
+    const { session } = await serverAuth.getSession()
+    const accessToken = session?.access_token
+    if (!accessToken) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+      throw redirect('/login', { headers })
+    }
+
+    // Check onboarding state
+    const httpClient = createServerHttpClient(accessToken)
+    const { data: prefs } = await getUsersMePreferences({
+      client: httpClient,
+      throwOnError: true,
+    })
+    if (prefs.mode == null) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+      throw redirect('/mode-choice', { headers })
+    }
+    if (prefs.mode === 'manual' && !prefs.initial_balance_set) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+      throw redirect('/initial-balance', { headers })
+    }
+    if (!prefs.has_seen_onboarding) {
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+      throw redirect('/welcome', { headers })
+    }
+
+    // Store access token + headers in context for child loaders
+    context.set(accessTokenContext, accessToken)
+    context.set(responseHeadersContext, headers)
+
+    const response = await next()
+
+    // Merge Set-Cookie headers from auth into the final response
+    headers.forEach((value, key) => {
+      if (response instanceof Response) {
+        response.headers.append(key, value)
+      }
+    })
+
+    return response
+  },
+]
+
+/**
+ * Server loader — returns null but carries Set-Cookie headers from middleware.
+ * Child route loaders handle data prefetching.
+ */
+export function loader({ context }: Route.LoaderArgs) {
+  const headers = context.get(responseHeadersContext)
+  return data(null, { headers })
+}
+
+// ── Client middleware ─────────────────────────────────────────────────
+// Handles splash animation + configures the browser HeyAPI client.
+// Auth is already validated server-side — no auth checks here.
+
+/**
+ * Client-side middleware — splash animation + browser HTTP client setup.
+ * Auth was already validated server-side; this only handles client concerns.
  */
 export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
   async (_, next) => {
-    // On cold start, wait for splash animation to complete before navigating.
-    // Skip delay when user prefers reduced motion.
+    // On cold start, wait for splash animation to complete
     const splashDelay =
       !splashShown && !prefersReducedMotion
         ? new Promise<void>((resolve) =>
@@ -49,28 +136,9 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
     splashShown = true
     sessionStorage.setItem('splashShown', '1')
 
-    const result = await requireAuth(authClient)
-
-    // Wait for animation to finish regardless of auth result
     await splashDelay
 
-    if ('message' in result) {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw redirect('/login')
-    }
-
-    // SEC-002: Enforce AAL2 when MFA is enrolled.
-    // Supabase returns an aal1 session after password login even with TOTP enrolled.
-    // Without this check, a user with MFA could access protected routes at aal1,
-    // defeating the purpose of 2FA. OWASP A07:2021 — Identification and Authentication Failures.
-    const { hasMfaEnrolled, currentLevel } =
-      await authClient.getAssuranceLevel()
-    if (hasMfaEnrolled && currentLevel === 'aal1') {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw redirect('/totp-challenge')
-    }
-
-    // Configure HTTP client before child loaders run
+    // Configure browser HTTP client for subsequent client-side queries
     client.setConfig({
       baseUrl: API_URL,
       auth: async () => {
@@ -78,21 +146,6 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
         return session?.access_token
       },
     })
-
-    // Check onboarding state — redirect if mode not chosen or initial balance not set
-    const { data: prefs } = await getUsersMePreferences({ throwOnError: true })
-    if (prefs.mode == null) {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw redirect('/mode-choice')
-    }
-    if (prefs.mode === 'manual' && !prefs.initial_balance_set) {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw redirect('/initial-balance')
-    }
-    if (!prefs.has_seen_onboarding) {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error
-      throw redirect('/welcome')
-    }
 
     await next()
   },

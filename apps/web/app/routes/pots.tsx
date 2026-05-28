@@ -6,10 +6,10 @@ import {
   useFeedbackModals,
   usePotCrud,
 } from '@financial-app/features'
-import { getPotsOptions } from '@financial-app/http-client'
+import { getPots, getPotsOptions } from '@financial-app/http-client'
 import { getErrorMessage, useModal } from '@financial-app/shared'
 import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import { useQuery } from '@tanstack/react-query'
+import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,7 +20,9 @@ import type {
 } from '@financial-app/features'
 import type { Pot } from '@financial-app/http-client'
 
-import { queryClient } from '../lib/query-client'
+import { createServerHttpClient } from '../lib/http-client.server'
+import { createServerQueryClient } from '../lib/query-client.server'
+import { accessTokenContext } from '../lib/route-context'
 
 import type { Route } from './+types/pots'
 
@@ -85,14 +87,24 @@ function PotCardItem({
   )
 }
 
-const potsOpts = getPotsOptions()
+/** @returns Prefetched pots data via server-side dehydration. */
+export async function loader({ context }: Route.LoaderArgs) {
+  const accessToken = context.get(accessTokenContext)
+  const httpClient = createServerHttpClient(accessToken)
+  const queryClient = createServerQueryClient()
 
-/** @returns Prefetched pots data for hydration. */
-export async function clientLoader() {
-  return queryClient.ensureQueryData(potsOpts).catch(() => undefined)
+  await queryClient.prefetchQuery({
+    ...getPotsOptions(),
+    queryFn: async () => {
+      const { data } = await getPots({ client: httpClient, throwOnError: true })
+      return data
+    },
+  })
+
+  return { dehydratedState: dehydrate(queryClient) }
 }
 
-/** @returns Skeleton fallback rendered while clientLoader is in flight. */
+/** @returns Skeleton fallback rendered during initial SSR hydration. */
 export function HydrateFallback() {
   return (
     <div className="p-6 lg:p-10">
@@ -110,22 +122,15 @@ export function HydrateFallback() {
 }
 
 /** @returns Pots page with pot cards and CRUD modals. */
-export default function Pots({
-  loaderData: initialData,
-}: Route.ComponentProps) {
+export default function Pots({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation()
   const modal = useModal()
   const formRef = useRef<HTMLFormElement>(null)
   const amountRef = useRef<IPotAmountFormRef>(null)
 
-  const {
-    data: pots,
-    error,
-    isLoading,
-  } = useQuery({
-    ...potsOpts,
-    initialData,
-  })
+  const potsOpts = getPotsOptions()
+
+  const { data: pots, error, isLoading } = useQuery(potsOpts)
 
   /** Reads form data from the dataset on the form element */
   const getFormData = useCallback((): PotFormValues | null => {
@@ -237,61 +242,69 @@ export default function Pots({
 
   if (isLoading) {
     return (
-      <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
-        <Spinner />
-      </div>
+      <HydrationBoundary state={loaderData.dehydratedState}>
+        <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+          <Spinner />
+        </div>
+      </HydrationBoundary>
     )
   }
 
   if (error) {
     return (
-      <div className="p-6 lg:p-10">
-        <Typography variant="page-title" as="h1" className="mb-4">
-          {t('pots.title')}
-        </Typography>
-        <Alert
-          severity="error"
-          message={t('common.errorLoading')}
-          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
-        />
-      </div>
+      <HydrationBoundary state={loaderData.dehydratedState}>
+        <div className="p-6 lg:p-10">
+          <Typography variant="page-title" as="h1" className="mb-4">
+            {t('pots.title')}
+          </Typography>
+          <Alert
+            severity="error"
+            message={t('common.errorLoading')}
+            description={
+              import.meta.env.DEV ? getErrorMessage(error) : undefined
+            }
+          />
+        </div>
+      </HydrationBoundary>
     )
   }
 
   return (
-    <div className="p-6 lg:p-10">
-      {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
-        <Typography variant="page-title" as="h1">
-          {t('pots.title')}
-        </Typography>
-        <Button
-          title={t('pots.addNewPot')}
-          onPress={handleAdd}
-          size="lg"
-          variant="primary"
-        />
-      </div>
-
-      {/* 2-col grid when content area >= 1100px */}
-      <div className="grid grid-cols-1 gap-6 @[1100px]:grid-cols-2">
-        {(pots ?? []).map((pot) => (
-          <PotCardItem
-            key={pot.id}
-            pot={pot}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onAddMoney={handleAddMoney}
-            onWithdraw={handleWithdraw}
-            totalSavedLabel={t('pots.totalSaved')}
-            targetOfLabel={t('pots.targetOf')}
-            addMoneyLabel={t('pots.addMoney')}
-            withdrawLabel={t('pots.withdraw')}
-            editLabel={t('pots.editPot')}
-            deleteLabel={t('pots.deletePot')}
+    <HydrationBoundary state={loaderData.dehydratedState}>
+      <div className="p-6 lg:p-10">
+        {/* Header */}
+        <div className="mb-8 flex items-center justify-between">
+          <Typography variant="page-title" as="h1">
+            {t('pots.title')}
+          </Typography>
+          <Button
+            title={t('pots.addNewPot')}
+            onPress={handleAdd}
+            size="lg"
+            variant="primary"
           />
-        ))}
+        </div>
+
+        {/* 2-col grid when content area >= 1100px */}
+        <div className="grid grid-cols-1 gap-6 @[1100px]:grid-cols-2">
+          {(pots ?? []).map((pot) => (
+            <PotCardItem
+              key={pot.id}
+              pot={pot}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onAddMoney={handleAddMoney}
+              onWithdraw={handleWithdraw}
+              totalSavedLabel={t('pots.totalSaved')}
+              targetOfLabel={t('pots.targetOf')}
+              addMoneyLabel={t('pots.addMoney')}
+              withdrawLabel={t('pots.withdraw')}
+              editLabel={t('pots.editPot')}
+              deleteLabel={t('pots.deletePot')}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </HydrationBoundary>
   )
 }

@@ -7,8 +7,10 @@ import {
   useFeedbackModals,
 } from '@financial-app/features'
 import {
+  getBudgets,
   getBudgetsOptions,
   getCategoriesOptions,
+  getTransactions,
   getTransactionsOptions,
 } from '@financial-app/http-client'
 import {
@@ -18,7 +20,7 @@ import {
   useModal,
 } from '@financial-app/shared'
 import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import { useQuery } from '@tanstack/react-query'
+import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -26,10 +28,16 @@ import type {
   BudgetFormValues,
   IBudgetFormBridge,
 } from '@financial-app/features'
-import type { IBudget, ICategory, ITransaction } from '@financial-app/shared'
-import type { IBudgetCategoryCard } from '@financial-app/shared'
+import type {
+  IBudget,
+  IBudgetCategoryCard,
+  ICategory,
+  ITransaction,
+} from '@financial-app/shared'
 
-import { queryClient } from '../lib/query-client'
+import { createServerHttpClient } from '../lib/http-client.server'
+import { createServerQueryClient } from '../lib/query-client.server'
+import { accessTokenContext } from '../lib/route-context'
 
 import type { Route } from './+types/budgets'
 
@@ -90,26 +98,43 @@ function BudgetCardItem({
   )
 }
 
-/** @returns Query options for budgets and transactions used by this route. */
-function fetchQueryOptions() {
-  const budgetsOpts = getBudgetsOptions({
-    query: { month: getCurrentBudgetMonth() },
-  })
-  const txnOpts = getTransactionsOptions({ query: { limit: 1000 } })
-  return { budgetsOpts, txnOpts }
-}
+/** @returns Prefetched budgets and transactions data via server-side dehydration. */
+export async function loader({ context }: Route.LoaderArgs) {
+  const accessToken = context.get(accessTokenContext)
+  const httpClient = createServerHttpClient(accessToken)
+  const queryClient = createServerQueryClient()
 
-/** @returns Prefetched budgets and transactions data for hydration. */
-export async function clientLoader() {
-  const { budgetsOpts, txnOpts } = fetchQueryOptions()
-  const [budgets, txn] = await Promise.all([
-    queryClient.ensureQueryData(budgetsOpts).catch(() => undefined),
-    queryClient.ensureQueryData(txnOpts).catch(() => undefined),
+  const month = getCurrentBudgetMonth()
+
+  await Promise.all([
+    queryClient.prefetchQuery({
+      ...getBudgetsOptions({ query: { month } }),
+      queryFn: async () => {
+        const { data } = await getBudgets({
+          client: httpClient,
+          query: { month },
+          throwOnError: true,
+        })
+        return data
+      },
+    }),
+    queryClient.prefetchQuery({
+      ...getTransactionsOptions({ query: { limit: 1000 } }),
+      queryFn: async () => {
+        const { data } = await getTransactions({
+          client: httpClient,
+          query: { limit: 1000 },
+          throwOnError: true,
+        })
+        return data
+      },
+    }),
   ])
-  return { budgets, txn }
+
+  return { dehydratedState: dehydrate(queryClient) }
 }
 
-/** @returns Skeleton fallback rendered while clientLoader is in flight. */
+/** @returns Skeleton fallback rendered during initial SSR hydration. */
 export function HydrateFallback() {
   return (
     <div className="p-6 lg:p-10">
@@ -133,20 +158,17 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation()
   const modal = useModal()
   const formRef = useRef<HTMLFormElement>(null)
-  const { budgetsOpts, txnOpts } = fetchQueryOptions()
+
+  const month = getCurrentBudgetMonth()
+  const budgetsOpts = getBudgetsOptions({ query: { month } })
+  const txnOpts = getTransactionsOptions({ query: { limit: 1000 } })
 
   const {
     data: budgets,
     error: budgetsError,
     isLoading: budgetsLoading,
-  } = useQuery({
-    ...budgetsOpts,
-    initialData: loaderData.budgets,
-  })
-  const { data: txnResult, error: txnError } = useQuery({
-    ...txnOpts,
-    initialData: loaderData.txn,
-  })
+  } = useQuery(budgetsOpts)
+  const { data: txnResult, error: txnError } = useQuery(txnOpts)
 
   const { budgetItems, categoryCards } = useMemo(
     () =>
@@ -223,75 +245,83 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
 
   if (budgetsLoading) {
     return (
-      <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
-        <Spinner />
-      </div>
+      <HydrationBoundary state={loaderData.dehydratedState}>
+        <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+          <Spinner />
+        </div>
+      </HydrationBoundary>
     )
   }
 
   const error = budgetsError ?? txnError
   if (error) {
     return (
-      <div className="p-6 lg:p-10">
-        <Typography variant="page-title" as="h1" className="mb-4">
-          {t('budgets.title')}
-        </Typography>
-        <Alert
-          severity="error"
-          message={t('common.errorLoading')}
-          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
-        />
-      </div>
+      <HydrationBoundary state={loaderData.dehydratedState}>
+        <div className="p-6 lg:p-10">
+          <Typography variant="page-title" as="h1" className="mb-4">
+            {t('budgets.title')}
+          </Typography>
+          <Alert
+            severity="error"
+            message={t('common.errorLoading')}
+            description={
+              import.meta.env.DEV ? getErrorMessage(error) : undefined
+            }
+          />
+        </div>
+      </HydrationBoundary>
     )
   }
 
   return (
-    <div className="p-6 lg:p-10">
-      {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
-        <Typography variant="page-title" as="h1">
-          {t('budgets.title')}
-        </Typography>
-        <Button
-          title={t('budgets.addNewBudget')}
-          onPress={handleAdd}
-          size="lg"
-          variant="primary"
-        />
-      </div>
-
-      {/* 2-col when content area >= 1100px (desktop with sidebar expanded/collapsed) */}
-      <div className="grid grid-cols-1 gap-6 @[1100px]:grid-cols-[1fr_1.5fr]">
-        {/* Left — Budget Overview */}
-        <div className="@[1100px]:self-start">
-          <BudgetOverview
-            budgets={budgetItems}
-            showSpentAmount
-            spendingSummaryTitle={t('budgets.spendingSummary')}
-            ofLabel={t('budgets.of')}
-            limitLabel={t('budgets.limit')}
+    <HydrationBoundary state={loaderData.dehydratedState}>
+      <div className="p-6 lg:p-10">
+        {/* Header */}
+        <div className="mb-8 flex items-center justify-between">
+          <Typography variant="page-title" as="h1">
+            {t('budgets.title')}
+          </Typography>
+          <Button
+            title={t('budgets.addNewBudget')}
+            onPress={handleAdd}
+            size="lg"
+            variant="primary"
           />
         </div>
 
-        {/* Right — Category Cards */}
-        <div className="flex flex-col gap-6">
-          {categoryCards.map((card) => (
-            <BudgetCardItem
-              key={card.id}
-              card={card}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              maximumOfLabel={t('budgets.maximumOf')}
-              spentLabel={t('budgets.spent')}
-              remainingLabel={t('budgets.remaining')}
-              latestSpendingTitle={t('budgets.latestSpending')}
-              seeAllLabel={t('budgets.seeAll')}
-              editLabel={t('budgets.editBudget')}
-              deleteLabel={t('budgets.deleteBudget')}
+        {/* 2-col when content area >= 1100px (desktop with sidebar expanded/collapsed) */}
+        <div className="grid grid-cols-1 gap-6 @[1100px]:grid-cols-[1fr_1.5fr]">
+          {/* Left — Budget Overview */}
+          <div className="@[1100px]:self-start">
+            <BudgetOverview
+              budgets={budgetItems}
+              showSpentAmount
+              spendingSummaryTitle={t('budgets.spendingSummary')}
+              ofLabel={t('budgets.of')}
+              limitLabel={t('budgets.limit')}
             />
-          ))}
+          </div>
+
+          {/* Right — Category Cards */}
+          <div className="flex flex-col gap-6">
+            {categoryCards.map((card) => (
+              <BudgetCardItem
+                key={card.id}
+                card={card}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                maximumOfLabel={t('budgets.maximumOf')}
+                spentLabel={t('budgets.spent')}
+                remainingLabel={t('budgets.remaining')}
+                latestSpendingTitle={t('budgets.latestSpending')}
+                seeAllLabel={t('budgets.seeAll')}
+                editLabel={t('budgets.editBudget')}
+                deleteLabel={t('budgets.deleteBudget')}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </HydrationBoundary>
   )
 }
