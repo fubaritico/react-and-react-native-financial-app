@@ -49,9 +49,7 @@ export function createServerClient(request: Request): {
             'Set-Cookie',
             serializeCookieHeader(name, value, {
               ...options,
-              httpOnly: true,
               secure: true,
-              sameSite: 'lax',
             })
           )
         })
