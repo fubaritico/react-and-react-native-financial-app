@@ -5,6 +5,15 @@ import { isAuthLoadingAtom, userAtom } from '../atoms/auth.atom'
 
 import type { IAuthClient } from './types'
 
+// ── Debug tracer (remove after fix confirmed) ────────────────────────
+const T0 = typeof performance !== 'undefined' ? performance.now() : 0
+let STEP = 0
+/** Logs a numbered step with ms since module load */
+function dbg(tag: string, ...args: unknown[]) {
+  const ms = (performance.now() - T0).toFixed(1)
+  console.warn(`[AUTH-FLOW] #${String(++STEP)} +${ms}ms [${tag}]`, ...args)
+}
+
 /** Safety timeout — if onAuthStateChange hasn't fired after this delay, unblock the app */
 const AUTH_INIT_TIMEOUT_MS = 5000
 
@@ -31,6 +40,7 @@ export function useAuthListener(authClient: IAuthClient) {
     }
 
     const subscription = authClient.onAuthStateChange((event, session) => {
+      dbg('AUTH-LISTENER', 'event:', event, 'user:', session?.user.id ?? null)
       setUser(session?.user ?? null)
       markReady()
     })

@@ -18,6 +18,15 @@ import { authClient } from '../lib/supabase'
 
 import type { ReactNode } from 'react'
 
+// ── Debug tracer (remove after fix confirmed) ────────────────────────
+const T0 = typeof performance !== 'undefined' ? performance.now() : 0
+let STEP = 0
+/** Logs a numbered step with ms since module load */
+function dbg(tag: string, ...args: unknown[]) {
+  const ms = (performance.now() - T0).toFixed(1)
+  console.warn(`[AUTH-FLOW] #${String(++STEP)} +${ms}ms [${tag}]`, ...args)
+}
+
 /** API base URL resolved from Vite env variable */
 const API_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ??
@@ -110,6 +119,7 @@ export function AuthBootstrap({ children }: Readonly<{ children: ReactNode }>) {
     [openModal, closeModal, t]
   )
 
+  dbg('AUTH-BOOTSTRAP', 'render, isAuthenticated:', isAuthenticated)
   useAuthListener(authClient)
   useConfigureHttpClient(client, authClient, API_URL, showSessionExpiredModal)
   useSessionExpiry(authClient, showSessionWarningModal, isAuthenticated)
