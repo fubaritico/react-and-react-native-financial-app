@@ -81,6 +81,29 @@ export function createApp() {
   )
   app.use(express.json({ limit: '10kb' }))
 
+  // Temporary debug middleware — DELETE after fixing body issue
+  app.use((req, _res, next) => {
+    if (
+      req.method === 'POST' ||
+      req.method === 'PUT' ||
+      req.method === 'PATCH'
+    ) {
+      console.warn('[DEBUG] Express req.method:', req.method)
+      console.warn('[DEBUG] Express req.url:', req.url)
+      console.warn(
+        '[DEBUG] Express req.headers.content-type:',
+        req.headers['content-type']
+      )
+      console.warn(
+        '[DEBUG] Express req.headers.content-length:',
+        req.headers['content-length']
+      )
+      console.warn('[DEBUG] Express req.body:', JSON.stringify(req.body))
+      console.warn('[DEBUG] Express req.body type:', typeof req.body)
+    }
+    next()
+  })
+
   // Rate limiting — skipped in serverless (in-memory store resets per invocation)
   const isServerless = !!process.env.AWS_LAMBDA_FUNCTION_NAME
 

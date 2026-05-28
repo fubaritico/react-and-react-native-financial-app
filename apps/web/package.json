@@ -34,7 +34,7 @@
     "react-dom": "catalog:",
     "react-i18next": "catalog:",
     "react-router": "^7.14.1",
-    "serverless-http": "^3.2.0"
+    "serverless-http": "^4.0.0"
   },
   "devDependencies": {
     "@netlify/vite-plugin-react-router": "^3.1.1",
