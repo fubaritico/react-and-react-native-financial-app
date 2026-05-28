@@ -47,6 +47,22 @@ let splashShown =
  * enforces AAL2 when MFA enrolled, checks onboarding state.
  * Forwards Set-Cookie headers for token refresh.
  */
+/** Cookie name for onboarding state cache (avoids 1-2s API call per navigation) */
+const ONBOARDING_COOKIE = 'onboarding'
+
+/**
+ * Extracts a cookie value from the request Cookie header.
+ * @param request - Incoming HTTP request
+ * @param name - Cookie name to extract
+ * @returns Cookie value or null if not found
+ */
+function getCookieValue(request: Request, name: string): string | null {
+  const cookies = request.headers.get('cookie')
+  if (!cookies) return null
+  const match = new RegExp(`(?:^|;\\s*)${name}=([^;]*)`).exec(cookies)
+  return match ? decodeURIComponent(match[1]) : null
+}
+
 export const middleware: Route.MiddlewareFunction[] = [
   async ({ request, context }, next) => {
     const url = new URL(request.url)
@@ -54,63 +70,72 @@ export const middleware: Route.MiddlewareFunction[] = [
     const t0 = performance.now()
     const { authClient: serverAuth, headers } = createServerClient(request)
 
-    // Validate JWT server-side (network call to Supabase Auth)
-    const tGetUser = performance.now()
-    const { user, error } = await serverAuth.getUser()
-    const getUserMs = performance.now() - tGetUser
+    // A: Parallelize getUser (network call ~500ms) + getSession (cookie read ~0ms)
+    const tAuth = performance.now()
+    const [userResult, sessionResult] = await Promise.all([
+      serverAuth.getUser(),
+      serverAuth.getSession(),
+    ])
+    const authMs = performance.now() - tAuth
+
+    const { user, error } = userResult
     if (error || !user) {
       console.warn(
-        `[SSR] middleware (${route}) getUser=${getUserMs.toFixed(0)}ms → redirect /login`
+        `[SSR] middleware (${route}) auth=${authMs.toFixed(0)}ms → redirect /login`
       )
       // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
       throw redirect('/login', { headers })
     }
 
-    // SEC-002: Enforce AAL2 when MFA is enrolled
-    const tAAL = performance.now()
+    const accessToken = sessionResult.session?.access_token
+    if (!accessToken) {
+      console.warn(
+        `[SSR] middleware (${route}) auth=${authMs.toFixed(0)}ms → redirect /login (no token)`
+      )
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+      throw redirect('/login', { headers })
+    }
+
+    // SEC-002: Enforce AAL2 when MFA is enrolled (reads local session, ~3ms)
     const { hasMfaEnrolled, currentLevel } =
       await serverAuth.getAssuranceLevel()
-    const aalMs = performance.now() - tAAL
     if (hasMfaEnrolled && currentLevel === 'aal1') {
-      console.warn(
-        `[SSR] middleware (${route}) getUser=${getUserMs.toFixed(0)}ms aal=${aalMs.toFixed(0)}ms → redirect /totp-challenge`
-      )
       // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
       throw redirect('/totp-challenge', { headers })
     }
 
-    // Get access token for API calls in child loaders
-    const tSession = performance.now()
-    const { session } = await serverAuth.getSession()
-    const sessionMs = performance.now() - tSession
-    const accessToken = session?.access_token
-    if (!accessToken) {
-      console.warn(
-        `[SSR] middleware (${route}) getUser=${getUserMs.toFixed(0)}ms aal=${aalMs.toFixed(0)}ms session=${sessionMs.toFixed(0)}ms → redirect /login (no token)`
-      )
-      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-      throw redirect('/login', { headers })
-    }
+    // B: Cookie cache for onboarding — skip the 1-2s API call if cookie matches current user
+    const onboardingCookie = getCookieValue(request, ONBOARDING_COOKIE)
+    const onboardingCached = onboardingCookie === user.id
+    let prefsMs = 0
 
-    // Check onboarding state
-    const tPrefs = performance.now()
-    const httpClient = createServerHttpClient(accessToken)
-    const { data: prefs } = await getUsersMePreferences({
-      client: httpClient,
-      throwOnError: true,
-    })
-    const prefsMs = performance.now() - tPrefs
-    if (prefs.mode == null) {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-      throw redirect('/mode-choice', { headers })
-    }
-    if (prefs.mode === 'manual' && !prefs.initial_balance_set) {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-      throw redirect('/initial-balance', { headers })
-    }
-    if (!prefs.has_seen_onboarding) {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-      throw redirect('/welcome', { headers })
+    if (!onboardingCached) {
+      const tPrefs = performance.now()
+      const httpClient = createServerHttpClient(accessToken)
+      const { data: prefs } = await getUsersMePreferences({
+        client: httpClient,
+        throwOnError: true,
+      })
+      prefsMs = performance.now() - tPrefs
+
+      if (prefs.mode == null) {
+        // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+        throw redirect('/mode-choice', { headers })
+      }
+      if (prefs.mode === 'manual' && !prefs.initial_balance_set) {
+        // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+        throw redirect('/initial-balance', { headers })
+      }
+      if (!prefs.has_seen_onboarding) {
+        // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+        throw redirect('/welcome', { headers })
+      }
+
+      // Onboarding complete — cache per-user to skip this API call on future navigations
+      headers.append(
+        'Set-Cookie',
+        `${ONBOARDING_COOKIE}=${user.id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`
+      )
     }
 
     // Store access token, user, and headers in context for child loaders
@@ -131,7 +156,7 @@ export const middleware: Route.MiddlewareFunction[] = [
 
     const totalMs = performance.now() - t0
     console.warn(
-      `[SSR] middleware (${route}) TOTAL=${totalMs.toFixed(0)}ms | getUser=${getUserMs.toFixed(0)}ms aal=${aalMs.toFixed(0)}ms session=${sessionMs.toFixed(0)}ms prefs=${prefsMs.toFixed(0)}ms loader=${loaderMs.toFixed(0)}ms`
+      `[SSR] middleware (${route}) TOTAL=${totalMs.toFixed(0)}ms | auth=${authMs.toFixed(0)}ms prefs=${prefsMs.toFixed(0)}ms(${onboardingCached ? 'cached' : 'api'}) loader=${loaderMs.toFixed(0)}ms`
     )
     return response
   },
@@ -145,6 +170,17 @@ export function loader({ context }: Route.LoaderArgs) {
   const headers = context.get(responseHeadersContext)
   const user = context.get(userContext)
   return data({ user }, { headers })
+}
+
+/**
+ * C: Prevents React Router from re-fetching layout data on internal navigations.
+ * The user object is hydrated once into Jotai — subsequent updates come from the
+ * client-side auth listener, not from re-running the server loader.
+ * Eliminates one full Lambda invocation (~2.8s) per client-side navigation.
+ * @returns Always false — layout data never needs server revalidation
+ */
+export function shouldRevalidate() {
+  return false
 }
 
 // ── Client middleware ─────────────────────────────────────────────────
