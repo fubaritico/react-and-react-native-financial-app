@@ -49,37 +49,57 @@ let splashShown =
  */
 export const middleware: Route.MiddlewareFunction[] = [
   async ({ request, context }, next) => {
+    const url = new URL(request.url)
+    const route = url.pathname
+    const t0 = performance.now()
     const { authClient: serverAuth, headers } = createServerClient(request)
 
     // Validate JWT server-side (network call to Supabase Auth)
+    const tGetUser = performance.now()
     const { user, error } = await serverAuth.getUser()
+    const getUserMs = performance.now() - tGetUser
     if (error || !user) {
+      console.warn(
+        `[SSR] middleware (${route}) getUser=${getUserMs.toFixed(0)}ms → redirect /login`
+      )
       // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
       throw redirect('/login', { headers })
     }
 
     // SEC-002: Enforce AAL2 when MFA is enrolled
+    const tAAL = performance.now()
     const { hasMfaEnrolled, currentLevel } =
       await serverAuth.getAssuranceLevel()
+    const aalMs = performance.now() - tAAL
     if (hasMfaEnrolled && currentLevel === 'aal1') {
+      console.warn(
+        `[SSR] middleware (${route}) getUser=${getUserMs.toFixed(0)}ms aal=${aalMs.toFixed(0)}ms → redirect /totp-challenge`
+      )
       // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
       throw redirect('/totp-challenge', { headers })
     }
 
     // Get access token for API calls in child loaders
+    const tSession = performance.now()
     const { session } = await serverAuth.getSession()
+    const sessionMs = performance.now() - tSession
     const accessToken = session?.access_token
     if (!accessToken) {
+      console.warn(
+        `[SSR] middleware (${route}) getUser=${getUserMs.toFixed(0)}ms aal=${aalMs.toFixed(0)}ms session=${sessionMs.toFixed(0)}ms → redirect /login (no token)`
+      )
       // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
       throw redirect('/login', { headers })
     }
 
     // Check onboarding state
+    const tPrefs = performance.now()
     const httpClient = createServerHttpClient(accessToken)
     const { data: prefs } = await getUsersMePreferences({
       client: httpClient,
       throwOnError: true,
     })
+    const prefsMs = performance.now() - tPrefs
     if (prefs.mode == null) {
       // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
       throw redirect('/mode-choice', { headers })
@@ -98,7 +118,9 @@ export const middleware: Route.MiddlewareFunction[] = [
     context.set(userContext, user)
     context.set(responseHeadersContext, headers)
 
+    const tLoader = performance.now()
     const response = await next()
+    const loaderMs = performance.now() - tLoader
 
     // Merge Set-Cookie headers from auth into the final response
     headers.forEach((value, key) => {
@@ -107,6 +129,10 @@ export const middleware: Route.MiddlewareFunction[] = [
       }
     })
 
+    const totalMs = performance.now() - t0
+    console.warn(
+      `[SSR] middleware (${route}) TOTAL=${totalMs.toFixed(0)}ms | getUser=${getUserMs.toFixed(0)}ms aal=${aalMs.toFixed(0)}ms session=${sessionMs.toFixed(0)}ms prefs=${prefsMs.toFixed(0)}ms loader=${loaderMs.toFixed(0)}ms`
+    )
     return response
   },
 ]
@@ -131,7 +157,10 @@ export function loader({ context }: Route.LoaderArgs) {
  */
 export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
   async (_, next) => {
+    const t0 = performance.now()
+
     // On cold start, wait for splash animation to complete
+    const tSplash = performance.now()
     const splashDelay =
       !splashShown && !prefersReducedMotion
         ? new Promise<void>((resolve) =>
@@ -142,6 +171,7 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
     sessionStorage.setItem('splashShown', '1')
 
     await splashDelay
+    const splashMs = performance.now() - tSplash
 
     // Configure browser HTTP client for subsequent client-side queries
     client.setConfig({
@@ -152,7 +182,13 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
       },
     })
 
+    const tNext = performance.now()
     await next()
+    const nextMs = performance.now() - tNext
+
+    console.warn(
+      `[Client] clientMiddleware TOTAL=${(performance.now() - t0).toFixed(0)}ms | splash=${splashMs.toFixed(0)}ms next=${nextMs.toFixed(0)}ms`
+    )
   },
 ]
 

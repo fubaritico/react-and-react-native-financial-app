@@ -36,6 +36,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
+      console.warn('[Client] isAuthenticated=true — navigating to /')
       void navigate('/', { replace: true })
     }
   }, [isAuthenticated, navigate])

@@ -30,7 +30,7 @@ import {
   Typography,
 } from '@financial-app/ui'
 import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
@@ -45,66 +45,89 @@ import type { Route } from './+types/home'
 
 /** @returns Prefetched overview data via server-side dehydration. */
 export async function loader({ context }: Route.LoaderArgs) {
+  const t0 = performance.now()
   const accessToken = context.get(accessTokenContext)
   const httpClient = createServerHttpClient(accessToken)
   const queryClient = createServerQueryClient()
 
   const month = getCurrentBudgetMonth()
 
+  const timers = {
+    balance: 0,
+    transactions: 0,
+    pots: 0,
+    budgets: 0,
+    recurringBills: 0,
+  }
+
   await Promise.all([
     queryClient.prefetchQuery({
       ...getBalanceOptions(),
       queryFn: async () => {
+        const start = performance.now()
         const { data } = await getBalance({
           client: httpClient,
           throwOnError: true,
         })
+        timers.balance = performance.now() - start
         return data
       },
     }),
     queryClient.prefetchQuery({
       ...getTransactionsOptions({ query: { limit: 5, sort: 'latest' } }),
       queryFn: async () => {
+        const start = performance.now()
         const { data } = await getTransactions({
           client: httpClient,
           query: { limit: 5, sort: 'latest' },
           throwOnError: true,
         })
+        timers.transactions = performance.now() - start
         return data
       },
     }),
     queryClient.prefetchQuery({
       ...getPotsOptions(),
       queryFn: async () => {
+        const start = performance.now()
         const { data } = await getPots({
           client: httpClient,
           throwOnError: true,
         })
+        timers.pots = performance.now() - start
         return data
       },
     }),
     queryClient.prefetchQuery({
       ...getBudgetsOptions({ query: { month } }),
       queryFn: async () => {
+        const start = performance.now()
         const { data } = await getBudgets({
           client: httpClient,
           query: { month },
           throwOnError: true,
         })
+        timers.budgets = performance.now() - start
         return data
       },
     }),
     queryClient.prefetchQuery({
       ...getRecurringBillsOptions(),
       queryFn: async () => {
+        const start = performance.now()
         const { data } = await getRecurringBills({
           client: httpClient,
           throwOnError: true,
         })
+        timers.recurringBills = performance.now() - start
         return data
       },
     }),
   ])
+
+  console.warn(
+    `[SSR] home loader TOTAL=${(performance.now() - t0).toFixed(0)}ms | balance=${timers.balance.toFixed(0)}ms txn=${timers.transactions.toFixed(0)}ms pots=${timers.pots.toFixed(0)}ms budgets=${timers.budgets.toFixed(0)}ms recurring=${timers.recurringBills.toFixed(0)}ms`
+  )
 
   return { dehydratedState: dehydrate(queryClient) }
 }
@@ -135,6 +158,10 @@ export function HydrateFallback() {
 
 /** @returns Overview page with balance cards, pots, transactions, budgets, and recurring bills. */
 export default function Home({ loaderData }: Route.ComponentProps) {
+  useEffect(() => {
+    console.warn('[Client] Home component MOUNTED — page visible')
+  }, [])
+
   const navigate = useNavigate()
   const { t } = useTranslation()
 

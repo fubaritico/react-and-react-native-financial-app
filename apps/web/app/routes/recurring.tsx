@@ -29,6 +29,7 @@ import type { Route } from './+types/recurring'
 
 /** @returns Prefetched recurring bills data via server-side dehydration. */
 export async function loader({ context }: Route.LoaderArgs) {
+  const t0 = performance.now()
   const accessToken = context.get(accessTokenContext)
   const httpClient = createServerHttpClient(accessToken)
   const queryClient = createServerQueryClient()
@@ -44,6 +45,9 @@ export async function loader({ context }: Route.LoaderArgs) {
     },
   })
 
+  console.warn(
+    `[SSR] recurring loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
+  )
   return { dehydratedState: dehydrate(queryClient) }
 }
 
