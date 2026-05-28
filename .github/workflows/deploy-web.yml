@@ -38,8 +38,6 @@ jobs:
           filters: |
             web:
               - 'apps/web/**'
-            api:
-              - 'apps/api/**'
             packages:
               - 'packages/**'
 
@@ -48,17 +46,17 @@ jobs:
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "result=true" >> $GITHUB_OUTPUT
-          elif [[ "${{ steps.filter.outputs.web }}" == "true" || "${{ steps.filter.outputs.api }}" == "true" || "${{ steps.filter.outputs.packages }}" == "true" ]]; then
+          elif [[ "${{ steps.filter.outputs.web }}" == "true" || "${{ steps.filter.outputs.packages }}" == "true" ]]; then
             echo "result=true" >> $GITHUB_OUTPUT
           else
             echo "result=false" >> $GITHUB_OUTPUT
           fi
 
       - uses: ./.github/actions/setup
-        # if: steps.changed.outputs.result == 'true'
+        if: steps.changed.outputs.result == 'true'
 
       - name: Build Web
-        # if: steps.changed.outputs.result == 'true'
+        if: steps.changed.outputs.result == 'true'
         run: pnpm --filter web-financial-app build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
@@ -68,11 +66,11 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Install Netlify CLI
-        # if: steps.changed.outputs.result == 'true'
+        if: steps.changed.outputs.result == 'true'
         run: pnpm install -g netlify-cli
 
       - name: Deploy to Netlify (Production)
-        # if: steps.changed.outputs.result == 'true'
+        if: steps.changed.outputs.result == 'true'
         run: netlify deploy --prod --no-build --site=$NETLIFY_SITE_ID_WEB --cwd apps/web --message "$DEPLOY_MESSAGE"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

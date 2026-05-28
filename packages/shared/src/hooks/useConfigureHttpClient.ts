@@ -35,8 +35,15 @@ interface IHttpClient {
 
 /**
  * Configures the HeyAPI HTTP client with baseUrl and auth token.
- * Re-runs whenever userAtom changes (login, logout, token refresh)
- * so the client always has the latest credentials.
+ *
+ * The auth callback always delegates to `authClient.getSession()` — it never
+ * conditionally sets `auth: undefined`. This prevents a race condition on web
+ * where `clientMiddleware` configures a working auth callback, but this effect
+ * fires before Jotai hydration completes and would overwrite it with `undefined`,
+ * causing API calls to go out without a token (→ 401 → false "session expired" modal).
+ *
+ * Re-runs whenever userAtom changes (login, logout, token refresh) to reset
+ * the sign-out guard for the 401 interceptor.
  *
  * Also registers a response interceptor that detects 401 responses
  * and calls `onSessionExpired` to trigger a user-facing modal.
@@ -80,19 +87,23 @@ export function useConfigureHttpClient(
     dbg('HTTP-CLIENT:effect', 'user:', user ? user.id : null)
     httpClient.setConfig({
       baseUrl: apiUrl,
-      auth: user
-        ? async () => {
-            const { session } = await authClient.getSession()
-            dbg(
-              'HTTP-CLIENT:auth-cb',
-              'token:',
-              session?.access_token ? 'present' : 'missing'
-            )
-            return session?.access_token
-          }
-        : undefined,
+      // Always provide the auth callback — never set auth to undefined.
+      // On web, clientMiddleware sets a working auth callback before this effect runs.
+      // Setting auth: undefined when user is null would overwrite it, causing
+      // API calls to fire without a token before hydration completes.
+      auth: async () => {
+        const { session } = await authClient.getSession()
+        dbg(
+          'HTTP-CLIENT:auth-cb',
+          'token:',
+          session?.access_token ? 'present' : 'missing'
+        )
+        return session?.access_token
+      },
     })
-    setHttpClientReady(!!user)
+    // Always true — the auth callback is always present (delegates to getSession).
+    // On mobile, useAuthRedirect waits for this before navigating.
+    setHttpClientReady(true)
 
     // Reset the sign-out guard when a new user logs in,
     // so the 401 interceptor can fire again on the next session expiry.
