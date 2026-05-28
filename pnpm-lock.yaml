@@ -244,9 +244,6 @@ importers:
       '@financial-app/prisma':
         specifier: workspace:^
         version: link:../../packages/prisma
-      '@sentry/aws-serverless':
-        specifier: ^10.54.0
-        version: 10.54.0(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))
       '@sentry/node':
         specifier: ^10.54.0
         version: 10.54.0
@@ -3744,10 +3741,6 @@ packages:
     resolution: {integrity: sha512-B7eicNhAomJ7bGihJO7mCw7pZ8FFo/THQgGPo85VR3FaJVCCot20WxVgvhjc7IVBQVlaaxSrnlUFvA+yHjszqQ==}
     engines: {node: '>=18'}
 
-  '@sentry/aws-serverless@10.54.0':
-    resolution: {integrity: sha512-frCNATYXVQi5uatFKcv8Xykn30RL38Rc3G7bMz91y2AvASo5ZznVIWrAqR1fNOfxAsdFWbtcYyJSBBpEr3QMiA==}
-    engines: {node: '>=18'}
-
   '@sentry/babel-plugin-component-annotate@5.3.0':
     resolution: {integrity: sha512-p4q8gn8wcFqZGP/s2MnJCAAd8fTikaU6A0mM97RDHQgStcrYiaS0Sc5zUNfb1V+UOLPuvdEdL6MwyxfzjYJQTA==}
     engines: {node: '>= 18'}
@@ -4194,9 +4187,6 @@ packages:
 
   '@types/aria-query@5.0.4':
     resolution: {integrity: sha512-rfT93uj5s0PRL7EzccGMs3brplhcrghnDoV26NqKhCAS1hVo+WdNsPvE/yb6ilfr5hi2MEk6d5EWJTKdxg8jVw==}
-
-  '@types/aws-lambda@8.10.161':
-    resolution: {integrity: sha512-rUYdp+MQwSFocxIOcSsYSF3YYYC/uUpMbCY/mbO21vGqfrEYvNSoPyKYDj6RhXXpPfS0KstW9RwG3qXh9sL7FQ==}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -12694,21 +12684,6 @@ snapshots:
       '@sentry-internal/browser-utils': 10.54.0
       '@sentry/core': 10.54.0
 
-  '@sentry/aws-serverless@10.54.0(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))':
-    dependencies:
-      '@opentelemetry/api': 1.9.1
-      '@opentelemetry/core': 2.7.1(@opentelemetry/api@1.9.1)
-      '@opentelemetry/instrumentation': 0.214.0(@opentelemetry/api@1.9.1)
-      '@opentelemetry/semantic-conventions': 1.41.1
-      '@sentry/core': 10.54.0
-      '@sentry/node': 10.54.0
-      '@sentry/node-core': 10.54.0(@opentelemetry/api@1.9.1)(@opentelemetry/core@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/instrumentation@0.214.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.7.1(@opentelemetry/api@1.9.1))(@opentelemetry/semantic-conventions@1.41.1)
-      '@types/aws-lambda': 8.10.161
-    transitivePeerDependencies:
-      - '@opentelemetry/exporter-trace-otlp-http'
-      - '@opentelemetry/sdk-trace-base'
-      - supports-color
-
   '@sentry/babel-plugin-component-annotate@5.3.0': {}
 
   '@sentry/browser@10.54.0':
@@ -13209,8 +13184,6 @@ snapshots:
     optional: true
 
   '@types/aria-query@5.0.4': {}
-
-  '@types/aws-lambda@8.10.161': {}
 
   '@types/babel__core@7.20.5':
     dependencies:
