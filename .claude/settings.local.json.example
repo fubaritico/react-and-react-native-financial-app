@@ -95,5 +95,102 @@
   "deny": [
     "Bash(rm -rf *)",
     "Bash(git push *)"
-  ]
+  ],
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Session démarrée\" with title \"Claude Code\"' && printf '{\"hookSpecificOutput\":{\"hookEventName\":\"SessionStart\",\"initialUserMessage\":\"/start-session\"}}'"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'MANDATORY RESEARCH CHAIN — before ANY code edit: (1) Basic Memory: search_notes for related notes/fixes/decisions. (2) opensrc/: check if the lib source is already in opensrc/. If yes, read it. If no, fetch it with npx opensrc <package>. (3) Web search: if steps 1-2 gave no answer, search the web (WebSearch/WebFetch). NEVER rely on training knowledge alone for external lib APIs, config, or behavior. If you skipped any step, STOP and do it now.'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Commande Bash terminée\" with title \"Claude Code\"' && echo 'REMINDER: If this was a test run (pnpm test) that failed, analyze the error output before retrying. Do not blindly retry the same command.'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$HOME/.claude/hooks/post-edit.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__basic-memory__write_note",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Note Basic Memory créée\" with title \"Claude Code\"'"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "review-.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Review lancée\" with title \"Claude Code — Review\"'"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "review-.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Review terminée\" with title \"Claude Code — Review\"'"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Compaction auto imminente — le contexte va être résumé\" with title \"Claude Code\" with sound name \"Submarine\"'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Claude a terminé\" with title \"Claude Code\"'"
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -12,9 +12,10 @@ targeting React Native (Expo) and React web (React Router).
 - **Package manager**: pnpm workspaces
 - **Monorepo orchestration**: Turborepo (turbo.json — to be added in Phase 6)
 - **Language**: TypeScript strict throughout
-- **Org scope**: @financial-app/*
+- **Org scope**: @financial-app/\*
 
 ## Critical Workflow Rules
+
 - **Shared responsibility** — you and the user share ownership of code quality and consistency. You are RESPONSIBLE. Care about every line you write — review your own output before presenting it.
 - **Be concise** — no recap, no enumerations, no unsolicited explanations. Act, then report briefly if needed.
 - **Discuss approach FIRST** — never code without confirming approach
@@ -44,7 +45,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Never i18n fallbacks** — NEVER pass a second argument to `t()` (e.g. `t('key', 'fallback')`), NEVER use default values for label/placeholder props in destructuring (e.g. `label = 'Edit'`), NEVER use `?? 'fallback'` on translated strings. If a key is missing, add it to both `en/translation.json` and `fr/translation.json`. Labels are always required props (`label: string`, not `label?: string`).
 - **Never fallback values** — NEVER use hardcoded fallback data (static rates, default configs, mock values) as silent degradation. If a runtime dependency (API, rates, config) fails to load, throw an error. The app must not silently serve stale or incorrect data. Future exception: offline mode with persisted last-known values — but that's an explicit feature, not a silent fallback.
 
-## Source code reference 
+## Source code reference
 
 Source code for dependencies is available in `opensrc/` for deeper understanding of implementation details.
 
@@ -74,7 +75,7 @@ npx opensrc <owner>/<repo>      # GitHub repo (e.g., npx opensrc vercel/ai)
 
 4. **Token pipeline**: Style Dictionary JSON → JS/TS + CSS vars + Tailwind map + RN values
 
-5. **Layer order**: tokens → tailwind-config → ui → features → apps  @/.claude/rules/monorepo.md
+5. **Layer order**: tokens → tailwind-config → ui → features → apps @/.claude/rules/monorepo.md
 
 ## Non-Negotiable Rules
 
@@ -89,28 +90,28 @@ npx opensrc <owner>/<repo>      # GitHub repo (e.g., npx opensrc vercel/ai)
 
 ## Tech Stack
 
-| Domain         | Choice                        |
-|----------------|-------------------------------|
-| Native styling | twrnc ^4.6.1                  |
-| Web styling    | Tailwind CSS 3                |
-| Variants       | class-variance-authority      |
-| Tokens         | Style Dictionary (DTCG)       |
-| Database/Auth  | Supabase                      |
-| Local state    | Jotai                         |
-| Server state   | TanStack Query                |
-| Navigation     | Expo Router (mobile)          |
-| Forms          | useFormValidation hook + zod   |
+| Domain         | Choice                       |
+| -------------- | ---------------------------- |
+| Native styling | twrnc ^4.6.1                 |
+| Web styling    | Tailwind CSS 3               |
+| Variants       | class-variance-authority     |
+| Tokens         | Style Dictionary (DTCG)      |
+| Database/Auth  | Supabase                     |
+| Local state    | Jotai                        |
+| Server state   | TanStack Query               |
+| Navigation     | Expo Router (mobile)         |
+| Forms          | useFormValidation hook + zod |
 
 ## Canonical Packages
 
-| Package                  | Path                      | Status        |
-|--------------------------|---------------------------|---------------|
-| @financial-app/tokens         | packages/tokens/          | to create     |
-| @financial-app/tailwind-config| packages/tailwind-config/ | to create     |
-| @financial-app/ui  | packages/ui/   | to refactor   |
-| @financial-app/shared         | packages/shared/          | to create     |
-| mobile (app)             | apps/mobile/              | to rename     |
-| web (app)                | apps/web/                 | to create     |
+| Package                        | Path                      | Status      |
+| ------------------------------ | ------------------------- | ----------- |
+| @financial-app/tokens          | packages/tokens/          | to create   |
+| @financial-app/tailwind-config | packages/tailwind-config/ | to create   |
+| @financial-app/ui              | packages/ui/              | to refactor |
+| @financial-app/shared          | packages/shared/          | to create   |
+| mobile (app)                   | apps/mobile/              | to rename   |
+| web (app)                      | apps/web/                 | to create   |
 
 ## Supabase
 
@@ -125,20 +126,21 @@ npx opensrc <owner>/<repo>      # GitHub repo (e.g., npx opensrc vercel/ai)
 - `files/docs and context/PERSONAL_FINANCE_ANALYSIS_EN.md` — full product specification
 
 ## Reference Files (load on demand — NOT auto-loaded)
-| File                 | When to load                                                   |
-|----------------------|----------------------------------------------------------------|
-| `new-component.md`   | UI component, design system and other pattern to apply strictly |
-| `design-system.md`   | All the rules to follow about UI package files, folders        |
-| `styling.md`         | All the rules to follow about styling                          |
-| `tokens.md`          | All infrmation about token use and setup                       |
-| `monorepo.md`        | Description of the expected project architecture               |
-| `troubleshooting.md` | Debug, architectural decisions                                 |
-| `api.md`             | API server stack, structure, routes, auth, error contract        |
-| `api-patterns.md`    | Supabase layer, Prisma types, schemas, sort, pagination, mutations |
-| `netlify.md`         | Netlify deployment, Lambda function, env vars, Sentry serverless |
-| `features.md`        | Screen/View split, feature package architecture                |
+
+| File                 | When to load                                                           |
+| -------------------- | ---------------------------------------------------------------------- |
+| `new-component.md`   | UI component, design system and other pattern to apply strictly        |
+| `design-system.md`   | All the rules to follow about UI package files, folders                |
+| `styling.md`         | All the rules to follow about styling                                  |
+| `tokens.md`          | All infrmation about token use and setup                               |
+| `monorepo.md`        | Description of the expected project architecture                       |
+| `troubleshooting.md` | Debug, architectural decisions                                         |
+| `api.md`             | API server stack, structure, routes, auth, error contract              |
+| `api-patterns.md`    | Supabase layer, Prisma types, schemas, sort, pagination, mutations     |
+| `netlify.md`         | Netlify deployment, Lambda function, env vars, Sentry serverless       |
+| `features.md`        | Screen/View split, feature package architecture                        |
 | `tests.md`           | 5-level test policy (happy, variants, managed/unmanaged errors, edges) |
-| `specifications.md`  | App specifications reminder and extra specifications           |
+| `specifications.md`  | App specifications reminder and extra specifications                   |
 
 **Before coding**: ask which reference files are needed — do NOT start coding without the relevant files loaded.
 
@@ -150,18 +152,12 @@ Read `@completed.md`
 
 ### Next
 
-1. **CI + Netlify deployment** — deploy NOT working yet (sites return "Not Found"). New methodology:
-   - Check Netlify dashboard Function logs FIRST (runtime errors, function existence)
-   - Add Sentry (web + API) for prod error visibility
-   - Read `@netlify/vite-plugin-react-router` source code when docs insufficient
-   - Verify online state before any code change — stop blind iteration
-   - See `docs/deploy-netlify-attempts.md` for full attempt history
-2. **Centralized auth** — session validation on app focus (AppState → getSession())
-3. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
-4. Tests — API + hooks
-5. Phase 8B: GoCardless bank connection (mode banque)
-6. **Server-side pagination** — replace client-side `limit: 1000`
-7. **Walkthrough** — onboarding animation (Lottie text layer injection, content drafted in Basic Memory)
+1. **Centralized auth** — session validation on app focus (AppState → getSession())
+2. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
+3. Tests — API + hooks
+4. Phase 8B: GoCardless bank connection (mode banque)
+5. **Server-side pagination** — replace client-side `limit: 1000`
+6. **Walkthrough** — onboarding animation (Lottie text layer injection, content drafted in Basic Memory)
 
 **Pending tests**: none
 

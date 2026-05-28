@@ -23,6 +23,7 @@ Produces a structured JSON report with findings sorted by severity.
 ### Step 1 — Scope Detection
 
 Determine which files to review (priority order):
+
 1. User-specified files/directories
 2. Files changed on current branch vs main/master (`git diff --name-only main...HEAD`)
 3. Staged files (`git diff --cached --name-only`)
@@ -33,6 +34,7 @@ Filter to only: `*.ts`, `*.tsx`, `*.js`, `*.jsx`, `*.json` (exclude `node_module
 ### Step 2 — Load Context
 
 Read all files in scope. For each file, determine which reference guides apply:
+
 - `.native.tsx` → platform-safety.md, accessibility.md
 - `.web.tsx` → platform-safety.md, security.md, accessibility.md
 - `*.variants.ts` → platform-safety.md (forbidden classes)
@@ -45,35 +47,24 @@ Read all files in scope. For each file, determine which reference guides apply:
 - All `*.tsx` → react-best-practices.md
 - All files → quality.md
 
-### Step 3 — Dispatch 6 Parallel Subagents
+### Step 3 — Dispatch 6 Parallel Custom Subagents
 
-Launch all 6 agents simultaneously using the Agent tool. Each agent receives:
-- The list of files in scope (content already read)
-- Its domain-specific reference guide
-- The JSON schema for findings output
-- Instruction to return ONLY a JSON array of findings (no prose)
+Launch all 6 **custom subagents** simultaneously using the Agent tool. Each subagent is defined
+in `.claude/agents/review/` and has its own system prompt with domain-specific rules.
 
-Agents:
-1. **Platform Safety** — reference: `references/platform-safety.md`
-2. **Security** — reference: `references/security.md`
-3. **Architecture** — reference: `references/architecture.md`
-4. **Quality** — reference: `references/quality.md`
-5. **Accessibility** — reference: `references/accessibility.md`
-6. **React Best Practices** — reference: `references/react-best-practices.md` + skills: `composition-patterns`, `react-best-practices`, `react-native-skills`
+Pass each subagent the list of files in scope as user message content (file paths + content).
 
-Each agent prompt must include:
-```
-You are a code reviewer specialized in [DOMAIN].
-Review the following files against the rules in the reference guide.
-Return ONLY a valid JSON array of findings. No prose, no markdown fences around the JSON.
-If no violations found, return an empty array: []
-Each finding must follow this exact schema: [paste from schema.json]
-Use severity levels: critical, high, medium, low
-Prefix IDs with: PLAT- / SEC- / ARCH- / QUAL- / A11Y- / REACT-
-If a finding depends on library version behavior or API correctness that you are not 100% certain about,
-set "needs_verification": true and provide a "verification_query" string for context7 lookup.
-Only use this for ambiguous cases — do NOT flag project-specific rule violations as needing verification.
-```
+Subagents (by `name` / `agent_type`):
+
+1. **`review-platform-safety`** — cross-platform safety (RN in web, HTML in native, CVA classes)
+2. **`review-security`** — security vulnerabilities (XSS, injection, secrets, auth)
+3. **`review-architecture`** — architecture rules (layers, SOLID, component patterns)
+4. **`review-quality`** — code quality (JSDoc, any types, console.log, dead code)
+5. **`review-accessibility`** — WCAG 2.1 AA compliance
+6. **`review-react`** — React best practices (memoization, composition, callbacks)
+
+Each subagent returns ONLY a JSON array of findings (no prose). The finding schema
+is defined in `references/schema.json`.
 
 ### Step 4 — Aggregate & Score
 
@@ -84,6 +75,7 @@ category_score = max(0, 100 - (critical * 25) - (high * 10) - (medium * 3) - (lo
 ```
 
 Weights for overall score:
+
 - Platform Safety: 20%
 - Security: 20%
 - Architecture: 15%
@@ -92,6 +84,7 @@ Weights for overall score:
 - React Best Practices: 15%
 
 Verdict thresholds:
+
 - 80-100 + no critical/high remaining → `ready`
 - 60-79 → `needs-attention`
 - < 60 → `needs-work`
@@ -104,12 +97,14 @@ Format as a readable table, followed by the score summary and verdict.
 ### Step 6 — Verify Ambiguous Findings (context7)
 
 Before fixing, check findings where `needs_verification: true`:
+
 1. Run the `verification_query` through context7 to confirm the finding is valid
 2. If context7 confirms the issue → proceed with fix
 3. If context7 shows the usage is correct → discard the finding, adjust score
 4. This prevents false positives from outdated assumptions about library APIs
 
 Common verification scenarios:
+
 - Deprecated API detection (is this prop/method still valid in current SDK version?)
 - Prop signature changes (did accessibilityState shape change?)
 - Library-specific patterns (is this Supabase usage safe in current version?)
@@ -118,6 +113,7 @@ Common verification scenarios:
 ### Step 7 — Fix Loop (max 3 iterations)
 
 If verdict is NOT `ready`:
+
 1. Fix all `critical` findings immediately
 2. Fix `high` findings
 3. Re-run affected agents only (not all 5) on modified files
@@ -126,6 +122,7 @@ If verdict is NOT `ready`:
 ### Step 8 — Handle Remaining Violations
 
 If violations remain after 3 iterations:
+
 - Present remaining violations to the user
 - Ask: **store** (write to `review-results/`) or **ignore** (proceed without storing)
 - If stored, write to `review-results/YYYY-MM-DD_HHmmss.json`
@@ -140,12 +137,14 @@ This skill is triggered by the main agent after every code session that produces
 immediately after `pnpm type-check && pnpm lint && pnpm test` passes.
 
 The main agent MUST NOT skip this step. The review is mandatory for:
+
 - New components
 - Modified components
 - New packages or significant refactors
 - Any changes to shared code (variants, hooks, utils)
 
 Optional (user decides) for:
+
 - Config-only changes (tsconfig, package.json)
 - Documentation-only changes
 - Changelog updates
