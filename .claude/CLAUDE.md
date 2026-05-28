@@ -84,6 +84,7 @@ npx opensrc <owner>/<repo>      # GitHub repo (e.g., npx opensrc vercel/ai)
 - NEVER put hover:/focus:/transition-/shadow- classes in shared CVA variants
 - NEVER add renderer imports to packages/variants/, hooks/, or shared/
 - NEVER call TanStack Query option factories (e.g. `getPotsOptions()`) at module top level — always inside the component body. On Android, modules are evaluated before `useConfigureHttpClient` sets the correct `baseUrl` (`10.0.2.2`), so the query fires against `localhost` which the emulator can't reach.
+- NEVER remove debug logs until the fix is confirmed working in the target environment. Logs are removed only AFTER success is verified, not when committing the fix.
 
 ## Tech Stack
 
