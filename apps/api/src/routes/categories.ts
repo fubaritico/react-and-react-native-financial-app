@@ -1,3 +1,17 @@
+/**
+ * Category routes — manage transaction/budget categories.
+ *
+ * Categories are either **system** (10 defaults shared by all users, `is_system = true`)
+ * or **custom** (user-created, tied to `user_id`). The GET endpoint returns both.
+ *
+ * Only custom categories can be created or deleted. Deletion is guarded:
+ * - 409 if the category is referenced by any transaction or budget
+ * - 404 if the category doesn't exist or is a system category
+ *
+ * A unique constraint on `(user_id, name)` prevents duplicate names (→ 409).
+ *
+ * @module
+ */
 import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'

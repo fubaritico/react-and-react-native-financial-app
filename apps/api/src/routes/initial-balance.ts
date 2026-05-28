@@ -1,3 +1,15 @@
+/**
+ * Initial balance route — one-time setup during onboarding.
+ *
+ * `POST /users/me/initial-balance` sets the user's starting balance
+ * (stored as `reference_balance` in `user_preferences`) and flips
+ * `initial_balance_set` to `true`.
+ *
+ * Idempotency guard: if the balance was already set, returns 409.
+ * This prevents accidental overwrites if the user replays the onboarding.
+ *
+ * @module
+ */
 import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'
@@ -43,6 +55,7 @@ registry.registerPath({
 export const initialBalanceRouter = Router()
 initialBalanceRouter.use(requireAuth)
 
+/** POST /users/me/initial-balance — sets starting balance (one-time, returns 409 if already set). */
 initialBalanceRouter.post(
   '/',
   validateBody(InitialBalanceSchema),

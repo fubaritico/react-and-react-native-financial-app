@@ -1,3 +1,14 @@
+/**
+ * User account route — account deletion.
+ *
+ * Single endpoint: `DELETE /users/me` permanently removes the authenticated
+ * user via Supabase Auth Admin. All associated data (transactions, budgets,
+ * pots, preferences, categories) is cascade-deleted by the database.
+ *
+ * This is irreversible. The client signs out after a successful deletion.
+ *
+ * @module
+ */
 import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'

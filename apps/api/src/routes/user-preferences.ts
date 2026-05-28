@@ -1,3 +1,15 @@
+/**
+ * User preferences routes — read and update user settings.
+ *
+ * Preferences include: `mode` (manual/bank), `has_seen_onboarding`,
+ * `currency` (ISO 4217), and `reference_balance` (starting balance).
+ *
+ * The GET endpoint auto-creates a preferences row if none exists (upsert
+ * with defaults), so it never returns 404. The PUT uses a Supabase upsert
+ * so it works whether a row exists or not.
+ *
+ * @module
+ */
 import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'
@@ -48,6 +60,7 @@ registry.registerPath({
 
 // --- Express handlers ---
 
+/** GET /users/me/preferences — returns preferences, auto-creating a row if none exists. */
 userPreferencesRouter.get('/', async (req, res) => {
   const result = await getOrCreatePreferences(res.locals.userId as string)
 
@@ -60,6 +73,7 @@ userPreferencesRouter.get('/', async (req, res) => {
   res.json(result.data)
 })
 
+/** PUT /users/me/preferences — updates one or more preference fields (mode, currency, etc.). */
 userPreferencesRouter.put(
   '/',
   validateBody(UpdateUserPreferencesSchema),

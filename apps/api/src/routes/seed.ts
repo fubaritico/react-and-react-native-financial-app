@@ -1,3 +1,16 @@
+/**
+ * Seed route — dev-only endpoint for populating test data.
+ *
+ * `POST /dev/seed` creates (or resets) a user with the given email/password,
+ * then inserts the full mock dataset from `packages/shared/src/mocks/data/data.json`
+ * (transactions, budgets, pots, categories, preferences).
+ *
+ * Only mounted when `NODE_ENV !== 'production'` (see app.ts).
+ * No authentication required — this is a dev utility.
+ * Not registered in the OpenAPI spec (no Swagger UI entry).
+ *
+ * @module
+ */
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 

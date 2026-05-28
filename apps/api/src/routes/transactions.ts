@@ -1,3 +1,17 @@
+/**
+ * Transaction routes — CRUD operations on financial transactions.
+ *
+ * Transactions represent individual income or expense entries tied to a category.
+ * The GET endpoint supports server-side pagination, sorting (latest/oldest/a-z/z-a),
+ * filtering by category, and text search on the transaction name.
+ *
+ * The response shape for GET is `{ data, page, totalPages, total }` — the only
+ * route that returns a paginated envelope rather than a raw array.
+ *
+ * All routes require authentication. Write operations are rate-limited.
+ *
+ * @module
+ */
 import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'
@@ -100,6 +114,10 @@ registry.registerPath({
 
 // --- Express handlers ---
 
+/**
+ * GET /transactions?page=&limit=&sort=&category_id=&search= — paginated transaction list.
+ * Returns `{ data, page, totalPages, total }`. Sort options: latest, oldest, a_to_z, z_to_a.
+ */
 transactionsRouter.get(
   '/',
   validateQuery(TransactionQuerySchema),
@@ -141,6 +159,7 @@ transactionsRouter.get(
   }
 )
 
+/** POST /transactions — creates a new transaction (income or expense). */
 transactionsRouter.post(
   '/',
   validateBody(CreateTransactionSchema),
@@ -173,6 +192,7 @@ transactionsRouter.post(
   }
 )
 
+/** PUT /transactions/:id — updates a transaction. Returns 404 if not found. */
 transactionsRouter.put(
   '/:id',
   validateParams(IdParamSchema),
@@ -214,6 +234,7 @@ transactionsRouter.put(
   }
 )
 
+/** DELETE /transactions/:id — removes a transaction. Returns 404 if not found, 204 on success. */
 transactionsRouter.delete(
   '/:id',
   validateParams(IdParamSchema),

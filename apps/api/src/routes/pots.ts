@@ -1,3 +1,18 @@
+/**
+ * Pot routes — CRUD + money movement on savings pots.
+ *
+ * A pot is a named savings goal with a `target` amount and a running `total`.
+ * Beyond standard CRUD, two extra endpoints handle atomic money movements:
+ * - `POST /:id/add` — adds money to the pot
+ * - `POST /:id/withdraw` — withdraws money (rejects if insufficient funds)
+ *
+ * Money movements use a Supabase RPC (`update_pot_total`) that performs
+ * the check-and-update in a single SQL statement — no TOCTOU race condition.
+ *
+ * All routes require authentication. Write operations are rate-limited.
+ *
+ * @module
+ */
 import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'
@@ -130,6 +145,7 @@ registry.registerPath({
 
 // --- Express handlers ---
 
+/** GET /pots — lists all savings pots for the authenticated user. */
 potsRouter.get('/', async (req, res) => {
   const result = await getPots(res.locals.userId as string)
 
@@ -142,6 +158,7 @@ potsRouter.get('/', async (req, res) => {
   res.json(result.data)
 })
 
+/** POST /pots — creates a new savings pot with a name, target, and theme. */
 potsRouter.post('/', validateBody(CreatePotSchema), async (req, res) => {
   const body = req.body as { name: string; target: number; theme: string }
 
@@ -164,6 +181,7 @@ potsRouter.post('/', validateBody(CreatePotSchema), async (req, res) => {
   res.status(201).json(result.data)
 })
 
+/** PUT /pots/:id — updates a pot's name, target, or theme. Returns 404 if not found. */
 potsRouter.put(
   '/:id',
   validateParams(IdParamSchema),
@@ -199,6 +217,7 @@ potsRouter.put(
   }
 )
 
+/** DELETE /pots/:id — removes a pot. Returns 404 if not found, 204 on success. */
 potsRouter.delete('/:id', validateParams(IdParamSchema), async (req, res) => {
   const result = await deletePot(
     req.params.id as string,
@@ -266,6 +285,7 @@ async function handlePotTotal(
   res.json(pot)
 }
 
+/** POST /pots/:id/add — atomically adds money to a pot. Returns 400 if pot not found. */
 potsRouter.post(
   '/:id/add',
   validateParams(IdParamSchema),
@@ -278,6 +298,7 @@ potsRouter.post(
   }
 )
 
+/** POST /pots/:id/withdraw — atomically withdraws money. Returns 400 if insufficient funds. */
 potsRouter.post(
   '/:id/withdraw',
   validateParams(IdParamSchema),

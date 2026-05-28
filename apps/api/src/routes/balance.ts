@@ -1,3 +1,17 @@
+/**
+ * Balance route — computed financial summary.
+ *
+ * Returns `{ current, income, expenses }` computed from the user's
+ * reference balance and transaction history. The formula is:
+ * `current = reference_balance + income - expenses - pots_total`
+ *
+ * Accepts an optional `month` query param (YYYY-MM) to scope the
+ * calculation to a specific month. Without it, returns the all-time balance.
+ *
+ * Read-only — no mutations. Only the global rate limiter applies.
+ *
+ * @module
+ */
 import { Router } from 'express'
 
 import { logger } from '../lib/logger.js'
@@ -30,6 +44,7 @@ registry.registerPath({
 
 // --- Express handlers ---
 
+/** GET /balance?month= — returns computed balance (current, income, expenses). Month is optional. */
 balanceRouter.get('/', validateQuery(BalanceQuerySchema), async (req, res) => {
   const { month = null } = (res.locals.query ?? {}) as { month?: string | null }
 
