@@ -3,15 +3,6 @@ import { useCallback, useEffect, useRef } from 'react'
 
 import { isHttpClientReadyAtom, userAtom } from '../atoms/auth.atom'
 
-// ── Debug tracer (remove after fix confirmed) ────────────────────────
-const T0 = typeof performance !== 'undefined' ? performance.now() : 0
-let STEP = 0
-/** Logs a numbered step with ms since module load */
-function dbg(tag: string, ...args: unknown[]) {
-  const ms = (performance.now() - T0).toFixed(1)
-  console.warn(`[AUTH-FLOW] #${String(++STEP)} +${ms}ms [${tag}]`, ...args)
-}
-
 import type { IAuthClient } from '../auth/types'
 
 /** Minimal interface for the HeyAPI client — duck-typed to avoid a build dependency */
@@ -84,7 +75,6 @@ export function useConfigureHttpClient(
   onSessionExpiredRef.current = onSessionExpired
 
   useEffect(() => {
-    dbg('HTTP-CLIENT:effect', 'user:', user ? user.id : null)
     httpClient.setConfig({
       baseUrl: apiUrl,
       // Always provide the auth callback — never set auth to undefined.
@@ -93,11 +83,6 @@ export function useConfigureHttpClient(
       // API calls to fire without a token before hydration completes.
       auth: async () => {
         const { session } = await authClient.getSession()
-        dbg(
-          'HTTP-CLIENT:auth-cb',
-          'token:',
-          session?.access_token ? 'present' : 'missing'
-        )
         return session?.access_token
       },
     })
@@ -119,17 +104,6 @@ export function useConfigureHttpClient(
      *  an active session is expected (e.g. visiting /login) and must
      *  not show the "session expired" modal. */
     const handle401 = (response: Response) => {
-      if (response.status === 401) {
-        dbg(
-          'HTTP-CLIENT:401',
-          'userRef:',
-          userRef.current?.id ?? null,
-          'signingOut:',
-          signingOutRef.current,
-          'url:',
-          response.url
-        )
-      }
       if (
         response.status === 401 &&
         !signingOutRef.current &&

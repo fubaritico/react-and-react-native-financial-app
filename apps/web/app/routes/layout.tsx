@@ -17,15 +17,6 @@ import { authClient } from '../lib/supabase'
 
 import type { Route } from './+types/layout'
 
-// ── Debug tracer (remove after fix confirmed) ────────────────────────
-const T0 = typeof performance !== 'undefined' ? performance.now() : 0
-let STEP = 0
-/** Logs a numbered step with ms since page load */
-function dbg(tag: string, ...args: unknown[]) {
-  const ms = (performance.now() - T0).toFixed(1)
-  console.warn(`[AUTH-FLOW] #${String(++STEP)} +${ms}ms [${tag}]`, ...args)
-}
-
 /** API base URL resolved from Vite env variable (inlined at build time) */
 const API_URL =
   (import.meta.env.VITE_API_URL as string | undefined) ??
@@ -153,16 +144,10 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
     await splashDelay
 
     // Configure browser HTTP client for subsequent client-side queries
-    dbg('CLIENT-MW', 'configuring HTTP client, baseUrl:', API_URL)
     client.setConfig({
       baseUrl: API_URL,
       auth: async () => {
         const { session } = await authClient.getSession()
-        dbg(
-          'CLIENT-MW:auth-cb',
-          'token:',
-          session?.access_token ? 'present' : 'missing'
-        )
         return session?.access_token
       },
     })
@@ -177,9 +162,7 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
  * Passes through server loader data (user) for Jotai hydration.
  */
 export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
-  const result = await serverLoader()
-  dbg('CLIENT-LOADER', 'serverLoader result:', result)
-  return result
+  return await serverLoader()
 }
 clientLoader.hydrate = true as const
 
@@ -223,7 +206,6 @@ export function HydrateFallback() {
  * and the HTTP client fires without auth, triggering a false "session expired" modal.
  */
 export default function AppLayout({ loaderData }: Route.ComponentProps) {
-  dbg('SSR-HYDRATE', 'AppLayout render, loaderData.user:', loaderData.user)
   useHydrateAtoms([[userAtom, loaderData.user]])
 
   return (
