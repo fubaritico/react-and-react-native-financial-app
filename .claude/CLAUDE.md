@@ -19,7 +19,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Be concise** — no recap, no enumerations, no unsolicited explanations. Act, then report briefly if needed.
 - **Discuss approach FIRST** — never code without confirming approach
 - **Review → Test → Commit** per change — no accumulation
-- **Never execute commands** — propose only. Exceptions: (1) user says "execute", "run", etc. (2) `pnpm type-check && pnpm lint && pnpm test` from root then `/review` — MUST run all 4 after every code change, never skip
+- **Never execute commands** — propose only. Exceptions: (1) user says "execute," "run," etc. (2) `pnpm type-check && pnpm lint && pnpm test` from root then `/review` — MUST run all 4 after every code change, never skip
 - **Always use root scripts** — never `cd apps/... && npx expo ...`. Use `pnpm expo:rebuild:ios`, `pnpm expo:start`, etc. from monorepo root. All scripts are in root `package.json`.
 - **Risky actions** (git push, reset --hard, rm -rf) require explicit permission EVERY TIME
 - **Never hallucinate** — if uncertain, read code first
@@ -33,60 +33,47 @@ targeting React Native (Expo) and React web (React Router).
 - **JSDoc everywhere** — EVERY interface property, EVERY function (`@param` + `@returns`), EVERY hook, EVERY type with properties, EVERY constant — no path exception, no "internal helper" excuse (QUAL-003/004/005)
 - **Always run** `pnpm type-check && pnpm lint && pnpm test` then `/review` after every set of modifications — ALL 4 MANDATORY, NEVER SKIP ANY
 - **Tests + Commit + End session** — every new feature, component, hook, route, or bug fix MUST ship with tests (5-level policy — see `tests.md`), a `/commit`, and `/end-session`. No code ships without tests. No session ends without committing and updating session state.
-- **Always ask** user to run pnpm dev, pnpm prod:server and pnpm storybook after having modified a component
+- **Always ask** the user to run `pnpm web:dev`, `pnpm api:dev`, `pnpm web:prod`, `pnpm api:prod`, and `pnpm storybook` after having modified a component
 - **Always use** the design system when coding components, NEVER code simple tags, asks user if components exist, if not create them
 - **Always create a Storybook story** after every component (`/story`)
 - **Model**: Haiku for questions/research, Sonnet for code/commits — suggest Haiku when appropriate
-- **For React**: instead of using `React.` for react types, import the type from react
+- **For React**: instead of using `React.` for react types, import the type from React
 - **React/RN skills**: always apply `composition-patterns`, `react-best-practices`, and `react-native-skills` when writing or reviewing component code
 - **Screenshot**: given screenshot names are always files located in desktop, otherwise the full file path is given
 - **Never i18n fallbacks** — NEVER pass a second argument to `t()` (e.g. `t('key', 'fallback')`), NEVER use default values for label/placeholder props in destructuring (e.g. `label = 'Edit'`), NEVER use `?? 'fallback'` on translated strings. If a key is missing, add it to both `en/translation.json` and `fr/translation.json`. Labels are always required props (`label: string`, not `label?: string`).
 - **Never fallback values** — NEVER use hardcoded fallback data (static rates, default configs, mock values) as silent degradation. If a runtime dependency (API, rates, config) fails to load, throw an error. The app must not silently serve stale or incorrect data. Future exception: offline mode with persisted last-known values — but that's an explicit feature, not a silent fallback.
 
-## Current State vs Target
+## Source code reference 
 
-### Exists now
-```
-apps/
-  mobile/              bare RN CLI — learning reference, may be aligned from time to time
-  mobile-expo/         Expo SDK 54 — CANONICAL mobile app, primary focus
-  mobile-expo-ejected/ ejected Expo — learning reference, may be aligned from time to time
-packages/
-  ui/       @financial-app/ui — RN-only, needs cross-platform refactor
-```
+Source code for dependencies is available in `opensrc/` for deeper understanding of implementation details.
 
-> **Production-grade**: all 3 mobile apps are kept intentionally to compare bare RN CLI
-> vs Expo managed vs Expo ejected. All are held to production-grade quality.
-> Only mobile-expo will be published. The other two may be updated to stay aligned.
-> Never delete them.
+See `opensrc/sources.json` for the list of available packages and their versions.
 
-### Target after all phases
-```
-apps/
-  mobile/              renamed from packages/mobile-expo
-  web/                 new — React Router + Vite
-packages/
-  tokens/              new — Style Dictionary, single token source of truth
-  tailwind-config/     new — shared Tailwind config consumed by both apps
-  ui/       refactored — cross-platform via file extension split
-  shared/              new — Supabase, Jotai atoms, TanStack Query, types, utils
+Use this source code when you need to understand how a package works internally, not just its types/interface.
+
+### Fetching Additional Source Code
+
+To fetch source code for a package or repository you need to understand, run:
+
+```bash
+npx opensrc <package>           # npm package (e.g., npx opensrc zod)
+npx opensrc pypi:<package>      # Python package (e.g., npx opensrc pypi:requests)
+npx opensrc crates:<package>    # Rust crate (e.g., npx opensrc crates:serde)
+npx opensrc <owner>/<repo>      # GitHub repo (e.g., npx opensrc vercel/ai)
 ```
 
 ## Core Architecture Decisions
 
-1. **Cross-platform components**: file extension split
-   - `Component.tsx` — types + props interface only, no JSX
-   - `Component.native.tsx` — React Native implementation (twrnc)
-   - `Component.web.tsx` — DOM implementation (Tailwind CSS + cn())
+1. **Cross-platform components**: @new-component.md
 
-2. **Styling**: twrnc on native, Tailwind CSS on web — NOT NativeWind (too unstable)
+2. **Styling**: twrnc on native, Tailwind CSS on web — NOT NativeWind (too unstable) @/.claude/rules/styling.md
 
 3. **Shared variants**: CVA (`class-variance-authority`) in `src/variants/` — platform-agnostic
    class strings consumed by both .native.tsx and .web.tsx
 
 4. **Token pipeline**: Style Dictionary JSON → JS/TS + CSS vars + Tailwind map + RN values
 
-5. **Layer order**: tokens → tailwind-config → ui → apps
+5. **Layer order**: tokens → tailwind-config → ui → features → apps  @/.claude/rules/monorepo.md
 
 ## Non-Negotiable Rules
 
@@ -144,7 +131,9 @@ packages/
 | `tokens.md`          | All infrmation about token use and setup                       |
 | `monorepo.md`        | Description of the expected project architecture               |
 | `troubleshooting.md` | Debug, architectural decisions                                 |
-| `api.md`             | API server patterns, routes, Supabase queries, auth, validation |
+| `api.md`             | API server stack, structure, routes, auth, error contract        |
+| `api-patterns.md`    | Supabase layer, Prisma types, schemas, sort, pagination, mutations |
+| `netlify.md`         | Netlify deployment, Lambda function, env vars, Sentry serverless |
 | `features.md`        | Screen/View split, feature package architecture                |
 | `tests.md`           | 5-level test policy (happy, variants, managed/unmanaged errors, edges) |
 | `specifications.md`  | App specifications reminder and extra specifications           |
@@ -159,7 +148,12 @@ Read `@completed.md`
 
 ### Next
 
-1. **CI + Netlify deployment** — set up CI pipeline, make API server production-ready, deploy API + web app on Netlify
+1. **CI + Netlify deployment** — deploy NOT working yet (sites return "Not Found"). New methodology:
+   - Check Netlify dashboard Function logs FIRST (runtime errors, function existence)
+   - Add Sentry (web + API) for prod error visibility
+   - Read `@netlify/vite-plugin-react-router` source code when docs insufficient
+   - Verify online state before any code change — stop blind iteration
+   - See `docs/deploy-netlify-attempts.md` for full attempt history
 2. **Centralized auth** — session validation on app focus (AppState → getSession())
 3. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
 4. Tests — API + hooks
