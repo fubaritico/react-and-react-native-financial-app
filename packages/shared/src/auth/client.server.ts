@@ -21,8 +21,8 @@ export function createServerClient(request: Request): {
 } {
   const headers = new Headers()
 
-  const url = process.env.VITE_SUPABASE_URL
-  const key = process.env.VITE_SUPABASE_ANON_KEY
+  const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
+  const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
 
   if (!url || !key) {
     throw new Error(
