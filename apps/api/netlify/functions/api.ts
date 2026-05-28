@@ -26,17 +26,7 @@ export const handler = async (
   event: Parameters<typeof serverlessHandler>[0],
   context: Parameters<typeof serverlessHandler>[1]
 ) => {
-  // Temporary debug logs — DELETE after fixing body issue
-  console.warn('[DEBUG] event.body type:', typeof event.body)
-  console.warn('[DEBUG] event.body:', event.body?.substring?.(0, 200) ?? event.body)
-  console.warn('[DEBUG] isBase64Encoded:', event.isBase64Encoded)
-  console.warn('[DEBUG] content-type:', event.headers?.['content-type'])
-
   const response = await serverlessHandler(event, context)
-
-  console.warn('[DEBUG] response.statusCode:', response.statusCode)
-  console.warn('[DEBUG] response.body:', response.body?.substring?.(0, 300) ?? response.body)
-
   await Sentry.flush(2000)
   return response
 }

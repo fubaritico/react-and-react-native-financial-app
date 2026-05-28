@@ -48,6 +48,9 @@
 - mobile-expo-ejected `ios/` is gitignored — icon update is local only
 - Responsive phone/tablet layouts: need to research Expo Router adaptive layouts + useWindowDimensions patterns before building Overview components
 
+## Netlify Deployment
+- Web + API sites return "Not Found" after deploy — Functions may not be deployed correctly. `--no-build` + `--cwd` interaction with `netlify.toml` `[functions].directory` unverified. Need to check Netlify dashboard Function logs before any code change. See `docs/deploy-netlify-attempts.md`.
+
 ## Build / Tooling
 - `@financial-app/tokens` missing `.d.ts` in build output — `build/ts/tokens.d.ts` referenced in package.json exports but only `tokens.ts` exists. Direct import from `@financial-app/tokens` fails type-check. Workaround: use `@financial-app/tokens/map` or inline constants with token reference comments.
 - Husky pre-commit hook still times out on Turbo test phase in non-TTY — HUSKY=0 workaround still needed

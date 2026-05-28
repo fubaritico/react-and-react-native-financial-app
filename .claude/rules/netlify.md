@@ -16,19 +16,22 @@ Browser → API Gateway (Netlify CDN) → Lambda event → serverless-http → E
 - `serverless-http` wrappe l'app Express pour Lambda
 - `Sentry.flush(2000)` après chaque réponse pour garantir l'envoi des events Sentry
 
-## Sentry — Règle critique
+## serverless-http — Version critique
 
-**NEVER use `@sentry/aws-serverless` `wrapHandler`** avec `serverless-http`.
+**`serverless-http` doit être en v4+** pour fonctionner avec Express 5.
 
-`wrapHandler` consomme/modifie le body de l'event Lambda avant que `serverless-http` ne le reçoive.
-Résultat : `req.body` est `undefined` dans Express → les POST/PUT/PATCH échouent (Zod "Required").
+v3 créait un stub socket avec `readable: false` — Express 5 (`raw-body`) vérifie que le stream
+est lisible avant de le consommer. Avec le stub, `express.json()` skip la lecture → `req.body`
+reste `undefined` → les POST/PUT/PATCH échouent (Zod "Required" sur tous les champs).
 
-Utiliser `@sentry/node` avec `Sentry.flush()` manuel :
+v4 utilise un vrai `PassThrough` stream — Express 5 peut lire le body normalement.
+
+## Sentry — Configuration
+
+Utiliser `@sentry/node` (pas `@sentry/aws-serverless`) :
 - `Sentry.init()` dans `createApp()` (app.ts)
 - `Sentry.setupExpressErrorHandler(app)` capture les erreurs de routes
 - `Sentry.flush(2000)` dans le handler Lambda avant le return
-
-Les GET fonctionnent avec `wrapHandler` car ils n'ont pas de body — le bug ne touche que POST/PUT/PATCH.
 
 ## Environment Variables
 
@@ -41,3 +44,10 @@ Les GET fonctionnent avec `wrapHandler` car ils n'ont pas de body — le bug ne 
 - Les vars `VITE_*` sont remplacées à la compilation, elles n'existent pas au runtime
 - Les vars API sont lues au runtime par Lambda — elles doivent être dans le dashboard Netlify
 - `SENTRY_AUTH_TOKEN` sert uniquement au plugin Vite pour uploader les source maps pendant le build
+
+## Deployed Sites
+
+| App | URL |
+|-----|-----|
+| Web | https://epouch-web.netlify.app |
+| API | https://epouch-api.netlify.app |

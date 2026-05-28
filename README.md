@@ -2,6 +2,13 @@
 
 A fullstack cross-platform **Personal Forecast Finance** application with an **Express 5 API** backend (Supabase + OpenAPI + pino logging), a shared design system, and two frontends — React Native (Expo SDK 54) and React web (React Router v7 SSR) — managed with **pnpm workspaces** and **Turborepo**. Internationalized (EN/FR), Supabase auth (email + TOTP 2FA + Google OAuth), and OWASP-hardened.
 
+### Live Demo
+
+| App | URL |
+|-----|-----|
+| Web | [epouch-web.netlify.app](https://epouch-web.netlify.app) |
+| API | [epouch-api.netlify.app](https://epouch-api.netlify.app) |
+
 ### Technologies
 
 React Native · Expo SDK 54 · Expo Router · React · React Router v7 · TypeScript · pnpm · Turborepo · twrnc · Tailwind CSS · Style Dictionary · CVA · Supabase · Jotai · TanStack Table · TanStack Query · HeyAPI · Zod · OpenAPI · Express 5 · Prisma · i18next · pino · Vitest · MSW · Storybook

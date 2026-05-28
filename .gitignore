@@ -80,3 +80,9 @@ files
 /.claude/completed.md
 /.claude/settings.local.json
 /.mcp.json
+
+# opensrc - source code for packages
+opensrc/
+
+# Local Netlify folder
+.netlify

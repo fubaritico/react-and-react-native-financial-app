@@ -23,6 +23,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Always use root scripts** — never `cd apps/... && npx expo ...`. Use `pnpm expo:rebuild:ios`, `pnpm expo:start`, etc. from monorepo root. All scripts are in root `package.json`.
 - **Risky actions** (git push, reset --hard, rm -rf) require explicit permission EVERY TIME
 - **Never hallucinate** — if uncertain, read code first
+- **Research FIRST** — when something fails or behaves unexpectedly, search the web BEFORE modifying code. Check GitHub issues, changelogs, and docs for the libraries involved. Most bugs are version incompatibilities, known issues, or misconfigurations — the answer is almost never in your own code alone. Never iterate blindly on code changes without first understanding what others have encountered.
 - **If it works elsewhere, it works here** — when something fails, NEVER conclude "it can't work" or write workaround mocks. Search how other projects do it (GitHub, issues, docs), find the root cause in YOUR setup (resolution paths, singleton issues, config), and fix it. If thousands of devs use Jest+RN successfully, the problem is your config, not the tool.
 - **Always use context7** for any question about an API, library, or package
 - **Always query Basic Memory** before coding — search `mcp__basic-memory__search_notes` for notes related to the current task (architecture decisions, past fixes, gotchas). The knowledge base (`memory/` directory) holds lessons that prevent repeated mistakes and wasted time.
