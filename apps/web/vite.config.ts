@@ -10,7 +10,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-export default defineConfig(() => ({
+export default defineConfig(({ command }) => ({
   plugins: [
     svgr(),
     reactRouter(),
@@ -31,11 +31,11 @@ export default defineConfig(() => ({
 
   /**
    * Bundle everything for serverless (Netlify Functions).
-   * The Netlify plugin sets `noExternal: /^(?!node:).*$/` but our explicit
-   * array was overriding it, leaving @react-router/node etc. as externals.
+   * Only applied during build — in dev, Vite SSR needs CJS packages (React)
+   * as externals to avoid "module is not defined" errors.
    */
   ssr: {
-    noExternal: /^(?!node:).*$/,
+    noExternal: command === 'build' ? /^(?!node:).*$/ : undefined,
   },
 
   server: {

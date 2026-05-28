@@ -17,6 +17,14 @@ import serverless from 'serverless-http'
 import { createApp } from '../../dist/app.js'
 
 const app = createApp()
+const serverlessHandler = serverless(app)
 
-/** Wraps with Sentry's Lambda handler — auto-captures errors and flushes before freeze. */
-export const handler = wrapHandler(serverless(app))
+/** Wraps with Sentry's Lambda handler — logs event body for debugging, then flushes. */
+export const handler = wrapHandler(async (event, context) => {
+  // Temporary debug log — DELETE after fixing body issue
+  console.warn('[DEBUG] event.body type:', typeof event.body)
+  console.warn('[DEBUG] event.body:', event.body?.substring?.(0, 200) ?? event.body)
+  console.warn('[DEBUG] isBase64Encoded:', event.isBase64Encoded)
+  console.warn('[DEBUG] content-type:', event.headers?.['content-type'])
+  return serverlessHandler(event, context)
+})
