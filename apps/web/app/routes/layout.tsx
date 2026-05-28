@@ -1,6 +1,8 @@
 import { getUsersMePreferences } from '@financial-app/http-client'
 import { client } from '@financial-app/http-client/client'
+import { userAtom } from '@financial-app/shared'
 import { createServerClient } from '@financial-app/shared/auth/client.server'
+import { useHydrateAtoms } from 'jotai/utils'
 import { Suspense, lazy } from 'react'
 import { Outlet, data, redirect } from 'react-router'
 
@@ -9,6 +11,7 @@ import { createServerHttpClient } from '../lib/http-client.server'
 import {
   accessTokenContext,
   responseHeadersContext,
+  userContext,
 } from '../lib/route-context'
 import { authClient } from '../lib/supabase'
 
@@ -90,8 +93,9 @@ export const middleware: Route.MiddlewareFunction[] = [
       throw redirect('/welcome', { headers })
     }
 
-    // Store access token + headers in context for child loaders
+    // Store access token, user, and headers in context for child loaders
     context.set(accessTokenContext, accessToken)
+    context.set(userContext, user)
     context.set(responseHeadersContext, headers)
 
     const response = await next()
@@ -108,12 +112,13 @@ export const middleware: Route.MiddlewareFunction[] = [
 ]
 
 /**
- * Server loader — returns null but carries Set-Cookie headers from middleware.
- * Child route loaders handle data prefetching.
+ * Server loader — returns the authenticated user for client-side Jotai hydration.
+ * Carries Set-Cookie headers from middleware. Child route loaders handle data prefetching.
  */
 export function loader({ context }: Route.LoaderArgs) {
   const headers = context.get(responseHeadersContext)
-  return data(null, { headers })
+  const user = context.get(userContext)
+  return data({ user }, { headers })
 }
 
 // ── Client middleware ─────────────────────────────────────────────────
@@ -154,9 +159,10 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
 /**
  * Forces client-side hydration — server renders HydrateFallback instead
  * of the layout, preventing a flash of authenticated UI before redirect.
+ * Passes through server loader data (user) for Jotai hydration.
  */
-export function clientLoader() {
-  return null
+export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
+  return await serverLoader()
 }
 clientLoader.hydrate = true as const
 
@@ -193,8 +199,15 @@ export function HydrateFallback() {
  * Shell layout for authenticated routes — sidebar + scrollable main content.
  * Mobile/tablet: content fills viewport, bottom nav bar is fixed.
  * Desktop (lg+): sidebar on left, content on right.
+ *
+ * Hydrates `userAtom` synchronously during render from server loader data,
+ * so AuthBootstrap's hooks (useConfigureHttpClient) see the authenticated user
+ * immediately — eliminates the race condition where userAtom starts null
+ * and the HTTP client fires without auth, triggering a false "session expired" modal.
  */
-export default function AppLayout() {
+export default function AppLayout({ loaderData }: Route.ComponentProps) {
+  useHydrateAtoms([[userAtom, loaderData.user]])
+
   return (
     <div className="flex min-h-screen bg-gradient-to-tl from-beige-200 to-beige-100">
       <Sidebar />
