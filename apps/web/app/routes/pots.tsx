@@ -5,7 +5,7 @@ import {
   useFeedbackModals,
   usePotCrud,
 } from '@financial-app/features'
-import { getPots, getPotsOptions } from '@financial-app/http-client'
+import { getPotsOptions } from '@financial-app/http-client'
 import { getErrorMessage, useModal } from '@financial-app/shared'
 import { Alert, Button, Spinner, Typography } from '@financial-app/ui'
 import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
@@ -20,30 +20,17 @@ import type {
 import type { Pot } from '@financial-app/http-client'
 
 import PotCardItem from '../components/PotCardItem'
-import { createServerHttpClient } from '../lib/http-client.server'
 import { createServerQueryClient } from '../lib/query-client.server'
-import { accessTokenContext } from '../lib/route-context'
+import { potsQuery } from '../queries'
 
 import type { Route } from './+types/pots'
 
 /** @returns Prefetched pots data via server-side dehydration. */
-export async function loader({ context }: Route.LoaderArgs) {
-  const t0 = performance.now()
-  const accessToken = context.get(accessTokenContext)
-  const httpClient = createServerHttpClient(accessToken)
+export async function loader() {
   const queryClient = createServerQueryClient()
 
-  await queryClient.ensureQueryData({
-    ...getPotsOptions(),
-    queryFn: async () => {
-      const { data } = await getPots({ client: httpClient, throwOnError: true })
-      return data
-    },
-  })
+  await potsQuery(queryClient)
 
-  console.warn(
-    `[SSR] pots loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
-  )
   return { dehydratedState: dehydrate(queryClient) }
 }
 
@@ -54,9 +41,7 @@ export default function Pots({ loaderData }: Route.ComponentProps) {
   const formRef = useRef<HTMLFormElement>(null)
   const amountRef = useRef<IPotAmountFormRef>(null)
 
-  const potsOpts = getPotsOptions()
-
-  const { data: pots, error, isLoading } = useQuery(potsOpts)
+  const { data: pots, error, isLoading } = useQuery(getPotsOptions())
 
   /** Reads form data from the dataset on the form element */
   const getFormData = useCallback((): PotFormValues | null => {

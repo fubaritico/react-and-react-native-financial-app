@@ -5,15 +5,10 @@ import {
   TransactionsOverview,
 } from '@financial-app/features'
 import {
-  getBalance,
   getBalanceOptions,
-  getBudgets,
   getBudgetsOptions,
-  getPots,
   getPotsOptions,
-  getRecurringBills,
   getRecurringBillsOptions,
-  getTransactions,
   getTransactionsOptions,
 } from '@financial-app/http-client'
 import {
@@ -31,101 +26,28 @@ import { useNavigate } from 'react-router'
 import type { IconName } from '@financial-app/icons'
 import type { ITransaction } from '@financial-app/shared'
 
-import { createServerHttpClient } from '../lib/http-client.server'
 import { createServerQueryClient } from '../lib/query-client.server'
-import { accessTokenContext } from '../lib/route-context'
+import {
+  balanceQuery,
+  budgetsQuery,
+  potsQuery,
+  recurringBillsQuery,
+  transactionsQuery,
+} from '../queries'
 
 import type { Route } from './+types/home'
 
 /** @returns Prefetched overview data via server-side dehydration. */
-export async function loader({ context }: Route.LoaderArgs) {
-  console.warn('[SSR] [HOME] loader SSR')
-
-  const t0 = performance.now()
-  const accessToken = context.get(accessTokenContext)
-  const httpClient = createServerHttpClient(accessToken)
+export async function loader() {
   const queryClient = createServerQueryClient()
 
-  const month = getCurrentBudgetMonth()
-
-  const timers = {
-    balance: 0,
-    transactions: 0,
-    pots: 0,
-    budgets: 0,
-    recurringBills: 0,
-  }
-
   await Promise.all([
-    queryClient.ensureQueryData({
-      ...getBalanceOptions(),
-      queryFn: async () => {
-        const start = performance.now()
-        const { data } = await getBalance({
-          client: httpClient,
-          throwOnError: true,
-        })
-        timers.balance = performance.now() - start
-        return data
-      },
-    }),
-    queryClient
-      .ensureQueryData({
-        ...getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } }),
-        queryFn: async () => {
-          const start = performance.now()
-          const { data } = await getTransactions({
-            client: httpClient,
-            query: { limit: 1000, sort: 'latest' },
-            throwOnError: true,
-          })
-          timers.transactions = performance.now() - start
-          return data
-        },
-      })
-      .then((r) => r.data.slice(5)),
-    queryClient.ensureQueryData({
-      ...getPotsOptions(),
-      queryFn: async () => {
-        const start = performance.now()
-        const { data } = await getPots({
-          client: httpClient,
-          throwOnError: true,
-        })
-        timers.pots = performance.now() - start
-        return data
-      },
-    }),
-    queryClient.ensureQueryData({
-      ...getBudgetsOptions({ query: { month } }),
-      queryFn: async () => {
-        const start = performance.now()
-        const { data } = await getBudgets({
-          client: httpClient,
-          query: { month },
-          throwOnError: true,
-        })
-        timers.budgets = performance.now() - start
-        return data
-      },
-    }),
-    queryClient.ensureQueryData({
-      ...getRecurringBillsOptions(),
-      queryFn: async () => {
-        const start = performance.now()
-        const { data } = await getRecurringBills({
-          client: httpClient,
-          throwOnError: true,
-        })
-        timers.recurringBills = performance.now() - start
-        return data
-      },
-    }),
+    balanceQuery(queryClient),
+    transactionsQuery(queryClient),
+    potsQuery(queryClient),
+    budgetsQuery(queryClient),
+    recurringBillsQuery(queryClient),
   ])
-
-  console.warn(
-    `[SSR] home loader TOTAL=${(performance.now() - t0).toFixed(0)}ms | balance=${timers.balance.toFixed(0)}ms txn=${timers.transactions.toFixed(0)}ms pots=${timers.pots.toFixed(0)}ms budgets=${timers.budgets.toFixed(0)}ms recurring=${timers.recurringBills.toFixed(0)}ms`
-  )
 
   return { dehydratedState: dehydrate(queryClient) }
 }
@@ -139,27 +61,22 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
-  const balanceOpts = getBalanceOptions()
-  const txnOpts = getTransactionsOptions({
-    query: { limit: 5, sort: 'latest' },
-  })
-  const potsOpts = getPotsOptions()
-  const budgetsOpts = getBudgetsOptions({
-    query: { month: getCurrentBudgetMonth() },
-  })
-  const recurringOpts = getRecurringBillsOptions()
-
   const {
     data: balance,
     error: balanceError,
     isLoading: balanceLoading,
-  } = useQuery(balanceOpts)
+  } = useQuery(getBalanceOptions())
 
-  const { data: transactions, error: txnError } = useQuery(txnOpts)
-  const { data: pots, error: potsError } = useQuery(potsOpts)
-  const { data: budgets, error: budgetsError } = useQuery(budgetsOpts)
-  const { data: recurringBills, error: recurringError } =
-    useQuery(recurringOpts)
+  const { data: transactions, error: txnError } = useQuery(
+    getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } })
+  )
+  const { data: pots, error: potsError } = useQuery(getPotsOptions())
+  const { data: budgets, error: budgetsError } = useQuery(
+    getBudgetsOptions({ query: { month: getCurrentBudgetMonth() } })
+  )
+  const { data: recurringBills, error: recurringError } = useQuery(
+    getRecurringBillsOptions()
+  )
 
   const latestTransactions = useMemo(
     () =>

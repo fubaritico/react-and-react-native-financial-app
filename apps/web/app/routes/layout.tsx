@@ -7,7 +7,6 @@ import { Suspense, lazy } from 'react'
 import { Outlet, data, redirect } from 'react-router'
 
 import { Sidebar } from '../components/Sidebar'
-import { createServerHttpClient } from '../lib/http-client.server'
 import {
   accessTokenContext,
   responseHeadersContext,
@@ -96,6 +95,13 @@ export const middleware: Route.MiddlewareFunction[] = [
       throw redirect('/login', { headers })
     }
 
+    // Configure the HeyAPI singleton for this request — same client used by
+    // child loaders and later hydrated into the browser
+    client.setConfig({
+      baseUrl: API_URL,
+      auth: () => accessToken,
+    })
+
     // SEC-002: Enforce AAL2 when MFA is enrolled (reads local session, ~3ms)
     const { hasMfaEnrolled, currentLevel } =
       await serverAuth.getAssuranceLevel()
@@ -111,9 +117,7 @@ export const middleware: Route.MiddlewareFunction[] = [
 
     if (!onboardingCached) {
       const tPrefs = performance.now()
-      const httpClient = createServerHttpClient(accessToken)
       const { data: prefs } = await getUsersMePreferences({
-        client: httpClient,
         throwOnError: true,
       })
       prefsMs = performance.now() - tPrefs

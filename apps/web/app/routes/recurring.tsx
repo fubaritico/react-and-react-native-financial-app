@@ -1,8 +1,5 @@
 import { BillsSummary, RecurringBillsDataTable } from '@financial-app/features'
-import {
-  getRecurringBills,
-  getRecurringBillsOptions,
-} from '@financial-app/http-client'
+import { getRecurringBillsOptions } from '@financial-app/http-client'
 import {
   buildRecurringBillsPageData,
   getErrorMessage,
@@ -15,35 +12,17 @@ import { useTranslation } from 'react-i18next'
 import type { IBillsSummaryRow } from '@financial-app/features'
 import type { ITransaction } from '@financial-app/shared'
 
-import { createServerHttpClient } from '../lib/http-client.server'
 import { createServerQueryClient } from '../lib/query-client.server'
-import { accessTokenContext } from '../lib/route-context'
+import { recurringBillsQuery } from '../queries'
 
 import type { Route } from './+types/recurring'
 
 /** @returns Prefetched recurring bills data via server-side dehydration. */
-export async function loader({ context }: Route.LoaderArgs) {
-  const t0 = performance.now()
-  const accessToken = context.get(accessTokenContext)
-  const httpClient = createServerHttpClient(accessToken)
+export async function loader() {
   const queryClient = createServerQueryClient()
 
-  await queryClient.ensureQueryData({
-    ...getRecurringBillsOptions(),
-    queryFn: async () => {
-      const { data } = await getRecurringBills({
-        client: httpClient,
-        throwOnError: true,
-      })
-      return data
-    },
-  })
+  await recurringBillsQuery(queryClient)
 
-  await new Promise((resolve) => setTimeout(resolve, 5000))
-
-  console.warn(
-    `[SSR] recurring loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
-  )
   return { dehydratedState: dehydrate(queryClient) }
 }
 

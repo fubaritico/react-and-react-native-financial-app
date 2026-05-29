@@ -6,10 +6,8 @@ import {
   useFeedbackModals,
 } from '@financial-app/features'
 import {
-  getBudgets,
   getBudgetsOptions,
   getCategoriesOptions,
-  getTransactions,
   getTransactionsOptions,
 } from '@financial-app/http-client'
 import {
@@ -30,49 +28,17 @@ import type {
 import type { IBudget, ICategory, ITransaction } from '@financial-app/shared'
 
 import BudgetCardItem from '../components/BudgetCardItem'
-import { createServerHttpClient } from '../lib/http-client.server'
 import { createServerQueryClient } from '../lib/query-client.server'
-import { accessTokenContext } from '../lib/route-context'
+import { budgetsQuery, transactionsQuery } from '../queries'
 
 import type { Route } from './+types/budgets'
 
 /** @returns Prefetched budgets and transactions data via server-side dehydration. */
-export async function loader({ context }: Route.LoaderArgs) {
-  const t0 = performance.now()
-  const accessToken = context.get(accessTokenContext)
-  const httpClient = createServerHttpClient(accessToken)
+export async function loader() {
   const queryClient = createServerQueryClient()
 
-  const month = getCurrentBudgetMonth()
+  await Promise.all([budgetsQuery(queryClient), transactionsQuery(queryClient)])
 
-  await Promise.all([
-    queryClient.ensureQueryData({
-      ...getBudgetsOptions({ query: { month } }),
-      queryFn: async () => {
-        const { data } = await getBudgets({
-          client: httpClient,
-          query: { month },
-          throwOnError: true,
-        })
-        return data
-      },
-    }),
-    queryClient.ensureQueryData({
-      ...getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } }),
-      queryFn: async () => {
-        const { data } = await getTransactions({
-          client: httpClient,
-          query: { limit: 1000, sort: 'latest' },
-          throwOnError: true,
-        })
-        return data
-      },
-    }),
-  ])
-
-  console.warn(
-    `[SSR] budgets loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
-  )
   return { dehydratedState: dehydrate(queryClient) }
 }
 
@@ -82,16 +48,15 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
   const modal = useModal()
   const formRef = useRef<HTMLFormElement>(null)
 
-  const month = getCurrentBudgetMonth()
-  const budgetsOpts = getBudgetsOptions({ query: { month } })
-  const txnOpts = getTransactionsOptions({ query: { limit: 1000 } })
-
   const {
     data: budgets,
     error: budgetsError,
     isLoading: budgetsLoading,
-  } = useQuery(budgetsOpts)
-  const { data: txnResult, error: txnError } = useQuery(txnOpts)
+  } = useQuery(getBudgetsOptions({ query: { month: getCurrentBudgetMonth() } }))
+
+  const { data: txnResult, error: txnError } = useQuery(
+    getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } })
+  )
 
   const { budgetItems, categoryCards } = useMemo(
     () =>
@@ -168,31 +133,25 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
 
   if (budgetsLoading) {
     return (
-      <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
-          <Spinner />
-        </div>
-      </HydrationBoundary>
+      <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
+        <Spinner />
+      </div>
     )
   }
 
   const error = budgetsError ?? txnError
   if (error) {
     return (
-      <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="p-6 lg:p-10">
-          <Typography variant="page-title" as="h1" className="mb-4">
-            {t('budgets.title')}
-          </Typography>
-          <Alert
-            severity="error"
-            message={t('common.errorLoading')}
-            description={
-              import.meta.env.DEV ? getErrorMessage(error) : undefined
-            }
-          />
-        </div>
-      </HydrationBoundary>
+      <div className="p-6 lg:p-10">
+        <Typography variant="page-title" as="h1" className="mb-4">
+          {t('budgets.title')}
+        </Typography>
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
+        />
+      </div>
     )
   }
 

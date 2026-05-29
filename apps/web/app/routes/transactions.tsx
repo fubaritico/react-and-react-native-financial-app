@@ -7,7 +7,6 @@ import {
 } from '@financial-app/features'
 import {
   getCategoriesOptions,
-  getTransactions,
   getTransactionsOptions,
 } from '@financial-app/http-client'
 import { getErrorMessage, useModal } from '@financial-app/shared'
@@ -19,36 +18,17 @@ import { useTranslation } from 'react-i18next'
 import type { TransactionFormData } from '@financial-app/features'
 import type { ICategory, ITransaction } from '@financial-app/shared'
 
-import { createServerHttpClient } from '../lib/http-client.server'
 import { createServerQueryClient } from '../lib/query-client.server'
-import { accessTokenContext } from '../lib/route-context'
+import { balanceQuery } from '../queries'
 
 import type { Route } from './+types/transactions'
 
 /** @returns Pre-fetched transaction data via server-side dehydration. */
-export async function loader({ context }: Route.LoaderArgs) {
-  const t0 = performance.now()
-  const accessToken = context.get(accessTokenContext)
-  const httpClient = createServerHttpClient(accessToken)
+export async function loader() {
   const queryClient = createServerQueryClient()
 
-  await queryClient.ensureQueryData({
-    queryKey: getTransactionsOptions({
-      query: { limit: 1000, sort: 'latest' },
-    }).queryKey,
-    queryFn: async () => {
-      const { data } = await getTransactions({
-        client: httpClient,
-        query: { limit: 1000, sort: 'latest' },
-        throwOnError: true,
-      })
-      return data
-    },
-  })
+  await balanceQuery(queryClient)
 
-  console.warn(
-    `[SSR] transactions loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
-  )
   return { dehydratedState: dehydrate(queryClient) }
 }
 
@@ -119,10 +99,9 @@ export default function TransactionsScreen({
     renderDeleteBody,
   })
 
-  const txnOpts = getTransactionsOptions({
-    query: { limit: 1000, sort: 'latest' },
-  })
-  const { data, error, isLoading } = useQuery(txnOpts)
+  const { data, error, isLoading } = useQuery(
+    getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } })
+  )
 
   // ── Render ─────────────────────────────────────────────────────
 
