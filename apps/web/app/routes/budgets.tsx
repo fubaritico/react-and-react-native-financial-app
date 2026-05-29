@@ -35,10 +35,14 @@ import type { Route } from './+types/budgets'
 
 /** @returns Prefetched budgets and transactions data via server-side dehydration. */
 export async function loader() {
+  const t0 = performance.now()
   const queryClient = createServerQueryClient()
 
   await Promise.all([budgetsQuery(queryClient), transactionsQuery(queryClient)])
 
+  console.warn(
+    `[SSR] [BUDGETS] loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
+  )
   return { dehydratedState: dehydrate(queryClient) }
 }
 

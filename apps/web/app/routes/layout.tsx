@@ -214,20 +214,26 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
     const splashMs = performance.now() - tSplash
 
     // Configure browser HTTP client for subsequent client-side queries
+    const tConfig = performance.now()
     client.setConfig({
       baseUrl: API_URL,
       auth: async () => {
+        const tSession = performance.now()
         const { session } = await authClient.getSession()
+        console.warn(
+          `[Client] authClient.getSession()=${(performance.now() - tSession).toFixed(0)}ms`
+        )
         return session?.access_token
       },
     })
+    const configMs = performance.now() - tConfig
 
     const tNext = performance.now()
     await next()
     const nextMs = performance.now() - tNext
 
     console.warn(
-      `[Client] clientMiddleware TOTAL=${(performance.now() - t0).toFixed(0)}ms | splash=${splashMs.toFixed(0)}ms next=${nextMs.toFixed(0)}ms`
+      `[Client] clientMiddleware TOTAL=${(performance.now() - t0).toFixed(0)}ms | splash=${splashMs.toFixed(0)}ms config=${configMs.toFixed(0)}ms next=${nextMs.toFixed(0)}ms`
     )
   },
 ]

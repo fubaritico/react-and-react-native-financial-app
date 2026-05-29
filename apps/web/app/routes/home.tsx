@@ -39,16 +39,43 @@ import type { Route } from './+types/home'
 
 /** @returns Prefetched overview data via server-side dehydration. */
 export async function loader() {
+  const t0 = performance.now()
   const queryClient = createServerQueryClient()
 
-  await Promise.all([
-    balanceQuery(queryClient),
-    transactionsQuery(queryClient),
-    potsQuery(queryClient),
-    budgetsQuery(queryClient),
-    recurringBillsQuery(queryClient),
+  const [, , , ,] = await Promise.all([
+    balanceQuery(queryClient).then((r) => {
+      console.warn(
+        `[SSR] [HOME] balance=${(performance.now() - t0).toFixed(0)}ms`
+      )
+      return r
+    }),
+    transactionsQuery(queryClient).then((r) => {
+      console.warn(
+        `[SSR] [HOME] transactions=${(performance.now() - t0).toFixed(0)}ms`
+      )
+      return r
+    }),
+    potsQuery(queryClient).then((r) => {
+      console.warn(`[SSR] [HOME] pots=${(performance.now() - t0).toFixed(0)}ms`)
+      return r
+    }),
+    budgetsQuery(queryClient).then((r) => {
+      console.warn(
+        `[SSR] [HOME] budgets=${(performance.now() - t0).toFixed(0)}ms`
+      )
+      return r
+    }),
+    recurringBillsQuery(queryClient).then((r) => {
+      console.warn(
+        `[SSR] [HOME] recurring=${(performance.now() - t0).toFixed(0)}ms`
+      )
+      return r
+    }),
   ])
 
+  console.warn(
+    `[SSR] [HOME] loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
+  )
   return { dehydratedState: dehydrate(queryClient) }
 }
 

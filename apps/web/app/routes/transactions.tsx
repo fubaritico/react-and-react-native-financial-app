@@ -25,10 +25,14 @@ import type { Route } from './+types/transactions'
 
 /** @returns Pre-fetched transaction data via server-side dehydration. */
 export async function loader() {
+  const t0 = performance.now()
   const queryClient = createServerQueryClient()
 
   await balanceQuery(queryClient)
 
+  console.warn(
+    `[SSR] [TRANSACTIONS] loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
+  )
   return { dehydratedState: dehydrate(queryClient) }
 }
 
