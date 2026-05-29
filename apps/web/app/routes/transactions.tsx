@@ -11,13 +11,8 @@ import {
   getTransactionsOptions,
 } from '@financial-app/http-client'
 import { getErrorMessage, useModal } from '@financial-app/shared'
-import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import {
-  HydrationBoundary,
-  QueryClient,
-  dehydrate,
-  useQuery,
-} from '@tanstack/react-query'
+import { Alert, Button, Spinner, Typography } from '@financial-app/ui'
+import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
 import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -37,8 +32,10 @@ export async function loader({ context }: Route.LoaderArgs) {
   const httpClient = createServerHttpClient(accessToken)
   const queryClient = createServerQueryClient()
 
-  await queryClient.prefetchQuery({
-    ...getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } }),
+  await queryClient.ensureQueryData({
+    queryKey: getTransactionsOptions({
+      query: { limit: 1000, sort: 'latest' },
+    }).queryKey,
     queryFn: async () => {
       const { data } = await getTransactions({
         client: httpClient,
@@ -53,33 +50,6 @@ export async function loader({ context }: Route.LoaderArgs) {
     `[SSR] transactions loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
   )
   return { dehydratedState: dehydrate(queryClient) }
-}
-
-/** Skeleton placeholder while the loader resolves */
-export function HydrateFallback() {
-  return (
-    <div className="p-6 lg:p-10">
-      <Skeleton variant="line" width="w-56" height="h-8" className="mb-6" />
-      <Skeleton variant="rectangle" height="h-12" className="mb-4" />
-      {Array.from({ length: 8 }).map((_, i) => (
-        <div key={i} className="flex items-center gap-4 py-3">
-          <Skeleton variant="circle" width="w-10" height="h-10" />
-          <Skeleton variant="line" height="h-4" className="flex-1" />
-          <Skeleton variant="line" width="w-20" height="h-4" />
-        </div>
-      ))}
-    </div>
-  )
-}
-
-/**
- * Client-side navigation: skip the server loader, return empty dehydrated state.
- * useQuery in the component will fetch data client-side with its own loading state,
- * allowing the page to render immediately instead of blocking on the server roundtrip.
- * @returns Empty dehydrated state for client-side data fetching
- */
-export function clientLoader() {
-  return { dehydratedState: dehydrate(new QueryClient()) }
 }
 
 export default function TransactionsScreen({
@@ -158,30 +128,24 @@ export default function TransactionsScreen({
 
   if (isLoading) {
     return (
-      <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
-          <Spinner />
-        </div>
-      </HydrationBoundary>
+      <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
+        <Spinner />
+      </div>
     )
   }
 
   if (error) {
     return (
-      <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="p-6 lg:p-10">
-          <Typography variant="page-title" as="h1" className="mb-4">
-            {t('transactions.title')}
-          </Typography>
-          <Alert
-            severity="error"
-            message={t('common.errorLoading')}
-            description={
-              import.meta.env.DEV ? getErrorMessage(error) : undefined
-            }
-          />
-        </div>
-      </HydrationBoundary>
+      <div className="p-6 lg:p-10">
+        <Typography variant="page-title" as="h1" className="mb-4">
+          {t('transactions.title')}
+        </Typography>
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
+        />
+      </div>
     )
   }
 

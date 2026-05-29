@@ -22,19 +22,8 @@ import {
   getCurrentBudgetMonth,
   getErrorMessage,
 } from '@financial-app/shared'
-import {
-  Alert,
-  BalanceCard,
-  Skeleton,
-  Spinner,
-  Typography,
-} from '@financial-app/ui'
-import {
-  HydrationBoundary,
-  QueryClient,
-  dehydrate,
-  useQuery,
-} from '@tanstack/react-query'
+import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
+import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
@@ -50,6 +39,8 @@ import type { Route } from './+types/home'
 
 /** @returns Prefetched overview data via server-side dehydration. */
 export async function loader({ context }: Route.LoaderArgs) {
+  console.warn('[SSR] [HOME] loader SSR')
+
   const t0 = performance.now()
   const accessToken = context.get(accessTokenContext)
   const httpClient = createServerHttpClient(accessToken)
@@ -66,7 +57,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   }
 
   await Promise.all([
-    queryClient.prefetchQuery({
+    queryClient.ensureQueryData({
       ...getBalanceOptions(),
       queryFn: async () => {
         const start = performance.now()
@@ -78,20 +69,22 @@ export async function loader({ context }: Route.LoaderArgs) {
         return data
       },
     }),
-    queryClient.prefetchQuery({
-      ...getTransactionsOptions({ query: { limit: 5, sort: 'latest' } }),
-      queryFn: async () => {
-        const start = performance.now()
-        const { data } = await getTransactions({
-          client: httpClient,
-          query: { limit: 5, sort: 'latest' },
-          throwOnError: true,
-        })
-        timers.transactions = performance.now() - start
-        return data
-      },
-    }),
-    queryClient.prefetchQuery({
+    queryClient
+      .ensureQueryData({
+        ...getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } }),
+        queryFn: async () => {
+          const start = performance.now()
+          const { data } = await getTransactions({
+            client: httpClient,
+            query: { limit: 1000, sort: 'latest' },
+            throwOnError: true,
+          })
+          timers.transactions = performance.now() - start
+          return data
+        },
+      })
+      .then((r) => r.data.slice(5)),
+    queryClient.ensureQueryData({
       ...getPotsOptions(),
       queryFn: async () => {
         const start = performance.now()
@@ -103,7 +96,7 @@ export async function loader({ context }: Route.LoaderArgs) {
         return data
       },
     }),
-    queryClient.prefetchQuery({
+    queryClient.ensureQueryData({
       ...getBudgetsOptions({ query: { month } }),
       queryFn: async () => {
         const start = performance.now()
@@ -116,7 +109,7 @@ export async function loader({ context }: Route.LoaderArgs) {
         return data
       },
     }),
-    queryClient.prefetchQuery({
+    queryClient.ensureQueryData({
       ...getRecurringBillsOptions(),
       queryFn: async () => {
         const start = performance.now()
@@ -137,44 +130,10 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { dehydratedState: dehydrate(queryClient) }
 }
 
-/** @returns Skeleton fallback rendered during initial SSR hydration. */
-export function HydrateFallback() {
-  return (
-    <div className="p-6 lg:p-10">
-      <Skeleton variant="line" width="w-48" height="h-8" className="mb-8" />
-      <div className="flex flex-col gap-3 md:flex-row md:gap-6">
-        <Skeleton variant="rectangle" height="h-24" className="md:flex-1" />
-        <Skeleton variant="rectangle" height="h-24" className="md:flex-1" />
-        <Skeleton variant="rectangle" height="h-24" className="md:flex-1" />
-      </div>
-      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="flex flex-col gap-6">
-          <Skeleton variant="rectangle" height="h-48" />
-          <Skeleton variant="rectangle" height="h-64" />
-        </div>
-        <div className="flex flex-col gap-6">
-          <Skeleton variant="rectangle" height="h-64" />
-          <Skeleton variant="rectangle" height="h-48" />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/**
- * Client-side navigation: skip the server loader, return empty dehydrated state.
- * useQuery in the component will fetch data client-side with its own loading state,
- * allowing the page to render immediately instead of blocking on the server roundtrip.
- * @returns Empty dehydrated state for client-side data fetching
- */
-export function clientLoader() {
-  return { dehydratedState: dehydrate(new QueryClient()) }
-}
-
 /** @returns Overview page with balance cards, pots, transactions, budgets, and recurring bills. */
 export default function Home({ loaderData }: Route.ComponentProps) {
   useEffect(() => {
-    console.warn('[Client] Home component MOUNTED — page visible')
+    console.warn('[CLIENT] [HOME] component MOUNTED — page visible')
   }, [])
 
   const navigate = useNavigate()
@@ -268,11 +227,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   if (isLoading) {
     return (
-      <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
-          <Spinner />
-        </div>
-      </HydrationBoundary>
+      <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
+        <Spinner />
+      </div>
     )
   }
 
@@ -281,20 +238,16 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   if (error) {
     return (
-      <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="p-6 lg:p-10">
-          <Typography variant="page-title" as="h1" className="mb-4">
-            {t('overview.title')}
-          </Typography>
-          <Alert
-            severity="error"
-            message={t('common.errorLoading')}
-            description={
-              import.meta.env.DEV ? getErrorMessage(error) : undefined
-            }
-          />
-        </div>
-      </HydrationBoundary>
+      <div className="p-6 lg:p-10">
+        <Typography variant="page-title" as="h1" className="mb-4">
+          {t('overview.title')}
+        </Typography>
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
+        />
+      </div>
     )
   }
 

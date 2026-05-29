@@ -7,19 +7,8 @@ import {
   buildRecurringBillsPageData,
   getErrorMessage,
 } from '@financial-app/shared'
-import {
-  Alert,
-  BalanceCard,
-  Skeleton,
-  Spinner,
-  Typography,
-} from '@financial-app/ui'
-import {
-  HydrationBoundary,
-  QueryClient,
-  dehydrate,
-  useQuery,
-} from '@tanstack/react-query'
+import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
+import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -39,7 +28,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   const httpClient = createServerHttpClient(accessToken)
   const queryClient = createServerQueryClient()
 
-  await queryClient.prefetchQuery({
+  await queryClient.ensureQueryData({
     ...getRecurringBillsOptions(),
     queryFn: async () => {
       const { data } = await getRecurringBills({
@@ -50,36 +39,12 @@ export async function loader({ context }: Route.LoaderArgs) {
     },
   })
 
+  await new Promise((resolve) => setTimeout(resolve, 5000))
+
   console.warn(
     `[SSR] recurring loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
   )
   return { dehydratedState: dehydrate(queryClient) }
-}
-
-/** @returns Skeleton fallback rendered during initial SSR hydration. */
-export function HydrateFallback() {
-  return (
-    <div className="p-6 lg:p-10">
-      <Skeleton variant="line" width="w-52" height="h-8" className="mb-8" />
-      <div className="grid grid-cols-1 gap-6 @[1100px]:grid-cols-[1fr_2fr]">
-        <div className="flex flex-col gap-6">
-          <Skeleton variant="rectangle" height="h-24" />
-          <Skeleton variant="rectangle" height="h-40" />
-        </div>
-        <Skeleton variant="rectangle" height="h-96" />
-      </div>
-    </div>
-  )
-}
-
-/**
- * Client-side navigation: skip the server loader, return empty dehydrated state.
- * useQuery in the component will fetch data client-side with its own loading state,
- * allowing the page to render immediately instead of blocking on the server roundtrip.
- * @returns Empty dehydrated state for client-side data fetching
- */
-export function clientLoader() {
-  return { dehydratedState: dehydrate(new QueryClient()) }
 }
 
 /** @returns Recurring bills page with summary cards and data table. */
@@ -100,11 +65,9 @@ export default function RecurringBills({ loaderData }: Route.ComponentProps) {
 
   if (isLoading) {
     return (
-      <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
-          <Spinner />
-        </div>
-      </HydrationBoundary>
+      <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
+        <Spinner />
+      </div>
     )
   }
 

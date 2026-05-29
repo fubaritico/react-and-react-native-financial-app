@@ -1,5 +1,4 @@
 import {
-  BudgetCategoryCard,
   BudgetFormContent,
   BudgetOverview,
   useBudgetCrud,
@@ -19,13 +18,8 @@ import {
   getErrorMessage,
   useModal,
 } from '@financial-app/shared'
-import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import {
-  HydrationBoundary,
-  QueryClient,
-  dehydrate,
-  useQuery,
-} from '@tanstack/react-query'
+import { Alert, Button, Spinner, Typography } from '@financial-app/ui'
+import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -33,75 +27,14 @@ import type {
   BudgetFormValues,
   IBudgetFormBridge,
 } from '@financial-app/features'
-import type {
-  IBudget,
-  IBudgetCategoryCard,
-  ICategory,
-  ITransaction,
-} from '@financial-app/shared'
+import type { IBudget, ICategory, ITransaction } from '@financial-app/shared'
 
+import BudgetCardItem from '../components/BudgetCardItem'
 import { createServerHttpClient } from '../lib/http-client.server'
 import { createServerQueryClient } from '../lib/query-client.server'
 import { accessTokenContext } from '../lib/route-context'
 
 import type { Route } from './+types/budgets'
-
-/** Props for the BudgetCardItem wrapper */
-interface IBudgetCardItemProps {
-  /** Budget card data */
-  card: IBudgetCategoryCard
-  /** Callback receiving the card to edit */
-  onEdit: (card: IBudgetCategoryCard) => void
-  /** Callback receiving the card to delete */
-  onDelete: (card: IBudgetCategoryCard) => void
-  /** Label for "Maximum of $X" */
-  maximumOfLabel: string
-  /** Label for the spent amount */
-  spentLabel: string
-  /** Label for the remaining amount */
-  remainingLabel: string
-  /** Title for the latest spending section */
-  latestSpendingTitle: string
-  /** Label for the "See All" link */
-  seeAllLabel: string
-  /** Label for the edit action in dropdown */
-  editLabel: string
-  /** Label for the delete action in dropdown */
-  deleteLabel: string
-}
-
-/**
- * Wrapper that memoizes the onEdit/onDelete callbacks per card (avoids inline arrow in map).
- * @param props - Budget card data with edit/delete handlers and labels
- * @returns Memoized BudgetCategoryCard JSX
- */
-function BudgetCardItem({
-  card,
-  onEdit,
-  onDelete,
-  ...labels
-}: Readonly<IBudgetCardItemProps>) {
-  const handleEdit = useCallback(() => {
-    onEdit(card)
-  }, [card, onEdit])
-
-  const handleDelete = useCallback(() => {
-    onDelete(card)
-  }, [card, onDelete])
-
-  return (
-    <BudgetCategoryCard
-      category={card.category}
-      maximum={card.maximum}
-      spent={card.spent}
-      color={card.color}
-      items={card.items}
-      onEdit={handleEdit}
-      onDelete={handleDelete}
-      {...labels}
-    />
-  )
-}
 
 /** @returns Prefetched budgets and transactions data via server-side dehydration. */
 export async function loader({ context }: Route.LoaderArgs) {
@@ -113,7 +46,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   const month = getCurrentBudgetMonth()
 
   await Promise.all([
-    queryClient.prefetchQuery({
+    queryClient.ensureQueryData({
       ...getBudgetsOptions({ query: { month } }),
       queryFn: async () => {
         const { data } = await getBudgets({
@@ -124,12 +57,12 @@ export async function loader({ context }: Route.LoaderArgs) {
         return data
       },
     }),
-    queryClient.prefetchQuery({
-      ...getTransactionsOptions({ query: { limit: 1000 } }),
+    queryClient.ensureQueryData({
+      ...getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } }),
       queryFn: async () => {
         const { data } = await getTransactions({
           client: httpClient,
-          query: { limit: 1000 },
+          query: { limit: 1000, sort: 'latest' },
           throwOnError: true,
         })
         return data
@@ -141,35 +74,6 @@ export async function loader({ context }: Route.LoaderArgs) {
     `[SSR] budgets loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
   )
   return { dehydratedState: dehydrate(queryClient) }
-}
-
-/** @returns Skeleton fallback rendered during initial SSR hydration. */
-export function HydrateFallback() {
-  return (
-    <div className="p-6 lg:p-10 ">
-      <div className="mb-8 flex items-center justify-between">
-        <Skeleton variant="line" width="w-40" height="h-8" />
-        <Skeleton variant="rectangle" width="w-36" height="h-10" />
-      </div>
-      <div className="grid grid-cols-1 gap-6 @[1100px]:grid-cols-[1fr_1.5fr]">
-        <Skeleton variant="rectangle" height="h-72" />
-        <div className="flex flex-col gap-6">
-          <Skeleton variant="rectangle" height="h-64" />
-          <Skeleton variant="rectangle" height="h-64" />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/**
- * Client-side navigation: skip the server loader, return empty dehydrated state.
- * useQuery in the component will fetch data client-side with its own loading state,
- * allowing the page to render immediately instead of blocking on the server roundtrip.
- * @returns Empty dehydrated state for client-side data fetching
- */
-export function clientLoader() {
-  return { dehydratedState: dehydrate(new QueryClient()) }
 }
 
 /** @returns Budgets page with overview chart, category cards, and CRUD modals. */

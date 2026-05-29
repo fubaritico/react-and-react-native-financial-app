@@ -1,6 +1,5 @@
 import {
   PotAmountFormContent,
-  PotCard,
   PotFormContent,
   useDeleteBodyRenderer,
   useFeedbackModals,
@@ -8,13 +7,8 @@ import {
 } from '@financial-app/features'
 import { getPots, getPotsOptions } from '@financial-app/http-client'
 import { getErrorMessage, useModal } from '@financial-app/shared'
-import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import {
-  HydrationBoundary,
-  QueryClient,
-  dehydrate,
-  useQuery,
-} from '@tanstack/react-query'
+import { Alert, Button, Spinner, Typography } from '@financial-app/ui'
+import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -25,72 +19,12 @@ import type {
 } from '@financial-app/features'
 import type { Pot } from '@financial-app/http-client'
 
+import PotCardItem from '../components/PotCardItem'
 import { createServerHttpClient } from '../lib/http-client.server'
 import { createServerQueryClient } from '../lib/query-client.server'
 import { accessTokenContext } from '../lib/route-context'
 
 import type { Route } from './+types/pots'
-
-/** Props for the PotCardItem wrapper */
-interface IPotCardItemProps {
-  /** Pot data */
-  pot: Pot
-  /** Callback receiving the pot to edit */
-  onEdit: (pot: Pot) => void
-  /** Callback receiving the pot to delete */
-  onDelete: (pot: Pot) => void
-  /** Callback receiving the pot to add money to */
-  onAddMoney: (pot: Pot) => void
-  /** Callback receiving the pot to withdraw from */
-  onWithdraw: (pot: Pot) => void
-  /** Label translations */
-  totalSavedLabel: string
-  targetOfLabel: string
-  addMoneyLabel: string
-  withdrawLabel: string
-  editLabel: string
-  deleteLabel: string
-}
-
-/** Wrapper that memoizes callbacks per pot (avoids inline arrow in map) */
-function PotCardItem({
-  pot,
-  onEdit,
-  onDelete,
-  onAddMoney,
-  onWithdraw,
-  ...labels
-}: Readonly<IPotCardItemProps>) {
-  const handleEdit = useCallback(() => {
-    onEdit(pot)
-  }, [pot, onEdit])
-
-  const handleDelete = useCallback(() => {
-    onDelete(pot)
-  }, [pot, onDelete])
-
-  const handleAddMoney = useCallback(() => {
-    onAddMoney(pot)
-  }, [pot, onAddMoney])
-
-  const handleWithdraw = useCallback(() => {
-    onWithdraw(pot)
-  }, [pot, onWithdraw])
-
-  return (
-    <PotCard
-      name={pot.name}
-      total={pot.total}
-      target={pot.target}
-      color={pot.theme}
-      onEdit={handleEdit}
-      onDelete={handleDelete}
-      onAddMoney={handleAddMoney}
-      onWithdraw={handleWithdraw}
-      {...labels}
-    />
-  )
-}
 
 /** @returns Prefetched pots data via server-side dehydration. */
 export async function loader({ context }: Route.LoaderArgs) {
@@ -99,7 +33,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   const httpClient = createServerHttpClient(accessToken)
   const queryClient = createServerQueryClient()
 
-  await queryClient.prefetchQuery({
+  await queryClient.ensureQueryData({
     ...getPotsOptions(),
     queryFn: async () => {
       const { data } = await getPots({ client: httpClient, throwOnError: true })
@@ -111,33 +45,6 @@ export async function loader({ context }: Route.LoaderArgs) {
     `[SSR] pots loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
   )
   return { dehydratedState: dehydrate(queryClient) }
-}
-
-/** @returns Skeleton fallback rendered during initial SSR hydration. */
-export function HydrateFallback() {
-  return (
-    <div className="p-6 lg:p-10">
-      <div className="mb-8 flex items-center justify-between">
-        <Skeleton variant="line" width="w-24" height="h-8" />
-        <Skeleton variant="rectangle" width="w-32" height="h-10" />
-      </div>
-      <div className="grid grid-cols-1 gap-6 @[1100px]:grid-cols-2">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} variant="rectangle" height="h-56" />
-        ))}
-      </div>
-    </div>
-  )
-}
-
-/**
- * Client-side navigation: skip the server loader, return empty dehydrated state.
- * useQuery in the component will fetch data client-side with its own loading state,
- * allowing the page to render immediately instead of blocking on the server roundtrip.
- * @returns Empty dehydrated state for client-side data fetching
- */
-export function clientLoader() {
-  return { dehydratedState: dehydrate(new QueryClient()) }
 }
 
 /** @returns Pots page with pot cards and CRUD modals. */
@@ -261,30 +168,24 @@ export default function Pots({ loaderData }: Route.ComponentProps) {
 
   if (isLoading) {
     return (
-      <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
-          <Spinner />
-        </div>
-      </HydrationBoundary>
+      <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
+        <Spinner />
+      </div>
     )
   }
 
   if (error) {
     return (
-      <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="p-6 lg:p-10">
-          <Typography variant="page-title" as="h1" className="mb-4">
-            {t('pots.title')}
-          </Typography>
-          <Alert
-            severity="error"
-            message={t('common.errorLoading')}
-            description={
-              import.meta.env.DEV ? getErrorMessage(error) : undefined
-            }
-          />
-        </div>
-      </HydrationBoundary>
+      <div className="p-6 lg:p-10">
+        <Typography variant="page-title" as="h1" className="mb-4">
+          {t('pots.title')}
+        </Typography>
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
+        />
+      </div>
     )
   }
 
