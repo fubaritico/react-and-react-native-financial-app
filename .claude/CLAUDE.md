@@ -13,6 +13,11 @@ targeting React Native (Expo) and React web (React Router).
 - **Monorepo orchestration**: Turborepo (turbo.json — to be added in Phase 6)
 - **Language**: TypeScript strict throughout
 - **Org scope**: @financial-app/\*
+-
+
+## Your role
+
+Your role is to help the developer, not to agree blindly with the developer. You can find yourself challenging the developer. You don't work or resolve problems based on assumptions. You must verify all the hypotheses in the code reference, bring missing code references when necessary. If not enough, You must verify all hypotheses with online search and finally give your sources to debate solutions.
 
 ## Critical Workflow Rules
 
@@ -32,6 +37,7 @@ targeting React Native (Expo) and React web (React Router).
 - **Always use pnpm** — never npm or yarn, including for registry lookups (`pnpm view` not `npm view`)
 - **Never `console.log`** — use `console.warn` / `console.error`
 - **Never explicit `any`** — strict TypeScript
+- **Never use `--no-verify`** — in the commit except if you have the developer agreement
 - **JSDoc everywhere** — EVERY interface property, EVERY function (`@param` + `@returns`), EVERY hook, EVERY type with properties, EVERY constant — no path exception, no "internal helper" excuse (QUAL-003/004/005)
 - **Always run** `pnpm type-check && pnpm lint && pnpm test` then `/review` after every set of modifications — ALL 4 MANDATORY, NEVER SKIP ANY
 - **Tests + Commit + End session** — every new feature, component, hook, route, or bug fix MUST ship with tests (5-level policy — see `tests.md`), a `/commit`, and `/end-session`. No code ships without tests. No session ends without committing and updating session state.
@@ -115,7 +121,7 @@ npx opensrc <owner>/<repo>      # GitHub repo (e.g., npx opensrc vercel/ai)
 
 ## Supabase
 
-- URL: https://lccpruqcqalxtbddggow.supabase.co
+- URL: https://wfovogtulmjynujtfiml.supabase.co
 - Credentials in .env (gitignored) — copy from .env.example
 
 ## Navigation
@@ -152,12 +158,14 @@ Read `@completed.md`
 
 ### Next
 
-1. **Centralized auth** — session validation on app focus (AppState → getSession())
-2. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
-3. Tests — API + hooks
-4. Phase 8B: GoCardless bank connection (mode banque)
-5. **Server-side pagination** — replace client-side `limit: 1000`
-6. **Walkthrough** — onboarding animation (Lottie text layer injection, content drafted in Basic Memory)
+1. **SSR navigation latency** — analyze Netlify function logs (instrumentation deployed), fix blocking middleware/loaders
+2. **Page skeletons (native)** — user builds web HydrateFallback skeletons, Claude adapts native versions + cleanup/best practices
+3. **Centralized auth** — session validation on app focus (AppState → getSession())
+4. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
+5. Tests — API + hooks
+6. Phase 8B: GoCardless bank connection (mode banque)
+7. **Server-side pagination** — replace client-side `limit: 1000`
+8. **Walkthrough** — onboarding animation (Lottie text layer injection, content drafted in Basic Memory)
 
 **Pending tests**: none
 
