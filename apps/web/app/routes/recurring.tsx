@@ -14,7 +14,12 @@ import {
   Spinner,
   Typography,
 } from '@financial-app/ui'
-import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+  useQuery,
+} from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -67,6 +72,16 @@ export function HydrateFallback() {
   )
 }
 
+/**
+ * Client-side navigation: skip the server loader, return empty dehydrated state.
+ * useQuery in the component will fetch data client-side with its own loading state,
+ * allowing the page to render immediately instead of blocking on the server roundtrip.
+ * @returns Empty dehydrated state for client-side data fetching
+ */
+export function clientLoader() {
+  return { dehydratedState: dehydrate(new QueryClient()) }
+}
+
 /** @returns Recurring bills page with summary cards and data table. */
 export default function RecurringBills({ loaderData }: Route.ComponentProps) {
   const { t, i18n } = useTranslation()
@@ -86,7 +101,7 @@ export default function RecurringBills({ loaderData }: Route.ComponentProps) {
   if (isLoading) {
     return (
       <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+        <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
           <Spinner />
         </div>
       </HydrationBoundary>

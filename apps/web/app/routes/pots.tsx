@@ -9,7 +9,12 @@ import {
 import { getPots, getPotsOptions } from '@financial-app/http-client'
 import { getErrorMessage, useModal } from '@financial-app/shared'
 import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+  useQuery,
+} from '@tanstack/react-query'
 import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -123,6 +128,16 @@ export function HydrateFallback() {
       </div>
     </div>
   )
+}
+
+/**
+ * Client-side navigation: skip the server loader, return empty dehydrated state.
+ * useQuery in the component will fetch data client-side with its own loading state,
+ * allowing the page to render immediately instead of blocking on the server roundtrip.
+ * @returns Empty dehydrated state for client-side data fetching
+ */
+export function clientLoader() {
+  return { dehydratedState: dehydrate(new QueryClient()) }
 }
 
 /** @returns Pots page with pot cards and CRUD modals. */
@@ -247,7 +262,7 @@ export default function Pots({ loaderData }: Route.ComponentProps) {
   if (isLoading) {
     return (
       <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+        <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
           <Spinner />
         </div>
       </HydrationBoundary>

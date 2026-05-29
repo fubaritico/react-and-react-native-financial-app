@@ -20,7 +20,12 @@ import {
   useModal,
 } from '@financial-app/shared'
 import { Alert, Button, Skeleton, Spinner, Typography } from '@financial-app/ui'
-import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+  useQuery,
+} from '@tanstack/react-query'
 import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -141,7 +146,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 /** @returns Skeleton fallback rendered during initial SSR hydration. */
 export function HydrateFallback() {
   return (
-    <div className="p-6 lg:p-10">
+    <div className="p-6 lg:p-10 ">
       <div className="mb-8 flex items-center justify-between">
         <Skeleton variant="line" width="w-40" height="h-8" />
         <Skeleton variant="rectangle" width="w-36" height="h-10" />
@@ -155,6 +160,16 @@ export function HydrateFallback() {
       </div>
     </div>
   )
+}
+
+/**
+ * Client-side navigation: skip the server loader, return empty dehydrated state.
+ * useQuery in the component will fetch data client-side with its own loading state,
+ * allowing the page to render immediately instead of blocking on the server roundtrip.
+ * @returns Empty dehydrated state for client-side data fetching
+ */
+export function clientLoader() {
+  return { dehydratedState: dehydrate(new QueryClient()) }
 }
 
 /** @returns Budgets page with overview chart, category cards, and CRUD modals. */
@@ -250,7 +265,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
   if (budgetsLoading) {
     return (
       <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="flex flex-1 items-center justify-center p-6 lg:p-10">
+        <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
           <Spinner />
         </div>
       </HydrationBoundary>
