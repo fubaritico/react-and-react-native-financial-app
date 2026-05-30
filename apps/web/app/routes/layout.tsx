@@ -134,11 +134,7 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
     client.setConfig({
       baseUrl: API_URL,
       auth: async () => {
-        const tSession = performance.now()
         const { session } = await authClient.getSession()
-        console.warn(
-          `[Client] authClient.getSession()=${(performance.now() - tSession).toFixed(0)}ms`
-        )
         return session?.access_token
       },
     })

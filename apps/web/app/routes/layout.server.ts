@@ -80,7 +80,6 @@ export async function authenticateRequest(
 
   const tAuth = performance.now()
   const { session } = await serverAuth.getSession()
-  const sessionMs = performance.now() - tAuth
   const accessToken = session?.access_token
   if (!accessToken) {
     console.warn(
@@ -90,26 +89,8 @@ export async function authenticateRequest(
     throw redirect('/login', { headers })
   }
 
-  // DEBUG (temporary): decode the JWT header to learn whether the token is signed
-  // with an asymmetric key (ES256 → local verification) or the legacy HS256 secret
-  // (→ getClaims falls back to a network getUser call). Remove once latency confirmed.
-  let alg = 'unknown'
-  try {
-    const decoded = JSON.parse(
-      Buffer.from(accessToken.split('.')[0], 'base64url').toString()
-    ) as { alg?: string }
-    alg = decoded.alg ?? 'none'
-  } catch {
-    // malformed header — leave alg as 'unknown'
-  }
-
-  const tClaims = performance.now()
   const { claims, error } = await serverAuth.getClaims(accessToken)
-  const claimsMs = performance.now() - tClaims
   const authMs = performance.now() - tAuth
-  console.warn(
-    `[SSR] auth breakdown (${route}) alg=${alg} getSession=${sessionMs.toFixed(0)}ms getClaims=${claimsMs.toFixed(0)}ms`
-  )
   if (error || !claims) {
     console.warn(
       `[SSR] middleware (${route}) auth=${authMs.toFixed(0)}ms → redirect /login`
