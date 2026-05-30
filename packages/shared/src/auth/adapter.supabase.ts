@@ -1,5 +1,6 @@
 import type {
   AuthAssuranceLevel,
+  IAuthClaims,
   IAuthClient,
   IAuthError,
   IAuthSubscription,
@@ -21,6 +22,20 @@ interface ISupabaseUser {
   /** User email address */
   email?: string
   /** Arbitrary metadata attached to the user */
+  user_metadata?: Record<string, unknown>
+}
+
+/** Minimal Supabase JWT claims shape used for mapping (subset of @supabase/auth-js JwtPayload) */
+interface ISupabaseClaims {
+  /** Subject — unique user identifier */
+  sub: string
+  /** User email address */
+  email?: string
+  /** Unix timestamp (seconds) when the token expires */
+  exp: number
+  /** Authenticator assurance level claim */
+  aal?: string
+  /** Arbitrary user metadata embedded in the token */
   user_metadata?: Record<string, unknown>
 }
 
@@ -79,6 +94,21 @@ function toUser(user: ISupabaseUser | null): IUser | null {
 }
 
 /**
+ * Maps Supabase JWT claims to the vendor-agnostic IAuthClaims interface.
+ * @param claims - Decoded Supabase JWT payload
+ * @returns Mapped IAuthClaims with a defaulted assurance level
+ */
+function toClaims(claims: ISupabaseClaims): IAuthClaims {
+  return {
+    sub: claims.sub,
+    email: claims.email,
+    exp: claims.exp,
+    aal: (claims.aal ?? 'aal1') as AuthAssuranceLevel,
+    user_metadata: claims.user_metadata,
+  }
+}
+
+/**
  * Maps a Supabase Session to the vendor-agnostic ISession interface.
  * @param session - Supabase session object or null
  * @returns Mapped ISession, or null if input is null or user mapping fails
@@ -110,6 +140,18 @@ export function createSupabaseAuthAdapter(client: SupabaseClient): IAuthClient {
         return { user: toUser(data.user), error: toAuthError(error) }
       } catch (e) {
         return { user: null, error: toNetworkError(e) }
+      }
+    },
+
+    async getClaims(jwt?: string) {
+      try {
+        const { data, error } = await client.auth.getClaims(jwt)
+        if (error) return { claims: null, error: toAuthError(error) }
+        // data is null when no session/token is present (no error raised)
+        if (!data) return { claims: null, error: null }
+        return { claims: toClaims(data.claims), error: null }
+      } catch (e) {
+        return { claims: null, error: toNetworkError(e) }
       }
     },
 

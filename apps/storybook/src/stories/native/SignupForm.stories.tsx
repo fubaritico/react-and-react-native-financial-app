@@ -11,6 +11,7 @@ const mockAuthClient = {
   signUp: () =>
     Promise.resolve({ user: null, error: null, isExistingEmail: false }),
   getUser: () => Promise.resolve({ user: null, error: null }),
+  getClaims: () => Promise.resolve({ claims: null, error: null }),
   getSession: () => Promise.resolve({ session: null, error: null }),
   signInWithPassword: () => Promise.resolve({ user: null, error: null }),
   signInWithOAuth: () => Promise.resolve({ url: null, error: null }),

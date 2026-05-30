@@ -6,6 +6,8 @@ import { useHydrateAtoms } from 'jotai/utils'
 import { Suspense, lazy } from 'react'
 import { Outlet, data, redirect } from 'react-router'
 
+import type { IUser } from '@financial-app/shared'
+
 import { Sidebar } from '../components/Sidebar'
 import {
   accessTokenContext,
@@ -42,9 +44,9 @@ let splashShown =
 
 /**
  * Server-side auth guard middleware.
- * Creates a per-request Supabase client from cookies, validates JWT via getUser(),
- * enforces AAL2 when MFA enrolled, checks onboarding state.
- * Forwards Set-Cookie headers for token refresh.
+ * Creates a per-request Supabase client from cookies, verifies the JWT locally via
+ * getClaims() (signature + expiration, no network round-trip), enforces AAL2 when
+ * MFA enrolled, checks onboarding state. Forwards Set-Cookie headers for token refresh.
  */
 /** Cookie name for onboarding state cache (avoids 1-2s API call per navigation) */
 const ONBOARDING_COOKIE = 'onboarding'
@@ -59,7 +61,14 @@ function getCookieValue(request: Request, name: string): string | null {
   const cookies = request.headers.get('cookie')
   if (!cookies) return null
   const match = new RegExp(`(?:^|;\\s*)${name}=([^;]*)`).exec(cookies)
-  return match ? decodeURIComponent(match[1]) : null
+  if (!match) return null
+  // A malformed percent-encoding (e.g. an attacker-set `%zz`) would otherwise throw
+  // a URIError and crash the middleware on every request for that session.
+  try {
+    return decodeURIComponent(match[1])
+  } catch {
+    return null
+  }
 }
 
 export const middleware: Route.MiddlewareFunction[] = [
@@ -69,16 +78,27 @@ export const middleware: Route.MiddlewareFunction[] = [
     const t0 = performance.now()
     const { authClient: serverAuth, headers } = createServerClient(request)
 
-    // A: Parallelize getUser (network call ~500ms) + getSession (cookie read ~0ms)
+    // getSession reads the cookie (and refreshes if expired) → raw token for the
+    // HeyAPI client + child loaders. getClaims verifies the token's signature and
+    // expiration LOCALLY (asymmetric signing keys) and yields identity from the
+    // `sub` claim — no network round-trip to Supabase on navigations.
+    // Tradeoff (accepted): local verification does NOT detect server-side token
+    // revocation before expiry (~1h TTL). Local signout clears the cookie; a global
+    // revocation is bounded by the access-token lifetime.
     const tAuth = performance.now()
-    const [userResult, sessionResult] = await Promise.all([
-      serverAuth.getUser(),
-      serverAuth.getSession(),
-    ])
-    const authMs = performance.now() - tAuth
+    const { session } = await serverAuth.getSession()
+    const accessToken = session?.access_token
+    if (!accessToken) {
+      console.warn(
+        `[SSR] middleware (${route}) auth=${(performance.now() - tAuth).toFixed(0)}ms → redirect /login (no token)`
+      )
+      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
+      throw redirect('/login', { headers })
+    }
 
-    const { user, error } = userResult
-    if (error || !user) {
+    const { claims, error } = await serverAuth.getClaims(accessToken)
+    const authMs = performance.now() - tAuth
+    if (error || !claims) {
       console.warn(
         `[SSR] middleware (${route}) auth=${authMs.toFixed(0)}ms → redirect /login`
       )
@@ -86,13 +106,10 @@ export const middleware: Route.MiddlewareFunction[] = [
       throw redirect('/login', { headers })
     }
 
-    const accessToken = sessionResult.session?.access_token
-    if (!accessToken) {
-      console.warn(
-        `[SSR] middleware (${route}) auth=${authMs.toFixed(0)}ms → redirect /login (no token)`
-      )
-      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-      throw redirect('/login', { headers })
+    const user: IUser = {
+      id: claims.sub,
+      email: claims.email,
+      user_metadata: claims.user_metadata,
     }
 
     // Configure the HeyAPI singleton for this request — same client used by
@@ -138,7 +155,7 @@ export const middleware: Route.MiddlewareFunction[] = [
       // Onboarding complete — cache per-user to skip this API call on future navigations
       headers.append(
         'Set-Cookie',
-        `${ONBOARDING_COOKIE}=${user.id}; Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000`
+        `${ONBOARDING_COOKIE}=${user.id}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`
       )
     }
 

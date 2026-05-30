@@ -14,6 +14,7 @@ export {
 export type { LoginFormData, SignupFormData } from './auth/validation'
 export type {
   AuthAssuranceLevel,
+  IAuthClaims,
   IAuthClient,
   IAuthError,
   IAuthStorage,

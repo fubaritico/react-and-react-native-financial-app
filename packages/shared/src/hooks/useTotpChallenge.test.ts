@@ -22,6 +22,7 @@ function createMockAuthClient(
 ): IAuthClient {
   return {
     getUser: () => Promise.resolve({ user: null, error: null }),
+    getClaims: () => Promise.resolve({ claims: null, error: null }),
     getSession: () => Promise.resolve({ session: null, error: null }),
     refreshSession: () => Promise.resolve({ session: null, error: null }),
     signInWithPassword: () => Promise.resolve({ user: null, error: null }),

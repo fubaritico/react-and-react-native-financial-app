@@ -51,6 +51,23 @@ export interface ISession {
   user: IUser
 }
 
+/**
+ * Cryptographically verified JWT claims — identity established from a validated
+ * token's signature and expiration, without a network round-trip to the provider.
+ */
+export interface IAuthClaims {
+  /** Subject — the unique user identifier (maps to IUser.id) */
+  sub: string
+  /** User email address, if present in the token */
+  email?: string
+  /** Unix timestamp (seconds) when the access token expires */
+  exp: number
+  /** Current authenticator assurance level (aal1 = password, aal2 = MFA verified) */
+  aal: AuthAssuranceLevel
+  /** Arbitrary user metadata embedded in the token (e.g., name, avatar) */
+  user_metadata?: Record<string, unknown>
+}
+
 /** Normalized auth error returned by all IAuthClient methods */
 export interface IAuthError {
   /** Human-readable error description */
@@ -142,6 +159,17 @@ export interface IMfaClient {
 export interface IAuthClient {
   /** Fetches the currently authenticated user from the provider */
   getUser(): Promise<{ user: IUser | null; error: IAuthError | null }>
+  /**
+   * Verifies an access token's signature and expiration locally (asymmetric
+   * signing keys) and returns its claims — no network round-trip. Falls back to
+   * a network verification if the project uses a legacy shared JWT secret.
+   * @param jwt - Optional raw access token to verify; defaults to the current session token
+   * @returns The verified claims, or null when no valid session is present
+   */
+  getClaims(jwt?: string): Promise<{
+    claims: IAuthClaims | null
+    error: IAuthError | null
+  }>
   /** Fetches the current session (access + refresh tokens) */
   getSession(): Promise<{
     session: ISession | null
