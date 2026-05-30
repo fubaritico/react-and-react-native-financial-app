@@ -342,7 +342,8 @@
     "cancel": "Annuler"
   },
   "accessibility": {
-    "savingsIcon": "Icône d'épargne"
+    "savingsIcon": "Icône d'épargne",
+    "skipToMain": "Aller au contenu principal"
   },
   "app": {
     "name": "finance",

@@ -342,7 +342,8 @@
     "cancel": "Cancel"
   },
   "accessibility": {
-    "savingsIcon": "Savings icon"
+    "savingsIcon": "Savings icon",
+    "skipToMain": "Skip to main content"
   },
   "app": {
     "name": "finance",

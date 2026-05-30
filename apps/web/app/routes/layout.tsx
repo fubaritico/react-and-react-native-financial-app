@@ -4,6 +4,7 @@ import { userAtom } from '@financial-app/shared'
 import { createServerClient } from '@financial-app/shared/auth/client.server'
 import { useHydrateAtoms } from 'jotai/utils'
 import { Suspense, lazy } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Outlet, data, redirect } from 'react-router'
 
 import type { IUser } from '@financial-app/shared'
@@ -25,9 +26,6 @@ const API_URL =
 
 /** Animation duration: 119 frames @ 30fps = ~4000ms + 500ms buffer */
 const SPLASH_DURATION_MS = 4500
-
-/** DotLottie animation canvas size (px) */
-const SPLASH_SIZE = 300
 
 /** Whether the user has requested reduced motion via OS accessibility settings */
 const prefersReducedMotion =
@@ -186,6 +184,8 @@ export const middleware: Route.MiddlewareFunction[] = [
 /**
  * Server loader — returns the authenticated user for client-side Jotai hydration.
  * Carries Set-Cookie headers from middleware. Child route loaders handle data prefetching.
+ * @param args - Route loader args exposing the request-scoped context
+ * @returns The authenticated user, with Set-Cookie headers forwarded from middleware
  */
 export function loader({ context }: Route.LoaderArgs) {
   const headers = context.get(responseHeadersContext)
@@ -259,27 +259,21 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
  * Forces client-side hydration — server renders HydrateFallback instead
  * of the layout, preventing a flash of authenticated UI before redirect.
  * Passes through server loader data (user) for Jotai hydration.
+ * @param args - Client loader args exposing the bound server loader
+ * @returns The server loader result (authenticated user) for Jotai hydration
  */
 export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
   return await serverLoader()
 }
 clientLoader.hydrate = true as const
 
-/** Client-only DotLottie — cannot render during SSR (requires Canvas/WebGL) */
-const DotLottieSplash = lazy(() =>
-  import('@lottiefiles/dotlottie-react').then((mod) => ({
-    default: () => (
-      <mod.DotLottieReact
-        src="/splash-animation.lottie"
-        autoplay
-        loop={false}
-        style={{ width: SPLASH_SIZE, height: SPLASH_SIZE }}
-      />
-    ),
-  }))
-)
+/** Client-only DotLottie splash — code-split; cannot render during SSR (Canvas/WebGL) */
+const DotLottieSplash = lazy(() => import('../components/DotLottieSplash'))
 
-/** Shown by the server (and during hydration) while clientMiddleware checks auth. */
+/**
+ * Shown by the server (and during hydration) while clientMiddleware checks auth.
+ * @returns The splash placeholder rendered until client-side hydration completes
+ */
 export function HydrateFallback() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-tl from-beige-200 to-beige-100">
@@ -303,14 +297,26 @@ export function HydrateFallback() {
  * so AuthBootstrap's hooks (useConfigureHttpClient) see the authenticated user
  * immediately — eliminates the race condition where userAtom starts null
  * and the HTTP client fires without auth, triggering a false "session expired" modal.
+ * @param props - Route component props including server loader data (user)
+ * @returns The authenticated shell: sidebar + scrollable main content outlet
  */
 export default function AppLayout({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation()
   useHydrateAtoms([[userAtom, loaderData.user]])
 
   return (
     <div className="flex min-h-screen bg-gradient-to-tl from-beige-200 to-beige-100">
+      <a
+        href="#main-content"
+        className="sr-only text-grey-900 focus-visible:not-sr-only focus-visible:absolute focus-visible:left-4 focus-visible:top-4 focus-visible:z-50 focus-visible:rounded-md focus-visible:bg-white focus-visible:px-4 focus-visible:py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900"
+      >
+        {t('accessibility.skipToMain')}
+      </a>
       <Sidebar />
-      <main className="@container flex-1 overflow-y-auto pb-24 lg:pb-0">
+      <main
+        id="main-content"
+        className="@container flex-1 overflow-y-auto pb-24 lg:pb-0"
+      >
         <Outlet />
       </main>
     </div>
