@@ -1,13 +1,9 @@
-import { getUsersMePreferences } from '@financial-app/http-client'
 import { client } from '@financial-app/http-client/client'
 import { userAtom } from '@financial-app/shared'
-import { createServerClient } from '@financial-app/shared/auth/client.server'
 import { useHydrateAtoms } from 'jotai/utils'
 import { Suspense, lazy } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Outlet, data, redirect } from 'react-router'
-
-import type { IUser } from '@financial-app/shared'
+import { Outlet, data } from 'react-router'
 
 import { Sidebar } from '../components/Sidebar'
 import {
@@ -16,6 +12,8 @@ import {
   userContext,
 } from '../lib/route-context'
 import { authClient } from '../lib/supabase'
+
+import { authenticateRequest } from './layout.server'
 
 import type { Route } from './+types/layout'
 
@@ -38,124 +36,26 @@ let splashShown =
 
 // ── Server middleware ─────────────────────────────────────────────────
 // Runs on EVERY request (SSR + client navigations via fetch).
-// Validates auth, enforces MFA, checks onboarding state.
+// Auth, MFA, and onboarding guards live in `authenticateRequest` (layout.server.ts);
+// this orchestrates context, the next() chain, header merge, and timing logs.
 
 /**
- * Server-side auth guard middleware.
- * Creates a per-request Supabase client from cookies, verifies the JWT locally via
- * getClaims() (signature + expiration, no network round-trip), enforces AAL2 when
- * MFA enrolled, checks onboarding state. Forwards Set-Cookie headers for token refresh.
+ * Server-side auth guard middleware. Delegates session/JWT/MFA/onboarding validation
+ * to authenticateRequest, stores the result in context for child loaders, runs the
+ * downstream chain, then merges auth Set-Cookie headers into the final response.
+ * @param args - Middleware args with the request and request-scoped context
+ * @param next - Runs the downstream middleware/loaders and returns the Response
+ * @returns The downstream Response with auth Set-Cookie headers merged in
  */
-/** Cookie name for onboarding state cache (avoids 1-2s API call per navigation) */
-const ONBOARDING_COOKIE = 'onboarding'
-
-/**
- * Extracts a cookie value from the request Cookie header.
- * @param request - Incoming HTTP request
- * @param name - Cookie name to extract
- * @returns Cookie value or null if not found
- */
-function getCookieValue(request: Request, name: string): string | null {
-  const cookies = request.headers.get('cookie')
-  if (!cookies) return null
-  const match = new RegExp(`(?:^|;\\s*)${name}=([^;]*)`).exec(cookies)
-  if (!match) return null
-  // A malformed percent-encoding (e.g. an attacker-set `%zz`) would otherwise throw
-  // a URIError and crash the middleware on every request for that session.
-  try {
-    return decodeURIComponent(match[1])
-  } catch {
-    return null
-  }
-}
-
 export const middleware: Route.MiddlewareFunction[] = [
   async ({ request, context }, next) => {
-    const url = new URL(request.url)
-    const route = url.pathname
+    const route = new URL(request.url).pathname
     const t0 = performance.now()
-    const { authClient: serverAuth, headers } = createServerClient(request)
 
-    // getSession reads the cookie (and refreshes if expired) → raw token for the
-    // HeyAPI client + child loaders. getClaims verifies the token's signature and
-    // expiration LOCALLY (asymmetric signing keys) and yields identity from the
-    // `sub` claim — no network round-trip to Supabase on navigations.
-    // Tradeoff (accepted): local verification does NOT detect server-side token
-    // revocation before expiry (~1h TTL). Local signout clears the cookie; a global
-    // revocation is bounded by the access-token lifetime.
-    const tAuth = performance.now()
-    const { session } = await serverAuth.getSession()
-    const accessToken = session?.access_token
-    if (!accessToken) {
-      console.warn(
-        `[SSR] middleware (${route}) auth=${(performance.now() - tAuth).toFixed(0)}ms → redirect /login (no token)`
-      )
-      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-      throw redirect('/login', { headers })
-    }
-
-    const { claims, error } = await serverAuth.getClaims(accessToken)
-    const authMs = performance.now() - tAuth
-    if (error || !claims) {
-      console.warn(
-        `[SSR] middleware (${route}) auth=${authMs.toFixed(0)}ms → redirect /login`
-      )
-      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-      throw redirect('/login', { headers })
-    }
-
-    const user: IUser = {
-      id: claims.sub,
-      email: claims.email,
-      user_metadata: claims.user_metadata,
-    }
-
-    // Configure the HeyAPI singleton for this request — same client used by
-    // child loaders and later hydrated into the browser
-    client.setConfig({
-      baseUrl: API_URL,
-      auth: () => accessToken,
-    })
-
-    // SEC-002: Enforce AAL2 when MFA is enrolled (reads local session, ~3ms)
-    const { hasMfaEnrolled, currentLevel } =
-      await serverAuth.getAssuranceLevel()
-    if (hasMfaEnrolled && currentLevel === 'aal1') {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-      throw redirect('/totp-challenge', { headers })
-    }
-
-    // B: Cookie cache for onboarding — skip the 1-2s API call if cookie matches current user
-    const onboardingCookie = getCookieValue(request, ONBOARDING_COOKIE)
-    const onboardingCached = onboardingCookie === user.id
-    let prefsMs = 0
-
-    if (!onboardingCached) {
-      const tPrefs = performance.now()
-      const { data: prefs } = await getUsersMePreferences({
-        throwOnError: true,
-      })
-      prefsMs = performance.now() - tPrefs
-
-      if (prefs.mode == null) {
-        // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-        throw redirect('/mode-choice', { headers })
-      }
-      if (prefs.mode === 'manual' && !prefs.initial_balance_set) {
-        // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-        throw redirect('/initial-balance', { headers })
-      }
-      if (!prefs.has_seen_onboarding) {
-        // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
-        throw redirect('/welcome', { headers })
-      }
-
-      // Onboarding complete — cache per-user to skip this API call on future navigations
-      headers.append(
-        'Set-Cookie',
-        `${ONBOARDING_COOKIE}=${user.id}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=31536000`
-      )
-    }
+    const { user, accessToken, headers, timing } = await authenticateRequest(
+      request,
+      route
+    )
 
     // Store access token, user, and headers in context for child loaders
     context.set(accessTokenContext, accessToken)
@@ -173,9 +73,8 @@ export const middleware: Route.MiddlewareFunction[] = [
       }
     })
 
-    const totalMs = performance.now() - t0
     console.warn(
-      `[SSR] middleware (${route}) TOTAL=${totalMs.toFixed(0)}ms | auth=${authMs.toFixed(0)}ms prefs=${prefsMs.toFixed(0)}ms(${onboardingCached ? 'cached' : 'api'}) loader=${loaderMs.toFixed(0)}ms`
+      `[SSR] middleware (${route}) TOTAL=${(performance.now() - t0).toFixed(0)}ms | auth=${timing.authMs.toFixed(0)}ms prefs=${timing.prefsMs.toFixed(0)}ms(${timing.onboardingCached ? 'cached' : 'api'}) loader=${loaderMs.toFixed(0)}ms`
     )
     return response
   },
