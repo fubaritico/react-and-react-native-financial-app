@@ -37,7 +37,7 @@ let splashShown =
 // ── Server middleware ─────────────────────────────────────────────────
 // Runs on EVERY request (SSR + client navigations via fetch).
 // Auth, MFA, and onboarding guards live in `authenticateRequest` (layout.server.ts);
-// this orchestrates context, the next() chain, header merge, and timing logs.
+// this orchestrates context, the next() chain, and the Set-Cookie header merge.
 
 /**
  * Server-side auth guard middleware. Delegates session/JWT/MFA/onboarding validation
@@ -49,22 +49,14 @@ let splashShown =
  */
 export const middleware: Route.MiddlewareFunction[] = [
   async ({ request, context }, next) => {
-    const route = new URL(request.url).pathname
-    const t0 = performance.now()
-
-    const { user, accessToken, headers, timing } = await authenticateRequest(
-      request,
-      route
-    )
+    const { user, accessToken, headers } = await authenticateRequest(request)
 
     // Store access token, user, and headers in context for child loaders
     context.set(accessTokenContext, accessToken)
     context.set(userContext, user)
     context.set(responseHeadersContext, headers)
 
-    const tLoader = performance.now()
     const response = await next()
-    const loaderMs = performance.now() - tLoader
 
     // Merge Set-Cookie headers from auth into the final response
     headers.forEach((value, key) => {
@@ -73,9 +65,6 @@ export const middleware: Route.MiddlewareFunction[] = [
       }
     })
 
-    console.warn(
-      `[SSR] middleware (${route}) TOTAL=${(performance.now() - t0).toFixed(0)}ms | auth=${timing.authMs.toFixed(0)}ms prefs=${timing.prefsMs.toFixed(0)}ms(${timing.onboardingCached ? 'cached' : 'api'}) loader=${loaderMs.toFixed(0)}ms`
-    )
     return response
   },
 ]
@@ -113,10 +102,7 @@ export function shouldRevalidate() {
  */
 export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
   async (_, next) => {
-    const t0 = performance.now()
-
-    // On cold start, wait for splash animation to complete
-    const tSplash = performance.now()
+    // On cold start, wait for the splash animation to complete
     const splashDelay =
       !splashShown && !prefersReducedMotion
         ? new Promise<void>((resolve) =>
@@ -127,10 +113,8 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
     sessionStorage.setItem('splashShown', '1')
 
     await splashDelay
-    const splashMs = performance.now() - tSplash
 
     // Configure browser HTTP client for subsequent client-side queries
-    const tConfig = performance.now()
     client.setConfig({
       baseUrl: API_URL,
       auth: async () => {
@@ -138,15 +122,8 @@ export const clientMiddleware: Route.ClientMiddlewareFunction[] = [
         return session?.access_token
       },
     })
-    const configMs = performance.now() - tConfig
 
-    const tNext = performance.now()
     await next()
-    const nextMs = performance.now() - tNext
-
-    console.warn(
-      `[Client] clientMiddleware TOTAL=${(performance.now() - t0).toFixed(0)}ms | splash=${splashMs.toFixed(0)}ms config=${configMs.toFixed(0)}ms next=${nextMs.toFixed(0)}ms`
-    )
   },
 ]
 

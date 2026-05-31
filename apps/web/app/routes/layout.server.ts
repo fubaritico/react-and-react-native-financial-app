@@ -13,16 +13,6 @@ const API_URL =
 /** Cookie name for onboarding state cache (avoids the prefs API call per navigation) */
 export const ONBOARDING_COOKIE = 'onboarding'
 
-/** Per-request auth timing, surfaced so the middleware can emit one aggregate log. */
-export interface IAuthTiming {
-  /** ms spent on getSession + local getClaims signature/expiration verification */
-  authMs: number
-  /** ms spent fetching user preferences (0 when served from the onboarding cookie) */
-  prefsMs: number
-  /** Whether onboarding state was read from the cookie cache (no prefs API call) */
-  onboardingCached: boolean
-}
-
 /** Result of a successful auth guard pass. */
 export interface IAuthResult {
   /** Authenticated user — identity derived from the verified JWT claims */
@@ -31,8 +21,6 @@ export interface IAuthResult {
   accessToken: string
   /** Response headers carrying Set-Cookie directives (token refresh + onboarding cache) */
   headers: Headers
-  /** Timing breakdown for instrumentation */
-  timing: IAuthTiming
 }
 
 /**
@@ -68,33 +56,23 @@ function getCookieValue(request: Request, name: string): string | null {
  * Also configures the HeyAPI singleton, enforces AAL2 when MFA is enrolled, and checks
  * onboarding state (cached per-user via cookie to skip the prefs API call on navigations).
  * @param request - Incoming HTTP request with auth cookies
- * @param route - Request pathname, used only for instrumentation logs
- * @returns The authenticated user, access token, response headers, and timing breakdown
+ * @returns The authenticated user, access token, and response headers
  * @throws A redirect Response when auth, MFA, or onboarding requirements are not met
  */
 export async function authenticateRequest(
-  request: Request,
-  route: string
+  request: Request
 ): Promise<IAuthResult> {
   const { authClient: serverAuth, headers } = createServerClient(request)
 
-  const tAuth = performance.now()
   const { session } = await serverAuth.getSession()
   const accessToken = session?.access_token
   if (!accessToken) {
-    console.warn(
-      `[SSR] middleware (${route}) auth=${(performance.now() - tAuth).toFixed(0)}ms → redirect /login (no token)`
-    )
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
     throw redirect('/login', { headers })
   }
 
   const { claims, error } = await serverAuth.getClaims(accessToken)
-  const authMs = performance.now() - tAuth
   if (error || !claims) {
-    console.warn(
-      `[SSR] middleware (${route}) auth=${authMs.toFixed(0)}ms → redirect /login`
-    )
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
     throw redirect('/login', { headers })
   }
@@ -122,12 +100,9 @@ export async function authenticateRequest(
   // Cookie cache for onboarding — skip the prefs API call if the cookie matches the user
   const onboardingCached =
     getCookieValue(request, ONBOARDING_COOKIE) === user.id
-  let prefsMs = 0
 
   if (!onboardingCached) {
-    const tPrefs = performance.now()
     const { data: prefs } = await getUsersMePreferences({ throwOnError: true })
-    prefsMs = performance.now() - tPrefs
 
     if (prefs.mode == null) {
       // eslint-disable-next-line @typescript-eslint/only-throw-error -- React Router redirect pattern
@@ -149,10 +124,5 @@ export async function authenticateRequest(
     )
   }
 
-  return {
-    user,
-    accessToken,
-    headers,
-    timing: { authMs, prefsMs, onboardingCached },
-  }
+  return { user, accessToken, headers }
 }

@@ -29,14 +29,10 @@ import type { Route } from './+types/pots'
 
 /** @returns Prefetched pots data via server-side dehydration. */
 export async function loader() {
-  const t0 = performance.now()
   const queryClient = createServerQueryClient()
 
   await potsQuery(queryClient)
 
-  console.warn(
-    `[SSR] [POTS] loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
-  )
   return { dehydratedState: dehydrate(queryClient) }
 }
 

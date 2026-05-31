@@ -19,7 +19,7 @@ import {
 } from '@financial-app/shared'
 import { Alert, BalanceCard, Spinner, Typography } from '@financial-app/ui'
 import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
@@ -41,43 +41,16 @@ import type { Route } from './+types/home'
 
 /** @returns Prefetched overview data via server-side dehydration. */
 export async function loader() {
-  const t0 = performance.now()
   const queryClient = createServerQueryClient()
 
   await Promise.all([
-    balanceQuery(queryClient).then((r) => {
-      console.warn(
-        `[SSR] [HOME] balance=${(performance.now() - t0).toFixed(0)}ms`
-      )
-      return r
-    }),
-    transactionsQuery(queryClient).then((r) => {
-      console.warn(
-        `[SSR] [HOME] transactions=${(performance.now() - t0).toFixed(0)}ms`
-      )
-      return r
-    }),
-    potsQuery(queryClient).then((r) => {
-      console.warn(`[SSR] [HOME] pots=${(performance.now() - t0).toFixed(0)}ms`)
-      return r
-    }),
-    budgetsQuery(queryClient).then((r) => {
-      console.warn(
-        `[SSR] [HOME] budgets=${(performance.now() - t0).toFixed(0)}ms`
-      )
-      return r
-    }),
-    recurringBillsQuery(queryClient).then((r) => {
-      console.warn(
-        `[SSR] [HOME] recurring=${(performance.now() - t0).toFixed(0)}ms`
-      )
-      return r
-    }),
+    balanceQuery(queryClient),
+    transactionsQuery(queryClient),
+    potsQuery(queryClient),
+    budgetsQuery(queryClient),
+    recurringBillsQuery(queryClient),
   ])
 
-  console.warn(
-    `[SSR] [HOME] loader TOTAL=${(performance.now() - t0).toFixed(0)}ms`
-  )
   return { dehydratedState: dehydrate(queryClient) }
 }
 
@@ -89,13 +62,6 @@ export const clientLoader = skipServerHop
  * @returns Overview page with balance cards, pots, transactions, budgets, and recurring bills
  */
 export default function Home({ loaderData }: Route.ComponentProps) {
-  useEffect(() => {
-    // Dev-only nav-timing marker — stripped from production so it never reaches users' consoles.
-    if (import.meta.env.DEV) {
-      console.warn('[CLIENT] [HOME] component MOUNTED — page visible')
-    }
-  }, [])
-
   const navigate = useNavigate()
   const { t } = useTranslation()
 
