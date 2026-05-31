@@ -72,7 +72,11 @@ export default function Pots({ loaderData }: Route.ComponentProps) {
     [t]
   )
 
-  /** Renders the pot form with web ref */
+  /**
+   * Renders the pot form with the web form ref.
+   * @param props - Optional initial values and description to prefill the form
+   * @returns The PotFormContent element
+   */
   const renderForm = useCallback(
     (props?: { initialValues?: PotFormValues; description?: string }) => (
       <PotFormContent
@@ -95,6 +99,7 @@ export default function Pots({ loaderData }: Route.ComponentProps) {
    * Renders the amount form for add money / withdraw modals.
    * @param pot - The pot for which to render the amount form
    * @param mode - Whether adding or withdrawing money
+   * @returns The PotAmountFormContent element
    */
   const renderAmountForm = useCallback(
     (pot: Pot, mode: 'add' | 'withdraw') => (
@@ -124,7 +129,10 @@ export default function Pots({ loaderData }: Route.ComponentProps) {
     [t]
   )
 
-  /** Returns the current amount from the amount form ref */
+  /**
+   * Reads the current amount from the amount-form ref.
+   * @returns The current amount, or 0 if the ref is not yet attached
+   */
   const getAmount = useCallback(() => amountRef.current?.getAmount() ?? 0, [])
 
   const {

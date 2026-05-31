@@ -63,7 +63,11 @@ export default function TransactionsScreen({
   const { showSuccess, showError } = useFeedbackModals(modal)
   const { renderDeleteBody } = useDeleteBodyRenderer()
 
-  /** Renders the transaction form inside the modal body */
+  /**
+   * Renders the transaction form inside the modal body.
+   * @param props - Optional initial values and description to prefill the form
+   * @returns The TransactionFormContent element
+   */
   const renderForm = useCallback(
     (props?: { initialValues?: TransactionFormData; description?: string }) => (
       <TransactionFormContent

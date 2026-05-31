@@ -101,7 +101,11 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
   const { showSuccess, showError } = useFeedbackModals(modal)
   const { renderDeleteBody } = useDeleteBodyRenderer()
 
-  /** Renders the budget form with platform-specific ref and current existing lists */
+  /**
+   * Renders the budget form with platform-specific ref and existing-name lists.
+   * @param props - Optional initial values and description to prefill the form
+   * @returns The BudgetFormContent element
+   */
   const renderForm = useCallback(
     (props?: { initialValues?: BudgetFormValues; description?: string }) => (
       <BudgetFormContent
