@@ -158,14 +158,16 @@ Read `@completed.md`
 
 ### Next
 
-1. **SSR navigation latency** — analyze Netlify function logs (instrumentation deployed), fix blocking middleware/loaders
-2. **Page skeletons (native)** — user builds web HydrateFallback skeletons, Claude adapts native versions + cleanup/best practices
-3. **Centralized auth** — session validation on app focus (AppState → getSession())
-4. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
-5. Tests — API + hooks
-6. Phase 8B: GoCardless bank connection (mode banque)
-7. **Server-side pagination** — replace client-side `limit: 1000`
-8. **Walkthrough** — onboarding animation (Lottie text layer injection, content drafted in Basic Memory)
+0. **Transaction type toggle (NEXT SESSION — priority before skeletons)** — add a toggle/button in the transaction modal to choose between **expense** and **revenue** (income). Affects transaction form (UI), schema/validation, API contract, and amount sign/display.
+1. **Page skeletons (native)** — user builds web HydrateFallback skeletons, Claude adapts native versions + cleanup/best practices
+2. **Centralized auth** — session validation on app focus (AppState → getSession())
+3. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
+4. Tests — API + hooks
+5. Phase 8B: GoCardless bank connection (mode banque)
+6. **Server-side pagination** — replace client-side `TRANSACTION_FETCH_LIMIT` (=1000)
+7. **Walkthrough** — onboarding animation (Lottie text layer injection, content drafted in Basic Memory)
+
+**Cleanups (deferred this session)**: delete dead `apps/web/app/lib/http-client.server.ts`; REACT-004 HydrationBoundary placement (works in prod — proper hoist is a risky cross-route restructure); SignupForm live-region a11y (A11Y-009); `.js.map` 404 noise on Netlify (CDN rule so sourcemap requests don't hit the SSR fn).
 
 **Pending tests**: none
 
