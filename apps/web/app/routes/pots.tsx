@@ -42,7 +42,10 @@ export async function loader() {
 /** Client-navigation loader — skips the server hop; useQuery drives data client-side. */
 export const clientLoader = skipServerHop
 
-/** @returns Pots page with pot cards and CRUD modals. */
+/**
+ * @param props - Route component props including the dehydrated query state
+ * @returns Pots page with pot cards and CRUD modals
+ */
 export default function Pots({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation()
   const modal = useModal()

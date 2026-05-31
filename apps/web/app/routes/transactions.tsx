@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import type { TransactionFormData } from '@financial-app/features'
 import type { ICategory, ITransaction } from '@financial-app/shared'
 
+import { TRANSACTION_FETCH_LIMIT } from '../lib/constants'
 import { createServerQueryClient } from '../lib/query-client.server'
 import { skipServerHop } from '../lib/skip-server-hop'
 import { balanceQuery } from '../queries'
@@ -40,6 +41,10 @@ export async function loader() {
 /** Client-navigation loader — skips the server hop; useQuery drives data client-side. */
 export const clientLoader = skipServerHop
 
+/**
+ * @param props - Route component props including the dehydrated query state
+ * @returns Transactions page with a data table and add/edit/delete CRUD modals
+ */
 export default function TransactionsScreen({
   loaderData,
 }: Route.ComponentProps) {
@@ -108,7 +113,9 @@ export default function TransactionsScreen({
   })
 
   const { data, error, isLoading } = useQuery(
-    getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } })
+    getTransactionsOptions({
+      query: { limit: TRANSACTION_FETCH_LIMIT, sort: 'latest' },
+    })
   )
 
   // ── Render ─────────────────────────────────────────────────────

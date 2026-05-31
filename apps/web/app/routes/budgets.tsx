@@ -28,6 +28,7 @@ import type {
 import type { IBudget, ICategory, ITransaction } from '@financial-app/shared'
 
 import BudgetCardItem from '../components/BudgetCardItem'
+import { TRANSACTION_FETCH_LIMIT } from '../lib/constants'
 import { createServerQueryClient } from '../lib/query-client.server'
 import { skipServerHop } from '../lib/skip-server-hop'
 import { budgetsQuery, transactionsQuery } from '../queries'
@@ -50,7 +51,10 @@ export async function loader() {
 /** Client-navigation loader — skips the server hop; useQuery drives data client-side. */
 export const clientLoader = skipServerHop
 
-/** @returns Budgets page with overview chart, category cards, and CRUD modals. */
+/**
+ * @param props - Route component props including the dehydrated query state
+ * @returns Budgets page with overview chart, category cards, and CRUD modals
+ */
 export default function Budgets({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation()
   const modal = useModal()
@@ -63,7 +67,9 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
   } = useQuery(getBudgetsOptions({ query: { month: getCurrentBudgetMonth() } }))
 
   const { data: txnResult, error: txnError } = useQuery(
-    getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } })
+    getTransactionsOptions({
+      query: { limit: TRANSACTION_FETCH_LIMIT, sort: 'latest' },
+    })
   )
 
   const { budgetItems, categoryCards } = useMemo(

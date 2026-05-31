@@ -34,13 +34,18 @@ export async function loader() {
 /** Client-navigation loader — skips the server hop; useQuery drives data client-side. */
 export const clientLoader = skipServerHop
 
-/** @returns Recurring bills page with summary cards and data table. */
+/**
+ * @param props - Route component props including the dehydrated query state
+ * @returns Recurring bills page with summary cards and data table
+ */
 export default function RecurringBills({ loaderData }: Route.ComponentProps) {
   const { t, i18n } = useTranslation()
 
-  const recurringOpts = getRecurringBillsOptions()
-
-  const { data: recurringBills, error, isLoading } = useQuery(recurringOpts)
+  const {
+    data: recurringBills,
+    error,
+    isLoading,
+  } = useQuery(getRecurringBillsOptions())
 
   const pageData = useMemo(
     () =>
@@ -60,20 +65,16 @@ export default function RecurringBills({ loaderData }: Route.ComponentProps) {
 
   if (error) {
     return (
-      <HydrationBoundary state={loaderData.dehydratedState}>
-        <div className="p-6 lg:p-10">
-          <Typography variant="page-title" as="h1" className="mb-4">
-            {t('recurring.title')}
-          </Typography>
-          <Alert
-            severity="error"
-            message={t('common.errorLoading')}
-            description={
-              import.meta.env.DEV ? getErrorMessage(error) : undefined
-            }
-          />
-        </div>
-      </HydrationBoundary>
+      <div className="p-6 lg:p-10">
+        <Typography variant="page-title" as="h1" className="mb-4">
+          {t('recurring.title')}
+        </Typography>
+        <Alert
+          severity="error"
+          message={t('common.errorLoading')}
+          description={import.meta.env.DEV ? getErrorMessage(error) : undefined}
+        />
+      </div>
     )
   }
 

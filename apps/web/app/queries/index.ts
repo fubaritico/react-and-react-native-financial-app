@@ -7,6 +7,8 @@ import {
 } from '@financial-app/http-client'
 import { getCurrentBudgetMonth } from '@financial-app/shared'
 
+import { TRANSACTION_FETCH_LIMIT } from '../lib/constants'
+
 import type { QueryClient } from '@tanstack/react-query'
 
 /** @param queryClient - QueryClient instance (server or client)
@@ -18,7 +20,9 @@ export const balanceQuery = (queryClient: QueryClient) =>
  *  @returns Prefetched transactions data */
 export const transactionsQuery = (queryClient: QueryClient) =>
   queryClient.ensureQueryData(
-    getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } })
+    getTransactionsOptions({
+      query: { limit: TRANSACTION_FETCH_LIMIT, sort: 'latest' },
+    })
   )
 
 /** @param queryClient - QueryClient instance (server or client)

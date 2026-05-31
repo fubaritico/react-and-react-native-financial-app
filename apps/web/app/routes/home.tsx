@@ -26,6 +26,7 @@ import { useNavigate } from 'react-router'
 import type { IconName } from '@financial-app/icons'
 import type { ITransaction } from '@financial-app/shared'
 
+import { TRANSACTION_FETCH_LIMIT } from '../lib/constants'
 import { createServerQueryClient } from '../lib/query-client.server'
 import { skipServerHop } from '../lib/skip-server-hop'
 import {
@@ -43,7 +44,7 @@ export async function loader() {
   const t0 = performance.now()
   const queryClient = createServerQueryClient()
 
-  const [, , , ,] = await Promise.all([
+  await Promise.all([
     balanceQuery(queryClient).then((r) => {
       console.warn(
         `[SSR] [HOME] balance=${(performance.now() - t0).toFixed(0)}ms`
@@ -83,10 +84,16 @@ export async function loader() {
 /** Client-navigation loader — skips the server hop; useQuery drives data client-side. */
 export const clientLoader = skipServerHop
 
-/** @returns Overview page with balance cards, pots, transactions, budgets, and recurring bills. */
+/**
+ * @param props - Route component props including the dehydrated query state
+ * @returns Overview page with balance cards, pots, transactions, budgets, and recurring bills
+ */
 export default function Home({ loaderData }: Route.ComponentProps) {
   useEffect(() => {
-    console.warn('[CLIENT] [HOME] component MOUNTED — page visible')
+    // Dev-only nav-timing marker — stripped from production so it never reaches users' consoles.
+    if (import.meta.env.DEV) {
+      console.warn('[CLIENT] [HOME] component MOUNTED — page visible')
+    }
   }, [])
 
   const navigate = useNavigate()
@@ -99,7 +106,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   } = useQuery(getBalanceOptions())
 
   const { data: transactions, error: txnError } = useQuery(
-    getTransactionsOptions({ query: { limit: 1000, sort: 'latest' } })
+    getTransactionsOptions({
+      query: { limit: TRANSACTION_FETCH_LIMIT, sort: 'latest' },
+    })
   )
   const { data: pots, error: potsError } = useQuery(getPotsOptions())
   const { data: budgets, error: budgetsError } = useQuery(
