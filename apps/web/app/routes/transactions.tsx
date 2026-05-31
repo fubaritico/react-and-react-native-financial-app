@@ -19,6 +19,7 @@ import type { TransactionFormData } from '@financial-app/features'
 import type { ICategory, ITransaction } from '@financial-app/shared'
 
 import { createServerQueryClient } from '../lib/query-client.server'
+import { skipServerHop } from '../lib/skip-server-hop'
 import { balanceQuery } from '../queries'
 
 import type { Route } from './+types/transactions'
@@ -35,6 +36,9 @@ export async function loader() {
   )
   return { dehydratedState: dehydrate(queryClient) }
 }
+
+/** Client-navigation loader — skips the server hop; useQuery drives data client-side. */
+export const clientLoader = skipServerHop
 
 export default function TransactionsScreen({
   loaderData,

@@ -13,6 +13,7 @@ import type { IBillsSummaryRow } from '@financial-app/features'
 import type { ITransaction } from '@financial-app/shared'
 
 import { createServerQueryClient } from '../lib/query-client.server'
+import { skipServerHop } from '../lib/skip-server-hop'
 import { recurringBillsQuery } from '../queries'
 
 import type { Route } from './+types/recurring'
@@ -29,6 +30,9 @@ export async function loader() {
   )
   return { dehydratedState: dehydrate(queryClient) }
 }
+
+/** Client-navigation loader — skips the server hop; useQuery drives data client-side. */
+export const clientLoader = skipServerHop
 
 /** @returns Recurring bills page with summary cards and data table. */
 export default function RecurringBills({ loaderData }: Route.ComponentProps) {

@@ -8,7 +8,8 @@
     "build": "react-router build",
     "start": "node build/server/index.js",
     "type-check": "react-router typegen && tsc --noEmit",
-    "lint": "react-router typegen && eslint ./app"
+    "lint": "react-router typegen && eslint ./app",
+    "test": "vitest run"
   },
   "dependencies": {
     "@financial-app/features": "workspace:^",
@@ -48,6 +49,7 @@
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "^8.0.9",
-    "vite-plugin-svgr": "^5.2.0"
+    "vite-plugin-svgr": "^5.2.0",
+    "vitest": "catalog:"
   }
 }

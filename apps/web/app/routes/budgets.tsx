@@ -29,6 +29,7 @@ import type { IBudget, ICategory, ITransaction } from '@financial-app/shared'
 
 import BudgetCardItem from '../components/BudgetCardItem'
 import { createServerQueryClient } from '../lib/query-client.server'
+import { skipServerHop } from '../lib/skip-server-hop'
 import { budgetsQuery, transactionsQuery } from '../queries'
 
 import type { Route } from './+types/budgets'
@@ -45,6 +46,9 @@ export async function loader() {
   )
   return { dehydratedState: dehydrate(queryClient) }
 }
+
+/** Client-navigation loader — skips the server hop; useQuery drives data client-side. */
+export const clientLoader = skipServerHop
 
 /** @returns Budgets page with overview chart, category cards, and CRUD modals. */
 export default function Budgets({ loaderData }: Route.ComponentProps) {

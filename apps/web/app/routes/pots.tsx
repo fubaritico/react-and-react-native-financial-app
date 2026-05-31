@@ -21,6 +21,7 @@ import type { Pot } from '@financial-app/http-client'
 
 import PotCardItem from '../components/PotCardItem'
 import { createServerQueryClient } from '../lib/query-client.server'
+import { skipServerHop } from '../lib/skip-server-hop'
 import { potsQuery } from '../queries'
 
 import type { Route } from './+types/pots'
@@ -37,6 +38,9 @@ export async function loader() {
   )
   return { dehydratedState: dehydrate(queryClient) }
 }
+
+/** Client-navigation loader — skips the server hop; useQuery drives data client-side. */
+export const clientLoader = skipServerHop
 
 /** @returns Pots page with pot cards and CRUD modals. */
 export default function Pots({ loaderData }: Route.ComponentProps) {

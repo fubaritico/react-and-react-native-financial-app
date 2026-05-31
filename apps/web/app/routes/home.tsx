@@ -27,6 +27,7 @@ import type { IconName } from '@financial-app/icons'
 import type { ITransaction } from '@financial-app/shared'
 
 import { createServerQueryClient } from '../lib/query-client.server'
+import { skipServerHop } from '../lib/skip-server-hop'
 import {
   balanceQuery,
   budgetsQuery,
@@ -78,6 +79,9 @@ export async function loader() {
   )
   return { dehydratedState: dehydrate(queryClient) }
 }
+
+/** Client-navigation loader — skips the server hop; useQuery drives data client-side. */
+export const clientLoader = skipServerHop
 
 /** @returns Overview page with balance cards, pots, transactions, budgets, and recurring bills. */
 export default function Home({ loaderData }: Route.ComponentProps) {
