@@ -22,6 +22,7 @@ import type { Pot } from '@financial-app/http-client'
 import PotCardItem from '../components/PotCardItem'
 import { createServerQueryClient } from '../lib/query-client.server'
 import { skipServerHop } from '../lib/skip-server-hop'
+import { useFormBridge } from '../lib/use-form-bridge'
 import { potsQuery } from '../queries'
 
 import type { Route } from './+types/pots'
@@ -54,31 +55,12 @@ export default function Pots({ loaderData }: Route.ComponentProps) {
 
   const { data: pots, error, isLoading } = useQuery(getPotsOptions())
 
-  /** Reads form data from the dataset on the form element */
-  const getFormData = useCallback((): PotFormValues | null => {
-    const ref = formRef.current
-    if (!ref?.dataset.formData) return null
-    const data = structuredClone(
-      JSON.parse(ref.dataset.formData) as PotFormValues
-    )
-    delete ref.dataset.formData
-    return data
-  }, [])
-
-  /** Whether the form has validation errors (dataset-based) */
-  const hasFormErrors = useCallback(
-    () => formRef.current?.dataset.error === 'true',
-    []
-  )
-
-  /** Triggers native form validation to show field errors */
-  const triggerValidation = useCallback(() => {
-    formRef.current?.requestSubmit()
-  }, [])
+  const { getFormData, hasErrors, triggerValidation } =
+    useFormBridge<PotFormValues>(formRef)
 
   const formBridge: IPotFormBridge = useMemo(
-    () => ({ getFormData, hasErrors: hasFormErrors, triggerValidation }),
-    [getFormData, hasFormErrors, triggerValidation]
+    () => ({ getFormData, hasErrors, triggerValidation }),
+    [getFormData, hasErrors, triggerValidation]
   )
 
   const { showSuccess, showError } = useFeedbackModals(modal)

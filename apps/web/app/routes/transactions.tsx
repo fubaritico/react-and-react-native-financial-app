@@ -21,6 +21,7 @@ import type { ICategory, ITransaction } from '@financial-app/shared'
 import { TRANSACTION_FETCH_LIMIT } from '../lib/constants'
 import { createServerQueryClient } from '../lib/query-client.server'
 import { skipServerHop } from '../lib/skip-server-hop'
+import { useFormBridge } from '../lib/use-form-bridge'
 import { balanceQuery } from '../queries'
 
 import type { Route } from './+types/transactions'
@@ -53,29 +54,8 @@ export default function TransactionsScreen({
   const formRef = useRef<HTMLFormElement>(null)
 
   // ── Form bridge (web dataset pattern) ──────────────────────────
-
-  /** Reads form data from the DOM dataset */
-  const getFormData = useCallback((): TransactionFormData | null => {
-    const ref = formRef.current
-    if (!ref?.dataset.formData) return null
-    const data = structuredClone(
-      JSON.parse(ref.dataset.formData) as TransactionFormData
-    )
-    delete ref.dataset.formData
-    return data
-  }, [])
-
-  /** Whether the form currently has validation errors */
-  const hasFormErrors = useCallback(
-    () => formRef.current?.dataset.error === 'true',
-    []
-  )
-
-  /** Triggers browser validation display */
-  const triggerValidation = useCallback(
-    () => formRef.current?.requestSubmit(),
-    []
-  )
+  const { getFormData, hasErrors, triggerValidation } =
+    useFormBridge<TransactionFormData>(formRef)
 
   // ── Categories ───────────────────────────────────────────────
   const { data: categoriesData } = useQuery(getCategoriesOptions())
@@ -105,7 +85,7 @@ export default function TransactionsScreen({
 
   const { handleAdd, handleEdit, handleDelete } = useTransactionCrud({
     modal,
-    formBridge: { getFormData, hasErrors: hasFormErrors, triggerValidation },
+    formBridge: { getFormData, hasErrors, triggerValidation },
     showSuccess,
     showError,
     renderForm,
