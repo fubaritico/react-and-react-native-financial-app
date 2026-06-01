@@ -183,6 +183,21 @@ export function $Name({
 }
 ```
 
+- **Conditional classes**: use the `cn()` **object form** (keys = class strings, values = booleans) — NOT chained `cond && 'class'` ternaries. It is the web mirror of the native `tw.style({ ... })` helper. Computed keys let you reuse `.styles.ts` entries. Order still matters: put the object after the variant/base so tailwind-merge resolves conflicts last-wins.
+
+```tsx
+className={cn(
+  $nameVariants({ variant, size }),
+  web.root,
+  {
+    'bg-white': active && !isColumn,
+    'bg-white/20 rounded-md border-b-0': active && isColumn,
+    [web.hover]: !active,
+    [web.focusRing]: isInteractive,
+  }
+)}
+```
+
 ---
 
 ## 6. `index.ts` + `index.web.ts` — barrel files (TWO, one per platform)
