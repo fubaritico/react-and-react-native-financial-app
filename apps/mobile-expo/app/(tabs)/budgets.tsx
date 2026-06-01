@@ -25,7 +25,7 @@ import { ScrollView, View } from 'react-native'
 
 import type {
   BudgetFormValues,
-  IBudgetFormBridge,
+  IBudgetFormAccessor,
   IBudgetFormRef,
 } from '@financial-app/features'
 import type { IBudget, ICategory, ITransaction } from '@financial-app/shared'
@@ -145,7 +145,7 @@ export default function BudgetsScreen() {
     formRef.current?.validate()
   }, [])
 
-  const formBridge: IBudgetFormBridge = useMemo(
+  const formAccessor: IBudgetFormAccessor = useMemo(
     () => ({ getFormData, hasErrors: hasFormErrors, triggerValidation }),
     [getFormData, hasFormErrors, triggerValidation]
   )
@@ -172,7 +172,7 @@ export default function BudgetsScreen() {
 
   const { handleAdd, handleEdit, handleDelete } = useBudgetCrud({
     modal,
-    formBridge,
+    formAccessor,
     showSuccess,
     showError,
     renderForm,

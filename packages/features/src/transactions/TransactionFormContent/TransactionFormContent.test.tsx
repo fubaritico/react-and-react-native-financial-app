@@ -38,7 +38,10 @@ const DEFAULT_PROPS = {
   nameLabel: 'Transaction Name',
   namePlaceholder: 'e.g. Urban Sports Club',
   amountLabel: 'Amount',
-  amountPlaceholder: 'e.g. 45.00',
+  amountPlaceholder: 'e.g. 45.50',
+  typeLabel: 'Type',
+  expenseLabel: 'Expense',
+  incomeLabel: 'Income',
   categoryLabel: 'Category',
   dateLabel: 'Date',
   datePlaceholder: 'Select date',
@@ -62,6 +65,8 @@ describe('TransactionFormContent', () => {
 
     expect(screen.getByLabelText('Transaction Name')).toBeInTheDocument()
     expect(screen.getByLabelText('Amount')).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: 'Expense' })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: 'Income' })).toBeInTheDocument()
     expect(screen.getByText('Category')).toBeInTheDocument()
     expect(screen.getByText('Date')).toBeInTheDocument()
     expect(screen.getByText('Recurring transaction')).toBeInTheDocument()
@@ -128,7 +133,8 @@ describe('TransactionFormContent', () => {
         {...DEFAULT_PROPS}
         initialValues={{
           name: 'Gym',
-          amount: '-50',
+          amount: '50',
+          transactionType: 'expense',
           category_id: 'cat-001',
           date: '2026-03-20',
           recurring: true,
@@ -137,7 +143,7 @@ describe('TransactionFormContent', () => {
     )
 
     expect(screen.getByLabelText('Transaction Name')).toHaveValue('Gym')
-    expect(screen.getByLabelText('Amount')).toHaveValue('-50')
+    expect(screen.getByLabelText('Amount')).toHaveValue('50')
     expect(screen.getByRole('checkbox')).toBeChecked()
   })
 
@@ -150,7 +156,8 @@ describe('TransactionFormContent', () => {
         ref={ref}
         initialValues={{
           name: 'Rent',
-          amount: '-1200',
+          amount: '1200',
+          transactionType: 'expense',
           category_id: 'cat-002',
           recurring: true,
           date: '2026-01-15',
@@ -162,7 +169,8 @@ describe('TransactionFormContent', () => {
     expect(values).toEqual(
       expect.objectContaining({
         name: 'Rent',
-        amount: '-1200',
+        amount: '1200',
+        transactionType: 'expense',
         category_id: 'cat-002',
         recurring: true,
         date: '2026-01-15',
@@ -235,7 +243,8 @@ describe('TransactionFormContent', () => {
         ref={ref}
         initialValues={{
           name: 'Groceries run',
-          amount: '-85.5',
+          amount: '85.5',
+          transactionType: 'expense',
           category_id: 'cat-003',
           date: '2026-05-14',
           recurring: false,
@@ -246,10 +255,63 @@ describe('TransactionFormContent', () => {
     const values = getFormData(ref.current!)
     expect(values).toEqual({
       name: 'Groceries run',
-      amount: '-85.5',
+      amount: '85.5',
+      transactionType: 'expense',
       category_id: 'cat-003',
       date: '2026-05-14',
       recurring: false,
     })
+  })
+
+  it('defaults transactionType to expense', () => {
+    const ref = { current: null } as RefObject<HTMLFormElement | null>
+
+    render(<TransactionFormContent {...DEFAULT_PROPS} ref={ref} />)
+
+    expect(getFormData(ref.current!).transactionType).toBe('expense')
+    expect(screen.getByRole('radio', { name: 'Expense' })).toBeChecked()
+  })
+
+  it('switches transactionType to income on segment selection', async () => {
+    const user = userEvent.setup()
+    const ref = { current: null } as RefObject<HTMLFormElement | null>
+
+    render(<TransactionFormContent {...DEFAULT_PROPS} ref={ref} />)
+
+    await user.click(screen.getByRole('radio', { name: 'Income' }))
+
+    expect(getFormData(ref.current!).transactionType).toBe('income')
+  })
+
+  it('pre-selects the income segment from initialValues', () => {
+    render(
+      <TransactionFormContent
+        {...DEFAULT_PROPS}
+        initialValues={{
+          name: 'Salary',
+          amount: '2400',
+          transactionType: 'income',
+          category_id: 'cat-001',
+          date: '2026-04-30',
+          recurring: true,
+        }}
+      />
+    )
+
+    expect(screen.getByRole('radio', { name: 'Income' })).toBeChecked()
+    expect(screen.getByRole('radio', { name: 'Expense' })).not.toBeChecked()
+  })
+
+  it('strips the minus sign from amount input (absolute value only)', async () => {
+    const user = userEvent.setup()
+    const ref = { current: null } as RefObject<HTMLFormElement | null>
+
+    render(<TransactionFormContent {...DEFAULT_PROPS} ref={ref} />)
+
+    const amountInput = screen.getByLabelText('Amount')
+    await user.type(amountInput, '-50')
+
+    expect(amountInput).toHaveValue('50')
+    expect(getFormData(ref.current!).amount).toBe('50')
   })
 })

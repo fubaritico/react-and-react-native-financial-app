@@ -16,7 +16,7 @@ import { ScrollView, View } from 'react-native'
 
 import type {
   IPotAmountFormRef,
-  IPotFormBridge,
+  IPotFormAccessor,
   IPotFormRef,
   PotFormValues,
 } from '@financial-app/features'
@@ -112,7 +112,7 @@ export default function PotsScreen() {
     formRef.current?.validate()
   }, [])
 
-  const formBridge: IPotFormBridge = useMemo(
+  const formAccessor: IPotFormAccessor = useMemo(
     () => ({ getFormData, hasErrors: hasFormErrors, triggerValidation }),
     [getFormData, hasFormErrors, triggerValidation]
   )
@@ -189,7 +189,7 @@ export default function PotsScreen() {
     handleWithdraw,
   } = usePotCrud({
     modal,
-    formBridge,
+    formAccessor,
     showSuccess,
     showError,
     renderForm,

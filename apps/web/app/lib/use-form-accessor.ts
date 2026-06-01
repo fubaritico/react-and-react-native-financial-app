@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 
 import type { RefObject } from 'react'
 
-/** Imperative bridge between a web form (DOM dataset pattern) and the CRUD modal hooks. */
-export interface IFormBridge<T> {
+/** Imperative accessor between a web form (DOM dataset pattern) and the CRUD modal hooks. */
+export interface IFormAccessor<T> {
   /**
    * Reads and clears the serialized form data stashed on the form's dataset.
    * @returns The parsed form values, or null if none are present
@@ -22,15 +22,15 @@ export interface IFormBridge<T> {
 }
 
 /**
- * Bridges a web form element to the CRUD modal hooks via the DOM dataset pattern.
+ * Connects a web form element to the CRUD modal hooks via the DOM dataset pattern.
  * Deduplicates the getFormData / hasErrors / triggerValidation trio previously
  * copy-pasted across the transactions, budgets, and pots routes.
  * @param formRef - Ref to the rendered HTMLFormElement
- * @returns The form bridge callbacks
+ * @returns The form accessor callbacks
  */
-export function useFormBridge<T>(
+export function useFormAccessor<T>(
   formRef: RefObject<HTMLFormElement | null>
-): IFormBridge<T> {
+): IFormAccessor<T> {
   const getFormData = useCallback((): T | null => {
     const ref = formRef.current
     if (!ref?.dataset.formData) return null

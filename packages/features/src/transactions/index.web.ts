@@ -20,6 +20,6 @@ export type {
 
 export { useTransactionCrud } from './hooks/useTransactionCrud'
 export type {
-  ITransactionFormBridge,
+  ITransactionFormAccessor,
   IUseTransactionCrudParams,
 } from './hooks/useTransactionCrud'

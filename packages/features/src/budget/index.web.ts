@@ -20,6 +20,6 @@ export type {
 
 export { useBudgetCrud } from './hooks/useBudgetCrud'
 export type {
-  IBudgetFormBridge,
+  IBudgetFormAccessor,
   IUseBudgetCrudParams,
 } from './hooks/useBudgetCrud'

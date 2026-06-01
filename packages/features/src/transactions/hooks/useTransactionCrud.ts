@@ -7,7 +7,7 @@ import {
 } from '@financial-app/http-client'
 import { toTimestamptz } from '@financial-app/shared'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { ITransaction } from '@financial-app/shared'
@@ -17,6 +17,7 @@ import {
   createDeleteTransactionModalConfig,
   createEditTransactionModalConfig,
 } from '../createTransactionModalConfigs'
+import { toSignedAmount } from '../TransactionFormContent/TransactionFormContent.utils'
 
 import type { IModalHandle } from '../../shared/hooks/useFeedbackModals'
 import type { TransactionFormData } from '../TransactionFormContent/TransactionFormContent'
@@ -26,7 +27,7 @@ import type { ReactNode } from 'react'
 const TRANSACTIONS_LIMIT = 1000
 
 /** Platform-specific form access — reads data from web dataset or native imperative ref */
-export interface ITransactionFormBridge {
+export interface ITransactionFormAccessor {
   /** Returns form values or null if unavailable */
   getFormData: () => TransactionFormData | null
   /** Whether the form currently has validation errors */
@@ -40,7 +41,7 @@ export interface IUseTransactionCrudParams {
   /** Modal controls from useModal() */
   modal: IModalHandle
   /** Platform-specific form access callbacks */
-  formBridge: ITransactionFormBridge
+  formAccessor: ITransactionFormAccessor
   /** Called after a successful mutation with the i18n message */
   showSuccess: (message: string) => void
   /** Called after a failed mutation with the error */
@@ -58,12 +59,12 @@ export interface IUseTransactionCrudParams {
  * Shared CRUD hook for transactions — mutations, submit handlers, modal config builders.
  * Platform-agnostic: receives callbacks for form access and JSX rendering.
  *
- * @param params - Modal handle, form bridge, feedback callbacks, render callbacks
+ * @param params - Modal handle, form accessor, feedback callbacks, render callbacks
  * @returns handleAdd, handleEdit, handleDelete callbacks + query options
  */
 export function useTransactionCrud({
   modal,
-  formBridge,
+  formAccessor,
   showSuccess,
   showError,
   renderForm,
@@ -72,10 +73,14 @@ export function useTransactionCrud({
   const { t } = useTranslation()
   const qc = useQueryClient()
 
-  /** Query options used for both fetching and invalidation */
-  const txnOpts = getTransactionsOptions({
-    query: { limit: TRANSACTIONS_LIMIT, sort: 'latest' },
-  })
+  /** Query options used for invalidation — memoized so `queryKey` stays referentially stable */
+  const txnOpts = useMemo(
+    () =>
+      getTransactionsOptions({
+        query: { limit: TRANSACTIONS_LIMIT, sort: 'latest' },
+      }),
+    []
+  )
 
   /** ID of the transaction currently being edited (stable ref to avoid stale closures) */
   const editingIdRef = useRef<string | null>(null)
@@ -126,17 +131,17 @@ export function useTransactionCrud({
   })
 
   /**
-   * Reads form data via the bridge, validates, parses amount, and calls create mutation.
+   * Reads form data via the accessor, validates, parses amount, and calls create mutation.
    */
   const handleSubmit = useCallback(() => {
-    if (formBridge.hasErrors()) {
-      formBridge.triggerValidation()
+    if (formAccessor.hasErrors()) {
+      formAccessor.triggerValidation()
       return
     }
-    const values = formBridge.getFormData()
+    const values = formAccessor.getFormData()
     if (!values) return
-    const amount = Number(values.amount)
-    if (!Number.isFinite(amount) || amount === 0) return
+    const amount = toSignedAmount(values.amount, values.transactionType)
+    if (amount === null) return
     modal.setSubmitting(true)
     createTransaction({
       body: {
@@ -147,22 +152,22 @@ export function useTransactionCrud({
         recurring: values.recurring,
       },
     })
-  }, [formBridge, modal, createTransaction])
+  }, [formAccessor, modal, createTransaction])
 
   /**
-   * Reads form data via the bridge, validates, parses amount, and calls update mutation.
+   * Reads form data via the accessor, validates, parses amount, and calls update mutation.
    */
   const handleSubmitEdit = useCallback(() => {
     const transactionId = editingIdRef.current
     if (!transactionId) return
-    if (formBridge.hasErrors()) {
-      formBridge.triggerValidation()
+    if (formAccessor.hasErrors()) {
+      formAccessor.triggerValidation()
       return
     }
-    const values = formBridge.getFormData()
+    const values = formAccessor.getFormData()
     if (!values) return
-    const amount = Number(values.amount)
-    if (!Number.isFinite(amount) || amount === 0) return
+    const amount = toSignedAmount(values.amount, values.transactionType)
+    if (amount === null) return
     modal.setSubmitting(true)
     updateTransaction({
       path: { id: transactionId },
@@ -174,7 +179,7 @@ export function useTransactionCrud({
         recurring: values.recurring,
       },
     })
-  }, [formBridge, modal, updateTransaction])
+  }, [formAccessor, modal, updateTransaction])
 
   /** Opens the Add Transaction modal */
   const handleAdd = useCallback(() => {
@@ -202,7 +207,8 @@ export function useTransactionCrud({
             name: transaction.name,
             category_id: transaction.category_id,
             date: transaction.date,
-            amount: String(transaction.amount),
+            amount: String(Math.abs(transaction.amount)),
+            transactionType: transaction.amount < 0 ? 'expense' : 'income',
             recurring: transaction.recurring,
           },
           description: t('transactions.editModal.description'),

@@ -1,5 +1,11 @@
 import type { ICategory } from '@financial-app/shared'
 
+/**
+ * Transaction direction toggled by the SegmentedControl.
+ * Maps to the signed `amount` convention in the DB/API: `expense` → negative, `income` → positive.
+ */
+export type TransactionType = 'expense' | 'income'
+
 /** Ref handle exposed by TransactionFormContent (native) */
 export interface ITransactionFormRef {
   /** Returns the current form values */
@@ -18,8 +24,10 @@ export interface TransactionFormData {
   category_id: string
   /** ISO datetime string */
   date: string
-  /** Amount as string — parsed to number on submit */
+  /** Absolute amount as a string (no sign) — the sign is derived from `transactionType` on submit */
   amount: string
+  /** Expense or income — drives the sign applied to `amount` when persisting */
+  transactionType: TransactionType
   /** Whether the transaction recurs */
   recurring: boolean
 }
@@ -41,6 +49,12 @@ export interface ITransactionFormContentProps {
   amountLabel: string
   /** Placeholder for the amount field */
   amountPlaceholder: string
+  /** Heading rendered above the expense/income segmented control */
+  typeLabel: string
+  /** Label for the expense segment */
+  expenseLabel: string
+  /** Label for the income segment */
+  incomeLabel: string
   /** Label for the category field */
   categoryLabel: string
   /** Label for the recurring checkbox */

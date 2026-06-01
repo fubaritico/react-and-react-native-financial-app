@@ -18,11 +18,12 @@ import {
   tw,
 } from '@financial-app/ui/native'
 import { useQuery } from '@tanstack/react-query'
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ScrollView, View } from 'react-native'
 
 import type {
+  ITransactionFormAccessor,
   ITransactionFormRef,
   TransactionFormData,
 } from '@financial-app/features'
@@ -40,7 +41,7 @@ export default function TransactionsScreen() {
   const modal = useModal()
   const formRef = useRef<ITransactionFormRef>(null)
 
-  // ── Form bridge (native imperative ref pattern) ────────────────
+  // ── Form accessor (native imperative ref pattern) ────────────────
 
   /** Reads form data from the imperative ref */
   const getFormData = useCallback((): TransactionFormData | null => {
@@ -58,6 +59,12 @@ export default function TransactionsScreen() {
     formRef.current?.validate()
   }, [])
 
+  /** Stable accessor object — avoids breaking the CRUD hook's useCallback memoization */
+  const formAccessor: ITransactionFormAccessor = useMemo(
+    () => ({ getFormData, hasErrors: hasFormErrors, triggerValidation }),
+    [getFormData, hasFormErrors, triggerValidation]
+  )
+
   // ── Categories ───────────────────────────────────────────────
   const { data: categoriesData } = useQuery(getCategoriesOptions())
 
@@ -74,6 +81,9 @@ export default function TransactionsScreen() {
         namePlaceholder={t('transactions.form.namePlaceholder')}
         amountLabel={t('transactions.form.amountLabel')}
         amountPlaceholder={t('transactions.form.amountPlaceholder')}
+        typeLabel={t('transactions.form.typeLabel')}
+        expenseLabel={t('transactions.form.expenseLabel')}
+        incomeLabel={t('transactions.form.incomeLabel')}
         categoryLabel={t('transactions.form.categoryLabel')}
         dateLabel={t('transactions.form.dateLabel')}
         datePlaceholder={t('datePicker.placeholder')}
@@ -86,7 +96,7 @@ export default function TransactionsScreen() {
 
   const { handleAdd, handleEdit, handleDelete } = useTransactionCrud({
     modal,
-    formBridge: { getFormData, hasErrors: hasFormErrors, triggerValidation },
+    formAccessor,
     showSuccess,
     showError,
     renderForm,

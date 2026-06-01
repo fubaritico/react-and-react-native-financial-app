@@ -12,16 +12,19 @@ import {
 import { getErrorMessage, useModal } from '@financial-app/shared'
 import { Alert, Button, Spinner, Typography } from '@financial-app/ui'
 import { HydrationBoundary, dehydrate, useQuery } from '@tanstack/react-query'
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { TransactionFormData } from '@financial-app/features'
+import type {
+  ITransactionFormAccessor,
+  TransactionFormData,
+} from '@financial-app/features'
 import type { ICategory, ITransaction } from '@financial-app/shared'
 
 import { TRANSACTION_FETCH_LIMIT } from '../lib/constants'
 import { createServerQueryClient } from '../lib/query-client.server'
 import { skipServerHop } from '../lib/skip-server-hop'
-import { useFormBridge } from '../lib/use-form-bridge'
+import { useFormAccessor } from '../lib/use-form-accessor'
 import { balanceQuery } from '../queries'
 
 import type { Route } from './+types/transactions'
@@ -49,9 +52,15 @@ export default function TransactionsScreen({
   const modal = useModal()
   const formRef = useRef<HTMLFormElement>(null)
 
-  // ── Form bridge (web dataset pattern) ──────────────────────────
+  // ── Form accessor (web dataset pattern) ────────────────────────
   const { getFormData, hasErrors, triggerValidation } =
-    useFormBridge<TransactionFormData>(formRef)
+    useFormAccessor<TransactionFormData>(formRef)
+
+  /** Stable accessor object — avoids breaking the CRUD hook's useCallback memoization */
+  const formAccessor: ITransactionFormAccessor = useMemo(
+    () => ({ getFormData, hasErrors, triggerValidation }),
+    [getFormData, hasErrors, triggerValidation]
+  )
 
   // ── Categories ───────────────────────────────────────────────
   const { data: categoriesData } = useQuery(getCategoriesOptions())
@@ -73,6 +82,9 @@ export default function TransactionsScreen({
         namePlaceholder={t('transactions.form.namePlaceholder')}
         amountLabel={t('transactions.form.amountLabel')}
         amountPlaceholder={t('transactions.form.amountPlaceholder')}
+        typeLabel={t('transactions.form.typeLabel')}
+        expenseLabel={t('transactions.form.expenseLabel')}
+        incomeLabel={t('transactions.form.incomeLabel')}
         categoryLabel={t('transactions.form.categoryLabel')}
         dateLabel={t('transactions.form.dateLabel')}
         datePlaceholder={t('datePicker.placeholder')}
@@ -85,7 +97,7 @@ export default function TransactionsScreen({
 
   const { handleAdd, handleEdit, handleDelete } = useTransactionCrud({
     modal,
-    formBridge: { getFormData, hasErrors, triggerValidation },
+    formAccessor,
     showSuccess,
     showError,
     renderForm,

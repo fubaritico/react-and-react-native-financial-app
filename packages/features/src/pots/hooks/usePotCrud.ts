@@ -25,7 +25,7 @@ import type { PotFormValues } from '../PotFormContent/PotFormContent'
 import type { ReactNode } from 'react'
 
 /** Platform-specific form access — reads data from web dataset or native imperative ref */
-export interface IPotFormBridge {
+export interface IPotFormAccessor {
   /** Returns form values or null if unavailable */
   getFormData: () => PotFormValues | null
   /** Whether the form currently has validation errors */
@@ -39,7 +39,7 @@ export interface IUsePotCrudParams {
   /** Modal controls from useModal() */
   modal: IModalHandle
   /** Platform-specific form access callbacks */
-  formBridge: IPotFormBridge
+  formAccessor: IPotFormAccessor
   /** Called after a successful mutation with the i18n message */
   showSuccess: (message: string) => void
   /** Called after a failed mutation with the error */
@@ -61,12 +61,12 @@ export interface IUsePotCrudParams {
  * Shared CRUD hook for pots — mutations, submit handlers, modal config builders.
  * Platform-agnostic: receives callbacks for form access and JSX rendering.
  *
- * @param params - Modal handle, form bridge, feedback callbacks, render callbacks
+ * @param params - Modal handle, form accessor, feedback callbacks, render callbacks
  * @returns handleAdd, handleEdit, handleDelete, handleAddMoney, handleWithdraw callbacks
  */
 export function usePotCrud({
   modal,
-  formBridge,
+  formAccessor,
   showSuccess,
   showError,
   renderForm,
@@ -154,14 +154,14 @@ export function usePotCrud({
   })
 
   /**
-   * Reads form data via the bridge, validates, parses target, and calls create mutation.
+   * Reads form data via the accessor, validates, parses target, and calls create mutation.
    */
   const handleSubmit = useCallback(() => {
-    if (formBridge.hasErrors()) {
-      formBridge.triggerValidation()
+    if (formAccessor.hasErrors()) {
+      formAccessor.triggerValidation()
       return
     }
-    const values = formBridge.getFormData()
+    const values = formAccessor.getFormData()
     if (!values) return
     const target = Number(values.target)
     if (!Number.isFinite(target) || target <= 0) return
@@ -174,19 +174,19 @@ export function usePotCrud({
         theme: values.theme,
       },
     })
-  }, [formBridge, modal, createPot])
+  }, [formAccessor, modal, createPot])
 
   /**
-   * Reads form data via the bridge, validates, parses target, and calls update mutation.
+   * Reads form data via the accessor, validates, parses target, and calls update mutation.
    */
   const handleSubmitEdit = useCallback(() => {
     const potId = editingIdRef.current
     if (!potId) return
-    if (formBridge.hasErrors()) {
-      formBridge.triggerValidation()
+    if (formAccessor.hasErrors()) {
+      formAccessor.triggerValidation()
       return
     }
-    const values = formBridge.getFormData()
+    const values = formAccessor.getFormData()
     if (!values) return
     const target = Number(values.target)
     if (!Number.isFinite(target) || target <= 0) return
@@ -200,7 +200,7 @@ export function usePotCrud({
         theme: values.theme,
       },
     })
-  }, [formBridge, modal, updatePot])
+  }, [formAccessor, modal, updatePot])
 
   /** Opens the Add Pot modal */
   const handleAdd = useCallback(() => {

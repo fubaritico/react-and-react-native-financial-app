@@ -36,7 +36,7 @@ export type {
 
 export { useTransactionCrud } from './transactions/index.web'
 export type {
-  ITransactionFormBridge,
+  ITransactionFormAccessor,
   IUseTransactionCrudParams,
 } from './transactions/index.web'
 
@@ -62,7 +62,7 @@ export type {
 
 export { useBudgetCrud } from './budget/index.web'
 export type {
-  IBudgetFormBridge,
+  IBudgetFormAccessor,
   IUseBudgetCrudParams,
 } from './budget/index.web'
 
@@ -94,7 +94,7 @@ export type {
 } from './pots/index.web'
 
 export { usePotCrud } from './pots/index.web'
-export type { IPotFormBridge, IUsePotCrudParams } from './pots/index.web'
+export type { IPotFormAccessor, IUsePotCrudParams } from './pots/index.web'
 
 export { RecurringBillsDataTable } from './recurring-bills/index.web'
 export type { IRecurringBillsDataTableProps } from './recurring-bills/index.web'

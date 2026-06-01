@@ -73,7 +73,8 @@ import { useTransactionCrud } from './useTransactionCrud'
 
 const VALID_FORM_DATA = {
   name: 'Netflix',
-  amount: '-15.99',
+  amount: '15.99',
+  transactionType: 'expense' as const,
   category_id: 'cat-001',
   date: '2026-05-21',
   recurring: true,
@@ -94,7 +95,7 @@ const TRANSACTION_FIXTURE = {
 function createMockParams() {
   return {
     modal: { open: vi.fn(), close: vi.fn(), setSubmitting: vi.fn() },
-    formBridge: {
+    formAccessor: {
       getFormData: vi.fn(() => ({ ...VALID_FORM_DATA })),
       hasErrors: vi.fn(() => false),
       triggerValidation: vi.fn(),
@@ -152,9 +153,12 @@ describe('useTransactionCrud', () => {
     })
   })
 
-  it('submit with hasErrors=true: calls triggerValidation and does not call mutate', async () => {
+  it('submit with transactionType=income: persists a positive amount', async () => {
     const params = createMockParams()
-    params.formBridge.hasErrors.mockReturnValue(true)
+    params.formAccessor.getFormData.mockReturnValue({
+      ...VALID_FORM_DATA,
+      transactionType: 'income',
+    })
     const { result } = renderHook(() => useTransactionCrud(params))
 
     act(() => {
@@ -168,13 +172,35 @@ describe('useTransactionCrud', () => {
       await addConfig.actions[0].onPress()
     })
 
-    expect(params.formBridge.triggerValidation).toHaveBeenCalled()
+    const body = mutations[0].mutate.mock.calls[0][0] as {
+      body: { amount: number }
+    }
+    expect(body.body.amount).toBe(15.99)
+  })
+
+  it('submit with hasErrors=true: calls triggerValidation and does not call mutate', async () => {
+    const params = createMockParams()
+    params.formAccessor.hasErrors.mockReturnValue(true)
+    const { result } = renderHook(() => useTransactionCrud(params))
+
+    act(() => {
+      result.current.handleAdd()
+    })
+
+    const addConfig = params.modal.open.mock.calls[0][0] as {
+      actions: { onPress: () => Promise<void> }[]
+    }
+    await act(async () => {
+      await addConfig.actions[0].onPress()
+    })
+
+    expect(params.formAccessor.triggerValidation).toHaveBeenCalled()
     expect(mutations[0].mutate).not.toHaveBeenCalled()
   })
 
   it('submit with getFormData returning null: does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue(null)
+    params.formAccessor.getFormData.mockReturnValue(null)
     const { result } = renderHook(() => useTransactionCrud(params))
 
     act(() => {
@@ -193,7 +219,7 @@ describe('useTransactionCrud', () => {
 
   it('submit with amount="0": does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue({
+    params.formAccessor.getFormData.mockReturnValue({
       ...VALID_FORM_DATA,
       amount: '0',
     })
@@ -215,7 +241,7 @@ describe('useTransactionCrud', () => {
 
   it('submit with amount="abc" (NaN): does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue({
+    params.formAccessor.getFormData.mockReturnValue({
       ...VALID_FORM_DATA,
       amount: 'abc',
     })
@@ -246,6 +272,36 @@ describe('useTransactionCrud', () => {
     expect(params.modal.open).toHaveBeenCalledTimes(1)
     const config = params.modal.open.mock.calls[0][0] as { title: string }
     expect(config.title).toBe('Edit')
+  })
+
+  it('handleEdit on a negative amount: prefills type=expense with absolute amount', () => {
+    const params = createMockParams()
+    const { result } = renderHook(() => useTransactionCrud(params))
+
+    act(() => {
+      result.current.handleEdit(TRANSACTION_FIXTURE)
+    })
+
+    const formProps = params.renderForm.mock.calls[0][0] as {
+      initialValues: { amount: string; transactionType: string }
+    }
+    expect(formProps.initialValues.transactionType).toBe('expense')
+    expect(formProps.initialValues.amount).toBe('15.99')
+  })
+
+  it('handleEdit on a positive amount: prefills type=income with absolute amount', () => {
+    const params = createMockParams()
+    const { result } = renderHook(() => useTransactionCrud(params))
+
+    act(() => {
+      result.current.handleEdit({ ...TRANSACTION_FIXTURE, amount: 2400 })
+    })
+
+    const formProps = params.renderForm.mock.calls[0][0] as {
+      initialValues: { amount: string; transactionType: string }
+    }
+    expect(formProps.initialValues.transactionType).toBe('income')
+    expect(formProps.initialValues.amount).toBe('2400')
   })
 
   it('edit submit happy path: calls update mutate with path.id and body', async () => {

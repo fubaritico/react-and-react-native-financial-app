@@ -88,7 +88,7 @@ const BUDGET_FIXTURE = {
 function createMockParams() {
   return {
     modal: { open: vi.fn(), close: vi.fn(), setSubmitting: vi.fn() },
-    formBridge: {
+    formAccessor: {
       getFormData: vi.fn(() => ({ ...VALID_FORM_DATA })),
       hasErrors: vi.fn(() => false),
       triggerValidation: vi.fn(),
@@ -145,7 +145,7 @@ describe('useBudgetCrud', () => {
 
   it('submit with hasErrors=true: calls triggerValidation and does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.hasErrors.mockReturnValue(true)
+    params.formAccessor.hasErrors.mockReturnValue(true)
     const { result } = renderHook(() => useBudgetCrud(params))
 
     act(() => {
@@ -159,13 +159,13 @@ describe('useBudgetCrud', () => {
       await addConfig.actions[0].onPress()
     })
 
-    expect(params.formBridge.triggerValidation).toHaveBeenCalled()
+    expect(params.formAccessor.triggerValidation).toHaveBeenCalled()
     expect(mutations[0].mutate).not.toHaveBeenCalled()
   })
 
   it('submit with getFormData returning null: does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue(null)
+    params.formAccessor.getFormData.mockReturnValue(null)
     const { result } = renderHook(() => useBudgetCrud(params))
 
     act(() => {
@@ -184,7 +184,7 @@ describe('useBudgetCrud', () => {
 
   it('submit with maximum="0": does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue({
+    params.formAccessor.getFormData.mockReturnValue({
       ...VALID_FORM_DATA,
       maximum: '0',
     })
@@ -206,7 +206,7 @@ describe('useBudgetCrud', () => {
 
   it('submit with maximum="-5": does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue({
+    params.formAccessor.getFormData.mockReturnValue({
       ...VALID_FORM_DATA,
       maximum: '-5',
     })
@@ -228,7 +228,7 @@ describe('useBudgetCrud', () => {
 
   it('submit with maximum="abc": does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue({
+    params.formAccessor.getFormData.mockReturnValue({
       ...VALID_FORM_DATA,
       maximum: 'abc',
     })

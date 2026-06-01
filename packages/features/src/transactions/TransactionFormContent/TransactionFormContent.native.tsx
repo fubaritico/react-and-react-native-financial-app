@@ -2,6 +2,7 @@ import { useFormValidation } from '@financial-app/shared'
 import {
   Checkbox,
   DatePicker,
+  SegmentedControl,
   TextInput,
   Typography,
   tw,
@@ -13,7 +14,7 @@ import { View } from 'react-native'
 import { CategoryDropdown } from '../../categories/CategoryDropdown/CategoryDropdown.native'
 
 import {
-  DEFAULT_TRANSACTION_FORM,
+  createDefaultTransactionForm,
   createTransactionFormSchema,
 } from './TransactionFormContent.constants'
 
@@ -44,6 +45,9 @@ export function TransactionFormContent({
   namePlaceholder,
   amountLabel,
   amountPlaceholder,
+  typeLabel,
+  expenseLabel,
+  incomeLabel,
   categoryLabel,
   recurringLabel,
   dateLabel,
@@ -60,7 +64,7 @@ export function TransactionFormContent({
   const { formData, errors, validateField, validateForm, hasErrors } =
     useFormValidation<TransactionFormData>(
       schema,
-      initialValues ?? DEFAULT_TRANSACTION_FORM
+      initialValues ?? createDefaultTransactionForm()
     )
 
   /** @param value - New name value */
@@ -71,13 +75,30 @@ export function TransactionFormContent({
     [validateField]
   )
 
-  /** @param value - New amount value as string */
+  /** @param value - New amount value as string (absolute — sign comes from the type toggle) */
   const onAmountChange = useCallback(
     (value: string) => {
-      const sanitized = value.replace(/[^0-9.-]/g, '')
+      const sanitized = value.replace(/[^0-9.]/g, '')
       validateField('amount', sanitized)
     },
     [validateField]
+  )
+
+  /** @param value - New transaction type selected in the segmented control */
+  const onTypeChange = useCallback(
+    (value: string) => {
+      validateField('transactionType', value)
+    },
+    [validateField]
+  )
+
+  /** Expense / income segments for the type toggle */
+  const typeSegments = useMemo(
+    () => [
+      { value: 'expense', label: expenseLabel },
+      { value: 'income', label: incomeLabel },
+    ],
+    [expenseLabel, incomeLabel]
   )
 
   /** @param value - New category value */
@@ -104,11 +125,15 @@ export function TransactionFormContent({
     [validateField]
   )
 
-  useImperativeHandle(ref, () => ({
-    getValues: () => formData,
-    hasErrors,
-    validate: () => validateForm(formData),
-  }))
+  useImperativeHandle(
+    ref,
+    () => ({
+      getValues: () => formData,
+      hasErrors,
+      validate: () => validateForm(formData),
+    }),
+    [formData, hasErrors, validateForm]
+  )
 
   return (
     <View style={tw`gap-4`}>
@@ -117,6 +142,15 @@ export function TransactionFormContent({
           {description}
         </Typography>
       ) : null}
+
+      {/* Type */}
+      <SegmentedControl
+        label={typeLabel}
+        segments={typeSegments}
+        value={formData.transactionType}
+        onChange={onTypeChange}
+        accessibilityLabel={typeLabel}
+      />
 
       {/* Name */}
       <View style={tw`gap-1`}>

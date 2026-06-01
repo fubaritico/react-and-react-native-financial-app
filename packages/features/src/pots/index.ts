@@ -30,4 +30,4 @@ export type {
 } from './createPotModalConfigs'
 
 export { usePotCrud } from './hooks/usePotCrud'
-export type { IPotFormBridge, IUsePotCrudParams } from './hooks/usePotCrud'
+export type { IPotFormAccessor, IUsePotCrudParams } from './hooks/usePotCrud'

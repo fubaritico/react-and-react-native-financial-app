@@ -22,7 +22,7 @@ import type { BudgetFormValues } from '../BudgetFormContent/BudgetFormContent'
 import type { ReactNode } from 'react'
 
 /** Platform-specific form access — reads data from web dataset or native imperative ref */
-export interface IBudgetFormBridge {
+export interface IBudgetFormAccessor {
   /** Returns form values or null if unavailable */
   getFormData: () => BudgetFormValues | null
   /** Whether the form currently has validation errors */
@@ -36,7 +36,7 @@ export interface IUseBudgetCrudParams {
   /** Modal controls from useModal() */
   modal: IModalHandle
   /** Platform-specific form access callbacks */
-  formBridge: IBudgetFormBridge
+  formAccessor: IBudgetFormAccessor
   /** Called after a successful mutation with the i18n message */
   showSuccess: (message: string) => void
   /** Called after a failed mutation with the error */
@@ -54,12 +54,12 @@ export interface IUseBudgetCrudParams {
  * Shared CRUD hook for budgets — mutations, submit handlers, modal config builders.
  * Platform-agnostic: receives callbacks for form access and JSX rendering.
  *
- * @param params - Modal handle, form bridge, feedback callbacks, render callbacks
+ * @param params - Modal handle, form accessor, feedback callbacks, render callbacks
  * @returns handleAdd, handleEdit, handleDelete callbacks
  */
 export function useBudgetCrud({
   modal,
-  formBridge,
+  formAccessor,
   showSuccess,
   showError,
   renderForm,
@@ -121,14 +121,14 @@ export function useBudgetCrud({
   })
 
   /**
-   * Reads form data via the bridge, validates, parses maximum, and calls create mutation.
+   * Reads form data via the accessor, validates, parses maximum, and calls create mutation.
    */
   const handleSubmit = useCallback(() => {
-    if (formBridge.hasErrors()) {
-      formBridge.triggerValidation()
+    if (formAccessor.hasErrors()) {
+      formAccessor.triggerValidation()
       return
     }
-    const values = formBridge.getFormData()
+    const values = formAccessor.getFormData()
     if (!values) return
     const maximum = Number(values.maximum)
     if (!Number.isFinite(maximum) || maximum <= 0) return
@@ -140,19 +140,19 @@ export function useBudgetCrud({
         month: getCurrentBudgetMonth(),
       },
     })
-  }, [formBridge, modal, createBudget])
+  }, [formAccessor, modal, createBudget])
 
   /**
-   * Reads form data via the bridge, validates, parses maximum, and calls update mutation.
+   * Reads form data via the accessor, validates, parses maximum, and calls update mutation.
    */
   const handleSubmitEdit = useCallback(() => {
     const budgetId = editingIdRef.current
     if (!budgetId) return
-    if (formBridge.hasErrors()) {
-      formBridge.triggerValidation()
+    if (formAccessor.hasErrors()) {
+      formAccessor.triggerValidation()
       return
     }
-    const values = formBridge.getFormData()
+    const values = formAccessor.getFormData()
     if (!values) return
     const maximum = Number(values.maximum)
     if (!Number.isFinite(maximum) || maximum <= 0) return
@@ -164,7 +164,7 @@ export function useBudgetCrud({
         maximum,
       },
     })
-  }, [formBridge, modal, updateBudget])
+  }, [formAccessor, modal, updateBudget])
 
   /** Opens the Add Budget modal */
   const handleAdd = useCallback(() => {

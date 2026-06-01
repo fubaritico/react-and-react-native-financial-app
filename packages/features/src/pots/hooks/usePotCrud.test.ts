@@ -105,7 +105,7 @@ const POT_FIXTURE = {
 function createMockParams() {
   return {
     modal: { open: vi.fn(), close: vi.fn(), setSubmitting: vi.fn() },
-    formBridge: {
+    formAccessor: {
       getFormData: vi.fn(() => ({ ...VALID_FORM_DATA })),
       hasErrors: vi.fn(() => false),
       triggerValidation: vi.fn(),
@@ -164,7 +164,7 @@ describe('usePotCrud', () => {
 
   it('submit with hasErrors=true: calls triggerValidation and does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.hasErrors.mockReturnValue(true)
+    params.formAccessor.hasErrors.mockReturnValue(true)
     const { result } = renderHook(() => usePotCrud(params))
 
     act(() => {
@@ -178,13 +178,13 @@ describe('usePotCrud', () => {
       await addConfig.actions[0].onPress()
     })
 
-    expect(params.formBridge.triggerValidation).toHaveBeenCalled()
+    expect(params.formAccessor.triggerValidation).toHaveBeenCalled()
     expect(mutations[0].mutate).not.toHaveBeenCalled()
   })
 
   it('submit with getFormData returning null: does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue(null)
+    params.formAccessor.getFormData.mockReturnValue(null)
     const { result } = renderHook(() => usePotCrud(params))
 
     act(() => {
@@ -203,7 +203,7 @@ describe('usePotCrud', () => {
 
   it('submit with target="0": does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue({
+    params.formAccessor.getFormData.mockReturnValue({
       ...VALID_FORM_DATA,
       target: '0',
     })
@@ -225,7 +225,7 @@ describe('usePotCrud', () => {
 
   it('submit with target="abc": does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue({
+    params.formAccessor.getFormData.mockReturnValue({
       ...VALID_FORM_DATA,
       target: 'abc',
     })
@@ -247,7 +247,7 @@ describe('usePotCrud', () => {
 
   it('submit with whitespace-only name: does not call mutate', async () => {
     const params = createMockParams()
-    params.formBridge.getFormData.mockReturnValue({
+    params.formAccessor.getFormData.mockReturnValue({
       ...VALID_FORM_DATA,
       name: '   ',
     })

@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next'
 
 import type {
   IPotAmountFormRef,
-  IPotFormBridge,
+  IPotFormAccessor,
   PotFormValues,
 } from '@financial-app/features'
 import type { Pot } from '@financial-app/http-client'
@@ -22,7 +22,7 @@ import type { Pot } from '@financial-app/http-client'
 import PotCardItem from '../components/PotCardItem'
 import { createServerQueryClient } from '../lib/query-client.server'
 import { skipServerHop } from '../lib/skip-server-hop'
-import { useFormBridge } from '../lib/use-form-bridge'
+import { useFormAccessor } from '../lib/use-form-accessor'
 import { potsQuery } from '../queries'
 
 import type { Route } from './+types/pots'
@@ -52,9 +52,9 @@ export default function Pots({ loaderData }: Route.ComponentProps) {
   const { data: pots, error, isLoading } = useQuery(getPotsOptions())
 
   const { getFormData, hasErrors, triggerValidation } =
-    useFormBridge<PotFormValues>(formRef)
+    useFormAccessor<PotFormValues>(formRef)
 
-  const formBridge: IPotFormBridge = useMemo(
+  const formAccessor: IPotFormAccessor = useMemo(
     () => ({ getFormData, hasErrors, triggerValidation }),
     [getFormData, hasErrors, triggerValidation]
   )
@@ -139,7 +139,7 @@ export default function Pots({ loaderData }: Route.ComponentProps) {
     handleWithdraw,
   } = usePotCrud({
     modal,
-    formBridge,
+    formAccessor,
     showSuccess,
     showError,
     renderForm,

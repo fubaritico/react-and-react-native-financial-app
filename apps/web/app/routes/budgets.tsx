@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 
 import type {
   BudgetFormValues,
-  IBudgetFormBridge,
+  IBudgetFormAccessor,
 } from '@financial-app/features'
 import type { IBudget, ICategory, ITransaction } from '@financial-app/shared'
 
@@ -31,7 +31,7 @@ import BudgetCardItem from '../components/BudgetCardItem'
 import { TRANSACTION_FETCH_LIMIT } from '../lib/constants'
 import { createServerQueryClient } from '../lib/query-client.server'
 import { skipServerHop } from '../lib/skip-server-hop'
-import { useFormBridge } from '../lib/use-form-bridge'
+import { useFormAccessor } from '../lib/use-form-accessor'
 import { budgetsQuery, transactionsQuery } from '../queries'
 
 import type { Route } from './+types/budgets'
@@ -87,9 +87,9 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
   const { data: categoriesData } = useQuery(getCategoriesOptions())
 
   const { getFormData, hasErrors, triggerValidation } =
-    useFormBridge<BudgetFormValues>(formRef)
+    useFormAccessor<BudgetFormValues>(formRef)
 
-  const formBridge: IBudgetFormBridge = useMemo(
+  const formAccessor: IBudgetFormAccessor = useMemo(
     () => ({ getFormData, hasErrors, triggerValidation }),
     [getFormData, hasErrors, triggerValidation]
   )
@@ -120,7 +120,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
 
   const { handleAdd, handleEdit, handleDelete } = useBudgetCrud({
     modal,
-    formBridge,
+    formAccessor,
     showSuccess,
     showError,
     renderForm,

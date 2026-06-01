@@ -2,6 +2,8 @@ import { z } from 'zod'
 
 import { getTodayISO } from './TransactionFormContent.utils'
 
+import type { TransactionFormData } from './TransactionFormContent'
+
 /**
  * Creates a Zod schema for transaction form validation with i18n messages.
  * @param t - Translation function
@@ -15,20 +17,28 @@ export const createTransactionFormSchema = (t: (key: string) => string) =>
       .string()
       .min(1, t('validation.amountRequired'))
       .refine(
-        (v) =>
-          v.length === 0 ||
-          (v !== '-' && v !== '.' && !Number.isNaN(Number(v))),
+        (v) => v !== '.' && !Number.isNaN(Number(v)),
         t('validation.amountInvalid')
-      ),
+      )
+      .refine((v) => Number(v) !== 0, t('validation.amountZero')),
+    transactionType: z.enum(['expense', 'income']),
     date: z.string().min(1, t('validation.dateRequired')),
     recurring: z.boolean(),
   })
 
-/** Default form values for the Add Transaction form */
-export const DEFAULT_TRANSACTION_FORM = {
-  name: '',
-  category_id: '',
-  amount: '',
-  date: getTodayISO(),
-  recurring: false,
-} as const
+/**
+ * Builds the default values for the Add Transaction form.
+ * A factory (not a module-level constant) so `date` is resolved when the form opens,
+ * never frozen at module-load time (which would go stale past midnight).
+ * @returns Fresh default TransactionFormData with today's date
+ */
+export function createDefaultTransactionForm(): TransactionFormData {
+  return {
+    name: '',
+    category_id: '',
+    amount: '',
+    transactionType: 'expense',
+    date: getTodayISO(),
+    recurring: false,
+  }
+}
