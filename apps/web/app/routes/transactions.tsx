@@ -114,7 +114,7 @@ export default function TransactionsScreen({
 
   if (isLoading) {
     return (
-      <div className="flex flex-1 items-center min-h-screen justify-center p-6 lg:p-10">
+      <div className="flex flex-1 items-center min-h-screen justify-center p-4 md:p-6  lg:p-10">
         <Spinner />
       </div>
     )
@@ -122,7 +122,7 @@ export default function TransactionsScreen({
 
   if (error) {
     return (
-      <div className="p-6 lg:p-10">
+      <div className="p-4 md:p-6  lg:p-10">
         <Typography variant="page-title" as="h1" className="mb-4">
           {t('transactions.title')}
         </Typography>
@@ -137,7 +137,7 @@ export default function TransactionsScreen({
 
   return (
     <HydrationBoundary state={loaderData.dehydratedState}>
-      <div className="p-6 lg:p-10">
+      <div className="p-4 md:p-6  lg:p-10">
         <div className="mb-8 flex items-center justify-between">
           <Typography variant="page-title" as="h1">
             {t('transactions.title')}
