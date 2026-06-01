@@ -1,4 +1,4 @@
-# 1.0.0 (2026-05-30)
+# 1.0.0 (2026-06-01)
 
 
 ### Bug Fixes
@@ -86,6 +86,7 @@
 * **ui:** review fixes — token refs, aria-disabled, extract styles ([b396fb6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b396fb68c354bd75e8e16ea02ccb4f674121edaa))
 * **ui:** sanitize href in Navigation to prevent javascript: URI (A03-009) ([a116581](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a116581a929a2841d90e6dc6df2c246c5a98f790))
 * **web:** hydrate userAtom from SSR to eliminate false session-expired modal ([83adf0c](https://github.com/fubaritico/react-and-react-native-financial-app/commit/83adf0c6262c170f2bd7d5dbea3b0f585f45536e))
+* **web:** keyboard a11y + extract DotLottie splash, JSDoc hardening ([9283aeb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9283aeb969bab65c9d2ef1cbf1f67ea87b9e030d))
 * **web:** run react-router typegen before type-check and lint ([2e08d74](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2e08d74800b6104743acf5112ca481167e409833))
 
 
@@ -213,4 +214,5 @@
 * **web:** add timing instrumentation to loaders and clientMiddleware ([b20aa19](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b20aa1986d8653896c5f7552cba339a41a72441d))
 * **web:** enable unstable_useTransitions on HydratedRouter ([50cca78](https://github.com/fubaritico/react-and-react-native-financial-app/commit/50cca783af948ecfb96e38b1fbca0d5adfa48cbd))
 * **web:** optimize SSR middleware — parallel auth, onboarding cookie cache, shouldRevalidate ([eddd3f1](https://github.com/fubaritico/react-and-react-native-financial-app/commit/eddd3f1a67106a7b5494ee466f55cbeb630edaba))
+* **web:** skip the server hop on client navigations via clientLoader ([48160ce](https://github.com/fubaritico/react-and-react-native-financial-app/commit/48160ce030366e6d39d7e5f82ec5103daa636495))
 * **web:** verify JWT locally via getClaims instead of network getUser ([92f0dda](https://github.com/fubaritico/react-and-react-native-financial-app/commit/92f0dda69cb3960f17b4cf18c2971a8f561f8a93))

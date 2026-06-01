@@ -16,6 +16,7 @@ export function Typography({
   color,
   align,
   as,
+  id,
   numberOfLines,
   className,
   children,
@@ -26,6 +27,7 @@ export function Typography({
   return createElement(
     tag,
     {
+      id,
       className: cn(
         typographyVariants({ variant, color, align }),
         numberOfLines === 1 && 'truncate',

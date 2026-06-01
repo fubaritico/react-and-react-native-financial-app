@@ -82,6 +82,12 @@ export type {
   PasswordRuleState,
 } from './components/molecules/PasswordRulesList/PasswordRulesList.tsx'
 
+export { SegmentedControl } from './components/molecules/SegmentedControl'
+export type {
+  ISegmentedControlProps,
+  ISegmentOption,
+} from './components/molecules/SegmentedControl/SegmentedControl.tsx'
+
 export { SectionLink } from './components/molecules/SectionLink'
 export type { ISectionLinkProps } from './components/molecules/SectionLink/SectionLink.tsx'
 

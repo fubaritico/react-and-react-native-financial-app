@@ -22,6 +22,8 @@ export interface ITypographyNativeProps extends ITypographyProps {
 export interface ITypographyWebProps extends ITypographyProps {
   /** Override the default HTML tag (e.g. "span" instead of "h1"). */
   as?: string
+  /** DOM id — e.g. to target this element from `aria-labelledby`/`aria-describedby`. */
+  id?: string
   /** Maximum number of lines before truncation (maps to CSS line-clamp). */
   numberOfLines?: number
   /** Additional CSS classes (layout only — text styles come from variant/color props). */
