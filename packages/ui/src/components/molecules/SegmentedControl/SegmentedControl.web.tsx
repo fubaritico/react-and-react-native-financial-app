@@ -96,7 +96,7 @@ export function SegmentedControl({
   return (
     <div className={shared.container}>
       {label ? (
-        <Typography as="span" id={labelId} variant="label">
+        <Typography as="span" id={labelId} variant="label" color="muted">
           {label}
         </Typography>
       ) : null}

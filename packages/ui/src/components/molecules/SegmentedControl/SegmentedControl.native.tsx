@@ -85,7 +85,11 @@ export function SegmentedControl({
 }: Readonly<ISegmentedControlProps>) {
   return (
     <View style={tw`${shared.container}`}>
-      {label ? <Typography variant="label">{label}</Typography> : null}
+      {label ? (
+        <Typography variant="label" color="muted">
+          {label}
+        </Typography>
+      ) : null}
       <View
         accessibilityRole="radiogroup"
         accessibilityLabel={accessibilityLabel}
