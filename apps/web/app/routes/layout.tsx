@@ -1,11 +1,12 @@
 import { client } from '@financial-app/http-client/client'
 import { userAtom } from '@financial-app/shared'
 import { useHydrateAtoms } from 'jotai/utils'
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Outlet, data } from 'react-router'
+import { Outlet, data, useLocation } from 'react-router'
 
 import { Sidebar } from '../components/Sidebar'
+import { trackContentRoute } from '../lib/last-content-route'
 import {
   accessTokenContext,
   responseHeadersContext,
@@ -82,7 +83,7 @@ export function loader({ context }: Route.LoaderArgs) {
 }
 
 /**
- * C: Prevents React Router from re-fetching layout data on internal navigations.
+ * Prevents React Router from re-fetching layout data on internal navigations.
  * The user object is hydrated once into Jotai — subsequent updates come from the
  * client-side auth listener, not from re-running the server loader.
  * Eliminates one full Lambda invocation (~2.8s) per client-side navigation.
@@ -174,7 +175,14 @@ export function HydrateFallback() {
  */
 export default function AppLayout({ loaderData }: Route.ComponentProps) {
   const { t } = useTranslation()
+  const location = useLocation()
   useHydrateAtoms([[userAtom, loaderData.user]])
+
+  // Remember the last content route so leaving Settings returns there (not to a
+  // Settings sub-screen) — web mirror of the native lastContentTab mechanism.
+  useEffect(() => {
+    trackContentRoute(location.pathname)
+  }, [location.pathname, trackContentRoute])
 
   return (
     <div className="flex min-h-screen bg-gradient-to-tl from-beige-200 to-beige-100">

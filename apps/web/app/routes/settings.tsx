@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router'
 
 import type { ISettingsFormValues } from '@financial-app/features'
 
+import { getLastContentRoute } from '../lib/last-content-route'
 import { authClient } from '../lib/supabase'
 
 /**
@@ -66,7 +67,7 @@ export default function SettingsScreen() {
         }),
       ])
 
-      void navigate(-1)
+      void navigate(getLastContentRoute())
     },
     [i18n, updatePreferences, queryClient, navigate]
   )
@@ -81,9 +82,9 @@ export default function SettingsScreen() {
     })
   }, [navigate])
 
-  /** Navigates back to the previous route */
+  /** Navigates back to the last content route (the screen before Settings) */
   const handleGoBack = useCallback(() => {
-    void navigate(-1)
+    void navigate(getLastContentRoute())
   }, [navigate])
 
   /** Navigates to the categories management screen */
