@@ -129,7 +129,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
 
   if (budgetsLoading) {
     return (
-      <div className="flex flex-1 items-center min-h-screen justify-center p-4 md:p-6  lg:p-10">
+      <div className="flex flex-1 items-center min-h-screen justify-center p-4 md:p-6 lg:p-10">
         <Spinner />
       </div>
     )
@@ -138,7 +138,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
   const error = budgetsError ?? txnError
   if (error) {
     return (
-      <div className="p-4 md:p-6  lg:p-10">
+      <div className="p-4 md:p-6 lg:p-10">
         <Typography variant="page-title" as="h1" className="mb-4">
           {t('budgets.title')}
         </Typography>
@@ -153,7 +153,7 @@ export default function Budgets({ loaderData }: Route.ComponentProps) {
 
   return (
     <HydrationBoundary state={loaderData.dehydratedState}>
-      <div className="p-4 md:p-6  lg:p-10">
+      <div className="p-4 md:p-6 lg:p-10">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <Typography variant="page-title" as="h1">

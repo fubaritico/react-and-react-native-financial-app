@@ -76,18 +76,30 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     isLoading: balanceLoading,
   } = useQuery(getBalanceOptions())
 
-  const { data: transactions, error: txnError } = useQuery(
+  const {
+    data: transactions,
+    error: txnError,
+    isLoading: txnLoading,
+  } = useQuery(
     getTransactionsOptions({
       query: { limit: TRANSACTION_FETCH_LIMIT, sort: 'latest' },
     })
   )
-  const { data: pots, error: potsError } = useQuery(getPotsOptions())
-  const { data: budgets, error: budgetsError } = useQuery(
-    getBudgetsOptions({ query: { month: getCurrentBudgetMonth() } })
-  )
-  const { data: recurringBills, error: recurringError } = useQuery(
-    getRecurringBillsOptions()
-  )
+  const {
+    data: pots,
+    error: potsError,
+    isLoading: potsLoading,
+  } = useQuery(getPotsOptions())
+  const {
+    data: budgets,
+    error: budgetsError,
+    isLoading: budgetsLoading,
+  } = useQuery(getBudgetsOptions({ query: { month: getCurrentBudgetMonth() } }))
+  const {
+    data: recurringBills,
+    error: recurringError,
+    isLoading: recurringLoading,
+  } = useQuery(getRecurringBillsOptions())
 
   const latestTransactions = useMemo(
     () =>
@@ -151,11 +163,16 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     void navigate('/recurring')
   }, [navigate])
 
-  const isLoading = balanceLoading
+  const isLoading =
+    balanceLoading ||
+    txnLoading ||
+    potsLoading ||
+    budgetsLoading ||
+    recurringLoading
 
   if (isLoading) {
     return (
-      <div className="flex flex-1 items-center min-h-screen justify-center p-4 md:p-6  lg:p-10">
+      <div className="flex flex-1 items-center min-h-screen justify-center p-4 md:p-6 lg:p-10">
         <Spinner />
       </div>
     )
@@ -166,7 +183,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   if (error) {
     return (
-      <div className="p-4 md:p-6  lg:p-10">
+      <div className="p-4 md:p-6 lg:p-10">
         <Typography variant="page-title" as="h1" className="mb-4">
           {t('overview.title')}
         </Typography>
@@ -181,7 +198,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   return (
     <HydrationBoundary state={loaderData.dehydratedState}>
-      <div className="p-4 md:p-6  lg:p-10">
+      <div className="p-4 md:p-6 lg:p-10">
         <Typography variant="page-title" as="h1" className="mb-8">
           {t('overview.title')}
         </Typography>
