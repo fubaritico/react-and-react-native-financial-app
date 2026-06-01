@@ -45,7 +45,12 @@ export async function loader() {
 
   await Promise.all([
     balanceQuery(queryClient),
-    transactionsQuery(queryClient),
+    transactionsQuery(queryClient).then((result) => {
+      const newResult = { ...result }
+      newResult.data = newResult.data.slice(0, 5)
+
+      return newResult
+    }),
     potsQuery(queryClient),
     budgetsQuery(queryClient),
     recurringBillsQuery(queryClient),
