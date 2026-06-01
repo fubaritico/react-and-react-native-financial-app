@@ -77,6 +77,7 @@
 * **shared:** use structuredClone instead of JSON roundtrip in useFormValidation (A08-014) ([d460087](https://github.com/fubaritico/react-and-react-native-financial-app/commit/d460087a0701227843dd4114b5b288b3fe0302bc))
 * **tokens:** align alias names with Figma variable naming ([a48464b](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a48464ba974357082ae577f26a5223c72f714108))
 * **ui:** align web bottom-bar NavItem with native + a11y/quality fixes ([9034b4c](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9034b4ca55a2f63f7e60694960cc6ea9072b963f))
+* **ui:** default Button type to button so it never submits its form ([5a9e778](https://github.com/fubaritico/react-and-react-native-financial-app/commit/5a9e7784cd6f70716b1b02ec605bd1e9c1cf4d09))
 * **ui:** extract Icon runtime constants, add Button iconPosition prop ([605f29e](https://github.com/fubaritico/react-and-react-native-financial-app/commit/605f29ea80576f6f51e2b1a476674148677df3c8))
 * **ui:** modal a11y + replace arbitrary max-w with token ([c25b5f3](https://github.com/fubaritico/react-and-react-native-financial-app/commit/c25b5f35b1f4dd0fb2bba30324ba7a0faab23a2e))
 * **ui:** modal portal nesting + dropdown/listbox/menu improvements ([e34bb69](https://github.com/fubaritico/react-and-react-native-financial-app/commit/e34bb694e866e42a3d62d021c474e384d4cfe6f6))

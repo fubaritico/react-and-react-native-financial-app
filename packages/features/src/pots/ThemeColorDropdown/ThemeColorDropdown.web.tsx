@@ -50,7 +50,7 @@ export function ThemeColorDropdown({
         <ColorDot color={option.value} size={option.disabled ? 12 : 16} />
         <Typography
           variant={isSelected ? 'body-bold' : 'body'}
-          color={option.disabled ? 'muted' : 'foreground'}
+          color="inherit"
           as="span"
           className="flex-1"
         >

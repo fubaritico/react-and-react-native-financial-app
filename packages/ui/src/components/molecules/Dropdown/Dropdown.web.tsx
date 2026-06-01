@@ -244,6 +244,7 @@ export function Dropdown({
             )}
             <Typography
               variant="body"
+              color="inherit"
               as="span"
               className={option.disabled ? 'opacity-50' : undefined}
             >

@@ -81,7 +81,7 @@ export function CategoryDropdown({
         )}
         <Typography
           variant={isSelected ? 'body-bold' : 'body'}
-          color={option.disabled ? 'muted' : 'foreground'}
+          color="inherit"
           as="span"
           className="flex-1"
         >
