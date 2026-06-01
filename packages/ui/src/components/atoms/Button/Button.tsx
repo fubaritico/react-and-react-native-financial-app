@@ -13,6 +13,8 @@ export interface IButtonProps extends VariantProps<typeof buttonVariants> {
   children?: ReactNode
   /** Callback fired when the button is pressed. */
   onPress: () => void
+  /** Native HTML button type (web only) — defaults to 'button' so a button never submits its enclosing form unless explicitly set to 'submit'. */
+  type?: 'button' | 'submit' | 'reset'
   /** Optional icon rendered next to the label by name (e.g. "caretRight"). Only used with `title`. */
   icon?: IconName
   /** Icon position relative to label — defaults to 'right'. Only used with `title`. */

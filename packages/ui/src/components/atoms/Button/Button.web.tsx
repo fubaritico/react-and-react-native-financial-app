@@ -23,6 +23,7 @@ export const Button = ({
   title,
   children,
   onPress,
+  type = 'button',
   centered,
   variant = 'primary',
   size = 'md',
@@ -45,6 +46,7 @@ export const Button = ({
   return (
     <button
       ref={ref as Ref<HTMLButtonElement>}
+      type={type}
       onClick={onPress}
       disabled={isDisabled}
       aria-label={accessibilityLabel}
