@@ -15,7 +15,7 @@ export const web = {
   sidebarCollapsed: 'w-[88px] px-4 items-center',
   /** Bottom bar container — fixed at bottom, dark bg */
   bottomBar:
-    'fixed bottom-0 left-0 right-0 z-50 flex lg:hidden bg-nav-bg px-4 pt-2 pb-2 rounded-t-lg',
+    'fixed bottom-0 left-0 right-0 z-50 flex gap-2 lg:hidden bg-nav-bg px-4 pt-2 pb-2',
   /** Logo area spacing */
   logoWrap: 'flex items-center mb-10',
   /** Logo collapsed spacing */
@@ -25,9 +25,9 @@ export const web = {
   /** Minimize button interactive styles */
   minimizeButton:
     'flex items-center gap-4 px-8 py-3 text-nav-text hover:text-on-dark transition-colors cursor-pointer rounded-r-md w-full',
-  /** Focus-visible ring for keyboard navigation */
+  /** Focus-visible ring for keyboard navigation (white — visible on the dark nav) */
   focusRing:
-    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',
+    'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white',
   /** Nav link wrapper — block display for full-width click area */
   navLink: 'block',
   /** Bottom bar item — equal flex distribution */

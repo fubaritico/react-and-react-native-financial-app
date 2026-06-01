@@ -39,6 +39,7 @@ function NavLink({
       href={safeHref}
       onClick={handleClick}
       aria-label={item.label}
+      aria-current={active ? 'page' : undefined}
       className={cn(
         orientation === 'row' ? web.navLink : web.bottomBarItem,
         web.focusRing

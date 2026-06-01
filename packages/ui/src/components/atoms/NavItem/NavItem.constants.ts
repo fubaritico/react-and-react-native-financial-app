@@ -5,7 +5,9 @@ export const NAV_LABEL_VARIANT: Record<
   string,
   NonNullable<TypographyVariants['variant']>
 > = {
+  /** Sidebar (row) label — bold body text */
   row: 'body-bold',
+  /** Bottom bar (column) label — bold caption text */
   column: 'caption-bold',
 } as const
 
@@ -14,6 +16,8 @@ export const NAV_LABEL_COLOR: Record<
   string,
   NonNullable<TypographyVariants['color']>
 > = {
+  /** Active label color */
   true: 'nav-active',
+  /** Inactive label color */
   false: 'nav-text',
 } as const

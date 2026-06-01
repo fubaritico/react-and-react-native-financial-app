@@ -11,7 +11,11 @@ import { navItemVariants } from './NavItem.variants'
 
 import type { INavItemProps } from './NavItem'
 
-/** Native implementation of the NavItem component. */
+/**
+ * Native implementation of the NavItem component.
+ * @param props - Icon, label, active/collapsed state, orientation, and optional onPress
+ * @returns The rendered nav item pressable
+ */
 export function NavItem({
   icon,
   label,

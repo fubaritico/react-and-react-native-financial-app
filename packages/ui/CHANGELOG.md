@@ -86,6 +86,7 @@
 * **ui:** review fixes — DataTable/ActionBar/TextInput a11y + platform safety + dead code ([0d43fae](https://github.com/fubaritico/react-and-react-native-financial-app/commit/0d43faecf012669f2f97c8d4504f8f5ffd93c543))
 * **ui:** review fixes — token refs, aria-disabled, extract styles ([b396fb6](https://github.com/fubaritico/react-and-react-native-financial-app/commit/b396fb68c354bd75e8e16ea02ccb4f674121edaa))
 * **ui:** sanitize href in Navigation to prevent javascript: URI (A03-009) ([a116581](https://github.com/fubaritico/react-and-react-native-financial-app/commit/a116581a929a2841d90e6dc6df2c246c5a98f790))
+* **ui:** use muted color for SegmentedControl group label ([cf1d46d](https://github.com/fubaritico/react-and-react-native-financial-app/commit/cf1d46dd54e6e70c44bab28a811a4dd0877f565f))
 * **web:** hydrate userAtom from SSR to eliminate false session-expired modal ([83adf0c](https://github.com/fubaritico/react-and-react-native-financial-app/commit/83adf0c6262c170f2bd7d5dbea3b0f585f45536e))
 * **web:** keyboard a11y + extract DotLottie splash, JSDoc hardening ([9283aeb](https://github.com/fubaritico/react-and-react-native-financial-app/commit/9283aeb969bab65c9d2ef1cbf1f67ea87b9e030d))
 * **web:** run react-router typegen before type-check and lint ([2e08d74](https://github.com/fubaritico/react-and-react-native-financial-app/commit/2e08d74800b6104743acf5112ca481167e409833))
