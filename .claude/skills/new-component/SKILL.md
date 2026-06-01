@@ -6,22 +6,20 @@ paths:
   - packages/ui/**
 metadata:
   author: financial-app
-  version: "2.0"
+  version: '2.1'
 ---
 
 # New Component
 
 Create a cross-platform component in `packages/ui/src/components/`.
 
-Before starting, read [the design system rules](../../../.claude/rules/design-system.md) and [the styling rules](../../../.claude/rules/styling.md).
+**Before starting**, read `.claude/rules/design-system.md` and `.claude/rules/styling.md`.
 
-## Arguments
-
-`$ARGUMENTS` = ComponentName (PascalCase, e.g. `Button`, `Avatar`, `Card`)
+`$ARGUMENTS` = ComponentName (PascalCase, e.g. `Button`, `Avatar`, `Card`).
 
 ## Atomic Design Placement
 
-Determine the correct atomic level before creating files:
+Pick the level before creating files:
 
 - **atoms/** — indivisible elements, no internal UI dependency
 - **molecules/** — compose atoms
@@ -30,421 +28,31 @@ Determine the correct atomic level before creating files:
 
 Atoms NEVER import from molecules/organisms/templates. Molecules NEVER import from organisms/templates.
 
-## Steps
-
-### 1. Create variant file (colocated in component folder)
-
-`packages/ui/src/components/{level}/$Name/$Name.variants.ts`
-
-CVA handles the **root element** styling with classes safe for both platforms.
-
-```ts
-import { cva } from 'class-variance-authority'
-
-import type { VariantProps } from 'class-variance-authority'
-
-/** CVA variants for the $Name component — controls [describe what it styles] */
-export const $nameVariants = cva(
-  'base-classes-safe-for-both-platforms',
-  {
-    variants: {
-      variant: {
-        primary: '...',
-        secondary: '...',
-      },
-      size: {
-        sm: '...',
-        md: '...',
-        lg: '...',
-      },
-      disabled: { true: 'opacity-50' },
-    },
-    defaultVariants: { variant: 'primary', size: 'md' },
-  }
-)
-
-export type $NameVariants = VariantProps<typeof $nameVariants>
-```
-
-FORBIDDEN in variants: `hover:*`, `focus:*`, `active:*`, `transition-*`, `cursor-*`, `shadow-*`, `ring-*`, `outline-*`, `animate-*`.
-
-### 2. Create styles file
-
-`packages/ui/src/components/{level}/$Name/$Name.styles.ts`
-
-The styles file centralizes **all Tailwind class strings** that live outside CVA variants.
-It has three named exports — `shared`, `web`, and `native`:
-
-- **`shared`** — layout classes identical in both native and web (flex, gap, margin, padding on inner elements). Both `.native.tsx` and `.web.tsx` import these.
-- **`web`** — web-only classes that would break native (hover, focus-visible, transition, cursor, shadow, animate, ring, outline, inline-block, fixed, sticky). Only `.web.tsx` imports these.
-- **`native`** — native-only classes that are unnecessary or behave differently on web (e.g. explicit `flex-row` on View containers, RN-specific absolute positioning). Only `.native.tsx` imports these.
-
-```ts
-/** Shared layout classes for $Name inner elements (safe for both native and web) */
-export const shared = {
-  /** Wrapper around children content */
-  childrenWrap: 'mt-3',
-} as const
-
-/** Web-only classes for $Name (hover, focus, transition, shadow, cursor, animate) */
-export const web = {
-  /** Shadow + hover feedback on root */
-  root: 'shadow-md hover:shadow-lg transition-shadow',
-  /** Focus-visible ring for keyboard navigation */
-  focusRing: 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-grey-900',
-} as const
-
-/** Native-only classes for $Name (RN layout quirks, explicit flex-row, absolute positioning) */
-export const native = {} as const
-```
-
-**Rules:**
-- Every key MUST have a JSDoc comment
-- NEVER put text styling here — text classes belong in `<Typography>` props
-- NEVER put renderer imports here (no react-native, no DOM types)
-- NEVER import styles via `#Atoms` barrel — use relative `./Component.styles`
-- ALWAYS use the design system when coding components, NEVER code simple tags, asks user if components exist, if not create them
-- `.native.tsx` imports `shared` + `native` — never `web`
-- `.web.tsx` imports `shared` + `web` — never `native`
-- If a component has NO inner elements and NO platform-specific classes, skip this file
-- Any export can be empty if not needed (`shared`, `web`, or `native`)
-- When a class doesn't work cross-platform, move it to the correct platform export instead of leaving it inline
-
-**Canonical example — Card:**
-
-```ts
-/** Shared layout classes for Card inner elements (safe for both native and web) */
-export const shared = {
-  /** Spacing above children content area */
-  childrenWrap: 'mt-3',
-} as const
-
-/** Web-only classes for Card (hover, focus, transition, shadow, cursor, animate) */
-export const web = {
-  /** Elevated shadow on card surface */
-  root: 'shadow-md',
-} as const
-
-/** Native-only classes for Card (RN layout quirks) */
-export const native = {} as const
-```
-
-Native usage: `tw\`${shared.childrenWrap}\``, `tw\`${native.keyName}\``
-Web usage: `cn(cardVariants(), web.root)` and `className={shared.childrenWrap}`
-
-### 3. Create types file
-
-`packages/ui/src/components/{level}/$Name/$Name.tsx`
-
-- Export the Props interface and NOTHING else
-- No JSX, no runtime code, no renderer imports
-- NEVER re-export variants — they are internal
-- NEVER export runtime values (const, function, object) — causes circular imports with Vite
-
-```ts
-import type { VariantProps } from 'class-variance-authority'
-import type { $nameVariants } from './$Name.variants'
-
-export interface I$NameProps extends VariantProps<typeof $nameVariants> {
-  /** Description of prop */
-  onPress: () => void
-}
-```
-
-### 4. Create native implementation
-
-`packages/ui/src/components/{level}/$Name/$Name.native.tsx`
-
-- Use Pressable, Text, View from react-native
-- Use `tw\`${$nameVariants({ ...variantProps })}\`` for root element
-- Use `tw\`${shared.keyName}\`` and `tw\`${native.keyName}\`` for inner elements (from `.styles.ts`)
-- All text via `<Typography>` — no bare `<Text>`
-- No HTML elements, no cn(), no `StyleSheet.create()` — never mix `tw` and `StyleSheet` in the same file
-- Import `shared` + `native` from `.styles.ts` — NEVER import `web`
-
-```tsx
-import { Pressable } from 'react-native'
-import tw from '#Lib/tw'
-import { Typography } from '#Atoms'
-import { native, shared } from './$Name.styles'
-import { $nameVariants } from './$Name.variants'
-import type { I$NameProps } from './$Name'
-
-/** Native implementation of the $Name component. */
-export function $Name({ onPress, variant, size, disabled }: Readonly<I$NameProps>) {
-  return (
-    <Pressable
-      onPress={onPress}
-      disabled={!!disabled}
-      style={tw`${$nameVariants({ variant, size, disabled })}`}
-    >
-      <Typography variant="body">...</Typography>
-    </Pressable>
-  )
-}
-```
-
-### 5. Create web implementation
-
-`packages/ui/src/components/{level}/$Name/$Name.web.tsx`
-
-- Use HTML semantic elements (button, div, span, etc.)
-- Use `cn($nameVariants({ ...variantProps }), web.root)` for root element
-- Use `shared.keyName` for inner elements, `web.keyName` for web-only behavior
-- All text via `<Typography>` — no bare `<p>/<span>/<h1>`
-- No RN imports, no StyleSheet, no tw``
-- Web-only classes come from `web` in `.styles.ts` — NOT hardcoded inline
-
-```tsx
-import { cn } from '#Lib/cn'
-import { Typography } from '#Atoms/index.web'
-import { shared, web } from './$Name.styles'
-import { $nameVariants } from './$Name.variants'
-import type { I$NameProps } from './$Name'
-
-/** Web implementation of the $Name component. */
-export function $Name({ onPress, variant, size, disabled }: Readonly<I$NameProps>) {
-  return (
-    <button
-      onClick={onPress}
-      disabled={!!disabled}
-      className={cn($nameVariants({ variant, size, disabled }), web.root, web.focusRing)}
-    >
-      <Typography variant="body">...</Typography>
-    </button>
-  )
-}
-```
-
-### 6. Create barrel files (TWO — one per platform)
-
-ALL imports must use explicit paths — no ambiguous `./ComponentName`.
-
-**`packages/ui/src/components/{level}/$Name/index.ts`** (Metro picks this)
-
-```ts
-export { $Name } from './$Name.native'
-export type { I$NameProps } from './$Name.tsx'
-```
-
-**`packages/ui/src/components/{level}/$Name/index.web.ts`** (Vite picks this)
-
-```ts
-export { $Name } from './$Name.web'
-export type { I$NameProps } from './$Name.tsx'
-```
-
-Variants and styles are NEVER exported from barrel files.
-
-### 7. Register in public API (BOTH top-level barrels)
-
-**`packages/ui/src/index.ts`** (native)
-
-```ts
-export { $Name } from './components/{level}/$Name'
-export type { I$NameProps } from './components/{level}/$Name'
-```
-
-**`packages/ui/src/index.web.ts`** (web)
-
-```ts
-export { $Name } from './components/{level}/$Name/index.web'
-export type { I$NameProps } from './components/{level}/$Name/index.web'
-```
-
-Variants and styles are NEVER exported from the package.
-
-### 8. Optional files (create only if needed)
-
-- **`$Name.constants.ts`** — shared runtime constants ONLY (numeric values, string maps, enums, config objects). No functions, no types, no renderer imports.
-- **`$Name.utils.ts`** — shared utility/helper functions when duplicated between native/web. May import from `.constants.ts` and `.tsx` (types). No renderer imports.
-
-**Separation rule**: constants hold _values_, utils hold _logic_, types file holds _all types/interfaces_. Never put functions in `.constants.ts` or types in `.constants.ts`.
-
-### 9. Run checks
-
-```bash
-pnpm type-check && pnpm lint && pnpm test
-```
-
-### 10. Write tests — 5-level policy (see `.claude/rules/tests.md`)
-
-Create `packages/ui/src/components/{level}/$Name/$Name.test.tsx` — web-only tests using Vitest + @testing-library/react.
-
-Every test suite MUST cover these 5 levels:
-
-1. **Happy path** — renders with default props, callbacks fire correctly
-2. **Variant cases** — each variant/size/state prop combination renders correctly
-3. **Managed error cases** — disabled state prevents interaction, validation feedback displays
-4. **Unmanaged error cases** — missing optional props don't crash, unexpected children handled
-5. **Edge cases** — empty strings, extreme values, rapid interactions, a11y attributes correct
-
-```
-describe('$Name', () => {
-  describe('happy path', () => { ... })
-  describe('variants', () => { ... })
-  describe('managed errors', () => { ... })
-  describe('unmanaged errors', () => { ... })
-  describe('edge cases', () => { ... })
-})
-```
-
-If a level genuinely does not apply, document it: `// L4: N/A — no async operations`
-
-**Test file template:**
-
-```tsx
-import { cleanup, render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
-
-import { $Name } from './$Name.web'
-
-afterEach(cleanup)
-
-describe('$Name', () => {
-  describe('happy path', () => {
-    it('renders with default props', () => {
-      render(<$Name /* required props */ />)
-      expect(screen.getByRole('...')).toBeInTheDocument()
-    })
-
-    it('calls onChange on interaction', async () => {
-      const onChange = vi.fn()
-      render(<$Name onChange={onChange} /* ... */ />)
-      await userEvent.click(screen.getByRole('...'))
-      expect(onChange).toHaveBeenCalledWith(/* expected value */)
-    })
-  })
-
-  describe('variants', () => {
-    it('applies primary variant classes', () => { ... })
-    it('applies secondary variant classes', () => { ... })
-  })
-
-  describe('managed errors', () => {
-    it('does not call onChange when disabled', async () => {
-      const onChange = vi.fn()
-      render(<$Name onChange={onChange} disabled /* ... */ />)
-      await userEvent.click(screen.getByRole('...'))
-      expect(onChange).not.toHaveBeenCalled()
-    })
-  })
-
-  // L4: N/A — no async operations
-  describe('edge cases', () => {
-    it('has correct accessibility attributes', () => { ... })
-  })
-})
-```
-
-**Rules:**
-- Import the `.web` implementation directly (not from barrel) — avoids RN resolution issues
-- Use `vi.fn()` for callback spies
-- Use `@testing-library/user-event` for realistic interactions (not `fireEvent`)
-- Use `screen.getByRole()` / `screen.getByText()` — prefer accessible queries
-- Test the component's public API (props → rendered output), not internal implementation
-- Native tests (`.native.tsx`) require Jest + react-native-testing-library — not yet set up, skip for now
-
-### 11. Create story
-
-Invoke `/story $Name` after component creation.
+## Workflow
+
+1. **Scaffold the 9 files** → read `references/file-structure.md` for every template and rule
+   (variant → styles → types → native → web → barrels → public API → optional constants/utils).
+2. **Run checks** → `pnpm type-check && pnpm lint && pnpm test`
+3. **Write tests** → `references/testing.md` (5-level policy). Prefer `/test $Name`.
+4. **Create story** → invoke `/story $Name`.
+
+While coding, keep `references/i18n.md` (no hardcoded text) and `references/checklist.md`
+(validation checklist, organism import paths, gotchas) in mind.
 
 ## Mandatory Completion Sequence
 
-After component + tests + story:
+No component is "done" without all 4:
 
-1. **`pnpm type-check && pnpm lint && pnpm test`** — all pass
-2. **`/review`** — multi-agent review
-3. **`/commit`** — conventional commit
-4. **`/end-session`** — update session state before closing
+1. `pnpm type-check && pnpm lint && pnpm test` — all pass
+2. `/review` — multi-agent review
+3. `/commit` — conventional commit
+4. `/end-session` — update session state
 
-No component is "done" without all 4 steps.
+## References (load on demand)
 
-## Validation Checklist
-
-- [ ] Correct atomic level directory
-- [ ] Variant file colocated in component folder (not in shared `variants/`)
-- [ ] No renderer imports in variant file
-- [ ] No JSX or runtime values in types file
-- [ ] `.styles.ts` with `shared` + `web` + `native` named exports (skip only if no inner elements AND no platform-specific classes)
-- [ ] Every key in `.styles.ts` has a JSDoc comment
-- [ ] `.native.tsx` imports `shared` + `native` from `.styles.ts` — never `web`
-- [ ] `.web.tsx` imports `shared` + `web` from `.styles.ts` — never `native`
-- [ ] No web-only classes hardcoded inline in `.web.tsx` — all in `web` export of `.styles.ts`
-- [ ] No native-only classes hardcoded inline in `.native.tsx` — all in `native` export of `.styles.ts`
-- [ ] No HTML elements in .native.tsx
-- [ ] No RN/StyleSheet imports in .web.tsx
-- [ ] No web-only Tailwind classes in variant base or variants object
-- [ ] `.constants.ts` contains ONLY constants (no functions, no types)
-- [ ] `.utils.ts` contains ONLY functions (no types — import them from `.tsx`)
-- [ ] All types/interfaces live in the `.tsx` types file (not in constants or utils)
-- [ ] All text uses `<Typography>` — no bare Text/p/span/h1
-- [ ] TWO barrel files: index.ts + index.web.ts with explicit extensions
-- [ ] Variants and styles NOT exported from barrels or public API
-- [ ] Component + type exported from BOTH src/index.ts and src/index.web.ts
-- [ ] JSDocs on props interface properties
-- [ ] Web tests written (`$Name.test.tsx`) with render, interaction, disabled, a11y checks
-- [ ] Story created
-
-## i18n — No Hardcoded User-Facing Text
-
-Components are i18n-agnostic — they receive translated strings as props, never call `useTranslation()`.
-But **every user-facing string** (labels, placeholders, aria-labels, button text like "Prev"/"Next") must:
-
-1. Be exposed as a **required prop** (`label: string`, NOT `label?: string`) on the component interface
-2. Have a corresponding **translation entry** in `packages/shared/src/i18n/locales/{en,fr}/translation.json`
-3. Be passed via `t('key')` in app-level consumers — NEVER with a fallback
-
-Never hardcode visible text inside a component — even short labels like "OK", "Cancel", "Next".
-
-### FORBIDDEN i18n patterns (ARCH-017)
-
-- `t('key', 'fallback')` — NEVER pass a second argument to `t()`
-- `label = 'Edit'` — NEVER use default values for label/placeholder props in destructuring
-- `?? 'fallback'` or `|| 'fallback'` — NEVER use fallback operators on translated strings
-- `label?: string` — label props must be **required** (`label: string`), not optional
-
-If a translation key is missing, add it to BOTH `en/translation.json` and `fr/translation.json`. Do not paper over it with a fallback.
-
-### i18n label ownership — atoms vs features/pages
-
-**Atom/molecule/organism components** (`packages/ui/`) are i18n-agnostic — they receive translated strings as props.
-
-**Feature components** (`packages/features/`) and **page-level components** (`apps/*/`) that are always used with the same fixed labels should call `useTranslation()` internally and own their labels, instead of pushing a wall of `nameLabel={t('...')}` props to every consumer.
-
-**Rule**: when a feature component always renders the same labels (e.g. `TransactionFormContent` always shows "Name", "Amount", "Category", "Date", "Recurring"), those labels should be internal `t()` calls, not props. Only expose a label as a prop if the consumer legitimately needs to customize it.
-
-**Evaluation checklist** before internalizing labels:
-- Will the label text ever change between usages? → prop
-- Is it always the same across all consumers (web + mobile)? → internal `t()`
-- Does the component live in `packages/ui/` (design system)? → always prop (i18n-agnostic)
-- Does it live in `packages/features/` or `apps/`? → evaluate, prefer internal `t()` for fixed labels
-
-## Import Path Rule — Sub-Components Within Organisms
-
-When a component lives **deep inside an organism folder** (e.g. `DataTable/cells/ActionCell/`),
-imports of other atomic levels (atoms, molecules) MUST use **relative paths**, NOT `#` aliases.
-
-```ts
-// GOOD — relative path, no ESLint import/order issues
-import { Icon } from '../../../../atoms/Icon/Icon.native'
-import { Dropdown } from '../../../../molecules/Dropdown/Dropdown.native'
-
-// BAD — bare #Atoms/#Molecules cause ESLint pathGroup mismatches in nested files
-import { Icon } from '#Atoms'
-import { Dropdown } from '#Molecules'
-```
-
-`#` aliases are fine for top-level component files (e.g. `atoms/Button/Button.native.tsx` importing `#Lib/tw`),
-but organism sub-components should use relative paths to avoid import ordering headaches.
-
-## Gotchas
-
-- Never use `React.FC` or `React.` prefix for types — import types directly from react
-- Never use `console.log` — use `console.warn` or `console.error`
-- Never use explicit `any` — strict TypeScript throughout
-- The variant file must ONLY contain safe cross-platform classes (see styling rules)
-- Each component owns its own variant — duplicate rather than share across components
-- Exception: composition chains (e.g. PasswordInput) may import parent's variant
-- `flex` means different things: twrnc = `{ flex: 1 }`, Tailwind = `display: flex`. Use `flex-row` in shared code.
+| File                           | When to load                                                    |
+| ------------------------------ | --------------------------------------------------------------- |
+| `references/file-structure.md` | Creating any of the 9 files — full templates + per-file rules   |
+| `references/testing.md`        | Writing the test suite (5-level policy + template)              |
+| `references/i18n.md`           | Any user-facing string (labels, placeholders, aria) + ARCH-017  |
+| `references/checklist.md`      | Final validation, organism import paths, cross-platform gotchas |
