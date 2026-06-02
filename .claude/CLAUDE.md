@@ -156,18 +156,19 @@ npx opensrc <owner>/<repo>      # GitHub repo (e.g., npx opensrc vercel/ai)
 
 Read `@completed.md`
 
-### Next
+**▶ ACTIVE — Months feature (Forecast)** : plan détaillé écrit dans `docs/plans/months-forecast-plan.md` (14 specs tracées, 7 décisions verrouillées). Démarrer l'implémentation par **l'étape 1 (DB)** dans `supabase/setup.sql` : table `months` + `user_preferences.active_month` + réécriture `get_balance` (mensuelle) + RPC `create_month` (matérialise les récurrentes + budgets opt-in), puis migration live + `pnpm prisma:sync`. Modèle clé : `current(M)=reference(M)+revenus(M)−dépenses(M)−Σpots` ; report inter-mois sur le **solde réel** (sans pots).
 
-0. **Transaction type toggle (NEXT SESSION — priority before skeletons)** — add a toggle/button in the transaction modal to choose between **expense** and **revenue** (income). Affects transaction form (UI), schema/validation, API contract, and amount sign/display.
-1. **Page skeletons (native)** — user builds web HydrateFallback skeletons, Claude adapts native versions + cleanup/best practices
-2. **Centralized auth** — session validation on app focus (AppState → getSession())
-3. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
-4. Tests — API + hooks
-5. Phase 8B: GoCardless bank connection (mode banque)
-6. **Server-side pagination** — replace client-side `TRANSACTION_FETCH_LIMIT` (=1000)
+Backlog : 0. **Page skeletons (native)** — user builds web HydrateFallback skeletons, Claude adapts native versions + cleanup/best practices
+
+1. **Centralized auth** — session validation on app focus (AppState → getSession())
+2. **Page error recovery** — TanStack Query focusManager for RN, refetchOnMount
+3. Tests — API + hooks
+4. Phase 8B: GoCardless bank connection (mode banque)
+5. **Server-side pagination** — replace client-side `TRANSACTION_FETCH_LIMIT` (=1000)
+6. ~~Months feature~~ → voir « ▶ ACTIVE » ci-dessus (`docs/plans/months-forecast-plan.md`)
 7. **Walkthrough** — onboarding animation (Lottie text layer injection, content drafted in Basic Memory)
 
-**Cleanups (deferred this session)**: delete dead `apps/web/app/lib/http-client.server.ts`; REACT-004 HydrationBoundary placement (works in prod — proper hoist is a risky cross-route restructure); SignupForm live-region a11y (A11Y-009); `.js.map` 404 noise on Netlify (CDN rule so sourcemap requests don't hit the SSR fn).
+**Cleanups (deferred this session)**: delete dead `apps/web/app/lib/http-client.server.ts`; REACT-004 HydrationBoundary placement (works in prod — proper hoist is a risky cross-route restructure); SignupForm live-region a11y (A11Y-009); `.js.map` 404 noise on Netlify (CDN rule so sourcemap requests don't hit the SSR fn); `settings.tsx` useMutation full-object deps (REACT-001/002); `lg:h-[54px]` arbitrary value → token.
 
 **Pending tests**: none
 

@@ -15,7 +15,7 @@ tags: [decision, architecture, design-system]
 - [reason] Prevents circular dependencies at the component level — strict layering mirrors the package dependency graph
 - [atoms] Indivisible elements with no internal UI dependency: Icon, Typography, Button, ColorDot, Divider, Avatar, LinkText
 - [molecules] Compose atoms: TextInput, PasswordInput, SectionLink, StatCard, BalanceCard, TransactionRow
-- [organisms] Autonomous sections composing molecules: Card, AuthCard, Header, PotsOverview, DataTable
+- [organisms] Autonomous sections composing molecules: Card, AuthCard, Header, LoadingView, DataTable
 - [templates] Page layouts: AuthLayout
 - [pattern] Cross-level imports use `#` aliases: `#Atoms`, `#Molecules`, `#Organisms`, `#Templates`
 - [pattern] Same-level sibling imports use relative paths

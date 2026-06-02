@@ -40,7 +40,7 @@ Accepted code review findings that were intentionally deferred:
 - `expo-dev-client` crashes on API 36/37 (Baklava) — use API 35
 
 ### React Native / Expo
-- twrnc `rounded-t-lg` doesn't work — use explicit RN style
+- twrnc v4.15 DOES support directional rounding (`rounded-t-lg`, `rounded-l-md`, etc.) — `borderLeftRadius`→`borderTop/BottomLeftRadius` (borders.js). The old "use explicit RN style" note was stale. Also: bare `flex` maps to `display:flex` (NOT `{flex:1}`); only `flex-1`/`flex-N` map to flexGrow. And `tw.style({ 'class': bool })` is the native equivalent of web `cn()` (splits multi-class keys on whitespace)
 - twrnc doesn't support class overriding like tailwind-merge
 - react-native-svg `fill` prop may not update on re-render — use `key={color}`
 - RN `overflow: visible` does NOT work on iOS

@@ -6,7 +6,7 @@ allowed-tools: Bash(opensrc:*)
 
 # Source Code Fetching with opensrc
 
-Fetches dependency source code so agents can read implementations, not just types. Clones repositories at the correct version tag and caches them globally at `~/.opensrc/`.
+Fetches dependency source code so agents can read implementations, not just types. Clones repositories at the correct version tag and caches them globally at `opensrc/`.
 
 ## Core Pattern
 
